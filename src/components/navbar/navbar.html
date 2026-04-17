@@ -1,0 +1,255 @@
+<!-- Navbar Component — 响应式导航栏，3种变体: default/transparent/glass -->
+<style>
+/* Navbar.css */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  transition: all var(--duration-normal) var(--ease-default);
+  position: relative;
+  z-index: var(--z-sticky);
+}
+
+/* ── 变体 ──────────────────────────── */
+.navbar--default {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar--transparent {
+  background: transparent;
+  border-bottom: none;
+}
+
+.navbar--glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Logo ──────────────────────────── */
+.navbar__logo {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.navbar__logo:hover {
+  opacity: 0.9;
+}
+
+/* ── 导航链接 ──────────────────────── */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar__link {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: var(--text-base);
+  transition: color var(--duration-fast) var(--ease-default);
+  position: relative;
+}
+
+.navbar__link:hover {
+  color: var(--color-primary);
+}
+
+.navbar__link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transition: width var(--duration-fast) var(--ease-default);
+}
+
+.navbar__link:hover::after {
+  width: 100%;
+}
+
+/* ── 按钮组 ────────────────────────── */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.navbar__btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+
+.navbar__btn:hover {
+  background: var(--color-bg-muted);
+  color: var(--color-text);
+}
+
+.navbar__btn--primary {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.navbar__btn--primary:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+/* ── 移动端菜单按钮 ────────────────── */
+.navbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2);
+}
+
+.navbar__toggle-icon {
+  width: 24px;
+  height: 24px;
+  stroke: var(--color-text);
+}
+
+/* ── 响应式设计 ────────────────────── */
+@media (max-width: 768px) {
+  .navbar__links {
+    display: none;
+  }
+  
+  .navbar__toggle {
+    display: block;
+  }
+  
+  .navbar__actions {
+    display: none;
+  }
+  
+  .navbar__links--mobile {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-dropdown);
+  }
+  
+  .navbar__links--mobile .navbar__link {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .navbar__links--mobile .navbar__link:last-child {
+    border-bottom: none;
+  }
+}
+</style>
+
+<!-- Demo: Navbar 组件 -->
+<div style="background: var(--color-bg-subtle); padding: 20px; border-radius: var(--radius-lg);">
+  <!-- 默认导航栏 -->
+  <nav class="navbar navbar--default" style="margin-bottom: 20px; border-radius: var(--radius-md);">
+    <a href="#" class="navbar__logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      DesignLib
+    </a>
+    
+    <ul class="navbar__links">
+      <li><a href="#" class="navbar__link">首页</a></li>
+      <li><a href="#" class="navbar__link">组件</a></li>
+      <li><a href="#" class="navbar__link">文档</a></li>
+      <li><a href="#" class="navbar__link">示例</a></li>
+    </ul>
+    
+    <div class="navbar__actions">
+      <button class="navbar__btn">登录</button>
+      <button class="navbar__btn navbar__btn--primary">注册</button>
+    </div>
+    
+    <button class="navbar__toggle">
+      <svg class="navbar__toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12h18M3 6h18M3 18h18"/>
+      </svg>
+    </button>
+  </nav>
+  
+  <!-- 透明导航栏 -->
+  <nav class="navbar navbar--transparent" style="margin-bottom: 20px; border-radius: var(--radius-md); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px;">
+    <a href="#" class="navbar__logo" style="color: white;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      DesignLib
+    </a>
+    
+    <ul class="navbar__links">
+      <li><a href="#" class="navbar__link" style="color: rgba(255,255,255,0.9);">首页</a></li>
+      <li><a href="#" class="navbar__link" style="color: rgba(255,255,255,0.9);">组件</a></li>
+      <li><a href="#" class="navbar__link" style="color: rgba(255,255,255,0.9);">文档</a></li>
+      <li><a href="#" class="navbar__link" style="color: rgba(255,255,255,0.9);">示例</a></li>
+    </ul>
+    
+    <div class="navbar__actions">
+      <button class="navbar__btn" style="color: white;">登录</button>
+      <button class="navbar__btn navbar__btn--primary">注册</button>
+    </div>
+  </nav>
+  
+  <!-- 毛玻璃导航栏 -->
+  <nav class="navbar navbar--glass" style="border-radius: var(--radius-md);">
+    <a href="#" class="navbar__logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      DesignLib
+    </a>
+    
+    <ul class="navbar__links">
+      <li><a href="#" class="navbar__link">首页</a></li>
+      <li><a href="#" class="navbar__link">组件</a></li>
+      <li><a href="#" class="navbar__link">文档</a></li>
+      <li><a href="#" class="navbar__link">示例</a></li>
+    </ul>
+    
+    <div class="navbar__actions">
+      <button class="navbar__btn">登录</button>
+      <button class="navbar__btn navbar__btn--primary">注册</button>
+    </div>
+  </nav>
+</div>
