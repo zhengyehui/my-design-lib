@@ -16,7 +16,6 @@ const pages = [
     colors: ['#6366f1', '#7c3aed', '#eef2ff'],
     rating: 9.2,
     description: '现代 SaaS 产品落地页，渐变 Hero + 特性卡片 + CTA 区域',
-    thumb: '/pages/saas-landing/thumb.svg'
   },
   {
     id: 'portfolio',
@@ -26,7 +25,6 @@ const pages = [
     colors: ['#0a0a0a', '#6366f1', '#ec4899'],
     rating: 9.5,
     description: '暗色系个人作品集，渐变背景 + 作品网格 + 技能展示',
-    thumb: '/pages/portfolio/thumb.svg'
   },
   {
     id: 'dashboard-dark',
@@ -36,7 +34,6 @@ const pages = [
     colors: ['#0f0f14', '#6366f1', '#1a1a24'],
     rating: 9.0,
     description: '暗色模式数据分析仪表盘，侧边栏 + 统计卡片 + 图表 + 表格',
-    thumb: '/pages/dashboard-dark/thumb.svg'
   },
   {
     id: 'checkout',
@@ -46,7 +43,6 @@ const pages = [
     colors: ['#f8f9fb', '#6366f1', '#fff'],
     rating: 8.8,
     description: '电商结账流程，步骤指示器 + 表单 + 订单摘要侧栏',
-    thumb: '/pages/checkout/thumb.svg'
   },
   {
     id: '404-creative',
@@ -56,7 +52,6 @@ const pages = [
     colors: ['#0a0a0a', '#6366f1', '#a855f7'],
     rating: 9.3,
     description: '太空主题创意 404 页面，星空动画 + 渐变数字 + 漂浮元素',
-    thumb: '/pages/404-creative/thumb.svg'
   }
 ]
 
@@ -84,10 +79,29 @@ function getScoreColor(score) {
 </script>
 
 <div class="gallery-page">
+  <!-- Nav -->
+  <nav class="gallery-nav">
+    <div class="nav-left">
+      <a href="/" class="nav-logo">◆ My Design Lib</a>
+    </div>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/components/button.html">组件</a>
+      <a href="/tokens/colors.html">设计变量</a>
+      <a href="/pages/" class="active">🎨 页面画廊</a>
+      <a href="/sponsor.html">赞助</a>
+    </div>
+  </nav>
+
   <!-- Hero -->
   <div class="gallery-hero">
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
+    <div class="hero-stats">
+      <span>📦 {{ pages.length }} 个完整页面</span>
+      <span>🏷️ {{ categories.length - 1 }} 个分类</span>
+      <span>🔄 每日自动更新</span>
+    </div>
   </div>
 
   <!-- Filter -->
@@ -144,22 +158,64 @@ function getScoreColor(score) {
     </a>
   </div>
 
-  <!-- Empty State -->
-  <div v-if="filteredPages.length === 0" class="gallery-empty">
-    <p>😅 该分类下还没有页面，正在收集中...</p>
+  <!-- Footer -->
+  <div class="gallery-footer">
+    <p>© 2026 My Design Lib — 为 AI 编程助手优化的设计库</p>
+    <p>📧 weta_zheng@qq.com &nbsp;|&nbsp; 💬 微信 weta010730</p>
   </div>
 </div>
 
 <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Nav */
+.gallery-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e5e7eb;
+}
+[data-theme="dark"] .gallery-nav {
+  background: rgba(15,15,20,0.9);
+  border-color: #1e1e2a;
+}
+.nav-logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #6366f1;
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+.nav-links a {
+  text-decoration: none;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: #6366f1;
+}
+
+/* Hero */
 .gallery-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
 }
-
 .gallery-hero {
   text-align: center;
-  padding: 3rem 0 2rem;
+  padding: 3rem 0 1.5rem;
 }
 .gallery-hero h1 {
   font-size: 2.5rem;
@@ -167,8 +223,16 @@ function getScoreColor(score) {
   margin-bottom: 0.5rem;
 }
 .gallery-hero p {
-  color: var(--vp-c-text-2);
+  color: #666;
   font-size: 1.1rem;
+}
+.hero-stats {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #888;
 }
 
 /* Filter */
@@ -177,27 +241,20 @@ function getScoreColor(score) {
   gap: 0.5rem;
   justify-content: center;
   flex-wrap: wrap;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
 }
 .filter-btn {
   padding: 0.5rem 1.2rem;
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid #e5e7eb;
   border-radius: 100px;
   background: none;
   cursor: pointer;
   font-size: 0.9rem;
-  color: var(--vp-c-text-2);
+  color: #666;
   transition: all 0.2s;
 }
-.filter-btn:hover {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
-}
-.filter-btn.active {
-  background: var(--vp-c-brand-1);
-  border-color: var(--vp-c-brand-1);
-  color: #fff;
-}
+.filter-btn:hover { border-color: #6366f1; color: #6366f1; }
+.filter-btn.active { background: #6366f1; border-color: #6366f1; color: #fff; }
 
 /* Grid */
 .gallery-grid {
@@ -206,11 +263,10 @@ function getScoreColor(score) {
   gap: 2rem;
   margin-top: 2rem;
 }
-
 .gallery-card {
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid #e5e7eb;
   text-decoration: none;
   color: inherit;
   transition: all 0.3s;
@@ -219,7 +275,7 @@ function getScoreColor(score) {
 .gallery-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-  border-color: var(--vp-c-brand-1);
+  border-color: #6366f1;
 }
 
 /* Preview */
@@ -228,10 +284,7 @@ function getScoreColor(score) {
   aspect-ratio: 16/10;
   overflow: hidden;
 }
-.card-gradient {
-  position: absolute;
-  inset: 0;
-}
+.card-gradient { position: absolute; inset: 0; }
 .card-mockup {
   position: absolute;
   inset: 15%;
@@ -247,31 +300,12 @@ function getScoreColor(score) {
   gap: 5px;
   padding: 0 8px;
 }
-.dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-.mockup-content {
-  padding: 12px;
-  height: calc(100% - 20px);
-}
-.mockup-line {
-  height: 6px;
-  border-radius: 3px;
-  margin-bottom: 8px;
-}
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.mockup-content { padding: 12px; height: calc(100% - 20px); }
+.mockup-line { height: 6px; border-radius: 3px; margin-bottom: 8px; }
 .mockup-line.short { width: 40%; height: 4px; }
-.mockup-blocks {
-  display: flex;
-  gap: 6px;
-  margin-top: 12px;
-}
-.mockup-block {
-  flex: 1;
-  height: 30px;
-  border-radius: 4px;
-}
+.mockup-blocks { display: flex; gap: 6px; margin-top: 12px; }
+.mockup-block { flex: 1; height: 30px; border-radius: 4px; }
 
 .card-score {
   position: absolute;
@@ -283,47 +317,35 @@ function getScoreColor(score) {
 }
 
 /* Info */
-.card-info {
-  padding: 1.2rem;
-  background: var(--vp-c-bg);
-}
-.card-info h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 0.3rem;
-}
-.card-info p {
-  font-size: 0.85rem;
-  color: var(--vp-c-text-2);
-  line-height: 1.5;
-  margin-bottom: 0.8rem;
-}
-.card-tags {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
+.card-info { padding: 1.2rem; background: #fff; }
+.card-info h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+.card-info p { font-size: 0.85rem; color: #666; line-height: 1.5; margin-bottom: 0.8rem; }
+.card-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
 .tag {
   padding: 0.2rem 0.6rem;
-  background: var(--vp-c-bg-soft);
+  background: #f3f4f6;
   border-radius: 6px;
   font-size: 0.75rem;
-  color: var(--vp-c-text-2);
+  color: #666;
 }
 
-.gallery-empty {
+/* Footer */
+.gallery-footer {
   text-align: center;
-  padding: 4rem;
-  color: var(--vp-c-text-2);
-  font-size: 1.1rem;
+  padding: 3rem 0 1rem;
+  margin-top: 3rem;
+  border-top: 1px solid #e5e7eb;
+  color: #999;
+  font-size: 0.85rem;
+  line-height: 1.8;
 }
+
+.gallery-empty { text-align: center; padding: 4rem; color: #999; font-size: 1.1rem; }
 
 @media (max-width: 640px) {
-  .gallery-grid {
-    grid-template-columns: 1fr;
-  }
-  .gallery-hero h1 {
-    font-size: 1.8rem;
-  }
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-hero h1 { font-size: 1.8rem; }
+  .nav-links { gap: 0.8rem; font-size: 0.8rem; }
+  .hero-stats { flex-direction: column; gap: 0.5rem; }
 }
 </style>
