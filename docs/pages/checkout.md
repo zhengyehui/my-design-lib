@@ -15,6 +15,18 @@ title: ShopFlow 结账页
     </div>
   </nav>
 
+  <!-- SEO Meta -->
+  <meta name="description" content="电商结账流程页面模板，步骤指示器 + 表单 + 订单摘要侧栏，纯 HTML+CSS。">
+  <meta name="keywords" content="结账页, checkout, 电商, 表单, 支付页面">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="ShopFlow 电商结账页 — My Design Lib">
+  <meta property="og:description" content="电商结账流程页面模板，步骤指示器 + 表单 + 订单摘要侧栏，纯 HTML+CSS。">
+  <meta property="og:url" content="http://101.37.166.208:11930/pages/checkout.html">
+  <link rel="canonical" href="http://101.37.166.208:11930/pages/checkout.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"ShopFlow 电商结账页 — My Design Lib","description":"电商结账流程页面模板，步骤指示器 + 表单 + 订单摘要侧栏，纯 HTML+CSS。","url":"http://101.37.166.208:11930/pages/checkout.html","genre":"ecommerce","author":{"@type":"Organization","name":"My Design Lib"}}</script>
+
+
   <div class="detail-header">
     <a href="/pages/" class="back-link">← 返回画廊</a>
     <div class="detail-meta">

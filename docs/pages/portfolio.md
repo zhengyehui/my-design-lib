@@ -15,6 +15,18 @@ title: 创意作品集
     </div>
   </nav>
 
+  <!-- SEO Meta -->
+  <meta name="description" content="暗色系个人作品集页面模板，渐变背景 + 作品网格 + 技能展示，纯 HTML+CSS，适合设计师和开发者。">
+  <meta name="keywords" content="作品集, portfolio, 暗色, 个人主页, 前端模板">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="创意作品集 — My Design Lib">
+  <meta property="og:description" content="暗色系个人作品集页面模板，渐变背景 + 作品网格 + 技能展示，纯 HTML+CSS，适合设计师和开发者。">
+  <meta property="og:url" content="http://101.37.166.208:11930/pages/portfolio.html">
+  <link rel="canonical" href="http://101.37.166.208:11930/pages/portfolio.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"创意作品集 — My Design Lib","description":"暗色系个人作品集页面模板，渐变背景 + 作品网格 + 技能展示，纯 HTML+CSS，适合设计师和开发者。","url":"http://101.37.166.208:11930/pages/portfolio.html","genre":"portfolio","author":{"@type":"Organization","name":"My Design Lib"}}</script>
+
+
   <div class="detail-header">
     <a href="/pages/" class="back-link">← 返回画廊</a>
     <div class="detail-meta">

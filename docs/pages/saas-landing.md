@@ -15,6 +15,18 @@ title: NovaPay SaaS 落地页
     </div>
   </nav>
 
+  <!-- SEO Meta -->
+  <meta name="description" content="现代 SaaS 产品落地页模板，渐变 Hero + 特性卡片 + CTA 区域，纯 HTML+CSS 零依赖，可直接复制使用。">
+  <meta name="keywords" content="SaaS, landing page, 落地页, 渐变, 前端模板">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="NovaPay SaaS 落地页 — My Design Lib">
+  <meta property="og:description" content="现代 SaaS 产品落地页模板，渐变 Hero + 特性卡片 + CTA 区域，纯 HTML+CSS 零依赖，可直接复制使用。">
+  <meta property="og:url" content="http://101.37.166.208:11930/pages/saas-landing.html">
+  <link rel="canonical" href="http://101.37.166.208:11930/pages/saas-landing.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"NovaPay SaaS 落地页 — My Design Lib","description":"现代 SaaS 产品落地页模板，渐变 Hero + 特性卡片 + CTA 区域，纯 HTML+CSS 零依赖，可直接复制使用。","url":"http://101.37.166.208:11930/pages/saas-landing.html","genre":"landing","author":{"@type":"Organization","name":"My Design Lib"}}</script>
+
+
   <div class="detail-header">
     <a href="/pages/" class="back-link">← 返回画廊</a>
     <div class="detail-meta">

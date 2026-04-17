@@ -15,6 +15,18 @@ title: Nexus 数据仪表盘
     </div>
   </nav>
 
+  <!-- SEO Meta -->
+  <meta name="description" content="暗色模式数据分析仪表盘模板，侧边栏 + 统计卡片 + 图表 + 数据表格，纯 HTML+CSS。">
+  <meta name="keywords" content="仪表盘, dashboard, 暗色, 数据可视化, 管理后台">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Nexus 数据仪表盘 — My Design Lib">
+  <meta property="og:description" content="暗色模式数据分析仪表盘模板，侧边栏 + 统计卡片 + 图表 + 数据表格，纯 HTML+CSS。">
+  <meta property="og:url" content="http://101.37.166.208:11930/pages/dashboard-dark.html">
+  <link rel="canonical" href="http://101.37.166.208:11930/pages/dashboard-dark.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Nexus 数据仪表盘 — My Design Lib","description":"暗色模式数据分析仪表盘模板，侧边栏 + 统计卡片 + 图表 + 数据表格，纯 HTML+CSS。","url":"http://101.37.166.208:11930/pages/dashboard-dark.html","genre":"dashboard","author":{"@type":"Organization","name":"My Design Lib"}}</script>
+
+
   <div class="detail-header">
     <a href="/pages/" class="back-link">← 返回画廊</a>
     <div class="detail-meta">

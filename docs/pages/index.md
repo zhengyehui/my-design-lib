@@ -93,6 +93,17 @@ function getScoreColor(score) {
     </div>
   </nav>
 
+  <!-- SEO Meta -->
+  <meta name="description" content="My Design Lib 页面灵感画廊 — 5 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商结账、404 创意页。可预览、看源码、学设计。">
+  <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
+  <meta property="og:description" content="完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等 5 个高质量页面模板。">
+  <meta property="og:url" content="http://101.37.166.208:11930/pages/">
+  <link rel="canonical" href="http://101.37.166.208:11930/pages/">
+
+
   <!-- Hero -->
   <div class="gallery-hero">
     <h1>🎨 页面灵感画廊</h1>

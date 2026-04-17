@@ -15,6 +15,18 @@ title: 太空主题 404
     </div>
   </nav>
 
+  <!-- SEO Meta -->
+  <meta name="description" content="太空主题创意 404 页面，星空动画 + 渐变数字 + 漂浮元素，纯 HTML+CSS+JS。">
+  <meta name="keywords" content="404页面, 创意, 太空, 动画, 错误页">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="太空主题 404 页面 — My Design Lib">
+  <meta property="og:description" content="太空主题创意 404 页面，星空动画 + 渐变数字 + 漂浮元素，纯 HTML+CSS+JS。">
+  <meta property="og:url" content="http://101.37.166.208:11930/pages/404-creative.html">
+  <link rel="canonical" href="http://101.37.166.208:11930/pages/404-creative.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"太空主题 404 页面 — My Design Lib","description":"太空主题创意 404 页面，星空动画 + 渐变数字 + 漂浮元素，纯 HTML+CSS+JS。","url":"http://101.37.166.208:11930/pages/404-creative.html","genre":"creative","author":{"@type":"Organization","name":"My Design Lib"}}</script>
+
+
   <div class="detail-header">
     <a href="/pages/" class="back-link">← 返回画廊</a>
     <div class="detail-meta">
