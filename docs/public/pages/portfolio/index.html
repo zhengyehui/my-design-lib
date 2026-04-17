@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative Portfolio</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; overflow-x: hidden; }
+
+/* Hero */
+.portfolio-hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 4rem; position: relative; }
+.portfolio-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.15), transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(236,72,153,0.1), transparent 50%); }
+.hero-inner { position: relative; z-index: 1; max-width: 900px; }
+.greeting { font-size: 1.1rem; color: #a855f7; font-weight: 500; margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase; }
+.portfolio-hero h1 { font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.05; margin-bottom: 1.5rem; }
+.highlight { background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.portfolio-hero p { font-size: 1.3rem; color: #888; max-width: 550px; line-height: 1.7; margin-bottom: 2rem; }
+.scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); color: #555; font-size: 0.85rem; animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+/* Work Grid */
+.work-section { padding: 6rem 4rem; }
+.work-section h2 { font-size: 2rem; font-weight: 700; margin-bottom: 3rem; }
+.work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.work-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 16/10; cursor: pointer; group: true; }
+.work-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.work-card:hover img { transform: scale(1.05); }
+.work-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem; opacity: 0; transition: opacity 0.3s; }
+.work-card:hover .work-overlay { opacity: 1; }
+.work-tag { font-size: 0.8rem; color: #a855f7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+.work-title { font-size: 1.4rem; font-weight: 700; }
+.work-desc { font-size: 0.9rem; color: #aaa; margin-top: 0.3rem; }
+
+/* Placeholder images with gradients */
+.work-card:nth-child(1) { background: linear-gradient(135deg, #667eea, #764ba2); }
+.work-card:nth-child(2) { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.work-card:nth-child(3) { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.work-card:nth-child(4) { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+.work-card:nth-child(5) { background: linear-gradient(135deg, #fa709a, #fee140); }
+.work-card:nth-child(6) { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+
+/* About */
+.about-section { padding: 6rem 4rem; display: flex; gap: 4rem; align-items: center; flex-wrap: wrap; }
+.about-photo { width: 300px; height: 380px; border-radius: 20px; background: linear-gradient(135deg, #6366f1, #a855f7); flex-shrink: 0; position: relative; overflow: hidden; }
+.about-photo::after { content: '👩‍🎨'; font-size: 8rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.about-text { flex: 1; min-width: 300px; }
+.about-text h2 { font-size: 2rem; margin-bottom: 1rem; }
+.about-text p { color: #888; line-height: 1.8; margin-bottom: 1rem; }
+.skills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.skill-tag { padding: 0.4rem 1rem; border: 1px solid #333; border-radius: 100px; font-size: 0.85rem; color: #ccc; }
+
+/* Contact */
+.contact-section { padding: 6rem 4rem; text-align: center; }
+.contact-section h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; }
+.contact-section p { color: #888; margin-bottom: 2rem; }
+.contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.contact-link { padding: 0.8rem 2rem; border: 1px solid #333; border-radius: 12px; color: #fff; text-decoration: none; font-weight: 600; transition: all 0.3s; }
+.contact-link:hover { border-color: #6366f1; background: rgba(99,102,241,0.1); }
+
+.footer { padding: 2rem 4rem; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a1a1a; }
+</style>
+</head>
+<body>
+
+<section class="portfolio-hero">
+  <div class="hero-inner">
+    <div class="greeting">Hello, I'm</div>
+    <h1>创意<span class="highlight">设计师</span><br>& 前端开发者</h1>
+    <p>专注于创造令人惊叹的数字体验。将复杂的想法转化为优雅、直观的设计。</p>
+    <div class="contact-links">
+      <a href="#" class="contact-link" style="border-color:#6366f1;">查看作品 ↓</a>
+      <a href="#" class="contact-link">联系我</a>
+    </div>
+  </div>
+  <div class="scroll-hint">↓ 向下滚动</div>
+</section>
+
+<section class="work-section">
+  <h2>精选作品</h2>
+  <div class="work-grid">
+    <div class="work-card">
+      <div class="work-overlay">
+        <div class="work-tag">品牌设计</div>
+        <div class="work-title">品牌视觉重塑</div>
+        <div class="work-desc">为科技初创公司打造全新品牌形象</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-overlay">
+        <div class="work-tag">网页设计</div>
+        <div class="work-title">电商平台改版</div>
+        <div class="work-desc">提升 40% 转化率的电商体验设计</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-overlay">
+        <div class="work-tag">移动应用</div>
+        <div class="work-title">健康追踪 App</div>
+        <div class="work-desc">iOS/Android 双平台健康应用设计</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-overlay">
+        <div class="work-tag">交互设计</div>
+        <div class="work-title">数据可视化平台</div>
+        <div class="work-desc">企业级数据分析仪表盘</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-overlay">
+        <div class="work-tag">UI/UX</div>
+        <div class="work-title">社交平台设计</div>
+        <div class="work-desc">新一代社交网络的界面设计</div>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-overlay">
+        <div class="work-tag">动态设计</div>
+        <div class="work-title">品牌动效系统</div>
+        <div class="work-desc">完整的品牌动效语言定义</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="about-photo"></div>
+  <div class="about-text">
+    <h2>关于我</h2>
+    <p>拥有 8 年设计与开发经验，专注于创造高品质的数字产品。我相信好的设计不仅是视觉上的美感，更是功能与体验的完美结合。</p>
+    <p>曾服务于多家知名科技公司，主导过从 0 到 1 的产品设计，也负责过百万级用户产品的体验升级。</p>
+    <div class="skills">
+      <span class="skill-tag">Figma</span>
+      <span class="skill-tag">React</span>
+      <span class="skill-tag">TypeScript</span>
+      <span class="skill-tag">Three.js</span>
+      <span class="skill-tag">Motion Design</span>
+      <span class="skill-tag">Design Systems</span>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section">
+  <h2>Let's Work Together</h2>
+  <p>有项目想法？让我们一起把它变成现实。</p>
+  <div class="contact-links">
+    <a href="#" class="contact-link" style="border-color:#6366f1;">📧 hello@example.com</a>
+    <a href="#" class="contact-link">🐦 Twitter</a>
+    <a href="#" class="contact-link">💼 LinkedIn</a>
+    <a href="#" class="contact-link">🐙 GitHub</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>© 2026 Portfolio. Crafted with ❤️ | My Design Lib 示例页面</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Segoe UI', sans-serif; background: #f8f9fb; color: var(--color-text); min-height: 100vh; }
+
+/* Header */
+.checkout-header { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+.checkout-logo { font-weight: 800; font-size: 1.2rem; color: var(--color-primary); }
+.secure-badge { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: #22c55e; font-weight: 600; }
+
+/* Layout */
+.checkout-layout { display: grid; grid-template-columns: 1fr 400px; max-width: 1100px; margin: 0 auto; gap: 2rem; padding: 2rem; min-height: calc(100vh - 60px); }
+
+/* Steps */
+.steps { display: flex; gap: 0; margin-bottom: 2rem; }
+.step { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #aaa; }
+.step.active { color: var(--color-primary); font-weight: 600; }
+.step.done { color: #22c55e; }
+.step-num { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; }
+.step.active .step-num { border-color: var(--color-primary); background: var(--color-primary); color: #fff; }
+.step.done .step-num { border-color: #22c55e; background: #22c55e; color: #fff; }
+.step-line { width: 40px; height: 2px; background: #e5e7eb; margin: 0 0.5rem; }
+
+/* Form */
+.form-section { background: #fff; border-radius: 16px; padding: 2rem; border: 1px solid #e5e7eb; }
+.form-section h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.form-row.full { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-group label { font-size: 0.85rem; font-weight: 600; color: #555; }
+.form-group input, .form-group select { padding: 0.8rem 1rem; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: 0.95rem; outline: none; transition: border-color 0.2s; background: #fff; }
+.form-group input:focus, .form-group select:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+
+/* Payment Methods */
+.payment-methods { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; }
+.payment-method { flex: 1; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; font-weight: 600; }
+.payment-method.selected { border-color: var(--color-primary); background: rgba(99,102,241,0.05); }
+.payment-method:hover { border-color: var(--color-primary); }
+.payment-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+
+/* Order Summary */
+.order-summary { background: #fff; border-radius: 16px; padding: 2rem; border: 1px solid #e5e7eb; height: fit-content; position: sticky; top: 2rem; }
+.order-summary h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+.order-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #f0f0f0; }
+.order-thumb { width: 60px; height: 60px; border-radius: 10px; flex-shrink: 0; }
+.order-thumb.t1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+.order-thumb.t2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.order-thumb.t3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.order-info { flex: 1; }
+.order-name { font-weight: 600; font-size: 0.95rem; }
+.order-variant { font-size: 0.8rem; color: #888; margin-top: 0.2rem; }
+.order-price { font-weight: 700; font-size: 0.95rem; white-space: nowrap; }
+
+.summary-row { display: flex; justify-content: space-between; padding: 0.6rem 0; font-size: 0.9rem; }
+.summary-row.total { border-top: 2px solid #e5e7eb; margin-top: 0.5rem; padding-top: 1rem; font-size: 1.1rem; font-weight: 800; }
+
+/* Promo */
+.promo-row { display: flex; gap: 0.5rem; margin: 1rem 0; }
+.promo-row input { flex: 1; padding: 0.7rem 1rem; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: 0.9rem; outline: none; }
+.promo-btn { padding: 0.7rem 1.2rem; background: #1e293b; color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
+
+/* Pay Button */
+.btn-pay { width: 100%; padding: 1rem; background: linear-gradient(135deg, var(--color-primary), #7c3aed); color: #fff; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-top: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; }
+.btn-pay:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99,102,241,0.3); }
+
+.trust-badges { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; font-size: 0.8rem; color: #aaa; }
+</style>
+</head>
+<body>
+
+<header class="checkout-header">
+  <div class="checkout-logo">🛍️ ShopFlow</div>
+  <div class="secure-badge">🔒 安全加密支付</div>
+</header>
+
+<div class="checkout-layout">
+  <div>
+    <div class="steps">
+      <div class="step done"><span class="step-num">✓</span> 购物车</div>
+      <div class="step-line"></div>
+      <div class="step active"><span class="step-num">2</span> 支付信息</div>
+      <div class="step-line"></div>
+      <div class="step"><span class="step-num">3</span> 确认</div>
+    </div>
+
+    <div class="form-section">
+      <h2>选择支付方式</h2>
+      <div class="payment-methods">
+        <div class="payment-method selected"><div class="payment-icon">💳</div>银行卡</div>
+        <div class="payment-method"><div class="payment-icon">📱</div>支付宝</div>
+        <div class="payment-method"><div class="payment-icon">💬</div>微信支付</div>
+      </div>
+
+      <h2>持卡人信息</h2>
+      <div class="form-row">
+        <div class="form-group"><label>名</label><input placeholder="请输入名" /></div>
+        <div class="form-group"><label>姓</label><input placeholder="请输入姓" /></div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group"><label>邮箱地址</label><input type="email" placeholder="用于接收订单确认" /></div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group"><label>手机号码</label><input type="tel" placeholder="用于短信验证" /></div>
+      </div>
+
+      <h2 style="margin-top:1.5rem;">银行卡信息</h2>
+      <div class="form-row full">
+        <div class="form-group"><label>卡号</label><input placeholder="0000 0000 0000 0000" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>有效期</label><input placeholder="MM / YY" /></div>
+        <div class="form-group"><label>安全码</label><input placeholder="CVV" /></div>
+      </div>
+
+      <h2 style="margin-top:1.5rem;">账单地址</h2>
+      <div class="form-row full">
+        <div class="form-group"><label>详细地址</label><input placeholder="街道、门牌号" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>城市</label><input placeholder="城市" /></div>
+        <div class="form-group"><label>邮编</label><input placeholder="邮政编码" /></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="order-summary">
+    <h2>订单摘要</h2>
+    <div class="order-item">
+      <div class="order-thumb t1"></div>
+      <div class="order-info"><div class="order-name">高级组件套装</div><div class="order-variant">年度授权 · 无限项目</div></div>
+      <div class="order-price">¥499</div>
+    </div>
+    <div class="order-item">
+      <div class="order-thumb t2"></div>
+      <div class="order-info"><div class="order-name">设计系统模板</div><div class="order-variant">暗色 + 亮色 · Figma</div></div>
+      <div class="order-price">¥299</div>
+    </div>
+    <div class="order-item">
+      <div class="order-thumb t3"></div>
+      <div class="order-info"><div class="order-name">AI 助手集成</div><div class="order-variant">GPT-4 插件 · 永久</div></div>
+      <div class="order-price">¥199</div>
+    </div>
+
+    <div class="promo-row">
+      <input placeholder="优惠码" />
+      <button class="promo-btn">应用</button>
+    </div>
+
+    <div class="summary-row"><span>小计</span><span>¥997</span></div>
+    <div class="summary-row"><span>折扣</span><span style="color:#22c55e">-¥100</span></div>
+    <div class="summary-row"><span>税费</span><span>¥0</span></div>
+    <div class="summary-row total"><span>总计</span><span>¥897</span></div>
+
+    <button class="btn-pay">确认支付 ¥897</button>
+
+    <div class="trust-badges">
+      <span>🔒 SSL</span>
+      <span>🛡️ 退款保障</span>
+      <span>⚡ 即时激活</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

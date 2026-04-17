@@ -86,6 +86,7 @@ export default defineConfig({
       { text: '组件', link: '/components/button' },
       { text: '设计变量', link: '/tokens/colors' },
       { text: '布局模式', link: '/patterns/landing' },
+      { text: '🎨 页面画廊', link: '/pages/' },
       { text: '🤝 赞助', link: '/sponsor' }
     ],
 
@@ -158,6 +159,19 @@ export default defineConfig({
           items: [
             { text: 'Landing Page 落地页', link: '/patterns/landing' },
             { text: 'Dashboard 仪表盘', link: '/patterns/dashboard' }
+          ]
+        }
+      ],
+      '/pages/': [
+        {
+          text: '🎨 页面画廊',
+          items: [
+            { text: '全部页面', link: '/pages/' },
+            { text: 'SaaS 落地页', link: '/pages/saas-landing' },
+            { text: '创意作品集', link: '/pages/portfolio' },
+            { text: '数据仪表盘', link: '/pages/dashboard-dark' },
+            { text: '电商结账页', link: '/pages/checkout' },
+            { text: '404 创意页', link: '/pages/404-creative' }
           ]
         }
       ]

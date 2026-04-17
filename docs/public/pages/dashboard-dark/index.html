@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Dashboard</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Segoe UI', sans-serif; background: #0f0f14; color: #e2e8f0; display: flex; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar { width: 260px; background: #16161e; border-right: 1px solid #1e1e2a; padding: 1.5rem 0; flex-shrink: 0; }
+.sidebar-logo { padding: 0 1.5rem; font-size: 1.3rem; font-weight: 800; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem; }
+.sidebar-logo span { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-group { margin-bottom: 1.5rem; }
+.nav-label { padding: 0 1.5rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #555; margin-bottom: 0.5rem; }
+.nav-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1.5rem; color: #888; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; cursor: pointer; }
+.nav-item:hover { color: #e2e8f0; background: rgba(99,102,241,0.05); }
+.nav-item.active { color: #6366f1; background: rgba(99,102,241,0.1); border-right: 3px solid #6366f1; }
+.nav-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+
+/* Main */
+.main { flex: 1; padding: 2rem; overflow-y: auto; }
+
+/* Top Bar */
+.topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.topbar h1 { font-size: 1.5rem; font-weight: 700; }
+.topbar-right { display: flex; align-items: center; gap: 1rem; }
+.search-box { background: #1e1e2a; border: 1px solid #2a2a3a; border-radius: 10px; padding: 0.6rem 1rem; color: #e2e8f0; font-size: 0.9rem; width: 240px; outline: none; }
+.search-box:focus { border-color: #6366f1; }
+.avatar { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #6366f1, #ec4899); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; }
+
+/* Stat Cards */
+.stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.stat-card { background: #1a1a24; border: 1px solid #1e1e2a; border-radius: 14px; padding: 1.5rem; transition: border-color 0.3s; }
+.stat-card:hover { border-color: #6366f1; }
+.stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.stat-label { font-size: 0.85rem; color: #888; }
+.stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+.stat-icon.blue { background: rgba(99,102,241,0.15); }
+.stat-icon.green { background: rgba(34,197,94,0.15); }
+.stat-icon.orange { background: rgba(249,115,22,0.15); }
+.stat-icon.pink { background: rgba(236,72,153,0.15); }
+.stat-value { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.3rem; }
+.stat-change { font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; }
+.stat-change.up { color: #22c55e; }
+.stat-change.down { color: #ef4444; }
+
+/* Chart Area */
+.charts { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+.chart-card { background: #1a1a24; border: 1px solid #1e1e2a; border-radius: 14px; padding: 1.5rem; }
+.chart-title { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+.chart-tabs { display: flex; gap: 0.5rem; }
+.chart-tab { padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.8rem; color: #888; cursor: pointer; border: none; background: none; }
+.chart-tab.active { background: rgba(99,102,241,0.15); color: #6366f1; }
+
+/* Fake Chart */
+.chart-area { height: 200px; position: relative; display: flex; align-items: flex-end; gap: 8px; padding-top: 1rem; }
+.bar { flex: 1; border-radius: 6px 6px 0 0; transition: height 0.5s; min-width: 0; }
+.bar.primary { background: linear-gradient(to top, #6366f1, #818cf8); }
+.bar.muted { background: #2a2a3a; }
+
+/* Donut */
+.donut-chart { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(#6366f1 0% 45%, #a855f7 45% 70%, #ec4899 70% 85%, #2a2a3a 85% 100%); margin: 1rem auto; position: relative; }
+.donut-chart::after { content: ''; position: absolute; inset: 30px; border-radius: 50%; background: #1a1a24; }
+.donut-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 1; font-size: 1.5rem; font-weight: 800; }
+.donut-legend { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+.legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #888; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* Table */
+.table-card { background: #1a1a24; border: 1px solid #1e1e2a; border-radius: 14px; padding: 1.5rem; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 0.8rem; font-size: 0.8rem; color: #555; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #1e1e2a; }
+td { padding: 0.8rem; font-size: 0.9rem; border-bottom: 1px solid #1e1e2a; }
+.status { padding: 0.25rem 0.7rem; border-radius: 100px; font-size: 0.8rem; font-weight: 600; }
+.status.success { background: rgba(34,197,94,0.15); color: #22c55e; }
+.status.pending { background: rgba(249,115,22,0.15); color: #f97316; }
+.status.failed { background: rgba(239,68,68,0.15); color: #ef4444; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">◆ <span>Nexus</span></div>
+  <div class="nav-group">
+    <div class="nav-label">概览</div>
+    <div class="nav-item active"><span class="nav-icon">📊</span> 仪表盘</div>
+    <div class="nav-item"><span class="nav-icon">📈</span> 分析</div>
+    <div class="nav-item"><span class="nav-icon">💰</span> 收入</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">管理</div>
+    <div class="nav-item"><span class="nav-icon">👥</span> 用户</div>
+    <div class="nav-item"><span class="nav-icon">📦</span> 产品</div>
+    <div class="nav-item"><span class="nav-icon">🛒</span> 订单</div>
+    <div class="nav-item"><span class="nav-icon">💳</span> 支付</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">系统</div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span> 设置</div>
+    <div class="nav-item"><span class="nav-icon">🔔</span> 通知</div>
+    <div class="nav-item"><span class="nav-icon">❓</span> 帮助</div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <h1>仪表盘</h1>
+    <div class="topbar-right">
+      <input class="search-box" placeholder="搜索..." />
+      <div class="avatar">Y</div>
+    </div>
+  </div>
+
+  <div class="stat-cards">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">总收入</span>
+        <div class="stat-icon blue">💰</div>
+      </div>
+      <div class="stat-value">¥284,392</div>
+      <div class="stat-change up">↑ 12.5% 较上月</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">活跃用户</span>
+        <div class="stat-icon green">👥</div>
+      </div>
+      <div class="stat-value">24,521</div>
+      <div class="stat-change up">↑ 8.2% 较上月</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">订单数</span>
+        <div class="stat-icon orange">📦</div>
+      </div>
+      <div class="stat-value">3,847</div>
+      <div class="stat-change down">↓ 2.1% 较上月</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">转化率</span>
+        <div class="stat-icon pink">🎯</div>
+      </div>
+      <div class="stat-value">4.28%</div>
+      <div class="stat-change up">↑ 0.8% 较上月</div>
+    </div>
+  </div>
+
+  <div class="charts">
+    <div class="chart-card">
+      <div class="chart-title">
+        收入趋势
+        <div class="chart-tabs">
+          <button class="chart-tab">日</button>
+          <button class="chart-tab active">周</button>
+          <button class="chart-tab">月</button>
+        </div>
+      </div>
+      <div class="chart-area">
+        <div class="bar primary" style="height:60%"></div>
+        <div class="bar muted" style="height:45%"></div>
+        <div class="bar primary" style="height:75%"></div>
+        <div class="bar muted" style="height:50%"></div>
+        <div class="bar primary" style="height:90%"></div>
+        <div class="bar muted" style="height:65%"></div>
+        <div class="bar primary" style="height:55%"></div>
+        <div class="bar muted" style="height:80%"></div>
+        <div class="bar primary" style="height:70%"></div>
+        <div class="bar muted" style="height:40%"></div>
+        <div class="bar primary" style="height:95%"></div>
+        <div class="bar muted" style="height:60%"></div>
+        <div class="bar primary" style="height:85%"></div>
+        <div class="bar muted" style="height:70%"></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">流量来源</div>
+      <div class="donut-chart"><div class="donut-center">72%</div></div>
+      <div class="donut-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#6366f1"></div> 直接访问 45%</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div> 搜索引擎 25%</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ec4899"></div> 社交媒体 15%</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2a2a3a"></div> 其他 15%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="chart-title">最近订单</div>
+    <table>
+      <thead><tr><th>订单号</th><th>客户</th><th>金额</th><th>状态</th><th>日期</th></tr></thead>
+      <tbody>
+        <tr><td>#ORD-7821</td><td>张三</td><td>¥2,399</td><td><span class="status success">已完成</span></td><td>2026-04-17</td></tr>
+        <tr><td>#ORD-7820</td><td>李四</td><td>¥899</td><td><span class="status pending">处理中</span></td><td>2026-04-17</td></tr>
+        <tr><td>#ORD-7819</td><td>王五</td><td>¥4,590</td><td><span class="status success">已完成</span></td><td>2026-04-16</td></tr>
+        <tr><td>#ORD-7818</td><td>赵六</td><td>¥1,299</td><td><span class="status failed">已取消</span></td><td>2026-04-16</td></tr>
+        <tr><td>#ORD-7817</td><td>孙七</td><td>¥3,499</td><td><span class="status success">已完成</span></td><td>2026-04-15</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+</body>
+</html>
