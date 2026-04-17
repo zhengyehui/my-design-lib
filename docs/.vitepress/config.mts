@@ -54,6 +54,17 @@ export default defineConfig({
             { text: 'Tooltip 工具提示', link: '/components/tooltip' },
             { text: 'Progress 进度条', link: '/components/progress' }
           ]
+        },
+        {
+          text: '✨ 炫酷组件',
+          items: [
+            { text: 'Glassmorphism 毛玻璃', link: '/components/glassmorphism' },
+            { text: 'Gradient Border 渐变边框', link: '/components/gradient-border' },
+            { text: 'Skeleton 骨架屏', link: '/components/skeleton' },
+            { text: '3D Tilt 倾斜卡片', link: '/components/3d-tilt' },
+            { text: 'Aurora 极光背景', link: '/components/aurora-bg' },
+            { text: 'Magnetic Button 磁性按钮', link: '/components/magnetic-btn' }
+          ]
         }
       ],
       '/tokens/': [

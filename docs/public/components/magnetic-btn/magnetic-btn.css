@@ -1,0 +1,112 @@
+/* Magnetic Button - 磁性按钮 */
+/* 需要少量 JS 实现磁性效果，这里提供纯 CSS hover 版 + JS 接口 */
+
+.magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 36px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+}
+
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #818cf8, #a78bfa);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.magnetic-btn:hover::before {
+  opacity: 1;
+}
+
+.magnetic-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 10px 40px rgba(99, 102, 241, 0.4),
+    0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.magnetic-btn:active {
+  transform: scale(0.98);
+}
+
+.magnetic-btn__text {
+  position: relative;
+  z-index: 1;
+}
+
+/* 变体 */
+.magnetic-btn--outline {
+  background: transparent;
+  border: 2px solid #6366f1;
+  color: #6366f1;
+}
+
+.magnetic-btn--outline::before {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.magnetic-btn--outline:hover {
+  color: #fff;
+  box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+}
+
+.magnetic-btn--ghost {
+  background: rgba(99, 102, 241, 0.1);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.magnetic-btn--ghost:hover {
+  background: rgba(99, 102, 241, 0.2);
+  color: #fff;
+  box-shadow: 0 10px 40px rgba(99, 102, 241, 0.2);
+}
+
+.magnetic-btn--glow {
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.magnetic-btn--glow:hover {
+  box-shadow: 
+    0 0 40px rgba(99, 102, 241, 0.5),
+    0 0 80px rgba(236, 72, 153, 0.3);
+}
+
+/* 粒子效果层 */
+.magnetic-btn__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 50px;
+}
+
+.magnetic-btn__particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  opacity: 0;
+}
+
+/* JS 磁性效果的 CSS 接口 */
+.magnetic-btn--magnetic {
+  transition: transform 0.15s ease-out;
+}

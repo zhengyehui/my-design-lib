@@ -1,0 +1,97 @@
+/* 3D Tilt Card - 3D 倾斜卡片 */
+/* 依赖: 需要少量 JS 来追踪鼠标位置，纯 CSS 也可用:hover做简单版 */
+
+/* 纯 CSS 版 - hover 时轻微倾斜 */
+.tilt-card {
+  perspective: 1000px;
+  display: inline-block;
+}
+
+.tilt-card__inner {
+  transition: transform 0.4s cubic-bezier(0.03, 0.98, 0.52, 0.99);
+  transform-style: preserve-3d;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 20px;
+  padding: 2.5rem;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.tilt-card__inner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.08), transparent 50%);
+  transform: translateZ(-1px);
+}
+
+.tilt-card:hover .tilt-card__inner {
+  transform: rotateY(-5deg) rotateX(5deg) translateZ(20px);
+  box-shadow: 
+    20px 20px 60px rgba(0, 0, 0, 0.3),
+    -5px -5px 20px rgba(99, 102, 241, 0.1);
+}
+
+/* JS 增强版 - 跟随鼠标倾斜 */
+.tilt-card--js .tilt-card__inner {
+  will-change: transform;
+}
+
+/* 卡片内元素的 3D 深度 */
+.tilt-card__shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  border-radius: 20px;
+}
+
+.tilt-card:hover .tilt-card__shine {
+  opacity: 1;
+}
+
+.tilt-card__icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+  transform: translateZ(30px);
+}
+
+.tilt-card__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  transform: translateZ(20px);
+}
+
+.tilt-card__desc {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  line-height: 1.6;
+  transform: translateZ(10px);
+}
+
+/* 变体 */
+.tilt-card--gradient .tilt-card__inner {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  color: #fff;
+  border: none;
+}
+
+.tilt-card--glass .tilt-card__inner {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

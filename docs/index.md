@@ -6,7 +6,7 @@ hero:
   tagline: 一套为 AI 编程助手优化的前端组件库。纯 HTML + CSS，复制即用，零框架依赖。
   actions:
     - theme: brand
-      text: 浏览 19 个组件
+      text: 浏览 25 个组件
       link: /components/button
     - theme: alt
       text: 赞助此项目
@@ -36,7 +36,7 @@ features:
 <div class="sponsors-hero">
   <div class="sponsors-hero__title">📊 项目数据</div>
   <div class="sponsors-hero__grid">
-    <span class="sponsors-hero__badge">📦 19 个生产级组件</span>
+    <span class="sponsors-hero__badge">📦 25 个生产级组件</span>
     <span class="sponsors-hero__badge">🎨 3 套设计 Tokens</span>
     <span class="sponsors-hero__badge">📄 1 个布局模式</span>
     <span class="sponsors-hero__badge">🤖 MCP Server 可用</span>
