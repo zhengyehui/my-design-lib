@@ -65,11 +65,20 @@ export default defineConfig({
             { text: 'Spacing 间距', link: '/tokens/spacing' }
           ]
         }
+      ],
+      '/patterns/': [
+        {
+          text: '布局模式',
+          items: [
+            { text: 'Landing Page 落地页', link: '/patterns/landing' },
+            { text: 'Dashboard 仪表盘', link: '/patterns/dashboard' }
+          ]
+        }
       ]
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com' }
+      { icon: 'github', link: 'https://github.com/zhengyehui/my-design-lib' }
     ],
 
     search: {

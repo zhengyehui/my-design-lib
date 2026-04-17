@@ -50,7 +50,7 @@
 
 ## 联系方式
 
-- 📧 邮件：hello@design-lib.dev
+- 📧 邮件：weta_zheng@qq.com
 - 💬 微信：（待补充）
 
 ---
