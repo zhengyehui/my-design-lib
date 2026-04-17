@@ -1,32 +1,372 @@
 # Tooltip 工具提示
 
-悬浮提示文字
+
+
+## 实时预览
+
+<iframe src="/components/tooltip/preview.html" style="width:100%; border:1px solid var(--color-border, #e5e7eb); border-radius:8px; min-height:200px; background:white;" loading="lazy"></iframe>
 
 ## 引入
 
 ```html
 <link rel="stylesheet" href="/tokens/tokens.css">
-<!-- 复制下面的组件代码 -->
+<link rel="stylesheet" href="/components/tooltip/tooltip.css">
 ```
-
-## 变体
-
-| 变体 | 用途 |
-|------|------|
-| `top` | 上方提示 |
-| `bottom` | 下方提示 |
-| `left` | 左侧提示 |
-| `right` | 右侧提示 |
 
 ## 代码
 
-::: details 展开查看完整代码
-<<< @/../src/components/tooltip/tooltip.html
-:::
+### HTML
+
+```html
+<!-- Tooltip Component — 工具提示组件，支持 top、bottom、left、right 四种方向 -->
+
+
+<!-- Demo: Tooltip 组件 -->
+<div style="display: flex; flex-direction: column; gap: 48px; padding: 40px; max-width: 600px;">
+  <!-- 方向变体 -->
+  <div>
+    <h4 style="margin: 0 0 24px 0; font-size: var(--text-sm); color: var(--color-text-secondary);">方向变体</h4>
+    <div style="display: flex; justify-content: space-around; align-items: center; height: 200px;">
+      <!-- 顶部 -->
+      <div class="tooltip tooltip--top">
+        <button class="tooltip__trigger btn btn--primary btn--md">顶部</button>
+        <div class="tooltip__content">这是顶部的工具提示</div>
+      </div>
+      
+      <!-- 底部 -->
+      <div class="tooltip tooltip--bottom">
+        <button class="tooltip__trigger btn btn--primary btn--md">底部</button>
+        <div class="tooltip__content">这是底部的工具提示</div>
+      </div>
+      
+      <!-- 左侧 -->
+      <div class="tooltip tooltip--left">
+        <button class="tooltip__trigger btn btn--primary btn--md">左侧</button>
+        <div class="tooltip__content">这是左侧的工具提示</div>
+      </div>
+      
+      <!-- 右侧 -->
+      <div class="tooltip tooltip--right">
+        <button class="tooltip__trigger btn btn--primary btn--md">右侧</button>
+        <div class="tooltip__content">这是右侧的工具提示</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 颜色变体 -->
+  <div>
+    <h4 style="margin: 0 0 24px 0; font-size: var(--text-sm); color: var(--color-text-secondary);">颜色变体</h4>
+    <div style="display: flex; gap: 24px; align-items: center;">
+      <!-- 成功 -->
+      <div class="tooltip tooltip--top tooltip--success">
+        <button class="tooltip__trigger btn btn--secondary btn--md">成功</button>
+        <div class="tooltip__content">操作成功！</div>
+      </div>
+      
+      <!-- 警告 -->
+      <div class="tooltip tooltip--top tooltip--warning">
+        <button class="tooltip__trigger btn btn--secondary btn--md">警告</button>
+        <div class="tooltip__content">请注意此操作</div>
+      </div>
+      
+      <!-- 危险 -->
+      <div class="tooltip tooltip--top tooltip--danger">
+        <button class="tooltip__trigger btn btn--secondary btn--md">危险</button>
+        <div class="tooltip__content">此操作不可撤销</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 不同触发元素 -->
+  <div>
+    <h4 style="margin: 0 0 24px 0; font-size: var(--text-sm); color: var(--color-text-secondary);">不同触发元素</h4>
+    <div style="display: flex; gap: 24px; align-items: center;">
+      <!-- 图标按钮 -->
+      <div class="tooltip tooltip--top">
+        <button class="tooltip__trigger btn btn--ghost btn--md">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4"></path>
+            <path d="M12 8h.01"></path>
+          </svg>
+        </button>
+        <div class="tooltip__content">更多信息</div>
+      </div>
+      
+      <!-- 文本链接 -->
+      <div class="tooltip tooltip--top">
+        <a href="#" class="tooltip__trigger" style="color: var(--color-primary); text-decoration: underline;">
+          悬停查看提示
+        </a>
+        <div class="tooltip__content">这是一个文本链接的工具提示</div>
+      </div>
+      
+      <!-- 图片 -->
+      <div class="tooltip tooltip--top">
+        <div class="tooltip__trigger" style="width: 40px; height: 40px; background: var(--color-primary); border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+          ?
+        </div>
+        <div class="tooltip__content">点击获取帮助</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 禁用状态 -->
+  <div>
+    <h4 style="margin: 0 0 24px 0; font-size: var(--text-sm); color: var(--color-text-secondary);">禁用状态</h4>
+    <div class="tooltip tooltip--top tooltip--disabled">
+      <button class="tooltip__trigger btn btn--ghost btn--md" disabled style="opacity: 0.5; cursor: not-allowed;">
+        禁用按钮
+      </button>
+      <div class="tooltip__content">这个提示不会显示</div>
+    </div>
+  </div>
+</div>
+
+<!-- 按钮样式（用于演示） -->
+
+
+<script>
+// Tooltip 交互逻辑
+document.addEventListener('DOMContentLoaded', function() {
+  // 为所有工具提示添加键盘支持
+  const tooltips = document.querySelectorAll('.tooltip');
+  
+  tooltips.forEach(tooltip => {
+    const trigger = tooltip.querySelector('.tooltip__trigger');
+    const content = tooltip.querySelector('.tooltip__content');
+    
+    if (!trigger || !content) return;
+    
+    // 添加 tabindex 使元素可聚焦
+    if (!trigger.hasAttribute('tabindex')) {
+      trigger.setAttribute('tabindex', '0');
+    }
+    
+    // 键盘事件
+    trigger.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        // 切换工具提示显示状态
+        const isVisible = content.style.opacity === '1';
+        content.style.opacity = isVisible ? '0' : '1';
+        content.style.visibility = isVisible ? 'hidden' : 'visible';
+      }
+      
+      if (e.key === 'Escape') {
+        content.style.opacity = '0';
+        content.style.visibility = 'hidden';
+      }
+    });
+    
+    // 焦点事件
+    trigger.addEventListener('focus', function() {
+      if (!tooltip.classList.contains('tooltip--disabled')) {
+        content.style.opacity = '1';
+        content.style.visibility = 'visible';
+      }
+    });
+    
+    trigger.addEventListener('blur', function() {
+      content.style.opacity = '0';
+      content.style.visibility = 'hidden';
+    });
+  });
+  
+  // 点击外部关闭所有工具提示
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.tooltip')) {
+      document.querySelectorAll('.tooltip__content').forEach(content => {
+        content.style.opacity = '0';
+        content.style.visibility = 'hidden';
+      });
+    }
+  });
+});
+</script>
+```
+
+### CSS
+
+```css
+/* Tooltip.css */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip__content {
+  position: absolute;
+  z-index: var(--z-tooltip, 1000);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-text);
+  color: var(--color-text-inverse);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-normal);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--duration-fast) var(--ease-default),
+              visibility var(--duration-fast) var(--ease-default),
+              transform var(--duration-fast) var(--ease-default);
+  pointer-events: none;
+}
+
+/* 箭头 */
+.tooltip__content::after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 6px;
+}
+
+/* 顶部方向 */
+.tooltip--top .tooltip__content {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  margin-bottom: 8px;
+}
+
+.tooltip--top .tooltip__content::after {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: var(--color-text) transparent transparent transparent;
+}
+
+.tooltip--top:hover .tooltip__content,
+.tooltip--top:focus-within .tooltip__content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 底部方向 */
+.tooltip--bottom .tooltip__content {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  margin-top: 8px;
+}
+
+.tooltip--bottom .tooltip__content::after {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: transparent transparent var(--color-text) transparent;
+}
+
+.tooltip--bottom:hover .tooltip__content,
+.tooltip--bottom:focus-within .tooltip__content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 左侧方向 */
+.tooltip--left .tooltip__content {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+  margin-right: 8px;
+}
+
+.tooltip--left .tooltip__content::after {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-color: transparent transparent transparent var(--color-text);
+}
+
+.tooltip--left:hover .tooltip__content,
+.tooltip--left:focus-within .tooltip__content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* 右侧方向 */
+.tooltip--right .tooltip__content {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-8px);
+  margin-left: 8px;
+}
+
+.tooltip--right .tooltip__content::after {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-color: transparent var(--color-text) transparent transparent;
+}
+
+.tooltip--right:hover .tooltip__content,
+.tooltip--right:focus-within .tooltip__content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* 触发元素 */
+.tooltip__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* 不同颜色变体 */
+.tooltip--success .tooltip__content {
+  background-color: var(--color-success);
+}
+
+.tooltip--success .tooltip__content::after {
+  border-color: var(--color-success) transparent transparent transparent;
+}
+
+.tooltip--warning .tooltip__content {
+  background-color: var(--color-warning);
+}
+
+.tooltip--warning .tooltip__content::after {
+  border-color: var(--color-warning) transparent transparent transparent;
+}
+
+.tooltip--danger .tooltip__content {
+  background-color: var(--color-danger);
+}
+
+.tooltip--danger .tooltip__content::after {
+  border-color: var(--color-danger) transparent transparent transparent;
+}
+
+/* 禁用状态 */
+.tooltip--disabled {
+  pointer-events: none;
+}
+
+.tooltip--disabled .tooltip__content {
+  display: none;
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+  .tooltip__content {
+    font-size: 10px;
+    padding: var(--space-1) var(--space-2);
+  }
+}
+```
 
 ## AI 使用说明
 
 ```
 组件名: tooltip
-选择器: .tooltip | 方向: data-tooltip-pos
+选择器: .tooltip
+依赖: /tokens/tokens.css
+文件: /components/tooltip/tooltip.html
 ```

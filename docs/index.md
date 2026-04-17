@@ -33,6 +33,39 @@ features:
     details: Design Hunter 每日自动爬取 Awwwards、Dribbble 等网站，提炼新组件入库。
 ---
 
+<div class="contact-bar">
+  <span>📧 <a href="mailto:weta_zheng@qq.com">weta_zheng@qq.com</a></span>
+  <span>💬 微信：<strong>weta010730</strong></span>
+  <span>🐙 <a href="https://github.com/zhengyehui/my-design-lib" target="_blank">GitHub</a></span>
+</div>
+
+<style>
+.contact-bar {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-2);
+  font-size: 0.9rem;
+}
+.contact-bar a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+}
+.contact-bar a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 640px) {
+  .contact-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+</style>
+
 <div class="sponsors-hero">
   <div class="sponsors-hero__title">📊 项目数据</div>
   <div class="sponsors-hero__grid">

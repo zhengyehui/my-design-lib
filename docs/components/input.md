@@ -1,17 +1,176 @@
 # Input 输入框
 
-表单输入组件，支持文本、搜索、错误状态、文本域。
+表单输入
 
-## 状态
+## 实时预览
 
-| 状态 | 类名 | 用途 |
-|------|------|------|
-| 默认 | `.input` | 普通输入 |
-| 错误 | `.input--error` | 验证失败 |
-| 成功 | `.input--success` | 验证通过 |
+<iframe src="/components/input/preview.html" style="width:100%; border:1px solid var(--color-border, #e5e7eb); border-radius:8px; min-height:200px; background:white;" loading="lazy"></iframe>
+
+## 引入
+
+```html
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="stylesheet" href="/components/input/input.css">
+```
 
 ## 代码
 
-::: details 展开查看完整代码
-<<< @/../src/components/input/input.html
-:::
+### HTML
+
+```html
+<!-- Input Component — 表单输入框，带标签、状态、图标 -->
+
+
+<!-- Demo: Input 组件 -->
+<div style="display:flex; flex-direction:column; gap:24px; max-width:400px;">
+
+  <!-- 基础输入 -->
+  <div class="input-group">
+    <label class="input-group__label">邮箱地址</label>
+    <input class="input" type="email" placeholder="you@example.com"></input>
+    <span class="input-group__hint">我们不会分享你的邮箱</span>
+  </div>
+
+  <!-- 带图标 -->
+  <div class="input-group">
+    <label class="input-group__label">搜索</label>
+    <div class="input__wrapper">
+      <svg class="input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+      <input class="input input--icon-left" type="text" placeholder="搜索组件..."></input>
+    </div>
+  </div>
+
+  <!-- 错误状态 -->
+  <div class="input-group">
+    <label class="input-group__label">用户名</label>
+    <input class="input input--error" type="text" value="ab" placeholder="至少3个字符"></input>
+    <span class="input__error-msg">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6M9 9l6 6"></path></svg>
+      用户名至少需要 3 个字符
+    </span>
+  </div>
+
+  <!-- Textarea -->
+  <div class="input-group">
+    <label class="input-group__label">留言</label>
+    <textarea class="input textarea" placeholder="说点什么..."></textarea>
+  </div>
+
+</div>
+```
+
+### CSS
+
+```css
+/* Input.css */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-group__label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+.input-group__hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* ── 输入框基础 ─────────────────────── */
+.input {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  transition: all var(--duration-fast) var(--ease-default);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:hover {
+  border-color: var(--color-border-hover);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ghost);
+}
+
+/* ── 状态 ──────────────────────────── */
+.input--error {
+  border-color: var(--color-danger);
+}
+.input--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input--success {
+  border-color: var(--color-success);
+}
+.input--success:focus {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* ── 带图标 ────────────────────────── */
+.input__wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.input__icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.input--icon-left {
+  padding-left: 42px;
+}
+
+.input__error-msg {
+  font-size: var(--text-xs);
+  color: var(--color-danger);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* ── Textarea ──────────────────────── */
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: var(--leading-normal);
+}
+```
+
+## AI 使用说明
+
+```
+组件名: input
+选择器: .input
+依赖: /tokens/tokens.css
+文件: /components/input/input.html
+```

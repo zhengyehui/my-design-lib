@@ -1,30 +1,201 @@
 # Toggle 开关
 
-开关切换组件
+二元状态切换
+
+## 实时预览
+
+<iframe src="/components/toggle/preview.html" style="width:100%; border:1px solid var(--color-border, #e5e7eb); border-radius:8px; min-height:200px; background:white;" loading="lazy"></iframe>
 
 ## 引入
 
 ```html
 <link rel="stylesheet" href="/tokens/tokens.css">
-<!-- 复制下面的组件代码 -->
+<link rel="stylesheet" href="/components/toggle/toggle.css">
 ```
-
-## 变体
-
-| 变体 | 用途 |
-|------|------|
-| `default` | 标准开关 |
-| `labeled` | 带标签的开关 |
 
 ## 代码
 
-::: details 展开查看完整代码
-<<< @/../src/components/toggle/toggle.html
-:::
+### HTML
+
+```html
+<!-- Toggle Component — 开关组件，支持 default 和 labeled 两种变体 -->
+
+
+<!-- Demo: Toggle 组件 -->
+<div style="display: flex; flex-direction: column; gap: 24px; padding: 20px;">
+  <!-- 基础开关 -->
+  <div>
+    <h4 style="margin: 0 0 12px 0; font-size: var(--text-sm); color: var(--color-text-secondary);">基础开关</h4>
+    <div style="display: flex; gap: 16px; align-items: center;">
+      <div class="toggle" onclick="this.classList.toggle('toggle--checked')"></div>
+      <div class="toggle toggle--checked" onclick="this.classList.toggle('toggle--checked')"></div>
+      <div class="toggle toggle--disabled"></div>
+    </div>
+  </div>
+
+  <!-- 带标签开关 -->
+  <div>
+    <h4 style="margin: 0 0 12px 0; font-size: var(--text-sm); color: var(--color-text-secondary);">带标签开关</h4>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <label class="toggle-labeled">
+        <input type="checkbox"></input>
+        <div class="toggle-labeled__toggle toggle-labeled__toggle--checked"></div>
+        <span class="toggle-labeled__label">开启通知</span>
+      </label>
+      <label class="toggle-labeled">
+        <input type="checkbox" checked></input>
+        <div class="toggle-labeled__toggle toggle-labeled__toggle--checked"></div>
+        <span class="toggle-labeled__label">自动保存</span>
+      </label>
+      <label class="toggle-labeled">
+        <input type="checkbox"></input>
+        <div class="toggle-labeled__toggle"></div>
+        <span class="toggle-labeled__label">深色模式</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<script>
+// Toggle 交互逻辑
+document.addEventListener('DOMContentLoaded', function() {
+  // 基础开关点击事件
+  document.querySelectorAll('.toggle:not(.toggle--disabled)').forEach(toggle => {
+    toggle.addEventListener('click', function() {
+      this.classList.toggle('toggle--checked');
+    });
+  });
+
+  // 带标签开关点击事件
+  document.querySelectorAll('.toggle-labeled').forEach(label => {
+    label.addEventListener('click', function(e) {
+      if (e.target.tagName !== 'INPUT') {
+        const checkbox = this.querySelector('input');
+        const toggle = this.querySelector('.toggle-labeled__toggle');
+        checkbox.checked = !checkbox.checked;
+        toggle.classList.toggle('toggle-labeled__toggle--checked', checkbox.checked);
+      }
+    });
+
+    // 监听原生 checkbox 变化
+    const checkbox = label.querySelector('input');
+    const toggle = label.querySelector('.toggle-labeled__toggle');
+    checkbox.addEventListener('change', function() {
+      toggle.classList.toggle('toggle-labeled__toggle--checked', this.checked);
+    });
+  });
+});
+</script>
+```
+
+### CSS
+
+```css
+/* Toggle.css */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-border);
+  cursor: pointer;
+  transition: background-color var(--duration-normal) var(--ease-default);
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+.toggle--checked {
+  background-color: var(--color-primary);
+}
+
+.toggle--checked::after {
+  transform: translateX(24px);
+}
+
+/* 禁用状态 */
+.toggle--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 带标签的变体 */
+.toggle-labeled {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.toggle-labeled__label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-secondary);
+  user-select: none;
+}
+
+.toggle-labeled__toggle {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-border);
+  transition: background-color var(--duration-normal) var(--ease-default);
+}
+
+.toggle-labeled__toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+.toggle-labeled__toggle--checked {
+  background-color: var(--color-primary);
+}
+
+.toggle-labeled__toggle--checked::after {
+  transform: translateX(24px);
+}
+
+/* 隐藏原生 checkbox */
+.toggle-labeled input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* 焦点状态 */
+.toggle:focus-visible,
+.toggle-labeled__toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+```
 
 ## AI 使用说明
 
 ```
 组件名: toggle
-选择器: .toggle | .toggle--labeled
+选择器: .toggle
+依赖: /tokens/tokens.css
+文件: /components/toggle/toggle.html
 ```

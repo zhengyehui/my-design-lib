@@ -1,31 +1,380 @@
 # Avatar 头像
 
-用户头像组件，支持图片和文字
+用户头像组件
+
+## 实时预览
+
+<iframe src="/components/avatar/preview.html" style="width:100%; border:1px solid var(--color-border, #e5e7eb); border-radius:8px; min-height:200px; background:white;" loading="lazy"></iframe>
 
 ## 引入
 
 ```html
 <link rel="stylesheet" href="/tokens/tokens.css">
-<!-- 复制下面的组件代码 -->
+<link rel="stylesheet" href="/components/avatar/avatar.css">
 ```
-
-## 变体
-
-| 变体 | 用途 |
-|------|------|
-| `default` | 圆角矩形头像 |
-| `circle` | 圆形头像 |
-| `square` | 方形头像 |
 
 ## 代码
 
-::: details 展开查看完整代码
-<<< @/../src/components/avatar/avatar.html
-:::
+### HTML
+
+```html
+<!-- Avatar Component — 3 variants: default, circle, square -->
+
+
+<!-- Demo: Avatar 组件 -->
+<div style="display: flex; flex-direction: column; gap: 32px; padding: 20px;">
+  
+  <!-- 基础头像 -->
+  <div>
+    <h4 style="margin: 0 0 16px 0; font-size: var(--text-lg);">基础头像</h4>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+      
+      <!-- 图片头像 -->
+      <div class="avatar avatar--circle avatar--lg">
+        <img class="avatar__img" src="https://i.pravatar.cc/150?img=32" alt="用户头像"></img>
+      </div>
+      
+      <!-- 文字头像 -->
+      <div class="avatar avatar--circle avatar--lg">
+        <span class="avatar__text">张</span>
+      </div>
+      
+      <!-- 占位符头像 -->
+      <div class="avatar avatar--circle avatar--lg">
+        <div class="avatar__placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+      </div>
+      
+      <!-- 带状态 -->
+      <div class="avatar avatar--circle avatar--lg">
+        <img class="avatar__img" src="https://i.pravatar.cc/150?img=47" alt="用户头像"></img>
+        <div class="avatar__status avatar__status--online"></div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 尺寸变体 -->
+  <div>
+    <h4 style="margin: 0 0 16px 0; font-size: var(--text-lg);">尺寸变体</h4>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+      
+      <div class="avatar avatar--circle avatar--xs">
+        <span class="avatar__text">A</span>
+      </div>
+      
+      <div class="avatar avatar--circle avatar--sm">
+        <span class="avatar__text">B</span>
+      </div>
+      
+      <div class="avatar avatar--circle avatar--md">
+        <span class="avatar__text">C</span>
+      </div>
+      
+      <div class="avatar avatar--circle avatar--lg">
+        <span class="avatar__text">D</span>
+      </div>
+      
+      <div class="avatar avatar--circle avatar--xl">
+        <span class="avatar__text">E</span>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 形状变体 -->
+  <div>
+    <h4 style="margin: 0 0 16px 0; font-size: var(--text-lg);">形状变体</h4>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+      
+      <!-- 默认（圆角矩形） -->
+      <div class="avatar avatar--default avatar--lg">
+        <img class="avatar__img" src="https://i.pravatar.cc/150?img=12" alt="用户头像"></img>
+      </div>
+      
+      <!-- 圆形 -->
+      <div class="avatar avatar--circle avatar--lg">
+        <img class="avatar__img" src="https://i.pravatar.cc/150?img=33" alt="用户头像"></img>
+      </div>
+      
+      <!-- 方形 -->
+      <div class="avatar avatar--square avatar--lg">
+        <img class="avatar__img" src="https://i.pravatar.cc/150?img=44" alt="用户头像"></img>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 头像组 -->
+  <div>
+    <h4 style="margin: 0 0 16px 0; font-size: var(--text-lg);">头像组</h4>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      
+      <!-- 堆叠头像 -->
+      <div class="avatar-group avatar-group--stacked">
+        <div class="avatar avatar--circle avatar--md">
+          <img class="avatar__img" src="https://i.pravatar.cc/150?img=1" alt="用户1"></img>
+        </div>
+        <div class="avatar avatar--circle avatar--md">
+          <img class="avatar__img" src="https://i.pravatar.cc/150?img=2" alt="用户2"></img>
+        </div>
+        <div class="avatar avatar--circle avatar--md">
+          <img class="avatar__img" src="https://i.pravatar.cc/150?img=3" alt="用户3"></img>
+        </div>
+        <div class="avatar avatar--circle avatar--md">
+          <img class="avatar__img" src="https://i.pravatar.cc/150?img=4" alt="用户4"></img>
+        </div>
+        <div class="avatar avatar--circle avatar--md avatar--more">
+          <span class="avatar__text">+3</span>
+        </div>
+      </div>
+      
+      <!-- 文字头像组 -->
+      <div class="avatar-group">
+        <div class="avatar avatar--circle avatar--md" style="background: #10b981;">
+          <span class="avatar__text">李</span>
+        </div>
+        <div class="avatar avatar--circle avatar--md" style="background: #f59e0b;">
+          <span class="avatar__text">王</span>
+        </div>
+        <div class="avatar avatar--circle avatar--md" style="background: #3b82f6;">
+          <span class="avatar__text">赵</span>
+        </div>
+        <div class="avatar avatar--circle avatar--md" style="background: #ef4444;">
+          <span class="avatar__text">孙</span>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 状态指示器 -->
+  <div>
+    <h4 style="margin: 0 0 16px 0; font-size: var(--text-lg);">状态指示器</h4>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+      
+      <div class="avatar avatar--circle avatar--lg">
+        <img class="avatar__img" src="https://i.pravatar.cc/150?img=5" alt="在线"></img>
+        <div class="avatar__status avatar__status--online"></div>
+      </div>
+      
+      <div class="avatar avatar--circle avatar--lg">
+        <img class="avatar__img" src="https://i.pravatar.cc/150?img=6" alt="忙碌"></img>
+        <div class="avatar__status avatar__status--busy"></div>
+      </div>
+      
+      <div class="avatar avatar--circle avatar--lg">
+        <img class="avatar__img" src="https://i.pravatar.cc/150?img=7" alt="离开"></img>
+        <div class="avatar__status avatar__status--away"></div>
+      </div>
+      
+      <div class="avatar avatar--circle avatar--lg">
+        <img class="avatar__img" src="https://i.pravatar.cc/150?img=8" alt="离线"></img>
+        <div class="avatar__status"></div>
+      </div>
+      
+    </div>
+  </div>
+
+</div>
+```
+
+### CSS
+
+```css
+/* Avatar.css */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-inverse);
+  background: var(--color-primary);
+  border: 2px solid var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-normal) var(--ease-default);
+  flex-shrink: 0;
+}
+
+.avatar:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── 图片 ──────────────────────────── */
+.avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── 占位符 ──────────────────────────── */
+.avatar__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  color: inherit;
+}
+
+.avatar__placeholder svg {
+  width: 60%;
+  height: 60%;
+  opacity: 0.8;
+}
+
+/* ── 文字头像 ──────────────────────────── */
+.avatar__text {
+  font-size: inherit;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* ── 状态指示器 ──────────────────────────── */
+.avatar__status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  height: 25%;
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-surface);
+  background: var(--color-text-muted);
+}
+
+.avatar__status--online {
+  background: var(--color-success);
+}
+
+.avatar__status--busy {
+  background: var(--color-danger);
+}
+
+.avatar__status--away {
+  background: var(--color-warning);
+}
+
+/* ── 尺寸 ──────────────────────────── */
+.avatar--xs {
+  width: 24px;
+  height: 24px;
+  font-size: var(--text-xs);
+  border-width: 1px;
+}
+
+.avatar--sm {
+  width: 32px;
+  height: 32px;
+  font-size: var(--text-sm);
+  border-width: 1.5px;
+}
+
+.avatar--md {
+  width: 40px;
+  height: 40px;
+  font-size: var(--text-base);
+}
+
+.avatar--lg {
+  width: 56px;
+  height: 56px;
+  font-size: var(--text-lg);
+  border-width: 2.5px;
+}
+
+.avatar--xl {
+  width: 80px;
+  height: 80px;
+  font-size: var(--text-2xl);
+  border-width: 3px;
+}
+
+/* ── 变体样式 ──────────────────────────── */
+.avatar--default {
+  border-radius: var(--radius-md);
+}
+
+.avatar--circle {
+  border-radius: var(--radius-full);
+}
+
+.avatar--square {
+  border-radius: var(--radius-sm);
+}
+
+/* ── 头像组 ──────────────────────────── */
+.avatar-group {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.avatar-group .avatar {
+  margin-left: -12px;
+  transition: transform var(--duration-normal) var(--ease-default);
+}
+
+.avatar-group .avatar:hover {
+  transform: translateY(-4px);
+  z-index: 10;
+}
+
+.avatar-group .avatar:first-child {
+  margin-left: 0;
+}
+
+.avatar-group--stacked .avatar {
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ── 更多头像指示器 ──────────────────────────── */
+.avatar--more {
+  background: var(--color-bg-muted);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  border-color: var(--color-border);
+}
+
+/* ── 暗黑模式适配 ──────────────────────────── */
+[data-theme="dark"] .avatar {
+  background: var(--color-primary);
+  border-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .avatar__status {
+  border-color: var(--color-surface);
+}
+
+[data-theme="dark"] .avatar--more {
+  background: var(--color-bg-muted);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .avatar-group .avatar {
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.3);
+}
+```
 
 ## AI 使用说明
 
 ```
 组件名: avatar
-选择器: .avatar | .avatar--circle | .avatar--square
+选择器: .avatar
+依赖: /tokens/tokens.css
+文件: /components/avatar/avatar.html
 ```

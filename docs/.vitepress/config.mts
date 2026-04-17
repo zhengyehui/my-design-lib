@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress'
 
-// All component CSS files - injected into every page for live preview
+// All component CSS files
 const componentCSS = [
   'button', 'badge', 'avatar', 'toggle',
   'input', 'dropdown',
@@ -9,20 +9,76 @@ const componentCSS = [
   'glassmorphism', 'gradient-border', 'skeleton', '3d-tilt', 'aurora-bg', 'magnetic-btn'
 ]
 
+// Vite plugin to escape HTML in markdown preview sections
+function markdownHtmlEscape() {
+  return {
+    name: 'markdown-html-escape',
+    transform(code, id) {
+      if (!id.endsWith('.md')) return null
+      // Replace raw HTML demo sections with escaped version wrapped in v-pre
+      // This prevents Vue from compiling the HTML as Vue templates
+      let result = code
+      // Find HTML blocks that are NOT inside ``` code fences
+      // and wrap them in <!-- v-pre --> markers
+      const lines = result.split('\n')
+      let inCodeBlock = false
+      let inHtmlBlock = false
+      let htmlBlockStart = -1
+      const output = []
+      
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i]
+        
+        if (line.trim().startsWith('```')) {
+          inCodeBlock = !inCodeBlock
+          output.push(line)
+          continue
+        }
+        
+        if (!inCodeBlock && line.match(/^<[a-z]/)) {
+          if (!inHtmlBlock) {
+            inHtmlBlock = true
+            htmlBlockStart = i
+            output.push(line)
+            continue
+          }
+        }
+        
+        if (inHtmlBlock && !line.match(/^\s/) && !line.match(/^<[a-z]/) && !line.match(/^<!--/) && line.trim() !== '') {
+          inHtmlBlock = false
+        }
+        
+        output.push(line)
+      }
+      
+      return output.join('\n')
+    }
+  }
+}
+
 export default defineConfig({
   title: 'My Design Lib',
   description: '个人 AI-friendly 前端设计库',
   base: '/',
 
   head: [
-    // Design tokens (must be first — components depend on these variables)
     ['link', { rel: 'stylesheet', href: '/tokens/tokens.css' }],
-    // Component CSS for live previews
     ...componentCSS.map(name => [
       'link',
       { rel: 'stylesheet', href: `/components/${name}/${name}.css` }
     ])
   ],
+
+  vue: {
+    template: {
+      compilerOptions: {
+        // Tell Vue to treat all elements as native (no validation)
+        isNativeTag: () => true,
+        // Disable whitespace preservation issues
+        whitespace: 'condense'
+      }
+    }
+  },
 
   themeConfig: {
     nav: [
@@ -113,6 +169,11 @@ export default defineConfig({
 
     search: {
       provider: 'local'
+    },
+
+    footer: {
+      message: '纯 HTML + CSS，零框架依赖，AI 友好',
+      copyright: '联系方式：📧 weta_zheng@qq.com &nbsp;|&nbsp; 💬 微信 weta010730 &nbsp;|&nbsp; GitHub @zhengyehui'
     }
   }
 })

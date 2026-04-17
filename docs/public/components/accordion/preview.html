@@ -1,25 +1,129 @@
-# Accordion 折叠面板
-
-
-
-## 实时预览
-
-<iframe src="/components/accordion/preview.html" style="width:100%; border:1px solid var(--color-border, #e5e7eb); border-radius:8px; min-height:200px; background:white;" loading="lazy"></iframe>
-
-## 引入
-
-```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>accordion Preview</title>
 <link rel="stylesheet" href="/tokens/tokens.css">
 <link rel="stylesheet" href="/components/accordion/accordion.css">
-```
-
-## 代码
-
-### HTML
-
-```html
+<style>
+  body { 
+    margin: 0; padding: 24px; 
+    background: var(--color-bg, #fff); 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+</style>
+</head>
+<body>
 <!-- Accordion Component — 折叠面板组件，支持 default 和 bordered 两种变体 -->
+<style>
+/* Accordion.css */
+.accordion {
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
 
+.accordion__item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.accordion__item:last-child {
+  border-bottom: none;
+}
+
+.accordion__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--color-surface);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  transition: background-color var(--duration-fast) var(--ease-default);
+}
+
+.accordion__header:hover {
+  background-color: var(--color-bg-subtle);
+}
+
+.accordion__header:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.accordion__icon {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--duration-normal) var(--ease-default);
+  color: var(--color-text-secondary);
+}
+
+.accordion__item--open .accordion__icon {
+  transform: rotate(180deg);
+}
+
+.accordion__content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--duration-normal) var(--ease-default);
+}
+
+.accordion__body {
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+/* 带边框变体 */
+.accordion--bordered {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.accordion--bordered .accordion__item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.accordion--bordered .accordion__header {
+  background-color: transparent;
+}
+
+.accordion--bordered .accordion__body {
+  background-color: transparent;
+  border-top: 1px solid var(--color-border);
+}
+
+/* 禁用状态 */
+.accordion__item--disabled .accordion__header {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 箭头图标 */
+.accordion__arrow {
+  width: 16px;
+  height: 16px;
+  border: solid var(--color-text-secondary);
+  border-width: 0 2px 2px 0;
+  padding: 3px;
+  transform: rotate(45deg);
+  transition: transform var(--duration-normal) var(--ease-default);
+  margin-left: var(--space-2);
+}
+
+.accordion__item--open .accordion__arrow {
+  transform: rotate(-135deg);
+}
+</style>
 
 <!-- Demo: Accordion 组件 -->
 <div style="display: flex; flex-direction: column; gap: 32px; padding: 20px; max-width: 600px;">
@@ -163,124 +267,5 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
-```
-
-### CSS
-
-```css
-/* Accordion.css */
-.accordion {
-  width: 100%;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.accordion__item {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.accordion__item:last-child {
-  border-bottom: none;
-}
-
-.accordion__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: var(--space-4) var(--space-5);
-  background-color: var(--color-surface);
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  font-weight: var(--weight-medium);
-  color: var(--color-text);
-  transition: background-color var(--duration-fast) var(--ease-default);
-}
-
-.accordion__header:hover {
-  background-color: var(--color-bg-subtle);
-}
-
-.accordion__header:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: -2px;
-}
-
-.accordion__icon {
-  width: 20px;
-  height: 20px;
-  transition: transform var(--duration-normal) var(--ease-default);
-  color: var(--color-text-secondary);
-}
-
-.accordion__item--open .accordion__icon {
-  transform: rotate(180deg);
-}
-
-.accordion__content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--duration-normal) var(--ease-default);
-}
-
-.accordion__body {
-  padding: var(--space-4) var(--space-5);
-  background-color: var(--color-bg-subtle);
-  color: var(--color-text-secondary);
-  font-size: var(--text-sm);
-  line-height: var(--leading-relaxed);
-}
-
-/* 带边框变体 */
-.accordion--bordered {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-}
-
-.accordion--bordered .accordion__item {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.accordion--bordered .accordion__header {
-  background-color: transparent;
-}
-
-.accordion--bordered .accordion__body {
-  background-color: transparent;
-  border-top: 1px solid var(--color-border);
-}
-
-/* 禁用状态 */
-.accordion__item--disabled .accordion__header {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* 箭头图标 */
-.accordion__arrow {
-  width: 16px;
-  height: 16px;
-  border: solid var(--color-text-secondary);
-  border-width: 0 2px 2px 0;
-  padding: 3px;
-  transform: rotate(45deg);
-  transition: transform var(--duration-normal) var(--ease-default);
-  margin-left: var(--space-2);
-}
-
-.accordion__item--open .accordion__arrow {
-  transform: rotate(-135deg);
-}
-```
-
-## AI 使用说明
-
-```
-组件名: accordion
-选择器: .accordion
-依赖: /tokens/tokens.css
-文件: /components/accordion/accordion.html
-```
+</body>
+</html>

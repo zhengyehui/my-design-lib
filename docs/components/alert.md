@@ -1,32 +1,325 @@
-# Alert 提示
+# Alert 警告
 
-提示信息框，四种语义颜色
+
+
+## 实时预览
+
+<iframe src="/components/alert/preview.html" style="width:100%; border:1px solid var(--color-border, #e5e7eb); border-radius:8px; min-height:200px; background:white;" loading="lazy"></iframe>
 
 ## 引入
 
 ```html
 <link rel="stylesheet" href="/tokens/tokens.css">
-<!-- 复制下面的组件代码 -->
+<link rel="stylesheet" href="/components/alert/alert.css">
 ```
-
-## 变体
-
-| 变体 | 用途 |
-|------|------|
-| `info` | 信息提示，蓝色 |
-| `success` | 成功提示，绿色 |
-| `warning` | 警告提示，黄色 |
-| `danger` | 危险提示，红色 |
 
 ## 代码
 
-::: details 展开查看完整代码
-<<< @/../src/components/alert/alert.html
-:::
+### HTML
+
+```html
+<!-- Alert Component — 4 variants: info, success, warning, danger -->
+
+
+<!-- Demo: Alert 组件 -->
+<div style="display: flex; flex-direction: column; gap: 16px; max-width: 600px;">
+  <!-- 信息提示 -->
+  <div class="alert alert--info">
+    <svg class="alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M12 16v-4M12 8h.01"></path>
+    </svg>
+    <div class="alert__content">
+      <h4 class="alert__title">信息提示</h4>
+      <p class="alert__description">这是一条普通的信息提示，用于告知用户一些有用的信息。</p>
+    </div>
+    <button class="alert__close" aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- 成功提示 -->
+  <div class="alert alert--success">
+    <svg class="alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <div class="alert__content">
+      <h4 class="alert__title">操作成功</h4>
+      <p class="alert__description">您的操作已成功完成，数据已保存。</p>
+    </div>
+    <button class="alert__close" aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- 警告提示 -->
+  <div class="alert alert--warning">
+    <svg class="alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+      <line x1="12" y1="9" x2="12" y2="13"></line>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>
+    <div class="alert__content">
+      <h4 class="alert__title">警告</h4>
+      <p class="alert__description">请注意，此操作可能有风险，请确认后再继续。</p>
+    </div>
+    <button class="alert__close" aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- 危险提示 -->
+  <div class="alert alert--danger">
+    <svg class="alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="15" y1="9" x2="9" y2="15"></line>
+      <line x1="9" y1="9" x2="15" y2="15"></line>
+    </svg>
+    <div class="alert__content">
+      <h4 class="alert__title">错误</h4>
+      <p class="alert__description">操作失败，请检查您的输入并重试。</p>
+    </div>
+    <button class="alert__close" aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+```
+
+### CSS
+
+```css
+/* Alert.css */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-normal) var(--ease-default);
+  position: relative;
+  overflow: hidden;
+}
+
+.alert:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── 图标 ──────────────────────────── */
+.alert__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── 内容区域 ──────────────────────────── */
+.alert__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.alert__title {
+  font-weight: var(--weight-semibold);
+  margin: 0 0 var(--space-1) 0;
+  color: var(--color-text);
+}
+
+.alert__description {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+/* ── 关闭按钮 ──────────────────────────── */
+.alert__close {
+  background: none;
+  border: none;
+  padding: var(--space-1);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-default);
+  flex-shrink: 0;
+}
+
+.alert__close:hover {
+  background: var(--color-bg-muted);
+  color: var(--color-text);
+}
+
+.alert__close svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* ── 变体样式 ──────────────────────────── */
+.alert--info {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.2);
+  color: #1e40af;
+}
+
+.alert--info .alert__icon {
+  color: var(--color-info);
+}
+
+.alert--info .alert__title {
+  color: #1e40af;
+}
+
+.alert--info .alert__description {
+  color: #3b82f6;
+}
+
+.alert--success {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.2);
+  color: #065f46;
+}
+
+.alert--success .alert__icon {
+  color: var(--color-success);
+}
+
+.alert--success .alert__title {
+  color: #065f46;
+}
+
+.alert--success .alert__description {
+  color: #10b981;
+}
+
+.alert--warning {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.2);
+  color: #92400e;
+}
+
+.alert--warning .alert__icon {
+  color: var(--color-warning);
+}
+
+.alert--warning .alert__title {
+  color: #92400e;
+}
+
+.alert--warning .alert__description {
+  color: #f59e0b;
+}
+
+.alert--danger {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #991b1b;
+}
+
+.alert--danger .alert__icon {
+  color: var(--color-danger);
+}
+
+.alert--danger .alert__title {
+  color: #991b1b;
+}
+
+.alert--danger .alert__description {
+  color: #ef4444;
+}
+
+/* ── 暗黑模式适配 ──────────────────────────── */
+[data-theme="dark"] .alert {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .alert__title {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .alert__description {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .alert--info {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .alert--info .alert__title {
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .alert--info .alert__description {
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .alert--success {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+}
+
+[data-theme="dark"] .alert--success .alert__title {
+  color: #6ee7b7;
+}
+
+[data-theme="dark"] .alert--success .alert__description {
+  color: #34d399;
+}
+
+[data-theme="dark"] .alert--warning {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fcd34d;
+}
+
+[data-theme="dark"] .alert--warning .alert__title {
+  color: #fcd34d;
+}
+
+[data-theme="dark"] .alert--warning .alert__description {
+  color: #fbbf24;
+}
+
+[data-theme="dark"] .alert--danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .alert--danger .alert__title {
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .alert--danger .alert__description {
+  color: #f87171;
+}
+```
 
 ## AI 使用说明
 
 ```
 组件名: alert
-选择器: .alert--info | .alert--success | .alert--warning | .alert--danger
+选择器: .alert
+依赖: /tokens/tokens.css
+文件: /components/alert/alert.html
 ```

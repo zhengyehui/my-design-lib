@@ -1,25 +1,182 @@
-# Tabs 标签页
-
-
-
-## 实时预览
-
-<iframe src="/components/tabs/preview.html" style="width:100%; border:1px solid var(--color-border, #e5e7eb); border-radius:8px; min-height:200px; background:white;" loading="lazy"></iframe>
-
-## 引入
-
-```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tabs Preview</title>
 <link rel="stylesheet" href="/tokens/tokens.css">
 <link rel="stylesheet" href="/components/tabs/tabs.css">
-```
-
-## 代码
-
-### HTML
-
-```html
+<style>
+  body { 
+    margin: 0; padding: 24px; 
+    background: var(--color-bg, #fff); 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+</style>
+</head>
+<body>
 <!-- Tabs Component — 标签切换组件，3种变体: default/pills/underline -->
+<style>
+/* Tabs.css */
+.tabs {
+  font-family: var(--font-sans);
+}
 
+/* ── 标签导航 ──────────────────────── */
+.tabs__nav {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+
+/* ── 变体 ──────────────────────────── */
+.tabs__nav--default {
+  gap: var(--space-1);
+}
+
+.tabs__nav--pills {
+  gap: var(--space-2);
+  background: var(--color-bg-muted);
+  padding: var(--space-1);
+  border-radius: var(--radius-md);
+  border-bottom: none;
+}
+
+.tabs__nav--underline {
+  gap: var(--space-8);
+}
+
+/* ── 标签按钮 ──────────────────────── */
+.tabs__btn {
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+  position: relative;
+  white-space: nowrap;
+}
+
+.tabs__btn:hover {
+  color: var(--color-text);
+}
+
+.tabs__btn--active {
+  color: var(--color-primary);
+}
+
+/* ── 默认变体样式 ──────────────────── */
+.tabs__nav--default .tabs__btn {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.tabs__nav--default .tabs__btn--active {
+  background: var(--color-surface);
+  border-bottom: 2px solid var(--color-primary);
+  margin-bottom: -1px;
+}
+
+/* ── 胶囊变体样式 ──────────────────── */
+.tabs__nav--pills .tabs__btn {
+  border-radius: var(--radius-md);
+}
+
+.tabs__nav--pills .tabs__btn--active {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── 下划线变体样式 ────────────────── */
+.tabs__nav--underline .tabs__btn {
+  padding: var(--space-3) 0;
+}
+
+.tabs__nav--underline .tabs__btn--active {
+  color: var(--color-primary);
+}
+
+.tabs__nav--underline .tabs__btn--active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary);
+}
+
+/* ── 标签内容 ──────────────────────── */
+.tabs__content {
+  padding: var(--space-6) 0;
+}
+
+.tabs__panel {
+  display: none;
+  animation: fadeIn var(--duration-normal) var(--ease-default);
+}
+
+.tabs__panel--active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── 标签图标 ──────────────────────── */
+.tabs__icon {
+  width: 16px;
+  height: 16px;
+  margin-right: var(--space-2);
+  vertical-align: middle;
+}
+
+/* ── 标签徽章 ──────────────────────── */
+.tabs__badge {
+  margin-left: var(--space-2);
+  padding: 2px 6px;
+  background: var(--color-primary-ghost);
+  color: var(--color-primary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  border-radius: var(--radius-full);
+}
+
+/* ── 响应式设计 ────────────────────── */
+@media (max-width: 768px) {
+  .tabs__nav {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .tabs__nav--underline {
+    gap: var(--space-6);
+  }
+  
+  .tabs__btn {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+  }
+}
+
+/* ── 禁用状态 ──────────────────────── */
+.tabs__btn--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+</style>
 
 <!-- Demo: Tabs 组件 -->
 <div style="background: var(--color-bg-subtle); padding: 20px; border-radius: var(--radius-lg);">
@@ -227,177 +384,5 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
-```
-
-### CSS
-
-```css
-/* Tabs.css */
-.tabs {
-  font-family: var(--font-sans);
-}
-
-/* ── 标签导航 ──────────────────────── */
-.tabs__nav {
-  display: flex;
-  border-bottom: 1px solid var(--color-border);
-  position: relative;
-}
-
-/* ── 变体 ──────────────────────────── */
-.tabs__nav--default {
-  gap: var(--space-1);
-}
-
-.tabs__nav--pills {
-  gap: var(--space-2);
-  background: var(--color-bg-muted);
-  padding: var(--space-1);
-  border-radius: var(--radius-md);
-  border-bottom: none;
-}
-
-.tabs__nav--underline {
-  gap: var(--space-8);
-}
-
-/* ── 标签按钮 ──────────────────────── */
-.tabs__btn {
-  padding: var(--space-3) var(--space-4);
-  background: transparent;
-  border: none;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-default);
-  position: relative;
-  white-space: nowrap;
-}
-
-.tabs__btn:hover {
-  color: var(--color-text);
-}
-
-.tabs__btn--active {
-  color: var(--color-primary);
-}
-
-/* ── 默认变体样式 ──────────────────── */
-.tabs__nav--default .tabs__btn {
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-}
-
-.tabs__nav--default .tabs__btn--active {
-  background: var(--color-surface);
-  border-bottom: 2px solid var(--color-primary);
-  margin-bottom: -1px;
-}
-
-/* ── 胶囊变体样式 ──────────────────── */
-.tabs__nav--pills .tabs__btn {
-  border-radius: var(--radius-md);
-}
-
-.tabs__nav--pills .tabs__btn--active {
-  background: var(--color-surface);
-  color: var(--color-primary);
-  box-shadow: var(--shadow-sm);
-}
-
-/* ── 下划线变体样式 ────────────────── */
-.tabs__nav--underline .tabs__btn {
-  padding: var(--space-3) 0;
-}
-
-.tabs__nav--underline .tabs__btn--active {
-  color: var(--color-primary);
-}
-
-.tabs__nav--underline .tabs__btn--active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--color-primary);
-}
-
-/* ── 标签内容 ──────────────────────── */
-.tabs__content {
-  padding: var(--space-6) 0;
-}
-
-.tabs__panel {
-  display: none;
-  animation: fadeIn var(--duration-normal) var(--ease-default);
-}
-
-.tabs__panel--active {
-  display: block;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ── 标签图标 ──────────────────────── */
-.tabs__icon {
-  width: 16px;
-  height: 16px;
-  margin-right: var(--space-2);
-  vertical-align: middle;
-}
-
-/* ── 标签徽章 ──────────────────────── */
-.tabs__badge {
-  margin-left: var(--space-2);
-  padding: 2px 6px;
-  background: var(--color-primary-ghost);
-  color: var(--color-primary);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-medium);
-  border-radius: var(--radius-full);
-}
-
-/* ── 响应式设计 ────────────────────── */
-@media (max-width: 768px) {
-  .tabs__nav {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  .tabs__nav--underline {
-    gap: var(--space-6);
-  }
-  
-  .tabs__btn {
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--text-xs);
-  }
-}
-
-/* ── 禁用状态 ──────────────────────── */
-.tabs__btn--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-```
-
-## AI 使用说明
-
-```
-组件名: tabs
-选择器: .tabs
-依赖: /tokens/tokens.css
-文件: /components/tabs/tabs.html
-```
+</body>
+</html>
