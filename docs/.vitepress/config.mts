@@ -1,9 +1,28 @@
 import { defineConfig } from 'vitepress'
 
+// All component CSS files - injected into every page for live preview
+const componentCSS = [
+  'button', 'badge', 'avatar', 'toggle',
+  'input', 'dropdown',
+  'card', 'hero', 'navbar', 'footer', 'table', 'tabs', 'accordion', 'breadcrumb',
+  'modal', 'alert', 'toast', 'tooltip', 'progress',
+  'glassmorphism', 'gradient-border', 'skeleton', '3d-tilt', 'aurora-bg', 'magnetic-btn'
+]
+
 export default defineConfig({
   title: 'My Design Lib',
   description: '个人 AI-friendly 前端设计库',
   base: '/',
+
+  head: [
+    // Design tokens (must be first — components depend on these variables)
+    ['link', { rel: 'stylesheet', href: '/tokens/tokens.css' }],
+    // Component CSS for live previews
+    ...componentCSS.map(name => [
+      'link',
+      { rel: 'stylesheet', href: `/components/${name}/${name}.css` }
+    ])
+  ],
 
   themeConfig: {
     nav: [

@@ -1,0 +1,113 @@
+/* modal.css — extracted from modal.html */
+/* Modal.css */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  z-index: var(--z-modal);
+  opacity: 0;
+  animation: modal-fade-in var(--duration-normal) var(--ease-out) forwards;
+}
+
+.modal-overlay--hidden {
+  animation: modal-fade-out var(--duration-fast) var(--ease-in) forwards;
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes modal-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── 对话框 ─────────────────────────── */
+.modal {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.95) translateY(10px);
+  animation: modal-slide-in var(--duration-normal) var(--ease-spring) forwards;
+}
+
+.modal-overlay--hidden .modal {
+  animation: modal-slide-out var(--duration-fast) var(--ease-in) forwards;
+}
+
+@keyframes modal-slide-in {
+  from { transform: scale(0.95) translateY(10px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes modal-slide-out {
+  from { transform: scale(1) translateY(0); opacity: 1; }
+  to   { transform: scale(0.95) translateY(10px); opacity: 0; }
+}
+
+/* ── 头部 ───────────────────────────── */
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal__title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+.modal__close:hover {
+  background: var(--color-bg-muted);
+  color: var(--color-text);
+}
+
+/* ── 内容 ───────────────────────────── */
+.modal__body {
+  padding: var(--space-6);
+  overflow-y: auto;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+/* ── 底部 ───────────────────────────── */
+.modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── 尺寸 ──────────────────────────── */
+.modal--sm { max-width: 380px; }
+.modal--lg { max-width: 720px; }
