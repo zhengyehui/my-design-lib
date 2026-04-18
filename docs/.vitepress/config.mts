@@ -212,7 +212,9 @@ export default defineConfig({
             { text: '创意作品集', link: '/pages/portfolio' },
             { text: '数据仪表盘', link: '/pages/dashboard-dark' },
             { text: '电商结账页', link: '/pages/checkout' },
-            { text: '404 创意页', link: '/pages/404-creative' }
+            { text: '404 创意页', link: '/pages/404-creative' },
+            { text: '设计机构作品集', link: '/pages/agency-portfolio' },
+            { text: '科技大会落地页', link: '/pages/conference-landing' }
           ]
         }
       ]

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio Creative — 数字设计机构</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --agency-primary: #1a1a1a;
+      --agency-secondary: #f8f7f4;
+      --agency-accent: #e63946;
+      --agency-text: #2d2d2d;
+      --agency-text-muted: #6b6b6b;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--agency-secondary);
+      color: var(--agency-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* 导航栏 */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(248, 247, 244, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--agency-primary);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 3rem;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      color: var(--agency-text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+    
+    .nav-links a:hover {
+      color: var(--agency-primary);
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--agency-accent);
+      transition: width 0.3s;
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    .nav-cta {
+      background: var(--agency-primary);
+      color: white;
+      padding: 0.8rem 1.8rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .nav-cta:hover {
+      background: var(--agency-accent);
+      transform: translateY(-2px);
+    }
+    
+    /* Hero区域 */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+      color: var(--agency-primary);
+      letter-spacing: -0.03em;
+    }
+    
+    .hero-title span {
+      color: var(--agency-accent);
+    }
+    
+    .hero-subtitle {
+      font-size: 1.5rem;
+      color: var(--agency-text-muted);
+      max-width: 600px;
+      margin-bottom: 3rem;
+      line-height: 1.6;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: var(--agency-primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--agency-accent);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--agency-primary);
+      border: 2px solid var(--agency-primary);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--agency-primary);
+      color: white;
+    }
+    
+    .hero-decoration {
+      position: absolute;
+      right: -10%;
+      top: 20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(230, 57, 70, 0.1), transparent 70%);
+      border-radius: 50%;
+      z-index: 1;
+    }
+    
+    /* 作品集展示 */
+    .portfolio {
+      padding: 6rem 4rem;
+      background: white;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--agency-primary);
+    }
+    
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--agency-text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .portfolio-item {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--agency-secondary);
+      transition: all 0.4s;
+      cursor: pointer;
+    }
+    
+    .portfolio-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    }
+    
+    .portfolio-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      transition: transform 0.4s;
+    }
+    
+    .portfolio-item:hover .portfolio-image {
+      transform: scale(1.05);
+    }
+    
+    .portfolio-content {
+      padding: 2rem;
+    }
+    
+    .portfolio-category {
+      color: var(--agency-accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .portfolio-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--agency-primary);
+    }
+    
+    .portfolio-description {
+      color: var(--agency-text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    /* 服务区域 */
+    .services {
+      padding: 6rem 4rem;
+      background: var(--agency-primary);
+      color: white;
+    }
+    
+    .services .section-title {
+      color: white;
+    }
+    
+    .services .section-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .service-card {
+      padding: 2.5rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+    }
+    
+    .service-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-5px);
+    }
+    
+    .service-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--agency-accent);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .service-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .service-description {
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+    }
+    
+    /* 客户评价 */
+    .testimonials {
+      padding: 6rem 4rem;
+      background: white;
+    }
+    
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .testimonial-card {
+      padding: 2.5rem;
+      border-radius: 16px;
+      background: var(--agency-secondary);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .testimonial-quote {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      color: var(--agency-text);
+      font-style: italic;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--agency-accent), #ff6b6b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+    
+    .testimonial-info h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    
+    .testimonial-info p {
+      color: var(--agency-text-muted);
+      font-size: 0.9rem;
+    }
+    
+    /* 联系区域 */
+    .contact {
+      padding: 6rem 4rem;
+      background: linear-gradient(135deg, var(--agency-primary), #2d2d2d);
+      color: white;
+      text-align: center;
+    }
+    
+    .contact .section-title {
+      color: white;
+      margin-bottom: 1rem;
+    }
+    
+    .contact .section-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 3rem;
+    }
+    
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .form-input {
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--agency-accent);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    textarea.form-input {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    .form-submit {
+      background: var(--agency-accent);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .form-submit:hover {
+      background: #ff5252;
+      transform: translateY(-3px);
+    }
+    
+    /* 页脚 */
+    .footer {
+      padding: 4rem;
+      background: var(--agency-primary);
+      color: white;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+    
+    .footer-brand h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-brand p {
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .social-link:hover {
+      background: var(--agency-accent);
+      transform: translateY(-3px);
+    }
+    
+    .footer-links h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+    
+    .footer-links ul {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--agency-accent);
+    }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 3rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.9rem;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .nav {
+        padding: 1rem 2rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .hero {
+        padding: 6rem 2rem 4rem;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .portfolio, .services, .testimonials, .contact {
+        padding: 4rem 2rem;
+      }
+      
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">Studio Creative</a>
+    <ul class="nav-links">
+      <li><a href="#work">作品</a></li>
+      <li><a href="#services">服务</a></li>
+      <li><a href="#about">关于</a></li>
+      <li><a href="#contact">联系</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">开始项目</a>
+  </nav>
+
+  <!-- Hero区域 -->
+  <section class="hero">
+    <div class="hero-decoration"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        用<span>设计</span>重新定义<br>数字体验
+      </h1>
+      <p class="hero-subtitle">
+        我们是数字-first 设计机构，专注于打造令人难忘的品牌体验和网站。从策略到部署，提供一站式解决方案。
+      </p>
+      <div class="hero-cta">
+        <a href="#work" class="btn btn-primary">查看作品</a>
+        <a href="#contact" class="btn btn-secondary">联系我们</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 作品集展示 -->
+  <section class="portfolio" id="work">
+    <div class="section-header">
+      <h2 class="section-title">精选作品</h2>
+      <p class="section-subtitle">每一个项目都是一次创新的探索，我们致力于创造有意义的数字体验</p>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-item">
+        <div class="portfolio-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+        <div class="portfolio-content">
+          <div class="portfolio-category">品牌重塑</div>
+          <h3 class="portfolio-title">Theory Verse</h3>
+          <p class="portfolio-description">为科技教育平台打造全新的视觉识别系统，融合现代感与学术氛围</p>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+        <div class="portfolio-content">
+          <div class="portfolio-category">电动汽车</div>
+          <h3 class="portfolio-title">Scout Motors</h3>
+          <p class="portfolio-description">为新兴电动汽车品牌设计完整的数字体验，突出创新与可持续性</p>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+        <div class="portfolio-content">
+          <div class="portfolio-category">体育场馆</div>
+          <h3 class="portfolio-title">Populous</h3>
+          <p class="portfolio-description">全球领先体育建筑公司的官方网站，展示宏伟项目与设计理念</p>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <div class="portfolio-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+        <div class="portfolio-content">
+          <div class="portfolio-category">食品品牌</div>
+          <h3 class="portfolio-title">Mate Libre</h3>
+          <p class="portfolio-description">阿根廷马黛茶品牌的数字平台，传递自然与健康的生活方式</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 服务区域 -->
+  <section class="services" id="services">
+    <div class="section-header">
+      <h2 class="section-title">我们的服务</h2>
+      <p class="section-subtitle">从概念到现实，提供全方位的数字设计解决方案</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🎨</div>
+        <h3 class="service-title">品牌设计</h3>
+        <p class="service-description">创建独特的视觉识别系统，包括标志、色彩方案、字体系统和品牌指南，确保品牌一致性。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💻</div>
+        <h3 class="service-title">网站设计与开发</h3>
+        <p class="service-description">设计并开发响应式网站，注重用户体验、性能优化和搜索引擎友好性。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3 class="service-title">数字产品</h3>
+        <p class="service-description">设计直观易用的移动应用和Web应用界面，从原型到最终产品的完整设计流程。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🚀</div>
+        <h3 class="service-title">数字策略</h3>
+        <p class="service-description">提供数字转型咨询、用户体验研究和增长策略，帮助品牌在数字时代脱颖而出。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 客户评价 -->
+  <section class="testimonials">
+    <div class="section-header">
+      <h2 class="section-title">客户评价</h2>
+      <p class="section-subtitle">听听我们的客户怎么说</p>
+    </div>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"Studio Creative 彻底改变了我们的数字形象。他们的设计不仅美观，更重要的是真正理解了我们的业务需求，带来了显著的转化率提升。"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">WZ</div>
+          <div class="testimonial-info">
+            <h4>王志远</h4>
+            <p>CEO, TechVision</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"与 Studio Creative 合作是一次愉快的体验。他们专业、高效，并且真正关心项目的成功。强烈推荐给任何需要高质量数字设计的人。"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">LH</div>
+          <div class="testimonial-info">
+            <h4>李华</h4>
+            <p>创始人, GreenTech</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系区域 -->
+  <section class="contact" id="contact">
+    <div class="section-header">
+      <h2 class="section-title">开始您的项目</h2>
+      <p class="section-subtitle">准备好创造一些令人惊叹的东西了吗？让我们聊聊您的想法。</p>
+    </div>
+    <form class="contact-form">
+      <div class="form-row">
+        <input type="text" class="form-input" placeholder="您的姓名">
+        <input type="email" class="form-input" placeholder="电子邮箱">
+      </div>
+      <input type="text" class="form-input" placeholder="项目类型">
+      <textarea class="form-input" placeholder="项目描述"></textarea>
+      <button type="submit" class="form-submit">发送消息</button>
+    </form>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>Studio Creative</h3>
+        <p>数字-first 设计机构，专注于创造有意义的数字体验。从2018年开始，我们帮助品牌在数字世界中脱颖而出。</p>
+        <div class="footer-social">
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">tw</a>
+          <a href="#" class="social-link">ig</a>
+          <a href="#" class="social-link">be</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>服务</h4>
+        <ul>
+          <li><a href="#">品牌设计</a></li>
+          <li><a href="#">网站设计</a></li>
+          <li><a href="#">数字产品</a></li>
+          <li><a href="#">数字策略</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>公司</h4>
+        <ul>
+          <li><a href="#">关于我们</a></li>
+          <li><a href="#">团队</a></li>
+          <li><a href="#">职业</a></li>
+          <li><a href="#">联系</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>资源</h4>
+        <ul>
+          <li><a href="#">博客</a></li>
+          <li><a href="#">案例研究</a></li>
+          <li><a href="#">设计系统</a></li>
+          <li><a href="#">常见问题</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>©2026 Studio Creative. 保留所有权利。</p>
+    </div>
+  </footer>
+
+  <script>
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // 导航栏滚动效果
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('.nav');
+      if (window.scrollY > 50) {
+        nav.style.background = 'rgba(248, 247, 244, 0.98)';
+        nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+      } else {
+        nav.style.background = 'rgba(248, 247, 244, 0.9)';
+        nav.style.boxShadow = 'none';
+      }
+    });
+
+    // 表单提交
+    document.querySelector('.contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('感谢您的留言！我们会尽快与您联系。');
+    });
+  </script>
+</body>
+</html>

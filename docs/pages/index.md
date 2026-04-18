@@ -52,6 +52,24 @@ const pages = [
     colors: ['#0a0a0a', '#6366f1', '#a855f7'],
     rating: 9.3,
     description: '太空主题创意 404 页面，星空动画 + 渐变数字 + 漂浮元素',
+  },
+  {
+    id: 'agency-portfolio',
+    title: 'Studio Creative 设计机构',
+    category: 'portfolio',
+    tags: ['设计机构', '作品集', '品牌设计'],
+    colors: ['#1a1a1a', '#f8f7f4', '#e63946'],
+    rating: 9.4,
+    description: '现代设计机构作品集，灵感来自 Locomotive，包含作品展示、服务介绍、客户评价',
+  },
+  {
+    id: 'conference-landing',
+    title: 'TechConf 科技大会',
+    category: 'landing',
+    tags: ['科技大会', '会议网站', '活动页面'],
+    colors: ['#0a2540', '#635bff', '#00d4ff'],
+    rating: 9.6,
+    description: '专业科技大会落地页，灵感来自 Stripe Sessions，包含议程、演讲者、门票定价',
   }
 ]
 

@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechConf 2026 — 全球科技大会</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --conf-primary: #0a2540;
+      --conf-secondary: #635bff;
+      --conf-accent: #00d4ff;
+      --conf-light: #f6f9fc;
+      --conf-text: #425466;
+      --conf-text-dark: #1a1f36;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--conf-light);
+      color: var(--conf-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* 导航栏 */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 37, 64, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--conf-secondary), var(--conf-accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: white;
+    }
+    
+    .nav-cta {
+      background: var(--conf-secondary);
+      color: white;
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .nav-cta:hover {
+      background: #5a4fd9;
+      transform: translateY(-2px);
+    }
+    
+    /* Hero区域 */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      background: linear-gradient(135deg, var(--conf-primary) 0%, #1a365d 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-content {
+      max-width: 900px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .hero-badge {
+      display: inline-block;
+      background: rgba(99, 91, 255, 0.2);
+      color: var(--conf-accent);
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+    
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      color: white;
+      letter-spacing: -0.02em;
+    }
+    
+    .hero-title span {
+      background: linear-gradient(135deg, var(--conf-secondary), var(--conf-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 700px;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    
+    .hero-date {
+      font-size: 1.1rem;
+      color: var(--conf-accent);
+      font-weight: 600;
+      margin-bottom: 3rem;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 1rem 2.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: var(--conf-secondary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #5a4fd9;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(99, 91, 255, 0.3);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .hero-decoration {
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(99, 91, 255, 0.2), transparent 70%);
+      border-radius: 50%;
+      z-index: 1;
+    }
+    
+    .hero-decoration-2 {
+      position: absolute;
+      bottom: 10%;
+      right: 10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.15), transparent 70%);
+      border-radius: 50%;
+      z-index: 1;
+    }
+    
+    /* 统计数据 */
+    .stats {
+      padding: 4rem 2rem;
+      background: white;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .stat-item h3 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--conf-secondary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-item p {
+      color: var(--conf-text);
+      font-size: 1rem;
+    }
+    
+    /* 议程区域 */
+    .agenda {
+      padding: 6rem 2rem;
+      background: var(--conf-light);
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--conf-text-dark);
+    }
+    
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--conf-text);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .agenda-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+    }
+    
+    .agenda-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    .agenda-day {
+      color: var(--conf-secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+    
+    .agenda-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--conf-text-dark);
+    }
+    
+    .agenda-description {
+      color: var(--conf-text);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .agenda-time {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--conf-text);
+      font-size: 0.9rem;
+    }
+    
+    /* 演讲者区域 */
+    .speakers {
+      padding: 6rem 2rem;
+      background: white;
+    }
+    
+    .speakers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .speaker-card {
+      text-align: center;
+      padding: 2rem;
+      border-radius: 16px;
+      background: var(--conf-light);
+      transition: all 0.3s;
+    }
+    
+    .speaker-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .speaker-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--conf-secondary), var(--conf-accent));
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: white;
+      font-weight: 700;
+    }
+    
+    .speaker-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--conf-text-dark);
+    }
+    
+    .speaker-title {
+      color: var(--conf-text);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .speaker-company {
+      color: var(--conf-secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    /* 定价区域 */
+    .pricing {
+      padding: 6rem 2rem;
+      background: var(--conf-light);
+    }
+    
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .pricing-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .pricing-card.featured {
+      border: 2px solid var(--conf-secondary);
+      transform: scale(1.05);
+      box-shadow: 0 20px 60px rgba(99, 91, 255, 0.15);
+    }
+    
+    .pricing-badge {
+      background: var(--conf-secondary);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    
+    .pricing-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--conf-text-dark);
+    }
+    
+    .pricing-price {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--conf-text-dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .pricing-price span {
+      font-size: 1rem;
+      color: var(--conf-text);
+      font-weight: 500;
+    }
+    
+    .pricing-features {
+      list-style: none;
+      margin: 2rem 0;
+      text-align: left;
+    }
+    
+    .pricing-features li {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      color: var(--conf-text);
+    }
+    
+    .pricing-features li:last-child {
+      border-bottom: none;
+    }
+    
+    .pricing-features li::before {
+      content: "✓";
+      color: var(--conf-secondary);
+      font-weight: 700;
+      margin-right: 0.8rem;
+    }
+    
+    .pricing-cta {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .pricing-cta-primary {
+      background: var(--conf-secondary);
+      color: white;
+      border: none;
+    }
+    
+    .pricing-cta-primary:hover {
+      background: #5a4fd9;
+      transform: translateY(-2px);
+    }
+    
+    .pricing-cta-secondary {
+      background: transparent;
+      color: var(--conf-secondary);
+      border: 2px solid var(--conf-secondary);
+    }
+    
+    .pricing-cta-secondary:hover {
+      background: var(--conf-secondary);
+      color: white;
+    }
+    
+    /* 赞助商区域 */
+    .sponsors {
+      padding: 4rem 2rem;
+      background: white;
+      text-align: center;
+    }
+    
+    .sponsors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      align-items: center;
+    }
+    
+    .sponsor-logo {
+      height: 60px;
+      background: var(--conf-light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--conf-text);
+      font-weight: 700;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+    
+    .sponsor-logo:hover {
+      background: var(--conf-secondary);
+      color: white;
+    }
+    
+    /* 联系区域 */
+    .contact {
+      padding: 6rem 2rem;
+      background: linear-gradient(135deg, var(--conf-primary), #1a365d);
+      color: white;
+      text-align: center;
+    }
+    
+    .contact .section-title {
+      color: white;
+      margin-bottom: 1rem;
+    }
+    
+    .contact .section-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 3rem;
+    }
+    
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .form-input {
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--conf-accent);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .form-submit {
+      background: var(--conf-secondary);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .form-submit:hover {
+      background: #5a4fd9;
+      transform: translateY(-3px);
+    }
+    
+    /* 页脚 */
+    .footer {
+      padding: 4rem 2rem;
+      background: var(--conf-primary);
+      color: white;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+    
+    .footer-brand h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-brand p {
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .social-link:hover {
+      background: var(--conf-secondary);
+      transform: translateY(-3px);
+    }
+    
+    .footer-links h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+    
+    .footer-links ul {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--conf-accent);
+    }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 3rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.9rem;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .nav {
+        padding: 1rem 2rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .hero {
+        padding: 6rem 2rem 4rem;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .agenda, .speakers, .pricing, .contact {
+        padding: 4rem 2rem;
+      }
+      
+      .agenda-grid, .speakers-grid, .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .pricing-card.featured {
+        transform: none;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">TC</div>
+      TechConf
+    </a>
+    <ul class="nav-links">
+      <li><a href="#agenda">议程</a></li>
+      <li><a href="#speakers">演讲者</a></li>
+      <li><a href="#pricing">门票</a></li>
+      <li><a href="#sponsors">赞助商</a></li>
+    </ul>
+    <a href="#pricing" class="nav-cta">立即注册</a>
+  </nav>
+
+  <!-- Hero区域 -->
+  <section class="hero">
+    <div class="hero-decoration"></div>
+    <div class="hero-decoration-2"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🔥 早鸟票限时优惠</div>
+      <h1 class="hero-title">
+        全球<span>科技</span>创新大会<br>2026
+      </h1>
+      <p class="hero-subtitle">
+        汇聚全球顶尖科技领袖、创新者和开发者，探索人工智能、区块链、云计算等前沿技术的未来趋势。
+      </p>
+      <div class="hero-date">2026年6月15-17日 • 旧金山 Moscone Center</div>
+      <div class="hero-cta">
+        <a href="#pricing" class="btn btn-primary">立即注册</a>
+        <a href="#agenda" class="btn btn-secondary">查看议程</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 统计数据 -->
+  <section class="stats">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <h3>5,000+</h3>
+        <p>参会者</p>
+      </div>
+      <div class="stat-item">
+        <h3>100+</h3>
+        <p>演讲嘉宾</p>
+      </div>
+      <div class="stat-item">
+        <h3>50+</h3>
+        <p>专题会议</p>
+      </div>
+      <div class="stat-item">
+        <h3>3</h3>
+        <p>天深度交流</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 议程区域 -->
+  <section class="agenda" id="agenda">
+    <div class="section-header">
+      <h2 class="section-title">大会日程</h2>
+      <p class="section-subtitle">三天的深度内容，涵盖科技领域的各个前沿方向</p>
+    </div>
+    <div class="agenda-grid">
+      <div class="agenda-card">
+        <div class="agenda-day">第一天 • 6月15日</div>
+        <h3 class="agenda-title">开幕式 & 主题演讲</h3>
+        <p class="agenda-description">全球科技领袖分享对未来的展望，探讨人工智能、量子计算等颠覆性技术的发展方向。</p>
+        <div class="agenda-time">
+          <span>⏰</span> 9:00 - 18:00
+        </div>
+      </div>
+      <div class="agenda-card">
+        <div class="agenda-day">第二天 • 6月16日</div>
+        <h3 class="agenda-title">专题会议 & 工作坊</h3>
+        <p class="agenda-description">深入探讨AI应用、区块链创新、云原生架构等技术专题，提供动手实践机会。</p>
+        <div class="agenda-time">
+          <span>⏰</span> 9:00 - 18:00
+        </div>
+      </div>
+      <div class="agenda-card">
+        <div class="agenda-day">第三天 • 6月17日</div>
+        <h3 class="agenda-title">闭幕式 & 社交活动</h3>
+        <p class="agenda-description">总结大会成果，颁发创新奖项，晚上举办盛大闭幕派对，拓展人脉。</p>
+        <div class="agenda-time">
+          <span>⏰</span> 9:00 - 22:00
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 演讲者区域 -->
+  <section class="speakers" id="speakers">
+    <div class="section-header">
+      <h2 class="section-title">特邀演讲嘉宾</h2>
+      <p class="section-subtitle">来自全球顶尖科技公司的行业领袖</p>
+    </div>
+    <div class="speakers-grid">
+      <div class="speaker-card">
+        <div class="speaker-avatar">PC</div>
+        <h3 class="speaker-name">Patrick Chen</h3>
+        <p class="speaker-title">CEO & 联合创始人</p>
+        <p class="speaker-company">TechCorp</p>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">SL</div>
+        <h3 class="speaker-name">Sarah Liu</h3>
+        <p class="speaker-title">首席AI科学家</p>
+        <p class="speaker-company">AI Labs</p>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">JW</div>
+        <h3 class="speaker-name">James Wang</h3>
+        <p class="speaker-title">CTO</p>
+        <p class="speaker-company">CloudScale</p>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">EZ</div>
+        <h3 class="speaker-name">Emily Zhang</h3>
+        <p class="speaker-title">产品副总裁</p>
+        <p class="speaker-company">InnovateTech</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 定价区域 -->
+  <section class="pricing" id="pricing">
+    <div class="section-header">
+      <h2 class="section-title">门票选择</h2>
+      <p class="section-subtitle">选择适合您的参会方案</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <h3 class="pricing-title">标准票</h3>
+        <div class="pricing-price">$999<span>/人</span></div>
+        <ul class="pricing-features">
+          <li>所有主题演讲</li>
+          <li>专题会议 access</li>
+          <li>展览区参观</li>
+          <li>午餐和茶歇</li>
+          <li>会议资料包</li>
+        </ul>
+        <button class="pricing-cta pricing-cta-secondary">选择标准票</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">最受欢迎</div>
+        <h3 class="pricing-title">VIP票</h3>
+        <div class="pricing-price">$1,499<span>/人</span></div>
+        <ul class="pricing-features">
+          <li>所有标准票权益</li>
+          <li>VIP休息室</li>
+          <li>演讲者见面会</li>
+          <li>优先座位</li>
+          <li>晚宴邀请</li>
+          <li>专属礼品</li>
+        </ul>
+        <button class="pricing-cta pricing-cta-primary">选择VIP票</button>
+      </div>
+      <div class="pricing-card">
+        <h3 class="pricing-title">团队票</h3>
+        <div class="pricing-price">$899<span>/人</span></div>
+        <ul class="pricing-features">
+          <li>5人以上团队优惠</li>
+          <li>所有标准票权益</li>
+          <li>团队专属区域</li>
+          <li>团队合影</li>
+          <li>定制服务</li>
+        </ul>
+        <button class="pricing-cta pricing-cta-secondary">选择团队票</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 赞助商区域 -->
+  <section class="sponsors" id="sponsors">
+    <div class="section-header">
+      <h2 class="section-title">合作伙伴</h2>
+      <p class="section-subtitle">感谢以下企业对大会的支持</p>
+    </div>
+    <div class="sponsors-grid">
+      <div class="sponsor-logo">TechGiant</div>
+      <div class="sponsor-logo">CloudCorp</div>
+      <div class="sponsor-logo">AI Systems</div>
+      <div class="sponsor-logo">DataFlow</div>
+      <div class="sponsor-logo">SecureNet</div>
+      <div class="sponsor-logo">InnovateLab</div>
+    </div>
+  </section>
+
+  <!-- 联系区域 -->
+  <section class="contact" id="contact">
+    <div class="section-header">
+      <h2 class="section-title">联系我们</h2>
+      <p class="section-subtitle">有任何问题？我们的团队随时为您服务。</p>
+    </div>
+    <form class="contact-form">
+      <div class="form-row">
+        <input type="text" class="form-input" placeholder="您的姓名">
+        <input type="email" class="form-input" placeholder="电子邮箱">
+      </div>
+      <input type="text" class="form-input" placeholder="主题">
+      <textarea class="form-input" placeholder="您的消息"></textarea>
+      <button type="submit" class="form-submit">发送消息</button>
+    </form>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>TechConf 2026</h3>
+        <p>全球科技创新大会，汇聚顶尖科技领袖，探索未来技术趋势。自2018年以来，我们已成为科技行业最重要的年度盛会之一。</p>
+        <div class="footer-social">
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">tw</a>
+          <a href="#" class="social-link">fb</a>
+          <a href="#" class="social-link">yt</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>大会信息</h4>
+        <ul>
+          <li><a href="#">关于大会</a></li>
+          <li><a href="#">议程安排</a></li>
+          <li><a href="#">演讲嘉宾</a></li>
+          <li><a href="#">场馆信息</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>参会者</h4>
+        <ul>
+          <li><a href="#">注册门票</a></li>
+          <li><a href="#">住宿预订</a></li>
+          <li><a href="#">签证支持</a></li>
+          <li><a href="#">常见问题</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>合作伙伴</h4>
+        <ul>
+          <li><a href="#">赞助机会</a></li>
+          <li><a href="#">媒体合作</a></li>
+          <li><a href="#">社区合作</a></li>
+          <li><a href="#">联系我们</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>©2026 TechConf. 保留所有权利。</p>
+    </div>
+  </footer>
+
+  <script>
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // 导航栏滚动效果
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('.nav');
+      if (window.scrollY > 50) {
+        nav.style.background = 'rgba(10, 37, 64, 0.98)';
+        nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.3)';
+      } else {
+        nav.style.background = 'rgba(10, 37, 64, 0.95)';
+        nav.style.boxShadow = 'none';
+      }
+    });
+
+    // 表单提交
+    document.querySelector('.contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('感谢您的留言！我们会尽快与您联系。');
+    });
+
+    // 定价按钮点击
+    document.querySelectorAll('.pricing-cta').forEach(button => {
+      button.addEventListener('click', () => {
+        alert('感谢您选择 TechConf 2026！即将跳转到注册页面。');
+      });
+    });
+  </script>
+</body>
+</html>
