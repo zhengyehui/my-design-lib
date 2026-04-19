@@ -1,5 +1,9 @@
 ---
 layout: false
+head:
+  - - script
+    - src: /pages/page-detail.js
+      defer: true
 title: NovaPay SaaS 落地页
 ---
 
@@ -45,7 +49,10 @@ title: NovaPay SaaS 落地页
 
   <div class="detail-body">
     <div id="preview-panel" class="panel"><iframe src="/pages/saas-landing/index.html" sandbox="allow-scripts" loading="lazy"></iframe></div>
-    <div id="code-panel" class="panel" style="display:none"><pre><code id="code-content">加载中...</code></pre></div>
+    <div id="code-panel" class="panel" style="display:none">
+    <button id="copy-btn" class="copy-btn" onclick="copySourceCode()">📋 复制源码</button>
+    <pre><code id="code-content">加载中...</code></pre>
+  </div>
   </div>
 
   <div class="design-tips">
@@ -115,9 +122,6 @@ body { font-family: -apple-system, 'Segoe UI', sans-serif; }
 .nav-prevnext { display: flex; gap: 2rem; }
 .nav-prevnext a { color: #666; text-decoration: none; font-size: 0.9rem; }
 .nav-prevnext a:hover { color: #6366f1; }
+
 </style>
 
-<script>
-function showPreview(){document.getElementById('preview-panel').style.display='block';document.getElementById('code-panel').style.display='none';document.querySelectorAll('.action-btn').forEach((b,i)=>{b.classList.toggle('active',i===0)})}
-function showCode(){document.getElementById('preview-panel').style.display='none';document.getElementById('code-panel').style.display='block';document.querySelectorAll('.action-btn').forEach((b,i)=>{b.classList.toggle('active',i===1)});fetch('/pages/saas-landing/index.html').then(r=>r.text()).then(t=>{document.getElementById('code-content').textContent=t})}
-</script>

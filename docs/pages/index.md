@@ -70,6 +70,24 @@ const pages = [
     colors: ['#0a2540', '#635bff', '#00d4ff'],
     rating: 9.6,
     description: '专业科技大会落地页，灵感来自 Stripe Sessions，包含议程、演讲者、门票定价',
+  },
+  {
+    id: 'ai-saas-landing',
+    title: 'NexusAI 智能平台',
+    category: 'landing',
+    tags: ['AI', 'SaaS', '产品展示', '登录框'],
+    colors: ['#fafbfc', '#6366f1', '#4f46e5'],
+    rating: 9.4,
+    description: 'AI SaaS 产品落地页，灵感来自 AuthKit/Amie，包含产品窗口展示、特性网格、客户评价',
+  },
+  {
+    id: 'studio-creative',
+    title: 'VOID 创意工作室',
+    category: 'portfolio',
+    tags: ['暗色', '设计机构', '作品集', 'Marquee'],
+    colors: ['#0a0a0a', '#ff4d00', '#141414'],
+    rating: 9.5,
+    description: '暗色系创意工作室落地页，灵感来自 Locomotive，包含作品网格、服务介绍、无限滚动 Marquee',
   }
 ]
 

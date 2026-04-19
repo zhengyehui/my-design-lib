@@ -214,7 +214,9 @@ export default defineConfig({
             { text: '电商结账页', link: '/pages/checkout' },
             { text: '404 创意页', link: '/pages/404-creative' },
             { text: '设计机构作品集', link: '/pages/agency-portfolio' },
-            { text: '科技大会落地页', link: '/pages/conference-landing' }
+            { text: '科技大会落地页', link: '/pages/conference-landing' },
+            { text: 'NexusAI 智能平台', link: '/pages/ai-saas-landing' },
+            { text: 'VOID 创意工作室', link: '/pages/studio-creative' }
           ]
         }
       ]

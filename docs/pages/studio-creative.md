@@ -4,7 +4,7 @@ head:
   - - script
     - src: /pages/page-detail.js
       defer: true
-title: TechConf 科技大会落地页
+title: VOID 创意工作室
 ---
 
 <div class="page-detail">
@@ -20,35 +20,35 @@ title: TechConf 科技大会落地页
   </nav>
 
   <!-- SEO Meta -->
-  <meta name="description" content="科技大会落地页模板，灵感来自 Stripe Sessions 等顶级科技会议网站，包含议程安排、演讲嘉宾、门票定价等完整模块。">
-  <meta name="keywords" content="科技大会, 会议网站, conference, landing page, 活动页面, 注册页面">
+  <meta name="description" content="暗色系创意工作室落地页，灵感来自 Locomotive，包含作品展示、服务介绍、关于我们、联系方式，纯 HTML+CSS 零依赖。">
+  <meta name="keywords" content="创意工作室, 设计机构, 暗色主题, portfolio, 作品集, 前端模板">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="TechConf 科技大会落地页 — My Design Lib">
-  <meta property="og:description" content="科技大会落地页模板，灵感来自 Stripe Sessions 等顶级科技会议网站，包含议程安排、演讲嘉宾、门票定价等完整模块。">
-  <meta property="og:url" content="http://101.37.166.208:11930/pages/conference-landing.html">
-  <link rel="canonical" href="http://101.37.166.208:11930/pages/conference-landing.html">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"TechConf 科技大会落地页 — My Design Lib","description":"科技大会落地页模板，灵感来自 Stripe Sessions 等顶级科技会议网站，包含议程安排、演讲嘉宾、门票定价等完整模块。","url":"http://101.37.166.208:11930/pages/conference-landing.html","genre":"landing","author":{"@type":"Organization","name":"My Design Lib"}}</script>
+  <meta property="og:title" content="VOID 创意工作室 — My Design Lib">
+  <meta property="og:description" content="暗色系创意工作室落地页模板，包含作品展示、服务介绍、关于我们、联系方式。">
+  <meta property="og:url" content="http://101.37.166.208:11930/pages/studio-creative.html">
+  <link rel="canonical" href="http://101.37.166.208:11930/pages/studio-creative.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"VOID 创意工作室 — My Design Lib","description":"暗色系创意工作室落地页模板，包含作品展示、服务介绍、关于我们、联系方式。","url":"http://101.37.166.208:11930/pages/studio-creative.html","genre":"portfolio","author":{"@type":"Organization","name":"My Design Lib"}}</script>
 
 
   <div class="detail-header">
     <a href="/pages/" class="back-link">← 返回画廊</a>
     <div class="detail-meta">
-      <h1>TechConf 科技大会落地页</h1>
+      <h1>VOID 创意工作室</h1>
       <div class="detail-tags">
-        <span class="tag">科技大会</span><span class="tag">会议网站</span><span class="tag">活动页面</span>
-        <span class="score">⭐ 9.6</span>
+        <span class="tag">创意工作室</span><span class="tag">暗色主题</span><span class="tag">作品集</span><span class="tag">设计机构</span>
+        <span class="score">⭐ 9.5</span>
       </div>
     </div>
     <div class="detail-actions">
       <button class="action-btn active" onclick="showPreview()">👁 预览</button>
       <button class="action-btn" onclick="showCode()">📝 源码</button>
-      <a href="/pages/conference-landing/index.html" target="_blank" class="action-btn">↗ 新窗口打开</a>
+      <a href="/pages/studio-creative/index.html" target="_blank" class="action-btn">↗ 新窗口打开</a>
     </div>
   </div>
 
   <div class="detail-body">
-    <div id="preview-panel" class="panel"><iframe src="/pages/conference-landing/index.html" sandbox="allow-scripts" loading="lazy"></iframe></div>
+    <div id="preview-panel" class="panel"><iframe src="/pages/studio-creative/index.html" sandbox="allow-scripts" loading="lazy"></iframe></div>
     <div id="code-panel" class="panel" style="display:none">
     <button id="copy-btn" class="copy-btn" onclick="copySourceCode()">📋 复制源码</button>
     <pre><code id="code-content">加载中...</code></pre>
@@ -58,18 +58,18 @@ title: TechConf 科技大会落地页
   <div class="design-tips">
     <h2>💡 设计分析</h2>
     <div class="tips-grid">
-      <div class="tip"><h3>布局结构</h3><p>专业会议网站布局：固定导航 → 渐变Hero → 统计数据 → 议程卡片 → 演讲者网格 → 定价卡片 → 赞助商 → 联系表单 → 页脚</p></div>
-      <div class="tip"><h3>配色方案</h3><p>深蓝色主色调 (#0a2540) 搭配紫色 (#635bff) 和青色 (#00d4ff) 强调色，营造科技感和专业感。</p></div>
-      <div class="tip"><h3>亮点技巧</h3><p>• Hero区域渐变背景+装饰圆形<br>• 统计数据大号数字突出<br>• 定价卡片中间突出显示<br>• 演讲者卡片圆形头像设计</p></div>
-      <div class="tip"><h3>适用场景</h3><p>科技大会、行业峰会、产品发布会、线上研讨会、培训活动等会议活动网站</p></div>
+      <div class="tip"><h3>布局结构</h3><p>Agency 风格：全屏 Hero → 品牌 Marquee → 作品网格（大图+小图混排）→ 服务网格 → 关于我们 → CTA → 页脚</p></div>
+      <div class="tip"><h3>配色方案</h3><p>纯暗色主题 (#0a0a0a)，主色橙红 (#ff4d00) 作为点缀。作品卡片使用不同色调的渐变背景区分项目。</p></div>
+      <div class="tip"><h3>亮点技巧</h3><p>• Nav 使用 mix-blend-mode: difference 适配暗色背景<br>• Marquee 无限滚动动画<br>• 作品卡片 hover 缩放+遮罩渐显<br>• 服务网格使用 1px gap 形成精致分割线</p></div>
+      <div class="tip"><h3>适用场景</h3><p>设计机构、创意工作室、个人作品集、品牌官网。灵感来自 Locomotive、Awwwards 获奖网站。</p></div>
     </div>
   </div>
 
   <div class="detail-footer">
     <a href="/pages/" class="back-btn">← 返回画廊</a>
     <div class="nav-prevnext">
-      <a href="/pages/agency-portfolio.html">← 设计机构作品集</a>
-      <a href="/pages/saas-landing.html">SaaS 落地页 →</a>
+      <a href="/pages/ai-saas-landing.html">← AI SaaS 落地页</a>
+      <a href="/pages/saas-landing.html">NovaPay SaaS →</a>
     </div>
   </div>
 </div>
@@ -124,4 +124,3 @@ body { font-family: -apple-system, 'Segoe UI', sans-serif; }
 .nav-prevnext a:hover { color: #6366f1; }
 
 </style>
-

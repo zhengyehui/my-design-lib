@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOID Studio — Digital Design Agency</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #141414;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666666;
+      --accent: #ff4d00;
+      --accent-light: #ff6b2b;
+      --border: #222222;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+    
+    /* ─── Nav ─── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      mix-blend-mode: difference;
+    }
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    
+    /* ─── Hero ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 3rem;
+      position: relative;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a0a 100%);
+      z-index: -1;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      top: 20%;
+      right: 10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255,77,0,0.15) 0%, transparent 70%);
+      filter: blur(60px);
+    }
+    .hero-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+    }
+    .hero h1 span {
+      display: block;
+      color: var(--text-muted);
+    }
+    .hero-meta {
+      display: flex;
+      gap: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      max-width: 600px;
+    }
+    .hero-meta-item {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .hero-meta-item strong {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+    
+    /* ─── Marquee ─── */
+    .marquee {
+      padding: 2rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-inner {
+      display: inline-flex;
+      gap: 3rem;
+      animation: marquee 20s linear infinite;
+    }
+    .marquee-item {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .marquee-item::before {
+      content: '◆';
+      margin-right: 1rem;
+      color: var(--accent);
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    
+    /* ─── Work Section ─── */
+    .work {
+      padding: 6rem 3rem;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+    .section-header h2 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .section-header span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+    .work-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      group: true;
+    }
+    .work-item:first-child {
+      grid-column: span 2;
+    }
+    .work-thumb {
+      aspect-ratio: 16/9;
+      background: var(--bg-card);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .work-item:hover .work-thumb {
+      transform: scale(1.05);
+    }
+    .work-item:first-child .work-thumb {
+      aspect-ratio: 21/9;
+    }
+    .work-thumb-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Visual patterns for each work */
+    .work-item:nth-child(1) .work-thumb-inner {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    .work-item:nth-child(1) .work-thumb-inner::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%);
+      top: 20%;
+      right: 20%;
+      filter: blur(40px);
+    }
+    .work-item:nth-child(2) .work-thumb-inner {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    }
+    .work-item:nth-child(2) .work-thumb-inner::before {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border: 2px solid rgba(255,77,0,0.3);
+      border-radius: 50%;
+      animation: pulse 3s ease-in-out infinite;
+    }
+    .work-item:nth-child(3) .work-thumb-inner {
+      background: linear-gradient(135deg, #1a0a1a 0%, #2d1b36 100%);
+    }
+    .work-item:nth-child(3) .work-thumb-inner::after {
+      content: '';
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(168,85,247,0.3) 0%, transparent 70%);
+      bottom: 20%;
+      left: 20%;
+      filter: blur(40px);
+    }
+    .work-item:nth-child(4) .work-thumb-inner {
+      background: linear-gradient(135deg, #0a1a0a 0%, #1a2e1a 100%);
+    }
+    .work-item:nth-child(4) .work-thumb-inner::before {
+      content: '';
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      background: conic-gradient(from 0deg, transparent, rgba(16,185,129,0.3), transparent);
+      border-radius: 50%;
+      animation: spin 8s linear infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .work-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .work-item:hover .work-overlay {
+      opacity: 1;
+    }
+    .work-overlay h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .work-overlay p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .work-tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      margin-top: 1rem;
+      width: fit-content;
+    }
+    
+    /* ─── Services ─── */
+    .services {
+      padding: 6rem 3rem;
+      border-top: 1px solid var(--border);
+    }
+    .services h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .service-item {
+      padding: 2.5rem 2rem;
+      background: var(--bg-dark);
+      transition: background 0.3s;
+    }
+    .service-item:hover {
+      background: var(--bg-card);
+    }
+    .service-num {
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    .service-item h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .service-item p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    /* ─── About ─── */
+    .about {
+      padding: 8rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    .about-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .about h2 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+    }
+    .about p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    .about-visual {
+      position: relative;
+      aspect-ratio: 1;
+      background: var(--bg-card);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        linear-gradient(45deg, transparent 40%, rgba(255,77,0,0.1) 50%, transparent 60%),
+        linear-gradient(-45deg, transparent 40%, rgba(99,102,241,0.1) 50%, transparent 60%);
+      animation: shimmer 4s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    .about-visual-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.05);
+      letter-spacing: -0.05em;
+    }
+    
+    /* ─── Contact ─── */
+    .contact {
+      padding: 6rem 3rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .contact h2 {
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    .contact h2 span {
+      color: var(--accent);
+    }
+    .contact p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+    }
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .contact-btn:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(255,77,0,0.3);
+    }
+    
+    /* ─── Footer ─── */
+    .footer {
+      padding: 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .footer-links a {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+    
+    @media (max-width: 768px) {
+      .nav { padding: 1rem 1.5rem; }
+      .hero { padding: 2rem; }
+      .work { padding: 4rem 1.5rem; }
+      .work-grid { grid-template-columns: 1fr; }
+      .work-item:first-child { grid-column: span 1; }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+      .contact h2 { font-size: 2.5rem; }
+      .footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">VOID®</a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-label">Digital Design Agency — Est. 2019</div>
+    <h1>
+      We craft<br>
+      <span>digital</span>
+      experiences
+    </h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <strong>120+</strong>
+        Projects Delivered
+      </div>
+      <div class="hero-meta-item">
+        <strong>7</strong>
+        Years Running
+      </div>
+      <div class="hero-meta-item">
+        <strong>24</strong>
+        Team Members
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="marquee-inner">
+      <span class="marquee-item">Brand Identity</span>
+      <span class="marquee-item">Web Design</span>
+      <span class="marquee-item">Motion Design</span>
+      <span class="marquee-item">Development</span>
+      <span class="marquee-item">Strategy</span>
+      <span class="marquee-item">Brand Identity</span>
+      <span class="marquee-item">Web Design</span>
+      <span class="marquee-item">Motion Design</span>
+      <span class="marquee-item">Development</span>
+      <span class="marquee-item">Strategy</span>
+    </div>
+  </div>
+
+  <!-- Work -->
+  <section class="work" id="work">
+    <div class="section-header">
+      <h2>Selected Work</h2>
+      <span>2019 — 2026</span>
+    </div>
+    <div class="work-grid">
+      <div class="work-item">
+        <div class="work-thumb">
+          <div class="work-thumb-inner"></div>
+        </div>
+        <div class="work-overlay">
+          <h3>Quantum Finance</h3>
+          <p>Complete brand identity and digital platform for a next-gen fintech startup</p>
+          <span class="work-tag">Branding · Web Design · Development</span>
+        </div>
+      </div>
+      <div class="work-item">
+        <div class="work-thumb">
+          <div class="work-thumb-inner"></div>
+        </div>
+        <div class="work-overlay">
+          <h3>Nova Motors</h3>
+          <p>Immersive 3D configurator for an electric vehicle brand</p>
+          <span class="work-tag">3D · Web Design</span>
+        </div>
+      </div>
+      <div class="work-item">
+        <div class="work-thumb">
+          <div class="work-thumb-inner"></div>
+        </div>
+        <div class="work-overlay">
+          <h3>Aether Studio</h3>
+          <p>Creative portfolio for an award-winning photography studio</p>
+          <span class="work-tag">Web Design · Motion</span>
+        </div>
+      </div>
+      <div class="work-item">
+        <div class="work-thumb">
+          <div class="work-thumb-inner"></div>
+        </div>
+        <div class="work-overlay">
+          <h3>Echo Health</h3>
+          <p>Healthcare platform redesign focused on accessibility and trust</p>
+          <span class="work-tag">UX/UI · Development</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <h2>What we do</h2>
+    <div class="services-grid">
+      <div class="service-item">
+        <div class="service-num">01</div>
+        <h3>Brand Strategy</h3>
+        <p>We define your brand's voice, values, and visual identity to create lasting impressions.</p>
+      </div>
+      <div class="service-item">
+        <div class="service-num">02</div>
+        <h3>Digital Design</h3>
+        <p>Pixel-perfect interfaces that balance aesthetics with usability across every screen.</p>
+      </div>
+      <div class="service-item">
+        <div class="service-num">03</div>
+        <h3>Development</h3>
+        <p>Performant, accessible websites and apps built with modern technologies.</p>
+      </div>
+      <div class="service-item">
+        <div class="service-num">04</div>
+        <h3>Motion</h3>
+        <p>Animations and interactions that bring your digital presence to life.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div>
+      <div class="about-label">About Us</div>
+      <h2>Small team,<br>big ideas</h2>
+      <p>We're a boutique design agency based in Montreal, focused on creating meaningful digital experiences for forward-thinking brands.</p>
+      <p>Our approach combines strategic thinking with obsessive attention to detail. Every pixel, every interaction, every line of code — crafted with purpose.</p>
+    </div>
+    <div class="about-visual">
+      <div class="about-visual-text">VOID</div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <h2>Let's create<br><span>something</span></h2>
+    <p>Have a project in mind? We'd love to hear about it.</p>
+    <a href="mailto:hello@void.studio" class="contact-btn">
+      Start a conversation →
+    </a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-left">© 2026 VOID Studio. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Dribbble</a>
+    </div>
+  </footer>
+</body>
+</html>
