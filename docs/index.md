@@ -28,58 +28,58 @@ features:
 
 <!-- 组件快速预览 - Phase 2 展示 -->
 <div class="component-quick-preview">
-  <div class="cqp-container">
-    <h2>🎨 组件快速预览</h2>
-    <p class="cqp-subtitle">立即查看设计系统中的核心组件</p>
-    
-    <div class="cqp-grid">
-      <!-- Button 组件 -->
-      <div class="cqp-card">
-        <h3>Button 按钮</h3>
-        <div class="cqp-demo">
-          <button class="btn btn-primary">Primary</button>
-          <button class="btn btn-secondary">Secondary</button>
-          <button class="btn btn-ghost">Ghost</button>
-        </div>
-      </div>
+<div class="cqp-container">
+<h2>🎨 组件快速预览</h2>
+<p class="cqp-subtitle">立即查看设计系统中的核心组件</p>
 
-      <!-- Card 组件 -->
-      <div class="cqp-card">
-        <h3>Card 卡片</h3>
-        <div class="cqp-demo" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-          <div class="card card-flat">Flat</div>
-          <div class="card card-elevated">Elevated</div>
-          <div class="card card-featured">Featured</div>
-        </div>
-      </div>
+<div class="cqp-grid">
+<!-- Button 组件 -->
+<div class="cqp-card">
+<h3>Button 按钮</h3>
+<div class="cqp-demo">
+<button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-ghost">Ghost</button>
+</div>
+</div>
 
-      <!-- Badge 组件 -->
-      <div class="cqp-card">
-        <h3>Badge 徽章</h3>
-        <div class="cqp-demo" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-          <span class="badge">默认</span>
-          <span class="badge badge-success">成功</span>
-          <span class="badge badge-warning">警告</span>
-          <span class="badge badge-danger">危险</span>
-        </div>
-      </div>
+<!-- Card 组件 -->
+<div class="cqp-card">
+<h3>Card 卡片</h3>
+<div class="cqp-demo" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+<div class="card card-flat">Flat</div>
+<div class="card card-elevated">Elevated</div>
+<div class="card card-featured">Featured</div>
+</div>
+</div>
 
-      <!-- 设计系统统计 -->
-      <div class="cqp-card">
-        <h3>📊 库统计</h3>
-        <div class="cqp-stats">
-          <div><strong>25</strong><br/>组件</div>
-          <div><strong>5</strong><br/>页面</div>
-          <div><strong>3</strong><br/>系统</div>
-        </div>
-      </div>
-    </div>
+<!-- Badge 组件 -->
+<div class="cqp-card">
+<h3>Badge 徽章</h3>
+<div class="cqp-demo" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+<span class="badge">默认</span>
+<span class="badge badge-success">成功</span>
+<span class="badge badge-warning">警告</span>
+<span class="badge badge-danger">危险</span>
+</div>
+</div>
 
-    <div class="cqp-cta">
-      <a href="/components/button" class="btn btn-primary">📦 浏览全部组件库</a>
-      <a href="/tokens/colors" class="btn btn-secondary">🎨 查看设计令牌</a>
-    </div>
-  </div>
+<!-- 设计系统统计 -->
+<div class="cqp-card">
+<h3>📊 库统计</h3>
+<div class="cqp-stats">
+<div><strong>25</strong><br/>组件</div>
+<div><strong>5</strong><br/>页面</div>
+<div><strong>3</strong><br/>系统</div>
+</div>
+</div>
+</div>
+
+<div class="cqp-cta">
+<a href="/components/button" class="btn btn-primary">📦 浏览全部组件库</a>
+<a href="/tokens/colors" class="btn btn-secondary">🎨 查看设计令牌</a>
+</div>
+</div>
 </div>
 
 <!-- 页面画廊预览 -->
