@@ -17,23 +17,23 @@ hero:
 
 features:
   - icon: 🎨
+    title: 设计系统优先
+    details: 完整 Design Tokens（色彩、排版、间距、阴影、动画）。一套 tokens 统一全站风格，改一处全局生效。
+  - icon: 🎯
     title: 页面灵感画廊
     details: 完整页面设计展示，像 Awwwards 一样浏览。点击预览实时效果，查看源码和设计分析。
   - icon: 🤖
     title: AI-Friendly
     details: 每个组件都有语义化 class、ai-manifest.json 和 llms.txt，AI 工具可直接读取使用。
-  - icon: 📋
+  - icon: 📦
     title: 复制即用
     details: 纯 HTML + CSS，零依赖。复制代码粘贴到任何项目就能用。
-  - icon: 🎨
-    title: Design Tokens
-    details: 颜色、字体、间距全部用 CSS 变量管理，改一处全局生效。
   - icon: 🌙
-    title: 暗色模式
-    details: 内置暗色模式支持，通过 data-theme 属性一键切换。
-  - icon: 🔄
-    title: 每日更新
-    details: Design Hunter 每日自动爬取 Awwwards、Dribbble 等网站，提炼新页面和组件入库。
+    title: 暗色优先设计
+    details: 墨色(Ink)调色板为主，内置暗色/亮色模式，data-theme 属性一键切换。
+  - icon: 🚀
+    title: 生产级质量
+    details: 25 个组件、5 个完整页面、3 套设计系统，均已可投入生产使用。
 ---
 
 <!-- 页面画廊预览 -->
@@ -121,7 +121,120 @@ features:
   </div>
 </div>
 
+<div class="design-tokens-showcase">
+  <div class="showcase-header">
+    <h2>🎨 Design Tokens 系统</h2>
+    <p>墨色(Ink)优先设计，紫色品牌色，语义化配色</p>
+  </div>
+  
+  <div class="tokens-grid">
+    <!-- Color Palette -->
+    <div class="token-section">
+      <h3>颜色系统</h3>
+      <div class="color-palette">
+        <div class="color-swatch" style="background: #7c5cff; color: white; border-radius: 8px; padding: 12px;">
+          <strong>Brand</strong><br><small>#7C5CFF</small>
+        </div>
+        <div class="color-swatch" style="background: #3ecf8e; color: white; border-radius: 8px; padding: 12px;">
+          <strong>Success</strong><br><small>#3ECF8E</small>
+        </div>
+        <div class="color-swatch" style="background: #ffb454; color: #000; border-radius: 8px; padding: 12px;">
+          <strong>Warning</strong><br><small>#FFB454</small>
+        </div>
+        <div class="color-swatch" style="background: #ff6b6b; color: white; border-radius: 8px; padding: 12px;">
+          <strong>Danger</strong><br><small>#FF6B6B</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Component Preview -->
+    <div class="token-section">
+      <h3>组件示例</h3>
+      <div class="component-demo">
+        <button class="btn btn-primary">Primary Button</button>
+        <button class="btn btn-secondary">Secondary</button>
+        <button class="btn btn-ghost">Ghost</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
+/* Design Tokens Showcase */
+.design-tokens-showcase {
+  max-width: 1100px;
+  margin: 4rem auto;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, var(--ink-900, #131316) 0%, var(--ink-950, #0a0a0b) 100%);
+  border-radius: 16px;
+  border: 1px solid var(--ink-800, #1a1a1f);
+}
+
+.showcase-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.showcase-header h2 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  color: var(--ink-50, #f5f5f8);
+}
+
+.showcase-header p {
+  margin: 0;
+  color: var(--ink-300, #a0a0ab);
+  font-size: 1rem;
+}
+
+.tokens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.token-section h3 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  color: var(--ink-100, #ebebf0);
+}
+
+.color-palette {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.color-swatch {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-swatch:hover {
+  transform: scale(1.05);
+}
+
+.color-swatch strong {
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.color-swatch small {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.component-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 /* Gallery Preview Section */
 .gallery-preview {
   max-width: 1100px;
