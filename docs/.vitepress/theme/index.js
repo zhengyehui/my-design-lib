@@ -1,6 +1,5 @@
 import DefaultTheme from 'vitepress/theme'
 import { h } from 'vue'
-import './navbar.css'
 import './custom.css'
 import SponsorCard from './SponsorCard.vue'
 
