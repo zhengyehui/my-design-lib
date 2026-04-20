@@ -469,9 +469,9 @@ features:
   max-width: 1100px;
   margin: 4rem auto;
   padding: 3rem 2rem;
-  background: linear-gradient(135deg, var(--ink-900, #131316) 0%, var(--ink-950, #0a0a0b) 100%);
+  background: linear-gradient(135deg, #f5f5f8, #ebebf0);
   border-radius: 16px;
-  border: 1px solid var(--ink-800, #1a1a1f);
+  border: 1px solid #e2e8f0;
 }
 
 .showcase-header {
@@ -482,12 +482,12 @@ features:
 .showcase-header h2 {
   margin: 0 0 0.5rem;
   font-size: 2rem;
-  color: var(--ink-50, #f5f5f8);
+  color: var(--ink-950, #0a0a0b);
 }
 
 .showcase-header p {
   margin: 0;
-  color: var(--ink-300, #a0a0ab);
+  color: var(--ink-600, #3d3d47);
   font-size: 1rem;
 }
 
@@ -500,7 +500,7 @@ features:
 .token-section h3 {
   margin: 0 0 1rem;
   font-size: 1.2rem;
-  color: var(--ink-100, #ebebf0);
+  color: var(--ink-900, #131316);
 }
 
 .color-palette {
