@@ -26,65 +26,58 @@ features:
     details: 25 个组件、5 个完整页面、3 套设计系统，均已可投入生产使用。
 ---
 
-<!-- 自定义英雄区增强 - 组件展示 -->
-<div class="hero-enhanced">
-  <div class="hero-left">
-    <div class="hero-badge">✨ 新一代设计系统</div>
-    <h2>快速开始</h2>
-    <p class="hero-subtitle">组件库亮点</p>
+<!-- 组件快速预览 - Phase 2 展示 -->
+<div class="component-quick-preview">
+  <div class="cqp-container">
+    <h2>🎨 组件快速预览</h2>
+    <p class="cqp-subtitle">立即查看设计系统中的核心组件</p>
     
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-number">25</span>
-        <span class="stat-label">生产级组件</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">5</span>
-        <span class="stat-label">完整页面</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">3</span>
-        <span class="stat-label">设计系统</span>
-      </div>
-    </div>
-
-    <div class="hero-actions">
-      <a href="/pages/" class="btn btn-primary">🎨 浏览页面画廊</a>
-      <a href="/components/button" class="btn btn-secondary">📦 查看全部组件</a>
-    </div>
-  </div>
-
-  <div class="hero-right">
-    <div class="component-showcase">
-      <div class="showcase-title">组件预览</div>
-      
-      <div class="showcase-section">
-        <h4>Button 按钮</h4>
-        <div class="showcase-buttons">
+    <div class="cqp-grid">
+      <!-- Button 组件 -->
+      <div class="cqp-card">
+        <h3>Button 按钮</h3>
+        <div class="cqp-demo">
           <button class="btn btn-primary">Primary</button>
           <button class="btn btn-secondary">Secondary</button>
           <button class="btn btn-ghost">Ghost</button>
         </div>
       </div>
 
-      <div class="showcase-section">
-        <h4>Card 卡片</h4>
-        <div class="showcase-cards">
+      <!-- Card 组件 -->
+      <div class="cqp-card">
+        <h3>Card 卡片</h3>
+        <div class="cqp-demo" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
           <div class="card card-flat">Flat</div>
           <div class="card card-elevated">Elevated</div>
           <div class="card card-featured">Featured</div>
         </div>
       </div>
 
-      <div class="showcase-section">
-        <h4>Badge 徽章</h4>
-        <div class="showcase-badges">
+      <!-- Badge 组件 -->
+      <div class="cqp-card">
+        <h3>Badge 徽章</h3>
+        <div class="cqp-demo" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <span class="badge">默认</span>
           <span class="badge badge-success">成功</span>
           <span class="badge badge-warning">警告</span>
           <span class="badge badge-danger">危险</span>
         </div>
       </div>
+
+      <!-- 设计系统统计 -->
+      <div class="cqp-card">
+        <h3>📊 库统计</h3>
+        <div class="cqp-stats">
+          <div><strong>25</strong><br/>组件</div>
+          <div><strong>5</strong><br/>页面</div>
+          <div><strong>3</strong><br/>系统</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cqp-cta">
+      <a href="/components/button" class="btn btn-primary">📦 浏览全部组件库</a>
+      <a href="/tokens/colors" class="btn btn-secondary">🎨 查看设计令牌</a>
     </div>
   </div>
 </div>
@@ -832,6 +825,132 @@ features:
 
   .stat-name {
     font-size: 0.8rem;
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   Component Quick Preview — Phase 2 Showcase
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.component-quick-preview {
+  max-width: 1100px;
+  margin: 2rem auto 3rem;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, var(--ink-900, #131316) 0%, var(--ink-800, #1a1a1f) 100%);
+  border: 1px solid var(--ink-700, #25252d);
+  border-radius: 16px;
+}
+
+.cqp-container h2 {
+  text-align: center;
+  font-size: 1.75rem;
+  margin: 0 0 0.5rem;
+  color: var(--ink-50, #f5f5f8);
+}
+
+.cqp-subtitle {
+  text-align: center;
+  color: var(--ink-300, #a0a0ab);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.cqp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.cqp-card {
+  background: rgba(124, 92, 255, 0.05);
+  border: 1px solid rgba(124, 92, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.cqp-card:hover {
+  border-color: rgba(124, 92, 255, 0.2);
+  background: rgba(124, 92, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.cqp-card h3 {
+  font-size: 0.95rem;
+  margin: 0 0 1rem;
+  color: var(--ink-100, #ebebf0);
+  font-weight: 600;
+}
+
+.cqp-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cqp-demo .btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  width: 100%;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.cqp-demo .card {
+  padding: 0.75rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.cqp-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.cqp-stats div {
+  color: var(--ink-100, #ebebf0);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.cqp-stats strong {
+  font-size: 1.5rem;
+  color: #7c5cff;
+  display: block;
+}
+
+.cqp-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cqp-cta .btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .component-quick-preview {
+    padding: 1.5rem;
+  }
+
+  .cqp-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .cqp-cta {
+    flex-direction: column;
+  }
+
+  .cqp-cta .btn {
+    width: 100%;
   }
 }
 </style>
