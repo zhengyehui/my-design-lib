@@ -1,5 +1,5 @@
 ---
-layout: false
+layout: page
 title: 页面灵感画廊
 description: 完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 ---
@@ -219,6 +219,21 @@ function getScoreColor(score) {
 
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* 隐藏 VitePress 的侧边栏和不需要的元素，保持画廊的自定义布局 */
+.VPSidebar, .VPDocOutlineDropdown, .VPDocFooter {
+  display: none !important;
+}
+
+/* 调整主内容区域为全宽 */
+.VPDoc {
+  padding: 0 !important;
+  max-width: none !important;
+}
+
+.VPContent {
+  max-width: none !important;
+}
 
 /* 页面容器和空间调整 - 为全局导航栏预留空间 */
 .gallery-page {
