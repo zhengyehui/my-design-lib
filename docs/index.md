@@ -5,73 +5,6 @@ hero:
   text: 你的设计，AI 来加速
   tagline: 一套为 AI 编程助手优化的前端组件库。纯 HTML + CSS，复制即用，零框架依赖。
 
-<!-- 自定义英雄区 - 左右分栏 -->
-<div class="hero-enhanced">
-  <div class="hero-left">
-    <div class="hero-badge">✨ 新一代设计系统</div>
-    <h1>My Design Lib</h1>
-    <p class="hero-subtitle">你的设计，AI 来加速</p>
-    <p class="hero-description">一套为 AI 编程助手优化的前端组件库。纯 HTML + CSS，复制即用，零框架依赖。</p>
-    
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-number">25</span>
-        <span class="stat-label">生产级组件</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">5</span>
-        <span class="stat-label">完整页面</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">3</span>
-        <span class="stat-label">设计系统</span>
-      </div>
-    </div>
-
-    <div class="hero-actions">
-      <a href="/pages/" class="btn btn-primary">🎨 浏览页面画廊</a>
-      <a href="/components/button" class="btn btn-secondary">📦 查看 25 个组件</a>
-    </div>
-  </div>
-
-  <div class="hero-right">
-    <div class="component-showcase">
-      <div class="showcase-title">组件预览</div>
-      
-      <!-- 按钮组件演示 -->
-      <div class="showcase-section">
-        <h4>Button 按钮</h4>
-        <div class="showcase-buttons">
-          <button class="btn btn-primary">Primary</button>
-          <button class="btn btn-secondary">Secondary</button>
-          <button class="btn btn-ghost">Ghost</button>
-        </div>
-      </div>
-
-      <!-- 卡片组件演示 -->
-      <div class="showcase-section">
-        <h4>Card 卡片</h4>
-        <div class="showcase-cards">
-          <div class="card card-flat">Flat</div>
-          <div class="card card-elevated">Elevated</div>
-          <div class="card card-featured">Featured</div>
-        </div>
-      </div>
-
-      <!-- 徽章组件演示 -->
-      <div class="showcase-section">
-        <h4>Badge 徽章</h4>
-        <div class="showcase-badges">
-          <span class="badge">默认</span>
-          <span class="badge badge-success">成功</span>
-          <span class="badge badge-warning">警告</span>
-          <span class="badge badge-danger">危险</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 features:
   - icon: 🎨
     title: 设计系统优先
@@ -92,6 +25,69 @@ features:
     title: 生产级质量
     details: 25 个组件、5 个完整页面、3 套设计系统，均已可投入生产使用。
 ---
+
+<!-- 自定义英雄区增强 - 组件展示 -->
+<div class="hero-enhanced">
+  <div class="hero-left">
+    <div class="hero-badge">✨ 新一代设计系统</div>
+    <h2>快速开始</h2>
+    <p class="hero-subtitle">组件库亮点</p>
+    
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-number">25</span>
+        <span class="stat-label">生产级组件</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">5</span>
+        <span class="stat-label">完整页面</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">3</span>
+        <span class="stat-label">设计系统</span>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a href="/pages/" class="btn btn-primary">🎨 浏览页面画廊</a>
+      <a href="/components/button" class="btn btn-secondary">📦 查看全部组件</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="component-showcase">
+      <div class="showcase-title">组件预览</div>
+      
+      <div class="showcase-section">
+        <h4>Button 按钮</h4>
+        <div class="showcase-buttons">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-secondary">Secondary</button>
+          <button class="btn btn-ghost">Ghost</button>
+        </div>
+      </div>
+
+      <div class="showcase-section">
+        <h4>Card 卡片</h4>
+        <div class="showcase-cards">
+          <div class="card card-flat">Flat</div>
+          <div class="card card-elevated">Elevated</div>
+          <div class="card card-featured">Featured</div>
+        </div>
+      </div>
+
+      <div class="showcase-section">
+        <h4>Badge 徽章</h4>
+        <div class="showcase-badges">
+          <span class="badge">默认</span>
+          <span class="badge badge-success">成功</span>
+          <span class="badge badge-warning">警告</span>
+          <span class="badge badge-danger">危险</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- 页面画廊预览 -->
 <div class="gallery-preview">
