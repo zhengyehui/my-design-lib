@@ -134,7 +134,15 @@ export default defineConfig({
     sidebar: {
       '/components/': [
         {
-          text: '基础组件',
+          text: '📚 快速开始',
+          collapsed: false,
+          items: [
+            { text: '组件库概览', link: '/components/button' }
+          ]
+        },
+        {
+          text: '🎯 核心基础',
+          collapsed: false,
           items: [
             { text: 'Button 按钮', link: '/components/button' },
             { text: 'Badge 徽章', link: '/components/badge' },
@@ -143,14 +151,16 @@ export default defineConfig({
           ]
         },
         {
-          text: '表单组件',
+          text: '📝 数据输入',
+          collapsed: false,
           items: [
             { text: 'Input 输入框', link: '/components/input' },
             { text: 'Dropdown 下拉菜单', link: '/components/dropdown' }
           ]
         },
         {
-          text: '布局组件',
+          text: '📦 容器与布局',
+          collapsed: false,
           items: [
             { text: 'Card 卡片', link: '/components/card' },
             { text: 'Hero 首屏', link: '/components/hero' },
@@ -163,7 +173,8 @@ export default defineConfig({
           ]
         },
         {
-          text: '反馈组件',
+          text: '💬 用户反馈',
+          collapsed: false,
           items: [
             { text: 'Modal 对话框', link: '/components/modal' },
             { text: 'Alert 提示', link: '/components/alert' },
@@ -173,7 +184,8 @@ export default defineConfig({
           ]
         },
         {
-          text: '✨ 炫酷组件',
+          text: '✨ 创意与炫彩',
+          collapsed: false,
           items: [
             { text: 'Glassmorphism 毛玻璃', link: '/components/glassmorphism' },
             { text: 'Gradient Border 渐变边框', link: '/components/gradient-border' },
@@ -186,17 +198,20 @@ export default defineConfig({
       ],
       '/tokens/': [
         {
-          text: '设计变量',
+          text: '🎨 Design Tokens',
+          collapsed: false,
           items: [
-            { text: 'Colors 颜色', link: '/tokens/colors' },
-            { text: 'Typography 字体', link: '/tokens/typography' },
-            { text: 'Spacing 间距', link: '/tokens/spacing' }
+            { text: '系统概览', link: '/tokens/colors' },
+            { text: 'Colors 颜色系统', link: '/tokens/colors' },
+            { text: 'Typography 排版系统', link: '/tokens/typography' },
+            { text: 'Spacing 间距系统', link: '/tokens/spacing' }
           ]
         }
       ],
       '/patterns/': [
         {
-          text: '布局模式',
+          text: '🏗️ 布局模式',
+          collapsed: false,
           items: [
             { text: 'Landing Page 落地页', link: '/patterns/landing' },
             { text: 'Dashboard 仪表盘', link: '/patterns/dashboard' }
@@ -206,19 +221,50 @@ export default defineConfig({
       '/pages/': [
         {
           text: '🎨 页面画廊',
+          collapsed: false,
           items: [
-            { text: '全部页面', link: '/pages/' },
-            { text: 'SaaS 落地页', link: '/pages/saas-landing' },
-            { text: '创意作品集', link: '/pages/portfolio' },
-            { text: '数据仪表盘', link: '/pages/dashboard-dark' },
-            { text: '电商结账页', link: '/pages/checkout' },
-            { text: '404 创意页', link: '/pages/404-creative' },
-            { text: '设计机构作品集', link: '/pages/agency-portfolio' },
-            { text: '科技大会落地页', link: '/pages/conference-landing' },
+            { text: '全部页面', link: '/pages/' }
+          ]
+        },
+        {
+          text: '🚀 落地页',
+          collapsed: true,
+          items: [
+            { text: 'NovaPay SaaS', link: '/pages/saas-landing' },
+            { text: 'TechConf 科技大会', link: '/pages/conference-landing' },
             { text: 'NexusAI 智能平台', link: '/pages/ai-saas-landing' },
-            { text: 'VOID 创意工作室', link: '/pages/studio-creative' },
-            { text: 'AuthKit 现代认证页', link: '/pages/auth-modern' },
-            { text: 'FlowDesk 极简产品页', link: '/pages/product-minimal' }
+            { text: 'FlowDesk 极简产品', link: '/pages/product-minimal' }
+          ]
+        },
+        {
+          text: '💼 作品集',
+          collapsed: true,
+          items: [
+            { text: '创意作品集', link: '/pages/portfolio' },
+            { text: 'Studio Creative 设计机构', link: '/pages/agency-portfolio' },
+            { text: 'VOID 创意工作室', link: '/pages/studio-creative' }
+          ]
+        },
+        {
+          text: '📊 仪表盘与数据',
+          collapsed: true,
+          items: [
+            { text: 'Nexus 数据仪表盘', link: '/pages/dashboard-dark' }
+          ]
+        },
+        {
+          text: '🛒 电商与应用',
+          collapsed: true,
+          items: [
+            { text: 'ShopFlow 结账页', link: '/pages/checkout' },
+            { text: 'AuthKit 现代认证页', link: '/pages/auth-modern' }
+          ]
+        },
+        {
+          text: '✨ 创意页面',
+          collapsed: true,
+          items: [
+            { text: '太空主题 404', link: '/pages/404-creative' }
           ]
         }
       ]

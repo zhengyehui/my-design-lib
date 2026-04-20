@@ -134,20 +134,6 @@ function getScoreColor(score) {
 </script>
 
 <div class="gallery-page">
-  <!-- Nav -->
-  <nav class="gallery-nav">
-    <div class="nav-left">
-      <a href="/" class="nav-logo">◆ My Design Lib</a>
-    </div>
-    <div class="nav-links">
-      <a href="/">首页</a>
-      <a href="/components/button.html">组件</a>
-      <a href="/tokens/colors.html">设计变量</a>
-      <a href="/pages/" class="active">🎨 页面画廊</a>
-      <a href="/sponsor.html">赞助</a>
-    </div>
-  </nav>
-
   <!-- SEO Meta -->
   <meta name="description" content="My Design Lib 页面灵感画廊 — 5 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商结账、404 创意页。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
@@ -234,54 +220,21 @@ function getScoreColor(score) {
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Nav */
-.gallery-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.8rem 2rem;
-  background: rgba(255,255,255,0.9);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #e5e7eb;
-}
-[data-theme="dark"] .gallery-nav {
-  background: rgba(15,15,20,0.9);
-  border-color: #1e1e2a;
-}
-.nav-logo {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #6366f1;
-  text-decoration: none;
-}
-.nav-links {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}
-.nav-links a {
-  text-decoration: none;
-  color: #666;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.nav-links a:hover, .nav-links a.active {
-  color: #6366f1;
+/* 页面容器和空间调整 - 为全局导航栏预留空间 */
+.gallery-page {
+  margin-top: 0;
+  padding-top: 0;
 }
 
 /* Hero */
 .gallery-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem 2rem;
+  padding: 2rem 2rem 2rem;
 }
 .gallery-hero {
   text-align: center;
-  padding: 3rem 0 1.5rem;
+  padding: 2rem 0 1.5rem;
 }
 .gallery-hero h1 {
   font-size: 2.5rem;
