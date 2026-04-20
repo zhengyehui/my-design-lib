@@ -759,9 +759,9 @@ features:
   max-width: 1100px;
   margin: 3rem auto;
   padding: 3rem 2rem;
-  background: linear-gradient(135deg, var(--ink-950, #0a0a0b) 0%, var(--ink-900, #131316) 100%);
+  background: linear-gradient(135deg, #f5f5f8, #ebebf0);
   border-radius: 16px;
-  border: 1px solid var(--ink-800, #1a1a1f);
+  border: 1px solid #e2e8f0;
 }
 
 .stats-container {
@@ -806,7 +806,7 @@ features:
 
 .stat-name {
   font-size: 0.875rem;
-  color: var(--ink-300, #a0a0ab);
+  color: var(--ink-600, #3d3d47);
 }
 
 @media (max-width: 768px) {
@@ -836,8 +836,8 @@ features:
   max-width: 1100px;
   margin: 2rem auto 3rem;
   padding: 2.5rem;
-  background: linear-gradient(135deg, var(--ink-900, #131316) 0%, var(--ink-800, #1a1a1f) 100%);
-  border: 1px solid var(--ink-700, #25252d);
+  background: linear-gradient(135deg, #f5f5f8, #ebebf0);
+  border: 1px solid #e2e8f0;
   border-radius: 16px;
 }
 
@@ -845,12 +845,12 @@ features:
   text-align: center;
   font-size: 1.75rem;
   margin: 0 0 0.5rem;
-  color: var(--ink-50, #f5f5f8);
+  color: var(--ink-950, #0a0a0b);
 }
 
 .cqp-subtitle {
   text-align: center;
-  color: var(--ink-300, #a0a0ab);
+  color: var(--ink-600, #3d3d47);
   margin-bottom: 2rem;
   font-size: 1rem;
 }
@@ -879,7 +879,7 @@ features:
 .cqp-card h3 {
   font-size: 0.95rem;
   margin: 0 0 1rem;
-  color: var(--ink-100, #ebebf0);
+  color: var(--ink-900, #131316);
   font-weight: 600;
 }
 
@@ -912,7 +912,7 @@ features:
 }
 
 .cqp-stats div {
-  color: var(--ink-100, #ebebf0);
+  color: var(--ink-700, #25252d);
   font-size: 0.9rem;
   line-height: 1.4;
 }
