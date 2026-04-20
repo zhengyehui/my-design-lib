@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="stylesheet" href="/components/toggle/toggle.css">
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 16px; background: #fff; }
+</style>
+</head>
+<body>
+<div style="display: flex; flex-direction: column; gap: 24px; padding: 20px;">
+  
+  <div>
+    <h4 style="margin: 0 0 12px 0; font-size: var(--text-sm); color: var(--color-text-secondary);">基础开关</h4>
+    <div style="display: flex; gap: 16px; align-items: center;">
+      <div class="toggle" onclick="this.classList.toggle('toggle--checked')"></div>
+      <div class="toggle toggle--checked" onclick="this.classList.toggle('toggle--checked')"></div>
+      <div class="toggle toggle--disabled"></div>
+    </div>
+  </div>
+
+  
+  <div>
+    <h4 style="margin: 0 0 12px 0; font-size: var(--text-sm); color: var(--color-text-secondary);">带标签开关</h4>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <label class="toggle-labeled">
+        <input type="checkbox"></input>
+        <div class="toggle-labeled__toggle toggle-labeled__toggle--checked"></div>
+        <span class="toggle-labeled__label">开启通知</span>
+      </label>
+      <label class="toggle-labeled">
+        <input type="checkbox" checked></input>
+        <div class="toggle-labeled__toggle toggle-labeled__toggle--checked"></div>
+        <span class="toggle-labeled__label">自动保存</span>
+      </label>
+      <label class="toggle-labeled">
+        <input type="checkbox"></input>
+        <div class="toggle-labeled__toggle"></div>
+        <span class="toggle-labeled__label">深色模式</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<script>
+// Toggle 交互逻辑
+document.addEventListener('DOMContentLoaded', function() {
+  // 基础开关点击事件
+  document.querySelectorAll('.toggle:not(.toggle--disabled)').forEach(toggle => {
+    toggle.addEventListener('click', function() {
+      this.classList.toggle('toggle--checked');
+    });
+  });
+
+  // 带标签开关点击事件
+  document.querySelectorAll('.toggle-labeled').forEach(label => {
+    label.addEventListener('click', function(e) {
+      if (e.target.tagName !== 'INPUT') {
+        const checkbox = this.querySelector('input');
+        const toggle = this.querySelector('.toggle-labeled__toggle');
+        checkbox.checked = !checkbox.checked;
+        toggle.classList.toggle('toggle-labeled__toggle--checked', checkbox.checked);
+      }
+    });
+
+    // 监听原生 checkbox 变化
+    const checkbox = label.querySelector('input');
+    const toggle = label.querySelector('.toggle-labeled__toggle');
+    checkbox.addEventListener('change', function() {
+      toggle.classList.toggle('toggle-labeled__toggle--checked', this.checked);
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Chat · My Design Lib</title>
+<link rel="stylesheet" href="http://101.37.166.208:11930/tokens/tokens.css">
+<style>
+  body { margin: 0; height: 100vh; background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); display: flex; flex-direction: column; }
+  header { padding: var(--space-3) var(--space-6); border-bottom: 1px solid var(--color-border); display: flex; align-items: center; justify-content: space-between; background: var(--color-surface); }
+  header .title { font-weight: 600; }
+  header .kbd { font-family: var(--font-mono); font-size: var(--text-xs); padding: 2px 6px; background: var(--color-bg-muted); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-secondary); }
+
+  .stream { flex: 1; overflow-y: auto; padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); max-width: 820px; width: 100%; margin: 0 auto; box-sizing: border-box; }
+  .bubble { display: flex; gap: var(--space-3); max-width: 100%; }
+  .bubble--user { flex-direction: row-reverse; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--color-bg-muted); display: flex; align-items: center; justify-content: center; font-size: var(--text-sm); font-weight: 600; flex: 0 0 32px; }
+  .bubble--user .avatar { background: var(--color-primary); color: #fff; }
+  .bubble--assistant .avatar { background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); color: #fff; }
+  .content { padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg); max-width: 70ch; white-space: pre-wrap; word-break: break-word; }
+  .bubble--user .content { background: var(--color-primary); color: #fff; border-bottom-right-radius: var(--radius-sm); }
+  .bubble--assistant .content { background: var(--color-bg-muted); border-bottom-left-radius: var(--radius-sm); }
+  .code {
+    background: #0f172a; color: #e2e8f0; padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md); font-family: var(--font-mono); font-size: var(--text-sm); margin-top: var(--space-2);
+    overflow-x: auto;
+  }
+
+  .composer {
+    border-top: 1px solid var(--color-border); padding: var(--space-4);
+    display: flex; gap: var(--space-2); max-width: 820px; width: 100%; margin: 0 auto; box-sizing: border-box;
+  }
+  .composer input {
+    flex: 1; padding: 12px var(--space-4); border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg); font-size: var(--text-base); background: var(--color-surface); color: inherit;
+  }
+  .composer input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-ghost); }
+  .composer button {
+    padding: 0 var(--space-5); border: none; border-radius: var(--radius-lg);
+    background: var(--color-primary); color: #fff; font-weight: 600; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<header>
+  <span class="title">AI 助手</span>
+  <span><kbd class="kbd">⌘</kbd> <kbd class="kbd">K</kbd> 打开命令面板</span>
+</header>
+<div class="stream">
+  <div class="bubble bubble--user"><div class="avatar">W</div><div class="content">帮我写一个 Python 斐波那契函数</div></div>
+  <div class="bubble bubble--assistant"><div class="avatar">AI</div><div class="content">推荐用迭代实现 O(n):<div class="code">def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a</div></div></div>
+  <div class="bubble bubble--assistant"><div class="avatar">AI</div><div class="content">还需要我补上单元测试吗?▊</div></div>
+</div>
+<form class="composer">
+  <input placeholder="发送消息…" autofocus />
+  <button type="submit">发送</button>
+</form>
+</body>
+</html>

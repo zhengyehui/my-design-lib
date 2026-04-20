@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Blog Post · My Design Lib</title>
+<link rel="stylesheet" href="http://101.37.166.208:11930/tokens/tokens.css">
+<style>
+  body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); line-height: var(--leading-relaxed); }
+  .container { max-width: 720px; margin: 0 auto; padding: 0 var(--space-6); }
+  nav { padding: var(--space-4) 0; border-bottom: 1px solid var(--color-border); color: var(--color-text-muted); font-size: var(--text-sm); }
+  nav a { color: inherit; text-decoration: none; }
+  nav .sep { margin: 0 var(--space-2); }
+
+  article h1 { font-size: var(--text-4xl); margin: var(--space-8) 0 var(--space-3); letter-spacing: -0.02em; }
+  article .meta { color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-8); }
+  article p { font-size: var(--text-base); margin: 0 0 var(--space-4); }
+  article h2 { font-size: var(--text-2xl); margin: var(--space-8) 0 var(--space-3); }
+  article blockquote {
+    border-left: 3px solid var(--color-primary);
+    margin: var(--space-6) 0; padding: var(--space-2) var(--space-4);
+    color: var(--color-text-secondary); font-style: italic;
+  }
+  article .code {
+    background: #0f172a; color: #e2e8f0; padding: var(--space-4);
+    border-radius: var(--radius-md); font-family: var(--font-mono); font-size: var(--text-sm);
+    overflow-x: auto; margin: var(--space-6) 0;
+  }
+  footer { margin-top: var(--space-16); padding: var(--space-6) 0; border-top: 1px solid var(--color-border); color: var(--color-text-muted); font-size: var(--text-sm); text-align: center; }
+</style>
+</head>
+<body>
+<nav class="container"><a href="/">首页</a><span class="sep">›</span><a href="/blog">博客</a><span class="sep">›</span>从零搭建 AI 设计系统</nav>
+
+<article class="container">
+  <h1>从零搭建一个 AI 原生设计系统</h1>
+  <div class="meta">2026-04-19 · Weta · 阅读 8 分钟</div>
+
+  <p>最近半年,我们团队把传统的组件库重构成了 AI 原生的设计系统。这篇文章分享一下设计决策和踩过的坑。</p>
+
+  <h2>为什么传统组件库对 AI 不友好?</h2>
+  <p>传统组件库(React / Vue / Svelte)有几个天然劣势: 框架锁定、API 隐式、依赖链复杂。AI 生成时需要正确 import、调用 hook、处理 state,一步错就全错。</p>
+
+  <blockquote>最好的 AI 体验是: AI 不需要思考,复制粘贴就能用。</blockquote>
+
+  <h2>我们的三个核心决策</h2>
+  <p>第一,抛弃框架,回到纯 HTML + CSS。第二,提供 MCP Server,让 AI 直接调用组件。第三,写 llms.txt 决策树,告诉 AI "什么情况用什么组件"。</p>
+
+  <div class="code">// MCP 调用示例
+get_component("chat-bubble", "streaming", "snippet")
+→ 返回可粘贴运行的完整 HTML</div>
+
+  <h2>效果如何?</h2>
+  <p>接入后 3 个月,AI 生成 UI 的一次通过率从 40% 提升到 82%。完整源码已开源,欢迎给个 Star。</p>
+</article>
+
+<footer class="container">© 2026 · My Design Lib · <a style="color:var(--color-primary);text-decoration:none;" href="#">回到顶部</a></footer>
+</body>
+</html>

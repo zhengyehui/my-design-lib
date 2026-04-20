@@ -216,7 +216,9 @@ export default defineConfig({
             { text: '设计机构作品集', link: '/pages/agency-portfolio' },
             { text: '科技大会落地页', link: '/pages/conference-landing' },
             { text: 'NexusAI 智能平台', link: '/pages/ai-saas-landing' },
-            { text: 'VOID 创意工作室', link: '/pages/studio-creative' }
+            { text: 'VOID 创意工作室', link: '/pages/studio-creative' },
+            { text: 'AuthKit 现代认证页', link: '/pages/auth-modern' },
+            { text: 'FlowDesk 极简产品页', link: '/pages/product-minimal' }
           ]
         }
       ]

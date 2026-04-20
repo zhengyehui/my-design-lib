@@ -1,0 +1,135 @@
+<!-- Chat Bubble Component — AI 聊天气泡,user / assistant / streaming 三态 -->
+<style>
+/* ── Container ─────────────────────────── */
+.chat-bubble {
+  display: flex;
+  gap: var(--space-3);
+  max-width: 760px;
+  padding: var(--space-3) 0;
+  font-family: var(--font-sans);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+}
+
+.chat-bubble__avatar {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+  user-select: none;
+}
+
+.chat-bubble__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.chat-bubble__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.chat-bubble__name { font-weight: var(--weight-medium); color: var(--color-text-secondary); }
+
+.chat-bubble__content {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* ── Variants ──────────────────────────── */
+/* variant: user */
+.chat-bubble--user { flex-direction: row-reverse; }
+.chat-bubble--user .chat-bubble__avatar {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+.chat-bubble--user .chat-bubble__meta { justify-content: flex-end; }
+.chat-bubble--user .chat-bubble__content {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+/* variant: assistant */
+.chat-bubble--assistant .chat-bubble__avatar {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: var(--color-text-inverse);
+}
+.chat-bubble--assistant .chat-bubble__content {
+  background: var(--color-bg-muted);
+  color: var(--color-text);
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+/* variant: streaming — 带光标闪烁 */
+.chat-bubble--streaming .chat-bubble__content::after {
+  content: "▊";
+  display: inline-block;
+  margin-left: 2px;
+  animation: chat-blink 1s steps(2) infinite;
+  color: var(--color-primary);
+}
+
+@keyframes chat-blink { 50% { opacity: 0; } }
+
+/* ── Dark Theme ────────────────────────── */
+[data-theme="dark"] .chat-bubble__avatar { background: var(--color-bg-muted); }
+[data-theme="dark"] .chat-bubble--assistant .chat-bubble__content {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+/* ── Responsive ────────────────────────── */
+@media (max-width: 640px) {
+  .chat-bubble__content { font-size: var(--text-sm); padding: var(--space-2) var(--space-3); }
+}
+</style>
+
+<!-- variant: user -->
+<div class="chat-bubble chat-bubble--user">
+  <div class="chat-bubble__avatar">W</div>
+  <div class="chat-bubble__body">
+    <div class="chat-bubble__meta"><span class="chat-bubble__name">You</span><span>· just now</span></div>
+    <div class="chat-bubble__content">帮我写一个用 Python 计算斐波那契数列的函数</div>
+  </div>
+</div>
+<!-- /variant -->
+
+<!-- variant: assistant -->
+<div class="chat-bubble chat-bubble--assistant">
+  <div class="chat-bubble__avatar">AI</div>
+  <div class="chat-bubble__body">
+    <div class="chat-bubble__meta"><span class="chat-bubble__name">Assistant</span><span>· 2s</span></div>
+    <div class="chat-bubble__content">好的,推荐用迭代实现 O(n) 复杂度:
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a</div>
+  </div>
+</div>
+<!-- /variant -->
+
+<!-- variant: streaming -->
+<div class="chat-bubble chat-bubble--assistant chat-bubble--streaming">
+  <div class="chat-bubble__avatar">AI</div>
+  <div class="chat-bubble__body">
+    <div class="chat-bubble__meta"><span class="chat-bubble__name">Assistant</span><span>· 正在回答</span></div>
+    <div class="chat-bubble__content">正在思考最优方案</div>
+  </div>
+</div>
+<!-- /variant -->

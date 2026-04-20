@@ -1,0 +1,104 @@
+<!-- Code Block Component — 带复制按钮 / 文件名 / diff 模式 -->
+<style>
+.code-block {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.code-block__filename {
+  font-size: var(--text-xs);
+  color: #94a3b8;
+  font-weight: var(--weight-medium);
+}
+.code-block__copy {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #cbd5e1;
+  font-size: var(--text-xs);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all var(--duration-fast) var(--ease-default);
+}
+.code-block__copy:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+.code-block__pre {
+  margin: 0;
+  padding: var(--space-4);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+}
+.code-block__pre code { font-family: inherit; }
+
+/* 伪语法高亮 (CSS 类约定,需要配合 highlight.js 等填充) */
+.code-block .tk-keyword { color: #c084fc; }
+.code-block .tk-string { color: #86efac; }
+.code-block .tk-fn { color: #60a5fa; }
+.code-block .tk-comment { color: #64748b; font-style: italic; }
+.code-block .tk-num { color: #fbbf24; }
+
+/* variant: diff */
+.code-block--diff .code-block__pre .line-add {
+  display: block;
+  background: rgba(16,185,129,0.15);
+  color: #86efac;
+  margin: 0 calc(-1 * var(--space-4));
+  padding: 0 var(--space-4);
+}
+.code-block--diff .code-block__pre .line-del {
+  display: block;
+  background: rgba(239,68,68,0.15);
+  color: #fca5a5;
+  margin: 0 calc(-1 * var(--space-4));
+  padding: 0 var(--space-4);
+}
+
+[data-theme="dark"] .code-block { border-color: var(--color-border); }
+</style>
+
+<!-- variant: default -->
+<div class="code-block">
+  <pre class="code-block__pre"><code><span class="tk-keyword">const</span> fib = (<span class="tk-keyword">n</span>) =&gt; n &lt; 2 ? n : fib(n - 1) + fib(n - 2);</code></pre>
+</div>
+<!-- /variant -->
+
+<!-- variant: with-filename -->
+<div class="code-block">
+  <div class="code-block__header">
+    <span class="code-block__filename">utils/fib.ts</span>
+    <button class="code-block__copy" onclick="navigator.clipboard.writeText(this.closest('.code-block').querySelector('code').innerText)">复制</button>
+  </div>
+  <pre class="code-block__pre"><code><span class="tk-keyword">export function</span> <span class="tk-fn">fib</span>(n: <span class="tk-keyword">number</span>) {
+  <span class="tk-keyword">let</span> a = <span class="tk-num">0</span>, b = <span class="tk-num">1</span>;
+  <span class="tk-keyword">for</span> (<span class="tk-keyword">let</span> i = <span class="tk-num">0</span>; i &lt; n; i++) [a, b] = [b, a + b];
+  <span class="tk-keyword">return</span> a;
+}</code></pre>
+</div>
+<!-- /variant -->
+
+<!-- variant: diff -->
+<div class="code-block code-block--diff">
+  <div class="code-block__header">
+    <span class="code-block__filename">auth.ts · 2 changes</span>
+    <button class="code-block__copy">复制</button>
+  </div>
+  <pre class="code-block__pre"><code><span class="line-del">- const secret = "hardcoded";</span>
+<span class="line-add">+ const secret = process.env.AUTH_SECRET;</span>
+  return jwt.sign(payload, secret);</code></pre>
+</div>
+<!-- /variant -->

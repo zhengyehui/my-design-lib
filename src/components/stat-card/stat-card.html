@@ -1,0 +1,145 @@
+<!-- Stat Card Component — Dashboard 数字卡片,含 trend 指示 -->
+<style>
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-sans);
+  min-width: 200px;
+  transition: transform var(--duration-normal) var(--ease-default),
+              box-shadow var(--duration-normal) var(--ease-default);
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.stat-card__icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-ghost);
+  color: var(--color-primary);
+  font-size: var(--text-lg);
+}
+
+.stat-card__value {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.stat-card__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+}
+.stat-card__trend--up {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+}
+.stat-card__trend--down {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+}
+.stat-card__trend--flat {
+  background: var(--color-bg-muted);
+  color: var(--color-text-muted);
+}
+
+.stat-card__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* variant: with-trend — sparkline 占位 */
+.stat-card__spark {
+  height: 40px;
+  margin-top: var(--space-2);
+  background: linear-gradient(180deg, var(--color-primary-ghost) 0%, transparent 100%);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card__spark::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background: var(--color-primary);
+  clip-path: polygon(0 80%, 15% 60%, 30% 70%, 45% 40%, 60% 50%, 75% 20%, 100% 30%, 100% 100%, 0 100%);
+}
+
+/* Dark */
+[data-theme="dark"] .stat-card { background: var(--color-surface); }
+</style>
+
+<!-- variant: default -->
+<div class="stat-card">
+  <div class="stat-card__header">
+    <span>总用户数</span>
+    <div class="stat-card__icon">👥</div>
+  </div>
+  <div class="stat-card__value">12,483</div>
+  <div class="stat-card__footer">
+    <span class="stat-card__trend stat-card__trend--up">↑ 12.5%</span>
+    <span>相比上周</span>
+  </div>
+</div>
+<!-- /variant -->
+
+<!-- variant: with-trend -->
+<div class="stat-card">
+  <div class="stat-card__header">
+    <span>本月营收</span>
+    <div class="stat-card__icon">💰</div>
+  </div>
+  <div class="stat-card__value">¥84,392</div>
+  <div class="stat-card__footer">
+    <span class="stat-card__trend stat-card__trend--up">↑ 8.2%</span>
+    <span>超出目标 ¥6.4k</span>
+  </div>
+  <div class="stat-card__spark"></div>
+</div>
+<!-- /variant -->
+
+<!-- variant: down -->
+<div class="stat-card">
+  <div class="stat-card__header">
+    <span>跳出率</span>
+    <div class="stat-card__icon">📉</div>
+  </div>
+  <div class="stat-card__value">34.8%</div>
+  <div class="stat-card__footer">
+    <span class="stat-card__trend stat-card__trend--down">↓ 2.1%</span>
+    <span>较上月降低</span>
+  </div>
+</div>
+<!-- /variant -->

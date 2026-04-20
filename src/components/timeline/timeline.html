@@ -1,0 +1,149 @@
+<!-- Timeline Component — 时间轴,垂直 / 水平 -->
+<style>
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+}
+
+/* ── Vertical ──────────────────────────── */
+.timeline--vertical { padding-left: var(--space-6); }
+.timeline--vertical::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--color-border);
+  border-radius: 1px;
+}
+
+.timeline__item {
+  position: relative;
+  padding: 0 0 var(--space-6) var(--space-6);
+}
+.timeline__item:last-child { padding-bottom: 0; }
+
+.timeline__dot {
+  position: absolute;
+  left: -8px;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 3px solid var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ghost);
+}
+.timeline__item--done .timeline__dot { background: var(--color-primary); border-color: var(--color-primary); }
+.timeline__item--pending .timeline__dot { border-color: var(--color-border); box-shadow: none; }
+
+.timeline__meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+.timeline__title {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  margin: 0 0 var(--space-1);
+}
+.timeline__desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Horizontal ────────────────────────── */
+.timeline--horizontal {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+  overflow-x: auto;
+}
+.timeline--horizontal .timeline__item {
+  flex: 1;
+  min-width: 160px;
+  padding: 0;
+  text-align: center;
+  position: relative;
+}
+.timeline--horizontal .timeline__item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  right: -50%;
+  height: 2px;
+  background: var(--color-border);
+  z-index: 0;
+}
+.timeline--horizontal .timeline__item--done::after { background: var(--color-primary); }
+.timeline--horizontal .timeline__dot {
+  position: relative;
+  left: auto;
+  top: auto;
+  margin: 0 auto var(--space-2);
+  z-index: 1;
+}
+</style>
+
+<!-- variant: vertical -->
+<ol class="timeline timeline--vertical">
+  <li class="timeline__item timeline__item--done">
+    <span class="timeline__dot"></span>
+    <div class="timeline__meta">2026-04-10</div>
+    <h4 class="timeline__title">订单已提交</h4>
+    <p class="timeline__desc">订单编号 #A20260410-88,金额 ¥299.00</p>
+  </li>
+  <li class="timeline__item timeline__item--done">
+    <span class="timeline__dot"></span>
+    <div class="timeline__meta">2026-04-11 09:20</div>
+    <h4 class="timeline__title">已支付</h4>
+    <p class="timeline__desc">支付方式: 信用卡 VISA · **4321</p>
+  </li>
+  <li class="timeline__item">
+    <span class="timeline__dot"></span>
+    <div class="timeline__meta">正在处理</div>
+    <h4 class="timeline__title">商家发货中</h4>
+    <p class="timeline__desc">预计今天下午 5 点前发货</p>
+  </li>
+  <li class="timeline__item timeline__item--pending">
+    <span class="timeline__dot"></span>
+    <div class="timeline__meta">预计 2026-04-13</div>
+    <h4 class="timeline__title">送达</h4>
+    <p class="timeline__desc">预计 48 小时内送达</p>
+  </li>
+</ol>
+<!-- /variant -->
+
+<!-- variant: horizontal -->
+<ol class="timeline timeline--horizontal">
+  <li class="timeline__item timeline__item--done">
+    <span class="timeline__dot"></span>
+    <h4 class="timeline__title">下单</h4>
+    <p class="timeline__desc">04-10</p>
+  </li>
+  <li class="timeline__item timeline__item--done">
+    <span class="timeline__dot"></span>
+    <h4 class="timeline__title">支付</h4>
+    <p class="timeline__desc">04-11</p>
+  </li>
+  <li class="timeline__item">
+    <span class="timeline__dot"></span>
+    <h4 class="timeline__title">发货</h4>
+    <p class="timeline__desc">处理中</p>
+  </li>
+  <li class="timeline__item timeline__item--pending">
+    <span class="timeline__dot"></span>
+    <h4 class="timeline__title">送达</h4>
+    <p class="timeline__desc">预计 04-13</p>
+  </li>
+</ol>
+<!-- /variant -->

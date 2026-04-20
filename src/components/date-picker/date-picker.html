@@ -1,0 +1,86 @@
+<!-- Date Picker Component — 美化的 native date input + 日期范围样式 -->
+<style>
+.date-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  transition: border-color var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default);
+  position: relative;
+}
+.date-picker:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ghost);
+}
+
+.date-picker__icon {
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  display: inline-flex;
+}
+
+.date-picker__input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  min-width: 140px;
+}
+.date-picker__input::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity var(--duration-fast);
+}
+.date-picker__input::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+
+.date-picker__label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
+}
+
+/* variant: range */
+.date-picker--range {
+  gap: var(--space-2);
+}
+.date-picker--range .date-picker__sep {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+[data-theme="dark"] .date-picker__input { color-scheme: dark; }
+</style>
+
+<!-- variant: default -->
+<label class="date-picker">
+  <span class="date-picker__icon">📅</span>
+  <input class="date-picker__input" type="date" value="2026-04-19" />
+</label>
+<!-- /variant -->
+
+<!-- variant: with-label -->
+<div style="display:flex; flex-direction:column; gap:var(--space-1);">
+  <span class="date-picker__label">生效日期</span>
+  <label class="date-picker">
+    <span class="date-picker__icon">📅</span>
+    <input class="date-picker__input" type="date" value="2026-04-19" />
+  </label>
+</div>
+<!-- /variant -->
+
+<!-- variant: range -->
+<div class="date-picker date-picker--range">
+  <span class="date-picker__icon">📅</span>
+  <input class="date-picker__input" type="date" value="2026-04-01" />
+  <span class="date-picker__sep">→</span>
+  <input class="date-picker__input" type="date" value="2026-04-30" />
+</div>
+<!-- /variant -->

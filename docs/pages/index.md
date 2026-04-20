@@ -88,6 +88,24 @@ const pages = [
     colors: ['#0a0a0a', '#ff4d00', '#141414'],
     rating: 9.5,
     description: '暗色系创意工作室落地页，灵感来自 Locomotive，包含作品网格、服务介绍、无限滚动 Marquee',
+  },
+  {
+    id: 'auth-modern',
+    title: 'AuthKit 现代认证页',
+    category: 'app',
+    tags: ['认证', '登录', '社交登录', '明暗主题'],
+    colors: ['#0f0f14', '#6366f1', '#ffffff'],
+    rating: 9.4,
+    description: '现代认证登录页面，灵感来自 AuthKit/WorkOS，包含登录表单、社交登录、明暗主题切换',
+  },
+  {
+    id: 'product-minimal',
+    title: 'FlowDesk 极简产品页',
+    category: 'landing',
+    tags: ['产品页', '极简', 'SaaS', '产品预览'],
+    colors: ['#ffffff', '#0f172a', '#f8fafc'],
+    rating: 9.3,
+    description: '极简产品落地页，灵感来自 Tatem/Amie，包含产品预览窗口、特性网格、分栏展示',
   }
 ]
 
@@ -97,7 +115,8 @@ const categories = [
   { id: 'portfolio', label: '作品集', icon: '💼' },
   { id: 'dashboard', label: '仪表盘', icon: '📊' },
   { id: 'ecommerce', label: '电商', icon: '🛒' },
-  { id: 'creative', label: '创意', icon: '✨' }
+  { id: 'creative', label: '创意', icon: '✨' },
+  { id: 'app', label: '应用', icon: '📱' }
 ]
 
 const activeCategory = ref('all')

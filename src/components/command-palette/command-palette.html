@@ -1,0 +1,183 @@
+<!-- Command Palette Component — Cmd+K 搜索面板,Linear / Raycast 风格 -->
+<style>
+.cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+  z-index: var(--z-modal);
+  font-family: var(--font-sans);
+}
+
+.cmdk {
+  width: 100%;
+  max-width: 640px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 70vh;
+}
+
+.cmdk__input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+.cmdk__search-icon { font-size: var(--text-lg); color: var(--color-text-muted); }
+.cmdk__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: var(--text-base);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+.cmdk__input::placeholder { color: var(--color-text-muted); }
+
+.cmdk__kbd {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-muted);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.cmdk__list {
+  overflow-y: auto;
+  padding: var(--space-2);
+}
+
+.cmdk__group-label {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  padding: var(--space-2) var(--space-3) var(--space-1);
+}
+
+.cmdk__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background var(--duration-fast) var(--ease-default);
+}
+.cmdk__item:hover,
+.cmdk__item[aria-selected="true"] {
+  background: var(--color-primary-ghost);
+  color: var(--color-primary);
+}
+.cmdk__item-icon {
+  width: 24px;
+  font-size: var(--text-base);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+.cmdk__item[aria-selected="true"] .cmdk__item-icon { color: var(--color-primary); }
+
+.cmdk__item-label { flex: 1; font-size: var(--text-sm); }
+.cmdk__item-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+.cmdk__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.cmdk__footer-hints { display: flex; gap: var(--space-3); align-items: center; }
+
+/* Dark Mode */
+[data-theme="dark"] .cmdk { background: var(--color-surface); }
+[data-theme="dark"] .cmdk__overlay { background: rgba(0,0,0,0.6); }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .cmdk-overlay { padding-top: 0; align-items: stretch; }
+  .cmdk { max-height: 100vh; border-radius: 0; }
+}
+</style>
+
+<!-- variant: default -->
+<div class="cmdk-overlay" role="dialog" aria-label="Command Palette">
+  <div class="cmdk">
+    <div class="cmdk__input-wrap">
+      <span class="cmdk__search-icon">⌕</span>
+      <input class="cmdk__input" placeholder="输入命令或搜索…" autofocus />
+      <kbd class="cmdk__kbd">esc</kbd>
+    </div>
+    <div class="cmdk__list">
+      <div class="cmdk__group-label">建议</div>
+      <div class="cmdk__item" aria-selected="true">
+        <span class="cmdk__item-icon">📄</span>
+        <span class="cmdk__item-label">新建文档</span>
+        <span class="cmdk__item-hint">⌘ N</span>
+      </div>
+      <div class="cmdk__item">
+        <span class="cmdk__item-icon">🔍</span>
+        <span class="cmdk__item-label">搜索文件</span>
+        <span class="cmdk__item-hint">⌘ P</span>
+      </div>
+      <div class="cmdk__item">
+        <span class="cmdk__item-icon">⚙️</span>
+        <span class="cmdk__item-label">打开设置</span>
+        <span class="cmdk__item-hint">⌘ ,</span>
+      </div>
+    </div>
+    <div class="cmdk__footer">
+      <span>My Design Lib</span>
+      <div class="cmdk__footer-hints">
+        <span><kbd class="cmdk__kbd">↑↓</kbd> 选择</span>
+        <span><kbd class="cmdk__kbd">↵</kbd> 确认</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /variant -->
+
+<!-- variant: with-groups -->
+<div class="cmdk-overlay">
+  <div class="cmdk">
+    <div class="cmdk__input-wrap">
+      <span class="cmdk__search-icon">⌕</span>
+      <input class="cmdk__input" placeholder="Type a command or search…" value="user" />
+      <kbd class="cmdk__kbd">esc</kbd>
+    </div>
+    <div class="cmdk__list">
+      <div class="cmdk__group-label">导航</div>
+      <div class="cmdk__item"><span class="cmdk__item-icon">👤</span><span class="cmdk__item-label">用户列表</span><span class="cmdk__item-hint">G U</span></div>
+      <div class="cmdk__item"><span class="cmdk__item-icon">🏠</span><span class="cmdk__item-label">用户中心</span><span class="cmdk__item-hint">G H</span></div>
+
+      <div class="cmdk__group-label">操作</div>
+      <div class="cmdk__item" aria-selected="true"><span class="cmdk__item-icon">➕</span><span class="cmdk__item-label">新建用户</span><span class="cmdk__item-hint">N U</span></div>
+      <div class="cmdk__item"><span class="cmdk__item-icon">📤</span><span class="cmdk__item-label">导出用户数据</span><span class="cmdk__item-hint">E U</span></div>
+    </div>
+    <div class="cmdk__footer"><span>2 groups · 4 results</span></div>
+  </div>
+</div>
+<!-- /variant -->
