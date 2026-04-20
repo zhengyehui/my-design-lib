@@ -4,16 +4,73 @@ hero:
   name: My Design Lib
   text: 你的设计，AI 来加速
   tagline: 一套为 AI 编程助手优化的前端组件库。纯 HTML + CSS，复制即用，零框架依赖。
-  actions:
-    - theme: brand
-      text: 🎨 浏览页面画廊
-      link: /pages/
-    - theme: alt
-      text: 📦 25 个组件
-      link: /components/button
-    - theme: alt
-      text: 🤝 赞助此项目
-      link: /sponsor
+
+<!-- 自定义英雄区 - 左右分栏 -->
+<div class="hero-enhanced">
+  <div class="hero-left">
+    <div class="hero-badge">✨ 新一代设计系统</div>
+    <h1>My Design Lib</h1>
+    <p class="hero-subtitle">你的设计，AI 来加速</p>
+    <p class="hero-description">一套为 AI 编程助手优化的前端组件库。纯 HTML + CSS，复制即用，零框架依赖。</p>
+    
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-number">25</span>
+        <span class="stat-label">生产级组件</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">5</span>
+        <span class="stat-label">完整页面</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">3</span>
+        <span class="stat-label">设计系统</span>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a href="/pages/" class="btn btn-primary">🎨 浏览页面画廊</a>
+      <a href="/components/button" class="btn btn-secondary">📦 查看 25 个组件</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="component-showcase">
+      <div class="showcase-title">组件预览</div>
+      
+      <!-- 按钮组件演示 -->
+      <div class="showcase-section">
+        <h4>Button 按钮</h4>
+        <div class="showcase-buttons">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-secondary">Secondary</button>
+          <button class="btn btn-ghost">Ghost</button>
+        </div>
+      </div>
+
+      <!-- 卡片组件演示 -->
+      <div class="showcase-section">
+        <h4>Card 卡片</h4>
+        <div class="showcase-cards">
+          <div class="card card-flat">Flat</div>
+          <div class="card card-elevated">Elevated</div>
+          <div class="card card-featured">Featured</div>
+        </div>
+      </div>
+
+      <!-- 徽章组件演示 -->
+      <div class="showcase-section">
+        <h4>Badge 徽章</h4>
+        <div class="showcase-badges">
+          <span class="badge">默认</span>
+          <span class="badge badge-success">成功</span>
+          <span class="badge badge-warning">警告</span>
+          <span class="badge badge-danger">危险</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 features:
   - icon: 🎨
@@ -104,6 +161,40 @@ features:
   </div>
 </div>
 
+<!-- 项目统计 -->
+<div class="project-stats">
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-content">
+        <div class="stat-value">25</div>
+        <div class="stat-name">生产级组件</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎨</div>
+      <div class="stat-content">
+        <div class="stat-value">5</div>
+        <div class="stat-name">完整页面</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🏷️</div>
+      <div class="stat-content">
+        <div class="stat-value">3</div>
+        <div class="stat-name">设计系统</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🤖</div>
+      <div class="stat-content">
+        <div class="stat-value">MCP</div>
+        <div class="stat-name">AI 集成</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 联系方式 -->
 <div class="contact-bar">
   <span>📧 <a href="mailto:weta_zheng@qq.com">weta_zheng@qq.com</a></span>
@@ -160,6 +251,230 @@ features:
 </div>
 
 <style>
+/* ═════════════════════════════════════════════════════════════════════════
+   Enhanced Hero Section — Left/Right Layout
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.hero-enhanced {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  background: rgba(124, 92, 255, 0.1);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  border-radius: 20px;
+  font-size: 0.875rem;
+  color: #7c5cff;
+  font-weight: 600;
+}
+
+.hero-left h1 {
+  font-size: 3.5rem;
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #7c5cff, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--text-primary, #0f172a);
+  font-weight: 600;
+}
+
+.hero-description {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--text-secondary, #475569);
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border-primary, #e2e8f0);
+  border-bottom: 1px solid var(--border-primary, #e2e8f0);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #7c5cff;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-muted, #94a3b8);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-actions .btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+/* Right Hero — Component Showcase */
+.hero-right {
+  display: flex;
+  justify-content: center;
+}
+
+.component-showcase {
+  background: var(--bg-secondary, #f8fafc);
+  border: 1px solid var(--border-primary, #e2e8f0);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.dark .component-showcase {
+  background: var(--ink-800, #1a1a1f);
+  border-color: var(--ink-700, #25252d);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.showcase-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #7c5cff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.showcase-section {
+  margin-bottom: 1.75rem;
+}
+
+.showcase-section:last-child {
+  margin-bottom: 0;
+}
+
+.showcase-section h4 {
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem;
+  color: var(--text-primary, #0f172a);
+  font-weight: 600;
+}
+
+.showcase-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.showcase-buttons .btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  width: 100%;
+  text-align: center;
+}
+
+.showcase-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.showcase-cards .card {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary, #0f172a);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.showcase-cards .card:hover {
+  transform: translateY(-2px);
+}
+
+.showcase-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.showcase-badges .badge {
+  font-size: 0.75rem;
+}
+
+/* Responsive Hero */
+@media (max-width: 768px) {
+  .hero-enhanced {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 1rem;
+  }
+
+  .hero-left h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .component-showcase {
+    max-width: 100%;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   Design Tokens Showcase
+   ═════════════════════════════════════════════════════════════════════════ */
+
 /* Design Tokens Showcase */
 .design-tokens-showcase {
   max-width: 1100px;
@@ -444,6 +759,83 @@ features:
 @media (max-width: 480px) {
   .gallery-preview__grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   Project Stats Section
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.project-stats {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, var(--ink-950, #0a0a0b) 0%, var(--ink-900, #131316) 100%);
+  border-radius: 16px;
+  border: 1px solid var(--ink-800, #1a1a1f);
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(124, 92, 255, 0.05);
+  border: 1px solid rgba(124, 92, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  border-color: rgba(124, 92, 255, 0.3);
+  background: rgba(124, 92, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #7c5cff;
+}
+
+.stat-name {
+  font-size: 0.875rem;
+  color: var(--ink-300, #a0a0ab);
+}
+
+@media (max-width: 768px) {
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
+  .stat-name {
+    font-size: 0.8rem;
   }
 }
 </style>
