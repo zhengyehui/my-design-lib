@@ -235,6 +235,50 @@ features:
   gap: 0.75rem;
 }
 
+.component-demo button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+}
+
+.component-demo button:nth-child(1) {
+  background: #7c5cff;
+  color: white;
+}
+
+.component-demo button:nth-child(1):hover {
+  background: #6b4fe8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
+}
+
+.component-demo button:nth-child(2) {
+  background: var(--ink-800, #1a1a1f);
+  color: var(--ink-100, #ebebf0);
+  border: 1px solid var(--ink-700, #25252d);
+}
+
+.component-demo button:nth-child(2):hover {
+  background: var(--ink-700, #25252d);
+  border-color: var(--ink-600, #3d3d47);
+}
+
+.component-demo button:nth-child(3) {
+  background: transparent;
+  color: var(--ink-100, #ebebf0);
+  border: 1px solid var(--ink-700, #25252d);
+}
+
+.component-demo button:nth-child(3):hover {
+  background: rgba(124, 92, 255, 0.08);
+  border-color: #7c5cff;
+  color: #7c5cff;
+}
+
 /* Gallery Preview Section */
 .gallery-preview {
   max-width: 1100px;
@@ -266,6 +310,27 @@ features:
   gap: 1rem;
 }
 
+/* Enhanced hero section styling */
+:root {
+  --hero-gradient: linear-gradient(135deg, var(--ink-950, #0a0a0b) 0%, var(--ink-900, #131316) 100%);
+}
+
+/* Override VitePress hero */
+.VPHero {
+  background: var(--hero-gradient);
+  padding-bottom: 4rem;
+}
+
+.VPHero .tagline {
+  color: var(--ink-300, #a0a0ab);
+  font-size: 1.1rem;
+}
+
+.VPHero .brand {
+  color: var(--brand, #7c5cff);
+  font-weight: 700;
+}
+
 /* Preview Card */
 .preview-card {
   border-radius: 12px;
@@ -277,7 +342,7 @@ features:
 }
 .preview-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 0 32px rgba(124, 92, 255, 0.15);
   border-color: var(--vp-c-brand-1);
 }
 .preview-card__visual {
