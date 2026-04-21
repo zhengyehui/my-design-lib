@@ -4,7 +4,7 @@ head:
   - - script
     - src: /pages/page-detail.js
       defer: true
-title: 现代认证页面
+title: 3D 互动落地页
 ---
 
 <div class="page-detail">
@@ -20,35 +20,35 @@ title: 现代认证页面
   </nav>
 
   <!-- SEO Meta -->
-  <meta name="description" content="受 AuthKit 启发的现代认证页面模板，登录表单 + 社交登录 + 功能特性展示，纯 HTML+CSS+JS，可直接复制使用。">
-  <meta name="keywords" content="auth, login, 认证, 登录页面, 社交登录, 前端模板">
+  <meta name="description" content="受 Lusion.co 启发的 3D 互动落地页模板，沉浸式数字体验，渐变背景 + 3D 动画 + 作品展示，纯 HTML+CSS+JS，可直接复制使用。">
+  <meta name="keywords" content="3D, interactive, landing page, 落地页, 沉浸式, 前端模板">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="现代认证页面 — My Design Lib">
-  <meta property="og:description" content="受 AuthKit 启发的现代认证页面模板，登录表单 + 社交登录 + 功能特性展示，纯 HTML+CSS+JS，可直接复制使用。">
-  <meta property="og:url" content="http://101.37.166.208:11930/pages/auth-modern.html">
-  <link rel="canonical" href="http://101.37.166.208:11930/pages/auth-modern.html">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"现代认证页面 — My Design Lib","description":"受 AuthKit 启发的现代认证页面模板，登录表单 + 社交登录 + 功能特性展示，纯 HTML+CSS+JS，可直接复制使用。","url":"http://101.37.166.208:11930/pages/auth-modern.html","genre":"auth","author":{"@type":"Organization","name":"My Design Lib"}}</script>
+  <meta property="og:title" content="3D 互动落地页 — My Design Lib">
+  <meta property="og:description" content="受 Lusion.co 启发的 3D 互动落地页模板，沉浸式数字体验，渐变背景 + 3D 动画 + 作品展示，纯 HTML+CSS+JS，可直接复制使用。">
+  <meta property="og:url" content="http://101.37.166.208:11930/pages/3d-interactive-landing.html">
+  <link rel="canonical" href="http://101.37.166.208:11930/pages/3d-interactive-landing.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"3D 互动落地页 — My Design Lib","description":"受 Lusion.co 启发的 3D 互动落地页模板，沉浸式数字体验，渐变背景 + 3D 动画 + 作品展示，纯 HTML+CSS+JS，可直接复制使用。","url":"http://101.37.166.208:11930/pages/3d-interactive-landing.html","genre":"landing","author":{"@type":"Organization","name":"My Design Lib"}}</script>
 
 
   <div class="detail-header">
     <a href="/pages/" class="back-link">← 返回画廊</a>
     <div class="detail-meta">
-      <h1>现代认证页面</h1>
+      <h1>3D 互动落地页</h1>
       <div class="detail-tags">
-        <span class="tag">认证</span><span class="tag">登录</span><span class="tag">社交登录</span>
-        <span class="score">⭐ 9.3</span>
+        <span class="tag">3D</span><span class="tag">互动</span><span class="tag">落地页</span>
+        <span class="score">⭐ 9.5</span>
       </div>
     </div>
     <div class="detail-actions">
       <button class="action-btn active" onclick="showPreview()">👁 预览</button>
       <button class="action-btn" onclick="showCode()">📝 源码</button>
-      <a href="/pages/auth-modern/index.html" target="_blank" class="action-btn">↗ 新窗口打开</a>
+      <a href="/pages/3d-interactive-landing/index.html" target="_blank" class="action-btn">↗ 新窗口打开</a>
     </div>
   </div>
 
   <div class="detail-body">
-    <div id="preview-panel" class="panel"><iframe src="/pages/auth-modern/index.html" sandbox="allow-scripts" loading="lazy"></iframe></div>
+    <div id="preview-panel" class="panel"><iframe src="/pages/3d-interactive-landing/index.html" sandbox="allow-scripts" loading="lazy"></iframe></div>
     <div id="code-panel" class="panel" style="display:none">
     <button id="copy-btn" class="copy-btn" onclick="copySourceCode()">📋 复制源码</button>
     <pre><code id="code-content">加载中...</code></pre>
@@ -58,18 +58,17 @@ title: 现代认证页面
   <div class="design-tips">
     <h2>💡 设计分析</h2>
     <div class="tips-grid">
-      <div class="tip"><h3>布局结构</h3><p>顶部导航 → 居中登录卡片 + 侧边功能特性 → 页脚</p></div>
-      <div class="tip"><h3>配色方案</h3><p>浅灰背景 (#fafafa) + 白色卡片，主色靛蓝 (#6366f1)，深色模式切换</p></div>
-      <div class="tip"><h3>亮点技巧</h3><p>• 登录表单 + 社交登录按钮<br>• 深色模式实时切换<br>• 侧边功能特性展示<br>• 企业级安全特性图标</p></div>
-      <div class="tip"><h3>适用场景</h3><p>SaaS 产品、企业应用、开发者工具、需要用户认证的网站</p></div>
+      <div class="tip"><h3>布局结构</h3><p>沉浸式全屏 Hero → 3D 动画背景 → 精选作品网格 → 关于我们 → CTA → 页脚</p></div>
+      <div class="tip"><h3>配色方案</h3><p>深色主题 (#000) 搭配靛蓝紫渐变 (#6366f1 到 #8b5cf6)，白色文字和半透明效果</p></div>
+      <div class="tip"><h3>亮点技巧</h3><p>• 3D 旋转立方体动画背景<br>• 滚动时导航栏背景变化<br>• 作品卡片 hover 上浮效果<br>• 径向渐变装饰元素</p></div>
+      <div class="tip"><h3>适用场景</h3><p>创意工作室、设计公司、3D/动画工作室、数字代理机构首页</p></div>
     </div>
   </div>
 
   <div class="detail-footer">
     <a href="/pages/" class="back-btn">← 返回画廊</a>
     <div class="nav-prevnext">
-      <a href="/pages/3d-interactive-landing.html">← 3D 互动落地页</a>
-      <a href="/pages/saas-landing.html">SaaS 落地页 →</a>
+      <a href="/pages/auth-modern.html">现代认证页面 →</a>
     </div>
   </div>
 </div>

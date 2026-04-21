@@ -3,522 +3,560 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Modern Auth - 现代认证页面</title>
+<title>Modern Auth Page - My Design Lib</title>
 <link rel="stylesheet" href="/tokens/tokens.css">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: var(--font-sans);
+body { 
+  font-family: -apple-system, 'Segoe UI', sans-serif; 
+  color: var(--color-text); 
+  background: #fafafa; 
   min-height: 100vh;
-  display: flex;
-  background: var(--color-bg);
-  color: var(--color-text);
-  overflow-x: hidden;
-}
-
-/* Split Layout */
-.auth-container {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-}
-
-/* Left Panel - Branding */
-.auth-brand {
-  flex: 1;
-  background: linear-gradient(135deg, #0f0f14 0%, #1a1a2e 50%, #16213e 100%);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+}
+
+/* Header */
+.header {
+  padding: 1.5rem 2rem;
+  display: flex;
   align-items: center;
-  padding: 3rem;
-  position: relative;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+.header-logo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111827;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.header-logo svg {
+  width: 24px;
+  height: 24px;
+}
+.header-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+.header-links a {
+  text-decoration: none;
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.header-links a:hover {
+  color: #111827;
+}
+
+/* Main Content */
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+/* Auth Container */
+.auth-container {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  border: 1px solid #e5e7eb;
   overflow: hidden;
 }
 
-.auth-brand::before {
-  content: '';
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%);
-  top: -100px;
-  left: -100px;
-  animation: float 8s ease-in-out infinite;
-}
-
-.auth-brand::after {
-  content: '';
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(168,85,247,0.2) 0%, transparent 70%);
-  bottom: -100px;
-  right: -100px;
-  animation: float 10s ease-in-out infinite reverse;
-}
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(30px, 30px); }
-}
-
-.brand-content {
-  position: relative;
-  z-index: 1;
+/* Auth Header */
+.auth-header {
+  padding: 2.5rem 2rem 1.5rem;
   text-align: center;
-  color: #fff;
-  max-width: 400px;
+  border-bottom: 1px solid #f3f4f6;
 }
-
-.brand-logo {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, var(--color-primary), #a855f7);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.5rem;
-  margin: 0 auto 2rem;
-  box-shadow: 0 20px 60px rgba(99,102,241,0.4);
-}
-
-.brand-content h1 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #fff, #a5b4fc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.brand-content p {
-  font-size: 1.1rem;
-  color: rgba(255,255,255,0.7);
-  line-height: 1.7;
-}
-
-.brand-features {
-  margin-top: 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.brand-feature {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: rgba(255,255,255,0.8);
-  font-size: 0.95rem;
-}
-
-.feature-icon {
-  width: 36px;
-  height: 36px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-/* Right Panel - Form */
-.auth-form-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 3rem;
-  background: var(--color-bg);
-}
-
-.auth-form-container {
-  width: 100%;
-  max-width: 400px;
-}
-
-.form-header {
-  margin-bottom: 2rem;
-}
-
-.form-header h2 {
-  font-size: 1.8rem;
+.auth-header h1 {
+  font-size: 1.5rem;
   font-weight: 700;
+  color: #111827;
   margin-bottom: 0.5rem;
 }
-
-.form-header p {
-  color: var(--color-text-secondary);
-  font-size: 0.95rem;
-}
-
-/* Theme Toggle */
-.theme-toggle {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--color-bg-muted);
-  border-radius: 100px;
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s;
-}
-
-.theme-toggle:hover {
-  background: var(--color-primary-ghost);
-  color: var(--color-primary);
-}
-
-/* Form */
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
+.auth-header p {
   font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--color-text);
+  color: #6b7280;
 }
 
+/* Auth Form */
+.auth-form {
+  padding: 2rem;
+}
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
 .form-input {
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  font-size: 1rem;
-  font-family: inherit;
-  background: var(--color-bg);
-  color: var(--color-text);
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #111827;
+  background: #fff;
   transition: all 0.2s;
 }
-
 .form-input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-ghost);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
 }
-
 .form-input::placeholder {
-  color: var(--color-text-muted);
+  color: #9ca3af;
 }
 
 /* Social Login */
-.social-divider {
+.social-login {
+  margin: 1.5rem 0;
+}
+.divider {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin: 0.5rem 0;
-  color: var(--color-text-muted);
-  font-size: 0.85rem;
+  text-align: center;
+  margin: 1.5rem 0;
 }
-
-.social-divider::before,
-.social-divider::after {
+.divider::before,
+.divider::after {
   content: '';
   flex: 1;
-  height: 1px;
-  background: var(--color-border);
+  border-bottom: 1px solid #e5e7eb;
 }
-
+.divider span {
+  padding: 0 1rem;
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
 .social-buttons {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
-
-.social-btn {
+.btn-social {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.8rem;
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-size: 0.95rem;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: #374151;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  font-family: inherit;
+  text-decoration: none;
+}
+.btn-social:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+.btn-social svg {
+  width: 18px;
+  height: 18px;
 }
 
-.social-btn:hover {
-  background: var(--color-bg-muted);
-  border-color: var(--color-border-hover);
-}
-
-.social-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
-/* Submit Button */
-.submit-btn {
-  padding: 1rem;
-  background: var(--color-primary);
+/* Primary Button */
+.btn-primary {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: #111827;
   color: #fff;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  font-family: inherit;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+}
+.btn-primary:hover {
+  background: #1f2937;
 }
 
-.submit-btn:hover {
-  background: var(--color-primary-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 25px rgba(99,102,241,0.3);
-}
-
-/* Footer Links */
-.form-footer {
-  margin-top: 2rem;
+/* Auth Footer */
+.auth-footer {
+  padding: 1.5rem 2rem;
+  background: #f9fafb;
+  border-top: 1px solid #f3f4f6;
   text-align: center;
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
 }
-
-.form-footer a {
-  color: var(--color-primary);
+.auth-footer p {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.auth-footer a {
+  color: #6366f1;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
 }
-
-.form-footer a:hover {
+.auth-footer a:hover {
   text-decoration: underline;
 }
 
-/* OTP Input */
-.otp-container {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin: 1rem 0;
+/* Features Sidebar */
+.auth-features {
+  padding: 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  border: 1px solid #e5e7eb;
+  max-width: 320px;
+  margin-left: 2rem;
 }
-
-.otp-input {
-  width: 48px;
-  height: 56px;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-  font-family: inherit;
-  background: var(--color-bg);
-  color: var(--color-text);
-  transition: all 0.2s;
+.features-header {
+  margin-bottom: 1.5rem;
 }
-
-.otp-input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-ghost);
-}
-
-/* Password Toggle */
-.password-wrapper {
-  position: relative;
-}
-
-.password-toggle {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
+.features-header h3 {
   font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+.features-header p {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.feature-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.feature-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.feature-icon svg {
+  width: 18px;
+  height: 18px;
+  color: #6366f1;
+}
+.feature-content h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.2rem;
+}
+.feature-content p {
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* Layout */
+.auth-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Theme Switch */
+.theme-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #d1d5db;
+  transition: .4s;
+  border-radius: 24px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #6366f1;
+}
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* Footer */
+.footer {
+  padding: 2rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.85rem;
+  border-top: 1px solid #e5e7eb;
+  background: #fff;
 }
 
 /* Responsive */
-@media (max-width: 900px) {
-  .auth-container {
+@media (max-width: 768px) {
+  .auth-layout {
     flex-direction: column;
   }
-  
-  .auth-brand {
-    padding: 2rem;
-    min-height: auto;
+  .auth-features {
+    margin-left: 0;
+    margin-top: 2rem;
+    max-width: 100%;
   }
-  
-  .brand-features {
-    display: none;
-  }
-  
-  .brand-content h1 {
-    font-size: 1.8rem;
-  }
-}
-
-/* Dark Mode */
-[data-theme="dark"] body {
-  background: #0f0f14;
-  color: #e2e8f0;
-}
-
-[data-theme="dark"] .auth-form-panel {
-  background: #0f0f14;
-}
-
-[data-theme="dark"] .form-input,
-[data-theme="dark"] .social-btn,
-[data-theme="dark"] .otp-input {
-  background: #1a1a24;
-  border-color: #2a2a3a;
-  color: #e2e8f0;
-}
-
-[data-theme="dark"] .form-input:focus,
-[data-theme="dark"] .otp-input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
-}
-
-[data-theme="dark"] .social-btn:hover {
-  background: #2a2a3a;
-}
-
-[data-theme="dark"] .theme-toggle {
-  background: #1a1a24;
 }
 </style>
 </head>
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()">
-  <span id="theme-icon">🌙</span>
-  <span id="theme-text">Dark</span>
-</button>
+<header class="header">
+  <a href="#" class="header-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+      <path d="M2 17l10 5 10-5"/>
+      <path d="M2 12l10 5 10-5"/>
+    </svg>
+    AuthKit
+  </a>
+  <div class="header-links">
+    <a href="#">文档</a>
+    <a href="#">定价</a>
+    <a href="#">GitHub</a>
+    <a href="#">登录</a>
+  </div>
+</header>
 
-<div class="auth-container">
-  <!-- Left Brand Panel -->
-  <div class="auth-brand">
-    <div class="brand-content">
-      <div class="brand-logo">🔐</div>
-      <h1>Welcome to AuthKit</h1>
-      <p>The world's best login box. Enterprise-grade authentication with beautiful, customizable UI.</p>
+<main class="main">
+  <div class="auth-layout">
+    <div class="auth-container">
+      <div class="auth-header">
+        <h1>登录到 SuperApp</h1>
+        <p>欢迎回来，请登录您的账户</p>
+      </div>
       
-      <div class="brand-features">
-        <div class="brand-feature">
-          <div class="feature-icon">🛡️</div>
-          <span>Enterprise-grade security</span>
+      <div class="auth-form">
+        <div class="form-group">
+          <label class="form-label">邮箱</label>
+          <input type="email" class="form-input" placeholder="your@email.com">
         </div>
-        <div class="brand-feature">
-          <div class="feature-icon">⚡</div>
-          <span>Lightning fast integration</span>
+        
+        <div class="form-group">
+          <label class="form-label">密码</label>
+          <input type="password" class="form-input" placeholder="••••••••">
         </div>
-        <div class="brand-feature">
-          <div class="feature-icon">🎨</div>
-          <span>Fully customizable design</span>
+        
+        <button class="btn-primary">继续</button>
+        
+        <div class="divider">
+          <span>或者</span>
         </div>
-        <div class="brand-feature">
-          <div class="feature-icon">🌐</div>
-          <span>Social login support</span>
+        
+        <div class="social-buttons">
+          <a href="#" class="btn-social">
+            <svg viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            使用 Google 登录
+          </a>
+          <a href="#" class="btn-social">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            使用 GitHub 登录
+          </a>
         </div>
+        
+        <div class="theme-switch">
+          <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+          </label>
+          <span>深色模式</span>
+        </div>
+      </div>
+      
+      <div class="auth-footer">
+        <p>还没有账户？ <a href="#">注册</a></p>
+        <p style="margin-top: 0.5rem;"><a href="#">忘记密码？</a></p>
       </div>
     </div>
-  </div>
-
-  <!-- Right Form Panel -->
-  <div class="auth-form-panel">
-    <div class="auth-form-container">
-      <div class="form-header">
-        <h2>Sign in to SuperApp</h2>
-        <p>Enter your credentials to access your account</p>
+    
+    <div class="auth-features">
+      <div class="features-header">
+        <h3>企业级安全</h3>
+        <p>为现代应用打造的身份验证解决方案</p>
       </div>
-
-      <form class="auth-form" onsubmit="return false;">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" class="form-input" placeholder="your@email.com" value="">
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-          <div class="password-wrapper">
-            <input type="password" class="form-input" placeholder="Enter your password" style="padding-right: 3rem;">
-            <button type="button" class="password-toggle" onclick="togglePassword()">👁️</button>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h4>单点登录 (SSO)</h4>
+            <p>支持 SAML 和 OIDC 协议，一次登录访问所有应用</p>
           </div>
         </div>
-
-        <div class="social-divider">OR</div>
-
-        <div class="social-buttons">
-          <button type="button" class="social-btn">
-            <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Continue with Google
-          </button>
-          <button type="button" class="social-btn">
-            <svg viewBox="0 0 24 24"><path fill="#00A4EF" d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z"/></svg>
-            Continue with Microsoft
-          </button>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h4>多因素认证 (MFA)</h4>
+            <p>TOTP、短信、邮件验证码，多层安全防护</p>
+          </div>
         </div>
-
-        <button type="submit" class="submit-btn">Continue</button>
-      </form>
-
-      <div class="form-footer">
-        Don't have an account? <a href="#">Sign up</a><br>
-        <a href="#" style="font-weight: 400; font-size: 0.85rem; margin-top: 0.5rem; display: inline-block;">Forgot password?</a>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h4>角色权限控制 (RBAC)</h4>
+            <p>精细化权限管理，基于角色的访问控制</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h4>社交登录</h4>
+            <p>支持 Google、GitHub、Apple 等主流社交平台登录</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</main>
+
+<footer class="footer">
+  <p>© 2026 AuthKit by WorkOS. My Design Lib 示例页面</p>
+</footer>
 
 <script>
-function toggleTheme() {
-  const html = document.documentElement;
-  const icon = document.getElementById('theme-icon');
-  const text = document.getElementById('theme-text');
-  
-  if (html.getAttribute('data-theme') === 'dark') {
-    html.removeAttribute('data-theme');
-    icon.textContent = '🌙';
-    text.textContent = 'Dark';
+// Theme toggle
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('change', (e) => {
+  if (e.target.checked) {
+    document.body.style.background = '#111827';
+    document.querySelector('.main').style.background = 'linear-gradient(135deg, #1f2937 0%, #111827 100%)';
+    document.querySelectorAll('.auth-container, .auth-features, .header, .footer').forEach(el => {
+      el.style.background = '#1f2937';
+      el.style.borderColor = '#374151';
+    });
+    document.querySelectorAll('h1, h3, h4, .form-label').forEach(el => {
+      el.style.color = '#f9fafb';
+    });
+    document.querySelectorAll('p, span, .header-links a').forEach(el => {
+      if (!el.closest('.auth-footer')) {
+        el.style.color = '#9ca3af';
+      }
+    });
+    document.querySelectorAll('.form-input').forEach(el => {
+      el.style.background = '#374151';
+      el.style.borderColor = '#4b5563';
+      el.style.color = '#f9fafb';
+    });
+    document.querySelectorAll('.btn-primary').forEach(el => {
+      el.style.background = '#6366f1';
+    });
   } else {
-    html.setAttribute('data-theme', 'dark');
-    icon.textContent = '☀️';
-    text.textContent = 'Light';
+    document.body.style.background = '#fafafa';
+    document.querySelector('.main').style.background = 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)';
+    document.querySelectorAll('.auth-container, .auth-features, .header, .footer').forEach(el => {
+      el.style.background = '#fff';
+      el.style.borderColor = '#e5e7eb';
+    });
+    document.querySelectorAll('h1, h3, h4, .form-label').forEach(el => {
+      el.style.color = '';
+    });
+    document.querySelectorAll('p, span, .header-links a').forEach(el => {
+      if (!el.closest('.auth-footer')) {
+        el.style.color = '';
+      }
+    });
+    document.querySelectorAll('.form-input').forEach(el => {
+      el.style.background = '';
+      el.style.borderColor = '';
+      el.style.color = '';
+    });
+    document.querySelectorAll('.btn-primary').forEach(el => {
+      el.style.background = '';
+    });
   }
-}
+});
 
-function togglePassword() {
-  const input = document.querySelector('input[type="password"], input[type="text"][data-password]');
-  if (input.type === 'password') {
-    input.type = 'text';
-    input.setAttribute('data-password', 'true');
-  } else {
-    input.type = 'password';
-  }
-}
-
-// Auto-focus first input
-document.querySelector('.form-input').focus();
+// Form submission prevention
+document.querySelector('.btn-primary').addEventListener('click', (e) => {
+  e.preventDefault();
+  alert('这是一个演示页面，表单不会实际提交。');
+});
 </script>
 
 </body>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Interactive Landing - My Design Lib</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: -apple-system, 'Segoe UI', sans-serif; 
+  color: var(--color-text); 
+  background: #000; 
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  transition: background 0.3s;
+}
+.nav.scrolled {
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(20px);
+}
+.nav-logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+}
+.nav-links a {
+  text-decoration: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover {
+  color: #fff;
+}
+.btn-contact {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 0.6rem 1.5rem;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.btn-contact:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-content {
+  max-width: 1000px;
+  position: relative;
+  z-index: 2;
+}
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.03em;
+}
+.hero p {
+  font-size: 1.3rem;
+  color: rgba(255,255,255,0.6);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.7;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  padding: 1rem 2.5rem;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(99,102,241,0.6);
+}
+.btn-secondary {
+  background: transparent;
+  color: #fff;
+  padding: 1rem 2.5rem;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s;
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* 3D Background */
+.bg-3d {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.cube {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.05));
+  border: 1px solid rgba(99,102,241,0.2);
+  transform-style: preserve-3d;
+  animation: rotate 20s infinite linear;
+}
+.cube:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.cube:nth-child(2) { top: 60%; left: 80%; width: 150px; height: 150px; animation-delay: -5s; }
+.cube:nth-child(3) { top: 30%; left: 70%; width: 80px; height: 80px; animation-delay: -10s; }
+.cube:nth-child(4) { top: 70%; left: 20%; width: 120px; height: 120px; animation-delay: -15s; }
+.cube:nth-child(5) { top: 40%; left: 50%; width: 60px; height: 60px; animation-delay: -8s; }
+
+@keyframes rotate {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+}
+
+/* Featured Work Section */
+.featured {
+  padding: 8rem 2rem;
+  background: #000;
+}
+.featured-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+.featured-header h4 {
+  font-size: 0.9rem;
+  color: #6366f1;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+.featured-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #fff;
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.2;
+}
+.featured-header p {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.6);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.work-item {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 16/10;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.4s;
+}
+.work-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(99,102,241,0.2);
+  border-color: rgba(99,102,241,0.3);
+}
+.work-item-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
+}
+.work-item h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.work-item p {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 1rem;
+}
+.work-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.work-tag {
+  padding: 0.3rem 0.8rem;
+  background: rgba(99,102,241,0.2);
+  color: #a5b4fc;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Approach Section */
+.approach {
+  padding: 8rem 2rem;
+  background: linear-gradient(180deg, #000 0%, #0f0f1a 100%);
+}
+.approach-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+.approach-text h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 2rem;
+  line-height: 1.2;
+}
+.approach-text p {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+.approach-visual {
+  position: relative;
+  height: 400px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.05));
+  border-radius: 24px;
+  border: 1px solid rgba(99,102,241,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.approach-visual::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(99,102,241,0.3), transparent 70%);
+  animation: pulse 4s infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.5); opacity: 0.8; }
+}
+
+/* CTA Section */
+.cta {
+  padding: 8rem 2rem;
+  background: linear-gradient(135deg, #0f0f1a, #1a1a2e);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99,102,241,0.15), transparent 70%);
+}
+.cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.cta h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+.cta p {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 2.5rem;
+}
+
+/* Footer */
+.footer {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .approach-content { grid-template-columns: 1fr; gap: 3rem; }
+  .work-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="navbar">
+  <a href="#" class="nav-logo">◆ Lusion</a>
+  <div class="nav-links">
+    <a href="#work">作品</a>
+    <a href="#about">关于</a>
+    <a href="#contact">联系</a>
+    <a href="#" class="btn-contact">Let's talk</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="bg-3d">
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+  </div>
+  <div class="hero-content">
+    <h1>创造沉浸式<br>数字体验</h1>
+    <p>我们结合设计、动态、3D 和开发，打造视觉震撼且技术无缝的数字体验。从品牌活动到沉浸式品牌世界，我们创造吸引注意力并邀请互动的作品。</p>
+    <div class="hero-actions">
+      <a href="#work" class="btn-primary">查看作品</a>
+      <a href="#about" class="btn-secondary">了解方法 →</a>
+    </div>
+  </div>
+</section>
+
+<section class="featured" id="work">
+  <div class="featured-header">
+    <h4>Featured Work</h4>
+    <h2>精选作品</h2>
+    <p>为雄心勃勃的品牌和前瞻性团队打造的沉浸式数字体验精选</p>
+  </div>
+  <div class="work-grid">
+    <div class="work-item">
+      <div class="work-item-content">
+        <h3>Oryzo AI</h3>
+        <p>为 AI 平台打造的沉浸式品牌体验，融合 3D 可视化与交互设计</p>
+        <div class="work-tags">
+          <span class="work-tag">Web</span>
+          <span class="work-tag">Design</span>
+          <span class="work-tag">3D</span>
+          <span class="work-tag">Animation</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="work-item-content">
+        <h3>Devin AI</h3>
+        <p>为首个 AI 软件工程师打造的产品展示页面，突出技术实力</p>
+        <div class="work-tags">
+          <span class="work-tag">Web</span>
+          <span class="work-tag">Design</span>
+          <span class="work-tag">Development</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="work-item-content">
+        <h3>Synthetic Human</h3>
+        <p>探索人工智能与人类交互的前沿数字艺术项目</p>
+        <div class="work-tags">
+          <span class="work-tag">Web</span>
+          <span class="work-tag">Design</span>
+          <span class="work-tag">3D</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="work-item-content">
+        <h3>Spatial Fusion</h3>
+        <p>空间计算时代的全新交互体验，融合 AR/VR 技术</p>
+        <div class="work-tags">
+          <span class="work-tag">Web</span>
+          <span class="work-tag">Development</span>
+          <span class="work-tag">3D</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="approach" id="about">
+  <div class="approach-content">
+    <div class="approach-text">
+      <h2>大胆创意，生动呈现</h2>
+      <p>我们不追逐潮流，也不生产看起来像其他人的作品。我们专注于创造视觉独特的数字体验，反映您的品牌，吸引您的受众，让人们记住他们所看到的。</p>
+      <p>我们的流程融合创意方向、3D 工艺和交互开发，构建量身定制的数字旅程，感觉原创、精致且具有影响力。</p>
+      <a href="#contact" class="btn-primary">开始合作</a>
+    </div>
+    <div class="approach-visual">
+      <!-- 3D visual placeholder -->
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="cta-content">
+    <h2>准备好让您的创意<br>变成沉浸式体验了吗？</h2>
+    <p>让我们一起创造令人难忘的数字体验。从概念到上线，我们提供全方位的创意和技术支持。</p>
+    <a href="mailto:hello@lusion.co" class="btn-primary">联系我们</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>© 2026 Lusion Creative Studio. My Design Lib 示例页面</p>
+</footer>
+
+<script>
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  const navbar = document.getElementById('navbar');
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

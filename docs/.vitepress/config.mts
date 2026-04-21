@@ -233,7 +233,8 @@ export default defineConfig({
             { text: 'NovaPay SaaS', link: '/pages/saas-landing' },
             { text: 'TechConf 科技大会', link: '/pages/conference-landing' },
             { text: 'NexusAI 智能平台', link: '/pages/ai-saas-landing' },
-            { text: 'FlowDesk 极简产品', link: '/pages/product-minimal' }
+            { text: 'FlowDesk 极简产品', link: '/pages/product-minimal' },
+            { text: '3D 互动落地页', link: '/pages/3d-interactive-landing' }
           ]
         },
         {
