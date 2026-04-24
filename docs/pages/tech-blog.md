@@ -14,8 +14,9 @@ title: DevChronicle 技术博客
       <a href="/">首页</a>
       <a href="/components/button.html">组件</a>
       <a href="/tokens/colors.html">设计变量</a>
+      <a href="/patterns/landing.html">布局模式</a>
       <a href="/pages/" class="active">🎨 页面画廊</a>
-      <a href="/sponsor.html">赞助</a>
+      <a href="/sponsor.html">🤝 赞助</a>
     </div>
   </nav>
 

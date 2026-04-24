@@ -14,8 +14,9 @@ title: ShopFlow 结账页
       <a href="/">首页</a>
       <a href="/components/button.html">组件</a>
       <a href="/tokens/colors.html">设计变量</a>
+      <a href="/patterns/landing.html">布局模式</a>
       <a href="/pages/" class="active">🎨 页面画廊</a>
-      <a href="/sponsor.html">赞助</a>
+      <a href="/sponsor.html">🤝 赞助</a>
     </div>
   </nav>
 
@@ -73,7 +74,7 @@ title: ShopFlow 结账页
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,'Segoe UI',sans-serif}
 .detail-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.8rem 2rem;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid #e5e7eb}
-.nav-logo{font-size:1.1rem;font-weight:800;color:#6366f1;text-decoration:none}
+.nav-logo{font-size:1.1rem;font-weight:800;color:#1e1b4b;text-decoration:none}
 .nav-links{display:flex;gap:1.5rem;align-items:center}
 .nav-links a{text-decoration:none;color:#666;font-size:.9rem;font-weight:500;transition:color .2s}
 .nav-links a:hover,.nav-links a.active{color:#6366f1}
