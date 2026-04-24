@@ -2,6 +2,7 @@
 layout: page
 title: 页面灵感画廊
 description: 完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+sidebar: false
 ---
 
 <script setup>
@@ -152,15 +153,6 @@ const pages = [
     colors: ['#000000', '#6366f1', '#8b5cf6'],
     rating: 9.5,
     description: '受 Lusion.co 启发的 3D 互动落地页，沉浸式数字体验，3D 动画背景 + 作品展示',
-  },
-  {
-    id: 'auth-modern',
-    title: '现代认证页面',
-    category: 'app',
-    tags: ['认证', '登录', '社交登录', '深色模式'],
-    colors: ['#fafafa', '#6366f1', '#111827'],
-    rating: 9.3,
-    description: '受 AuthKit 启发的现代认证页面，登录表单 + 社交登录 + 功能特性展示 + 深色模式切换',
   },
   {
     id: 'tech-blog',
