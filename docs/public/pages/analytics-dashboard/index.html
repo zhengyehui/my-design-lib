@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Dashboard — Design System</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ============================================================
+       Analytics Dashboard — Dark Theme
+       ============================================================ */
+
+    /* ── Dark theme overrides ──────────────────────────────── */
+    :root {
+      --dash-bg: #0f0f14;
+      --dash-bg-alt: #13131a;
+      --dash-card: #1a1a24;
+      --dash-card-hover: #22222e;
+      --dash-card-border: #2a2a38;
+      --dash-primary: #6366f1;
+      --dash-primary-light: #818cf8;
+      --dash-primary-glow: rgba(99, 102, 241, 0.15);
+      --dash-accent-green: #10b981;
+      --dash-accent-green-bg: rgba(16, 185, 129, 0.1);
+      --dash-accent-red: #ef4444;
+      --dash-accent-red-bg: rgba(239, 68, 68, 0.1);
+      --dash-text: #e2e8f0;
+      --dash-text-secondary: #94a3b8;
+      --dash-text-muted: #64748b;
+      --dash-border: #1e1e2a;
+      --dash-sidebar-bg: #0a0a10;
+      --dash-sidebar-width: 240px;
+      --dash-topbar-height: 64px;
+      --dash-table-stripe: rgba(255, 255, 255, 0.015);
+    }
+
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--dash-bg);
+      color: var(--dash-text);
+      line-height: var(--leading-normal);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ── Layout ────────────────────────────────────────────── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ───────────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--dash-sidebar-width);
+      background: var(--dash-sidebar-bg);
+      border-right: 1px solid var(--dash-border);
+      display: flex;
+      flex-direction: column;
+      z-index: var(--z-sticky);
+      transition: transform var(--duration-normal) var(--ease-default);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-5) var(--space-5);
+      border-bottom: 1px solid var(--dash-border);
+      height: var(--dash-topbar-height);
+    }
+
+    .sidebar-brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--dash-primary), #a78bfa);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-lg);
+      font-weight: var(--weight-bold);
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .sidebar-brand-text {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--dash-text);
+      letter-spacing: -0.01em;
+    }
+
+    .sidebar-brand-badge {
+      font-size: 10px;
+      background: var(--dash-primary);
+      color: white;
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      font-weight: var(--weight-medium);
+      margin-left: auto;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: var(--space-3) var(--space-3);
+      overflow-y: auto;
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: var(--weight-semibold);
+      color: var(--dash-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: var(--space-4) var(--space-3) var(--space-2);
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      color: var(--dash-text-secondary);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      transition: all var(--duration-fast) var(--ease-default);
+      cursor: pointer;
+      position: relative;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-nav-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--dash-text);
+    }
+
+    .sidebar-nav-item.active {
+      background: rgba(99, 102, 241, 0.12);
+      color: var(--dash-primary-light);
+    }
+
+    .sidebar-nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: var(--dash-primary);
+      border-radius: 0 3px 3px 0;
+    }
+
+    .sidebar-nav-icon {
+      width: 20px;
+      text-align: center;
+      font-size: var(--text-base);
+      flex-shrink: 0;
+    }
+
+    .sidebar-nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      background: var(--dash-accent-red);
+      color: white;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      font-weight: var(--weight-semibold);
+    }
+
+    .sidebar-footer {
+      padding: var(--space-4);
+      border-top: 1px solid var(--dash-border);
+    }
+
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease-default);
+    }
+
+    .sidebar-user:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .sidebar-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--dash-primary), #ec4899);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .sidebar-user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sidebar-user-name {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      color: var(--dash-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-user-role {
+      font-size: 11px;
+      color: var(--dash-text-muted);
+    }
+
+    /* ── Main Area ─────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      margin-left: var(--dash-sidebar-width);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Top Bar ───────────────────────────────────────────── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--dash-topbar-height);
+      background: rgba(15, 15, 20, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--dash-border);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-6);
+      gap: var(--space-4);
+      z-index: var(--z-sticky);
+    }
+
+    .topbar-title {
+      font-size: var(--text-lg);
+      font-weight: var(--weight-semibold);
+      color: var(--dash-text);
+      white-space: nowrap;
+    }
+
+    .topbar-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      color: var(--dash-text-muted);
+    }
+
+    .topbar-breadcrumb-sep {
+      color: var(--dash-text-muted);
+      opacity: 0.5;
+    }
+
+    .topbar-breadcrumb-current {
+      color: var(--dash-text-secondary);
+    }
+
+    .topbar-spacer {
+      flex: 1;
+    }
+
+    .topbar-search {
+      position: relative;
+      width: 280px;
+    }
+
+    .topbar-search-input {
+      width: 100%;
+      padding: var(--space-2) var(--space-3) var(--space-2) 36px;
+      background: var(--dash-card);
+      border: 1px solid var(--dash-card-border);
+      border-radius: var(--radius-sm);
+      color: var(--dash-text);
+      font-size: var(--text-sm);
+      font-family: var(--font-sans);
+      outline: none;
+      transition: border-color var(--duration-fast) var(--ease-default),
+                  box-shadow var(--duration-fast) var(--ease-default);
+    }
+
+    .topbar-search-input::placeholder {
+      color: var(--dash-text-muted);
+    }
+
+    .topbar-search-input:focus {
+      border-color: var(--dash-primary);
+      box-shadow: 0 0 0 3px var(--dash-primary-glow);
+    }
+
+    .topbar-search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--dash-text-muted);
+      font-size: var(--text-sm);
+      pointer-events: none;
+    }
+
+    .topbar-search-shortcut {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      color: var(--dash-text-muted);
+      background: var(--dash-bg);
+      border: 1px solid var(--dash-card-border);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      pointer-events: none;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .topbar-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: var(--dash-text-secondary);
+      cursor: pointer;
+      font-size: var(--text-base);
+      transition: all var(--duration-fast) var(--ease-default);
+      position: relative;
+    }
+
+    .topbar-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--dash-text);
+    }
+
+    .topbar-btn-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 7px;
+      height: 7px;
+      background: var(--dash-accent-red);
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--dash-bg);
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--dash-card-border);
+      margin: 0 var(--space-2);
+    }
+
+    .topbar-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--dash-primary), #ec4899);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      color: white;
+      cursor: pointer;
+      transition: box-shadow var(--duration-fast) var(--ease-default);
+    }
+
+    .topbar-avatar:hover {
+      box-shadow: 0 0 0 2px var(--dash-primary-glow), 0 0 0 3px var(--dash-primary);
+    }
+
+    /* ── Content ───────────────────────────────────────────── */
+    .content {
+      flex: 1;
+      padding: var(--space-6);
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-6);
+    }
+
+    .content-header-left h1 {
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-bold);
+      color: var(--dash-text);
+      letter-spacing: -0.02em;
+    }
+
+    .content-header-left p {
+      font-size: var(--text-sm);
+      color: var(--dash-text-muted);
+      margin-top: var(--space-1);
+    }
+
+    .content-header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      font-family: var(--font-sans);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-default);
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--dash-primary);
+      color: white;
+      border-color: var(--dash-primary);
+    }
+
+    .btn-primary:hover {
+      background: #5558e6;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--dash-text-secondary);
+      border-color: var(--dash-card-border);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--dash-text);
+      border-color: var(--dash-text-muted);
+    }
+
+    .date-range-picker {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--dash-card);
+      border: 1px solid var(--dash-card-border);
+      border-radius: var(--radius-sm);
+      color: var(--dash-text-secondary);
+      font-size: var(--text-sm);
+      cursor: pointer;
+      transition: border-color var(--duration-fast) var(--ease-default);
+    }
+
+    .date-range-picker:hover {
+      border-color: var(--dash-text-muted);
+    }
+
+    /* ── Stat Cards ────────────────────────────────────────── */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+
+    .stat-card {
+      background: var(--dash-card);
+      border: 1px solid var(--dash-card-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+      transition: all var(--duration-normal) var(--ease-default);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: transparent;
+      transition: background var(--duration-normal) var(--ease-default);
+    }
+
+    .stat-card:hover {
+      border-color: var(--dash-card-border);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-card:hover::before {
+      background: var(--dash-primary);
+    }
+
+    .stat-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-3);
+    }
+
+    .stat-card-label {
+      font-size: var(--text-sm);
+      color: var(--dash-text-muted);
+      font-weight: var(--weight-medium);
+    }
+
+    .stat-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-lg);
+    }
+
+    .stat-card-icon.purple {
+      background: rgba(99, 102, 241, 0.12);
+    }
+
+    .stat-card-icon.green {
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .stat-card-icon.blue {
+      background: rgba(59, 130, 246, 0.12);
+    }
+
+    .stat-card-icon.amber {
+      background: rgba(245, 158, 11, 0.12);
+    }
+
+    .stat-card-value {
+      font-size: var(--text-3xl);
+      font-weight: var(--weight-bold);
+      color: var(--dash-text);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: var(--space-2);
+    }
+
+    .stat-card-footer {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .stat-card-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+    }
+
+    .stat-card-trend.up {
+      color: var(--dash-accent-green);
+      background: var(--dash-accent-green-bg);
+    }
+
+    .stat-card-trend.down {
+      color: var(--dash-accent-red);
+      background: var(--dash-accent-red-bg);
+    }
+
+    .stat-card-compare {
+      font-size: var(--text-xs);
+      color: var(--dash-text-muted);
+    }
+
+    .stat-card-sparkline {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100px;
+      height: 40px;
+      opacity: 0.15;
+    }
+
+    /* ── Chart Cards ───────────────────────────────────────── */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+
+    .charts-row-split {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+
+    .chart-card {
+      background: var(--dash-card);
+      border: 1px solid var(--dash-card-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .chart-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-5) var(--space-5) var(--space-3);
+    }
+
+    .chart-card-title {
+      font-size: var(--text-base);
+      font-weight: var(--weight-semibold);
+      color: var(--dash-text);
+    }
+
+    .chart-card-subtitle {
+      font-size: var(--text-xs);
+      color: var(--dash-text-muted);
+      margin-top: 2px;
+    }
+
+    .chart-card-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .chart-tab-group {
+      display: flex;
+      background: var(--dash-bg);
+      border-radius: var(--radius-sm);
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .chart-tab {
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: var(--weight-medium);
+      color: var(--dash-text-muted);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-default);
+      border: none;
+      background: transparent;
+      font-family: var(--font-sans);
+    }
+
+    .chart-tab.active {
+      background: var(--dash-card);
+      color: var(--dash-text);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .chart-tab:hover:not(.active) {
+      color: var(--dash-text-secondary);
+    }
+
+    .chart-card-body {
+      padding: 0 var(--space-5) var(--space-5);
+    }
+
+    /* ── Area Chart (CSS Simulated) ────────────────────────── */
+    .area-chart {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .area-chart-grid {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-4) 0;
+    }
+
+    .area-chart-grid-line {
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .area-chart-labels {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-4) 0;
+    }
+
+    .area-chart-label {
+      font-size: 10px;
+      color: var(--dash-text-muted);
+      font-family: var(--font-mono);
+      text-align: right;
+      padding-right: var(--space-2);
+    }
+
+    .area-chart-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .area-chart-x-labels {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-2) 40px 0;
+    }
+
+    .area-chart-x-label {
+      font-size: 10px;
+      color: var(--dash-text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .area-chart-legend {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      padding: var(--space-3) 0 0;
+    }
+
+    .area-chart-legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--dash-text-secondary);
+    }
+
+    .area-chart-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-full);
+    }
+
+    /* ── Bar Chart (CSS Simulated) ─────────────────────────── */
+    .bar-chart {
+      width: 100%;
+      height: 200px;
+      display: flex;
+      align-items: flex-end;
+      gap: var(--space-2);
+      padding: var(--space-4) 0;
+      position: relative;
+    }
+
+    .bar-chart-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .bar-chart-bars {
+      display: flex;
+      gap: 3px;
+      align-items: flex-end;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .bar-chart-bar {
+      width: 14px;
+      border-radius: 3px 3px 0 0;
+      transition: all var(--duration-fast) var(--ease-default);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .bar-chart-bar:hover {
+      opacity: 0.85;
+      transform: scaleY(1.02);
+      transform-origin: bottom;
+    }
+
+    .bar-chart-bar.primary {
+      background: var(--dash-primary);
+    }
+
+    .bar-chart-bar.secondary {
+      background: rgba(99, 102, 241, 0.25);
+    }
+
+    .bar-chart-label {
+      font-size: 10px;
+      color: var(--dash-text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .bar-chart-grid {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-4) 0;
+      pointer-events: none;
+    }
+
+    .bar-chart-grid-line {
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .bar-chart-legend {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      padding: var(--space-2) 0 0;
+    }
+
+    .bar-chart-legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--dash-text-secondary);
+    }
+
+    .bar-chart-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+
+    /* ── Donut Chart (CSS Simulated) ───────────────────────── */
+    .donut-chart-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .donut-chart {
+      width: 160px;
+      height: 160px;
+      border-radius: var(--radius-full);
+      position: relative;
+      background: conic-gradient(
+        var(--dash-primary) 0deg 130deg,
+        var(--dash-accent-green) 130deg 220deg,
+        #f59e0b 220deg 280deg,
+        #64748b 280deg 360deg
+      );
+    }
+
+    .donut-chart::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      background: var(--dash-card);
+      border-radius: var(--radius-full);
+    }
+
+    .donut-chart-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      text-align: center;
+    }
+
+    .donut-chart-center-value {
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-bold);
+      color: var(--dash-text);
+      line-height: 1;
+    }
+
+    .donut-chart-center-label {
+      font-size: 10px;
+      color: var(--dash-text-muted);
+      margin-top: 2px;
+    }
+
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      width: 100%;
+    }
+
+    .donut-legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: var(--text-sm);
+    }
+
+    .donut-legend-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .donut-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .donut-legend-name {
+      color: var(--dash-text-secondary);
+    }
+
+    .donut-legend-value {
+      font-weight: var(--weight-semibold);
+      color: var(--dash-text);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+    }
+
+    /* ── Data Table ────────────────────────────────────────── */
+    .table-card {
+      background: var(--dash-card);
+      border: 1px solid var(--dash-card-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .table-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-5);
+      border-bottom: 1px solid var(--dash-card-border);
+    }
+
+    .table-card-title {
+      font-size: var(--text-base);
+      font-weight: var(--weight-semibold);
+      color: var(--dash-text);
+    }
+
+    .table-card-count {
+      font-size: var(--text-xs);
+      color: var(--dash-text-muted);
+      background: var(--dash-bg);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      margin-left: var(--space-2);
+      font-weight: var(--weight-medium);
+    }
+
+    .table-search {
+      position: relative;
+    }
+
+    .table-search-input {
+      padding: var(--space-2) var(--space-3) var(--space-2) 30px;
+      background: var(--dash-bg);
+      border: 1px solid var(--dash-card-border);
+      border-radius: var(--radius-sm);
+      color: var(--dash-text);
+      font-size: var(--text-sm);
+      font-family: var(--font-sans);
+      outline: none;
+      width: 200px;
+      transition: border-color var(--duration-fast) var(--ease-default);
+    }
+
+    .table-search-input::placeholder {
+      color: var(--dash-text-muted);
+    }
+
+    .table-search-input:focus {
+      border-color: var(--dash-primary);
+    }
+
+    .table-search-icon {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--dash-text-muted);
+      font-size: 12px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-sm);
+    }
+
+    .data-table thead th {
+      text-align: left;
+      padding: var(--space-3) var(--space-4);
+      font-size: 11px;
+      font-weight: var(--weight-semibold);
+      color: var(--dash-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--dash-card-border);
+      white-space: nowrap;
+      background: var(--dash-bg-alt);
+      cursor: pointer;
+      user-select: none;
+      transition: color var(--duration-fast) var(--ease-default);
+    }
+
+    .data-table thead th:hover {
+      color: var(--dash-text-secondary);
+    }
+
+    .data-table thead th .sort-icon {
+      margin-left: 4px;
+      opacity: 0.4;
+    }
+
+    .data-table tbody tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      transition: background var(--duration-fast) var(--ease-default);
+    }
+
+    .data-table tbody tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .data-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .data-table tbody td {
+      padding: var(--space-3) var(--space-4);
+      color: var(--dash-text-secondary);
+      white-space: nowrap;
+    }
+
+    .table-user {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .table-user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: var(--weight-bold);
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .table-user-name {
+      font-weight: var(--weight-medium);
+      color: var(--dash-text);
+    }
+
+    .table-user-email {
+      font-size: 11px;
+      color: var(--dash-text-muted);
+    }
+
+    .table-amount {
+      font-family: var(--font-mono);
+      font-weight: var(--weight-medium);
+      color: var(--dash-text);
+    }
+
+    .table-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-medium);
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .table-status.completed {
+      color: var(--dash-accent-green);
+      background: var(--dash-accent-green-bg);
+    }
+
+    .table-status.pending {
+      color: #f59e0b;
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .table-status.failed {
+      color: var(--dash-accent-red);
+      background: var(--dash-accent-red-bg);
+    }
+
+    .table-status-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: var(--radius-full);
+      background: currentColor;
+    }
+
+    .table-date {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--dash-text-muted);
+    }
+
+    .table-action-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: var(--dash-text-muted);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-default);
+    }
+
+    .table-action-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--dash-text);
+    }
+
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) var(--space-4);
+      border-top: 1px solid var(--dash-card-border);
+    }
+
+    .table-footer-info {
+      font-size: var(--text-xs);
+      color: var(--dash-text-muted);
+    }
+
+    .table-pagination {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .table-pagination-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--dash-card-border);
+      background: transparent;
+      color: var(--dash-text-secondary);
+      font-size: var(--text-xs);
+      font-family: var(--font-sans);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-default);
+    }
+
+    .table-pagination-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--dash-text-muted);
+    }
+
+    .table-pagination-btn.active {
+      background: var(--dash-primary);
+      border-color: var(--dash-primary);
+      color: white;
+    }
+
+    .table-pagination-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* ── Tooltip (simple CSS) ──────────────────────────────── */
+    .tooltip {
+      position: relative;
+    }
+
+    .tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      background: #1e1e2e;
+      color: var(--dash-text);
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all var(--duration-fast) var(--ease-default);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: var(--z-dropdown);
+    }
+
+    .tooltip:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    /* ── Scrollbar ─────────────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 1200px) {
+      .stat-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .charts-row-split {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .main {
+        margin-left: 0;
+      }
+      .stat-cards {
+        grid-template-columns: 1fr;
+      }
+      .topbar-search {
+        display: none;
+      }
+    }
+
+    /* ── Animations ────────────────────────────────────────── */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stat-card {
+      animation: fadeInUp 0.4s ease-out backwards;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.05s; }
+    .stat-card:nth-child(2) { animation-delay: 0.1s; }
+    .stat-card:nth-child(3) { animation-delay: 0.15s; }
+    .stat-card:nth-child(4) { animation-delay: 0.2s; }
+
+    .chart-card {
+      animation: fadeInUp 0.4s ease-out 0.25s backwards;
+    }
+
+    .table-card {
+      animation: fadeInUp 0.4s ease-out 0.35s backwards;
+    }
+
+    /* ── Live indicator ────────────────────────────────────── */
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--dash-accent-green);
+      border-radius: var(--radius-full);
+      display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- ═══════════════════════════════════════════════════════
+         SIDEBAR
+         ═══════════════════════════════════════════════════════ -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">A</div>
+        <span class="sidebar-brand-text">Analytics</span>
+        <span class="sidebar-brand-badge">PRO</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+
+        <a href="#" class="sidebar-nav-item active">
+          <span class="sidebar-nav-icon">📊</span>
+          Dashboard
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <span class="sidebar-nav-icon">📈</span>
+          Analytics
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <span class="sidebar-nav-icon">📋</span>
+          Reports
+          <span class="sidebar-nav-badge">3</span>
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <span class="sidebar-nav-icon">👥</span>
+          Users
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <span class="sidebar-nav-icon">🎯</span>
+          Funnels
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <span class="sidebar-nav-icon">🔄</span>
+          Cohorts
+        </a>
+
+        <div class="sidebar-section-label">System</div>
+
+        <a href="#" class="sidebar-nav-item">
+          <span class="sidebar-nav-icon">🔔</span>
+          Notifications
+          <span class="sidebar-nav-badge">12</span>
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <span class="sidebar-nav-icon">⚙️</span>
+          Settings
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <span class="sidebar-nav-icon">❓</span>
+          Help & Support
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-user-avatar">JD</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">Jane Doe</div>
+            <div class="sidebar-user-role">Admin</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════════════════════
+         MAIN CONTENT
+         ═══════════════════════════════════════════════════════ -->
+    <main class="main">
+      <!-- ── Top Bar ──────────────────────────────────────── -->
+      <header class="topbar">
+        <div class="topbar-breadcrumb">
+          <span>Home</span>
+          <span class="topbar-breadcrumb-sep">/</span>
+          <span class="topbar-breadcrumb-current">Dashboard</span>
+        </div>
+
+        <div class="topbar-spacer"></div>
+
+        <div class="topbar-search">
+          <span class="topbar-search-icon">🔍</span>
+          <input type="text" class="topbar-search-input" placeholder="Search anything…">
+          <span class="topbar-search-shortcut">⌘K</span>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="topbar-btn tooltip" data-tooltip="Notifications">
+            🔔
+            <span class="topbar-btn-badge"></span>
+          </button>
+          <button class="topbar-btn tooltip" data-tooltip="Messages">
+            ✉️
+          </button>
+          <div class="topbar-divider"></div>
+          <div class="topbar-avatar tooltip" data-tooltip="Jane Doe">JD</div>
+        </div>
+      </header>
+
+      <!-- ── Content ──────────────────────────────────────── -->
+      <div class="content">
+        <!-- Content Header -->
+        <div class="content-header">
+          <div class="content-header-left">
+            <h1>Dashboard Overview</h1>
+            <p>Real-time analytics for your product — last updated 2 min ago <span class="live-dot" style="margin-left: 4px;"></span></p>
+          </div>
+          <div class="content-header-actions">
+            <div class="date-range-picker">
+              📅 Last 30 days ▾
+            </div>
+            <button class="btn btn-ghost">⬇ Export</button>
+            <button class="btn btn-primary">+ Add Widget</button>
+          </div>
+        </div>
+
+        <!-- ── Stat Cards ─────────────────────────────────── -->
+        <div class="stat-cards">
+          <!-- Total Users -->
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-label">Total Users</span>
+              <div class="stat-card-icon purple">👥</div>
+            </div>
+            <div class="stat-card-value">48,294</div>
+            <div class="stat-card-footer">
+              <span class="stat-card-trend up">↑ 12.5%</span>
+              <span class="stat-card-compare">vs last month</span>
+            </div>
+            <!-- Sparkline SVG -->
+            <svg class="stat-card-sparkline" viewBox="0 0 100 40" fill="none">
+              <polyline points="0,35 12,28 24,32 36,18 48,22 60,12 72,16 84,8 100,4" stroke="var(--dash-primary)" stroke-width="2" fill="none"/>
+              <polyline points="0,35 12,28 24,32 36,18 48,22 60,12 72,16 84,8 100,4 100,40 0,40" fill="url(#sparkGrad1)" opacity="0.3"/>
+              <defs>
+                <linearGradient id="sparkGrad1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--dash-primary)" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="var(--dash-primary)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Revenue -->
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-label">Revenue</span>
+              <div class="stat-card-icon green">💰</div>
+            </div>
+            <div class="stat-card-value">$284,592</div>
+            <div class="stat-card-footer">
+              <span class="stat-card-trend up">↑ 8.2%</span>
+              <span class="stat-card-compare">vs last month</span>
+            </div>
+            <svg class="stat-card-sparkline" viewBox="0 0 100 40" fill="none">
+              <polyline points="0,30 15,25 30,28 45,15 60,20 75,10 100,5" stroke="var(--dash-accent-green)" stroke-width="2" fill="none"/>
+              <polyline points="0,30 15,25 30,28 45,15 60,20 75,10 100,5 100,40 0,40" fill="url(#sparkGrad2)" opacity="0.3"/>
+              <defs>
+                <linearGradient id="sparkGrad2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--dash-accent-green)" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="var(--dash-accent-green)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Conversion Rate -->
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-label">Conversion Rate</span>
+              <div class="stat-card-icon blue">🎯</div>
+            </div>
+            <div class="stat-card-value">3.24%</div>
+            <div class="stat-card-footer">
+              <span class="stat-card-trend down">↓ 0.8%</span>
+              <span class="stat-card-compare">vs last month</span>
+            </div>
+            <svg class="stat-card-sparkline" viewBox="0 0 100 40" fill="none">
+              <polyline points="0,10 15,14 30,12 45,18 60,16 75,22 100,28" stroke="var(--dash-accent-red)" stroke-width="2" fill="none"/>
+              <polyline points="0,10 15,14 30,12 45,18 60,16 75,22 100,28 100,40 0,40" fill="url(#sparkGrad3)" opacity="0.3"/>
+              <defs>
+                <linearGradient id="sparkGrad3" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--dash-accent-red)" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="var(--dash-accent-red)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Active Sessions -->
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-label">Active Sessions</span>
+              <div class="stat-card-icon amber">⚡</div>
+            </div>
+            <div class="stat-card-value">1,847</div>
+            <div class="stat-card-footer">
+              <span class="stat-card-trend up">↑ 24.1%</span>
+              <span class="stat-card-compare">vs last month</span>
+            </div>
+            <svg class="stat-card-sparkline" viewBox="0 0 100 40" fill="none">
+              <polyline points="0,32 15,28 30,30 45,20 60,24 75,14 100,6" stroke="#f59e0b" stroke-width="2" fill="none"/>
+              <polyline points="0,32 15,28 30,30 45,20 60,24 75,14 100,6 100,40 0,40" fill="url(#sparkGrad4)" opacity="0.3"/>
+              <defs>
+                <linearGradient id="sparkGrad4" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ── Main Area Chart ────────────────────────────── -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Revenue & Users Overview</div>
+                <div class="chart-card-subtitle">Monthly performance across key metrics</div>
+              </div>
+              <div class="chart-card-actions">
+                <div class="chart-tab-group">
+                  <button class="chart-tab">7D</button>
+                  <button class="chart-tab active">30D</button>
+                  <button class="chart-tab">90D</button>
+                  <button class="chart-tab">1Y</button>
+                </div>
+              </div>
+            </div>
+            <div class="chart-card-body">
+              <div class="area-chart">
+                <!-- Grid lines -->
+                <div class="area-chart-grid">
+                  <div class="area-chart-grid-line"></div>
+                  <div class="area-chart-grid-line"></div>
+                  <div class="area-chart-grid-line"></div>
+                  <div class="area-chart-grid-line"></div>
+                  <div class="area-chart-grid-line"></div>
+                </div>
+
+                <!-- Y-axis labels -->
+                <div class="area-chart-labels">
+                  <span class="area-chart-label">50k</span>
+                  <span class="area-chart-label">40k</span>
+                  <span class="area-chart-label">30k</span>
+                  <span class="area-chart-label">20k</span>
+                  <span class="area-chart-label">10k</span>
+                </div>
+
+                <!-- SVG Chart -->
+                <svg class="area-chart-svg" viewBox="0 0 800 300" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="areaGrad1" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
+                      <stop offset="100%" stop-color="#6366f1" stop-opacity="0.02"/>
+                    </linearGradient>
+                    <linearGradient id="areaGrad2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#10b981" stop-opacity="0.2"/>
+                      <stop offset="100%" stop-color="#10b981" stop-opacity="0.02"/>
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Area fill - Revenue -->
+                  <path d="M0,240 C40,220 80,200 120,180 C160,160 200,170 240,150 C280,130 320,140 360,120 C400,100 440,110 480,90 C520,70 560,80 600,60 C640,50 680,40 720,30 C760,25 800,20 800,20 L800,300 L0,300 Z" fill="url(#areaGrad1)"/>
+
+                  <!-- Line - Revenue -->
+                  <path d="M0,240 C40,220 80,200 120,180 C160,160 200,170 240,150 C280,130 320,140 360,120 C400,100 440,110 480,90 C520,70 560,80 600,60 C640,50 680,40 720,30 C760,25 800,20 800,20" stroke="#6366f1" stroke-width="2.5" fill="none"/>
+
+                  <!-- Area fill - Users -->
+                  <path d="M0,260 C40,250 80,245 120,235 C160,225 200,230 240,215 C280,200 320,210 360,195 C400,180 440,185 480,170 C520,155 560,160 600,145 C640,135 680,125 720,115 C760,110 800,100 800,100 L800,300 L0,300 Z" fill="url(#areaGrad2)"/>
+
+                  <!-- Line - Users -->
+                  <path d="M0,260 C40,250 80,245 120,235 C160,225 200,230 240,215 C280,200 320,210 360,195 C400,180 440,185 480,170 C520,155 560,160 600,145 C640,135 680,125 720,115 C760,110 800,100 800,100" stroke="#10b981" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
+
+                  <!-- Data point dots - Revenue -->
+                  <circle cx="120" cy="180" r="3.5" fill="#6366f1" stroke="#0f0f14" stroke-width="2"/>
+                  <circle cx="240" cy="150" r="3.5" fill="#6366f1" stroke="#0f0f14" stroke-width="2"/>
+                  <circle cx="360" cy="120" r="3.5" fill="#6366f1" stroke="#0f0f14" stroke-width="2"/>
+                  <circle cx="480" cy="90" r="3.5" fill="#6366f1" stroke="#0f0f14" stroke-width="2"/>
+                  <circle cx="600" cy="60" r="3.5" fill="#6366f1" stroke="#0f0f14" stroke-width="2"/>
+                  <circle cx="720" cy="30" r="3.5" fill="#6366f1" stroke="#0f0f14" stroke-width="2"/>
+                </svg>
+
+                <!-- X-axis labels -->
+                <div class="area-chart-x-labels">
+                  <span class="area-chart-x-label">Jan</span>
+                  <span class="area-chart-x-label">Feb</span>
+                  <span class="area-chart-x-label">Mar</span>
+                  <span class="area-chart-x-label">Apr</span>
+                  <span class="area-chart-x-label">May</span>
+                  <span class="area-chart-x-label">Jun</span>
+                </div>
+              </div>
+
+              <!-- Legend -->
+              <div class="area-chart-legend">
+                <div class="area-chart-legend-item">
+                  <div class="area-chart-legend-dot" style="background: #6366f1;"></div>
+                  Revenue
+                </div>
+                <div class="area-chart-legend-item">
+                  <div class="area-chart-legend-dot" style="background: #10b981;"></div>
+                  Users
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Split Charts: Bar + Donut ──────────────────── -->
+        <div class="charts-row-split">
+          <!-- Bar Chart -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Weekly Traffic Sources</div>
+                <div class="chart-card-subtitle">Sessions by acquisition channel</div>
+              </div>
+              <div class="chart-card-actions">
+                <div class="chart-tab-group">
+                  <button class="chart-tab active">Week</button>
+                  <button class="chart-tab">Month</button>
+                </div>
+              </div>
+            </div>
+            <div class="chart-card-body">
+              <div class="bar-chart">
+                <div class="bar-chart-grid">
+                  <div class="bar-chart-grid-line"></div>
+                  <div class="bar-chart-grid-line"></div>
+                  <div class="bar-chart-grid-line"></div>
+                  <div class="bar-chart-grid-line"></div>
+                </div>
+
+                <div class="bar-chart-group">
+                  <div class="bar-chart-bars">
+                    <div class="bar-chart-bar primary" style="height: 65%;"></div>
+                    <div class="bar-chart-bar secondary" style="height: 40%;"></div>
+                  </div>
+                  <span class="bar-chart-label">Mon</span>
+                </div>
+                <div class="bar-chart-group">
+                  <div class="bar-chart-bars">
+                    <div class="bar-chart-bar primary" style="height: 80%;"></div>
+                    <div class="bar-chart-bar secondary" style="height: 55%;"></div>
+                  </div>
+                  <span class="bar-chart-label">Tue</span>
+                </div>
+                <div class="bar-chart-group">
+                  <div class="bar-chart-bars">
+                    <div class="bar-chart-bar primary" style="height: 90%;"></div>
+                    <div class="bar-chart-bar secondary" style="height: 60%;"></div>
+                  </div>
+                  <span class="bar-chart-label">Wed</span>
+                </div>
+                <div class="bar-chart-group">
+                  <div class="bar-chart-bars">
+                    <div class="bar-chart-bar primary" style="height: 70%;"></div>
+                    <div class="bar-chart-bar secondary" style="height: 50%;"></div>
+                  </div>
+                  <span class="bar-chart-label">Thu</span>
+                </div>
+                <div class="bar-chart-group">
+                  <div class="bar-chart-bars">
+                    <div class="bar-chart-bar primary" style="height: 95%;"></div>
+                    <div class="bar-chart-bar secondary" style="height: 70%;"></div>
+                  </div>
+                  <span class="bar-chart-label">Fri</span>
+                </div>
+                <div class="bar-chart-group">
+                  <div class="bar-chart-bars">
+                    <div class="bar-chart-bar primary" style="height: 55%;"></div>
+                    <div class="bar-chart-bar secondary" style="height: 35%;"></div>
+                  </div>
+                  <span class="bar-chart-label">Sat</span>
+                </div>
+                <div class="bar-chart-group">
+                  <div class="bar-chart-bars">
+                    <div class="bar-chart-bar primary" style="height: 40%;"></div>
+                    <div class="bar-chart-bar secondary" style="height: 25%;"></div>
+                  </div>
+                  <span class="bar-chart-label">Sun</span>
+                </div>
+              </div>
+              <div class="bar-chart-legend">
+                <div class="bar-chart-legend-item">
+                  <div class="bar-chart-legend-dot" style="background: var(--dash-primary);"></div>
+                  Direct
+                </div>
+                <div class="bar-chart-legend-item">
+                  <div class="bar-chart-legend-dot" style="background: rgba(99, 102, 241, 0.25);"></div>
+                  Referral
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Donut Chart -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Traffic Breakdown</div>
+                <div class="chart-card-subtitle">By source category</div>
+              </div>
+            </div>
+            <div class="chart-card-body">
+              <div class="donut-chart-container">
+                <div class="donut-chart">
+                  <div class="donut-chart-center">
+                    <div class="donut-chart-center-value">24.8k</div>
+                    <div class="donut-chart-center-label">Total Visits</div>
+                  </div>
+                </div>
+                <div class="donut-legend">
+                  <div class="donut-legend-item">
+                    <div class="donut-legend-left">
+                      <div class="donut-legend-dot" style="background: var(--dash-primary);"></div>
+                      <span class="donut-legend-name">Organic Search</span>
+                    </div>
+                    <span class="donut-legend-value">36.1%</span>
+                  </div>
+                  <div class="donut-legend-item">
+                    <div class="donut-legend-left">
+                      <div class="donut-legend-dot" style="background: var(--dash-accent-green);"></div>
+                      <span class="donut-legend-name">Direct</span>
+                    </div>
+                    <span class="donut-legend-value">25.0%</span>
+                  </div>
+                  <div class="donut-legend-item">
+                    <div class="donut-legend-left">
+                      <div class="donut-legend-dot" style="background: #f59e0b;"></div>
+                      <span class="donut-legend-name">Social Media</span>
+                    </div>
+                    <span class="donut-legend-value">16.7%</span>
+                  </div>
+                  <div class="donut-legend-item">
+                    <div class="donut-legend-left">
+                      <div class="donut-legend-dot" style="background: #64748b;"></div>
+                      <span class="donut-legend-name">Other</span>
+                    </div>
+                    <span class="donut-legend-value">22.2%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Data Table ─────────────────────────────────── -->
+        <div class="table-card">
+          <div class="table-card-header">
+            <div style="display: flex; align-items: center;">
+              <span class="table-card-title">Recent Transactions</span>
+              <span class="table-card-count">248 total</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-3);">
+              <div class="table-search">
+                <span class="table-search-icon">🔍</span>
+                <input type="text" class="table-search-input" placeholder="Search transactions…">
+              </div>
+              <button class="btn btn-ghost" style="font-size: var(--text-xs);">⬇ Export CSV</button>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Transaction ID <span class="sort-icon">↕</span></th>
+                  <th>Customer <span class="sort-icon">↕</span></th>
+                  <th>Amount <span class="sort-icon">↕</span></th>
+                  <th>Status <span class="sort-icon">↕</span></th>
+                  <th>Date <span class="sort-icon">↕</span></th>
+                  <th>Channel</th>
+                  <th style="width: 40px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--dash-text-muted);">#TXN-8294</span></td>
+                  <td>
+                    <div class="table-user">
+                      <div class="table-user-avatar" style="background: linear-gradient(135deg, #6366f1, #a78bfa);">SK</div>
+                      <div>
+                        <div class="table-user-name">Sarah Kim</div>
+                        <div class="table-user-email">sarah@company.io</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="table-amount">$2,450.00</span></td>
+                  <td><span class="table-status completed"><span class="table-status-dot"></span>Completed</span></td>
+                  <td><span class="table-date">Apr 24, 2026</span></td>
+                  <td style="color: var(--dash-text-muted);">Stripe</td>
+                  <td><button class="table-action-btn">⋯</button></td>
+                </tr>
+                <tr>
+                  <td><span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--dash-text-muted);">#TXN-8293</span></td>
+                  <td>
+                    <div class="table-user">
+                      <div class="table-user-avatar" style="background: linear-gradient(135deg, #10b981, #34d399);">MR</div>
+                      <div>
+                        <div class="table-user-name">Marcus Rodriguez</div>
+                        <div class="table-user-email">marcus.r@startup.co</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="table-amount">$890.00</span></td>
+                  <td><span class="table-status completed"><span class="table-status-dot"></span>Completed</span></td>
+                  <td><span class="table-date">Apr 24, 2026</span></td>
+                  <td style="color: var(--dash-text-muted);">PayPal</td>
+                  <td><button class="table-action-btn">⋯</button></td>
+                </tr>
+                <tr>
+                  <td><span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--dash-text-muted);">#TXN-8292</span></td>
+                  <td>
+                    <div class="table-user">
+                      <div class="table-user-avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">AL</div>
+                      <div>
+                        <div class="table-user-name">Aisha Lee</div>
+                        <div class="table-user-email">aisha@design.co</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="table-amount">$4,200.00</span></td>
+                  <td><span class="table-status pending"><span class="table-status-dot"></span>Pending</span></td>
+                  <td><span class="table-date">Apr 23, 2026</span></td>
+                  <td style="color: var(--dash-text-muted);">Wire Transfer</td>
+                  <td><button class="table-action-btn">⋯</button></td>
+                </tr>
+                <tr>
+                  <td><span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--dash-text-muted);">#TXN-8291</span></td>
+                  <td>
+                    <div class="table-user">
+                      <div class="table-user-avatar" style="background: linear-gradient(135deg, #ef4444, #f87171);">JP</div>
+                      <div>
+                        <div class="table-user-name">James Park</div>
+                        <div class="table-user-email">j.park@enterprise.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="table-amount">$1,320.00</span></td>
+                  <td><span class="table-status failed"><span class="table-status-dot"></span>Failed</span></td>
+                  <td><span class="table-date">Apr 23, 2026</span></td>
+                  <td style="color: var(--dash-text-muted);">Stripe</td>
+                  <td><button class="table-action-btn">⋯</button></td>
+                </tr>
+                <tr>
+                  <td><span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--dash-text-muted);">#TXN-8290</span></td>
+                  <td>
+                    <div class="table-user">
+                      <div class="table-user-avatar" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">EN</div>
+                      <div>
+                        <div class="table-user-name">Elena Novak</div>
+                        <div class="table-user-email">elena@creative.studio</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="table-amount">$750.00</span></td>
+                  <td><span class="table-status completed"><span class="table-status-dot"></span>Completed</span></td>
+                  <td><span class="table-date">Apr 22, 2026</span></td>
+                  <td style="color: var(--dash-text-muted);">PayPal</td>
+                  <td><button class="table-action-btn">⋯</button></td>
+                </tr>
+                <tr>
+                  <td><span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--dash-text-muted);">#TXN-8289</span></td>
+                  <td>
+                    <div class="table-user">
+                      <div class="table-user-avatar" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">DW</div>
+                      <div>
+                        <div class="table-user-name">David Wu</div>
+                        <div class="table-user-email">david.wu@tech.dev</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="table-amount">$3,100.00</span></td>
+                  <td><span class="table-status completed"><span class="table-status-dot"></span>Completed</span></td>
+                  <td><span class="table-date">Apr 22, 2026</span></td>
+                  <td style="color: var(--dash-text-muted);">Stripe</td>
+                  <td><button class="table-action-btn">⋯</button></td>
+                </tr>
+                <tr>
+                  <td><span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--dash-text-muted);">#TXN-8288</span></td>
+                  <td>
+                    <div class="table-user">
+                      <div class="table-user-avatar" style="background: linear-gradient(135deg, #ec4899, #f472b6);">OG</div>
+                      <div>
+                        <div class="table-user-name">Olivia Garcia</div>
+                        <div class="table-user-email">olivia@garcia.co</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="table-amount">$560.00</span></td>
+                  <td><span class="table-status pending"><span class="table-status-dot"></span>Pending</span></td>
+                  <td><span class="table-date">Apr 21, 2026</span></td>
+                  <td style="color: var(--dash-text-muted);">Wire Transfer</td>
+                  <td><button class="table-action-btn">⋯</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <span class="table-footer-info">Showing 1–7 of 248 transactions</span>
+            <div class="table-pagination">
+              <button class="table-pagination-btn" disabled>‹</button>
+              <button class="table-pagination-btn active">1</button>
+              <button class="table-pagination-btn">2</button>
+              <button class="table-pagination-btn">3</button>
+              <button class="table-pagination-btn">…</button>
+              <button class="table-pagination-btn">36</button>
+              <button class="table-pagination-btn">›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MINIMAL JS — Tab switching & interactions
+       ═══════════════════════════════════════════════════════ -->
+  <script>
+    // Chart tab switching
+    document.querySelectorAll('.chart-tab-group').forEach(group => {
+      group.querySelectorAll('.chart-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          group.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+    });
+
+    // Sidebar nav active state
+    document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Pagination
+    document.querySelectorAll('.table-pagination-btn:not(:disabled)').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.table-pagination-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Keyboard shortcut: Cmd/Ctrl+K to focus search
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        document.querySelector('.topbar-search-input').focus();
+      }
+    });
+  </script>
+</body>
+</html>

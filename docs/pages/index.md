@@ -161,6 +161,24 @@ const pages = [
     colors: ['#fafafa', '#6366f1', '#111827'],
     rating: 9.3,
     description: '受 AuthKit 启发的现代认证页面，登录表单 + 社交登录 + 功能特性展示 + 深色模式切换',
+  },
+  {
+    id: 'tech-blog',
+    title: 'DevChronicle 技术博客',
+    category: 'blog',
+    tags: ['博客', '编辑设计', '文章列表', 'Newsletter'],
+    colors: ['#ffffff', '#6366f1', '#f59e0b'],
+    rating: 9.4,
+    description: '现代技术博客页面，灵感来自 Stripe/Vercel 博客，包含 Featured 文章、卡片网格、侧边栏、Newsletter 订阅',
+  },
+  {
+    id: 'analytics-dashboard',
+    title: '数据分析仪表盘',
+    category: 'dashboard',
+    tags: ['仪表盘', '数据分析', '暗色主题', '图表'],
+    colors: ['#0f0f14', '#6366f1', '#10b981'],
+    rating: 9.5,
+    description: '暗色主题数据分析仪表盘，灵感来自 Mixpanel/Amplitude，包含统计卡片、SVG 图表、数据表格',
   }
 ]
 
@@ -171,6 +189,7 @@ const categories = [
   { id: 'dashboard', label: '仪表盘', icon: '📊' },
   { id: 'ecommerce', label: '电商', icon: '🛒' },
   { id: 'creative', label: '创意', icon: '✨' },
+  { id: 'blog', label: '博客', icon: '📝' },
   { id: 'app', label: '应用', icon: '📱' }
 ]
 

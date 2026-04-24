@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Immersive Studio - 创意机构作品集</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: 'Space Grotesk', var(--font-sans); 
+  color: var(--color-text); 
+  background: #0a0a0a; 
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  mix-blend-mode: difference;
+}
+.nav-logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+}
+.nav-links a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.nav-links a:hover {
+  color: white;
+}
+.nav-cta {
+  padding: 0.6rem 1.5rem;
+  background: white;
+  color: #0a0a0a !important;
+  border-radius: 100px;
+  font-weight: 600;
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 3rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,0.15), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(168,85,247,0.1), transparent);
+  pointer-events: none;
+}
+.hero-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: rgba(255,255,255,0.3);
+}
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: white;
+  margin-bottom: 2rem;
+}
+.hero h1 span {
+  display: block;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-desc {
+  font-size: 1.25rem;
+  color: rgba(255,255,255,0.6);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: white;
+  color: #0a0a0a;
+  border-radius: 100px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(255,255,255,0.15);
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.btn-secondary:hover {
+  color: white;
+}
+
+/* Marquee */
+.marquee-section {
+  padding: 3rem 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.marquee {
+  display: flex;
+  animation: marquee 30s linear infinite;
+}
+.marquee-item {
+  flex-shrink: 0;
+  padding: 0 3rem;
+  font-size: 4rem;
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+  white-space: nowrap;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Featured Work */
+.work-section {
+  padding: 8rem 3rem;
+}
+.section-header {
+  max-width: 1400px;
+  margin: 0 auto 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.section-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.section-count {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.4);
+}
+.work-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+.work-item {
+  position: relative;
+  aspect-ratio: 16/10;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  cursor: pointer;
+  transition: transform 0.4s;
+}
+.work-item:hover {
+  transform: scale(1.02);
+}
+.work-item.large {
+  grid-column: span 2;
+  aspect-ratio: 21/9;
+}
+.work-content {
+  position: absolute;
+  inset: 0;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 60%);
+}
+.work-tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.work-tag {
+  padding: 0.3rem 0.75rem;
+  background: rgba(255,255,255,0.1);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+}
+.work-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+.work-desc {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+}
+.work-item:nth-child(1) { background: linear-gradient(135deg, #667eea, #764ba2); }
+.work-item:nth-child(2) { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.work-item:nth-child(3) { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.work-item:nth-child(4) { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+
+/* Services */
+.services-section {
+  padding: 8rem 3rem;
+  background: var(--color-bg-subtle);
+}
+.services-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.service-card {
+  padding: 3rem 2rem;
+  background: #0a0a0a;
+  transition: background 0.3s;
+}
+.service-card:hover {
+  background: #111;
+}
+.service-num {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 1.5rem;
+}
+.service-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1rem;
+}
+.service-desc {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+/* Contact */
+.contact-section {
+  padding: 8rem 3rem;
+  text-align: center;
+}
+.contact-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.contact-eyebrow {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+.contact-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+.contact-desc {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 3rem;
+}
+.btn-large {
+  padding: 1.25rem 3rem;
+  font-size: 1.1rem;
+}
+
+/* Footer */
+.footer {
+  padding: 3rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-left {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.9rem;
+}
+.footer-links {
+  display: flex;
+  gap: 2rem;
+}
+.footer-links a {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+.footer-links a:hover {
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .work-grid {
+    grid-template-columns: 1fr;
+  }
+  .work-item.large {
+    grid-column: span 1;
+  }
+}
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 6rem 1.5rem 3rem; }
+  .work-section, .services-section, .contact-section { padding: 4rem 1.5rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#" class="nav-logo">Immersive</a>
+  <div class="nav-links">
+    <a href="#work">作品</a>
+    <a href="#services">服务</a>
+    <a href="#about">关于</a>
+    <a href="#contact" class="nav-cta">联系我们</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">创意机构</div>
+    <h1>
+      <span>我们创造</span>
+      <span>沉浸式体验</span>
+    </h1>
+    <p class="hero-desc">
+      我们将设计、动效、3D 和开发相结合，打造令人惊叹的数字体验。从品牌发布到沉浸式世界，我们构建能够捕捉注意力并邀请互动的作品。
+    </p>
+    <div class="hero-actions">
+      <a href="#work" class="btn-primary">
+        查看作品
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+      <a href="#contact" class="btn-secondary">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+        </svg>
+        播放视频
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="marquee-section">
+  <div class="marquee">
+    <span class="marquee-item">3D 可视化</span>
+    <span class="marquee-item">•</span>
+    <span class="marquee-item">交互设计</span>
+    <span class="marquee-item">•</span>
+    <span class="marquee-item">品牌体验</span>
+    <span class="marquee-item">•</span>
+    <span class="marquee-item">WebGL</span>
+    <span class="marquee-item">•</span>
+    <span class="marquee-item">3D 可视化</span>
+    <span class="marquee-item">•</span>
+    <span class="marquee-item">交互设计</span>
+    <span class="marquee-item">•</span>
+    <span class="marquee-item">品牌体验</span>
+    <span class="marquee-item">•</span>
+    <span class="marquee-item">WebGL</span>
+    <span class="marquee-item">•</span>
+  </div>
+</section>
+
+<section class="work-section" id="work">
+  <div class="section-header">
+    <span class="section-title">精选作品</span>
+    <span class="section-count">01 — 04</span>
+  </div>
+  <div class="work-grid">
+    <div class="work-item large">
+      <div class="work-content">
+        <div class="work-tags">
+          <span class="work-tag">Web</span>
+          <span class="work-tag">3D</span>
+          <span class="work-tag">Animation</span>
+        </div>
+        <h3 class="work-title">Oryzo AI 品牌体验</h3>
+        <p class="work-desc">为 AI 创业公司打造的沉浸式品牌网站</p>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="work-content">
+        <div class="work-tags">
+          <span class="work-tag">Design</span>
+          <span class="work-tag">Development</span>
+        </div>
+        <h3 class="work-title">The Oak 家具品牌</h3>
+        <p class="work-desc">高端家具品牌的数字体验</p>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="work-content">
+        <div class="work-tags">
+          <span class="work-tag">3D</span>
+          <span class="work-tag">WebGL</span>
+        </div>
+        <h3 class="work-title">Devin AI 产品展示</h3>
+        <p class="work-desc">AI 工程师的创新产品页面</p>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="work-content">
+        <div class="work-tags">
+          <span class="work-tag">AR</span>
+          <span class="work-tag">Interactive</span>
+        </div>
+        <h3 class="work-title">Soda AR 体验</h3>
+        <p class="work-desc">增强现实品牌互动体验</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services-section" id="services">
+  <div class="section-header">
+    <span class="section-title">我们的服务</span>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <h3 class="service-title">创意方向</h3>
+      <p class="service-desc">从概念到视觉策略，我们为品牌打造独特的数字身份和创意方向。</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <h3 class="service-title">3D 与动效</h3>
+      <p class="service-desc">使用 WebGL、Three.js 和 GSAP 创建流畅的 3D 体验和微交互。</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <h3 class="service-title">网页开发</h3>
+      <p class="service-desc">高性能、响应式的现代网站开发，支持所有设备和浏览器。</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <h3 class="service-title">品牌体验</h3>
+      <p class="service-desc">从登陆页到完整品牌网站，创造令人难忘的数字体验。</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <div class="contact-content">
+    <p class="contact-eyebrow">准备好开始了吗？</p>
+    <h2 class="contact-title">让我们一起创造<br>非凡的体验</h2>
+    <p class="contact-desc">无论您是初创公司还是全球品牌，我们都期待与您合作，将您的愿景变为现实。</p>
+    <a href="mailto:hello@immersive.studio" class="btn-primary btn-large">
+      开始对话
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-left">
+    © 2026 Immersive Studio. All rights reserved.
+  </div>
+  <div class="footer-links">
+    <a href="#">Twitter</a>
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Dribbble</a>
+  </div>
+</footer>
+
+</body>
+</html>

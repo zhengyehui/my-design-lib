@@ -250,7 +250,8 @@ export default defineConfig({
           text: '📊 仪表盘与数据',
           collapsed: true,
           items: [
-            { text: 'Nexus 数据仪表盘', link: '/pages/dashboard-dark' }
+            { text: 'Nexus 数据仪表盘', link: '/pages/dashboard-dark' },
+            { text: '数据分析仪表盘', link: '/pages/analytics-dashboard' }
           ]
         },
         {
@@ -259,6 +260,13 @@ export default defineConfig({
           items: [
             { text: 'ShopFlow 结账页', link: '/pages/checkout' },
             { text: 'AuthKit 现代认证页', link: '/pages/auth-modern' }
+          ]
+        },
+        {
+          text: '📝 博客',
+          collapsed: true,
+          items: [
+            { text: 'DevChronicle 技术博客', link: '/pages/tech-blog' }
           ]
         },
         {
