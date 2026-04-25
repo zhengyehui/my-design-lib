@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse — Coming Soon</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: #0a0a0a;
+      color: #ffffff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ── Animated Gradient Background ──────────────────────── */
+    .gradient-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(
+        135deg,
+        #0a0a0a 0%,
+        #0f0f1a 25%,
+        #1a0a2e 50%,
+        #0a0a1a 75%,
+        #0a0a0a 100%
+      );
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      25% { background-position: 100% 0%; }
+      50% { background-position: 100% 100%; }
+      75% { background-position: 0% 100%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ── Floating Particles (CSS-only) ─────────────────────── */
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particles::before,
+    .particles::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    .particles::before {
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(99, 102, 241, 0.4) 50%, transparent 50%),
+        radial-gradient(2px 2px at 30% 65%, rgba(236, 72, 153, 0.35) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 55% 15%, rgba(245, 158, 11, 0.3) 50%, transparent 50%),
+        radial-gradient(2px 2px at 75% 80%, rgba(99, 102, 241, 0.3) 50%, transparent 50%),
+        radial-gradient(1px 1px at 90% 40%, rgba(236, 72, 153, 0.4) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 15% 85%, rgba(245, 158, 11, 0.25) 50%, transparent 50%),
+        radial-gradient(2px 2px at 45% 45%, rgba(99, 102, 241, 0.2) 50%, transparent 50%),
+        radial-gradient(1px 1px at 65% 30%, rgba(236, 72, 153, 0.3) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 85% 60%, rgba(245, 158, 11, 0.35) 50%, transparent 50%),
+        radial-gradient(2px 2px at 25% 50%, rgba(99, 102, 241, 0.25) 50%, transparent 50%),
+        radial-gradient(1px 1px at 50% 90%, rgba(236, 72, 153, 0.2) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 70% 10%, rgba(245, 158, 11, 0.3) 50%, transparent 50%),
+        radial-gradient(2px 2px at 5% 55%, rgba(99, 102, 241, 0.35) 50%, transparent 50%),
+        radial-gradient(1px 1px at 95% 75%, rgba(236, 72, 153, 0.25) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 40% 5%, rgba(245, 158, 11, 0.2) 50%, transparent 50%),
+        radial-gradient(2px 2px at 60% 70%, rgba(99, 102, 241, 0.3) 50%, transparent 50%);
+      animation: floatUp 25s linear infinite;
+    }
+
+    .particles::after {
+      background-image:
+        radial-gradient(1.5px 1.5px at 20% 35%, rgba(236, 72, 153, 0.3) 50%, transparent 50%),
+        radial-gradient(2px 2px at 40% 75%, rgba(99, 102, 241, 0.25) 50%, transparent 50%),
+        radial-gradient(1px 1px at 60% 25%, rgba(245, 158, 11, 0.35) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 80% 55%, rgba(236, 72, 153, 0.2) 50%, transparent 50%),
+        radial-gradient(2px 2px at 12% 90%, rgba(99, 102, 241, 0.3) 50%, transparent 50%),
+        radial-gradient(1px 1px at 35% 10%, rgba(245, 158, 11, 0.25) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 88% 85%, rgba(236, 72, 153, 0.35) 50%, transparent 50%),
+        radial-gradient(2px 2px at 52% 60%, rgba(99, 102, 241, 0.2) 50%, transparent 50%),
+        radial-gradient(1px 1px at 78% 20%, rgba(245, 158, 11, 0.3) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 8% 45%, rgba(236, 72, 153, 0.25) 50%, transparent 50%);
+      animation: floatDown 30s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-30px) translateX(15px); }
+      100% { transform: translateY(0) translateX(0); }
+    }
+
+    @keyframes floatDown {
+      0% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(25px) translateX(-20px); }
+      100% { transform: translateY(0) translateX(0); }
+    }
+
+    /* ── Ambient Glow Orbs ─────────────────────────────────── */
+    .glow-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-orb--1 {
+      width: 600px;
+      height: 600px;
+      background: #6366f1;
+      top: -15%;
+      left: -10%;
+      animation: orbFloat1 20s ease-in-out infinite;
+    }
+
+    .glow-orb--2 {
+      width: 500px;
+      height: 500px;
+      background: #ec4899;
+      bottom: -20%;
+      right: -10%;
+      animation: orbFloat2 18s ease-in-out infinite;
+    }
+
+    .glow-orb--3 {
+      width: 400px;
+      height: 400px;
+      background: #f59e0b;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: orbFloat3 22s ease-in-out infinite;
+    }
+
+    @keyframes orbFloat1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(60px, 40px) scale(1.1); }
+      66% { transform: translate(-30px, 80px) scale(0.95); }
+    }
+
+    @keyframes orbFloat2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-50px, -60px) scale(1.05); }
+      66% { transform: translate(40px, -30px) scale(0.9); }
+    }
+
+    @keyframes orbFloat3 {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.15); }
+    }
+
+    /* ── Main Content ──────────────────────────────────────── */
+    .page {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--space-8) var(--space-6);
+    }
+
+    /* ── Fade-in Animation ─────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s var(--ease-out) forwards;
+    }
+
+    .fade-in--1 { animation-delay: 0.1s; }
+    .fade-in--2 { animation-delay: 0.3s; }
+    .fade-in--3 { animation-delay: 0.5s; }
+    .fade-in--4 { animation-delay: 0.7s; }
+    .fade-in--5 { animation-delay: 0.9s; }
+    .fade-in--6 { animation-delay: 1.1s; }
+    .fade-in--7 { animation-delay: 1.3s; }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Brand Logo / Name ─────────────────────────────────── */
+    .brand {
+      font-size: clamp(4rem, 12vw, 10rem);
+      font-weight: var(--weight-bold);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      background: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #f59e0b 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientText 4s ease infinite;
+      text-align: center;
+      user-select: none;
+      position: relative;
+    }
+
+    .brand::after {
+      content: 'Pulse';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #f59e0b 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientText 4s ease infinite;
+      filter: blur(40px);
+      opacity: 0.4;
+      z-index: -1;
+    }
+
+    @keyframes gradientText {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ── Tagline ───────────────────────────────────────────── */
+    .tagline {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-weight: var(--weight-light);
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      margin-top: var(--space-4);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── Divider ───────────────────────────────────────────── */
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, #6366f1, #ec4899, #f59e0b);
+      border: none;
+      margin: var(--space-10) auto;
+      border-radius: 2px;
+    }
+
+    /* ── Countdown Timer ───────────────────────────────────── */
+    .countdown {
+      display: flex;
+      gap: var(--space-4);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .countdown__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .countdown__box {
+      position: relative;
+      width: clamp(80px, 15vw, 120px);
+      height: clamp(80px, 15vw, 120px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .countdown__box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(236, 72, 153, 0.3), rgba(245, 158, 11, 0.3));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .countdown__number {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: var(--weight-bold);
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+
+    .countdown__label {
+      font-size: var(--text-xs);
+      font-weight: var(--weight-medium);
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    /* Pulse animation on number change */
+    .countdown__number.pulse {
+      animation: numberPulse 0.3s var(--ease-spring);
+    }
+
+    @keyframes numberPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* ── Email Signup Form ─────────────────────────────────── */
+    .signup {
+      margin-top: var(--space-12);
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .signup__form {
+      display: flex;
+      gap: 0;
+      position: relative;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--radius-full);
+      padding: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: border-color var(--duration-normal) var(--ease-default),
+                  box-shadow var(--duration-normal) var(--ease-default);
+    }
+
+    .signup__form:focus-within {
+      border-color: rgba(99, 102, 241, 0.5);
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+    }
+
+    .signup__input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-family: var(--font-sans);
+      font-size: var(--text-base);
+      padding: var(--space-4) var(--space-6);
+      min-width: 0;
+    }
+
+    .signup__input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .signup__btn {
+      position: relative;
+      background: linear-gradient(135deg, #6366f1, #ec4899, #f59e0b);
+      background-size: 200% 200%;
+      border: none;
+      color: #ffffff;
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      padding: var(--space-3) var(--space-8);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      transition: all var(--duration-normal) var(--ease-default);
+      animation: gradientText 4s ease infinite;
+    }
+
+    .signup__btn:hover {
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.4),
+                  0 0 60px rgba(236, 72, 153, 0.2);
+      transform: scale(1.02);
+    }
+
+    .signup__btn:active {
+      transform: scale(0.98);
+    }
+
+    .signup__note {
+      text-align: center;
+      margin-top: var(--space-4);
+      font-size: var(--text-xs);
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ── Social Icons ──────────────────────────────────────── */
+    .social {
+      display: flex;
+      gap: var(--space-6);
+      margin-top: var(--space-12);
+      justify-content: center;
+    }
+
+    .social__link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      font-size: 1.25rem;
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+
+    .social__link:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .social__link--twitter:hover { color: #1DA1F2; border-color: rgba(29, 161, 242, 0.3); }
+    .social__link--instagram:hover { color: #E4405F; border-color: rgba(228, 64, 95, 0.3); }
+    .social__link--dribbble:hover { color: #EA4C89; border-color: rgba(234, 76, 137, 0.3); }
+    .social__link--github:hover { color: #ffffff; border-color: rgba(255, 255, 255, 0.3); }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .footer {
+      margin-top: var(--space-16);
+      text-align: center;
+      font-size: var(--text-xs);
+      color: rgba(255, 255, 255, 0.25);
+      letter-spacing: 0.05em;
+    }
+
+    .footer a {
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease-default);
+    }
+
+    .footer a:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .countdown {
+        gap: var(--space-3);
+      }
+
+      .signup__form {
+        flex-direction: column;
+        border-radius: var(--radius-lg);
+        padding: 6px;
+      }
+
+      .signup__input {
+        text-align: center;
+        padding: var(--space-3) var(--space-4);
+      }
+
+      .signup__btn {
+        padding: var(--space-3) var(--space-6);
+        border-radius: var(--radius-md);
+      }
+
+      .social {
+        gap: var(--space-4);
+      }
+
+      .glow-orb--1 { width: 300px; height: 300px; }
+      .glow-orb--2 { width: 250px; height: 250px; }
+      .glow-orb--3 { width: 200px; height: 200px; }
+    }
+
+    @media (max-width: 380px) {
+      .countdown__box {
+        width: 70px;
+        height: 70px;
+      }
+
+      .countdown__number {
+        font-size: 1.75rem;
+      }
+    }
+
+    /* ── Selection Color ───────────────────────────────────── */
+    ::selection {
+      background: rgba(99, 102, 241, 0.3);
+      color: #ffffff;
+    }
+
+    /* ── Scrollbar ─────────────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="gradient-bg"></div>
+
+  <!-- Floating Particles -->
+  <div class="particles"></div>
+
+  <!-- Ambient Glow Orbs -->
+  <div class="glow-orb glow-orb--1"></div>
+  <div class="glow-orb glow-orb--2"></div>
+  <div class="glow-orb glow-orb--3"></div>
+
+  <!-- Main Content -->
+  <main class="page">
+    <!-- Brand Name -->
+    <h1 class="brand fade-in fade-in--1">Pulse</h1>
+
+    <!-- Tagline -->
+    <p class="tagline fade-in fade-in--2">Something extraordinary is coming</p>
+
+    <!-- Divider -->
+    <hr class="divider fade-in fade-in--3">
+
+    <!-- Countdown Timer -->
+    <div class="countdown fade-in fade-in--4" id="countdown">
+      <div class="countdown__item">
+        <div class="countdown__box">
+          <span class="countdown__number" id="days">00</span>
+        </div>
+        <span class="countdown__label">Days</span>
+      </div>
+      <div class="countdown__item">
+        <div class="countdown__box">
+          <span class="countdown__number" id="hours">00</span>
+        </div>
+        <span class="countdown__label">Hours</span>
+      </div>
+      <div class="countdown__item">
+        <div class="countdown__box">
+          <span class="countdown__number" id="minutes">00</span>
+        </div>
+        <span class="countdown__label">Minutes</span>
+      </div>
+      <div class="countdown__item">
+        <div class="countdown__box">
+          <span class="countdown__number" id="seconds">00</span>
+        </div>
+        <span class="countdown__label">Seconds</span>
+      </div>
+    </div>
+
+    <!-- Email Signup -->
+    <div class="signup fade-in fade-in--5">
+      <form class="signup__form" onsubmit="handleSubscribe(event)">
+        <input
+          type="email"
+          class="signup__input"
+          placeholder="Enter your email address"
+          required
+          aria-label="Email address"
+        >
+        <button type="submit" class="signup__btn">Notify Me</button>
+      </form>
+      <p class="signup__note">No spam, ever. Unsubscribe anytime.</p>
+    </div>
+
+    <!-- Social Media Icons -->
+    <div class="social fade-in fade-in--6">
+      <a href="#" class="social__link social__link--twitter" aria-label="Twitter" title="Twitter">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+      <a href="#" class="social__link social__link--instagram" aria-label="Instagram" title="Instagram">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="5"/>
+          <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <a href="#" class="social__link social__link--dribbble" aria-label="Dribbble" title="Dribbble">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.245.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z"/>
+        </svg>
+      </a>
+      <a href="#" class="social__link social__link--github" aria-label="GitHub" title="GitHub">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer fade-in fade-in--7">
+      <p>&copy; 2026 Pulse Studio. All rights reserved.</p>
+      <p style="margin-top: var(--space-2);">
+        Crafted with care in the digital realm
+      </p>
+    </footer>
+  </main>
+
+  <!-- Countdown Timer Script -->
+  <script>
+    (function() {
+      // Set launch date to 90 days from now
+      const now = new Date();
+      const launchDate = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
+
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+
+      function pad(num) {
+        return String(num).padStart(2, '0');
+      }
+
+      function animateNumber(el, newVal) {
+        const formatted = pad(newVal);
+        if (el.textContent !== formatted) {
+          el.textContent = formatted;
+          el.classList.remove('pulse');
+          // Force reflow to restart animation
+          void el.offsetWidth;
+          el.classList.add('pulse');
+        }
+      }
+
+      function updateCountdown() {
+        const now = new Date();
+        const diff = launchDate - now;
+
+        if (diff <= 0) {
+          daysEl.textContent = '00';
+          hoursEl.textContent = '00';
+          minutesEl.textContent = '00';
+          secondsEl.textContent = '00';
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        animateNumber(daysEl, days);
+        animateNumber(hoursEl, hours);
+        animateNumber(minutesEl, minutes);
+        animateNumber(secondsEl, seconds);
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    })();
+
+    function handleSubscribe(e) {
+      e.preventDefault();
+      const input = e.target.querySelector('input');
+      const btn = e.target.querySelector('button');
+      const originalText = btn.textContent;
+
+      btn.textContent = '✓ Subscribed!';
+      btn.style.background = 'linear-gradient(135deg, #10b981, #06b6d4)';
+      input.value = '';
+
+      setTimeout(function() {
+        btn.textContent = originalText;
+        btn.style.background = '';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

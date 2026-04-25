@@ -171,6 +171,24 @@ const pages = [
     colors: ['#0f0f14', '#6366f1', '#10b981'],
     rating: 9.5,
     description: '暗色主题数据分析仪表盘，灵感来自 Mixpanel/Amplitude，包含统计卡片、SVG 图表、数据表格',
+  },
+  {
+    id: 'product-showcase',
+    title: 'Bloom 生活方式电商',
+    category: 'ecommerce',
+    tags: ['电商', '产品展示', '生活方式', '暖色'],
+    colors: ['#2d6a4f', '#52b788', '#fefae0'],
+    rating: 9.3,
+    description: '现代生活方式品牌电商页，灵感来自 Happly，包含产品网格、特色产品展示、用户评价、Newsletter',
+  },
+  {
+    id: 'coming-soon',
+    title: 'Pulse 品牌上线预告',
+    category: 'creative',
+    tags: ['Coming Soon', '倒计时', '创意', '暗色'],
+    colors: ['#0a0a0a', '#6366f1', '#ec4899'],
+    rating: 9.4,
+    description: '创意品牌上线预告页，动画渐变背景 + 倒计时器 + 浮动粒子 + 渐变文字效果',
   }
 ]
 

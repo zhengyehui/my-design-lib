@@ -259,6 +259,7 @@ export default defineConfig({
           collapsed: true,
           items: [
             { text: 'ShopFlow 结账页', link: '/pages/checkout' },
+            { text: 'Bloom 生活方式电商', link: '/pages/product-showcase' },
             { text: 'AuthKit 现代认证页', link: '/pages/auth-modern' }
           ]
         },
@@ -273,7 +274,8 @@ export default defineConfig({
           text: '✨ 创意页面',
           collapsed: true,
           items: [
-            { text: '太空主题 404', link: '/pages/404-creative' }
+            { text: '太空主题 404', link: '/pages/404-creative' },
+            { text: 'Pulse 上线预告', link: '/pages/coming-soon' }
           ]
         }
       ]
