@@ -189,6 +189,15 @@ const pages = [
     colors: ['#0a0a0a', '#6366f1', '#ec4899'],
     rating: 9.4,
     description: '创意品牌上线预告页，动画渐变背景 + 倒计时器 + 浮动粒子 + 渐变文字效果',
+  },
+  {
+    id: 'restaurant-ember',
+    title: 'Ember Kitchen 餐厅落地页',
+    category: 'landing',
+    tags: ['餐厅', '暖色', '美食', '预约'],
+    colors: ['#d97706', '#1a1a1a', '#faf8f5'],
+    rating: 9.5,
+    description: '高端餐厅落地页，灵感来自 Haven Coffee，暗色 Hero + 粒子动效 + 菜单展示 + 预约 CTA',
   }
 ]
 

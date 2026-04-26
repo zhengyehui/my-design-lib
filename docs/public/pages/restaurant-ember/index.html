@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember Kitchen — 现代餐厅落地页</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ─────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ember: #d97706;
+  --ember-light: #f59e0b;
+  --ember-dark: #b45309;
+  --ember-glow: rgba(217, 119, 6, 0.15);
+  --charcoal: #1a1a1a;
+  --charcoal-light: #2a2a2a;
+  --cream: #faf8f5;
+  --cream-dark: #f0ebe3;
+  --warm-gray: #6b6358;
+  --warm-gray-light: #9a9189;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--charcoal);
+  background: var(--cream);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Navigation ───────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.25rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.4s var(--ease-default);
+}
+
+.nav.scrolled {
+  background: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 0.8rem 3rem;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.nav-logo span { color: var(--ember-light); }
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+  list-style: none;
+}
+
+.nav-links a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--ember-light); }
+
+.nav-cta {
+  background: var(--ember) !important;
+  color: #fff !important;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 600 !important;
+  transition: all 0.3s !important;
+}
+
+.nav-cta:hover {
+  background: var(--ember-light) !important;
+  transform: translateY(-1px);
+}
+
+/* ── Hero ─────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--charcoal);
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(217, 119, 6, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 20% 80%, rgba(180, 83, 9, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(245, 158, 11, 0.06) 0%, transparent 50%);
+}
+
+/* Animated floating ember particles */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--ember-light);
+  border-radius: 50%;
+  opacity: 0;
+  animation: float-up 6s infinite;
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 7s; }
+.particle:nth-child(2) { left: 25%; animation-delay: 1.2s; animation-duration: 5.5s; }
+.particle:nth-child(3) { left: 40%; animation-delay: 0.5s; animation-duration: 8s; }
+.particle:nth-child(4) { left: 55%; animation-delay: 2s; animation-duration: 6s; }
+.particle:nth-child(5) { left: 70%; animation-delay: 0.8s; animation-duration: 7.5s; }
+.particle:nth-child(6) { left: 85%; animation-delay: 1.5s; animation-duration: 5s; }
+.particle:nth-child(7) { left: 15%; animation-delay: 3s; animation-duration: 6.5s; }
+.particle:nth-child(8) { left: 60%; animation-delay: 2.5s; animation-duration: 7s; }
+
+@keyframes float-up {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 0 2rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-full);
+  color: var(--ember-light);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--ember-light), var(--ember));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: rgba(255,255,255,0.6);
+  max-width: 500px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.2rem;
+  background: var(--ember);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-default);
+}
+
+.btn-primary:hover {
+  background: var(--ember-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(217, 119, 6, 0.35);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.2rem;
+  background: transparent;
+  color: rgba(255,255,255,0.8);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-full);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-default);
+}
+
+.btn-outline:hover {
+  border-color: rgba(255,255,255,0.5);
+  color: #fff;
+  background: rgba(255,255,255,0.05);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: bounce 2s infinite;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Stats Bar ────────────────────────────────────── */
+.stats-bar {
+  background: var(--charcoal);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 2.5rem 3rem;
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--ember-light);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.3rem;
+}
+
+/* ── Section Common ───────────────────────────────── */
+.section {
+  padding: 6rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ember);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--charcoal);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  font-size: 1.1rem;
+  color: var(--warm-gray);
+  max-width: 550px;
+  line-height: 1.7;
+}
+
+/* ── Story Section ────────────────────────────────── */
+.story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  padding: 6rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.story-visual {
+  position: relative;
+  aspect-ratio: 4/5;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--charcoal), var(--charcoal-light));
+}
+
+.story-img-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.15);
+  font-size: 4rem;
+  gap: 1rem;
+}
+
+.story-img-placeholder span {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.story-accent {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--ember);
+  opacity: 0.15;
+  filter: blur(40px);
+}
+
+.story-content {
+  padding: 2rem 0;
+}
+
+.story-content .section-label { margin-bottom: 1.5rem; }
+
+.story-text {
+  font-size: 1.05rem;
+  color: var(--warm-gray);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.story-signature {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.signature-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ember), var(--ember-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.signature-info strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--charcoal);
+}
+
+.signature-info span {
+  font-size: 0.8rem;
+  color: var(--warm-gray-light);
+}
+
+/* ── Menu Section ─────────────────────────────────── */
+.menu-section {
+  background: var(--charcoal);
+  padding: 6rem 3rem;
+}
+
+.menu-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.menu-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.menu-header .section-title { color: #fff; }
+.menu-header .section-desc {
+  color: rgba(255,255,255,0.5);
+  margin: 0 auto;
+}
+
+.menu-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+}
+
+.menu-tab {
+  padding: 0.6rem 1.5rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.menu-tab:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+
+.menu-tab.active {
+  background: var(--ember);
+  border-color: var(--ember);
+  color: #fff;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.3s;
+}
+
+.menu-item:hover {
+  border-color: rgba(217, 119, 6, 0.3);
+  background: rgba(255,255,255,0.02);
+}
+
+.menu-item-info { flex: 1; }
+
+.menu-item-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+
+.menu-item-desc {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.5;
+}
+
+.menu-item-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ember-light);
+  white-space: nowrap;
+  margin-left: 1.5rem;
+}
+
+.menu-item-tags {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.menu-tag {
+  padding: 0.15rem 0.5rem;
+  background: rgba(217, 119, 6, 0.1);
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  color: var(--ember-light);
+  font-weight: 500;
+}
+
+/* ── Gallery ──────────────────────────────────────── */
+.gallery-section { padding: 6rem 3rem; max-width: 1200px; margin: 0 auto; }
+
+.gallery-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 220px);
+  gap: 1rem;
+}
+
+.gallery-item {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.4s var(--ease-default);
+}
+
+.gallery-item:hover { transform: scale(1.02); }
+
+.gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+
+.gallery-item-bg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: rgba(255,255,255,0.2);
+}
+
+.gallery-item:nth-child(1) .gallery-item-bg { background: linear-gradient(135deg, #2d1f14, #4a3428); }
+.gallery-item:nth-child(2) .gallery-item-bg { background: linear-gradient(135deg, #1a2332, #2a3a4f); }
+.gallery-item:nth-child(3) .gallery-item-bg { background: linear-gradient(135deg, #2d1f14, #5a3d28); }
+.gallery-item:nth-child(4) .gallery-item-bg { background: linear-gradient(135deg, #1a1a2e, #2d2d44); }
+.gallery-item:nth-child(5) .gallery-item-bg { background: linear-gradient(135deg, #3d2819, #5a3d1f); }
+.gallery-item:nth-child(6) .gallery-item-bg { background: linear-gradient(135deg, #1f2d1a, #2d4a28); }
+
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+
+.gallery-overlay span {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ── Reservation CTA ──────────────────────────────── */
+.reservation {
+  background: var(--charcoal);
+  padding: 6rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.reservation-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(217, 119, 6, 0.08) 0%, transparent 70%);
+}
+
+.reservation-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.reservation .section-title {
+  color: #fff;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin-bottom: 1rem;
+}
+
+.reservation .section-desc {
+  color: rgba(255,255,255,0.5);
+  margin: 0 auto 2.5rem;
+}
+
+.reservation-form {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+}
+
+.reservation-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.reservation-input::placeholder { color: rgba(255,255,255,0.3); }
+.reservation-input:focus { border-color: var(--ember); }
+
+.reservation-note {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── Hours & Location ─────────────────────────────── */
+.info-section {
+  padding: 6rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.info-card {
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: #fff;
+  transition: all 0.3s;
+}
+
+.info-card:hover {
+  border-color: var(--ember);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.info-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--ember-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
+}
+
+.info-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: var(--charcoal);
+}
+
+.info-card p {
+  font-size: 0.9rem;
+  color: var(--warm-gray);
+  line-height: 1.7;
+}
+
+.info-hours {
+  list-style: none;
+}
+
+.info-hours li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
+  color: var(--warm-gray);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.info-hours li:last-child { border-bottom: none; }
+
+.info-hours .day { font-weight: 500; color: var(--charcoal); }
+
+/* ── Footer ───────────────────────────────────────── */
+.footer {
+  background: var(--charcoal);
+  padding: 4rem 3rem 2rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-brand h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.footer-brand h3 span { color: var(--ember-light); }
+
+.footer-brand p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  max-width: 300px;
+}
+
+.footer-col h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 1.2rem;
+}
+
+.footer-col ul { list-style: none; }
+
+.footer-col li { margin-bottom: 0.6rem; }
+
+.footer-col a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: var(--ember-light); }
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.footer-social {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.3s;
+}
+
+.footer-social a:hover {
+  border-color: var(--ember);
+  color: var(--ember-light);
+  background: rgba(217, 119, 6, 0.1);
+}
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero h1 { font-size: 2.5rem; }
+  .stats-bar { flex-direction: column; gap: 1.5rem; padding: 2rem; }
+  .story { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.5rem; }
+  .menu-grid { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .gallery-item:nth-child(1) { grid-column: span 2; }
+  .info-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .reservation-form { flex-direction: column; }
+  .section { padding: 3rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">EMBER<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#story">故事</a></li>
+    <li><a href="#menu">菜单</a></li>
+    <li><a href="#gallery">空间</a></li>
+    <li><a href="#info">到访</a></li>
+    <li><a href="#reservation" class="nav-cta">预约订座</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 Est. 2019 · 北京三里屯</div>
+    <h1>以火为魂<br><em>以食为艺</em></h1>
+    <p class="hero-sub">在 Ember，每一道菜都是一场关于火候与风味的对话。我们用明火烹饪，用时间调味，让食材回归最纯粹的表达。</p>
+    <div class="hero-actions">
+      <a href="#reservation" class="btn-primary">预约订座 →</a>
+      <a href="#menu" class="btn-outline">浏览菜单</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-number">6</div>
+    <div class="stat-label">年匠心传承</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">120+</div>
+    <div class="stat-label">精选酒款</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">4.9</div>
+    <div class="stat-label">大众点评评分</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">3</div>
+    <div class="stat-label">黑珍珠推荐</div>
+  </div>
+</div>
+
+<!-- Story -->
+<section class="story" id="story">
+  <div class="story-visual">
+    <div class="story-img-placeholder">
+      🔥
+      <span>主厨肖像</span>
+    </div>
+    <div class="story-accent"></div>
+  </div>
+  <div class="story-content">
+    <div class="section-label">Our Story</div>
+    <h2 class="section-title">从一团火焰开始的旅程</h2>
+    <p class="story-text">
+      2019年，主厨陈墨在结束了为期三年的欧洲研修之旅后，带着对明火烹饪的执念回到北京。他在三里屯一条安静的巷子里，找到了一间老厂房——裸露的红砖、高耸的穹顶，和一台从阿根廷运来的 Asado 烤炉。
+    </p>
+    <p class="story-text">
+      Ember 不只是一家餐厅。它是关于「火」的信仰——相信最原始的烹饪方式，能唤醒食材最深处的灵魂。从澳洲和牛到云南松茸，从地中海海鲜到本地有机蔬菜，每一道菜都在明火上完成最后的升华。
+    </p>
+    <div class="story-signature">
+      <div class="signature-avatar">陈</div>
+      <div class="signature-info">
+        <strong>陈墨 (Marco Chen)</strong>
+        <span>创始人 & 行政主厨</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Menu -->
+<section class="menu-section" id="menu">
+  <div class="menu-inner">
+    <div class="menu-header">
+      <div class="section-label" style="color: var(--ember-light);">Menu</div>
+      <h2 class="section-title">主厨推荐</h2>
+      <p class="section-desc">季节更替，菜单随之变化。以下是本季主厨最引以为傲的创作。</p>
+    </div>
+
+    <div class="menu-tabs">
+      <button class="menu-tab active">全部</button>
+      <button class="menu-tab">前菜</button>
+      <button class="menu-tab">主菜</button>
+      <button class="menu-tab">甜品</button>
+      <button class="menu-tab">饮品</button>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <div class="menu-item-name">明火炙烤和牛塔塔</div>
+          <div class="menu-item-desc">M5 和牛薄切，烟熏蛋黄，松露泡沫，酸种面包脆片</div>
+          <div class="menu-item-tags">
+            <span class="menu-tag">招牌</span>
+            <span class="menu-tag">前菜</span>
+          </div>
+        </div>
+        <div class="menu-item-price">¥188</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <div class="menu-item-name">炭烤整条鲈鱼</div>
+          <div class="menu-item-desc">东海野生鲈鱼，柠檬百里香黄油，烤蔬菜沙拉</div>
+          <div class="menu-item-tags">
+            <span class="menu-tag">主菜</span>
+          </div>
+        </div>
+        <div class="menu-item-price">¥268</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <div class="menu-item-name">松茸奶油浓汤</div>
+          <div class="menu-item-desc">云南新鲜松茸，黑松露油，帕玛森脆片</div>
+          <div class="menu-item-tags">
+            <span class="menu-tag">季节限定</span>
+            <span class="menu-tag">前菜</span>
+          </div>
+        </div>
+        <div class="menu-item-price">¥128</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <div class="menu-item-name">48小时慢烤牛肋排</div>
+          <div class="menu-item-desc">澳洲安格斯牛肋排，烟熏烧烤酱，玉米糊，烤玉米</div>
+          <div class="menu-item-tags">
+            <span class="menu-tag">招牌</span>
+            <span class="menu-tag">主菜</span>
+          </div>
+        </div>
+        <div class="menu-item-price">¥388</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <div class="menu-item-name">炭烤帝王蟹腿</div>
+          <div class="menu-item-desc">阿拉斯加帝王蟹，蒜蓉黄油，柠檬，时令蔬菜</div>
+          <div class="menu-item-tags">
+            <span class="menu-tag">海鲜</span>
+            <span class="menu-tag">主菜</span>
+          </div>
+        </div>
+        <div class="menu-item-price">¥588</div>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <div class="menu-item-name">焦糖布蕾配烟熏冰淇淋</div>
+          <div class="menu-item-desc">经典法式焦糖布蕾，木烟冰淇淋，可可碎</div>
+          <div class="menu-item-tags">
+            <span class="menu-tag">甜品</span>
+          </div>
+        </div>
+        <div class="menu-item-price">¥88</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="gallery-section" id="gallery">
+  <div class="gallery-header">
+    <div class="section-label">Space</div>
+    <h2 class="section-title"> Ember 的空间</h2>
+    <p class="section-desc" style="margin: 0 auto;">裸露的红砖、温暖的灯光、跳动的火焰——每一处细节都为用餐体验而设计。</p>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <div class="gallery-item-bg">🔥</div>
+      <div class="gallery-overlay"><span>开放式厨房 & 明火烤炉</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-item-bg">🍷</div>
+      <div class="gallery-overlay"><span>酒窖与品鉴区</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-item-bg">🌿</div>
+      <div class="gallery-overlay"><span>露台花园座位</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-item-bg">🕯️</div>
+      <div class="gallery-overlay"><span>主厅用餐区</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-item-bg">🎵</div>
+      <div class="gallery-overlay"><span>周末爵士现场</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-item-bg">🎂</div>
+      <div class="gallery-overlay"><span>私人包间</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Reservation CTA -->
+<section class="reservation" id="reservation">
+  <div class="reservation-bg"></div>
+  <div class="reservation-inner">
+    <div class="section-label" style="color: var(--ember-light);">Reservation</div>
+    <h2 class="section-title">开启您的 Ember 之旅</h2>
+    <p class="section-desc">我们建议提前 3 天预约。周末及节假日请提前一周预订。</p>
+    <div class="reservation-form">
+      <input type="text" class="reservation-input" placeholder="选择日期">
+      <input type="text" class="reservation-input" placeholder="用餐人数">
+      <button class="btn-primary" style="white-space: nowrap;">立即预约</button>
+    </div>
+    <p class="reservation-note">或致电 +86 10 6417 8899 · 周二至周日 17:30 - 23:00</p>
+  </div>
+</section>
+
+<!-- Info -->
+<section class="info-section" id="info">
+  <div style="text-align: center;">
+    <div class="section-label">Visit Us</div>
+    <h2 class="section-title">到访 Ember</h2>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-icon">📍</div>
+      <h3>地址</h3>
+      <p>北京市朝阳区三里屯路 19 号院<br>三里屯太古里南区 S4-33<br>100027</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-icon">🕐</div>
+      <h3>营业时间</h3>
+      <ul class="info-hours">
+        <li><span class="day">周一</span><span>休息</span></li>
+        <li><span class="day">周二 - 周四</span><span>17:30 - 22:30</span></li>
+        <li><span class="day">周五 - 周六</span><span>17:30 - 23:30</span></li>
+        <li><span class="day">周日</span><span>17:00 - 22:00</span></li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-icon">📞</div>
+      <h3>联系方式</h3>
+      <p>
+        电话：+86 10 6417 8899<br>
+        邮箱：hello@ember-kitchen.cn<br>
+        微信：EmberKitchen<br>
+        小红书：@Ember明火餐厅
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>EMBER<span>.</span></h3>
+      <p>以火为魂，以食为艺。在Ember，我们相信最原始的烹饪方式能唤醒食材最深处的灵魂。</p>
+    </div>
+    <div class="footer-col">
+      <h4>探索</h4>
+      <ul>
+        <li><a href="#story">我们的故事</a></li>
+        <li><a href="#menu">季节菜单</a></li>
+        <li><a href="#gallery">空间导览</a></li>
+        <li><a href="#">主厨团队</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>服务</h4>
+      <ul>
+        <li><a href="#">私人包间</a></li>
+        <li><a href="#">企业宴请</a></li>
+        <li><a href="#">烹饪课程</a></li>
+        <li><a href="#">礼品卡</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>关注</h4>
+      <ul>
+        <li><a href="#">小红书</a></li>
+        <li><a href="#">微信公众号</a></li>
+        <li><a href="#">大众点评</a></li>
+        <li><a href="#">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Ember Kitchen. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="#">微</a>
+      <a href="#">红</a>
+      <a href="#">评</a>
+      <a href="#">IG</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Menu tab interaction
+document.querySelectorAll('.menu-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+
+</body>
+</html>
