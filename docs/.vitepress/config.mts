@@ -278,6 +278,13 @@ export default defineConfig({
             { text: '太空主题 404', link: '/pages/404-creative' },
             { text: 'Pulse 上线预告', link: '/pages/coming-soon' }
           ]
+        },
+        {
+          text: '💰 定价页',
+          collapsed: true,
+          items: [
+            { text: 'CloudStack 定价页', link: '/pages/pricing-page' }
+          ]
         }
       ]
     },

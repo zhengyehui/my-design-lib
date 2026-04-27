@@ -198,6 +198,15 @@ const pages = [
     colors: ['#d97706', '#1a1a1a', '#faf8f5'],
     rating: 9.5,
     description: '高端餐厅落地页，灵感来自 Haven Coffee，暗色 Hero + 粒子动效 + 菜单展示 + 预约 CTA',
+  },
+  {
+    id: 'pricing-page',
+    title: 'CloudStack 定价页',
+    category: 'pricing',
+    tags: ['定价', 'SaaS', '对比表', 'FAQ'],
+    colors: ['#6366f1', '#7c3aed', '#eef2ff'],
+    rating: 9.3,
+    description: '现代 SaaS 定价页，灵感来自 Amie/Stripe，包含月付年付切换、三栏定价卡片、功能对比表、FAQ 手风琴',
   }
 ]
 
@@ -209,7 +218,8 @@ const categories = [
   { id: 'ecommerce', label: '电商', icon: '🛒' },
   { id: 'creative', label: '创意', icon: '✨' },
   { id: 'blog', label: '博客', icon: '📝' },
-  { id: 'app', label: '应用', icon: '📱' }
+  { id: 'app', label: '应用', icon: '📱' },
+  { id: 'pricing', label: '定价', icon: '💰' }
 ]
 
 const activeCategory = ref('all')
