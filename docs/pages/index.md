@@ -207,6 +207,24 @@ const pages = [
     colors: ['#6366f1', '#7c3aed', '#eef2ff'],
     rating: 9.3,
     description: '现代 SaaS 定价页，灵感来自 Amie/Stripe，包含月付年付切换、三栏定价卡片、功能对比表、FAQ 手风琴',
+  },
+  {
+    id: 'music-player',
+    title: 'WaveSync 音乐播放器',
+    category: 'creative',
+    tags: ['音乐', '播放器', '暗色', '媒体'],
+    colors: ['#0a0a0f', '#8b5cf6', '#ec4899'],
+    rating: 9.5,
+    description: '暗色系音乐流媒体播放器，三栏布局 + 环境光背景 + 播放队列 + 底部控制条',
+  },
+  {
+    id: 'fitness-app',
+    title: 'VitalFit 健身追踪',
+    category: 'app',
+    tags: ['健身', '健康', '运动', '数据'],
+    colors: ['#f0f4f8', '#10b981', '#f97316'],
+    rating: 9.4,
+    description: '健身追踪应用仪表盘，SVG 环形图 + 运动数据统计 + 心率监测 + 打卡日历',
   }
 ]
 

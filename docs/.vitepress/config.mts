@@ -285,6 +285,20 @@ export default defineConfig({
           items: [
             { text: 'CloudStack 定价页', link: '/pages/pricing-page' }
           ]
+        },
+        {
+          text: '🎵 媒体与创意',
+          collapsed: true,
+          items: [
+            { text: 'WaveSync 音乐播放器', link: '/pages/music-player' }
+          ]
+        },
+        {
+          text: '💪 健康与应用',
+          collapsed: true,
+          items: [
+            { text: 'VitalFit 健身追踪', link: '/pages/fitness-app' }
+          ]
         }
       ]
     },

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VitalFit 健身追踪</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #f0f4f8;
+  --surface: #ffffff;
+  --accent: #10b981;
+  --accent-dark: #059669;
+  --accent-light: #d1fae5;
+  --accent-glow: rgba(16, 185, 129, 0.15);
+  --orange: #f97316;
+  --orange-light: #fff7ed;
+  --blue: #3b82f6;
+  --blue-light: #eff6ff;
+  --pink: #ec4899;
+  --pink-light: #fdf2f8;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --radius: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── App Shell ── */
+.app-shell {
+  display: grid;
+  grid-template-columns: 72px 1fr 360px;
+  min-height: 100vh;
+}
+
+/* ── Left Rail (Mobile-style) ── */
+.left-rail {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  gap: 8px;
+}
+.rail-logo {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--accent), #06b6d4);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: white;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+.rail-btn {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rail-btn:hover { background: var(--bg); color: var(--text); }
+.rail-btn.active { background: var(--accent-light); color: var(--accent); }
+.rail-spacer { flex: 1; }
+
+/* ── Main Dashboard ── */
+.dashboard {
+  padding: 28px 32px;
+  overflow-y: auto;
+}
+.dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+.dash-greeting h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.dash-greeting p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+.dash-actions { display: flex; gap: 10px; }
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.btn-accent:hover { background: var(--accent-dark); }
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Stats Ring ── */
+.stats-hero {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.ring-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 28px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ring-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin-bottom: 20px;
+}
+.ring-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-bg {
+  fill: none;
+  stroke: #e2e8f0;
+  stroke-width: 10;
+}
+.ring-fill {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 440;
+  stroke-dashoffset: 132;
+  transition: stroke-dashoffset 1s ease;
+}
+.ring-fill.orange { stroke: var(--orange); stroke-dashoffset: 220; }
+.ring-fill.blue { stroke: var(--blue); stroke-dashoffset: 264; }
+.ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ring-center .cal-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.ring-center .cal-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.ring-legend {
+  display: flex;
+  gap: 20px;
+  font-size: 0.8rem;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+.legend-dot.green { background: var(--accent); }
+.legend-dot.orange { background: var(--orange); }
+.legend-dot.blue { background: var(--blue); }
+
+/* ── Quick Stats ── */
+.quick-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.stat-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--border);
+  transition: all 0.25s;
+}
+.stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.stat-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+.stat-icon.green { background: var(--accent-light); }
+.stat-icon.orange { background: var(--orange-light); }
+.stat-icon.blue { background: var(--blue-light); }
+.stat-icon.pink { background: var(--pink-light); }
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.stat-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 6px;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.stat-change.up { color: var(--accent); background: var(--accent-light); }
+.stat-change.down { color: #ef4444; background: #fef2f2; }
+
+/* ── Weekly Chart ── */
+.chart-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  border: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.chart-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.chart-tabs { display: flex; gap: 4px; }
+.chart-tab {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.chart-tab.active { background: var(--accent); color: white; }
+.chart-tab:hover:not(.active) { background: var(--bg); }
+
+.chart-area {
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 0 8px;
+}
+.chart-bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.chart-bar {
+  width: 100%;
+  max-width: 40px;
+  border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(180deg, var(--accent), rgba(16, 185, 129, 0.6));
+  transition: height 0.5s ease;
+  min-height: 8px;
+}
+.chart-bar.orange { background: linear-gradient(180deg, var(--orange), rgba(249, 115, 22, 0.6)); }
+.chart-day {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Workouts List ── */
+.workouts-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  border: 1px solid var(--border);
+}
+.workouts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.workouts-header h3 { font-size: 1.05rem; font-weight: 700; }
+.workout-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  border-radius: 12px;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.workout-item:hover { background: var(--bg); }
+.workout-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.workout-icon.run { background: var(--accent-light); }
+.workout-icon.strength { background: var(--orange-light); }
+.workout-icon.yoga { background: var(--pink-light); }
+.workout-icon.cycle { background: var(--blue-light); }
+.workout-info { flex: 1; }
+.workout-info .name { font-size: 0.9rem; font-weight: 600; }
+.workout-info .meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+.workout-cal {
+  text-align: right;
+}
+.workout-cal .value { font-size: 1rem; font-weight: 700; }
+.workout-cal .label { font-size: 0.7rem; color: var(--text-muted); }
+
+/* ── Right Panel ── */
+.right-panel {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 28px 24px;
+  overflow-y: auto;
+}
+.panel-section { margin-bottom: 28px; }
+.panel-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Today's Goal */
+.goal-ring {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(6, 182, 212, 0.08));
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid rgba(16, 185, 129, 0.15);
+}
+.goal-mini-ring {
+  width: 80px; height: 80px;
+  position: relative;
+  flex-shrink: 0;
+}
+.goal-mini-ring svg {
+  width: 100%; height: 100%;
+  transform: rotate(-90deg);
+}
+.goal-mini-ring .bg { fill: none; stroke: #e2e8f0; stroke-width: 6; }
+.goal-mini-ring .fill {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 50;
+}
+.goal-mini-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+.goal-text h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+.goal-text p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+
+/* Streak */
+.streak-card {
+  background: linear-gradient(135deg, #f97316, #f59e0b);
+  border-radius: 14px;
+  padding: 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.streak-flame { font-size: 2.5rem; }
+.streak-info h4 { font-size: 1.2rem; font-weight: 800; }
+.streak-info p { font-size: 0.8rem; opacity: 0.85; margin-top: 2px; }
+.streak-days {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+}
+.streak-dot {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+.streak-dot.done { background: rgba(255,255,255,0.9); color: #f97316; }
+
+/* Heart Rate */
+.hr-card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+.hr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.hr-header h4 { font-size: 0.9rem; font-weight: 600; }
+.hr-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ef4444;
+  line-height: 1;
+}
+.hr-unit { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; }
+.hr-wave {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 12px;
+}
+.hr-bar {
+  flex: 1;
+  background: #fecaca;
+  border-radius: 2px;
+  min-height: 4px;
+  transition: height 0.3s;
+}
+.hr-bar:nth-child(odd) { background: #ef4444; }
+
+/* Upcoming */
+.upcoming-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.upcoming-item:last-child { border-bottom: none; }
+.upcoming-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  min-width: 48px;
+  padding-top: 2px;
+}
+.upcoming-info .name { font-size: 0.85rem; font-weight: 600; }
+.upcoming-info .detail { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.upcoming-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.upcoming-badge.cardio { background: #fef2f2; color: #ef4444; }
+.upcoming-badge.strength { background: var(--orange-light); color: var(--orange); }
+.upcoming-badge.yoga { background: var(--pink-light); color: var(--pink); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .app-shell { grid-template-columns: 1fr; }
+  .left-rail, .right-panel { display: none; }
+  .stats-hero { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Left Rail -->
+  <nav class="left-rail">
+    <div class="rail-logo">V</div>
+    <button class="rail-btn active">🏠</button>
+    <button class="rail-btn">📊</button>
+    <button class="rail-btn">🏃</button>
+    <button class="rail-btn">🍎</button>
+    <button class="rail-btn">🏆</button>
+    <div class="rail-spacer"></div>
+    <button class="rail-btn">⚙️</button>
+  </nav>
+
+  <!-- Main Dashboard -->
+  <main class="dashboard">
+    <div class="dash-header">
+      <div class="dash-greeting">
+        <h1>早上好，Weta 👋</h1>
+        <p>今天是你连续运动的第 23 天</p>
+      </div>
+      <div class="dash-actions">
+        <button class="btn-outline">📅 计划</button>
+        <button class="btn-accent">▶ 开始训练</button>
+      </div>
+    </div>
+
+    <!-- Stats Hero -->
+    <div class="stats-hero">
+      <!-- Ring Card -->
+      <div class="ring-card">
+        <div class="ring-container">
+          <svg class="ring-svg" viewBox="0 0 160 160">
+            <circle class="ring-bg" cx="80" cy="80" r="70" />
+            <circle class="ring-fill" cx="80" cy="80" r="70" />
+            <circle class="ring-fill orange" cx="80" cy="80" r="55" />
+            <circle class="ring-fill blue" cx="80" cy="80" r="40" />
+          </svg>
+          <div class="ring-center">
+            <div class="cal-number">648</div>
+            <div class="cal-label">千卡已消耗</div>
+          </div>
+        </div>
+        <div class="ring-legend">
+          <div class="legend-item"><div class="legend-dot green"></div> 运动 420</div>
+          <div class="legend-item"><div class="legend-dot orange"></div> 步行 168</div>
+          <div class="legend-item"><div class="legend-dot blue"></div> 活动 60</div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="quick-stats">
+        <div class="stat-card">
+          <div class="stat-icon green">🏃</div>
+          <div class="stat-value">8,432</div>
+          <div class="stat-label">今日步数</div>
+          <div class="stat-change up">↑ 12% 较昨日</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">🔥</div>
+          <div class="stat-value">52 <small style="font-size:0.6em;font-weight:400">min</small></div>
+          <div class="stat-label">运动时长</div>
+          <div class="stat-change up">↑ 8% 较上周</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">💤</div>
+          <div class="stat-value">7.5 <small style="font-size:0.6em;font-weight:400">h</small></div>
+          <div class="stat-label">昨晚睡眠</div>
+          <div class="stat-change up">↑ 优质</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon pink">💓</div>
+          <div class="stat-value">72</div>
+          <div class="stat-label">静息心率</div>
+          <div class="stat-change down">↓ 3 bpm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Chart -->
+    <div class="chart-section">
+      <div class="chart-header">
+        <h3>本周运动数据</h3>
+        <div class="chart-tabs">
+          <button class="chart-tab active">卡路里</button>
+          <button class="chart-tab">步数</button>
+          <button class="chart-tab">时长</button>
+        </div>
+      </div>
+      <div class="chart-area">
+        <div class="chart-bar-group">
+          <div class="chart-bar" style="height: 60%"></div>
+          <div class="chart-day">周一</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar" style="height: 85%"></div>
+          <div class="chart-day">周二</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar" style="height: 45%"></div>
+          <div class="chart-day">周三</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar" style="height: 92%"></div>
+          <div class="chart-day">周四</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar" style="height: 70%"></div>
+          <div class="chart-day">周五</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar orange" style="height: 55%"></div>
+          <div class="chart-day">周六</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="chart-bar" style="height: 30%; opacity: 0.4"></div>
+          <div class="chart-day" style="font-weight:700; color: var(--accent)">今天</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Workouts -->
+    <div class="workouts-section">
+      <div class="workouts-header">
+        <h3>最近训练</h3>
+        <button class="btn-outline" style="padding:6px 14px; font-size:0.8rem;">查看全部</button>
+      </div>
+      <div class="workout-item">
+        <div class="workout-icon run">🏃</div>
+        <div class="workout-info">
+          <div class="name">晨跑 — 奥森公园</div>
+          <div class="meta">今天 07:30 · 5.2 km · 28:15</div>
+        </div>
+        <div class="workout-cal">
+          <div class="value">320</div>
+          <div class="label">千卡</div>
+        </div>
+      </div>
+      <div class="workout-item">
+        <div class="workout-icon strength">💪</div>
+        <div class="workout-info">
+          <div class="name">力量训练 — 上肢</div>
+          <div class="meta">昨天 18:00 · 45 min · 中等强度</div>
+        </div>
+        <div class="workout-cal">
+          <div class="value">280</div>
+          <div class="label">千卡</div>
+        </div>
+      </div>
+      <div class="workout-item">
+        <div class="workout-icon yoga">🧘</div>
+        <div class="workout-info">
+          <div class="name">瑜伽 — 恢复拉伸</div>
+          <div class="meta">周二 20:00 · 30 min · 轻度</div>
+        </div>
+        <div class="workout-cal">
+          <div class="value">120</div>
+          <div class="label">千卡</div>
+        </div>
+      </div>
+      <div class="workout-item">
+        <div class="workout-icon cycle">🚴</div>
+        <div class="workout-info">
+          <div class="name">骑行 — 长安街往返</div>
+          <div class="meta">周一 07:00 · 15.8 km · 42:30</div>
+        </div>
+        <div class="workout-cal">
+          <div class="value">410</div>
+          <div class="label">千卡</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Right Panel -->
+  <aside class="right-panel">
+    <!-- Today's Goal -->
+    <div class="panel-section">
+      <div class="panel-title">🎯 今日目标</div>
+      <div class="goal-ring">
+        <div class="goal-mini-ring">
+          <svg viewBox="0 0 80 80">
+            <circle class="bg" cx="40" cy="40" r="32" />
+            <circle class="fill" cx="40" cy="40" r="32" />
+          </svg>
+          <div class="goal-mini-center">75%</div>
+        </div>
+        <div class="goal-text">
+          <h4>3/4 项已完成</h4>
+          <p>还差 1,568 步达到今日步数目标</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streak -->
+    <div class="panel-section">
+      <div class="streak-card">
+        <div class="streak-flame">🔥</div>
+        <div class="streak-info">
+          <h4>23 天连续打卡</h4>
+          <p>保持这个势头！</p>
+          <div class="streak-days">
+            <div class="streak-dot done">一</div>
+            <div class="streak-dot done">二</div>
+            <div class="streak-dot done">三</div>
+            <div class="streak-dot done">四</div>
+            <div class="streak-dot done">五</div>
+            <div class="streak-dot">六</div>
+            <div class="streak-dot">日</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heart Rate -->
+    <div class="panel-section">
+      <div class="hr-card">
+        <div class="hr-header">
+          <h4>❤️ 实时心率</h4>
+          <span style="font-size:0.75rem; color: var(--text-muted);">刚刚更新</span>
+        </div>
+        <div class="hr-value">72 <span class="hr-unit">bpm</span></div>
+        <div class="hr-wave">
+          <div class="hr-bar" style="height: 30%"></div>
+          <div class="hr-bar" style="height: 80%"></div>
+          <div class="hr-bar" style="height: 45%"></div>
+          <div class="hr-bar" style="height: 20%"></div>
+          <div class="hr-bar" style="height: 60%"></div>
+          <div class="hr-bar" style="height: 90%"></div>
+          <div class="hr-bar" style="height: 35%"></div>
+          <div class="hr-bar" style="height: 15%"></div>
+          <div class="hr-bar" style="height: 70%"></div>
+          <div class="hr-bar" style="height: 50%"></div>
+          <div class="hr-bar" style="height: 85%"></div>
+          <div class="hr-bar" style="height: 25%"></div>
+          <div class="hr-bar" style="height: 55%"></div>
+          <div class="hr-bar" style="height: 95%"></div>
+          <div class="hr-bar" style="height: 40%"></div>
+          <div class="hr-bar" style="height: 20%"></div>
+          <div class="hr-bar" style="height: 75%"></div>
+          <div class="hr-bar" style="height: 60%"></div>
+          <div class="hr-bar" style="height: 30%"></div>
+          <div class="hr-bar" style="height: 80%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming -->
+    <div class="panel-section">
+      <div class="panel-title">📋 今日计划</div>
+      <div class="upcoming-item">
+        <div class="upcoming-time">07:30</div>
+        <div class="upcoming-info">
+          <div class="name">晨跑 ✅</div>
+          <div class="detail">已完成 · 5.2km</div>
+        </div>
+      </div>
+      <div class="upcoming-item">
+        <div class="upcoming-time">12:00</div>
+        <div class="upcoming-info">
+          <div class="name">午间步行</div>
+          <div class="detail">30 分钟轻松步行</div>
+          <div class="upcoming-badge cardio">进行中</div>
+        </div>
+      </div>
+      <div class="upcoming-item">
+        <div class="upcoming-time">18:30</div>
+        <div class="upcoming-info">
+          <div class="name">HIIT 训练</div>
+          <div class="detail">40 分钟 · 高强度</div>
+          <div class="upcoming-badge strength">待开始</div>
+        </div>
+      </div>
+      <div class="upcoming-item">
+        <div class="upcoming-time">21:00</div>
+        <div class="upcoming-info">
+          <div class="name">拉伸放松</div>
+          <div class="detail">15 分钟 · 轻度</div>
+          <div class="upcoming-badge yoga">待开始</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+</body>
+</html>
