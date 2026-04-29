@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arclight 品牌重塑 — 案例研究</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ============================================================
+   Case Study Page — 灵感来自 Evervault + Traffic Productions
+   暗色主题 + 粗边框极简主义 + 数据驱动叙事
+   ============================================================ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: #07070d;
+  color: #e2e8f0;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Nav ────────────────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 3rem;
+  background: rgba(7, 7, 13, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.12);
+}
+.nav-logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.nav-logo span { color: var(--color-primary); }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  transition: color 0.2s;
+  letter-spacing: 0.02em;
+}
+.nav-links a:hover { color: #fff; }
+.nav-links a.active { color: var(--color-primary); }
+
+/* ── Hero ────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 6rem 3rem 4rem;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 20%, rgba(99, 102, 241, 0.15), transparent),
+    radial-gradient(ellipse 60% 50% at 20% 80%, rgba(236, 72, 153, 0.08), transparent),
+    linear-gradient(180deg, #07070d 0%, #0c0c18 100%);
+  z-index: 0;
+}
+.hero-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  z-index: 1;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-full);
+  background: rgba(99, 102, 241, 0.08);
+}
+.hero-label::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  animation: pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.hero h1 {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-meta {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.hero-meta-item .label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #64748b;
+  font-weight: 600;
+}
+.hero-meta-item .value {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  animation: float-hint 2s ease-in-out infinite;
+}
+.hero-scroll-hint .arrow {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, #475569, transparent);
+}
+@keyframes float-hint {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ── Section Base ────────────────────────────────────── */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 3rem;
+}
+.section-border {
+  border-top: 1px solid rgba(99, 102, 241, 0.12);
+}
+.section-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: var(--radius-full);
+}
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+.section-desc {
+  font-size: 1.05rem;
+  color: #94a3b8;
+  max-width: 680px;
+  line-height: 1.7;
+}
+
+/* ── Overview Grid ────────────────────────────────────── */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  margin-top: 3rem;
+}
+.overview-card {
+  background: #0c0c18;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.overview-card .card-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #64748b;
+  font-weight: 600;
+}
+.overview-card .card-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+}
+.overview-card .card-detail {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ── Challenge ────────────────────────────────────── */
+.challenge-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-top: 3rem;
+}
+.challenge-text p {
+  font-size: 1.05rem;
+  color: #cbd5e1;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+.challenge-visual {
+  position: relative;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(236, 72, 153, 0.05));
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.challenge-visual::before {
+  content: '"';
+  position: absolute;
+  top: -0.5rem;
+  left: 1.5rem;
+  font-size: 5rem;
+  color: rgba(99, 102, 241, 0.2);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+.challenge-quote {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: #e2e8f0;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+.challenge-quote-author {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-style: normal;
+}
+.challenge-quote-author strong {
+  color: #94a3b8;
+}
+
+/* ── Process Timeline ────────────────────────────── */
+.process-timeline {
+  margin-top: 3rem;
+  position: relative;
+}
+.process-timeline::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--color-primary), rgba(236, 72, 153, 0.5), rgba(99, 102, 241, 0.1));
+}
+.process-step {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 2rem;
+  padding: 2.5rem 0;
+  position: relative;
+}
+.process-step:not(:last-child) {
+  border-bottom: 1px solid rgba(99, 102, 241, 0.06);
+}
+.process-number {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #0c0c18;
+  border: 2px solid var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  z-index: 1;
+}
+.process-content h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+.process-content p {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  line-height: 1.7;
+  max-width: 600px;
+}
+.process-tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.process-tag {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: var(--radius-full);
+  color: var(--color-primary-light);
+  font-weight: 500;
+}
+
+/* ── Results Metrics ────────────────────────────── */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  margin-top: 3rem;
+}
+.result-card {
+  background: #0c0c18;
+  padding: 3rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.result-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), #ec4899);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.result-card:hover::after { opacity: 1; }
+.result-number {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+.result-unit {
+  font-size: 1.2rem;
+  -webkit-text-fill-color: #6366f1;
+}
+.result-label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.result-detail {
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+/* ── Gallery ────────────────────────────────────── */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  margin-top: 3rem;
+}
+.gallery-item {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: #0c0c18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gallery-item.featured {
+  grid-row: span 2;
+}
+.gallery-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.gallery-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+}
+.gallery-item:nth-child(1) .gallery-placeholder::before {
+  background: linear-gradient(135deg, #1a1a3e 0%, #0f0f1e 50%, #1e0a2e 100%);
+}
+.gallery-item:nth-child(2) .gallery-placeholder::before {
+  background: linear-gradient(135deg, #0f1a2e 0%, #0a1520 100%);
+}
+.gallery-item:nth-child(3) .gallery-placeholder::before {
+  background: linear-gradient(135deg, #1e0a28 0%, #0f0f1e 100%);
+}
+.gallery-item:nth-child(4) .gallery-placeholder::before {
+  background: linear-gradient(135deg, #0f2018 0%, #0a1510 100%);
+}
+.gallery-item:nth-child(5) .gallery-placeholder::before {
+  background: linear-gradient(135deg, #1a1010 0%, #0f0a0a 100%);
+}
+/* Abstract decorative shapes inside gallery items */
+.gallery-shape {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--radius-lg);
+}
+.gallery-item:nth-child(1) .gallery-shape {
+  width: 70%;
+  height: 60%;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.1));
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2px;
+  padding: 2px;
+  overflow: hidden;
+}
+.gallery-shape .sidebar-mock {
+  background: rgba(99, 102, 241, 0.08);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.sidebar-mock .mock-line {
+  height: 4px;
+  background: rgba(99, 102, 241, 0.2);
+  border-radius: 2px;
+}
+.sidebar-mock .mock-line:nth-child(1) { width: 80%; }
+.sidebar-mock .mock-line:nth-child(2) { width: 60%; }
+.sidebar-mock .mock-line:nth-child(3) { width: 90%; }
+.gallery-shape .main-mock {
+  background: rgba(15, 15, 30, 0.6);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.main-mock .mock-header {
+  display: flex;
+  gap: 0.3rem;
+}
+.main-mock .mock-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.3);
+}
+.main-mock .mock-dot:nth-child(1) { background: #ef4444; }
+.main-mock .mock-dot:nth-child(2) { background: #f59e0b; }
+.main-mock .mock-dot:nth-child(3) { background: #10b981; }
+.main-mock .mock-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem;
+}
+.main-mock .mock-block {
+  background: rgba(99, 102, 241, 0.06);
+  border-radius: 4px;
+  border: 1px solid rgba(99, 102, 241, 0.08);
+}
+.gallery-item:nth-child(2) .gallery-shape,
+.gallery-item:nth-child(3) .gallery-shape,
+.gallery-item:nth-child(4) .gallery-shape,
+.gallery-item:nth-child(5) .gallery-shape {
+  width: 80%;
+  height: 60%;
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gallery-item:nth-child(2) .gallery-shape {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(99, 102, 241, 0.1));
+}
+.gallery-item:nth-child(3) .gallery-shape {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(99, 102, 241, 0.08));
+}
+.gallery-item:nth-child(4) .gallery-shape {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(99, 102, 241, 0.08));
+}
+.gallery-item:nth-child(5) .gallery-shape {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(99, 102, 241, 0.08));
+}
+.gallery-icon {
+  font-size: 2rem;
+  opacity: 0.6;
+}
+.gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(7, 7, 13, 0.9), transparent);
+  z-index: 2;
+}
+.gallery-caption span {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+/* ── Testimonial ────────────────────────────── */
+.testimonial-section {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(236, 72, 153, 0.04));
+  border-top: 1px solid rgba(99, 102, 241, 0.1);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+}
+.testimonial-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+.testimonial-quote {
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 500;
+  color: #e2e8f0;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+.testimonial-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), #ec4899);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+}
+.testimonial-info {
+  text-align: left;
+}
+.testimonial-name {
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.95rem;
+}
+.testimonial-role {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* ── Next Project ────────────────────────────── */
+.next-project {
+  border-top: 1px solid rgba(99, 102, 241, 0.1);
+  padding: 4rem 3rem;
+  text-align: center;
+}
+.next-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #475569;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.next-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.next-title:hover {
+  color: var(--color-primary);
+}
+.next-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+.next-arrow svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s;
+}
+.next-title:hover + .next-arrow svg,
+.next-arrow:hover svg {
+  transform: translateX(4px);
+}
+
+/* ── Footer ────────────────────────────── */
+.footer {
+  border-top: 1px solid rgba(99, 102, 241, 0.08);
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.footer-left {
+  font-size: 0.8rem;
+  color: #475569;
+}
+.footer-right {
+  display: flex;
+  gap: 1.5rem;
+}
+.footer-right a {
+  font-size: 0.8rem;
+  color: #64748b;
+  transition: color 0.2s;
+}
+.footer-right a:hover { color: var(--color-primary); }
+
+/* ── Responsive ────────────────────────────── */
+@media (max-width: 1024px) {
+  .overview-grid { grid-template-columns: repeat(2, 1fr); }
+  .challenge-content { grid-template-columns: 1fr; gap: 2rem; }
+  .results-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-item.featured { grid-row: auto; }
+}
+@media (max-width: 640px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 5rem 1.5rem 3rem; }
+  .section { padding: 4rem 1.5rem; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .results-grid { grid-template-columns: 1fr; }
+  .hero-meta { gap: 1.5rem; }
+  .footer { flex-direction: column; gap: 1rem; text-align: center; }
+}
+
+/* ── Scroll Animations ────────────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.animate-on-scroll.visible {
+  animation: fade-up 0.6s var(--ease-out) forwards;
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-logo">Arc<span>.</span>light</div>
+  <div class="nav-links">
+    <a href="#" class="active">案例</a>
+    <a href="#">服务</a>
+    <a href="#">关于</a>
+    <a href="#">联系</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-label">案例研究</div>
+    <h1>
+      Arclight<br>
+      <span class="gradient-text">品牌重塑</span>
+    </h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="label">客户</span>
+        <span class="value">Arclight Technologies</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">行业</span>
+        <span class="value">B2B SaaS · 数据分析</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">时间</span>
+        <span class="value">2025.09 — 2026.01</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">角色</span>
+        <span class="value">品牌设计 · 前端开发</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>向下滚动</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- Overview -->
+<section class="section section-border">
+  <span class="section-label">项目概览</span>
+  <div class="section-title animate-on-scroll">从混乱到统一的<br>品牌系统</div>
+  <p class="section-desc animate-on-scroll">
+    Arclight 是一家专注于企业数据分析的 B2B SaaS 公司。在快速扩张后，品牌视觉系统变得碎片化，
+    我们帮助他们重新构建了一套完整的品牌体系和数字产品体验。
+  </p>
+  <div class="overview-grid animate-on-scroll">
+    <div class="overview-card">
+      <span class="card-label">客户规模</span>
+      <span class="card-value">500+ 企业</span>
+      <span class="card-detail">覆盖金融、医疗、制造三大行业</span>
+    </div>
+    <div class="overview-card">
+      <span class="card-label">项目周期</span>
+      <span class="card-value">16 周</span>
+      <span class="card-detail">4 阶段迭代式交付</span>
+    </div>
+    <div class="overview-card">
+      <span class="card-label">交付物</span>
+      <span class="card-value">23 件</span>
+      <span class="card-detail">品牌手册 + 60+ 组件 + 8 个页面</span>
+    </div>
+    <div class="overview-card">
+      <span class="card-label">团队配置</span>
+      <span class="card-value">4 人</span>
+      <span class="card-detail">设计 × 2 · 前端 × 1 · PM × 1</span>
+    </div>
+  </div>
+</section>
+
+<!-- Challenge -->
+<section class="section section-border">
+  <span class="section-label">挑战</span>
+  <div class="section-title animate-on-scroll">品牌一致性的崩塌</div>
+  <div class="challenge-content">
+    <div class="challenge-text animate-on-scroll">
+      <p>
+        Arclight 在过去三年中经历了四次产品线扩展，每次扩展都引入了独立的视觉风格。
+        到项目启动时，他们的品牌资产库中存在 <strong style="color:#fff">12 种不同的蓝色</strong>、
+        <strong style="color:#fff">7 套字体方案</strong>和<strong style="color:#fff">完全割裂的 UI 组件库</strong>。
+      </p>
+      <p>
+        客户端的产品体验参差不齐，市场团队无法产出统一的营销材料，开发者在每个新项目中
+        都要重新搭建基础样式。品牌形象的碎片化正在直接影响销售转化和团队效率。
+      </p>
+      <p>
+        我们的任务是：在不中断现有产品迭代的前提下，建立一套可扩展的品牌系统，
+        统一所有数字触点的视觉体验。
+      </p>
+    </div>
+    <div class="challenge-visual animate-on-scroll">
+      <div class="challenge-quote">
+        "我们的产品功能很强，但每次给客户演示时，他们总问为什么每个页面看起来都像不同的产品。"
+      </div>
+      <div class="challenge-quote-author">
+        — <strong>Sarah Chen</strong>，Arclight CPO
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="section section-border">
+  <span class="section-label">过程</span>
+  <div class="section-title animate-on-scroll">系统化的品牌重建</div>
+  <p class="section-desc animate-on-scroll">
+    我们采用"自底向上"的策略——先统一设计令牌，再扩展到组件和页面模板。
+  </p>
+  <div class="process-timeline animate-on-scroll">
+    <div class="process-step">
+      <div class="process-number">01</div>
+      <div class="process-content">
+        <h3>审计与发现</h3>
+        <p>
+          用三周时间全面审计了 Arclight 现有的 14 个产品页面、32 份营销材料和 8 个客户接触点。
+          通过设计走查、利益相关者访谈和用户调研，识别出品牌不一致的核心痛点。
+        </p>
+        <div class="process-tags">
+          <span class="process-tag">设计审计</span>
+          <span class="process-tag">用户调研</span>
+          <span class="process-tag">竞品分析</span>
+        </div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-number">02</div>
+      <div class="process-content">
+        <h3>设计令牌系统</h3>
+        <p>
+          构建了完整的 Design Tokens 体系：从颜色、字体、间距到阴影、动效。
+          所有令牌以 CSS 自定义属性的形式存在，支持明暗主题切换，
+          确保从设计工具到代码的零损耗传递。
+        </p>
+        <div class="process-tags">
+          <span class="process-tag">Design Tokens</span>
+          <span class="process-tag">CSS Variables</span>
+          <span class="process-tag">主题系统</span>
+        </div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-number">03</div>
+      <div class="process-content">
+        <h3>组件库构建</h3>
+        <p>
+          基于令牌系统开发了 60+ 原子组件，覆盖按钮、表单、卡片、导航等核心模式。
+          每个组件都包含完整的状态变体和响应式适配，确保跨平台一致性。
+        </p>
+        <div class="process-tags">
+          <span class="process-tag">组件化设计</span>
+          <span class="process-tag">Storybook</span>
+          <span class="process-tag">Figma Library</span>
+        </div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-number">04</div>
+      <div class="process-content">
+        <h3>页面模板与落地</h3>
+        <p>
+          将品牌系统落地为 8 个高保真页面模板，覆盖产品展示、营销落地、文档中心等核心场景。
+          通过组件化开发，新页面的上线时间从 2 周缩短到 2 天。
+        </p>
+        <div class="process-tags">
+          <span class="process-tag">页面模板</span>
+          <span class="process-tag">VitePress</span>
+          <span class="process-tag">响应式设计</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Results -->
+<section class="section section-border">
+  <span class="section-label">成果</span>
+  <div class="section-title animate-on-scroll">数据驱动的成果</div>
+  <div class="results-grid animate-on-scroll">
+    <div class="result-card">
+      <div class="result-number">47<span class="result-unit">%</span></div>
+      <div class="result-label">转化率提升</div>
+      <div class="result-detail">落地页注册转化率从 3.2% 提升至 4.7%</div>
+    </div>
+    <div class="result-card">
+      <div class="result-number">3.2<span class="result-unit">×</span></div>
+      <div class="result-label">开发效率提升</div>
+      <div class="result-detail">新页面上线时间从 2 周缩短到 2 天</div>
+    </div>
+    <div class="result-card">
+      <div class="result-number">92<span class="result-unit">%</span></div>
+      <div class="result-label">品牌一致性</div>
+      <div class="result-detail">跨触点品牌一致性从 31% 提升到 92%</div>
+    </div>
+    <div class="result-card">
+      <div class="result-number">60<span class="result-unit">+</span></div>
+      <div class="result-label">组件复用</div>
+      <div class="result-detail">标准化组件库，支持明暗主题切换</div>
+    </div>
+    <div class="result-card">
+      <div class="result-number">2<span class="result-unit">天</span></div>
+      <div class="result-label">新页面上线</div>
+      <div class="result-detail">基于模板的新页面上线时间</div>
+    </div>
+    <div class="result-card">
+      <div class="result-number">4.8<span class="result-unit">/5</span></div>
+      <div class="result-label">客户满意度</div>
+      <div class="result-detail">内部团队对新品牌的评分</div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="section section-border">
+  <span class="section-label">作品展示</span>
+  <div class="section-title animate-on-scroll">项目截图</div>
+  <div class="gallery-grid animate-on-scroll">
+    <div class="gallery-item featured">
+      <div class="gallery-placeholder">
+        <div class="gallery-shape">
+          <div class="sidebar-mock">
+            <div class="mock-line"></div>
+            <div class="mock-line"></div>
+            <div class="mock-line"></div>
+            <div class="mock-line" style="width:50%;margin-top:auto"></div>
+          </div>
+          <div class="main-mock">
+            <div class="mock-header">
+              <div class="mock-dot"></div>
+              <div class="mock-dot"></div>
+              <div class="mock-dot"></div>
+            </div>
+            <div class="mock-content">
+              <div class="mock-block" style="grid-column: span 2; height: 40px;"></div>
+              <div class="mock-block"></div>
+              <div class="mock-block"></div>
+              <div class="mock-block" style="grid-column: span 2; height: 60px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-caption"><span>产品仪表盘</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="gallery-shape">
+          <span class="gallery-icon">📊</span>
+        </div>
+      </div>
+      <div class="gallery-caption"><span>品牌色板系统</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="gallery-shape">
+          <span class="gallery-icon">🧩</span>
+        </div>
+      </div>
+      <div class="gallery-caption"><span>组件库</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="gallery-shape">
+          <span class="gallery-icon">📱</span>
+        </div>
+      </div>
+      <div class="gallery-caption"><span>响应式适配</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <div class="gallery-shape">
+          <span class="gallery-icon">🎨</span>
+        </div>
+      </div>
+      <div class="gallery-caption"><span>品牌手册</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonial -->
+<section class="section testimonial-section">
+  <div class="testimonial-content animate-on-scroll">
+    <div class="testimonial-quote">
+      "这次品牌重塑不仅统一了我们的视觉语言，更重要的是建立了一套可持续演进的设计系统。
+      现在我们的产品、市场和销售团队都在用同一套设计语言沟通。"
+    </div>
+    <div class="testimonial-author">
+      <div class="testimonial-avatar">SC</div>
+      <div class="testimonial-info">
+        <div class="testimonial-name">Sarah Chen</div>
+        <div class="testimonial-role">Arclight Technologies · 首席产品官</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Next Project -->
+<section class="next-project">
+  <div class="next-label">下一个案例</div>
+  <div class="next-title">Pulse Studio 品牌升级</div>
+  <div class="next-arrow">
+    查看详情
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-left">© 2026 Arclight Case Study — My Design Lib</div>
+  <div class="footer-right">
+    <a href="/pages/">← 返回画廊</a>
+    <a href="#">查看源码</a>
+  </div>
+</footer>
+
+<!-- Scroll Animation Observer -->
+<script>
+  if (typeof IntersectionObserver !== 'undefined') {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible')
+          observer.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' })
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el))
+  } else {
+    document.querySelectorAll('.animate-on-scroll').forEach(el => el.classList.add('visible'))
+  }
+</script>
+
+</body>
+</html>

@@ -299,6 +299,13 @@ export default defineConfig({
           items: [
             { text: 'VitalFit 健身追踪', link: '/pages/fitness-app' }
           ]
+        },
+        {
+          text: '📋 案例研究',
+          collapsed: true,
+          items: [
+            { text: 'Arclight 品牌重塑', link: '/pages/case-study' }
+          ]
         }
       ]
     },

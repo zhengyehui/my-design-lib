@@ -225,6 +225,15 @@ const pages = [
     colors: ['#f0f4f8', '#10b981', '#f97316'],
     rating: 9.4,
     description: '健身追踪应用仪表盘，SVG 环形图 + 运动数据统计 + 心率监测 + 打卡日历',
+  },
+  {
+    id: 'case-study',
+    title: 'Arclight 品牌重塑案例',
+    category: 'case-study',
+    tags: ['案例研究', '品牌重塑', 'B2B SaaS', '暗色'],
+    colors: ['#07070d', '#6366f1', '#ec4899'],
+    rating: 9.6,
+    description: 'B2B SaaS 品牌重塑案例研究，灵感来自 Evervault + Traffic Productions，包含项目概览、流程时间线、成果数据、作品展示',
   }
 ]
 
@@ -237,7 +246,8 @@ const categories = [
   { id: 'creative', label: '创意', icon: '✨' },
   { id: 'blog', label: '博客', icon: '📝' },
   { id: 'app', label: '应用', icon: '📱' },
-  { id: 'pricing', label: '定价', icon: '💰' }
+  { id: 'pricing', label: '定价', icon: '💰' },
+  { id: 'case-study', label: '案例', icon: '📋' }
 ]
 
 const activeCategory = ref('all')
