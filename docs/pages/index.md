@@ -234,6 +234,24 @@ const pages = [
     colors: ['#07070d', '#6366f1', '#ec4899'],
     rating: 9.6,
     description: 'B2B SaaS 品牌重塑案例研究，灵感来自 Evervault + Traffic Productions，包含项目概览、流程时间线、成果数据、作品展示',
+  },
+  {
+    id: 'docs-portal',
+    title: 'DevDocs 现代文档门户',
+    category: 'docs',
+    tags: ['文档', '门户', '开发者体验', '代码高亮'],
+    colors: ['#ffffff', '#6366f1', '#1e1e2e'],
+    rating: 9.5,
+    description: '现代技术文档门户，灵感来自 Stripe/Railway 文档，包含三栏布局、代码高亮、API 参数表、步骤引导、Callout 提示',
+  },
+  {
+    id: 'job-board',
+    title: 'TalentFlow 招聘平台',
+    category: 'careers',
+    tags: ['招聘', '求职', 'SaaS平台', '深色Hero'],
+    colors: ['#0f172a', '#6366f1', '#10b981'],
+    rating: 9.4,
+    description: '现代招聘平台页面，灵感来自 levels.fyi/Notion Careers，包含搜索筛选、职位卡片、侧边栏热招公司、趋势排行',
   }
 ]
 
@@ -247,7 +265,9 @@ const categories = [
   { id: 'blog', label: '博客', icon: '📝' },
   { id: 'app', label: '应用', icon: '📱' },
   { id: 'pricing', label: '定价', icon: '💰' },
-  { id: 'case-study', label: '案例', icon: '📋' }
+  { id: 'case-study', label: '案例', icon: '📋' },
+  { id: 'docs', label: '文档', icon: '📖' },
+  { id: 'careers', label: '招聘', icon: '💼' }
 ]
 
 const activeCategory = ref('all')

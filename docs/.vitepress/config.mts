@@ -306,6 +306,20 @@ export default defineConfig({
           items: [
             { text: 'Arclight 品牌重塑', link: '/pages/case-study' }
           ]
+        },
+        {
+          text: '📖 文档与门户',
+          collapsed: true,
+          items: [
+            { text: 'DevDocs 文档门户', link: '/pages/docs-portal' }
+          ]
+        },
+        {
+          text: '💼 招聘与职业',
+          collapsed: true,
+          items: [
+            { text: 'TalentFlow 招聘平台', link: '/pages/job-board' }
+          ]
         }
       ]
     },

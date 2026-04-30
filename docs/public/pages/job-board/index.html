@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalentFlow — 现代招聘平台</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    background: var(--color-bg-subtle);
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Navigation ── */
+  .navbar {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--color-border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .nav-brand .brand-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    display: inline-block;
+  }
+
+  .nav-center {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 48px;
+    background: var(--color-bg-muted);
+    border-radius: var(--radius-full);
+    padding: 4px;
+  }
+
+  .nav-center a {
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: all var(--duration-fast);
+  }
+
+  .nav-center a.active {
+    background: var(--color-bg);
+    color: var(--color-text);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .nav-center a:hover:not(.active) { color: var(--color-text); }
+
+  .nav-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-right a {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    transition: all var(--duration-fast);
+  }
+
+  .nav-right a:hover { color: var(--color-text); }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--duration-normal) var(--ease-default);
+    font-family: var(--font-sans);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-primary-dark);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    background: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--duration-normal) var(--ease-default);
+    font-family: var(--font-sans);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--color-primary-ghost);
+  }
+
+  /* ── Hero Section ── */
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+    color: white;
+    padding: 80px 32px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: var(--text-lg);
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 40px;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .hero-stat .stat-number {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: white;
+  }
+
+  .hero-stat .stat-label {
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+
+  /* ── Search Bar ── */
+  .search-section {
+    max-width: 900px;
+    margin: -32px auto 0;
+    padding: 0 32px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .search-bar {
+    background: var(--color-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: 20px 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .search-field {
+    flex: 1;
+    position: relative;
+  }
+
+  .search-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin-bottom: 6px;
+  }
+
+  .search-field input,
+  .search-field select {
+    width: 100%;
+    height: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0 12px;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    background: var(--color-bg);
+    outline: none;
+    font-family: var(--font-sans);
+    transition: border-color var(--duration-fast);
+    appearance: auto;
+  }
+
+  .search-field input:focus,
+  .search-field select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-ghost);
+  }
+
+  .search-divider {
+    width: 1px;
+    height: 48px;
+    background: var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .search-btn {
+    padding: 0 28px;
+    height: 44px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--duration-normal) var(--ease-default);
+    font-family: var(--font-sans);
+    align-self: flex-end;
+  }
+
+  .search-btn:hover {
+    background: var(--color-primary-dark);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  /* ── Filter Tags ── */
+  .filter-row {
+    max-width: 900px;
+    margin: 16px auto 0;
+    padding: 0 32px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  .filter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: var(--color-bg);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+    font-family: var(--font-sans);
+  }
+
+  .filter-tag:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+  .filter-tag.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+
+  /* ── Main Layout ── */
+  .main-layout {
+    max-width: 1200px;
+    margin: 40px auto 80px;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+  }
+
+  /* ── Job List ── */
+  .job-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .job-list-header h2 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+  }
+
+  .job-list-header .job-count {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .sort-select {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    background: var(--color-bg);
+    font-family: var(--font-sans);
+    cursor: pointer;
+    outline: none;
+  }
+
+  .job-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .job-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    transition: all var(--duration-normal) var(--ease-default);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .job-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .job-card.featured {
+    border-color: rgba(99, 102, 241, 0.3);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(124, 58, 237, 0.02) 100%);
+  }
+
+  .job-card.featured::before {
+    content: '⭐ 热招';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-primary);
+    background: var(--color-primary-ghost);
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+  }
+
+  .job-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .company-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .company-logo.logo-1 { background: linear-gradient(135deg, #6366f1, #7c3aed); }
+  .company-logo.logo-2 { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+  .company-logo.logo-3 { background: linear-gradient(135deg, #f59e0b, #d97706); }
+  .company-logo.logo-4 { background: linear-gradient(135deg, #10b981, #059669); }
+  .company-logo.logo-5 { background: linear-gradient(135deg, #ec4899, #be185d); }
+  .company-logo.logo-6 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+
+  .job-info h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: var(--color-text);
+  }
+
+  .job-info .company-name {
+    font-size: var(--text-sm);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .job-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .job-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .job-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-muted);
+    color: var(--color-text-secondary);
+  }
+
+  .job-tag.highlight {
+    background: var(--color-primary-ghost);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .job-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .salary-range {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-success);
+  }
+
+  .salary-period {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    font-weight: 400;
+  }
+
+  .job-posted {
+    font-size: 12px;
+    color: var(--color-text-muted);
+  }
+
+  .apply-btn {
+    padding: 7px 16px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-default);
+    font-family: var(--font-sans);
+  }
+
+  .apply-btn:hover {
+    background: var(--color-primary-dark);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .sidebar-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+  }
+
+  .sidebar-card h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Company List */
+  .company-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .company-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+  }
+
+  .company-item:hover { background: var(--color-bg-subtle); }
+
+  .company-item .ci-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .company-item .ci-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .company-item .ci-name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .company-item .ci-roles {
+    font-size: 11px;
+    color: var(--color-text-muted);
+  }
+
+  .company-item .ci-arrow {
+    color: var(--color-text-muted);
+    font-size: 12px;
+  }
+
+  /* Skills */
+  .skill-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .skill-pill {
+    padding: 5px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+  }
+
+  .skill-pill:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--color-primary-ghost);
+  }
+
+  .skill-pill.hot {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--color-primary-ghost);
+  }
+
+  /* Trending */
+  .trending-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .trending-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--text-sm);
+  }
+
+  .trending-item .rank {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .trending-item:nth-child(1) .rank { background: rgba(99, 102, 241, 0.1); color: var(--color-primary); }
+  .trending-item:nth-child(2) .rank { background: rgba(6, 182, 212, 0.1); color: var(--color-secondary); }
+  .trending-item:nth-child(3) .rank { background: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+  .trending-item:nth-child(n+4) .rank { background: var(--color-bg-muted); color: var(--color-text-muted); }
+
+  .trending-item .t-title {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .trending-item .t-count {
+    font-size: 12px;
+    color: var(--color-text-muted);
+  }
+
+  /* Newsletter Card */
+  .newsletter-card {
+    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%) !important;
+    color: white !important;
+    border: none !important;
+  }
+
+  .newsletter-card h3 { color: white !important; }
+
+  .newsletter-card p {
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+
+  .newsletter-input-group {
+    display: flex;
+    gap: 8px;
+  }
+
+  .newsletter-input-group input {
+    flex: 1;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius-sm);
+    padding: 0 12px;
+    font-size: var(--text-sm);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    outline: none;
+    font-family: var(--font-sans);
+  }
+
+  .newsletter-input-group input::placeholder { color: rgba(255,255,255,0.5); }
+
+  .newsletter-input-group button {
+    padding: 0 16px;
+    height: 40px;
+    background: white;
+    color: var(--color-primary-dark);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    white-space: nowrap;
+  }
+
+  /* ── Footer ── */
+  .site-footer {
+    background: var(--color-text);
+    color: rgba(255,255,255,0.5);
+    padding: 60px 32px 32px;
+  }
+
+  .footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+
+  .footer-brand .brand-name {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: white;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-brand .brand-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  .footer-brand p {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: white;
+    margin-bottom: 16px;
+  }
+
+  .footer-col a {
+    display: block;
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    padding: 4px 0;
+    transition: color var(--duration-fast);
+  }
+
+  .footer-col a:hover { color: white; }
+
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <a class="nav-brand" href="#">
+    <span class="brand-dot"></span>
+    TalentFlow
+  </a>
+  <div class="nav-center">
+    <a href="#" class="active">发现职位</a>
+    <a href="#">公司</a>
+    <a href="#">薪资</a>
+    <a href="#">远程工作</a>
+  </div>
+  <div class="nav-right">
+    <a href="#">登录</a>
+    <a href="#" class="btn-primary">🚀 发布职位</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>发现你的下一个<br>梦想职业</h1>
+    <p>连接全球顶尖科技公司与优秀人才。探索 12,000+ 个高质量技术职位，找到最适合你的机会。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="stat-number">12,847</div>
+        <div class="stat-label">活跃职位</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-number">3,200+</div>
+        <div class="stat-label">优质公司</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-number">95%</div>
+        <div class="stat-label">匹配成功率</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-number">¥45万</div>
+        <div class="stat-label">平均年薪</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search Bar -->
+<div class="search-section">
+  <div class="search-bar">
+    <div class="search-field">
+      <label>职位关键词</label>
+      <input type="text" placeholder="如：前端工程师、产品经理...">
+    </div>
+    <div class="search-divider"></div>
+    <div class="search-field">
+      <label>工作地点</label>
+      <input type="text" placeholder="城市或远程">
+    </div>
+    <div class="search-divider"></div>
+    <div class="search-field">
+      <label>薪资范围</label>
+      <select>
+        <option>不限</option>
+        <option>20k-40k</option>
+        <option>40k-60k</option>
+        <option>60k-100k</option>
+        <option>100k+</option>
+      </select>
+    </div>
+    <button class="search-btn">🔍 搜索职位</button>
+  </div>
+</div>
+
+<!-- Filter Tags -->
+<div class="filter-row">
+  <span class="filter-label">热门标签：</span>
+  <button class="filter-tag active">全部</button>
+  <button class="filter-tag">远程工作</button>
+  <button class="filter-tag">全职</button>
+  <button class="filter-tag">高薪</button>
+  <button class="filter-tag">初创公司</button>
+  <button class="filter-tag">大厂</button>
+  <button class="filter-tag">AI/ML</button>
+  <button class="filter-tag">全栈</button>
+</div>
+
+<!-- Main Content -->
+<div class="main-layout">
+  <!-- Job List -->
+  <div class="job-list-section">
+    <div class="job-list-header">
+      <div>
+        <h2>推荐职位</h2>
+        <span class="job-count">共找到 248 个匹配职位</span>
+      </div>
+      <select class="sort-select">
+        <option>按推荐排序</option>
+        <option>按薪资排序</option>
+        <option>按发布时间</option>
+      </select>
+    </div>
+
+    <div class="job-list">
+      <!-- Job Card 1 - Featured -->
+      <div class="job-card featured">
+        <div class="job-card-header">
+          <div class="company-logo logo-1">N</div>
+          <div class="job-info">
+            <h3>高级前端工程师</h3>
+            <span class="company-name">Nexus Technologies</span>
+          </div>
+        </div>
+        <div class="job-meta">
+          <span>📍 上海 · 远程友好</span>
+          <span>⏰ 全职</span>
+          <span>👥 500-1000人</span>
+          <span>💰 D轮</span>
+        </div>
+        <div class="job-tags">
+          <span class="job-tag highlight">React</span>
+          <span class="job-tag highlight">TypeScript</span>
+          <span class="job-tag">Next.js</span>
+          <span class="job-tag">GraphQL</span>
+          <span class="job-tag">WebGL</span>
+        </div>
+        <div class="job-card-footer">
+          <div class="salary-range">
+            ¥50-80K <span class="salary-period">/ 月</span>
+          </div>
+          <span class="job-posted">2小时前</span>
+          <button class="apply-btn">立即投递</button>
+        </div>
+      </div>
+
+      <!-- Job Card 2 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo logo-4">V</div>
+          <div class="job-info">
+            <h3>AI 算法工程师</h3>
+            <span class="company-name">Vercel AI Lab</span>
+          </div>
+        </div>
+        <div class="job-meta">
+          <span>📍 北京</span>
+          <span>⏰ 全职</span>
+          <span>👥 200-500人</span>
+          <span>💰 C轮</span>
+        </div>
+        <div class="job-tags">
+          <span class="job-tag highlight">Python</span>
+          <span class="job-tag highlight">PyTorch</span>
+          <span class="job-tag">LLM</span>
+          <span class="job-tag">Transformer</span>
+        </div>
+        <div class="job-card-footer">
+          <div class="salary-range">
+            ¥60-100K <span class="salary-period">/ 月</span>
+          </div>
+          <span class="job-posted">5小时前</span>
+          <button class="apply-btn">立即投递</button>
+        </div>
+      </div>
+
+      <!-- Job Card 3 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo logo-2">S</div>
+          <div class="job-info">
+            <h3>产品设计师</h3>
+            <span class="company-name">Stripe Design</span>
+          </div>
+        </div>
+        <div class="job-meta">
+          <span>📍 杭州 · 远程</span>
+          <span>⏰ 全职</span>
+          <span>👥 1000-5000人</span>
+          <span>💰 上市</span>
+        </div>
+        <div class="job-tags">
+          <span class="job-tag highlight">Figma</span>
+          <span class="job-tag highlight">Design System</span>
+          <span class="job-tag">交互设计</span>
+          <span class="job-tag">用户研究</span>
+        </div>
+        <div class="job-card-footer">
+          <div class="salary-range">
+            ¥40-60K <span class="salary-period">/ 月</span>
+          </div>
+          <span class="job-posted">1天前</span>
+          <button class="apply-btn">立即投递</button>
+        </div>
+      </div>
+
+      <!-- Job Card 4 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo logo-5">A</div>
+          <div class="job-info">
+            <h3>全栈开发工程师</h3>
+            <span class="company-name">Anthropic China</span>
+          </div>
+        </div>
+        <div class="job-meta">
+          <span>📍 深圳</span>
+          <span>⏰ 全职</span>
+          <span>👥 100-200人</span>
+          <span>💰 B轮</span>
+        </div>
+        <div class="job-tags">
+          <span class="job-tag highlight">Node.js</span>
+          <span class="job-tag highlight">React</span>
+          <span class="job-tag">PostgreSQL</span>
+          <span class="job-tag">Docker</span>
+        </div>
+        <div class="job-card-footer">
+          <div class="salary-range">
+            ¥45-70K <span class="salary-period">/ 月</span>
+          </div>
+          <span class="job-posted">1天前</span>
+          <button class="apply-btn">立即投递</button>
+        </div>
+      </div>
+
+      <!-- Job Card 5 -->
+      <div class="job-card">
+        <div class="job-card-header">
+          <div class="company-logo logo-6">L</div>
+          <div class="job-info">
+            <h3>DevOps 工程师</h3>
+            <span class="company-name">Linear App</span>
+          </div>
+        </div>
+        <div class="job-meta">
+          <span>📍 远程 (全球)</span>
+          <span>⏰ 全职</span>
+          <span>👥 50-100人</span>
+          <span>💰 A轮</span>
+        </div>
+        <div class="job-tags">
+          <span class="job-tag highlight">Kubernetes</span>
+          <span class="job-tag highlight">AWS</span>
+          <span class="job-tag">Terraform</span>
+          <span class="job-tag">Go</span>
+        </div>
+        <div class="job-card-footer">
+          <div class="salary-range">
+            ¥55-85K <span class="salary-period">/ 月</span>
+          </div>
+          <span class="job-posted">2天前</span>
+          <button class="apply-btn">立即投递</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar-panel">
+    <!-- Trending Companies -->
+    <div class="sidebar-card">
+      <h3>🔥 热招公司</h3>
+      <div class="company-list">
+        <div class="company-item">
+          <div class="ci-logo logo-1">N</div>
+          <div class="ci-info">
+            <div class="ci-name">Nexus Technologies</div>
+            <div class="ci-roles">12 个在招职位</div>
+          </div>
+          <span class="ci-arrow">→</span>
+        </div>
+        <div class="company-item">
+          <div class="ci-logo logo-4">V</div>
+          <div class="ci-info">
+            <div class="ci-name">Vercel AI Lab</div>
+            <div class="ci-roles">8 个在招职位</div>
+          </div>
+          <span class="ci-arrow">→</span>
+        </div>
+        <div class="company-item">
+          <div class="ci-logo logo-2">S</div>
+          <div class="ci-info">
+            <div class="ci-name">Stripe Design</div>
+            <div class="ci-roles">6 个在招职位</div>
+          </div>
+          <span class="ci-arrow">→</span>
+        </div>
+        <div class="company-item">
+          <div class="ci-logo logo-5">A</div>
+          <div class="ci-info">
+            <div class="ci-name">Anthropic China</div>
+            <div class="ci-roles">5 个在招职位</div>
+          </div>
+          <span class="ci-arrow">→</span>
+        </div>
+        <div class="company-item">
+          <div class="ci-logo logo-6">L</div>
+          <div class="ci-info">
+            <div class="ci-name">Linear App</div>
+            <div class="ci-roles">4 个在招职位</div>
+          </div>
+          <span class="ci-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hot Skills -->
+    <div class="sidebar-card">
+      <h3>📈 热门技能</h3>
+      <div class="skill-cloud">
+        <span class="skill-pill hot">React</span>
+        <span class="skill-pill hot">TypeScript</span>
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill hot">Next.js</span>
+        <span class="skill-pill">Node.js</span>
+        <span class="skill-pill">PostgreSQL</span>
+        <span class="skill-pill hot">AI/LLM</span>
+        <span class="skill-pill">Go</span>
+        <span class="skill-pill">Rust</span>
+        <span class="skill-pill">Docker</span>
+        <span class="skill-pill">Kubernetes</span>
+        <span class="skill-pill hot">Figma</span>
+      </div>
+    </div>
+
+    <!-- Trending Roles -->
+    <div class="sidebar-card">
+      <h3>📊 趋势职位</h3>
+      <div class="trending-list">
+        <div class="trending-item">
+          <span class="rank">1</span>
+          <span class="t-title">AI 工程师</span>
+          <span class="t-count">+180%</span>
+        </div>
+        <div class="trending-item">
+          <span class="rank">2</span>
+          <span class="t-title">全栈开发者</span>
+          <span class="t-count">+95%</span>
+        </div>
+        <div class="trending-item">
+          <span class="rank">3</span>
+          <span class="t-title">产品设计师</span>
+          <span class="t-count">+72%</span>
+        </div>
+        <div class="trending-item">
+          <span class="rank">4</span>
+          <span class="t-title">DevOps 工程师</span>
+          <span class="t-count">+65%</span>
+        </div>
+        <div class="trending-item">
+          <span class="rank">5</span>
+          <span class="t-title">数据工程师</span>
+          <span class="t-count">+58%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="sidebar-card newsletter-card">
+      <h3>📬 每周精选</h3>
+      <p>订阅我们的周报，每周获取最新的高薪技术职位推荐和行业洞察。</p>
+      <div class="newsletter-input-group">
+        <input type="email" placeholder="你的邮箱地址">
+        <button>订阅</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="brand-name"><span class="brand-dot"></span> TalentFlow</div>
+      <p>连接全球顶尖科技公司与优秀人才。让每个人都能找到理想的职业机会。</p>
+    </div>
+    <div class="footer-col">
+      <h4>产品</h4>
+      <a href="#">浏览职位</a>
+      <a href="#">公司列表</a>
+      <a href="#">薪资查询</a>
+      <a href="#">简历优化</a>
+      <a href="#">面试辅导</a>
+    </div>
+    <div class="footer-col">
+      <h4>企业</h4>
+      <a href="#">发布职位</a>
+      <a href="#">雇主品牌</a>
+      <a href="#">人才搜索</a>
+      <a href="#">定价方案</a>
+    </div>
+    <div class="footer-col">
+      <h4>资源</h4>
+      <a href="#">技术博客</a>
+      <a href="#">职业指南</a>
+      <a href="#">薪资报告</a>
+      <a href="#">社区</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 TalentFlow. All rights reserved.</span>
+    <span>隐私政策 · 服务条款 · 联系我们</span>
+  </div>
+</footer>
+
+</body>
+</html>
