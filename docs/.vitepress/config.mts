@@ -320,6 +320,20 @@ export default defineConfig({
           items: [
             { text: 'TalentFlow 招聘平台', link: '/pages/job-board' }
           ]
+        },
+        {
+          text: '🏠 房产',
+          collapsed: true,
+          items: [
+            { text: 'Luxe Estates 奢华房产', link: '/pages/real-estate-luxury' }
+          ]
+        },
+        {
+          text: '📰 杂志与编辑',
+          collapsed: true,
+          items: [
+            { text: 'Mono Journal 杂志', link: '/pages/magazine-editorial' }
+          ]
         }
       ]
     },

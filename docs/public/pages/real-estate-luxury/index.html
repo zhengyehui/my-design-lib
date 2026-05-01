@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxe Estates — 奢华房产</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #c9a96e;
+      --gold-light: #dfc49b;
+      --gold-dark: #a8854a;
+      --dark: #0d0d0d;
+      --dark-card: #161616;
+      --dark-surface: #1a1a1a;
+      --dark-border: #2a2a2a;
+      --text-primary: #f5f5f5;
+      --text-secondary: #999;
+      --text-muted: #666;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(13, 13, 13, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+      transition: all 0.3s;
+    }
+    .navbar.scrolled {
+      padding: 1rem 3rem;
+      background: rgba(13, 13, 13, 0.95);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+    .nav-logo span { color: var(--text-primary); font-weight: 300; }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      padding: 0.7rem 1.8rem;
+      background: var(--gold);
+      color: var(--dark) !important;
+      border-radius: 2px;
+      font-weight: 600 !important;
+      transition: all 0.3s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(13,13,13,0.7) 0%, rgba(13,13,13,0.3) 50%, rgba(13,13,13,0.8) 100%),
+        url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80') center/cover no-repeat;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 6rem;
+      max-width: 800px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.5rem;
+      font-weight: 600;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+    }
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .hero-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .hero-scroll {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: float 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-8px); }
+    }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--dark-border);
+    }
+    .stat-item {
+      padding: 3rem;
+      text-align: center;
+      border-right: 1px solid var(--dark-border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── Search Bar ── */
+    .search-section {
+      padding: 4rem 6rem;
+      background: var(--dark-surface);
+    }
+    .search-bar {
+      display: flex;
+      gap: 1px;
+      background: var(--dark-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .search-field {
+      flex: 1;
+      padding: 1.2rem 1.5rem;
+      background: var(--dark-card);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .search-field label {
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .search-field input,
+    .search-field select {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+    }
+    .search-field select { cursor: pointer; }
+    .search-field select option { background: var(--dark-card); }
+    .search-btn {
+      padding: 0 2.5rem;
+      background: var(--gold);
+      color: var(--dark);
+      border: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .search-btn:hover { background: var(--gold-light); }
+
+    /* ── Featured Properties ── */
+    .section { padding: 6rem; }
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+    }
+    .section-label {
+      font-size: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+    }
+    .section-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: gap 0.3s;
+    }
+    .section-link:hover { gap: 1rem; }
+
+    /* ── Property Grid ── */
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .property-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: all 0.4s;
+      cursor: pointer;
+    }
+    .property-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .property-card.featured {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .property-image {
+      position: relative;
+      overflow: hidden;
+    }
+    .property-card.featured .property-image { height: 100%; min-height: 500px; }
+    .property-card:not(.featured) .property-image { height: 240px; }
+    .property-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s;
+    }
+    .property-card:hover .property-image img { transform: scale(1.05); }
+    .property-tag {
+      position: absolute;
+      top: 1.2rem;
+      left: 1.2rem;
+      padding: 0.4rem 1rem;
+      background: var(--gold);
+      color: var(--dark);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .property-favorite {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      width: 40px;
+      height: 40px;
+      background: rgba(13,13,13,0.6);
+      backdrop-filter: blur(10px);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .property-favorite:hover { background: var(--gold); color: var(--dark); }
+    .property-info {
+      padding: 1.5rem;
+    }
+    .property-card.featured .property-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 3rem 2rem 2rem;
+      background: linear-gradient(transparent, rgba(13,13,13,0.95));
+    }
+    .property-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .property-card.featured .property-price { font-size: 2.2rem; }
+    .property-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .property-location {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .property-features {
+      display: flex;
+      gap: 1.2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--dark-border);
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .feature-icon { color: var(--gold); font-size: 0.9rem; }
+
+    /* ── Categories ── */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .category-card {
+      position: relative;
+      height: 300px;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .category-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s;
+    }
+    .category-card:hover img { transform: scale(1.08); }
+    .category-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(transparent 40%, rgba(13,13,13,0.9));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      transition: background 0.3s;
+    }
+    .category-card:hover .category-overlay { background: linear-gradient(transparent 30%, rgba(13,13,13,0.95)); }
+    .category-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+    .category-count {
+      font-size: 0.8rem;
+      color: var(--gold);
+    }
+
+    /* ── Testimonial ── */
+    .testimonial-section {
+      background: var(--dark-surface);
+      text-align: center;
+    }
+    .testimonial-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-style: italic;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--gold);
+    }
+    .testimonial-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .testimonial-role {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Agents ── */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .agent-card {
+      text-align: center;
+      padding: 2rem;
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    .agent-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .agent-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--gold);
+      margin-bottom: 1rem;
+    }
+    .agent-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+    .agent-title {
+      font-size: 0.8rem;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+    .agent-stats {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      position: relative;
+      padding: 8rem 6rem;
+      text-align: center;
+      overflow: hidden;
+    }
+    .cta-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(13,13,13,0.8), rgba(13,13,13,0.6)),
+        url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=80') center/cover;
+    }
+    .cta-content { position: relative; z-index: 2; }
+    .cta-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .cta-section p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .btn-primary {
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .btn-primary:hover { background: var(--gold-light); }
+    .btn-outline {
+      padding: 1rem 2.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover { background: var(--gold); color: var(--dark); }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 4rem 6rem 2rem;
+      border-top: 1px solid var(--dark-border);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .footer-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 300px;
+    }
+    .footer-heading {
+      font-size: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--dark-border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Animations ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="nav-logo">LUXE <span>ESTATES</span></a>
+    <ul class="nav-links">
+      <li><a href="#">Properties</a></li>
+      <li><a href="#">Categories</a></li>
+      <li><a href="#">Agents</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#" class="nav-cta">Book Viewing</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">◆ Exclusive Collection 2026</div>
+      <h1>Find Your <em>Dream</em> Residence</h1>
+      <p>Discover exceptional properties in the world's most coveted addresses. Curated luxury living, redefined.</p>
+      <a href="#" class="hero-btn">Explore Properties →</a>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <span>↓</span>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-number">2,400+</div>
+      <div class="stat-label">Premium Properties</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">$8.2B</div>
+      <div class="stat-label">Total Portfolio Value</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">35+</div>
+      <div class="stat-label">Global Markets</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">98%</div>
+      <div class="stat-label">Client Satisfaction</div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <section class="search-section">
+    <div class="search-bar">
+      <div class="search-field">
+        <label>Location</label>
+        <input type="text" placeholder="City, neighborhood, or address">
+      </div>
+      <div class="search-field">
+        <label>Property Type</label>
+        <select>
+          <option>All Types</option>
+          <option>Penthouse</option>
+          <option>Villa</option>
+          <option>Apartment</option>
+          <option>Estate</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Price Range</label>
+        <select>
+          <option>Any Price</option>
+          <option>$1M - $5M</option>
+          <option>$5M - $10M</option>
+          <option>$10M - $25M</option>
+          <option>$25M+</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Bedrooms</label>
+        <select>
+          <option>Any</option>
+          <option>2+</option>
+          <option>3+</option>
+          <option>4+</option>
+          <option>5+</option>
+        </select>
+      </div>
+      <button class="search-btn">Search →</button>
+    </div>
+  </section>
+
+  <!-- Featured Properties -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Featured Listings</div>
+        <h2 class="section-title">Handpicked Properties</h2>
+      </div>
+      <a href="#" class="section-link">View All Properties →</a>
+    </div>
+
+    <div class="property-grid">
+      <!-- Featured Property -->
+      <div class="property-card featured fade-up">
+        <div class="property-image">
+          <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80" alt="Modern Villa">
+          <span class="property-tag">Featured</span>
+          <button class="property-favorite">♡</button>
+        </div>
+        <div class="property-info">
+          <div class="property-price">$12,500,000</div>
+          <div class="property-name">The Glass Pavilion</div>
+          <div class="property-location">📍 Beverly Hills, California</div>
+          <div class="property-features">
+            <span class="feature"><span class="feature-icon">◆</span> 6 Beds</span>
+            <span class="feature"><span class="feature-icon">◆</span> 8 Baths</span>
+            <span class="feature"><span class="feature-icon">◆</span> 12,400 sqft</span>
+            <span class="feature"><span class="feature-icon">◆</span> Pool & Spa</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Property 2 -->
+      <div class="property-card fade-up">
+        <div class="property-image">
+          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" alt="Luxury Home">
+          <button class="property-favorite">♡</button>
+        </div>
+        <div class="property-info">
+          <div class="property-price">$8,900,000</div>
+          <div class="property-name">Skyline Residence</div>
+          <div class="property-location">📍 Miami Beach, Florida</div>
+          <div class="property-features">
+            <span class="feature"><span class="feature-icon">◆</span> 4 Beds</span>
+            <span class="feature"><span class="feature-icon">◆</span> 5 Baths</span>
+            <span class="feature"><span class="feature-icon">◆</span> 6,800 sqft</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Property 3 -->
+      <div class="property-card fade-up">
+        <div class="property-image">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" alt="Modern Estate">
+          <button class="property-favorite">♡</button>
+        </div>
+        <div class="property-info">
+          <div class="property-price">$15,200,000</div>
+          <div class="property-name">Oceanfront Manor</div>
+          <div class="property-location">📍 Malibu, California</div>
+          <div class="property-features">
+            <span class="feature"><span class="feature-icon">◆</span> 7 Beds</span>
+            <span class="feature"><span class="feature-icon">◆</span> 9 Baths</span>
+            <span class="feature"><span class="feature-icon">◆</span> 15,000 sqft</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Property 4 -->
+      <div class="property-card fade-up">
+        <div class="property-image">
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80" alt="Penthouse">
+          <span class="property-tag">New</span>
+          <button class="property-favorite">♡</button>
+        </div>
+        <div class="property-info">
+          <div class="property-price">$6,750,000</div>
+          <div class="property-name">The Meridian Penthouse</div>
+          <div class="property-location">📍 Manhattan, New York</div>
+          <div class="property-features">
+            <span class="feature"><span class="feature-icon">◆</span> 3 Beds</span>
+            <span class="feature"><span class="feature-icon">◆</span> 4 Baths</span>
+            <span class="feature"><span class="feature-icon">◆</span> 4,200 sqft</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Property 5 -->
+      <div class="property-card fade-up">
+        <div class="property-image">
+          <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80" alt="Estate">
+          <button class="property-favorite">♡</button>
+        </div>
+        <div class="property-info">
+          <div class="property-price">$22,000,000</div>
+          <div class="property-name">Villa Serenita</div>
+          <div class="property-location">📍 Aspen, Colorado</div>
+          <div class="property-features">
+            <span class="feature"><span class="feature-icon">◆</span> 8 Beds</span>
+            <span class="feature"><span class="feature-icon">◆</span> 10 Baths</span>
+            <span class="feature"><span class="feature-icon">◆</span> 18,500 sqft</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="section" style="background: var(--dark-surface);">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Browse by Category</div>
+        <h2 class="section-title">Property Types</h2>
+      </div>
+    </div>
+    <div class="categories-grid">
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=75" alt="Villas">
+        <div class="category-overlay">
+          <div class="category-name">Luxury Villas</div>
+          <div class="category-count">420 Properties</div>
+        </div>
+      </div>
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=75" alt="Penthouses">
+        <div class="category-overlay">
+          <div class="category-name">Penthouses</div>
+          <div class="category-count">185 Properties</div>
+        </div>
+      </div>
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=600&q=75" alt="Estates">
+        <div class="category-overlay">
+          <div class="category-name">Private Estates</div>
+          <div class="category-count">95 Properties</div>
+        </div>
+      </div>
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=75" alt="Waterfront">
+        <div class="category-overlay">
+          <div class="category-name">Waterfront</div>
+          <div class="category-count">230 Properties</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="section testimonial-section">
+    <div class="section-label" style="text-align:center;">Client Stories</div>
+    <div class="testimonial-quote fade-up">
+      "Luxe Estates transformed our search into an extraordinary journey. They understood our vision and delivered a property that exceeded every expectation."
+    </div>
+    <div class="testimonial-author">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Client" class="testimonial-avatar">
+      <div>
+        <div class="testimonial-name">Alexander Chen</div>
+        <div class="testimonial-role">Tech Entrepreneur, San Francisco</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agents -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Our Team</div>
+        <h2 class="section-title">Expert Agents</h2>
+      </div>
+      <a href="#" class="section-link">Meet the Team →</a>
+    </div>
+    <div class="agents-grid">
+      <div class="agent-card fade-up">
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80" alt="Agent" class="agent-avatar">
+        <div class="agent-name">Marcus Webb</div>
+        <div class="agent-title">Senior Luxury Specialist</div>
+        <div class="agent-stats">142 Properties Sold · $1.2B Volume</div>
+      </div>
+      <div class="agent-card fade-up">
+        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" alt="Agent" class="agent-avatar">
+        <div class="agent-name">Sofia Reyes</div>
+        <div class="agent-title">International Relations</div>
+        <div class="agent-stats">98 Properties Sold · $890M Volume</div>
+      </div>
+      <div class="agent-card fade-up">
+        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80" alt="Agent" class="agent-avatar">
+        <div class="agent-name">James Thornton</div>
+        <div class="agent-title">Waterfront Expert</div>
+        <div class="agent-stats">76 Properties Sold · $650M Volume</div>
+      </div>
+      <div class="agent-card fade-up">
+        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80" alt="Agent" class="agent-avatar">
+        <div class="agent-name">Elena Park</div>
+        <div class="agent-title">Penthouse Collection</div>
+        <div class="agent-stats">112 Properties Sold · $980M Volume</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="cta-content">
+      <h2>Begin Your Journey</h2>
+      <p>Schedule a private consultation with our luxury property specialists.</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn-primary">Schedule Consultation</a>
+        <a href="#" class="btn-outline">Download Catalog</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">LUXE ESTATES</div>
+        <p class="footer-desc">Curating exceptional properties for discerning buyers since 2010. Our commitment to excellence defines every interaction.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Properties</div>
+        <ul class="footer-links">
+          <li><a href="#">Luxury Villas</a></li>
+          <li><a href="#">Penthouses</a></li>
+          <li><a href="#">Private Estates</a></li>
+          <li><a href="#">Waterfront</a></li>
+          <li><a href="#">New Developments</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Team</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Services</div>
+        <ul class="footer-links">
+          <li><a href="#">Property Search</a></li>
+          <li><a href="#">Market Analysis</a></li>
+          <li><a href="#">Investment Advisory</a></li>
+          <li><a href="#">Concierge</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Luxe Estates. All rights reserved.</span>
+      <span>Privacy Policy · Terms of Service</span>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Intersection Observer for fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

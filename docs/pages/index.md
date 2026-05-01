@@ -252,6 +252,24 @@ const pages = [
     colors: ['#0f172a', '#6366f1', '#10b981'],
     rating: 9.4,
     description: '现代招聘平台页面，灵感来自 levels.fyi/Notion Careers，包含搜索筛选、职位卡片、侧边栏热招公司、趋势排行',
+  },
+  {
+    id: 'real-estate-luxury',
+    title: 'Luxe Estates 奢华房产',
+    category: 'real-estate',
+    tags: ['房产', '奢华', '暗色主题', '大图展示'],
+    colors: ['#0d0d0d', '#c9a96e', '#161616'],
+    rating: 9.5,
+    description: '奢华房产落地页，Playfair Display 衬线字体 + 金色强调 + 全屏 Hero + 房源网格 + 搜索筛选 + 经纪人团队',
+  },
+  {
+    id: 'magazine-editorial',
+    title: 'Mono Journal 杂志编辑',
+    category: 'editorial',
+    tags: ['杂志', '编辑设计', '报纸', '内容排版'],
+    colors: ['#f8f6f1', '#c0392b', '#1a1a1a'],
+    rating: 9.4,
+    description: '现代杂志编辑页面，DM Serif Display 衬线字体 + 双线边框报刊风 + 特色文章网格 + 观点金句 + Newsletter 订阅',
   }
 ]
 
@@ -267,7 +285,9 @@ const categories = [
   { id: 'pricing', label: '定价', icon: '💰' },
   { id: 'case-study', label: '案例', icon: '📋' },
   { id: 'docs', label: '文档', icon: '📖' },
-  { id: 'careers', label: '招聘', icon: '💼' }
+  { id: 'careers', label: '招聘', icon: '💼' },
+  { id: 'real-estate', label: '房产', icon: '🏠' },
+  { id: 'editorial', label: '杂志', icon: '📰' }
 ]
 
 const activeCategory = ref('all')
