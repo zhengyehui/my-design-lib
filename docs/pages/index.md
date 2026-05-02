@@ -270,6 +270,15 @@ const pages = [
     colors: ['#f8f6f1', '#c0392b', '#1a1a1a'],
     rating: 9.4,
     description: '现代杂志编辑页面，DM Serif Display 衬线字体 + 双线边框报刊风 + 特色文章网格 + 观点金句 + Newsletter 订阅',
+  },
+  {
+    id: 'product-detail-premium',
+    title: 'Lumina Pro 产品详情页',
+    category: 'ecommerce',
+    tags: ['产品详情', 'PDP', '暗色', '硬件'],
+    colors: ['#0a0a0f', '#6366f1', '#8b5cf6'],
+    rating: 9.4,
+    description: '暗色系硬件产品详情页，灵感来自 Opal Camera，全屏 Hero + 特性网格 + 交替展示 + 对比表格 + 粘性购买栏',
   }
 ]
 

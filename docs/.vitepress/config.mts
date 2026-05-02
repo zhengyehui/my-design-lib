@@ -261,6 +261,7 @@ export default defineConfig({
           items: [
             { text: 'ShopFlow 结账页', link: '/pages/checkout' },
             { text: 'Bloom 生活方式电商', link: '/pages/product-showcase' },
+            { text: 'Lumina Pro 产品详情', link: '/pages/product-detail-premium' },
             { text: 'AuthKit 现代认证页', link: '/pages/auth-modern' }
           ]
         },
