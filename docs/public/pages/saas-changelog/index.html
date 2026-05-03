@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowSync — Changelog</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ── Fallback tokens ── */
+    :root {
+      --color-primary: #6366f1;
+      --color-primary-light: #eef2ff;
+      --color-primary-hover: #4f46e5;
+      --color-bg: #ffffff;
+      --color-bg-secondary: #f8fafc;
+      --color-bg-tertiary: #f1f5f9;
+      --color-text: #0f172a;
+      --color-text-secondary: #475569;
+      --color-text-tertiary: #94a3b8;
+      --color-border: #e2e8f0;
+      --color-border-light: #f1f5f9;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.04), 0 1px 3px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,.05), 0 2px 4px -2px rgba(0,0,0,.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.06), 0 4px 6px -4px rgba(0,0,0,.06);
+      --tag-green-bg: #dcfce7;
+      --tag-green-text: #166534;
+      --tag-blue-bg: #dbeafe;
+      --tag-blue-text: #1e40af;
+      --tag-red-bg: #fee2e2;
+      --tag-red-text: #991b1b;
+      --tag-yellow-bg: #fef3c7;
+      --tag-yellow-text: #92400e;
+      --tag-purple-bg: #f3e8ff;
+      --tag-purple-text: #6b21a8;
+      --tag-gray-bg: #f1f5f9;
+      --tag-gray-text: #475569;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── Top Bar ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .topbar-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .topbar-logo svg {
+      width: 28px;
+      height: 28px;
+      color: var(--color-primary);
+    }
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .15rem .55rem;
+      border-radius: 999px;
+      letter-spacing: .02em;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: .875rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all .15s ease;
+    }
+    .btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+      box-shadow: 0 0 0 3px rgba(99,102,241,.2);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border);
+    }
+    .btn-ghost:hover {
+      background: var(--color-bg-secondary);
+      color: var(--color-text);
+    }
+    .btn svg { width: 16px; height: 16px; }
+
+    /* ── Page Layout ── */
+    .page {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: sticky;
+      top: 64px;
+      align-self: start;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+      padding: 1.5rem 1.5rem 1.5rem 0;
+      border-right: 1px solid var(--color-border-light);
+    }
+    .sidebar-title {
+      font-size: .7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--color-text-tertiary);
+      padding: 0 1.25rem .75rem;
+    }
+    .timeline {
+      list-style: none;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: var(--color-border);
+      border-radius: 1px;
+    }
+    .timeline li {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: .25rem;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--color-bg);
+      border: 2px solid var(--color-border);
+      transition: all .15s ease;
+      z-index: 1;
+    }
+    .timeline li.active .timeline-dot,
+    .timeline li:hover .timeline-dot {
+      border-color: var(--color-primary);
+      background: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(99,102,241,.18);
+    }
+    .timeline-link {
+      display: block;
+      padding: .5rem .75rem;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      transition: background .15s ease;
+    }
+    .timeline-link:hover {
+      background: var(--color-bg-secondary);
+    }
+    .timeline-version {
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--color-text);
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .timeline-date {
+      font-size: .75rem;
+      color: var(--color-text-tertiary);
+    }
+    .latest-label {
+      font-size: .625rem;
+      font-weight: 600;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      padding: .1rem .4rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    /* ── Main Content ── */
+    .main {
+      padding: 2rem 2.5rem 4rem;
+      min-width: 0;
+    }
+
+    /* ── Page Header ── */
+    .page-header {
+      margin-bottom: 2rem;
+    }
+    .page-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: .25rem;
+    }
+    .page-header p {
+      color: var(--color-text-secondary);
+      font-size: 1rem;
+    }
+
+    /* ── Search & Filter Bar ── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 240px;
+      max-width: 400px;
+    }
+    .search-icon {
+      position: absolute;
+      left: .75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--color-text-tertiary);
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      padding: .55rem .75rem .55rem 2.25rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: .875rem;
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      background: var(--color-bg);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .search-input::placeholder {
+      color: var(--color-text-tertiary);
+    }
+    .search-input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+    }
+    .tag-chips {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+    }
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+      padding: .3rem .7rem;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      color: var(--color-text-secondary);
+      transition: all .15s ease;
+      user-select: none;
+    }
+    .tag-chip:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      background: var(--color-primary-light);
+    }
+    .tag-chip.active {
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+    .tag-chip .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    /* ── Version Entry ── */
+    .version-entry {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 80px;
+      animation: fadeUp .35s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .version-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .version-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1.2;
+    }
+    .version-meta {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding-top: .2rem;
+    }
+    .version-date {
+      font-size: .875rem;
+      color: var(--color-text-tertiary);
+    }
+    .version-sep {
+      color: var(--color-border);
+    }
+    .version-title {
+      font-size: .9rem;
+      color: var(--color-text-secondary);
+      font-weight: 500;
+    }
+    .version-tags {
+      display: flex;
+      gap: .35rem;
+      flex-wrap: wrap;
+      margin-bottom: .75rem;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .15rem .55rem;
+      border-radius: 999px;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .tag-feature { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+    .tag-improvement { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+    .tag-fix { background: var(--tag-red-bg); color: var(--tag-red-text); }
+    .tag-breaking { background: var(--tag-red-bg); color: var(--tag-red-text); }
+    .tag-performance { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+
+    .version-description {
+      font-size: .95rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+      line-height: 1.65;
+    }
+
+    /* ── Change Cards ── */
+    .changes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: .75rem;
+      margin-bottom: 1rem;
+    }
+    .change-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      background: var(--color-bg);
+      transition: box-shadow .15s, border-color .15s;
+    }
+    .change-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: #d1d5db;
+    }
+    .change-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .5rem;
+    }
+    .change-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .badge-added {
+      background: var(--tag-green-bg);
+      color: var(--tag-green-text);
+    }
+    .badge-improved {
+      background: var(--tag-blue-bg);
+      color: var(--tag-blue-text);
+    }
+    .badge-fixed {
+      background: var(--tag-red-bg);
+      color: var(--tag-red-text);
+    }
+    .badge-removed {
+      background: var(--tag-gray-bg);
+      color: var(--tag-gray-text);
+    }
+    .change-card p {
+      font-size: .875rem;
+      color: var(--color-text);
+      line-height: 1.55;
+    }
+    .change-card p strong {
+      font-weight: 600;
+    }
+
+    /* ── Screenshot Placeholder ── */
+    .screenshot-placeholder {
+      margin-top: 1rem;
+      background: var(--color-bg-tertiary);
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      color: var(--color-text-tertiary);
+      min-height: 180px;
+    }
+    .screenshot-placeholder svg {
+      width: 32px;
+      height: 32px;
+      opacity: .5;
+    }
+    .screenshot-placeholder span {
+      font-size: .8rem;
+      font-weight: 500;
+    }
+
+    /* ── Expanded / Collapsed ── */
+    .version-changes-wrapper {
+      overflow: hidden;
+      transition: max-height .35s ease;
+    }
+    .version-changes-wrapper.collapsed {
+      max-height: 300px;
+    }
+    .version-changes-wrapper.expanded {
+      max-height: 5000px;
+    }
+    .toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .4rem .85rem;
+      border-radius: var(--radius-md);
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--color-primary);
+      background: var(--color-primary-light);
+      border: none;
+      cursor: pointer;
+      transition: background .15s;
+      margin-top: .5rem;
+    }
+    .toggle-btn:hover {
+      background: #dde3ff;
+    }
+    .toggle-btn svg {
+      width: 14px;
+      height: 14px;
+      transition: transform .2s ease;
+    }
+    .toggle-btn.collapsed svg {
+      transform: rotate(0deg);
+    }
+    .toggle-btn.expanded svg {
+      transform: rotate(180deg);
+    }
+
+    /* ── Divider ── */
+    .version-divider {
+      height: 1px;
+      background: var(--color-border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── Scrollbar ── */
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border-light);
+        padding: 1rem;
+        overflow-y: visible;
+      }
+      .timeline {
+        display: flex;
+        gap: 0;
+        overflow-x: auto;
+        padding-bottom: .5rem;
+      }
+      .timeline::before { display: none; }
+      .timeline li {
+        padding-left: 0;
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+      .timeline-dot { display: none; }
+      .timeline-link {
+        padding: .35rem .6rem;
+        white-space: nowrap;
+      }
+      .main {
+        padding: 1.5rem 1rem 3rem;
+      }
+      .changes-grid {
+        grid-template-columns: 1fr;
+      }
+      .topbar {
+        padding: 0 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ Top Bar ════ -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="#" class="topbar-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+        FlowSync
+      </a>
+      <span class="version-badge">v3.2.0</span>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost" onclick="window.print()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        Export
+      </button>
+      <a href="#" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Subscribe to Updates
+      </a>
+    </div>
+  </header>
+
+  <!-- ════ Page Layout ════ -->
+  <div class="page">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-title">Versions</div>
+      <ul class="timeline">
+        <li class="active">
+          <div class="timeline-dot"></div>
+          <a href="#v3-2-0" class="timeline-link">
+            <div class="timeline-version">v3.2.0 <span class="latest-label">Latest</span></div>
+            <div class="timeline-date">March 2026</div>
+          </a>
+        </li>
+        <li>
+          <div class="timeline-dot"></div>
+          <a href="#v3-1-0" class="timeline-link">
+            <div class="timeline-version">v3.1.0</div>
+            <div class="timeline-date">February 2026</div>
+          </a>
+        </li>
+        <li>
+          <div class="timeline-dot"></div>
+          <a href="#v3-0-0" class="timeline-link">
+            <div class="timeline-version">v3.0.0</div>
+            <div class="timeline-date">January 2026</div>
+          </a>
+        </li>
+        <li>
+          <div class="timeline-dot"></div>
+          <a href="#v2-9-0" class="timeline-link">
+            <div class="timeline-version">v2.9.0</div>
+            <div class="timeline-date">December 2025</div>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="main">
+
+      <div class="page-header">
+        <h1>Changelog</h1>
+        <p>What's new in FlowSync — product updates, improvements, and fixes.</p>
+      </div>
+
+      <!-- Search & Filter -->
+      <div class="filter-bar">
+        <div class="search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" placeholder="Search changelog…" id="searchInput" oninput="filterChangelog()">
+        </div>
+        <div class="tag-chips" id="tagChips">
+          <button class="tag-chip" data-tag="feature" onclick="toggleFilter(this)">
+            <span class="chip-dot" style="background:#7c3aed"></span> Feature
+          </button>
+          <button class="tag-chip" data-tag="improvement" onclick="toggleFilter(this)">
+            <span class="chip-dot" style="background:#2563eb"></span> Improvement
+          </button>
+          <button class="tag-chip" data-tag="fix" onclick="toggleFilter(this)">
+            <span class="chip-dot" style="background:#dc2626"></span> Fix
+          </button>
+          <button class="tag-chip" data-tag="breaking" onclick="toggleFilter(this)">
+            <span class="chip-dot" style="background:#b91c1c"></span> Breaking
+          </button>
+          <button class="tag-chip" data-tag="performance" onclick="toggleFilter(this)">
+            <span class="chip-dot" style="background:#d97706"></span> Performance
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Version 3.2.0 ── -->
+      <section class="version-entry" id="v3-2-0" data-tags="feature improvement fix">
+        <div class="version-header">
+          <span class="version-number">v3.2.0</span>
+          <div class="version-meta">
+            <span class="version-date">March 12, 2026</span>
+            <span class="version-sep">·</span>
+            <span class="version-title">AI-Powered Insights</span>
+          </div>
+        </div>
+        <div class="version-tags">
+          <span class="tag tag-feature">Feature</span>
+          <span class="tag tag-improvement">Improvement</span>
+          <span class="tag tag-fix">Fix</span>
+        </div>
+        <p class="version-description">
+          Introducing AI-powered analytics and smart suggestions to help your team work faster. This release also includes major performance improvements to the dashboard and several important bug fixes.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>AI Insights Dashboard Preview</span>
+        </div>
+
+        <div class="version-changes-wrapper collapsed" id="changes-v320">
+          <div class="changes-grid" style="margin-top:1rem;">
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>AI-Powered Insights Panel</strong> — Smart analytics that surface actionable trends from your team's workflow data.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>Smart Suggestions</strong> — Context-aware task recommendations powered by machine learning models.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>Natural Language Search</strong> — Query your project data using plain English instead of filters.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>Dashboard Performance</strong> — 40% faster load times with optimized data fetching and rendering pipeline.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>Notification System</strong> — Redesigned notification center with priority filtering and batch actions.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-fixed">Fixed</span>
+              </div>
+              <p><strong>Date Picker Crash</strong> — Resolved an issue where the date picker would crash when selecting dates across time zones.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-fixed">Fixed</span>
+              </div>
+              <p><strong>Export Formatting</strong> — PDF exports now correctly preserve table formatting and custom column widths.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-fixed">Fixed</span>
+              </div>
+              <p><strong>Keyboard Shortcut Conflict</strong> — Resolved Cmd+K shortcut override when multiple browser extensions are active.</p>
+            </div>
+          </div>
+        </div>
+        <button class="toggle-btn collapsed" onclick="toggleChanges('changes-v320', this)">
+          Show all changes
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <div class="version-divider"></div>
+      </section>
+
+      <!-- ── Version 3.1.0 ── -->
+      <section class="version-entry" id="v3-1-0" data-tags="feature performance">
+        <div class="version-header">
+          <span class="version-number">v3.1.0</span>
+          <div class="version-meta">
+            <span class="version-date">February 18, 2026</span>
+            <span class="version-sep">·</span>
+            <span class="version-title">Collaboration Mode</span>
+          </div>
+        </div>
+        <div class="version-tags">
+          <span class="tag tag-feature">Feature</span>
+          <span class="tag tag-performance">Performance</span>
+        </div>
+        <p class="version-description">
+          Real-time collaboration is here. Work together with your team in shared spaces with live cursors, inline comments, and instant sync across all devices.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Collaboration Mode Preview</span>
+        </div>
+
+        <div class="version-changes-wrapper collapsed" id="changes-v310">
+          <div class="changes-grid" style="margin-top:1rem;">
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>Real-Time Collaboration</strong> — See team members' cursors and edits in real time with conflict-free resolution.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>Shared Workspaces</strong> — Create shared spaces for teams with granular permission controls and access levels.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>Inline Comments</strong> — Leave contextual feedback directly on tasks, documents, and design files.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>Sync Speed</strong> — Real-time sync is now 3x faster with our new WebSocket architecture.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>Mobile Experience</strong> — Completely rebuilt mobile interface with gesture navigation and offline support.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>Activity Feed</strong> — Track all team activity in a unified timeline with smart filtering and search.</p>
+            </div>
+          </div>
+        </div>
+        <button class="toggle-btn collapsed" onclick="toggleChanges('changes-v310', this)">
+          Show all changes
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <div class="version-divider"></div>
+      </section>
+
+      <!-- ── Version 3.0.0 ── -->
+      <section class="version-entry" id="v3-0-0" data-tags="breaking feature">
+        <div class="version-header">
+          <span class="version-number">v3.0.0</span>
+          <div class="version-meta">
+            <span class="version-date">January 8, 2026</span>
+            <span class="version-sep">·</span>
+            <span class="version-title">Complete Redesign</span>
+          </div>
+        </div>
+        <div class="version-tags">
+          <span class="tag tag-breaking">Breaking Change</span>
+          <span class="tag tag-feature">Feature</span>
+        </div>
+        <p class="version-description">
+          FlowSync 3.0 is a ground-up redesign of the entire platform. New visual language, redesigned navigation, and a completely rebuilt API. Please review the migration guide before upgrading.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Complete Redesign Overview</span>
+        </div>
+
+        <div class="version-changes-wrapper collapsed" id="changes-v300">
+          <div class="changes-grid" style="margin-top:1rem;">
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>New Design System</strong> — Entirely new visual language with a comprehensive design token system and component library.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>Command Palette (⌘K)</strong> — Quickly navigate, search, and execute actions from anywhere in the app.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-added">Added</span>
+              </div>
+              <p><strong>Custom Workflows</strong> — Build custom automation pipelines with a visual flow editor and trigger system.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>Navigation Structure</strong> — Simplified sidebar with collapsible sections and keyboard-first navigation.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>Dark Mode</strong> — System-aware dark mode with manual override and per-theme color adjustments.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>API v3</strong> — New RESTful API with GraphQL support, webhook improvements, and rate limit increases.</p>
+            </div>
+          </div>
+        </div>
+        <button class="toggle-btn collapsed" onclick="toggleChanges('changes-v300', this)">
+          Show all changes
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <div class="version-divider"></div>
+      </section>
+
+      <!-- ── Version 2.9.0 ── -->
+      <section class="version-entry" id="v2-9-0" data-tags="improvement fix">
+        <div class="version-header">
+          <span class="version-number">v2.9.0</span>
+          <div class="version-meta">
+            <span class="version-date">December 5, 2025</span>
+            <span class="version-sep">·</span>
+            <span class="version-title">Stability Update</span>
+          </div>
+        </div>
+        <div class="version-tags">
+          <span class="tag tag-improvement">Improvement</span>
+          <span class="tag tag-fix">Fix</span>
+        </div>
+        <p class="version-description">
+          A focused stability release addressing community feedback. Improved reliability for large teams and fixed several long-standing issues with data synchronization.
+        </p>
+
+        <div class="screenshot-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>Stability Metrics Dashboard</span>
+        </div>
+
+        <div class="version-changes-wrapper collapsed" id="changes-v290">
+          <div class="changes-grid" style="margin-top:1rem;">
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>Sync Reliability</strong> — Data synchronization now handles network interruptions gracefully with automatic retry logic.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>Large Team Performance</strong> — Optimized database queries for organizations with 500+ members.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-improved">Improved</span>
+              </div>
+              <p><strong>Memory Usage</strong> — Reduced client-side memory consumption by 25% during long work sessions.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-fixed">Fixed</span>
+              </div>
+              <p><strong>Sync Conflict Resolution</strong> — Concurrent edits no longer produce duplicate entries in shared lists.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-fixed">Fixed</span>
+              </div>
+              <p><strong>Webhook Delivery</strong> — Webhooks now retry failed deliveries up to 3 times with exponential backoff.</p>
+            </div>
+            <div class="change-card">
+              <div class="change-card-header">
+                <span class="change-type-badge badge-fixed">Fixed</span>
+              </div>
+              <p><strong>Calendar View Bug</strong> — Fixed a rendering issue where overlapping events would display incorrectly in month view.</p>
+            </div>
+          </div>
+        </div>
+        <button class="toggle-btn collapsed" onclick="toggleChanges('changes-v290', this)">
+          Show all changes
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ════ Scripts ════ -->
+  <script>
+    // Toggle expand/collapse for version changes
+    function toggleChanges(id, btn) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var isCollapsed = el.classList.contains('collapsed');
+      if (isCollapsed) {
+        el.classList.remove('collapsed');
+        el.classList.add('expanded');
+        btn.classList.remove('collapsed');
+        btn.classList.add('expanded');
+        btn.innerHTML = 'Show fewer changes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+      } else {
+        el.classList.remove('expanded');
+        el.classList.add('collapsed');
+        btn.classList.remove('expanded');
+        btn.classList.add('collapsed');
+        btn.innerHTML = 'Show all changes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+      }
+    }
+
+    // Tag filter state
+    var activeFilters = new Set();
+
+    function toggleFilter(chip) {
+      var tag = chip.getAttribute('data-tag');
+      if (activeFilters.has(tag)) {
+        activeFilters.delete(tag);
+        chip.classList.remove('active');
+      } else {
+        activeFilters.add(tag);
+        chip.classList.add('active');
+      }
+      filterChangelog();
+    }
+
+    function filterChangelog() {
+      var query = document.getElementById('searchInput').value.toLowerCase();
+      var entries = document.querySelectorAll('.version-entry');
+      entries.forEach(function(entry) {
+        var tags = (entry.getAttribute('data-tags') || '').split(' ');
+        var text = entry.textContent.toLowerCase();
+        var matchesSearch = !query || text.indexOf(query) > -1;
+        var matchesTags = activeFilters.size === 0 || tags.some(function(t) { return activeFilters.has(t); });
+        entry.style.display = (matchesSearch && matchesTags) ? '' : 'none';
+      });
+    }
+
+    // Sidebar active state on scroll
+    var sidebarLinks = document.querySelectorAll('.timeline li');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          sidebarLinks.forEach(function(li) { li.classList.remove('active'); });
+          var id = entry.target.getAttribute('id');
+          var link = document.querySelector('.timeline-link[href="#' + id + '"]');
+          if (link) link.parentElement.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-80px 0px -60% 0px' });
+
+    document.querySelectorAll('.version-entry').forEach(function(el) {
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>

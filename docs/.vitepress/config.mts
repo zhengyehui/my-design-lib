@@ -266,10 +266,11 @@ export default defineConfig({
           ]
         },
         {
-          text: '📝 博客',
+          text: '📝 博客与更新',
           collapsed: true,
           items: [
-            { text: 'DevChronicle 技术博客', link: '/pages/tech-blog' }
+            { text: 'DevChronicle 技术博客', link: '/pages/tech-blog' },
+            { text: 'FlowSync 更新日志', link: '/pages/saas-changelog' }
           ]
         },
         {
@@ -295,10 +296,11 @@ export default defineConfig({
           ]
         },
         {
-          text: '💪 健康与应用',
+          text: '💪 应用与工具',
           collapsed: true,
           items: [
-            { text: 'VitalFit 健身追踪', link: '/pages/fitness-app' }
+            { text: 'VitalFit 健身追踪', link: '/pages/fitness-app' },
+            { text: 'SkyPulse 天气仪表盘', link: '/pages/weather-dashboard' }
           ]
         },
         {

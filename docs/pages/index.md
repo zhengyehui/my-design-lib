@@ -279,6 +279,24 @@ const pages = [
     colors: ['#0a0a0f', '#6366f1', '#8b5cf6'],
     rating: 9.4,
     description: '暗色系硬件产品详情页，灵感来自 Opal Camera，全屏 Hero + 特性网格 + 交替展示 + 对比表格 + 粘性购买栏',
+  },
+  {
+    id: 'weather-dashboard',
+    title: 'SkyPulse 天气仪表盘',
+    category: 'app',
+    tags: ['天气', '仪表盘', '暗色', '动效', '毛玻璃'],
+    colors: ['#1a1a3e', '#0d1b2a', '#f59e0b'],
+    rating: 9.5,
+    description: '深蓝渐变天气仪表盘，毛玻璃卡片 + 动态 SVG 图标 + 浮动光球动画 + 日出日落弧线 + 空气质量指数',
+  },
+  {
+    id: 'saas-changelog',
+    title: 'FlowSync 更新日志',
+    category: 'blog',
+    tags: ['更新日志', 'SaaS', '时间线', '标签筛选'],
+    colors: ['#ffffff', '#6366f1', '#e2e8f0'],
+    rating: 9.3,
+    description: 'SaaS 产品更新日志，左侧时间线 + 标签筛选 + 搜索过滤 + 版本卡片展开折叠 + 彩色变更徽章',
   }
 ]
 

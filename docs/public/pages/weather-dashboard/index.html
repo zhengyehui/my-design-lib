@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Dashboard — Design Gallery</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ── Fallback token defaults (used when tokens.css isn't available) ── */
+    :root {
+      --color-primary: #6366f1;
+      --color-secondary: #06b6d4;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-danger: #ef4444;
+      --color-bg: #ffffff;
+      --color-text: #0f172a;
+      --color-text-secondary: #475569;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,.1);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,.15);
+      --shadow-xl: 0 20px 60px rgba(0,0,0,.2);
+
+      /* Dashboard-specific */
+      --dash-gradient-start: #1a1a3e;
+      --dash-gradient-end: #0d1b2a;
+      --dash-card-bg: rgba(255,255,255,0.08);
+      --dash-card-bg-solid: rgba(255,255,255,0.12);
+      --dash-card-border: rgba(255,255,255,0.12);
+      --dash-text-primary: #ffffff;
+      --dash-text-secondary: rgba(255,255,255,0.65);
+      --dash-text-tertiary: rgba(255,255,255,0.40);
+      --dash-glow-primary: rgba(99,102,241,0.35);
+      --dash-glow-secondary: rgba(6,182,212,0.35);
+    }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    body {
+      font-family: var(--font-sans);
+      background: linear-gradient(165deg, var(--dash-gradient-start) 0%, var(--dash-gradient-end) 50%, #0a0f1e 100%);
+      color: var(--dash-text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated background orbs ── */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(99,102,241,0.15), transparent 70%);
+      top: -150px; right: -100px;
+      animation: float-orb 20s ease-in-out infinite;
+    }
+    body::after {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(6,182,212,0.12), transparent 70%);
+      bottom: -100px; left: -100px;
+      animation: float-orb 25s ease-in-out infinite reverse;
+    }
+    @keyframes float-orb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.05); }
+      66% { transform: translate(-20px, 15px) scale(0.95); }
+    }
+
+    /* ── Layout Shell ── */
+    .dashboard {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 24px 60px;
+    }
+
+    /* ── Top Bar ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      margin-bottom: 12px;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-location {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em;
+    }
+    .topbar-location svg { opacity: 0.8; }
+    .topbar-date {
+      font-size: 0.82rem; color: var(--dash-text-secondary); font-weight: 400;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--dash-card-bg); border: 1px solid var(--dash-card-border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--dash-text-primary); cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .topbar-btn:hover {
+      background: var(--dash-card-bg-solid);
+      transform: scale(1.08);
+    }
+
+    /* ── Hero Section ── */
+    .hero {
+      text-align: center;
+      padding: 40px 0 32px;
+      position: relative;
+    }
+    .hero-icon {
+      width: 160px; height: 160px;
+      margin: 0 auto 16px;
+      position: relative;
+    }
+    .hero-icon .sun-glow {
+      position: absolute;
+      width: 120px; height: 120px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(251,191,36,0.25), transparent 70%);
+      border-radius: 50%;
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+      50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    }
+    .hero-icon svg { position: relative; z-index: 1; }
+    .hero-temp {
+      font-size: 7rem;
+      font-weight: 200;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff 30%, rgba(255,255,255,0.7));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-temp span {
+      font-size: 3rem;
+      font-weight: 300;
+      vertical-align: super;
+    }
+    .hero-condition {
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--dash-text-secondary);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .hero-range {
+      font-size: 0.95rem;
+      color: var(--dash-text-tertiary);
+      font-weight: 400;
+    }
+    .hero-range strong {
+      color: var(--dash-text-secondary);
+      font-weight: 600;
+    }
+
+    /* ── Hourly Forecast ── */
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--dash-text-tertiary);
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-left: 4px;
+    }
+    .hourly-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 4px 0 16px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .hourly-scroll::-webkit-scrollbar { display: none; }
+    .hourly-card {
+      flex: 0 0 auto;
+      width: 72px;
+      padding: 16px 8px;
+      border-radius: var(--radius-lg);
+      background: var(--dash-card-bg);
+      border: 1px solid var(--dash-card-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      scroll-snap-align: start;
+      transition: background .2s, transform .2s;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .hourly-card:hover {
+      background: var(--dash-card-bg-solid);
+      transform: translateY(-2px);
+    }
+    .hourly-card.active {
+      background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(6,182,212,0.2));
+      border-color: rgba(99,102,241,0.4);
+    }
+    .hourly-time {
+      font-size: 0.75rem;
+      color: var(--dash-text-secondary);
+      font-weight: 500;
+    }
+    .hourly-card.active .hourly-time { color: var(--dash-text-primary); }
+    .hourly-icon { width: 28px; height: 28px; }
+    .hourly-temp {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── 7-Day Forecast ── */
+    .daily-section {
+      margin-top: 32px;
+    }
+    .daily-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .daily-row {
+      display: grid;
+      grid-template-columns: 110px 36px 1fr 50px;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      background: var(--dash-card-bg);
+      border: 1px solid var(--dash-card-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: background .2s;
+    }
+    .daily-row:hover {
+      background: var(--dash-card-bg-solid);
+    }
+    .daily-day {
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+    .daily-icon { width: 28px; height: 28px; justify-self: center; }
+    .daily-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .daily-low {
+      font-size: 0.85rem;
+      color: var(--dash-text-tertiary);
+      font-weight: 500;
+      min-width: 28px;
+      text-align: right;
+    }
+    .daily-bar {
+      flex: 1;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .daily-bar-fill {
+      position: absolute;
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    }
+    .daily-high {
+      font-size: 0.85rem;
+      font-weight: 600;
+      min-width: 28px;
+    }
+
+    /* ── Weather Details Grid ── */
+    .details-section {
+      margin-top: 32px;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .detail-card {
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, var(--dash-card-bg), rgba(255,255,255,0.04));
+      border: 1px solid var(--dash-card-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .detail-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    }
+    .detail-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 14px;
+    }
+    .detail-header svg {
+      opacity: 0.5;
+    }
+    .detail-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--dash-text-secondary);
+      font-weight: 600;
+    }
+    .detail-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .detail-extra {
+      font-size: 0.8rem;
+      color: var(--dash-text-tertiary);
+      font-weight: 400;
+    }
+    .detail-gauge {
+      margin-top: 12px;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .detail-gauge-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s ease;
+    }
+    .detail-gauge-fill.uv {
+      width: 42%;
+      background: linear-gradient(90deg, var(--color-success), var(--color-warning));
+    }
+    .detail-gauge-fill.humidity {
+      width: 64%;
+      background: linear-gradient(90deg, var(--color-secondary), var(--color-primary));
+    }
+    .detail-gauge-fill.pressure {
+      width: 55%;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    }
+
+    /* ── Air Quality ── */
+    .aqi-section {
+      margin-top: 32px;
+    }
+    .aqi-card {
+      padding: 24px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(145deg, var(--dash-card-bg), rgba(255,255,255,0.04));
+      border: 1px solid var(--dash-card-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .aqi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .aqi-value-wrap { display: flex; align-items: baseline; gap: 10px; }
+    .aqi-value {
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .aqi-label-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: rgba(16,185,129,0.15);
+      color: var(--color-success);
+      border: 1px solid rgba(16,185,129,0.25);
+    }
+    .aqi-desc {
+      font-size: 0.88rem;
+      color: var(--dash-text-secondary);
+      max-width: 400px;
+      line-height: 1.5;
+    }
+    .aqi-bar {
+      height: 10px;
+      border-radius: 5px;
+      background: linear-gradient(90deg,
+        #10b981 0%, #10b981 20%,
+        #f59e0b 20%, #f59e0b 40%,
+        #f97316 40%, #f97316 60%,
+        #ef4444 60%, #ef4444 80%,
+        #7c2d12 80%, #7c2d12 100%
+      );
+      position: relative;
+      margin-top: 4px;
+      overflow: visible;
+    }
+    .aqi-marker {
+      position: absolute;
+      top: -5px;
+      width: 20px; height: 20px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transform: translateX(-50%);
+      left: 28%;
+      transition: left 1s ease;
+    }
+    .aqi-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 0.65rem;
+      color: var(--dash-text-tertiary);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Mini Map ── */
+    .map-section {
+      margin-top: 32px;
+    }
+    .map-card {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: var(--dash-card-bg);
+      border: 1px solid var(--dash-card-border);
+      height: 220px;
+      position: relative;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .map-placeholder {
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(99,102,241,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(6,182,212,0.06) 0%, transparent 50%),
+        linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+    }
+    .map-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .map-pin {
+      position: relative;
+      z-index: 1;
+      animation: bounce-pin 2s ease-in-out infinite;
+    }
+    @keyframes bounce-pin {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .map-text {
+      font-size: 0.85rem;
+      color: var(--dash-text-tertiary);
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Sun Times Row ── */
+    .sun-section { margin-top: 32px; }
+    .sun-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 24px 32px;
+      border-radius: var(--radius-xl);
+      background: var(--dash-card-bg);
+      border: 1px solid var(--dash-card-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .sun-item {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .sun-item-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--dash-text-secondary);
+      font-weight: 600;
+    }
+    .sun-item-time {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .sun-arc {
+      flex: 1;
+      max-width: 260px;
+      height: 80px;
+      position: relative;
+      margin: 0 24px;
+    }
+    .sun-arc-path {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .dashboard { padding: 16px 16px 48px; }
+      .hero-temp { font-size: 5rem; }
+      .hero-icon { width: 120px; height: 120px; }
+      .details-grid { grid-template-columns: repeat(2, 1fr); }
+      .daily-row {
+        grid-template-columns: 80px 28px 1fr 40px;
+        padding: 12px 14px;
+        gap: 8px;
+      }
+      .sun-card { flex-wrap: wrap; gap: 16px; padding: 20px; }
+      .sun-arc { max-width: 200px; margin: 0; }
+    }
+    @media (max-width: 480px) {
+      .hero-temp { font-size: 4rem; }
+      .details-grid { grid-template-columns: 1fr; }
+      .detail-card { padding: 16px; }
+      .topbar { flex-wrap: wrap; gap: 8px; }
+      .aqi-top { flex-direction: column; gap: 12px; }
+    }
+
+    /* ── Fade-in animation ── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up {
+      animation: fade-up 0.6s ease-out both;
+    }
+    .fade-up:nth-child(1) { animation-delay: 0.05s; }
+    .fade-up:nth-child(2) { animation-delay: 0.10s; }
+    .fade-up:nth-child(3) { animation-delay: 0.15s; }
+    .fade-up:nth-child(4) { animation-delay: 0.20s; }
+    .fade-up:nth-child(5) { animation-delay: 0.25s; }
+    .fade-up:nth-child(6) { animation-delay: 0.30s; }
+    .fade-up:nth-child(7) { animation-delay: 0.35s; }
+  </style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- ═══════ TOP BAR ═══════ -->
+  <header class="topbar fade-up">
+    <div class="topbar-left">
+      <div class="topbar-location">
+        <!-- Location pin icon -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        San Francisco
+      </div>
+      <span class="topbar-date">Sunday, May 3</span>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" aria-label="Notifications">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </button>
+      <button class="topbar-btn" aria-label="Settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══════ HERO ═══════ -->
+  <section class="hero fade-up">
+    <div class="hero-icon">
+      <div class="sun-glow"></div>
+      <!-- Sun with cloud SVG -->
+      <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+        <!-- Sun -->
+        <circle cx="85" cy="60" r="28" fill="url(#sunGrad)" opacity="0.95"/>
+        <g stroke="url(#sunRayGrad)" stroke-width="3" stroke-linecap="round" opacity="0.6">
+          <line x1="85" y1="16" x2="85" y2="24"/>
+          <line x1="85" y1="96" x2="85" y2="104"/>
+          <line x1="41" y1="60" x2="49" y2="60"/>
+          <line x1="121" y1="60" x2="129" y2="60"/>
+          <line x1="54" y1="29" x2="59.6" y2="34.6"/>
+          <line x1="110.4" y1="85.4" x2="116" y2="91"/>
+          <line x1="116" y1="29" x2="110.4" y2="34.6"/>
+          <line x1="59.6" y1="85.4" x2="54" y2="91"/>
+        </g>
+        <!-- Cloud -->
+        <path d="M50 110c-11 0-20-9-20-20s9-20 20-20c1.5 0 3 .2 4.4.5C58 59.4 67.5 52 79 52c15.5 0 28 12 28.6 27.3C115 80.8 123 90 123 101c0 11-9 20-20 20H50z" fill="url(#cloudGrad)" opacity="0.95"/>
+        <path d="M50 110c-11 0-20-9-20-20s9-20 20-20c1.5 0 3 .2 4.4.5C58 59.4 67.5 52 79 52c15.5 0 28 12 28.6 27.3C115 80.8 123 90 123 101c0 11-9 20-20 20H50z" fill="url(#cloudShine)" opacity="0.3"/>
+        <defs>
+          <radialGradient id="sunGrad" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="#fcd34d"/>
+            <stop offset="100%" stop-color="#f59e0b"/>
+          </radialGradient>
+          <linearGradient id="sunRayGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#fbbf24"/>
+            <stop offset="100%" stop-color="#f59e0b"/>
+          </linearGradient>
+          <linearGradient id="cloudGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#e2e8f0"/>
+            <stop offset="100%" stop-color="#94a3b8"/>
+          </linearGradient>
+          <linearGradient id="cloudShine" x1="0.5" y1="0" x2="0.5" y2="1">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#cbd5e1"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="hero-temp">24<span>°C</span></div>
+    <div class="hero-condition">Partly Cloudy</div>
+    <div class="hero-range">H:<strong>27°</strong>  L:<strong>18°</strong></div>
+  </section>
+
+  <!-- ═══════ HOURLY FORECAST ═══════ -->
+  <section class="fade-up" style="animation-delay:0.2s">
+    <div class="section-label">Hourly Forecast</div>
+    <div class="hourly-scroll" id="hourlyScroll">
+
+      <div class="hourly-card">
+        <span class="hourly-time">Now</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="12" r="5" fill="#fbbf24"/>
+          <path d="M7 22c-2.5 0-4.5-2-4.5-4.5S4.5 13 7 13c.3 0 .7 0 1 .1C9 9.6 11.2 7.5 14 7.5c3.3 0 6 2.5 6.5 5.7.3-.1.6-.2 1-.2 2.5 0 4.5 2 4.5 4.5S24.3 22 21.8 22H7z" fill="#e2e8f0" opacity="0.9"/>
+        </svg>
+        <span class="hourly-temp">24°</span>
+      </div>
+
+      <div class="hourly-card active">
+        <span class="hourly-time">1 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="12" r="5" fill="#fbbf24"/>
+          <path d="M7 22c-2.5 0-4.5-2-4.5-4.5S4.5 13 7 13c.3 0 .7 0 1 .1C9 9.6 11.2 7.5 14 7.5c3.3 0 6 2.5 6.5 5.7.3-.1.6-.2 1-.2 2.5 0 4.5 2 4.5 4.5S24.3 22 21.8 22H7z" fill="#e2e8f0" opacity="0.9"/>
+        </svg>
+        <span class="hourly-temp">24°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">2 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="12" r="5" fill="#fbbf24"/>
+          <path d="M7 22c-2.5 0-4.5-2-4.5-4.5S4.5 13 7 13c.3 0 .7 0 1 .1C9 9.6 11.2 7.5 14 7.5c3.3 0 6 2.5 6.5 5.7.3-.1.6-.2 1-.2 2.5 0 4.5 2 4.5 4.5S24.3 22 21.8 22H7z" fill="#e2e8f0" opacity="0.9"/>
+        </svg>
+        <span class="hourly-temp">25°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">3 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="11" r="5.5" fill="#fbbf24" opacity="0.8"/>
+          <path d="M6 22c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C8 10.3 10.7 8 14 8c3.8 0 7 3 7.3 6.7.3-.1.6-.2 1-.2 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#94a3b8" opacity="0.95"/>
+        </svg>
+        <span class="hourly-temp">25°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">4 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M6 22c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C8 10.3 10.7 8 14 8c3.8 0 7 3 7.3 6.7.3-.1.6-.2 1-.2 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#94a3b8"/>
+        </svg>
+        <span class="hourly-temp">23°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">5 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M6 22c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C8 10.3 10.7 8 14 8c3.8 0 7 3 7.3 6.7.3-.1.6-.2 1-.2 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#64748b"/>
+          <line x1="9" y1="24" x2="7" y2="28" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="14" y1="24" x2="12" y2="28" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="19" y1="24" x2="17" y2="28" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+        <span class="hourly-temp">21°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">6 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M6 20c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C8 8.3 10.7 6 14 6c3.8 0 7 3 7.3 6.7.3-.1.6-.2 1-.2 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#475569"/>
+          <line x1="8" y1="22" x2="6" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="12" y1="22" x2="10" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="16" y1="22" x2="14" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="20" y1="22" x2="18" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="hourly-temp">19°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">7 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M6 20c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C8 8.3 10.7 6 14 6c3.8 0 7 3 7.3 6.7.3-.1.6-.2 1-.2 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#475569"/>
+          <line x1="8" y1="22" x2="6" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="14" y1="22" x2="12" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="20" y1="22" x2="18" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="hourly-temp">18°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">8 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M6 20c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C8 8.3 10.7 6 14 6c3.8 0 7 3 7.3 6.7.3-.1.6-.2 1-.2 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#334155"/>
+        </svg>
+        <span class="hourly-temp">17°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">9 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M6 20c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C8 8.3 10.7 6 14 6c3.8 0 7 3 7.3 6.7.3-.1.6-.2 1-.2 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#334155"/>
+        </svg>
+        <span class="hourly-temp">16°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">10 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="5" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.5"/>
+          <path d="M14 6a8 8 0 0 0 0 16" fill="#94a3b8" opacity="0.4"/>
+          <path d="M6 18c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C7.5 6.8 10.5 5 14 5c4 0 7.2 3.2 7.5 7.1.3-.1.7-.1 1-.1 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#475569" opacity="0.6"/>
+        </svg>
+        <span class="hourly-temp">15°</span>
+      </div>
+
+      <div class="hourly-card">
+        <span class="hourly-time">11 PM</span>
+        <svg class="hourly-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="5" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.5"/>
+          <path d="M14 6a8 8 0 0 0 0 16" fill="#94a3b8" opacity="0.4"/>
+          <path d="M6 18c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C7.5 6.8 10.5 5 14 5c4 0 7.2 3.2 7.5 7.1.3-.1.7-.1 1-.1 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#334155" opacity="0.7"/>
+        </svg>
+        <span class="hourly-temp">14°</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════ 7-DAY FORECAST ═══════ -->
+  <section class="daily-section fade-up" style="animation-delay:0.3s">
+    <div class="section-label">7-Day Forecast</div>
+    <div class="daily-grid">
+
+      <div class="daily-row">
+        <span class="daily-day">Today</span>
+        <svg class="daily-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="12" r="5" fill="#fbbf24" opacity="0.8"/>
+          <path d="M7 22c-2.5 0-4.5-2-4.5-4.5S4.5 13 7 13c.3 0 .7 0 1 .1C9 9.6 11.2 7.5 14 7.5c3.3 0 6 2.5 6.5 5.7.3-.1.6-.2 1-.2 2.5 0 4.5 2 4.5 4.5S24.3 22 21.8 22H7z" fill="#e2e8f0" opacity="0.9"/>
+        </svg>
+        <div class="daily-bar-wrap">
+          <span class="daily-low">18°</span>
+          <div class="daily-bar"><div class="daily-bar-fill" style="left:20%;width:55%"></div></div>
+          <span class="daily-high">27°</span>
+        </div>
+      </div>
+
+      <div class="daily-row">
+        <span class="daily-day">Mon</span>
+        <svg class="daily-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M6 22c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C8 10.3 10.7 8 14 8c3.8 0 7 3 7.3 6.7.3-.1.6-.2 1-.2 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#94a3b8"/>
+        </svg>
+        <div class="daily-bar-wrap">
+          <span class="daily-low">16°</span>
+          <div class="daily-bar"><div class="daily-bar-fill" style="left:15%;width:50%"></div></div>
+          <span class="daily-high">23°</span>
+        </div>
+      </div>
+
+      <div class="daily-row">
+        <span class="daily-day">Tue</span>
+        <svg class="daily-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M6 20c-2.2 0-4-1.8-4-4s1.8-4 4-4c.3 0 .5 0 .8.1C8 8.3 10.7 6 14 6c3.8 0 7 3 7.3 6.7.3-.1.6-.2 1-.2 2.2 0 4 1.8 4 4s-1.8 4-4 4H6z" fill="#475569"/>
+          <line x1="8" y1="22" x2="6" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="14" y1="22" x2="12" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="20" y1="22" x2="18" y2="26" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="daily-bar-wrap">
+          <span class="daily-low">14°</span>
+          <div class="daily-bar"><div class="daily-bar-fill" style="left:10%;width:45%"></div></div>
+          <span class="daily-high">20°</span>
+        </div>
+      </div>
+
+      <div class="daily-row">
+        <span class="daily-day">Wed</span>
+        <svg class="daily-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="12" r="5.5" fill="#fbbf24"/>
+          <g stroke="#fbbf24" stroke-width="2" stroke-linecap="round">
+            <line x1="14" y1="2" x2="14" y2="5"/>
+            <line x1="14" y1="19" x2="14" y2="22"/>
+            <line x1="4" y1="12" x2="7" y2="12"/>
+            <line x1="21" y1="12" x2="24" y2="12"/>
+          </g>
+        </svg>
+        <div class="daily-bar-wrap">
+          <span class="daily-low">15°</span>
+          <div class="daily-bar"><div class="daily-bar-fill" style="left:12%;width:55%"></div></div>
+          <span class="daily-high">26°</span>
+        </div>
+      </div>
+
+      <div class="daily-row">
+        <span class="daily-day">Thu</span>
+        <svg class="daily-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="12" r="5.5" fill="#fbbf24"/>
+          <g stroke="#fbbf24" stroke-width="2" stroke-linecap="round">
+            <line x1="14" y1="2" x2="14" y2="5"/>
+            <line x1="14" y1="19" x2="14" y2="22"/>
+            <line x1="4" y1="12" x2="7" y2="12"/>
+            <line x1="21" y1="12" x2="24" y2="12"/>
+          </g>
+        </svg>
+        <div class="daily-bar-wrap">
+          <span class="daily-low">17°</span>
+          <div class="daily-bar"><div class="daily-bar-fill" style="left:18%;width:60%"></div></div>
+          <span class="daily-high">28°</span>
+        </div>
+      </div>
+
+      <div class="daily-row">
+        <span class="daily-day">Fri</span>
+        <svg class="daily-icon" viewBox="0 0 28 28" fill="none">
+          <path d="M7 22c-2.5 0-4.5-2-4.5-4.5S4.5 13 7 13c.3 0 .7 0 1 .1C9 9.6 11.2 7.5 14 7.5c3.3 0 6 2.5 6.5 5.7.3-.1.6-.2 1-.2 2.5 0 4.5 2 4.5 4.5S24.3 22 21.8 22H7z" fill="#e2e8f0"/>
+        </svg>
+        <div class="daily-bar-wrap">
+          <span class="daily-low">16°</span>
+          <div class="daily-bar"><div class="daily-bar-fill" style="left:14%;width:48%"></div></div>
+          <span class="daily-high">22°</span>
+        </div>
+      </div>
+
+      <div class="daily-row">
+        <span class="daily-day">Sat</span>
+        <svg class="daily-icon" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="12" r="5" fill="#fbbf24" opacity="0.8"/>
+          <path d="M7 22c-2.5 0-4.5-2-4.5-4.5S4.5 13 7 13c.3 0 .7 0 1 .1C9 9.6 11.2 7.5 14 7.5c3.3 0 6 2.5 6.5 5.7.3-.1.6-.2 1-.2 2.5 0 4.5 2 4.5 4.5S24.3 22 21.8 22H7z" fill="#e2e8f0" opacity="0.9"/>
+        </svg>
+        <div class="daily-bar-wrap">
+          <span class="daily-low">18°</span>
+          <div class="daily-bar"><div class="daily-bar-fill" style="left:22%;width:52%"></div></div>
+          <span class="daily-high">25°</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════ WEATHER DETAILS ═══════ -->
+  <section class="details-section fade-up" style="animation-delay:0.35s">
+    <div class="section-label">Weather Details</div>
+    <div class="details-grid">
+
+      <!-- UV Index -->
+      <div class="detail-card">
+        <div class="detail-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"/>
+            <line x1="12" y1="1" x2="12" y2="4"/>
+            <line x1="12" y1="20" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+            <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="4" y2="12"/>
+            <line x1="20" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+            <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+          </svg>
+          <span class="detail-label">UV Index</span>
+        </div>
+        <div class="detail-value">5</div>
+        <div class="detail-extra">Moderate</div>
+        <div class="detail-gauge">
+          <div class="detail-gauge-fill uv"></div>
+        </div>
+      </div>
+
+      <!-- Wind -->
+      <div class="detail-card">
+        <div class="detail-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>
+          </svg>
+          <span class="detail-label">Wind</span>
+        </div>
+        <div class="detail-value">18 <span style="font-size:0.9rem;font-weight:400;opacity:0.6">km/h</span></div>
+        <div class="detail-extra">WSW • Gusts 28 km/h</div>
+      </div>
+
+      <!-- Humidity -->
+      <div class="detail-card">
+        <div class="detail-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+          <span class="detail-label">Humidity</span>
+        </div>
+        <div class="detail-value">64<span style="font-size:0.9rem;font-weight:400;opacity:0.6">%</span></div>
+        <div class="detail-extra">Dew point: 17°</div>
+        <div class="detail-gauge">
+          <div class="detail-gauge-fill humidity"></div>
+        </div>
+      </div>
+
+      <!-- Visibility -->
+      <div class="detail-card">
+        <div class="detail-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span class="detail-label">Visibility</span>
+        </div>
+        <div class="detail-value">16 <span style="font-size:0.9rem;font-weight:400;opacity:0.6">km</span></div>
+        <div class="detail-extra">Crystal clear</div>
+      </div>
+
+      <!-- Pressure -->
+      <div class="detail-card">
+        <div class="detail-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span class="detail-label">Pressure</span>
+        </div>
+        <div class="detail-value">1013 <span style="font-size:0.75rem;font-weight:400;opacity:0.6">hPa</span></div>
+        <div class="detail-extra">Normal</div>
+        <div class="detail-gauge">
+          <div class="detail-gauge-fill pressure"></div>
+        </div>
+      </div>
+
+      <!-- Feels Like -->
+      <div class="detail-card">
+        <div class="detail-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+          </svg>
+          <span class="detail-label">Feels Like</span>
+        </div>
+        <div class="detail-value">22<span>°</span></div>
+        <div class="detail-extra">Slightly cooler than actual</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════ AIR QUALITY ═══════ -->
+  <section class="aqi-section fade-up" style="animation-delay:0.4s">
+    <div class="section-label">Air Quality Index</div>
+    <div class="aqi-card">
+      <div class="aqi-top">
+        <div>
+          <div class="aqi-value-wrap">
+            <span class="aqi-value">28</span>
+            <span class="aqi-label-badge">Good</span>
+          </div>
+          <p class="aqi-desc" style="margin-top:12px">
+            Air quality is satisfactory. Air pollution poses little or no risk. Enjoy outdoor activities freely.
+          </p>
+        </div>
+      </div>
+      <div class="aqi-bar">
+        <div class="aqi-marker"></div>
+      </div>
+      <div class="aqi-labels">
+        <span>Good</span>
+        <span>Fair</span>
+        <span>Moderate</span>
+        <span>Poor</span>
+        <span>Hazardous</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ SUN TIMES ═══════ -->
+  <section class="sun-section fade-up" style="animation-delay:0.45s">
+    <div class="section-label">Sunrise &amp; Sunset</div>
+    <div class="sun-card">
+      <div class="sun-item">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round">
+          <path d="M17 18a5 5 0 0 0-10 0"/>
+          <line x1="12" y1="9" x2="12" y2="2"/>
+          <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/>
+          <line x1="1" y1="18" x2="3" y2="18"/>
+          <line x1="21" y1="18" x2="23" y2="18"/>
+          <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/>
+          <line x1="23" y1="22" x2="1" y2="22"/>
+          <polyline points="8 6 12 2 16 6"/>
+        </svg>
+        <span class="sun-item-label">Sunrise</span>
+        <span class="sun-item-time">6:12 AM</span>
+      </div>
+
+      <div class="sun-arc">
+        <svg class="sun-arc-path" viewBox="0 0 260 80" fill="none">
+          <defs>
+            <linearGradient id="arcGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.1"/>
+              <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#6366f1" stop-opacity="0.1"/>
+            </linearGradient>
+          </defs>
+          <!-- Arc background -->
+          <path d="M10 75 Q130 -20 250 75" stroke="rgba(255,255,255,0.08)" stroke-width="2" fill="none" stroke-dasharray="4,4"/>
+          <!-- Arc progress -->
+          <path d="M10 75 Q130 -20 250 75" stroke="url(#arcGrad)" stroke-width="2.5" fill="none" stroke-dasharray="200" stroke-dashoffset="120"/>
+          <!-- Sun position on arc -->
+          <circle cx="105" cy="30" r="8" fill="#fbbf24" opacity="0.9"/>
+          <circle cx="105" cy="30" r="14" fill="#fbbf24" opacity="0.15"/>
+          <!-- Horizon line -->
+          <line x1="10" y1="75" x2="250" y2="75" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        </svg>
+      </div>
+
+      <div class="sun-item">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round">
+          <path d="M17 18a5 5 0 0 0-10 0"/>
+          <line x1="12" y1="9" x2="12" y2="2"/>
+          <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/>
+          <line x1="1" y1="18" x2="3" y2="18"/>
+          <line x1="21" y1="18" x2="23" y2="18"/>
+          <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/>
+          <line x1="23" y1="22" x2="1" y2="22"/>
+          <polyline points="16 6 12 10 8 6"/>
+        </svg>
+        <span class="sun-item-label">Sunset</span>
+        <span class="sun-item-time">8:04 PM</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ MINI MAP ═══════ -->
+  <section class="map-section fade-up" style="animation-delay:0.5s">
+    <div class="section-label">Location Map</div>
+    <div class="map-card">
+      <div class="map-placeholder">
+        <div class="map-grid"></div>
+        <div class="map-pin">
+          <svg width="36" height="48" viewBox="0 0 36 48" fill="none">
+            <path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 30 18 30s18-16.5 18-30C36 8.06 27.94 0 18 0z" fill="url(#pinGrad)"/>
+            <circle cx="18" cy="18" r="8" fill="white" opacity="0.9"/>
+            <circle cx="18" cy="18" r="4" fill="url(#pinGrad)"/>
+            <defs>
+              <linearGradient id="pinGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#818cf8"/>
+                <stop offset="100%" stop-color="#6366f1"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="map-text">San Francisco, CA • 37.7749°N, 122.4194°W</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═══════ Minimal JS for interactions ═══════ -->
+<script>
+  // Hourly scroll: highlight clicked card
+  document.querySelectorAll('.hourly-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.hourly-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    });
+  });
+
+  // Animate detail gauge fills on scroll into view
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.detail-gauge-fill').forEach(fill => {
+          fill.style.width = fill.style.width || '0%';
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.details-grid').forEach(el => observer.observe(el));
+
+  // Parallax subtle effect on hero icon
+  const heroIcon = document.querySelector('.hero-icon');
+  if (heroIcon) {
+    window.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 12;
+      const y = (e.clientY / window.innerHeight - 0.5) * 8;
+      heroIcon.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  }
+</script>
+
+</body>
+</html>
