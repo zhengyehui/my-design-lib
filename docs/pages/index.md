@@ -297,6 +297,24 @@ const pages = [
     colors: ['#ffffff', '#6366f1', '#e2e8f0'],
     rating: 9.3,
     description: 'SaaS 产品更新日志，左侧时间线 + 标签筛选 + 搜索过滤 + 版本卡片展开折叠 + 彩色变更徽章',
+  },
+  {
+    id: 'edu-platform',
+    title: 'LearnHub 在线学习平台',
+    category: 'education',
+    tags: ['在线教育', '课程', '学习路径', '讲师'],
+    colors: ['#0d9488', '#6366f1', '#f0fdfa'],
+    rating: 9.4,
+    description: '现代在线学习平台，搜索栏 + 课程网格 + 学习路径 + 讲师展示 + 进度追踪',
+  },
+  {
+    id: 'travel-booking',
+    title: 'Voyager 旅行预订',
+    category: 'travel',
+    tags: ['旅行', '预订', '奢华', '目的地'],
+    colors: ['#0c1445', '#e8614d', '#c9a96e'],
+    rating: 9.5,
+    description: '沉浸式旅行预订平台，星空动画 Hero + 毛玻璃搜索框 + 目的地网格 + 套餐定价',
   }
 ]
 
@@ -314,7 +332,9 @@ const categories = [
   { id: 'docs', label: '文档', icon: '📖' },
   { id: 'careers', label: '招聘', icon: '💼' },
   { id: 'real-estate', label: '房产', icon: '🏠' },
-  { id: 'editorial', label: '杂志', icon: '📰' }
+  { id: 'editorial', label: '杂志', icon: '📰' },
+  { id: 'education', label: '教育', icon: '📚' },
+  { id: 'travel', label: '旅行', icon: '✈️' }
 ]
 
 const activeCategory = ref('all')
@@ -333,7 +353,7 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-  <meta name="description" content="My Design Lib 页面灵感画廊 — 5 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商结账、404 创意页。可预览、看源码、学设计。">
+  <meta name="description" content="My Design Lib 页面灵感画廊 — 30 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商结账、404 创意页、在线教育、旅行预订等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">

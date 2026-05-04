@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，5 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，30 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -336,6 +336,20 @@ export default defineConfig({
           collapsed: true,
           items: [
             { text: 'Mono Journal 杂志', link: '/pages/magazine-editorial' }
+          ]
+        },
+        {
+          text: '📚 在线教育',
+          collapsed: true,
+          items: [
+            { text: 'LearnHub 在线学习', link: '/pages/edu-platform' }
+          ]
+        },
+        {
+          text: '✈️ 旅行与预订',
+          collapsed: true,
+          items: [
+            { text: 'Voyager 旅行预订', link: '/pages/travel-booking' }
           ]
         }
       ]
