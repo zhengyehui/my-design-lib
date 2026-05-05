@@ -315,7 +315,25 @@ const pages = [
     colors: ['#0c1445', '#e8614d', '#c9a96e'],
     rating: 9.5,
     description: '沉浸式旅行预订平台，星空动画 Hero + 毛玻璃搜索框 + 目的地网格 + 套餐定价',
-  }
+  },
+  {
+    id: 'crypto-web3',
+    title: 'NovaChain Web3 DeFi 落地页',
+    category: 'web3',
+    tags: ['Web3', 'DeFi', '暗色主题', '加密货币'],
+    colors: ['#050510', '#06b6d4', '#8b5cf6'],
+    rating: 9.5,
+    description: 'Web3 DeFi 产品落地页，暗色太空底 + 霓虹光球动画 + Token 数据展示 + 路线图 + Marquee 合作伙伴',
+  },
+  {
+    id: 'newsletter-landing',
+    title: 'The Signal Newsletter 落地页',
+    category: 'newsletter',
+    tags: ['Newsletter', '内容创作', '极简', '订阅'],
+    colors: ['#fafaf9', '#6366f1', '#ec4899'],
+    rating: 9.4,
+    description: '现代 Newsletter 订阅落地页，渐变文字标题 + 邮箱表单 + 往期精选 + 读者评价 + 暗色 CTA',
+  },
 ]
 
 const categories = [
@@ -334,7 +352,9 @@ const categories = [
   { id: 'real-estate', label: '房产', icon: '🏠' },
   { id: 'editorial', label: '杂志', icon: '📰' },
   { id: 'education', label: '教育', icon: '📚' },
-  { id: 'travel', label: '旅行', icon: '✈️' }
+  { id: 'travel', label: '旅行', icon: '✈️' },
+  { id: 'web3', label: 'Web3', icon: '⛓️' },
+  { id: 'newsletter', label: 'Newsletter', icon: '📬' }
 ]
 
 const activeCategory = ref('all')

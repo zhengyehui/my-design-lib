@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Signal — Newsletter Landing</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  background: #fafaf9;
+  color: #1a1a1a;
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Nav ── */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+.nav-logo {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: #1a1a1a;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-logo span {
+  display: inline-flex;
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  border-radius: 6px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #64748b;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  transition: color var(--duration-fast);
+}
+
+.nav-links a:hover {
+  color: #1a1a1a;
+}
+
+/* ── Hero ── */
+.hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem 5rem;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #6366f1;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #0f172a;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: var(--text-xl);
+  color: #64748b;
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  line-height: var(--leading-relaxed);
+}
+
+/* Email form */
+.email-form {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 460px;
+  margin: 0 auto 1rem;
+}
+
+.email-input {
+  flex: 1;
+  padding: 0.875rem 1.25rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-family: var(--font-sans);
+  background: #fff;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color var(--duration-fast);
+}
+
+.email-input:focus {
+  border-color: #6366f1;
+}
+
+.email-input::placeholder {
+  color: #94a3b8;
+}
+
+.email-btn {
+  padding: 0.875rem 1.75rem;
+  background: #0f172a;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--duration-normal);
+}
+
+.email-btn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+.hero-note {
+  font-size: var(--text-sm);
+  color: #94a3b8;
+}
+
+.hero-note strong {
+  color: #64748b;
+}
+
+/* ── Social Proof ── */
+.social-proof {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  flex-wrap: wrap;
+}
+
+.avatar-stack {
+  display: flex;
+}
+
+.avatar-stack .avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2.5px solid #fafaf9;
+  margin-left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: #fff;
+}
+
+.avatar-stack .avatar:first-child { margin-left: 0; }
+.avatar-stack .avatar:nth-child(1) { background: #6366f1; z-index: 5; }
+.avatar-stack .avatar:nth-child(2) { background: #ec4899; z-index: 4; }
+.avatar-stack .avatar:nth-child(3) { background: #06b6d4; z-index: 3; }
+.avatar-stack .avatar:nth-child(4) { background: #f59e0b; z-index: 2; }
+.avatar-stack .avatar:nth-child(5) { background: #10b981; z-index: 1; }
+
+.social-proof-text {
+  font-size: var(--text-sm);
+  color: #64748b;
+}
+
+.social-proof-text strong {
+  color: #1a1a1a;
+}
+
+/* ── Features ── */
+.features {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.features-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.features-header h2 {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.features-header p {
+  color: #64748b;
+  font-size: var(--text-lg);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: all var(--duration-normal);
+}
+
+.feature-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.feature-emoji {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.feature-card h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  font-size: var(--text-sm);
+  color: #64748b;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Featured Issues ── */
+.issues {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.issues-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.issues-header h2 {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.issues-header p {
+  color: #64748b;
+  font-size: var(--text-lg);
+}
+
+.issues-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.issue-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--duration-normal);
+}
+
+.issue-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.issue-cover {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  position: relative;
+}
+
+.issue-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.03));
+}
+
+.issue-cover.c1 { background: linear-gradient(135deg, #ede9fe, #e0e7ff); }
+.issue-cover.c2 { background: linear-gradient(135deg, #fce7f3, #ede9fe); }
+.issue-cover.c3 { background: linear-gradient(135deg, #e0f2fe, #ecfdf5); }
+.issue-cover.c4 { background: linear-gradient(135deg, #fef3c7, #fce7f3); }
+
+.issue-body {
+  padding: 1.5rem;
+}
+
+.issue-number {
+  font-size: var(--text-xs);
+  color: #6366f1;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.issue-body h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.issue-body p {
+  font-size: var(--text-sm);
+  color: #64748b;
+  line-height: var(--leading-relaxed);
+  margin-bottom: 1rem;
+}
+
+.issue-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-xs);
+  color: #94a3b8;
+}
+
+.issue-read-time {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ── Testimonials ── */
+.testimonials {
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 5rem 2rem;
+}
+
+.testimonials-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.testimonials-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.testimonials-header h2 {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  padding: 1.5rem;
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-lg);
+  border: 1px solid #e2e8f0;
+}
+
+.testimonial-quote {
+  font-size: var(--text-sm);
+  color: #475569;
+  line-height: var(--leading-relaxed);
+  margin-bottom: 1.25rem;
+  font-style: italic;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.testimonial-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.testimonial-name {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #0f172a;
+}
+
+.testimonial-role {
+  font-size: var(--text-xs);
+  color: #94a3b8;
+}
+
+/* ── Stats ── */
+.stats {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-bold);
+  color: #0f172a;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: var(--text-sm);
+  color: #64748b;
+}
+
+/* ── Final CTA ── */
+.final-cta {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 2rem 6rem;
+  text-align: center;
+}
+
+.final-cta-box {
+  background: #0f172a;
+  border-radius: var(--radius-xl);
+  padding: 4rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.final-cta-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #ec4899, #06b6d4);
+}
+
+.final-cta-box h2 {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.final-cta-box p {
+  color: #94a3b8;
+  font-size: var(--text-lg);
+  max-width: 400px;
+  margin: 0 auto 2rem;
+}
+
+.final-cta .email-form {
+  max-width: 420px;
+}
+
+.final-cta .email-input {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.final-cta .email-input::placeholder {
+  color: #64748b;
+}
+
+.final-cta .email-input:focus {
+  border-color: #6366f1;
+}
+
+.final-cta .email-btn {
+  background: #6366f1;
+}
+
+.final-cta .email-btn:hover {
+  background: #818cf8;
+}
+
+/* ── Footer ── */
+.footer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #94a3b8;
+  font-size: var(--text-sm);
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-links a {
+  color: #64748b;
+  text-decoration: none;
+  transition: color var(--duration-fast);
+}
+
+.footer-links a:hover {
+  color: #1a1a1a;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .features-grid,
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .issues-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .email-form { flex-direction: column; }
+  .footer { flex-direction: column; gap: 1rem; text-align: center; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <span>S</span>
+    The Signal
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Archive</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Sponsor</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-eyebrow">📬 Free Weekly Newsletter</div>
+  <h1>Design & Tech Insights,<br><em>Delivered Weekly</em></h1>
+  <p class="hero-subtitle">Curated stories on design systems, front-end engineering, and the tools shaping the future of the web.</p>
+  <form class="email-form" onsubmit="event.preventDefault()">
+    <input type="email" class="email-input" placeholder="your@email.com">
+    <button class="email-btn" type="submit">Subscribe</button>
+  </form>
+  <p class="hero-note">Join <strong>12,400+</strong> readers · Free forever · No spam</p>
+</section>
+
+<!-- Social Proof -->
+<div class="social-proof">
+  <div class="avatar-stack">
+    <div class="avatar">A</div>
+    <div class="avatar">K</div>
+    <div class="avatar">M</div>
+    <div class="avatar">J</div>
+    <div class="avatar">+</div>
+  </div>
+  <p class="social-proof-text">Read by designers at <strong>Stripe</strong>, <strong>Vercel</strong>, <strong>Figma</strong>, and <strong>Linear</strong></p>
+</div>
+
+<!-- Features -->
+<section class="features">
+  <div class="features-header">
+    <h2>What You'll Get</h2>
+    <p>Every Tuesday morning, in your inbox</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-emoji">🎨</span>
+      <h3>Design Deep-Dives</h3>
+      <p>Analysis of the best interfaces on the web — what works, what doesn't, and why.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">🛠️</span>
+      <h3>Tool Reviews</h3>
+      <p>Honest reviews of new design tools, frameworks, and developer utilities.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">💡</span>
+      <h3>Pro Tips</h3>
+      <p>Actionable tips and tricks from senior designers and engineers in the industry.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Issues -->
+<section class="issues">
+  <div class="issues-header">
+    <h2>Recent Issues</h2>
+    <p>A taste of what's inside</p>
+  </div>
+  <div class="issues-grid">
+    <div class="issue-card">
+      <div class="issue-cover c1">🎨</div>
+      <div class="issue-body">
+        <div class="issue-number">Issue #142</div>
+        <h3>Why Design Systems Fail (And How to Fix Yours)</h3>
+        <p>A deep analysis of the 5 most common reasons design systems break down, with practical solutions from teams at Airbnb and Shopify.</p>
+        <div class="issue-meta">
+          <span>Apr 29, 2026</span>
+          <span class="issue-read-time">📖 8 min read</span>
+        </div>
+      </div>
+    </div>
+    <div class="issue-card">
+      <div class="issue-cover c2">⚡</div>
+      <div class="issue-body">
+        <div class="issue-number">Issue #141</div>
+        <h3>The Death of Loading Spinners</h3>
+        <p>Why skeleton screens, optimistic UI, and instant feedback patterns are replacing traditional loading indicators everywhere.</p>
+        <div class="issue-meta">
+          <span>Apr 22, 2026</span>
+          <span class="issue-read-time">📖 6 min read</span>
+        </div>
+      </div>
+    </div>
+    <div class="issue-card">
+      <div class="issue-cover c3">🔮</div>
+      <div class="issue-body">
+        <div class="issue-number">Issue #140</div>
+        <h3>CSS Has Changed: The 2026 Feature Roundup</h3>
+        <p>Scroll-driven animations, container queries in production, and 12 other CSS features you should be using right now.</p>
+        <div class="issue-meta">
+          <span>Apr 15, 2026</span>
+          <span class="issue-read-time">📖 10 min read</span>
+        </div>
+      </div>
+    </div>
+    <div class="issue-card">
+      <div class="issue-cover c4">🚀</div>
+      <div class="issue-body">
+        <div class="issue-number">Issue #139</div>
+        <h3>From Figma to Production in 10 Minutes</h3>
+        <p>A step-by-step guide to shipping pixel-perfect designs using modern AI-assisted development workflows.</p>
+        <div class="issue-meta">
+          <span>Apr 8, 2026</span>
+          <span class="issue-read-time">📖 7 min read</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="testimonials-header">
+      <h2>What Readers Say</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"The only newsletter I actually read every single week. The design deep-dives are incredibly insightful."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: #6366f1">S</div>
+          <div>
+            <div class="testimonial-name">Sarah Chen</div>
+            <div class="testimonial-role">Design Lead @ Stripe</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"I've recommended The Signal to our entire engineering team. The tool reviews alone save us hours of research."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: #ec4899">M</div>
+          <div>
+            <div class="testimonial-name">Marcus Rivera</div>
+            <div class="testimonial-role">CTO @ Launchpad</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"Clean, concise, and always relevant. This is how newsletters should be done. Quality over quantity, every time."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: #06b6d4">A</div>
+          <div>
+            <div class="testimonial-name">Aiko Tanaka</div>
+            <div class="testimonial-role">Product Designer @ Figma</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div>
+    <div class="stat-value">12.4K</div>
+    <div class="stat-label">Subscribers</div>
+  </div>
+  <div>
+    <div class="stat-value">142</div>
+    <div class="stat-label">Issues Published</div>
+  </div>
+  <div>
+    <div class="stat-value">68%</div>
+    <div class="stat-label">Open Rate</div>
+  </div>
+  <div>
+    <div class="stat-value">4.9★</div>
+    <div class="stat-label">Reader Rating</div>
+  </div>
+</div>
+
+<!-- Final CTA -->
+<section class="final-cta">
+  <div class="final-cta-box">
+    <h2>Don't Miss the Next Issue</h2>
+    <p>Get design insights that actually matter, delivered to your inbox every Tuesday.</p>
+    <form class="email-form" onsubmit="event.preventDefault()">
+      <input type="email" class="email-input" placeholder="your@email.com">
+      <button class="email-btn" type="submit">Subscribe Free</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2026 The Signal</p>
+  <div class="footer-links">
+    <a href="#">Twitter</a>
+    <a href="#">RSS</a>
+    <a href="#">Privacy</a>
+  </div>
+</footer>
+
+</body>
+</html>

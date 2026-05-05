@@ -351,6 +351,20 @@ export default defineConfig({
           items: [
             { text: 'Voyager 旅行预订', link: '/pages/travel-booking' }
           ]
+        },
+        {
+          text: '⛓️ Web3 与加密',
+          collapsed: true,
+          items: [
+            { text: 'NovaChain Web3 DeFi', link: '/pages/crypto-web3' }
+          ]
+        },
+        {
+          text: '📬 Newsletter',
+          collapsed: true,
+          items: [
+            { text: 'The Signal 订阅页', link: '/pages/newsletter-landing' }
+          ]
         }
       ]
     },
