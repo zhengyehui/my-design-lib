@@ -334,6 +334,15 @@ const pages = [
     rating: 9.4,
     description: '现代 Newsletter 订阅落地页，渐变文字标题 + 邮箱表单 + 往期精选 + 读者评价 + 暗色 CTA',
   },
+  {
+    id: 'fashion-brand',
+    title: 'Maison Élégance 时尚品牌',
+    category: 'fashion',
+    tags: ['时尚', '奢侈品', '品牌', '衬线字体'],
+    colors: ['#faf8f5', '#1a1a1a', '#b8956a'],
+    rating: 9.4,
+    description: '奢华时尚品牌官网，Playfair Display 衬线字体 + 暖色奶油底 + 产品横向滚动 + 匠心工艺分栏',
+  },
 ]
 
 const categories = [
@@ -354,7 +363,8 @@ const categories = [
   { id: 'education', label: '教育', icon: '📚' },
   { id: 'travel', label: '旅行', icon: '✈️' },
   { id: 'web3', label: 'Web3', icon: '⛓️' },
-  { id: 'newsletter', label: 'Newsletter', icon: '📬' }
+  { id: 'newsletter', label: 'Newsletter', icon: '📬' },
+  { id: 'fashion', label: '时尚', icon: '👗' }
 ]
 
 const activeCategory = ref('all')

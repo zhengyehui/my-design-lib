@@ -365,6 +365,13 @@ export default defineConfig({
           items: [
             { text: 'The Signal 订阅页', link: '/pages/newsletter-landing' }
           ]
+        },
+        {
+          text: '👗 时尚品牌',
+          collapsed: true,
+          items: [
+            { text: 'Maison Élégance 时尚品牌', link: '/pages/fashion-brand' }
+          ]
         }
       ]
     },
