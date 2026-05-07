@@ -300,7 +300,8 @@ export default defineConfig({
           collapsed: true,
           items: [
             { text: 'VitalFit 健身追踪', link: '/pages/fitness-app' },
-            { text: 'SkyPulse 天气仪表盘', link: '/pages/weather-dashboard' }
+            { text: 'SkyPulse 天气仪表盘', link: '/pages/weather-dashboard' },
+            { text: 'NeoBank 数字银行', link: '/pages/fintech-app' }
           ]
         },
         {
@@ -371,6 +372,13 @@ export default defineConfig({
           collapsed: true,
           items: [
             { text: 'Maison Élégance 时尚品牌', link: '/pages/fashion-brand' }
+          ]
+        },
+        {
+          text: '🎙️ 播客',
+          collapsed: true,
+          items: [
+            { text: 'SoundWave 播客频道', link: '/pages/podcast-show' }
           ]
         }
       ]

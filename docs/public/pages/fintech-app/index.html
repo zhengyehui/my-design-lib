@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeoBank — The Future of Banking</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --nb-primary:var(--color-primary,#6366f1);--nb-teal:#00c9a7;--nb-indigo:#6366f1;--nb-rose:#f43f5e;
+  --nb-text:#111827;--nb-text2:var(--color-text-secondary,#475569);--nb-muted:var(--color-text-muted,#94a3b8);
+  --nb-surface:var(--color-bg,#ffffff);--nb-surface2:var(--color-bg-subtle,#f8fafc);--nb-surface3:#f3f4f6;
+  --nb-border:var(--border-color,#e2e8f0);--nb-radius:var(--radius-lg,12px);--nb-radius-sm:var(--radius-sm,6px);
+  --nb-radius-xl:var(--radius-xl,20px);--nb-shadow:var(--shadow-md,0 4px 24px rgba(0,0,0,.06));
+  --nb-shadow-lg:var(--shadow-lg,0 12px 40px rgba(0,0,0,.1));--nb-font:var(--font-sans,'Inter'),system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--nb-font);color:var(--nb-text);background:var(--nb-surface);line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--nb-indigo);color:#fff}
+a:focus-visible,button:focus-visible{outline:2px solid var(--nb-primary);outline-offset:3px}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1rem,4vw,3rem);height:72px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--nb-border)}
+.nav-logo{font-size:1.45rem;font-weight:800;background:linear-gradient(135deg,var(--nb-indigo),var(--nb-teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--nb-text2);font-size:.95rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--nb-primary)}
+.nav-cta{padding:.6rem 1.5rem;border-radius:var(--nb-radius);background:var(--nb-primary);color:#fff!important;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(99,102,241,.35)}
+
+/* Decorative background dots */
+.hero::before {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 520px; height: 520px; z-index: -1;
+  background: radial-gradient(circle 1.5px, var(--nb-border) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.45; pointer-events: none;
+}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:1240px;margin:0 auto;padding:5rem clamp(1.5rem,4vw,3rem) 4rem;align-items:center;position:relative}
+.hero-title{font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:800;line-height:1.1;letter-spacing:-1px;background:linear-gradient(135deg,var(--nb-text) 40%,var(--nb-primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1.15rem;color:var(--nb-text2);margin:1.25rem 0 2rem;max-width:460px;line-height:1.7}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-p{padding:.85rem 2rem;border-radius:var(--nb-radius);background:linear-gradient(135deg,var(--nb-indigo),#818cf8);color:#fff;font-weight:700;font-size:1rem;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(99,102,241,.35)}
+.btn-s{padding:.85rem 2rem;border-radius:var(--nb-radius);background:transparent;border:2px solid var(--nb-border);color:var(--nb-text);font-weight:600;font-size:1rem;cursor:pointer;transition:border-color .2s,color .2s}
+.btn-s:hover{border-color:var(--nb-primary);color:var(--nb-primary)}
+.hero-stats{display:flex;gap:2.5rem;margin-top:2.5rem}
+.hero-stat-num{font-size:1.6rem;font-weight:800;color:var(--nb-primary)}
+.hero-stat-label{font-size:.82rem;color:var(--nb-muted);margin-top:2px}
+
+/* Phone */
+.phone-wrap{display:flex;justify-content:center;perspective:900px}
+.phone{width:280px;height:560px;border-radius:36px;background:#1a1a2e;padding:10px;box-shadow:0 30px 80px rgba(99,102,241,.18),0 8px 30px rgba(0,0,0,.12);transform:rotateY(-6deg) rotateX(3deg);transition:transform .5s ease;position:relative}
+.phone:hover{transform:rotateY(0) rotateX(0)}
+.phone-screen{width:100%;height:100%;border-radius:28px;background:var(--nb-surface);overflow:hidden;display:flex;flex-direction:column}
+.phone-notch{width:120px;height:28px;margin:0 auto;background:#1a1a2e;border-radius:0 0 16px 16px;position:relative;z-index:2}
+.phone-inner{padding:8px 16px 16px;flex:1;display:flex;flex-direction:column}
+.phone-greet{font-size:.7rem;color:var(--nb-muted)}
+.phone-name{font-size:1.05rem;font-weight:700;margin-bottom:12px}
+.phone-bal-label{font-size:.65rem;color:var(--nb-muted);text-transform:uppercase;letter-spacing:.5px}
+.phone-bal{font-size:1.7rem;font-weight:800;margin:2px 0 14px}
+.phone-card{width:100%;height:70px;border-radius:10px;background:linear-gradient(135deg,var(--nb-indigo),#a78bfa);padding:10px 14px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff;margin-bottom:14px;position:relative;overflow:hidden}
+.phone-card::after{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1)}
+.phone-card-num{font-size:.65rem;font-family:'Courier New',monospace;letter-spacing:1px}
+.phone-card-name{font-size:.55rem;opacity:.8}
+.phone-txns{flex:1}
+.phone-txns-title{font-size:.7rem;font-weight:700;margin-bottom:6px}
+.phone-txn{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f1f1f1}
+.phone-txn-icon{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:#fff;flex-shrink:0}
+.phone-txn-name{font-size:.6rem;font-weight:600;flex:1}
+.phone-txn-amt{font-size:.6rem;font-weight:700}
+.neg{color:var(--nb-rose)}.pos{color:#10b981}
+
+/* Sections */
+.section{padding:5rem clamp(1.5rem,4vw,3rem);max-width:1240px;margin:0 auto}
+.section-label{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--nb-primary);margin-bottom:.5rem}
+.section-title{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;letter-spacing:-.5px;margin-bottom:1rem}
+.section-desc{font-size:1.05rem;color:var(--nb-text2);max-width:540px;margin-bottom:3rem;line-height:1.7}
+
+/* Features */
+.features-bg{background:var(--nb-surface2)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.feature-card{background:var(--nb-surface);border-radius:var(--nb-radius-xl);padding:2.2rem;border:1px solid var(--nb-border);transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;inset:0;border-radius:var(--nb-radius-xl);padding:2px;background:linear-gradient(135deg,var(--nb-indigo),var(--nb-teal));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s}
+.feature-card:hover{transform:translateY(-6px);box-shadow:var(--nb-shadow-lg)}
+.feature-card:hover::before{opacity:1}
+.feature-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.2rem}
+.feature-card:nth-child(1) .feature-icon{background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
+.feature-card:nth-child(2) .feature-icon{background:linear-gradient(135deg,#d1fae5,#a7f3d0)}
+.feature-card:nth-child(3) .feature-icon{background:linear-gradient(135deg,#dbeafe,#bfdbfe)}
+.feature-title{font-size:1.15rem;font-weight:700;margin-bottom:.5rem}
+.feature-desc{font-size:.92rem;color:var(--nb-text2);line-height:1.65}
+
+/* Cards Showcase */
+.cards-section{text-align:center}
+.cards-fan{display:flex;justify-content:center;align-items:center;height:340px;position:relative;margin-top:1rem}
+.vcard{width:300px;height:188px;border-radius:16px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;position:absolute;box-shadow:var(--nb-shadow-lg);transition:transform .4s ease;color:#fff}
+.vcard-i{background:linear-gradient(135deg,#4f46e5,#7c3aed);z-index:3;transform:translateX(-40px)}
+.vcard-t{background:linear-gradient(135deg,#0891b2,#00c9a7);z-index:2}
+.vcard-r{background:linear-gradient(135deg,#e11d48,#f43f5e);z-index:1;transform:translateX(40px)}
+.cards-fan:hover .vcard-i{transform:translateX(-80px) rotate(-8deg)}
+.cards-fan:hover .vcard-t{transform:translateY(-10px)}
+.cards-fan:hover .vcard-r{transform:translateX(80px) rotate(8deg)}
+.vcard-chip{width:36px;height:26px;border-radius:5px;background:linear-gradient(135deg,#fbbf24,#f59e0b);position:relative;overflow:hidden}
+.vcard-chip::after{content:'';position:absolute;inset:3px;border:1px solid rgba(255,255,255,.4);border-radius:3px}
+.vcard-number{font-size:1.05rem;font-family:'Courier New',monospace;letter-spacing:2px;text-align:center}
+.vcard-bottom{display:flex;justify-content:space-between;align-items:flex-end}
+.vcard-name{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.vcard-exp{font-size:.65rem;opacity:.8}
+.vcard-holo{width:32px;height:22px;border-radius:4px;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.1));border:1px solid rgba(255,255,255,.3)}
+
+/* Transactions */
+.txns-bg{background:var(--nb-surface2)}
+.txn-list{background:var(--nb-surface);border-radius:var(--nb-radius-xl);overflow:hidden;border:1px solid var(--nb-border);max-width:800px}
+.txn-item{display:grid;grid-template-columns:auto 1fr auto auto auto;gap:1rem;align-items:center;padding:1rem 1.5rem;border-bottom:1px solid #f1f5f9;transition:background .15s}
+.txn-item:last-child{border-bottom:none}
+.txn-item:nth-child(odd){background:#fafbfc}
+.txn-item:hover{background:#f0f4ff}
+.txn-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff}
+.txn-merchant{font-weight:600;font-size:.95rem}
+.txn-cat{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--nb-surface3);color:var(--nb-text2)}
+.txn-amount{font-weight:700;font-size:.95rem}
+.txn-amount.debit{color:var(--nb-text)}
+.txn-amount.credit{color:#10b981}
+.txn-date{font-size:.82rem;color:var(--nb-muted)}
+
+/* Security */
+.security-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.security-card{background:var(--nb-surface);border:1px solid var(--nb-border);border-radius:var(--nb-radius-xl);padding:2rem;display:flex;gap:1.2rem;align-items:flex-start;transition:transform .3s,box-shadow .3s}
+.security-card:hover{transform:translateY(-4px);box-shadow:var(--nb-shadow)}
+.security-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;background:linear-gradient(135deg,#ede9fe,#e0e7ff)}
+.security-title{font-weight:700;font-size:1.05rem;margin-bottom:.35rem}
+.security-desc{font-size:.88rem;color:var(--nb-text2);line-height:1.6}
+
+/* Pricing */
+.pricing-bg{background:var(--nb-surface2)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;align-items:start}
+.pricing-card{background:var(--nb-surface);border:1px solid var(--nb-border);border-radius:var(--nb-radius-xl);padding:2.5rem 2rem;text-align:center;position:relative;transition:transform .3s,box-shadow .3s}
+.pricing-card:hover{transform:translateY(-6px);box-shadow:var(--nb-shadow-lg)}
+.pricing-card.popular{border-color:var(--nb-primary);border-width:2px;box-shadow:0 8px 32px rgba(99,102,241,.12)}
+.pricing-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--nb-indigo),#818cf8);color:#fff;font-size:.72rem;font-weight:700;padding:4px 16px;border-radius:20px;white-space:nowrap}
+.pricing-tier{font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.pricing-price{font-size:2.6rem;font-weight:800;margin:.75rem 0}
+.pricing-price span{font-size:1rem;font-weight:500;color:var(--nb-muted)}
+.pricing-desc{font-size:.88rem;color:var(--nb-muted);margin-bottom:1.5rem}
+.pricing-features{list-style:none;text-align:left;margin-bottom:2rem}
+.pricing-features li{padding:.45rem 0;font-size:.9rem;color:var(--nb-text2);display:flex;align-items:center;gap:.6rem}
+.pricing-features li::before{content:'✓';font-weight:700;color:var(--nb-teal);font-size:.85rem}
+.pricing-btn{width:100%;padding:.8rem;border-radius:var(--nb-radius);font-weight:700;font-size:.95rem;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.pricing-btn:hover{transform:translateY(-2px)}
+.pricing-btn-fill{background:linear-gradient(135deg,var(--nb-indigo),#818cf8);color:#fff;border:none;box-shadow:0 4px 16px rgba(99,102,241,.25)}
+.pricing-btn-outline{background:transparent;color:var(--nb-text);border:2px solid var(--nb-border)}
+.pricing-btn-outline:hover{border-color:var(--nb-primary);color:var(--nb-primary)}
+
+/* CTA */
+.cta-banner{background:linear-gradient(135deg,var(--nb-indigo),#818cf8,var(--nb-teal));padding:4rem clamp(1.5rem,4vw,3rem);text-align:center}
+.cta-banner h2{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;color:#fff;margin-bottom:.75rem}
+.cta-banner p{color:rgba(255,255,255,.85);font-size:1.05rem;margin-bottom:2rem}
+.cta-form{display:flex;gap:.75rem;justify-content:center;max-width:460px;margin:0 auto}
+.cta-input{flex:1;padding:.85rem 1.25rem;border-radius:var(--nb-radius);border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.12);color:#fff;font-size:.95rem;outline:none;transition:border-color .2s;font-family:var(--nb-font)}
+.cta-input::placeholder{color:rgba(255,255,255,.55)}
+.cta-input:focus{border-color:rgba(255,255,255,.6)}
+.cta-submit{padding:.85rem 1.8rem;border-radius:var(--nb-radius);background:#fff;color:var(--nb-indigo);font-weight:700;font-size:.95rem;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.cta-submit:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.15)}
+
+/* Footer */
+.footer{background:#0f172a;color:rgba(255,255,255,.7);padding:3.5rem clamp(1.5rem,4vw,3rem) 1.5rem}
+.footer-grid{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2.5rem}
+.footer-brand .nav-logo{margin-bottom:.75rem;display:inline-block}
+.footer-brand p{font-size:.88rem;line-height:1.65;max-width:280px}
+.footer-col h4{color:#fff;font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:1rem}
+.footer-col a{display:block;color:rgba(255,255,255,.6);text-decoration:none;font-size:.88rem;padding:.3rem 0;transition:color .2s}
+.footer-col a:hover{color:var(--nb-teal)}
+.footer-bottom{max-width:1240px;margin:0 auto;border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;display:flex;justify-content:space-between;font-size:.82rem}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-text { animation: fadeInUp 0.7s ease-out; }
+.phone-wrap { animation: fadeInUp 0.9s ease-out 0.15s both; }
+.feature-card { animation: fadeInUp 0.5s ease-out both; }
+.feature-card:nth-child(1) { animation-delay: 0.1s; }
+.feature-card:nth-child(2) { animation-delay: 0.2s; }
+.feature-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* Phone screen gradient status bar */
+.phone-status-bar {
+  height: 6px; margin: 4px 12px 0;
+  background: linear-gradient(90deg, var(--nb-indigo), var(--nb-teal));
+  border-radius: 3px; opacity: 0.6;
+}
+
+/* Phone app bottom nav */
+.phone-bottom-nav {
+  display: flex; justify-content: space-around;
+  padding: 8px 0 4px; border-top: 1px solid #f1f1f1;
+  margin-top: auto;
+}
+.phone-bottom-nav span {
+  font-size: 0.5rem; text-align: center; color: var(--nb-muted);
+}
+.phone-bottom-nav span.active { color: var(--nb-indigo); font-weight: 700; }
+
+/* Pricing card lift glow */
+.pricing-card.popular::after {
+  content: ''; position: absolute; inset: -1px;
+  border-radius: var(--nb-radius-xl);
+  background: linear-gradient(135deg, var(--nb-indigo), var(--nb-teal));
+  z-index: -1; opacity: 0.08; filter: blur(20px);
+}
+
+/* Responsive */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;gap:3rem;text-align:center}
+  .hero-sub{margin-left:auto;margin-right:auto}
+  .hero-actions,.hero-stats{justify-content:center}
+  .phone-wrap{order:-1}
+  .features-grid,.pricing-grid{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
+  .security-grid{grid-template-columns:1fr}
+  .cards-fan{height:300px}
+  .vcard{width:240px;height:152px;padding:18px}
+  .vcard-number{font-size:.85rem}
+  .nav-links{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .txn-item{grid-template-columns:auto 1fr auto;gap:.75rem;padding:.8rem 1rem}
+  .txn-cat,.txn-date{display:none}
+}
+@media(max-width:500px){.footer-grid{grid-template-columns:1fr}.cta-form{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">NeoBank</div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#cards">Cards</a></li>
+    <li><a href="#security">Security</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div>
+    <h1 class="hero-title">The future of banking is&nbsp;here</h1>
+    <p class="hero-sub">Send, spend, and manage your money with zero fees on everyday transactions. Join millions who've already made the switch to smarter banking.</p>
+    <div class="hero-actions">
+      <button class="btn-p" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Get Started</button>
+      <button class="btn-s" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Learn More</button>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hero-stat-num">2M+</div><div class="hero-stat-label">Active Users</div></div>
+      <div><div class="hero-stat-num">150+</div><div class="hero-stat-label">Countries</div></div>
+      <div><div class="hero-stat-num">$50B+</div><div class="hero-stat-label">Processed</div></div>
+    </div>
+  </div>
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="phone-notch"></div>
+        <div class="phone-status-bar"></div>
+        <div class="phone-inner">
+          <div class="phone-greet">Good morning,</div>
+          <div class="phone-name">Sarah ✨</div>
+          <div class="phone-bal-label">Total Balance</div>
+          <div class="phone-bal">$24,891.50</div>
+          <div class="phone-card">
+            <div><div class="phone-card-num">•••• 4829</div><div class="phone-card-name">NeoBank Debit</div></div>
+            <div style="font-size:1.3rem">💳</div>
+          </div>
+            <div class="phone-txns">
+            <div class="phone-txns-title">Recent</div>
+            <div class="phone-txn"><div class="phone-txn-icon" style="background:#6366f1">S</div><div class="phone-txn-name">Spotify</div><div class="phone-txn-amt neg">-$9.99</div></div>
+            <div class="phone-txn"><div class="phone-txn-icon" style="background:#10b981">D</div><div class="phone-txn-name">Direct Deposit</div><div class="phone-txn-amt pos">+$3,200</div></div>
+            <div class="phone-txn"><div class="phone-txn-icon" style="background:#f59e0b">A</div><div class="phone-txn-name">Amazon</div><div class="phone-txn-amt neg">-$67.42</div></div>
+          </div>
+          <div class="phone-bottom-nav">
+            <span class="active">🏠 Home</span>
+            <span>💳 Cards</span>
+            <span>📊 Stats</span>
+            <span>⚙️ Settings</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features-bg" id="features">
+  <div class="section">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything you need, nothing you&nbsp;don't</h2>
+    <p class="section-desc">Powerful tools built for the way you actually use money — not the way banks think you should.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Instant Transfers</div>
+        <p class="feature-desc">Send money to anyone, anywhere in seconds. No hidden fees, no waiting periods. Your money moves at the speed of now.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Smart Budgeting</div>
+        <p class="feature-desc">AI-powered insights categorize your spending automatically. Set goals, track progress, and get alerts before you overspend.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">Bank-Grade Security</div>
+        <p class="feature-desc">256-bit encryption, biometric auth, and real-time fraud monitoring. Your money is safer here than in a traditional vault.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cards Showcase -->
+<section class="section cards-section" id="cards">
+  <div class="section-label">Cards</div>
+  <h2 class="section-title">Beautiful cards for every&nbsp;occasion</h2>
+  <p class="section-desc" style="margin-left:auto;margin-right:auto">Choose from our collection of virtual and physical cards, each designed with care and crafted for performance.</p>
+  <div class="cards-fan">
+    <div class="vcard vcard-i">
+      <div class="vcard-chip"></div>
+      <div class="vcard-number">4829 •••• •••• 7341</div>
+      <div class="vcard-bottom"><div><div class="vcard-name">Sarah Mitchell</div><div class="vcard-exp">09/28</div></div><div class="vcard-holo"></div></div>
+    </div>
+    <div class="vcard vcard-t">
+      <div class="vcard-chip"></div>
+      <div class="vcard-number">5193 •••• •••• 2085</div>
+      <div class="vcard-bottom"><div><div class="vcard-name">Sarah Mitchell</div><div class="vcard-exp">03/27</div></div><div class="vcard-holo"></div></div>
+    </div>
+    <div class="vcard vcard-r">
+      <div class="vcard-chip"></div>
+      <div class="vcard-number">3742 •••• •••• 9156</div>
+      <div class="vcard-bottom"><div><div class="vcard-name">Sarah Mitchell</div><div class="vcard-exp">11/29</div></div><div class="vcard-holo"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Transactions -->
+<section class="txns-bg" id="transactions">
+  <div class="section">
+    <div class="section-label">Activity</div>
+    <h2 class="section-title">Stay on top of every&nbsp;dollar</h2>
+    <p class="section-desc">Real-time transaction tracking with smart categorization and instant notifications.</p>
+    <div class="txn-list">
+      <div class="txn-item"><div class="txn-icon" style="background:#6366f1">S</div><div class="txn-merchant">Spotify Premium</div><div class="txn-cat">Entertainment</div><div class="txn-amount debit">-$9.99</div><div class="txn-date">May 1, 2026</div></div>
+      <div class="txn-item"><div class="txn-icon" style="background:#10b981">D</div><div class="txn-merchant">Direct Deposit — Acme Corp</div><div class="txn-cat">Income</div><div class="txn-amount credit">+$3,200.00</div><div class="txn-date">Apr 30, 2026</div></div>
+      <div class="txn-item"><div class="txn-icon" style="background:#f59e0b">W</div><div class="txn-merchant">Whole Foods Market</div><div class="txn-cat">Groceries</div><div class="txn-amount debit">-$127.34</div><div class="txn-date">Apr 29, 2026</div></div>
+      <div class="txn-item"><div class="txn-icon" style="background:#ec4899">U</div><div class="txn-merchant">Uber Ride</div><div class="txn-cat">Transport</div><div class="txn-amount debit">-$23.50</div><div class="txn-date">Apr 28, 2026</div></div>
+      <div class="txn-item"><div class="txn-icon" style="background:#14b8a6">T</div><div class="txn-merchant">Transfer to Savings</div><div class="txn-cat">Transfer</div><div class="txn-amount debit">-$500.00</div><div class="txn-date">Apr 27, 2026</div></div>
+      <div class="txn-item"><div class="txn-icon" style="background:#8b5cf6">R</div><div class="txn-merchant">Restaurant — Nobu</div><div class="txn-cat">Dining</div><div class="txn-amount debit">-$89.00</div><div class="txn-date">Apr 26, 2026</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Security -->
+<section class="section" id="security">
+  <div class="section-label">Security</div>
+  <h2 class="section-title">Your money, triple‑protected</h2>
+  <p class="section-desc">Multiple layers of defense working around the clock to keep your account safe.</p>
+  <div class="security-grid">
+    <div class="security-card"><div class="security-icon">🔐</div><div><div class="security-title">Two-Factor Authentication</div><p class="security-desc">Every login and transaction requires dual verification. Even if your password is compromised, your account stays locked down.</p></div></div>
+    <div class="security-card"><div class="security-icon">🛡️</div><div><div class="security-title">End-to-End Encryption</div><p class="security-desc">AES-256 encryption protects your data in transit and at rest. Your financial information never touches an unsecured server.</p></div></div>
+    <div class="security-card"><div class="security-icon">👆</div><div><div class="security-title">Biometric Login</div><p class="security-desc">Face ID, Touch ID, and fingerprint recognition provide instant, secure access — no passwords to remember or type.</p></div></div>
+    <div class="security-card"><div class="security-icon">🔔</div><div><div class="security-title">Real-Time Alerts</div><p class="security-desc">Instant push notifications for every transaction. Spot suspicious activity in seconds and freeze your card with one tap.</p></div></div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing-bg" id="pricing">
+  <div class="section" style="text-align:center">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Simple, transparent pricing</h2>
+    <p class="section-desc" style="margin-left:auto;margin-right:auto">No hidden fees. No surprise charges. Upgrade or downgrade anytime — no contracts, no commitments.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Free</div>
+        <div class="pricing-price">$0<span>/mo</span></div>
+        <p class="pricing-desc">Perfect for getting started with digital banking.</p>
+        <ul class="pricing-features"><li>1 Virtual debit card</li><li>Unlimited domestic transfers</li><li>Basic spending analytics</li><li>1% cashback on purchases</li><li>Email support</li></ul>
+        <button class="pricing-btn pricing-btn-outline">Get Started Free</button>
+      </div>
+      <div class="pricing-card popular">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-tier">Pro</div>
+        <div class="pricing-price">$9.99<span>/mo</span></div>
+        <p class="pricing-desc">For power users who want the full NeoBank experience.</p>
+        <ul class="pricing-features"><li>Unlimited virtual &amp; physical cards</li><li>Free international transfers</li><li>Advanced budgeting &amp; analytics</li><li>3% cashback on purchases</li><li>Priority 24/7 support</li><li>Currency exchange at interbank rates</li></ul>
+        <button class="pricing-btn pricing-btn-fill">Start Pro Trial</button>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-tier">Business</div>
+        <div class="pricing-price">$29.99<span>/mo</span></div>
+        <p class="pricing-desc">Built for teams and companies scaling globally.</p>
+        <ul class="pricing-features"><li>Everything in Pro</li><li>Multi-user team accounts</li><li>Expense management tools</li><li>5% cashback on purchases</li><li>Dedicated account manager</li><li>API access &amp; integrations</li></ul>
+        <button class="pricing-btn pricing-btn-outline">Contact Sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Banner -->
+<section class="cta-banner" id="cta">
+  <h2>Start your digital banking journey</h2>
+  <p>Join 2 million people who've already switched to smarter money management.</p>
+  <form class="cta-form" onsubmit="event.preventDefault();this.querySelector('button').textContent='✓ You\'re on the list!';this.querySelector('button').style.background='rgba(255,255,255,.2)';this.querySelector('button').style.color='#fff'">
+    <input type="email" class="cta-input" placeholder="Enter your email" required>
+    <button type="submit" class="cta-submit">Get Early Access</button>
+  </form>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand"><div class="nav-logo">NeoBank</div><p>The modern banking platform for a borderless world. Send, spend, and save smarter — from anywhere.</p></div>
+    <div class="footer-col"><h4>Product</h4><a href="#">Features</a><a href="#">Cards</a><a href="#">Security</a><a href="#">Pricing</a><a href="#">Roadmap</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Careers</a><a href="#">Press</a><a href="#">Blog</a><a href="#">Partners</a></div>
+    <div class="footer-col"><h4>Support</h4><a href="#">Help Center</a><a href="#">Contact</a><a href="#">Status</a><a href="#">API Docs</a><a href="#">Community</a></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2026 NeoBank Inc. All rights reserved.</span><span>Privacy · Terms · Cookies</span></div>
+</footer>
+
+</body>
+</html>

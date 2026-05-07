@@ -343,6 +343,24 @@ const pages = [
     rating: 9.4,
     description: '奢华时尚品牌官网，Playfair Display 衬线字体 + 暖色奶油底 + 产品横向滚动 + 匠心工艺分栏',
   },
+  {
+    id: 'podcast-show',
+    title: 'SoundWave 播客频道',
+    category: 'podcast',
+    tags: ['播客', '音频', '媒体', '暗色主题', '波形动画'],
+    colors: ['#0a0a0f', '#ff6b35', '#8b5cf6'],
+    rating: 9.4,
+    description: '暗色系播客频道页，毛玻璃导航 + CSS 波形动画 + 集数网格 + 主持人介绍 + 听众评价 + Newsletter',
+  },
+  {
+    id: 'fintech-app',
+    title: 'NeoBank 数字银行',
+    category: 'app',
+    tags: ['金融科技', '银行', '数字支付', '明色主题'],
+    colors: ['#ffffff', '#00c9a7', '#6366f1'],
+    rating: 9.5,
+    description: '现代数字银行产品页，CSS 手机模型 + 虚拟银行卡扇形展开 + 交易记录 + 安全特性 + 定价方案',
+  },
 ]
 
 const categories = [
@@ -364,7 +382,8 @@ const categories = [
   { id: 'travel', label: '旅行', icon: '✈️' },
   { id: 'web3', label: 'Web3', icon: '⛓️' },
   { id: 'newsletter', label: 'Newsletter', icon: '📬' },
-  { id: 'fashion', label: '时尚', icon: '👗' }
+  { id: 'fashion', label: '时尚', icon: '👗' },
+  { id: 'podcast', label: '播客', icon: '🎙️' }
 ]
 
 const activeCategory = ref('all')

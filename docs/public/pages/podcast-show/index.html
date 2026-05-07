@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoundWave 播客 — 探索科技与创意的交汇点</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+:root{--bg-deep:#0a0a0f;--bg-surface:#1a1a2e;--bg-card:#16162a;--accent-orange:#ff6b35;--accent-purple:#8b5cf6;--glass-bg:rgba(26,26,46,0.55);--glass-border:rgba(255,255,255,0.08);--text-primary:#f0f0f5;--text-secondary:#a0a0b8;--text-dim:#6b6b80}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scrollbar-color:var(--accent-purple) var(--bg-deep)}
+body{font-family:var(--font-sans);background:var(--bg-deep);color:var(--text-primary);line-height:var(--leading-normal);overflow-x:hidden}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg-deep)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--accent-purple),var(--accent-orange));border-radius:var(--radius-full)}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-sticky);display:flex;align-items:center;justify-content:space-between;padding:var(--space-4) var(--space-8);background:rgba(10,10,15,0.7);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border)}
+.nav-logo{display:flex;align-items:center;gap:var(--space-2);font-weight:var(--weight-bold);font-size:var(--text-xl);background:linear-gradient(135deg,var(--accent-orange),var(--accent-purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-logo-icon{width:32px;height:32px;border-radius:var(--radius-sm);background:linear-gradient(135deg,var(--accent-orange),var(--accent-purple));display:flex;align-items:center;justify-content:center}
+.nav-logo-icon svg{width:18px;height:18px;fill:white}
+.nav-links{display:flex;gap:var(--space-6);list-style:none}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:var(--text-sm);font-weight:var(--weight-medium);transition:color var(--duration-normal) var(--ease-default)}
+.nav-links a:hover{color:var(--accent-orange)}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;padding:var(--space-24) var(--space-8);position:relative;overflow:hidden}
+.hero-bg-orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.3;animation:float 8s ease-in-out infinite}
+.hero-bg-orb.orb1{width:500px;height:500px;top:-10%;right:5%;background:var(--accent-purple)}
+.hero-bg-orb.orb2{width:400px;height:400px;bottom:-5%;left:10%;background:var(--accent-orange);animation-delay:-3s}
+.hero-bg-orb.orb3{width:200px;height:200px;top:40%;left:45%;background:#06b6d4;animation-delay:-5s}
+.hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:var(--space-16);align-items:center;position:relative;z-index:1;width:100%}
+.hero-content{display:flex;flex-direction:column;gap:var(--space-6)}
+.hero-badge{display:inline-flex;align-items:center;gap:var(--space-2);background:var(--bg-surface);border:1px solid var(--glass-border);border-radius:var(--radius-full);padding:var(--space-1) var(--space-4);font-size:var(--text-xs);color:var(--accent-orange);width:fit-content}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-orange);animation:pulse 2s infinite}
+.hero-title{font-size:clamp(2.5rem,5vw,var(--text-6xl));font-weight:var(--weight-bold);line-height:var(--leading-tight);background:linear-gradient(135deg,#fff 0%,var(--accent-orange) 50%,var(--accent-purple) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-tagline{font-size:var(--text-lg);color:var(--text-secondary);max-width:480px;line-height:var(--leading-relaxed)}
+.hero-actions{display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap}
+.hero-stats{display:flex;gap:var(--space-8);margin-top:var(--space-2)}
+.hero-stat{display:flex;flex-direction:column}
+.hero-stat-value{font-size:var(--text-2xl);font-weight:var(--weight-bold)}
+.hero-stat-label{font-size:var(--text-xs);color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em}
+.hero-artwork{width:100%;aspect-ratio:1;border-radius:var(--radius-xl);background:linear-gradient(135deg,#1a1a2e 0%,#2d1b69 30%,#ff6b35 70%,#ff8c5a 100%);position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(139,92,246,0.3),0 0 0 1px var(--glass-border);animation:float 6s ease-in-out infinite}
+.hero-artwork::after{content:'🎧';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:5rem;opacity:0.6}
+
+/* Buttons */
+.btn-play{display:inline-flex;align-items:center;gap:var(--space-2);background:linear-gradient(135deg,var(--accent-orange),#ff8c5a);color:white;border:none;padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);font-size:var(--text-base);font-weight:var(--weight-semibold);cursor:pointer;transition:transform var(--duration-normal) var(--ease-spring),box-shadow var(--duration-normal)}
+.btn-play:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(255,107,53,0.4)}
+.btn-play svg{width:16px;height:16px;fill:currentColor}
+
+/* Sections */
+.section{padding:var(--space-20) var(--space-8);max-width:1200px;margin:0 auto}
+.section-header{margin-bottom:var(--space-12)}
+.section-label{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.1em;color:var(--accent-orange);font-weight:var(--weight-semibold);margin-bottom:var(--space-2)}
+.section-title{font-size:clamp(1.75rem,3vw,var(--text-4xl));font-weight:var(--weight-bold)}
+
+/* Waveform */
+.waveform{display:flex;align-items:flex-end;gap:3px;height:40px}
+.waveform-bar{width:4px;border-radius:2px;animation:waveform 1.2s ease-in-out infinite}
+.waveform-bar:nth-child(1){height:60%;animation-delay:0s;background:#ff6b35}
+.waveform-bar:nth-child(2){height:80%;animation-delay:0.1s;background:#8b5cf6}
+.waveform-bar:nth-child(3){height:40%;animation-delay:0.2s;background:#06b6d4}
+.waveform-bar:nth-child(4){height:90%;animation-delay:0.3s;background:#ff6b35}
+.waveform-bar:nth-child(5){height:50%;animation-delay:0.4s;background:#8b5cf6}
+.waveform-bar:nth-child(6){height:70%;animation-delay:0.5s;background:#06b6d4}
+.waveform-bar:nth-child(7){height:45%;animation-delay:0.6s;background:#ff6b35}
+.waveform-bar:nth-child(8){height:85%;animation-delay:0.7s;background:#8b5cf6}
+
+/* Featured */
+.featured{background:var(--glass-bg);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:var(--space-10);display:grid;grid-template-columns:280px 1fr;gap:var(--space-10);align-items:center;max-width:1200px;margin:0 auto;position:relative;overflow:hidden}
+.featured::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,107,53,0.05),rgba(139,92,246,0.08));pointer-events:none}
+.featured-art{width:100%;aspect-ratio:1;border-radius:var(--radius-lg);background:linear-gradient(160deg,#0f0c29,#302b63,#24243e);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.featured-art-inner{width:70%;height:70%;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--accent-orange),var(--accent-purple));display:flex;align-items:center;justify-content:center;font-size:3rem;animation:pulse 3s ease-in-out infinite}
+.featured-info{display:flex;flex-direction:column;gap:var(--space-4);position:relative;z-index:1}
+.featured-tag{display:inline-flex;align-items:center;gap:var(--space-2);background:rgba(255,107,53,0.15);color:var(--accent-orange);padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:var(--weight-semibold);width:fit-content}
+.featured-title{font-size:var(--text-2xl);font-weight:var(--weight-bold)}
+.featured-desc{color:var(--text-secondary);line-height:var(--leading-relaxed)}
+.featured-meta{display:flex;align-items:center;gap:var(--space-4);color:var(--text-dim);font-size:var(--text-sm)}
+.featured-meta span{display:flex;align-items:center;gap:var(--space-1)}
+.featured-play{display:inline-flex;align-items:center;gap:var(--space-3);background:linear-gradient(135deg,var(--accent-orange),var(--accent-purple));color:white;border:none;padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);font-size:var(--text-base);font-weight:var(--weight-semibold);cursor:pointer;width:fit-content;transition:transform var(--duration-normal) var(--ease-spring),box-shadow var(--duration-normal)}
+.featured-play:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(139,92,246,0.4)}
+
+/* Episodes Grid */
+.episodes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--space-6)}
+.episode-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius-lg);overflow:hidden;transition:transform var(--duration-normal) var(--ease-spring),box-shadow var(--duration-normal),border-color var(--duration-normal)}
+.episode-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.3);border-color:rgba(139,92,246,0.3)}
+.episode-art{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.episode-art .ep-number{position:absolute;top:var(--space-3);left:var(--space-3);background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:var(--weight-semibold);color:var(--accent-orange)}
+.episode-art .ep-icon{font-size:2.5rem;opacity:0.7}
+.episode-body{padding:var(--space-5);display:flex;flex-direction:column;gap:var(--space-3)}
+.episode-title{font-size:var(--text-base);font-weight:var(--weight-semibold)}
+.episode-meta{display:flex;align-items:center;justify-content:space-between;color:var(--text-dim);font-size:var(--text-xs)}
+.episode-meta-left{display:flex;gap:var(--space-3)}
+.episode-play-btn{width:36px;height:36px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--accent-orange),var(--accent-purple));color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform var(--duration-fast) var(--ease-spring)}
+.episode-play-btn:hover{transform:scale(1.15)}
+.episode-play-btn svg{width:14px;height:14px;fill:currentColor;margin-left:2px}
+
+/* Hosts */
+.hosts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:var(--space-8)}
+.host-card{display:flex;gap:var(--space-6);padding:var(--space-8);background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius-lg);transition:border-color var(--duration-normal)}
+.host-card:hover{border-color:rgba(139,92,246,0.3)}
+.host-avatar{width:80px;height:80px;border-radius:var(--radius-full);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:var(--text-2xl);font-weight:var(--weight-bold);color:white}
+.host-avatar.host-a{background:linear-gradient(135deg,var(--accent-orange),#ff8c5a)}
+.host-avatar.host-b{background:linear-gradient(135deg,var(--accent-purple),#a78bfa)}
+.host-info{display:flex;flex-direction:column;gap:var(--space-2)}
+.host-name{font-size:var(--text-lg);font-weight:var(--weight-semibold)}
+.host-role{font-size:var(--text-sm);color:var(--accent-orange)}
+.host-bio{font-size:var(--text-sm);color:var(--text-secondary);line-height:var(--leading-relaxed)}
+.host-socials{display:flex;gap:var(--space-3);margin-top:var(--space-2)}
+.host-socials a{width:32px;height:32px;border-radius:var(--radius-sm);background:var(--bg-surface);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);text-decoration:none;font-size:var(--text-sm);transition:background var(--duration-fast),color var(--duration-fast)}
+.host-socials a:hover{background:var(--accent-purple);color:white;border-color:var(--accent-purple)}
+
+/* Testimonials */
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--space-6)}
+.testimonial-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:var(--space-8);display:flex;flex-direction:column;gap:var(--space-4);position:relative;transition:transform var(--duration-normal) var(--ease-spring),border-color var(--duration-normal)}
+.testimonial-card:hover{transform:translateY(-3px);border-color:rgba(255,107,53,0.3)}
+.testimonial-card::before{content:'"';position:absolute;top:var(--space-4);right:var(--space-6);font-size:4rem;line-height:1;color:var(--accent-purple);opacity:0.3;font-family:Georgia,serif}
+.testimonial-stars{color:var(--accent-orange);font-size:var(--text-sm);letter-spacing:2px}
+.testimonial-text{font-size:var(--text-sm);color:var(--text-secondary);line-height:var(--leading-relaxed);flex:1}
+.testimonial-author{display:flex;align-items:center;gap:var(--space-3)}
+.testimonial-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:var(--text-xs);font-weight:var(--weight-bold);color:white}
+.testimonial-avatar.ta1{background:linear-gradient(135deg,#ff6b35,#ff8c5a)}
+.testimonial-avatar.ta2{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
+.testimonial-avatar.ta3{background:linear-gradient(135deg,#06b6d4,#22d3ee)}
+.testimonial-name{font-size:var(--text-sm);font-weight:var(--weight-semibold)}
+.testimonial-handle{font-size:var(--text-xs);color:var(--text-dim)}
+
+/* Newsletter */
+.newsletter{text-align:center;padding:var(--space-20) var(--space-8)}
+.newsletter-inner{max-width:600px;margin:0 auto;background:linear-gradient(135deg,rgba(255,107,53,0.1),rgba(139,92,246,0.1));border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:var(--space-12) var(--space-8)}
+.newsletter-title{font-size:var(--text-3xl);font-weight:var(--weight-bold);margin-bottom:var(--space-3)}
+.newsletter-desc{color:var(--text-secondary);margin-bottom:var(--space-8)}
+.newsletter-form{display:flex;gap:var(--space-3);justify-content:center;max-width:460px;margin:0 auto}
+.newsletter-input{flex:1;padding:var(--space-3) var(--space-5);background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius-full);color:var(--text-primary);font-size:var(--text-sm);outline:none;transition:border-color var(--duration-normal)}
+.newsletter-input::placeholder{color:var(--text-dim)}
+.newsletter-input:focus{border-color:var(--accent-purple)}
+.newsletter-btn{padding:var(--space-3) var(--space-6);background:linear-gradient(135deg,var(--accent-orange),var(--accent-purple));color:white;border:none;border-radius:var(--radius-full);font-weight:var(--weight-semibold);font-size:var(--text-sm);cursor:pointer;transition:transform var(--duration-normal) var(--ease-spring),box-shadow var(--duration-normal)}
+.newsletter-btn:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(139,92,246,0.3)}
+
+/* Footer */
+.footer{border-top:1px solid var(--glass-border);padding:var(--space-12) var(--space-8);max-width:1200px;margin:0 auto}
+.footer-inner{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:var(--space-10)}
+.footer-brand-desc{color:var(--text-dim);font-size:var(--text-sm);margin-top:var(--space-3);max-width:280px}
+.footer-col-title{font-weight:var(--weight-semibold);margin-bottom:var(--space-4);font-size:var(--text-sm)}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:var(--space-2)}
+.footer-links a{color:var(--text-dim);text-decoration:none;font-size:var(--text-sm);transition:color var(--duration-fast)}
+.footer-links a:hover{color:var(--accent-orange)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-10);padding-top:var(--space-6);border-top:1px solid var(--glass-border);color:var(--text-dim);font-size:var(--text-xs)}
+
+/* Animations */
+@keyframes waveform{0%,100%{transform:scaleY(1)}50%{transform:scaleY(0.4)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* Responsive */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-content{align-items:center}
+  .hero-tagline{margin:0 auto}
+  .hero-artwork{max-width:400px;margin:0 auto}
+  .featured{grid-template-columns:1fr;padding:var(--space-6);margin:0 var(--space-4)}
+  .featured-art{max-width:300px;margin:0 auto}
+  .hosts-grid{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .nav-links{display:none}
+  .episodes-grid{grid-template-columns:1fr}
+  .testimonials-grid{grid-template-columns:1fr}
+  .newsletter-form{flex-direction:column}
+  .footer-inner{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM19 10v2a7 7 0 0 1-14 0v-2H3v2a9 9 0 0 0 8 8.94V23h2v-2.06A9 9 0 0 0 21 12v-2h-2z"/></svg></div>
+    SoundWave
+  </div>
+  <ul class="nav-links">
+    <li><a href="#episodes">剧集</a></li>
+    <li><a href="#hosts">主持人</a></li>
+    <li><a href="#testimonials">听众评价</a></li>
+    <li><a href="#subscribe">订阅</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+  <div class="hero-bg-orb orb3"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge"><span class="hero-badge-dot"></span>每周更新中</div>
+      <h1 class="hero-title">SoundWave 播客</h1>
+      <p class="hero-tagline">探索科技与创意的交汇点 — 每周更新，带你走进前沿技术与独立创作者的世界</p>
+      <div class="hero-actions">
+        <button class="btn-play" onclick="document.getElementById('episodes').scrollIntoView({behavior:'smooth'})">
+          <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>开始收听
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="hero-stat-value">128K+</span><span class="hero-stat-label">订阅者</span></div>
+        <div class="hero-stat"><span class="hero-stat-value">240+</span><span class="hero-stat-label">剧集</span></div>
+        <div class="hero-stat"><span class="hero-stat-value">4.9 ★</span><span class="hero-stat-label">评分</span></div>
+      </div>
+    </div>
+    <div class="hero-artwork" aria-label="Podcast artwork"></div>
+  </div>
+</section>
+
+<!-- Featured Episode -->
+<section class="section" id="featured">
+  <div class="section-header">
+    <div class="section-label">✦ 最新剧集</div>
+    <h2 class="section-title">本周推荐</h2>
+  </div>
+  <div class="featured">
+    <div class="featured-art"><div class="featured-art-inner">🎙️</div></div>
+    <div class="featured-info">
+      <span class="featured-tag">🔥 本周热门</span>
+      <h3 class="featured-title">EP.242 — AI 创作革命：当机器学会做梦</h3>
+      <p class="featured-desc">在本期节目中，我们深入探讨了生成式 AI 对创意产业的冲击与机遇。从音乐、绘画到写作，人工智能正在重新定义「创作」的边界。嘉宾分享了他们如何将 AI 作为协作工具，而非替代品。</p>
+      <div class="featured-meta"><span>⏱ 58 分钟</span><span>📅 2026年5月3日</span><span>🎙️ 第242期</span></div>
+      <div style="display:flex;align-items:center;gap:var(--space-4);margin-top:var(--space-2);">
+        <button class="featured-play">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>播放本期
+        </button>
+        <div class="waveform" aria-label="Audio waveform">
+          <div class="waveform-bar"></div><div class="waveform-bar"></div><div class="waveform-bar"></div>
+          <div class="waveform-bar"></div><div class="waveform-bar"></div><div class="waveform-bar"></div>
+          <div class="waveform-bar"></div><div class="waveform-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Episodes Grid -->
+<section class="section" id="episodes">
+  <div class="section-header">
+    <div class="section-label">🎧 剧集列表</div>
+    <h2 class="section-title">全部剧集</h2>
+  </div>
+  <div class="episodes-grid">
+    <article class="episode-card">
+      <div class="episode-art" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364)">
+        <span class="ep-number">EP.241</span><span class="ep-icon">🌐</span>
+      </div>
+      <div class="episode-body">
+        <h3 class="episode-title">Web3 沉思录：去中心化的未来是乌托邦吗？</h3>
+        <div class="episode-meta"><div class="episode-meta-left"><span>⏱ 47分钟</span><span>📅 4月26日</span></div><button class="episode-play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+    </article>
+    <article class="episode-card">
+      <div class="episode-art" style="background:linear-gradient(135deg,#1a0533,#2d1b4e,#5b2c8a)">
+        <span class="ep-number">EP.240</span><span class="ep-icon">🧠</span>
+      </div>
+      <div class="episode-body">
+        <h3 class="episode-title">独立开发者的一年：从零到百万用户的旅程</h3>
+        <div class="episode-meta"><div class="episode-meta-left"><span>⏱ 62分钟</span><span>📅 4月19日</span></div><button class="episode-play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+    </article>
+    <article class="episode-card">
+      <div class="episode-art" style="background:linear-gradient(135deg,#1a0a00,#4a1a00,#ff6b35)">
+        <span class="ep-number">EP.239</span><span class="ep-icon">🎨</span>
+      </div>
+      <div class="episode-body">
+        <h3 class="episode-title">设计系统实战：如何构建可扩展的 UI 语言</h3>
+        <div class="episode-meta"><div class="episode-meta-left"><span>⏱ 53分钟</span><span>📅 4月12日</span></div><button class="episode-play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+    </article>
+    <article class="episode-card">
+      <div class="episode-art" style="background:linear-gradient(135deg,#001a1a,#003333,#06b6d4)">
+        <span class="ep-number">EP.238</span><span class="ep-icon">🔊</span>
+      </div>
+      <div class="episode-body">
+        <h3 class="episode-title">空间音频技术深度解析：声音的三维革命</h3>
+        <div class="episode-meta"><div class="episode-meta-left"><span>⏱ 44分钟</span><span>📅 4月5日</span></div><button class="episode-play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+    </article>
+    <article class="episode-card">
+      <div class="episode-art" style="background:linear-gradient(135deg,#1a0a2e,#3d1a5e,#8b5cf6)">
+        <span class="ep-number">EP.237</span><span class="ep-icon">🚀</span>
+      </div>
+      <div class="episode-body">
+        <h3 class="episode-title">创业者的深夜电台：失败教会我的十件事</h3>
+        <div class="episode-meta"><div class="episode-meta-left"><span>⏱ 71分钟</span><span>📅 3月29日</span></div><button class="episode-play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+    </article>
+    <article class="episode-card">
+      <div class="episode-art" style="background:linear-gradient(135deg,#0a0a1a,#1a1a3a,#ff6b35,#8b5cf6)">
+        <span class="ep-number">EP.236</span><span class="ep-icon">✨</span>
+      </div>
+      <div class="episode-body">
+        <h3 class="episode-title">开源精神再思考：社区驱动的创新模式</h3>
+        <div class="episode-meta"><div class="episode-meta-left"><span>⏱ 56分钟</span><span>📅 3月22日</span></div><button class="episode-play-btn" aria-label="Play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Hosts -->
+<section class="section" id="hosts">
+  <div class="section-header">
+    <div class="section-label">🎙️ 主持人</div>
+    <h2 class="section-title">认识我们的主播</h2>
+  </div>
+  <div class="hosts-grid">
+    <div class="host-card">
+      <div class="host-avatar host-a">陈</div>
+      <div class="host-info">
+        <h3 class="host-name">陈思远</h3>
+        <span class="host-role">主理人 / 科技评论人</span>
+        <p class="host-bio">前 Google 工程师，独立播客创作者。十年科技媒体经验，关注 AI、Web3 与创意工具的交汇领域。</p>
+        <div class="host-socials"><a href="#" aria-label="Twitter">𝕏</a><a href="#" aria-label="GitHub">GH</a><a href="#" aria-label="Email">@</a></div>
+      </div>
+    </div>
+    <div class="host-card">
+      <div class="host-avatar host-b">林</div>
+      <div class="host-info">
+        <h3 class="host-name">林嘉怡</h3>
+        <span class="host-role">联合主播 / 设计师</span>
+        <p class="host-bio">设计师 & 创意技术者。曾任 Spotify 设计系统团队负责人，热衷探索设计与技术融合的无限可能。</p>
+        <div class="host-socials"><a href="#" aria-label="Twitter">𝕏</a><a href="#" aria-label="Dribbble">Dr</a><a href="#" aria-label="Email">@</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section" id="testimonials">
+  <div class="section-header">
+    <div class="section-label">💬 听众心声</div>
+    <h2 class="section-title">他们在说什么</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">每周最期待的声音！思远和嘉怡的对话总是既有深度又有趣味，是我通勤路上的必备伴侣。尤其是关于 AI 创作的几期，给了我很多灵感。</p>
+      <div class="testimonial-author"><div class="testimonial-avatar ta1">张</div><div><div class="testimonial-name">张伟明</div><div class="testimonial-handle">@weiming_zhang</div></div></div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">作为一个独立开发者，这个播客让我感觉自己不再孤独。每次听完都有种「世界很大，我在路上」的感觉。强烈推荐给所有创意工作者！</p>
+      <div class="testimonial-author"><div class="testimonial-avatar ta2">王</div><div><div class="testimonial-name">王小萌</div><div class="testimonial-handle">@xiaomeng_dev</div></div></div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">SoundWave 是少数能让我在跑步时暂停做笔记的播客。每一期的信息密度都很高，但表达方式又很轻松，这是很难得的平衡。</p>
+      <div class="testimonial-author"><div class="testimonial-avatar ta3">李</div><div><div class="testimonial-name">李浩然</div><div class="testimonial-handle">@haoran_li</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter" id="subscribe">
+  <div class="newsletter-inner">
+    <h2 class="newsletter-title">📬 不错过每一期</h2>
+    <p class="newsletter-desc">订阅我们的邮件通知，新剧集上线第一时间通知你</p>
+    <form class="newsletter-form" onsubmit="event.preventDefault();this.querySelector('button').textContent='已订阅 ✓'">
+      <input type="email" class="newsletter-input" placeholder="输入你的邮箱地址" required>
+      <button type="submit" class="newsletter-btn">订阅</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="nav-logo" style="margin-bottom:var(--space-2);">
+        <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM19 10v2a7 7 0 0 1-14 0v-2H3v2a9 9 0 0 0 8 8.94V23h2v-2.06A9 9 0 0 0 21 12v-2h-2z"/></svg></div>
+        SoundWave
+      </div>
+      <p class="footer-brand-desc">探索科技与创意的交汇点。每周三更新，为你带来最前沿的科技对话与创作者故事。</p>
+    </div>
+    <div>
+      <h4 class="footer-col-title">平台</h4>
+      <ul class="footer-links"><li><a href="#">Apple Podcasts</a></li><li><a href="#">Spotify</a></li><li><a href="#">小宇宙</a></li><li><a href="#">喜马拉雅</a></li></ul>
+    </div>
+    <div>
+      <h4 class="footer-col-title">资源</h4>
+      <ul class="footer-links"><li><a href="#">往期节目</a></li><li><a href="#">文字稿</a></li><li><a href="#">推荐书单</a></li><li><a href="#">合作伙伴</a></li></ul>
+    </div>
+    <div>
+      <h4 class="footer-col-title">关于</h4>
+      <ul class="footer-links"><li><a href="#">关于我们</a></li><li><a href="#">联系方式</a></li><li><a href="#">隐私政策</a></li><li><a href="#">加入社群</a></li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SoundWave 播客. All rights reserved.</span>
+    <span>Made with 🎙️ & ❤️</span>
+  </div>
+</footer>
+
+</body>
+</html>
