@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lóvi Care — AI 健康管理平台</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --health-navy: #151581;
+      --health-blue: #5163FF;
+      --health-teal: #00B3B0;
+      --health-pink: #FA7599;
+      --health-lavender: #F6F6FA;
+      --health-warm: #F6F5F4;
+      --health-text: #292824;
+      --health-text-muted: rgba(84, 81, 81, 0.7);
+    }
+
+    body {
+      font-family: 'Inter', var(--font-sans);
+      color: var(--health-text);
+      background: #fff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Navigation ── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--health-navy);
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--health-blue), var(--health-teal));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--health-text-secondary, #475569);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--health-navy); }
+    .nav-cta {
+      padding: 10px 24px;
+      border-radius: 100px;
+      background: var(--health-blue);
+      color: #fff !important;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(81, 99, 255, 0.3);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      background: linear-gradient(180deg, #fff 0%, #fff 19%, var(--health-lavender) 21%, var(--health-lavender) 100%);
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border-radius: 100px;
+      background: linear-gradient(135deg, rgba(81,99,255,0.08), rgba(0,179,176,0.08));
+      color: var(--health-navy);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 28px;
+      border: 1px solid rgba(81,99,255,0.12);
+    }
+    .hero-badge span { font-size: 16px; }
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--health-navy);
+      max-width: 700px;
+      margin-bottom: 20px;
+    }
+    .hero h1 strong { font-weight: 600; }
+    .hero p {
+      font-size: 17px;
+      color: var(--health-text-muted);
+      max-width: 500px;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 36px;
+      border-radius: 100px;
+      background: var(--health-blue);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(81, 99, 255, 0.3);
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(81, 99, 255, 0.4);
+    }
+    .hero-cta svg { width: 20px; height: 20px; }
+
+    /* ── Phone Mockup ── */
+    .phone-section {
+      position: relative;
+      margin-top: -60px;
+      padding: 0 24px 80px;
+      display: flex;
+      justify-content: center;
+      background: var(--health-lavender);
+    }
+    .phone-mockup {
+      width: 320px;
+      height: 640px;
+      border-radius: 40px;
+      background: #000;
+      padding: 8px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 34px;
+      background: linear-gradient(180deg, var(--health-navy) 0%, #1a1a5e 40%, #2a2a7e 100%);
+      overflow: hidden;
+      position: relative;
+    }
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #000;
+      border-radius: 0 0 18px 18px;
+      z-index: 5;
+    }
+    .phone-content {
+      padding: 48px 24px 24px;
+      color: #fff;
+    }
+    .phone-greeting {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .phone-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 24px;
+    }
+    .phone-scan {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(81,99,255,0.3), rgba(0,179,176,0.3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .phone-scan::before {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border: 2px dashed rgba(255,255,255,0.3);
+      border-radius: 18px;
+    }
+    .phone-scan-icon {
+      font-size: 48px;
+      opacity: 0.8;
+    }
+    .phone-scan-line {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--health-teal), transparent);
+      animation: scanLine 2.5s ease-in-out infinite;
+    }
+    @keyframes scanLine {
+      0%, 100% { top: 20%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      50% { top: 80%; }
+    }
+    .phone-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .phone-stat {
+      text-align: center;
+      padding: 12px 4px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+    }
+    .phone-stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--health-teal);
+    }
+    .phone-stat-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    /* ── Brand Logos ── */
+    .brands {
+      padding: 80px 24px;
+      background: var(--health-lavender);
+    }
+    .brands-label {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--health-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 32px;
+    }
+    .brands-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .brand-logo {
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.8);
+      font-size: 14px;
+      font-weight: 600;
+      color: #94a3b8;
+      white-space: nowrap;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    /* ── Features ── */
+    .features {
+      padding: 100px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .features-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .features-header h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 400;
+      color: var(--health-navy);
+      margin-bottom: 16px;
+    }
+    .features-header h2 strong { font-weight: 600; }
+    .features-header p {
+      font-size: 16px;
+      color: var(--health-text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      padding: 36px 32px;
+      border-radius: 20px;
+      background: var(--health-lavender);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(21, 21, 129, 0.08);
+    }
+    .feature-card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .feature-card-icon.blue { background: rgba(81,99,255,0.1); }
+    .feature-card-icon.teal { background: rgba(0,179,176,0.1); }
+    .feature-card-icon.pink { background: rgba(250,117,153,0.1); }
+    .feature-card-icon.purple { background: rgba(222,98,222,0.1); }
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--health-navy);
+      margin-bottom: 10px;
+    }
+    .feature-card p {
+      font-size: 14px;
+      color: var(--health-text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── AI Chat Section ── */
+    .ai-chat {
+      padding: 100px 24px;
+      background: linear-gradient(135deg, rgba(81,99,255,0.85), rgba(206,162,255,0.85), rgba(255,133,177,0.85));
+      color: #fff;
+      text-align: center;
+    }
+    .ai-chat h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+    .ai-chat h2 strong { font-weight: 600; }
+    .ai-chat > p {
+      font-size: 16px;
+      opacity: 0.85;
+      max-width: 480px;
+      margin: 0 auto 48px;
+      line-height: 1.6;
+    }
+    .chat-container {
+      max-width: 480px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .chat-bubble {
+      padding: 16px 20px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      max-width: 85%;
+      font-size: 14px;
+      line-height: 1.5;
+      animation: fadeInUp 0.5s ease-out;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .chat-ai {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      border-bottom-left-radius: 6px;
+    }
+    .chat-user {
+      background: rgba(255,255,255,0.95);
+      color: var(--health-navy);
+      margin-left: auto;
+      border-bottom-right-radius: 6px;
+    }
+    .chat-typing {
+      display: flex;
+      gap: 4px;
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      width: fit-content;
+      margin-bottom: 12px;
+    }
+    .chat-typing span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.6);
+      animation: typing 1.4s infinite;
+    }
+    .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ── Skin Issues Grid ── */
+    .skin-issues {
+      padding: 100px 24px;
+      background: #fff;
+    }
+    .skin-issues-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .skin-text h2 {
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 400;
+      color: var(--health-navy);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .skin-text h2 strong { font-weight: 600; }
+    .skin-text p {
+      font-size: 15px;
+      color: var(--health-text-muted);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+    .skin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .skin-item {
+      padding: 16px 12px;
+      border-radius: 14px;
+      background: var(--health-lavender);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .skin-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(21, 21, 129, 0.06);
+    }
+    .skin-item-icon { font-size: 22px; margin-bottom: 6px; }
+    .skin-item-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--health-text);
+    }
+    .skin-visual {
+      display: flex;
+      justify-content: center;
+    }
+    .skin-visual-phone {
+      width: 280px;
+      height: 500px;
+      border-radius: 36px;
+      background: linear-gradient(135deg, #0d0d6e, var(--health-navy), #2a2a8e);
+      padding: 8px;
+      box-shadow: 0 30px 60px rgba(21, 21, 129, 0.2);
+      position: relative;
+    }
+    .skin-visual-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .skin-visual-chart {
+      width: 200px;
+      height: 120px;
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .skin-visual-chart svg { width: 100%; height: 100%; }
+    .skin-visual-score {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--health-teal);
+    }
+    .skin-visual-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+    }
+
+    /* ── Ingredients Section ── */
+    .ingredients {
+      padding: 100px 24px;
+      background: var(--health-lavender);
+    }
+    .ingredients-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .ingredients-inner h2 {
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 400;
+      color: var(--health-navy);
+      margin-bottom: 12px;
+    }
+    .ingredients-inner h2 strong { font-weight: 600; }
+    .ingredients-inner > p {
+      font-size: 15px;
+      color: var(--health-text-muted);
+      max-width: 500px;
+      margin: 0 auto 48px;
+      line-height: 1.6;
+    }
+    .ingredient-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .ingredient-card {
+      padding: 28px 20px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .ingredient-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+    }
+    .ingredient-emoji { font-size: 32px; margin-bottom: 12px; }
+    .ingredient-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--health-navy);
+      margin-bottom: 6px;
+    }
+    .ingredient-desc {
+      font-size: 13px;
+      color: var(--health-text-muted);
+      line-height: 1.5;
+    }
+    .ingredient-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-safe { background: rgba(59,196,57,0.1); color: #16a34a; }
+    .badge-natural { background: rgba(0,179,176,0.1); color: #00B3B0; }
+
+    /* ── Testimonials ── */
+    .testimonials {
+      padding: 100px 24px;
+      background: #fff;
+    }
+    .testimonials-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .testimonials-header h2 {
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 400;
+      color: var(--health-navy);
+      margin-bottom: 12px;
+    }
+    .testimonials-header h2 strong { font-weight: 600; }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .testimonial-card {
+      padding: 28px;
+      border-radius: 18px;
+      background: var(--health-lavender);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    .testimonial-stars {
+      color: #f59e0b;
+      font-size: 14px;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+    .testimonial-text {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--health-text);
+      margin-bottom: 16px;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .testimonial-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #fff;
+      font-weight: 600;
+    }
+    .testimonial-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--health-navy);
+    }
+    .testimonial-role {
+      font-size: 11px;
+      color: var(--health-text-muted);
+    }
+
+    /* ── FAQ ── */
+    .faq {
+      padding: 100px 24px;
+      background: var(--health-lavender);
+    }
+    .faq-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .faq-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .faq-header h2 {
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 400;
+      color: var(--health-navy);
+      margin-bottom: 12px;
+    }
+    .faq-header h2 strong { font-weight: 600; }
+    .faq-item {
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .faq-question {
+      width: 100%;
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--health-navy);
+      text-align: left;
+    }
+    .faq-question:hover { color: var(--health-blue); }
+    .faq-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(81,99,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--health-blue);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    .faq-item.active .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+      padding-bottom: 20px;
+    }
+    .faq-answer p {
+      font-size: 14px;
+      color: var(--health-text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── CTA Section ── */
+    .cta-section {
+      padding: 100px 24px;
+      background: linear-gradient(135deg, var(--health-navy), #2a2a8e);
+      text-align: center;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,179,176,0.2), transparent 70%);
+      top: -100px;
+      right: -100px;
+    }
+    .cta-section::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(250,117,153,0.15), transparent 70%);
+      bottom: -80px;
+      left: -80px;
+    }
+    .cta-content {
+      position: relative;
+      z-index: 1;
+    }
+    .cta-section h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+    .cta-section h2 strong { font-weight: 600; }
+    .cta-section p {
+      font-size: 16px;
+      opacity: 0.75;
+      max-width: 460px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 40px;
+      border-radius: 100px;
+      background: #fff;
+      color: var(--health-navy);
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 48px 24px;
+      background: #fff;
+      text-align: center;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .footer p {
+      font-size: 13px;
+      color: var(--health-text-muted);
+      line-height: 1.6;
+    }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 16px;
+    }
+    .footer-links a {
+      font-size: 13px;
+      color: var(--health-text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--health-blue); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .skin-issues-inner { grid-template-columns: 1fr; }
+      .skin-grid { grid-template-columns: repeat(3, 1fr); }
+      .ingredient-cards { grid-template-columns: 1fr; max-width: 360px; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .phone-mockup { width: 280px; height: 560px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">💚</div>
+      Lóvi Care
+    </a>
+    <div class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#ai-chat">AI 对话</a>
+      <a href="#ingredients">成分检测</a>
+      <a href="#faq">常见问题</a>
+      <a href="#" class="nav-cta">免费下载</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span>🏆</span> 荣获 Beauty Innovation Award
+    </div>
+    <h1>科学驱动的 <strong>AI 皮肤管理</strong>，值得信赖</h1>
+    <p>围绕你的需求定制，让护肤像自我关爱一样简单。11+ 皮肤问题检测，个性化 AI 美容顾问 24/7 在线。</p>
+    <a href="#" class="hero-cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      开始免费体验
+    </a>
+  </section>
+
+  <!-- Phone Mockup -->
+  <div class="phone-section">
+    <div class="phone-mockup">
+      <div class="phone-screen">
+        <div class="phone-notch"></div>
+        <div class="phone-content">
+          <div class="phone-greeting">Hi，欢迎回来 👋</div>
+          <div class="phone-sub">今日皮肤状态检测</div>
+          <div class="phone-scan">
+            <div class="phone-scan-icon">🔬</div>
+            <div class="phone-scan-line"></div>
+          </div>
+          <div class="phone-stats">
+            <div class="phone-stat">
+              <div class="phone-stat-value">92</div>
+              <div class="phone-stat-label">综合评分</div>
+            </div>
+            <div class="phone-stat">
+              <div class="phone-stat-value">3</div>
+              <div class="phone-stat-label">需关注</div>
+            </div>
+            <div class="phone-stat">
+              <div class="phone-stat-value">8</div>
+              <div class="phone-stat-label">良好</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand Logos -->
+  <section class="brands">
+    <div class="brands-label">受到全球领先护肤品牌信赖</div>
+    <div class="brands-track">
+      <div class="brand-logo">CeraVe</div>
+      <div class="brand-logo">The Ordinary</div>
+      <div class="brand-logo">Paula's Choice</div>
+      <div class="brand-logo">La Roche-Posay</div>
+      <div class="brand-logo">SK-II</div>
+      <div class="brand-logo">Drunk Elephant</div>
+      <div class="brand-logo">Medik8</div>
+      <div class="brand-logo">SkinCeuticals</div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="features-header">
+      <h2>你的智能 <strong>护肤助手</strong></h2>
+      <p>AI 驱动的个性化护肤方案，从检测到推荐，一站式解决</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-card-icon blue">🔍</div>
+        <h3>11+ 皮肤问题检测</h3>
+        <p>通过 AI 面部扫描，精准检测痤疮、皱纹、色素沉着、毛孔、红血丝等 11 种以上皮肤状况，生成详细报告。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon teal">🤖</div>
+        <h3>24/7 AI 美容顾问</h3>
+        <p>随时向 AI 美容顾问提问，获取个性化护肤建议、产品推荐和成分分析，就像拥有一位专业皮肤科医生。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon pink">🧪</div>
+        <h3>成分安全检测</h3>
+        <p>扫描任何护肤品，立即查看成分安全性、过敏风险和功效评估，帮你避开不适合的成分。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon purple">📈</div>
+        <h3>皮肤变化追踪</h3>
+        <p>定期记录皮肤状态，可视化追踪改善趋势。用数据见证你的护肤成果，及时调整方案。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Chat Section -->
+  <section class="ai-chat" id="ai-chat">
+    <h2>口袋里的 <strong>24/7 美容顾问</strong></h2>
+    <p>自然语言对话，AI 即时回答你的任何护肤问题</p>
+    <div class="chat-container">
+      <div class="chat-bubble chat-ai">你好！我是你的 AI 美容顾问 ✨ 今天皮肤感觉怎么样？</div>
+      <div class="chat-bubble chat-user">最近额头总是长闭口，有什么建议吗？</div>
+      <div class="chat-typing">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="chat-bubble chat-ai">根据你上次的扫描报告，你的额头 T 区油脂分泌偏高。建议：<br><br>1️⃣ 使用含水杨酸 (BHA) 的洁面产品<br>2️⃣ 每周 1-2 次清洁面膜<br>3️⃣ 选择轻薄质地的保湿产品<br><br>推荐你试试 The Ordinary 水杨酸精华，匹配度 94% 👍</div>
+    </div>
+  </section>
+
+  <!-- Skin Issues -->
+  <section class="skin-issues">
+    <div class="skin-issues-inner">
+      <div class="skin-text">
+        <h2>全面检测 <strong>11+ 皮肤问题</strong></h2>
+        <p>先进的计算机视觉技术，帮你精准了解每一种皮肤状况，制定针对性护理方案。</p>
+        <div class="skin-grid">
+          <div class="skin-item"><div class="skin-item-icon">🔴</div><div class="skin-item-label">痤疮</div></div>
+          <div class="skin-item"><div class="skin-item-icon">〰️</div><div class="skin-item-label">皱纹</div></div>
+          <div class="skin-item"><div class="skin-item-icon">🟤</div><div class="skin-item-label">色素</div></div>
+          <div class="skin-item"><div class="skin-item-icon">⭕</div><div class="skin-item-label">毛孔</div></div>
+          <div class="skin-item"><div class="skin-item-icon">🔴</div><div class="skin-item-label">红血丝</div></div>
+          <div class="skin-item"><div class="skin-item-icon">🩹</div><div class="skin-item-label">痘印</div></div>
+          <div class="skin-item"><div class="skin-item-icon">💧</div><div class="skin-item-label">黑头</div></div>
+          <div class="skin-item"><div class="skin-item-icon">✨</div><div class="skin-item-label">光泽度</div></div>
+          <div class="skin-item"><div class="skin-item-icon">🎯</div><div class="skin-item-label">弹性</div></div>
+        </div>
+      </div>
+      <div class="skin-visual">
+        <div class="skin-visual-phone">
+          <div class="skin-visual-screen">
+            <div class="skin-visual-chart">
+              <svg viewBox="0 0 200 120">
+                <defs>
+                  <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#5163FF;stop-opacity:0.3"/>
+                    <stop offset="100%" style="stop-color:#5163FF;stop-opacity:0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M10,90 C30,85 50,60 80,55 C110,50 130,30 160,25 C180,22 190,15 195,10 L195,120 L10,120 Z" fill="url(#chartGrad)"/>
+                <path d="M10,90 C30,85 50,60 80,55 C110,50 130,30 160,25 C180,22 190,15 195,10" fill="none" stroke="#5163FF" stroke-width="2.5"/>
+                <circle cx="80" cy="55" r="4" fill="#5163FF"/>
+                <circle cx="160" cy="25" r="4" fill="#5163FF"/>
+              </svg>
+            </div>
+            <div class="skin-visual-score">92</div>
+            <div class="skin-visual-label">皮肤健康评分</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ingredients -->
+  <section class="ingredients" id="ingredients">
+    <div class="ingredients-inner">
+      <h2>智能 <strong>成分安全检测</strong></h2>
+      <p>扫描任何护肤品，即刻了解成分安全性、功效和匹配度</p>
+      <div class="ingredient-cards">
+        <div class="ingredient-card">
+          <div class="ingredient-emoji">🧪</div>
+          <div class="ingredient-name">视黄醇 Retinol</div>
+          <div class="ingredient-desc">抗衰老金标准成分，促进细胞更新，减少细纹</div>
+          <span class="ingredient-badge badge-safe">✓ 安全使用</span>
+        </div>
+        <div class="ingredient-card">
+          <div class="ingredient-emoji">🌿</div>
+          <div class="ingredient-name">角鲨烷 Squalane</div>
+          <div class="ingredient-desc">天然保湿因子，修复皮肤屏障，质地轻盈</div>
+          <span class="ingredient-badge badge-natural">🌱 天然成分</span>
+        </div>
+        <div class="ingredient-card">
+          <div class="ingredient-emoji">💧</div>
+          <div class="ingredient-name">烟酰胺 Niacinamide</div>
+          <div class="ingredient-desc">维生素 B3，控油收毛孔，提亮肤色</div>
+          <span class="ingredient-badge badge-safe">✓ 安全使用</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <div class="testimonials-inner">
+      <div class="testimonials-header">
+        <h2>用户 <strong>真实评价</strong></h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"用了两个月，痘痘明显减少了！AI 推荐的产品真的很适合我的肤质，比我自己瞎买靠谱多了。"</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: linear-gradient(135deg, #5163FF, #00B3B0)">S</div>
+            <div>
+              <div class="testimonial-name">Sarah K.</div>
+              <div class="testimonial-role">App Store 用户</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"成分检测功能太好用了！以前买护肤品全靠感觉，现在扫一下就知道适不适合自己。"</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: linear-gradient(135deg, #FA7599, #DE62DE)">M</div>
+            <div>
+              <div class="testimonial-name">Mia L.</div>
+              <div class="testimonial-role">Trustpilot</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"作为一个皮肤科医生，我推荐我的患者使用这款 App 来追踪皮肤变化，数据非常准确。"</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4)">D</div>
+            <div>
+              <div class="testimonial-name">Dr. Sofia Pereira</div>
+              <div class="testimonial-role">皮肤科医生</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="faq-inner">
+      <div class="faq-header">
+        <h2>常见 <strong>问题</strong></h2>
+      </div>
+      <div class="faq-item active">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+          Lóvi Care 是什么？
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Lóvi Care 是一款 AI 驱动的皮肤管理应用，通过面部扫描检测 11+ 种皮肤问题，提供个性化护肤建议和产品推荐。</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+          我的数据安全吗？
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>完全安全。你的面部数据和健康信息采用端到端加密存储，不会分享给第三方。你可以随时删除所有数据。</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+          AI 推荐的产品是否与品牌合作？
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>不，我们的推荐完全基于你的皮肤数据和成分匹配度，没有任何品牌赞助或合作关系。我们只推荐最适合你肤质的产品。</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+          检测结果有科学依据吗？
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>是的，我们的 AI 模型基于 10 万+ 皮肤科临床数据训练，并通过了皮肤科医生的验证。检测准确率超过 95%。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>Lóvi Care — <strong>护肤即自爱</strong></h2>
+      <p>下载 Lóvi Care，开启你的 AI 皮肤管理之旅。免费使用基础功能。</p>
+      <a href="#" class="cta-btn">📱 立即下载</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 Lóvi Care. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">隐私政策</a>
+      <a href="#">服务条款</a>
+      <a href="#">联系我们</a>
+      <a href="#">帮助中心</a>
+    </div>
+  </footer>
+
+</body>
+</html>

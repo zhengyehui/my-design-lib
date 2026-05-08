@@ -380,6 +380,20 @@ export default defineConfig({
           items: [
             { text: 'SoundWave 播客频道', link: '/pages/podcast-show' }
           ]
+        },
+        {
+          text: '🏥 健康',
+          collapsed: true,
+          items: [
+            { text: 'Lóvi Care AI 健康管理', link: '/pages/health-ai' }
+          ]
+        },
+        {
+          text: '📷 摄影',
+          collapsed: true,
+          items: [
+            { text: 'Atelier Lumière 摄影作品集', link: '/pages/photography-portfolio' }
+          ]
         }
       ]
     },

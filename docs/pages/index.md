@@ -361,6 +361,24 @@ const pages = [
     rating: 9.5,
     description: '现代数字银行产品页，CSS 手机模型 + 虚拟银行卡扇形展开 + 交易记录 + 安全特性 + 定价方案',
   },
+  {
+    id: 'health-ai',
+    title: 'Lóvi Care AI 健康管理',
+    category: 'health',
+    tags: ['健康', 'AI', '医疗', '护肤'],
+    colors: ['#151581', '#5163FF', '#F6F6FA'],
+    rating: 9.5,
+    description: 'AI 皮肤管理应用落地页，灵感来自 Lóvi.care，手机模型扫描动画 + AI 对话演示 + 成分检测 + 用户评价',
+  },
+  {
+    id: 'photography-portfolio',
+    title: 'Atelier Lumière 摄影作品集',
+    category: 'portfolio',
+    tags: ['摄影', '作品集', '极简', '衬线字体'],
+    colors: ['#faf9f7', '#1a1a1a', '#c4a35a'],
+    rating: 9.4,
+    description: '极简摄影作品集，Playfair Display 衬线字体 + 12 列不等宽网格 + mix-blend-mode 导航 + Marquee 滚动条',
+  },
 ]
 
 const categories = [
@@ -383,7 +401,8 @@ const categories = [
   { id: 'web3', label: 'Web3', icon: '⛓️' },
   { id: 'newsletter', label: 'Newsletter', icon: '📬' },
   { id: 'fashion', label: '时尚', icon: '👗' },
-  { id: 'podcast', label: '播客', icon: '🎙️' }
+  { id: 'podcast', label: '播客', icon: '🎙️' },
+  { id: 'health', label: '健康', icon: '🏥' }
 ]
 
 const activeCategory = ref('all')
