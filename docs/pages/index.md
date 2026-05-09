@@ -379,6 +379,24 @@ const pages = [
     rating: 9.4,
     description: '极简摄影作品集，Playfair Display 衬线字体 + 12 列不等宽网格 + mix-blend-mode 导航 + Marquee 滚动条',
   },
+  {
+    id: 'architecture-studio',
+    title: 'Atelier Noir 建筑设计工作室',
+    category: 'architecture',
+    tags: ['建筑设计', '暗色主题', '作品集', '奢华'],
+    colors: ['#0a0a0a', '#c9a96e', '#f5f0eb'],
+    rating: 9.5,
+    description: '暗色系建筑设计工作室，衬线字体 + 宽字距 + 横向滚动画廊 + 交错项目展示',
+  },
+  {
+    id: 'nonprofit-impact',
+    title: 'Hope Forward 公益教育平台',
+    category: 'nonprofit',
+    tags: ['公益', '非营利', '教育', '暗色Hero'],
+    colors: ['#0c1d3a', '#e8614d', '#faf8f5'],
+    rating: 9.4,
+    description: '公益教育组织落地页，浮动粒子动画 + 影响力数据 + 项目网格 + 捐赠 CTA',
+  },
 ]
 
 const categories = [
@@ -402,7 +420,9 @@ const categories = [
   { id: 'newsletter', label: 'Newsletter', icon: '📬' },
   { id: 'fashion', label: '时尚', icon: '👗' },
   { id: 'podcast', label: '播客', icon: '🎙️' },
-  { id: 'health', label: '健康', icon: '🏥' }
+  { id: 'health', label: '健康', icon: '🏥' },
+  { id: 'architecture', label: '建筑', icon: '🏛️' },
+  { id: 'nonprofit', label: '公益', icon: '💚' },
 ]
 
 const activeCategory = ref('all')

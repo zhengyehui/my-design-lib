@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATELIER NOIR — Architecture & Interior Design</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ============================================
+       ATELIER NOIR — Dark Luxury Architecture Studio
+       ============================================ */
+
+    :root {
+      --color-primary: #c9a96e;
+      --color-text: #f5f0eb;
+      --color-text-secondary: rgba(245, 240, 235, 0.55);
+      --color-bg: #0a0a0a;
+      --color-bg-alt: #1a1a1a;
+      --color-gold: #c9a96e;
+      --color-gold-dim: rgba(201, 169, 110, 0.35);
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --font-display: Georgia, 'Times New Roman', 'Noto Serif', 'Playfair Display', serif;
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 2rem;
+      --space-lg: 4rem;
+      --space-xl: 6rem;
+      --space-2xl: 8rem;
+      --radius-sm: 2px;
+      --radius-md: 4px;
+      --radius-lg: 8px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.5);
+      --shadow-lg: 0 16px 64px rgba(0,0,0,0.6);
+      --ease-default: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ---- Scrollbar ---- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--color-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--color-gold-dim); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
+
+    /* ---- Typography ---- */
+    .heading-xl {
+      font-family: var(--font-display);
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .heading-lg {
+      font-family: var(--font-display);
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .heading-md {
+      font-family: var(--font-display);
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      line-height: 1.3;
+    }
+
+    .label {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+    }
+
+    .gold { color: var(--color-gold); }
+    .dim { color: var(--color-text-secondary); }
+
+    /* ---- Reveal Animation ---- */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideRight {
+      from {
+        opacity: 0;
+        transform: translateX(-60px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes lineGrow {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s var(--ease-default), transform 0.8s var(--ease-default);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ============================================
+       a) HERO SECTION
+       ============================================ */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      background: var(--color-bg);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,169,110,0.06) 0%, transparent 70%),
+        linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(10,10,10,0.4) 100%);
+      z-index: 1;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, #0a0a0a 0%, #1a1510 25%, #0d0d0d 50%, #151210 75%, #0a0a0a 100%);
+      opacity: 0.8;
+    }
+
+    .hero-grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,169,110,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,169,110,0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: var(--space-md);
+    }
+
+    .hero-pretitle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: var(--space-lg);
+      animation: fadeIn 1s var(--ease-default) 0.3s both;
+    }
+
+    .hero-line {
+      width: 60px;
+      height: 1px;
+      background: var(--color-gold);
+      animation: lineGrow 1s var(--ease-default) 0.8s both;
+      transform-origin: center;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 10vw, 8rem);
+      margin-bottom: var(--space-md);
+      animation: fadeUp 1s var(--ease-default) 0.5s both;
+      mix-blend-mode: difference;
+    }
+
+    .hero-title span {
+      display: block;
+      color: var(--color-text);
+    }
+
+    .hero-title .accent {
+      color: var(--color-gold);
+      mix-blend-mode: normal;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-sans);
+      font-size: clamp(0.75rem, 1.5vw, 1rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-xl);
+      animation: fadeUp 1s var(--ease-default) 0.7s both;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 2.5rem;
+      border: 1px solid var(--color-gold-dim);
+      color: var(--color-gold);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      transition: all 0.5s var(--ease-default);
+      animation: fadeUp 1s var(--ease-default) 0.9s both;
+    }
+
+    .hero-cta:hover {
+      background: var(--color-gold);
+      color: var(--color-bg);
+      border-color: var(--color-gold);
+    }
+
+    .hero-cta svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.4s var(--ease-default);
+    }
+
+    .hero-cta:hover svg {
+      transform: translateY(4px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      animation: fadeIn 1s var(--ease-default) 1.2s both;
+    }
+
+    .hero-scroll span {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      writing-mode: vertical-rl;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--color-gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ============================================
+       b) PROJECT GALLERY (Horizontal Scroll)
+       ============================================ */
+    .gallery-section {
+      padding: var(--space-2xl) 0 var(--space-xl);
+      overflow: hidden;
+    }
+
+    .gallery-header {
+      padding: 0 var(--space-lg);
+      margin-bottom: var(--space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .gallery-header .number {
+      font-family: var(--font-display);
+      font-size: 5rem;
+      color: var(--color-bg-alt);
+      line-height: 1;
+      font-style: italic;
+    }
+
+    .gallery-scroll-wrapper {
+      position: relative;
+    }
+
+    .gallery-scroll {
+      display: flex;
+      gap: 2rem;
+      padding: 0 var(--space-lg);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      cursor: grab;
+    }
+
+    .gallery-scroll::-webkit-scrollbar { display: none; }
+
+    .gallery-item {
+      flex: 0 0 380px;
+      scroll-snap-align: start;
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      group: true;
+    }
+
+    .gallery-item-image {
+      width: 100%;
+      height: 520px;
+      border-radius: var(--radius-md);
+      transition: transform 0.8s var(--ease-default), filter 0.8s var(--ease-default);
+    }
+
+    .gallery-item:nth-child(1) .gallery-item-image {
+      background: linear-gradient(160deg, #1a1510 0%, #2a1f15 30%, #0f0d0a 60%, #1a1612 100%);
+    }
+    .gallery-item:nth-child(2) .gallery-item-image {
+      background: linear-gradient(200deg, #121212 0%, #1f1a15 40%, #0a0a0a 70%, #161210 100%);
+    }
+    .gallery-item:nth-child(3) .gallery-item-image {
+      background: linear-gradient(140deg, #0f0d0a 0%, #251e16 35%, #1a1510 65%, #0d0b08 100%);
+    }
+    .gallery-item:nth-child(4) .gallery-item-image {
+      background: linear-gradient(170deg, #141210 0%, #1c1710 45%, #0b0a08 75%, #131110 100%);
+    }
+    .gallery-item:nth-child(5) .gallery-item-image {
+      background: linear-gradient(190deg, #101010 0%, #221c14 30%, #0e0c0a 60%, #181512 100%);
+    }
+    .gallery-item:nth-child(6) .gallery-item-image {
+      background: linear-gradient(155deg, #0d0d0d 0%, #1d1812 50%, #0a0a0a 80%, #141210 100%);
+    }
+
+    .gallery-item:hover .gallery-item-image {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    .gallery-item-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem;
+      background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 100%);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.5s var(--ease-default);
+    }
+
+    .gallery-item:hover .gallery-item-overlay {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .gallery-item-overlay h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .gallery-item-overlay p {
+      font-size: 0.75rem;
+      color: var(--color-gold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* Geometric accent shapes on gallery items */
+    .gallery-item-image::before {
+      content: '';
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--color-gold-dim);
+      opacity: 0;
+      transition: all 0.6s var(--ease-default);
+      z-index: 1;
+    }
+
+    .gallery-item:hover .gallery-item-image::before {
+      opacity: 1;
+      transform: rotate(45deg);
+    }
+
+    /* ============================================
+       c) ABOUT SECTION
+       ============================================ */
+    .about-section {
+      padding: var(--space-2xl) var(--space-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-gold-dim), transparent);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .about-text {
+      padding-right: var(--space-lg);
+    }
+
+    .about-text .label {
+      margin-bottom: var(--space-md);
+      display: block;
+    }
+
+    .about-text h2 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      margin-bottom: var(--space-lg);
+      line-height: 1.05;
+    }
+
+    .about-text h2 .highlight {
+      color: var(--color-gold);
+      font-style: italic;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-md);
+      max-width: 520px;
+    }
+
+    .about-text .stat-row {
+      display: flex;
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid rgba(201,169,110,0.15);
+    }
+
+    .stat {
+      text-align: left;
+    }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--color-gold);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+    }
+
+    /* Decorative geometric element */
+    .about-visual {
+      position: relative;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .geo-frame {
+      position: relative;
+      width: 320px;
+      height: 320px;
+    }
+
+    .geo-frame .frame-border {
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--color-gold-dim);
+    }
+
+    .geo-frame .frame-inner {
+      position: absolute;
+      inset: 30px;
+      background: linear-gradient(135deg, #1a1610 0%, #0f0d0a 50%, #151210 100%);
+    }
+
+    .geo-frame .frame-accent {
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 80px;
+      height: 80px;
+      border: 1px solid var(--color-gold);
+    }
+
+    .geo-frame .frame-dot {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      width: 8px;
+      height: 8px;
+      background: var(--color-gold);
+      border-radius: 50%;
+    }
+
+    .geo-frame .frame-line-h {
+      position: absolute;
+      top: 50%;
+      left: -40px;
+      width: 40px;
+      height: 1px;
+      background: var(--color-gold-dim);
+    }
+
+    .geo-frame .frame-line-v {
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      width: 1px;
+      height: 40px;
+      background: var(--color-gold-dim);
+    }
+
+    .geo-text-overlay {
+      position: absolute;
+      font-family: var(--font-display);
+      font-size: 8rem;
+      font-style: italic;
+      color: rgba(201,169,110,0.04);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ============================================
+       d) SERVICES GRID
+       ============================================ */
+    .services-section {
+      padding: var(--space-2xl) var(--space-lg);
+      background: var(--color-bg-alt);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+
+    .services-header h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-top: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      padding: var(--space-xl) var(--space-lg);
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.02);
+      transition: all 0.6s var(--ease-default);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--color-gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.6s var(--ease-default);
+    }
+
+    .service-card:hover {
+      background: rgba(201,169,110,0.03);
+      border-color: rgba(201,169,110,0.1);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-number {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      color: rgba(201,169,110,0.08);
+      line-height: 1;
+      margin-bottom: var(--space-md);
+      transition: color 0.5s var(--ease-default);
+    }
+
+    .service-card:hover .service-number {
+      color: rgba(201,169,110,0.2);
+    }
+
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-md);
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-md);
+    }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--color-gold);
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: gap 0.4s var(--ease-default);
+    }
+
+    .service-link:hover {
+      gap: 1.25rem;
+    }
+
+    .service-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.4s var(--ease-default);
+    }
+
+    .service-link:hover svg {
+      transform: translateX(4px);
+    }
+
+    /* ============================================
+       e) FEATURED PROJECTS (Alternating Layouts)
+       ============================================ */
+    .featured-section {
+      padding: var(--space-2xl) var(--space-lg);
+    }
+
+    .featured-header {
+      text-align: center;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .featured-header h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-top: var(--space-sm);
+    }
+
+    .featured-item {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-xl);
+      max-width: 1400px;
+      margin: 0 auto var(--space-2xl);
+      align-items: center;
+    }
+
+    .featured-item.reverse {
+      grid-template-columns: 1fr 1.2fr;
+    }
+
+    .featured-item.reverse .featured-image {
+      order: 2;
+    }
+
+    .featured-item.reverse .featured-info {
+      order: 1;
+      text-align: right;
+    }
+
+    .featured-image {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+
+    .featured-image-inner {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s var(--ease-default);
+    }
+
+    .featured-item:hover .featured-image-inner {
+      transform: scale(1.03);
+    }
+
+    .featured-item:nth-child(odd) .featured-image-inner {
+      background: linear-gradient(135deg, #1c1710 0%, #2a2015 30%, #12100e 60%, #1a1612 100%);
+    }
+
+    .featured-item:nth-child(even) .featured-image-inner {
+      background: linear-gradient(200deg, #141210 0%, #1e1914 40%, #0e0c0a 70%, #151210 100%);
+    }
+
+    .featured-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.6) 0%, transparent 50%);
+    }
+
+    .featured-image-label {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+    }
+
+    .featured-info .label {
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+
+    .featured-info h3 {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      margin-bottom: var(--space-md);
+      line-height: 1.15;
+    }
+
+    .featured-info p {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-md);
+      max-width: 440px;
+    }
+
+    .featured-info .meta {
+      display: flex;
+      gap: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid rgba(201,169,110,0.12);
+    }
+
+    .featured-item.reverse .featured-info .meta {
+      justify-content: flex-end;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .meta-item span:first-child {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+    }
+
+    .meta-item span:last-child {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--color-gold);
+    }
+
+    /* ============================================
+       f) CONTACT SECTION
+       ============================================ */
+    .contact-section {
+      padding: var(--space-2xl) var(--space-lg);
+      background: var(--color-bg-alt);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+    }
+
+    .contact-left .label {
+      margin-bottom: var(--space-md);
+      display: block;
+    }
+
+    .contact-left h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      margin-bottom: var(--space-lg);
+      line-height: 1.1;
+    }
+
+    .contact-left p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--color-text-secondary);
+      max-width: 480px;
+      margin-bottom: var(--space-lg);
+    }
+
+    .contact-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 2.5rem;
+      border: 1px solid var(--color-gold-dim);
+      color: var(--color-gold);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.5s var(--ease-default);
+    }
+
+    .contact-email:hover {
+      background: var(--color-gold);
+      color: var(--color-bg);
+      border-color: var(--color-gold);
+    }
+
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 0.5rem;
+    }
+
+    .contact-address {
+      margin-bottom: var(--space-lg);
+    }
+
+    .contact-address .address-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+
+    .contact-address address {
+      font-style: normal;
+      font-size: 1.1rem;
+      line-height: 2;
+      color: var(--color-text);
+    }
+
+    .contact-details {
+      display: flex;
+      gap: var(--space-lg);
+    }
+
+    .contact-detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .contact-detail-item .detail-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+    }
+
+    .contact-detail-item a,
+    .contact-detail-item span {
+      font-size: 0.9rem;
+      color: var(--color-text);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .contact-detail-item a:hover {
+      color: var(--color-gold);
+    }
+
+    /* ============================================
+       g) FOOTER
+       ============================================ */
+    .footer {
+      padding: var(--space-lg) var(--space-lg);
+      border-top: 1px solid rgba(201,169,110,0.1);
+    }
+
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--space-md);
+    }
+
+    .footer-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-gold);
+    }
+
+    .footer-copy {
+      font-size: 0.7rem;
+      color: rgba(245,240,235,0.3);
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 1024px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+      }
+
+      .about-text {
+        padding-right: 0;
+      }
+
+      .about-visual {
+        height: 350px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .featured-item,
+      .featured-item.reverse {
+        grid-template-columns: 1fr;
+      }
+
+      .featured-item.reverse .featured-image {
+        order: 0;
+      }
+
+      .featured-item.reverse .featured-info {
+        order: 0;
+        text-align: left;
+      }
+
+      .featured-item.reverse .featured-info .meta {
+        justify-content: flex-start;
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --space-lg: 2.5rem;
+        --space-xl: 4rem;
+        --space-2xl: 5rem;
+      }
+
+      .gallery-header {
+        padding: 0 var(--space-md);
+      }
+
+      .gallery-header .number {
+        font-size: 3rem;
+      }
+
+      .gallery-scroll {
+        padding: 0 var(--space-md);
+      }
+
+      .gallery-item {
+        flex: 0 0 300px;
+      }
+
+      .gallery-item-image {
+        height: 400px;
+      }
+
+      .stat-row {
+        flex-direction: column;
+        gap: var(--space-md) !important;
+      }
+
+      .service-card {
+        padding: var(--space-lg) var(--space-md);
+      }
+
+      .featured-info .meta {
+        flex-direction: column;
+        gap: var(--space-sm) !important;
+      }
+
+      .featured-item.reverse .featured-info .meta {
+        justify-content: flex-start;
+      }
+
+      .contact-details {
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+      }
+
+      .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-item {
+        flex: 0 0 260px;
+      }
+
+      .gallery-item-image {
+        height: 340px;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .contact-email {
+        padding: 1rem 1.5rem;
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-pretitle">
+        <span class="hero-line"></span>
+        <span class="label">Est. 2008</span>
+        <span class="hero-line"></span>
+      </div>
+      <h1 class="hero-title heading-xl">
+        <span>ATELIER</span>
+        <span class="accent">NOIR</span>
+      </h1>
+      <p class="hero-tagline">Architecture &amp; Interior Design</p>
+      <a href="#projects" class="hero-cta">
+        View Projects
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M8 2v12M3 9l5 5 5-5"/>
+        </svg>
+      </a>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section class="gallery-section" id="projects">
+    <div class="gallery-header reveal">
+      <div>
+        <span class="label">Selected Works</span>
+        <h2 class="heading-lg" style="margin-top: 0.75rem;">Portfolio</h2>
+      </div>
+      <div class="number">06</div>
+    </div>
+    <div class="gallery-scroll-wrapper">
+      <div class="gallery-scroll" id="galleryScroll">
+        <div class="gallery-item reveal reveal-delay-1">
+          <div class="gallery-item-image" style="position:relative;"></div>
+          <div class="gallery-item-overlay">
+            <h3>Obsidian Tower</h3>
+            <p>Shanghai, 2024</p>
+          </div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-2">
+          <div class="gallery-item-image" style="position:relative;"></div>
+          <div class="gallery-item-overlay">
+            <h3>The Void Residence</h3>
+            <p>Tokyo, 2023</p>
+          </div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-3">
+          <div class="gallery-item-image" style="position:relative;"></div>
+          <div class="gallery-item-overlay">
+            <h3>Nocturne Gallery</h3>
+            <p>Berlin, 2023</p>
+          </div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-4">
+          <div class="gallery-item-image" style="position:relative;"></div>
+          <div class="gallery-item-overlay">
+            <h3>Eclipse Pavilion</h3>
+            <p>Dubai, 2022</p>
+          </div>
+        </div>
+        <div class="gallery-item reveal">
+          <div class="gallery-item-image" style="position:relative;"></div>
+          <div class="gallery-item-overlay">
+            <h3>Shadow House</h3>
+            <p>Copenhagen, 2022</p>
+          </div>
+        </div>
+        <div class="gallery-item reveal">
+          <div class="gallery-item-image" style="position:relative;"></div>
+          <div class="gallery-item-overlay">
+            <h3>Monolith Spa</h3>
+            <p>Reykjavik, 2021</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="about-section">
+    <div class="about-divider"></div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <span class="label">About the Studio</span>
+        <h2 class="heading-xl">
+          We shape spaces that<br>
+          <span class="highlight">define silence</span>
+        </h2>
+        <p>
+          Atelier Noir is a multi-disciplinary architecture and interior design studio
+          founded on the belief that restraint is the highest form of expression. We create
+          spaces where material, light, and proportion speak without excess.
+        </p>
+        <p>
+          Our practice spans residential, commercial, and cultural projects across four
+          continents, guided by a philosophy of quiet permanence over fleeting trends.
+        </p>
+        <div class="stat-row">
+          <div class="stat">
+            <div class="stat-number">120+</div>
+            <div class="stat-label">Projects Completed</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">18</div>
+            <div class="stat-label">Countries</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">36</div>
+            <div class="stat-label">Awards</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual reveal reveal-delay-2">
+        <div class="geo-text-overlay" style="top: -30px; right: -60px;">AN</div>
+        <div class="geo-frame">
+          <div class="frame-border"></div>
+          <div class="frame-inner"></div>
+          <div class="frame-accent"></div>
+          <div class="frame-dot"></div>
+          <div class="frame-line-h"></div>
+          <div class="frame-line-v"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="services-section">
+    <div class="services-header reveal">
+      <span class="label">What We Do</span>
+      <h2 class="heading-lg">Services</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-number">01</div>
+        <h3 class="heading-md">Residential</h3>
+        <p>
+          Private homes, penthouses, and estates designed with obsessive attention to
+          proportion, material, and the rhythm of daily life.
+        </p>
+        <a href="#" class="service-link">
+          Learn More
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M1 7h12M8 2l5 5-5 5"/>
+          </svg>
+        </a>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-number">02</div>
+        <h3 class="heading-md">Commercial</h3>
+        <p>
+          Offices, hospitality, and retail environments that embody brand identity
+          through spatial narrative and material honesty.
+        </p>
+        <a href="#" class="service-link">
+          Learn More
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M1 7h12M8 2l5 5-5 5"/>
+          </svg>
+        </a>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-number">03</div>
+        <h3 class="heading-md">Interior</h3>
+        <p>
+          Full interior architecture and design services, from concept through
+          bespoke furniture and material specification.
+        </p>
+        <a href="#" class="service-link">
+          Learn More
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M1 7h12M8 2l5 5-5 5"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURED PROJECTS ===== -->
+  <section class="featured-section">
+    <div class="featured-header reveal">
+      <span class="label">Featured</span>
+      <h2 class="heading-lg">Selected Projects</h2>
+    </div>
+
+    <!-- Project 1 — Left layout -->
+    <div class="featured-item reveal">
+      <div class="featured-image">
+        <div class="featured-image-inner"></div>
+        <div class="featured-image-overlay"></div>
+        <span class="featured-image-label">Architecture, 2024</span>
+      </div>
+      <div class="featured-info">
+        <span class="label">Residential</span>
+        <h3 class="heading-md">Obsidian Tower</h3>
+        <p>
+          A 42-story residential tower in Shanghai's Lujiazui district. The facade
+          employs a double-skin curtain wall of blackened bronze and glass, creating
+          a monolithic presence that shifts with daylight.
+        </p>
+        <div class="meta">
+          <div class="meta-item">
+            <span>Location</span>
+            <span>Shanghai</span>
+          </div>
+          <div class="meta-item">
+            <span>Area</span>
+            <span>86,000 m²</span>
+          </div>
+          <div class="meta-item">
+            <span>Status</span>
+            <span>Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2 — Right layout (reversed) -->
+    <div class="featured-item reverse reveal">
+      <div class="featured-image">
+        <div class="featured-image-inner"></div>
+        <div class="featured-image-overlay"></div>
+        <span class="featured-image-label">Interior, 2023</span>
+      </div>
+      <div class="featured-info">
+        <span class="label">Cultural</span>
+        <h3 class="heading-md">Nocturne Gallery</h3>
+        <p>
+          A contemporary art gallery in Berlin where the architecture itself becomes
+          the first exhibit. Interiors are carved from raw concrete and oiled steel,
+          directing natural light through calibrated apertures.
+        </p>
+        <div class="meta">
+          <div class="meta-item">
+            <span>Location</span>
+            <span>Berlin</span>
+          </div>
+          <div class="meta-item">
+            <span>Area</span>
+            <span>4,200 m²</span>
+          </div>
+          <div class="meta-item">
+            <span>Status</span>
+            <span>Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3 — Left layout -->
+    <div class="featured-item reveal">
+      <div class="featured-image">
+        <div class="featured-image-inner"></div>
+        <div class="featured-image-overlay"></div>
+        <span class="featured-image-label">Architecture + Interior, 2022</span>
+      </div>
+      <div class="featured-info">
+        <span class="label">Hospitality</span>
+        <h3 class="heading-md">Monolith Spa</h3>
+        <p>
+          Nestled into a volcanic landscape in Iceland, this wellness retreat is
+          a study in elemental architecture — stone, water, steam, and silence.
+          Every space is oriented toward the horizon.
+        </p>
+        <div class="meta">
+          <div class="meta-item">
+            <span>Location</span>
+            <span>Reykjavik</span>
+          </div>
+          <div class="meta-item">
+            <span>Area</span>
+            <span>12,500 m²</span>
+          </div>
+          <div class="meta-item">
+            <span>Status</span>
+            <span>Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="contact-section">
+    <div class="contact-inner">
+      <div class="contact-left reveal">
+        <span class="label">Get in Touch</span>
+        <h2 class="heading-xl">Let's Create<br>Something<br><span class="gold">Timeless</span></h2>
+        <p>
+          Every great project begins with a conversation. Whether you're envisioning
+          a private residence or a cultural landmark, we'd love to hear your vision.
+        </p>
+        <a href="mailto:studio@ateliernoir.com" class="contact-email">
+          studio@ateliernoir.com
+        </a>
+      </div>
+      <div class="contact-right reveal reveal-delay-2">
+        <div class="contact-address">
+          <span class="address-label">Studio</span>
+          <address>
+            38 Rue de Sèvres<br>
+            75007 Paris, France
+          </address>
+        </div>
+        <div class="contact-address">
+          <span class="address-label">London Office</span>
+          <address>
+            14 Clerkenwell Green<br>
+            London EC1R 0DP, UK
+          </address>
+        </div>
+        <div class="contact-details">
+          <div class="contact-detail-item">
+            <span class="detail-label">Phone</span>
+            <a href="tel:+33142227788">+33 1 42 22 77 88</a>
+          </div>
+          <div class="contact-detail-item">
+            <span class="detail-label">Instagram</span>
+            <a href="#">@ateliernoir</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">Atelier Noir</div>
+      <nav class="footer-links">
+        <a href="#">Projects</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Press</a>
+        <a href="#">Contact</a>
+      </nav>
+      <div class="footer-copy">© 2024 Atelier Noir. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- ===== Scroll Reveal Script ===== -->
+  <script>
+    (function() {
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -60px 0px'
+      });
+
+      reveals.forEach(function(el) {
+        observer.observe(el);
+      });
+
+      // Horizontal gallery drag scroll
+      var gallery = document.getElementById('galleryScroll');
+      var isDown = false, startX, scrollLeft;
+
+      gallery.addEventListener('mousedown', function(e) {
+        isDown = true;
+        gallery.style.cursor = 'grabbing';
+        startX = e.pageX - gallery.offsetLeft;
+        scrollLeft = gallery.scrollLeft;
+      });
+      gallery.addEventListener('mouseleave', function() { isDown = false; gallery.style.cursor = 'grab'; });
+      gallery.addEventListener('mouseup', function() { isDown = false; gallery.style.cursor = 'grab'; });
+      gallery.addEventListener('mousemove', function(e) {
+        if (!isDown) return;
+        e.preventDefault();
+        var x = e.pageX - gallery.offsetLeft;
+        gallery.scrollLeft = scrollLeft - (x - startX) * 1.5;
+      });
+    })();
+  </script>
+</body>
+</html>

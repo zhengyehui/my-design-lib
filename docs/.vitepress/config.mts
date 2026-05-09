@@ -394,6 +394,20 @@ export default defineConfig({
           items: [
             { text: 'Atelier Lumière 摄影作品集', link: '/pages/photography-portfolio' }
           ]
+        },
+        {
+          text: '🏛️ 建筑设计',
+          collapsed: true,
+          items: [
+            { text: 'Atelier Noir 建筑设计工作室', link: '/pages/architecture-studio' }
+          ]
+        },
+        {
+          text: '💚 公益与社会',
+          collapsed: true,
+          items: [
+            { text: 'Hope Forward 公益教育', link: '/pages/nonprofit-impact' }
+          ]
         }
       ]
     },
