@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexusForge — Game Studio</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  background: #0a0a0f;
+  color: #e2e8f0;
+  overflow-x: hidden;
+  line-height: var(--leading-normal);
+}
+
+/* ── Particle Canvas Background ── */
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.particles canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Navigation ── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.25rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.3s;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+.nav-logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #ff4d00, #ff8a00);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1rem;
+  color: #fff;
+  letter-spacing: -1px;
+}
+.nav-logo-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  letter-spacing: 0.02em;
+}
+.nav-links a:hover { color: #ff4d00; }
+.nav-cta {
+  padding: 0.6rem 1.5rem;
+  background: #ff4d00;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.nav-cta:hover {
+  background: #ff6a20;
+  transform: translateY(-1px);
+}
+
+/* ── Hero Section ── */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 500px at 30% 20%, rgba(255, 77, 0, 0.08), transparent),
+    radial-gradient(ellipse 600px 400px at 70% 60%, rgba(139, 92, 246, 0.06), transparent);
+  z-index: -1;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 77, 0, 0.1);
+  border: 1px solid rgba(255, 77, 0, 0.2);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  color: #ff8a00;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  background: #ff4d00;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  max-width: 900px;
+}
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, #ff4d00 0%, #ff8a00 40%, #ffaa00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: #64748b;
+  max-width: 560px;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn-primary {
+  padding: 0.85rem 2rem;
+  background: linear-gradient(135deg, #ff4d00, #ff6a20);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(255, 77, 0, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 77, 0, 0.4);
+}
+.btn-ghost {
+  padding: 0.85rem 2rem;
+  background: transparent;
+  color: #e2e8f0;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.btn-ghost:hover {
+  border-color: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.04);
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+.scroll-indicator-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, #475569, transparent);
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ── Stats Bar ── */
+.stats-bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(10, 10, 15, 0.5);
+}
+.stat-item { text-align: center; }
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ff4d00;
+  letter-spacing: -0.02em;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.25rem;
+}
+
+/* ── Section Titles ── */
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.section-tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #ff4d00;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.section-desc {
+  font-size: 1.05rem;
+  color: #64748b;
+  max-width: 500px;
+  margin: 1rem auto 0;
+  line-height: 1.7;
+}
+
+/* ── Game Showcase Grid ── */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+.game-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16/10;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.game-card:hover {
+  transform: scale(1.02);
+}
+.game-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.game-card:hover .game-card-bg {
+  transform: scale(1.08);
+}
+.game-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,10,15,0.95) 0%, rgba(10,10,15,0.3) 50%, transparent 100%);
+  z-index: 1;
+}
+.game-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  z-index: 2;
+}
+.game-card-genre {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  background: rgba(255, 77, 0, 0.2);
+  border: 1px solid rgba(255, 77, 0, 0.3);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  color: #ff8a00;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+.game-card-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+.game-card-desc {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  max-width: 400px;
+}
+.game-card-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.game-card-stat {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+.game-card-stat strong {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+/* Featured game - full width */
+.game-card.featured {
+  grid-column: 1 / -1;
+  aspect-ratio: 21/9;
+}
+
+/* ── About / Philosophy ── */
+.philosophy {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.philosophy-visual {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1025 0%, #0d0d14 100%);
+}
+.philosophy-visual-inner {
+  position: absolute;
+  inset: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 77, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(255, 77, 0, 0.08), transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(139, 92, 246, 0.06), transparent 50%);
+}
+.philosophy-visual-text {
+  font-size: 5rem;
+  font-weight: 900;
+  color: rgba(255, 77, 0, 0.12);
+  letter-spacing: -0.04em;
+  text-align: center;
+  line-height: 1.1;
+}
+.philosophy-content h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+.philosophy-content p {
+  font-size: 1rem;
+  color: #94a3b8;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+.philosophy-values {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.philosophy-value {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.philosophy-value-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 10px;
+  background: rgba(255, 77, 0, 0.1);
+  border: 1px solid rgba(255, 77, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+.philosophy-value-text h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 0.25rem;
+}
+.philosophy-value-text p {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ── Team Section ── */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.team-card {
+  text-align: center;
+  padding: 2rem 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  transition: all 0.3s;
+}
+.team-card:hover {
+  border-color: rgba(255, 77, 0, 0.2);
+  background: rgba(255, 77, 0, 0.03);
+  transform: translateY(-4px);
+}
+.team-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+}
+.team-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 0.25rem;
+}
+.team-role {
+  font-size: 0.8rem;
+  color: #ff8a00;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.team-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+/* ── Careers / Join Us ── */
+.careers {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.careers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+.job-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  transition: all 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.job-card:hover {
+  border-color: rgba(255, 77, 0, 0.25);
+  background: rgba(255, 77, 0, 0.04);
+}
+.job-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 0.25rem;
+}
+.job-info p {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+.job-arrow {
+  font-size: 1.5rem;
+  color: #475569;
+  transition: all 0.3s;
+}
+.job-card:hover .job-arrow {
+  color: #ff4d00;
+  transform: translateX(4px);
+}
+
+/* ── Marquee ── */
+.marquee-section {
+  position: relative;
+  z-index: 1;
+  padding: 3rem 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.marquee {
+  display: flex;
+  gap: 3rem;
+  animation: marqueeScroll 30s linear infinite;
+  width: max-content;
+}
+.marquee-item {
+  font-size: 3rem;
+  font-weight: 900;
+  color: rgba(255,255,255,0.04);
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── Footer ── */
+.footer {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 3rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand p {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 1rem;
+  line-height: 1.7;
+  max-width: 300px;
+}
+.footer-col h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.footer-col a {
+  display: block;
+  font-size: 0.875rem;
+  color: #64748b;
+  text-decoration: none;
+  padding: 0.3rem 0;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: #ff4d00; }
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.footer-bottom p {
+  font-size: 0.8rem;
+  color: #475569;
+}
+.footer-social {
+  display: flex;
+  gap: 1rem;
+}
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.footer-social a:hover {
+  border-color: #ff4d00;
+  color: #ff4d00;
+  background: rgba(255, 77, 0, 0.05);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 6rem 1.5rem 4rem; }
+  .stats-bar { gap: 2rem; flex-wrap: wrap; }
+  .stat-number { font-size: 1.8rem; }
+  .section { padding: 4rem 1.5rem; }
+  .games-grid { grid-template-columns: 1fr; }
+  .game-card.featured { aspect-ratio: 16/10; }
+  .philosophy-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .careers-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Particle Background -->
+<div class="particles">
+  <canvas id="particleCanvas"></canvas>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">NF</div>
+    <span class="nav-logo-text">NexusForge</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#games">Games</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#careers">Careers</a></li>
+  </ul>
+  <a href="#careers" class="nav-cta">Join Us →</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    Now Hiring — 8 Open Positions
+  </div>
+  <h1>We Build Worlds<br>You'll <span class="gradient-text">Never Forget</span></h1>
+  <p class="hero-subtitle">NexusForge is an independent game studio crafting immersive, story-driven experiences that push the boundaries of interactive entertainment.</p>
+  <div class="hero-actions">
+    <a href="#games" class="btn-primary">Explore Our Games</a>
+    <a href="#about" class="btn-ghost">Our Story →</a>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-indicator-line"></div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number">12</div>
+    <div class="stat-label">Games Shipped</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">45M+</div>
+    <div class="stat-label">Players Worldwide</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">200+</div>
+    <div class="stat-label">Team Members</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">98</div>
+    <div class="stat-label">Metacritic Avg</div>
+  </div>
+</div>
+
+<!-- Games Showcase -->
+<section class="section" id="games">
+  <div class="section-header">
+    <div class="section-tag">Our Games</div>
+    <h2 class="section-title">Crafted with Obsession</h2>
+    <p class="section-desc">Every game we ship is a labor of love — years of iteration, storytelling, and relentless polish.</p>
+  </div>
+  <div class="games-grid">
+    <!-- Featured Game -->
+    <div class="game-card featured">
+      <div class="game-card-bg" style="background: linear-gradient(135deg, #1a0a2e 0%, #16213e 50%, #0f3460 100%);"></div>
+      <div class="game-card-content">
+        <span class="game-card-genre">★ Featured · Action RPG</span>
+        <h3 class="game-card-title">Echoes of the Void</h3>
+        <p class="game-card-desc">A sprawling open-world action RPG set in a fractured dimension. Explore 200+ hours of hand-crafted content across three warring realms.</p>
+        <div class="game-card-stats">
+          <span class="game-card-stat"><strong>2025</strong> Release</span>
+          <span class="game-card-stat"><strong>97</strong> Metacritic</span>
+          <span class="game-card-stat"><strong>12M</strong> Players</span>
+        </div>
+      </div>
+    </div>
+    <!-- Game 2 -->
+    <div class="game-card">
+      <div class="game-card-bg" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);"></div>
+      <div class="game-card-content">
+        <span class="game-card-genre">Strategy · 4X</span>
+        <h3 class="game-card-title">Starfield Dominion</h3>
+        <p class="game-card-desc">Lead your civilization among the stars in this deep strategy epic.</p>
+        <div class="game-card-stats">
+          <span class="game-card-stat"><strong>95</strong> Score</span>
+          <span class="game-card-stat"><strong>8M</strong> Players</span>
+        </div>
+      </div>
+    </div>
+    <!-- Game 3 -->
+    <div class="game-card">
+      <div class="game-card-bg" style="background: linear-gradient(135deg, #0a192f 0%, #112240 100%);"></div>
+      <div class="game-card-content">
+        <span class="game-card-genre">Survival · Co-op</span>
+        <h3 class="game-card-title">Deep Current</h3>
+        <p class="game-card-desc">Dive into an alien ocean. Build, survive, and uncover what lurks below.</p>
+        <div class="game-card-stats">
+          <span class="game-card-stat"><strong>93</strong> Score</span>
+          <span class="game-card-stat"><strong>5M</strong> Players</span>
+        </div>
+      </div>
+    </div>
+    <!-- Game 4 -->
+    <div class="game-card">
+      <div class="game-card-bg" style="background: linear-gradient(135deg, #2d1b3d 0%, #1a0a2e 100%);"></div>
+      <div class="game-card-content">
+        <span class="game-card-genre">Puzzle · Narrative</span>
+        <h3 class="game-card-title">Fragments of Memory</h3>
+        <p class="game-card-desc">A meditative puzzle game about loss, memory, and finding beauty in impermanence.</p>
+        <div class="game-card-stats">
+          <span class="game-card-stat"><strong>96</strong> Score</span>
+          <span class="game-card-stat"><strong>3M</strong> Players</span>
+        </div>
+      </div>
+    </div>
+    <!-- Game 5 -->
+    <div class="game-card">
+      <div class="game-card-bg" style="background: linear-gradient(135deg, #1a1a2e 0%, #0d1b2a 100%);"></div>
+      <div class="game-card-content">
+        <span class="game-card-genre">FPS · Arena</span>
+        <h3 class="game-card-title">Neon Crucible</h3>
+        <p class="game-card-desc">Fast-paced arena shooter with cybernetic abilities and neon-soaked arenas.</p>
+        <div class="game-card-stats">
+          <span class="game-card-stat"><strong>91</strong> Score</span>
+          <span class="game-card-stat"><strong>2M</strong> Players</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Philosophy -->
+<section class="philosophy" id="about">
+  <div class="philosophy-grid">
+    <div class="philosophy-visual">
+      <div class="philosophy-visual-inner">
+        <div class="philosophy-visual-text">FORGE<br>WORLDS</div>
+      </div>
+    </div>
+    <div class="philosophy-content">
+      <div class="section-tag">Our Philosophy</div>
+      <h2>Games Are the Art Form of Our Time</h2>
+      <p>We believe interactive experiences have the power to move people in ways no other medium can. Every game we create starts with a question: what feeling do we want to leave with the player?</p>
+      <p>Founded in 2018 by a team of industry veterans from studios like Naughty Dog, CD Projekt, and FromSoftware, NexusForge has grown from 5 passionate creators to a 200-person studio united by one mission.</p>
+      <div class="philosophy-values">
+        <div class="philosophy-value">
+          <div class="philosophy-value-icon">🎨</div>
+          <div class="philosophy-value-text">
+            <h4>Art-First Design</h4>
+            <p>Every mechanic, every pixel serves the emotional experience.</p>
+          </div>
+        </div>
+        <div class="philosophy-value">
+          <div class="philosophy-value-icon">⚡</div>
+          <div class="philosophy-value-text">
+            <h4>Ship It Right</h4>
+            <p>We don't crunch. We don't cut corners. Quality takes the time it takes.</p>
+          </div>
+        </div>
+        <div class="philosophy-value">
+          <div class="philosophy-value-icon">🌍</div>
+          <div class="philosophy-value-text">
+            <h4>Global Team</h4>
+            <p>200+ creators across 15 countries, working remotely with radical trust.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section class="section" id="team">
+  <div class="section-header">
+    <div class="section-tag">Leadership</div>
+    <h2 class="section-title">The Architects</h2>
+    <p class="section-desc">Meet the people shaping NexusForge's vision and culture.</p>
+  </div>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar" style="background: linear-gradient(135deg, #ff4d00, #ff8a00);">AK</div>
+      <div class="team-name">Alex Kim</div>
+      <div class="team-role">CEO & Creative Director</div>
+      <div class="team-desc">15 years in AAA game design. Former lead at Naughty Dog.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">SR</div>
+      <div class="team-name">Sara Rivera</div>
+      <div class="team-role">CTO</div>
+      <div class="team-desc">Engine architect. Built custom tools powering all NexusForge titles.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">MT</div>
+      <div class="team-name">Marcus Tan</div>
+      <div class="team-role">Art Director</div>
+      <div class="team-desc">Visionary artist. His concept art defines our visual identity.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">LN</div>
+      <div class="team-name">Lena Novak</div>
+      <div class="team-role">Head of Narrative</div>
+      <div class="team-desc">Award-winning writer. Crafted the stories behind Echoes of the Void.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Careers -->
+<section class="careers" id="careers">
+  <div class="section-header">
+    <div class="section-tag">Join Us</div>
+    <h2 class="section-title">Build the Next Chapter</h2>
+    <p class="section-desc">We're looking for extraordinary people who want to make games that matter.</p>
+  </div>
+  <div class="careers-grid">
+    <a href="#" class="job-card">
+      <div class="job-info">
+        <h4>Senior Gameplay Engineer</h4>
+        <p>Remote · Full-time · Engineering</p>
+      </div>
+      <span class="job-arrow">→</span>
+    </a>
+    <a href="#" class="job-card">
+      <div class="job-info">
+        <h4>Technical Artist</h4>
+        <p>Remote · Full-time · Art</p>
+      </div>
+      <span class="job-arrow">→</span>
+    </a>
+    <a href="#" class="job-card">
+      <div class="job-info">
+        <h4>Senior Level Designer</h4>
+        <p>Remote · Full-time · Design</p>
+      </div>
+      <span class="job-arrow">→</span>
+    </a>
+    <a href="#" class="job-card">
+      <div class="job-info">
+        <h4>Backend Engineer — Multiplayer</h4>
+        <p>Remote · Full-time · Engineering</p>
+      </div>
+      <span class="job-arrow">→</span>
+    </a>
+    <a href="#" class="job-card">
+      <div class="job-info">
+        <h4>UI/UX Designer</h4>
+        <p>Remote · Full-time · Design</p>
+      </div>
+      <span class="job-arrow">→</span>
+    </a>
+    <a href="#" class="job-card">
+      <div class="job-info">
+        <h4>QA Lead</h4>
+        <p>Remote · Full-time · QA</p>
+      </div>
+      <span class="job-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-section">
+  <div class="marquee">
+    <span class="marquee-item">ECHOES OF THE VOID</span>
+    <span class="marquee-item">★</span>
+    <span class="marquee-item">STARFIELD DOMINION</span>
+    <span class="marquee-item">★</span>
+    <span class="marquee-item">DEEP CURRENT</span>
+    <span class="marquee-item">★</span>
+    <span class="marquee-item">FRAGMENTS OF MEMORY</span>
+    <span class="marquee-item">★</span>
+    <span class="marquee-item">NEON CRUCIBLE</span>
+    <span class="marquee-item">★</span>
+    <span class="marquee-item">ECHOES OF THE VOID</span>
+    <span class="marquee-item">★</span>
+    <span class="marquee-item">STARFIELD DOMINION</span>
+    <span class="marquee-item">★</span>
+    <span class="marquee-item">DEEP CURRENT</span>
+    <span class="marquee-item">★</span>
+    <span class="marquee-item">FRAGMENTS OF MEMORY</span>
+    <span class="marquee-item">★</span>
+    <span class="marquee-item">NEON CRUCIBLE</span>
+    <span class="marquee-item">★</span>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">NF</div>
+        <span class="nav-logo-text">NexusForge</span>
+      </a>
+      <p>Independent game studio crafting immersive, story-driven experiences. Based everywhere, building worlds from nowhere.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Games</h4>
+      <a href="#">Echoes of the Void</a>
+      <a href="#">Starfield Dominion</a>
+      <a href="#">Deep Current</a>
+      <a href="#">Fragments of Memory</a>
+      <a href="#">Neon Crucible</a>
+    </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <a href="#">About Us</a>
+      <a href="#">Careers</a>
+      <a href="#">Press Kit</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <a href="#">Discord</a>
+      <a href="#">Twitter / X</a>
+      <a href="#">YouTube</a>
+      <a href="#">Reddit</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 NexusForge Studios. All rights reserved.</p>
+    <div class="footer-social">
+      <a href="#" title="Discord">💬</a>
+      <a href="#" title="Twitter">𝕏</a>
+      <a href="#" title="YouTube">▶</a>
+      <a href="#" title="Instagram">📷</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Particle system
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+const PARTICLE_COUNT = 60;
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.opacity = Math.random() * 0.3 + 0.1;
+    this.color = Math.random() > 0.7 ? '255, 77, 0' : '255, 255, 255';
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+      this.reset();
+    }
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+  particles.push(new Particle());
+}
+
+function connectParticles() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 150) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(255, 77, 0, ${0.03 * (1 - dist / 150)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.update();
+    p.draw();
+  });
+  connectParticles();
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Nav background on scroll
+const nav = document.querySelector('.nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    nav.style.background = 'rgba(10, 10, 15, 0.95)';
+  } else {
+    nav.style.background = 'rgba(10, 10, 15, 0.7)';
+  }
+});
+</script>
+
+</body>
+</html>

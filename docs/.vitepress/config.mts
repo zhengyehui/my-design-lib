@@ -408,6 +408,13 @@ export default defineConfig({
           items: [
             { text: 'Hope Forward 公益教育', link: '/pages/nonprofit-impact' }
           ]
+        },
+        {
+          text: '🎮 游戏与工作室',
+          collapsed: true,
+          items: [
+            { text: 'NexusForge 游戏工作室', link: '/pages/game-studio' }
+          ]
         }
       ]
     },

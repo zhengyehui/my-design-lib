@@ -397,6 +397,15 @@ const pages = [
     rating: 9.4,
     description: '公益教育组织落地页，浮动粒子动画 + 影响力数据 + 项目网格 + 捐赠 CTA',
   },
+  {
+    id: 'game-studio',
+    title: 'NexusForge 游戏工作室',
+    category: 'game',
+    tags: ['游戏', '工作室', '暗色主题', '粒子动画', '招聘'],
+    colors: ['#0a0a0f', '#ff4d00', '#ff8a00'],
+    rating: 9.5,
+    description: '暗色系游戏工作室落地页，Canvas 粒子连线 + 游戏展示网格 + 团队卡片 + 招聘列表 + Marquee 滚动',
+  },
 ]
 
 const categories = [
@@ -423,6 +432,7 @@ const categories = [
   { id: 'health', label: '健康', icon: '🏥' },
   { id: 'architecture', label: '建筑', icon: '🏛️' },
   { id: 'nonprofit', label: '公益', icon: '💚' },
+  { id: 'game', label: '游戏', icon: '🎮' },
 ]
 
 const activeCategory = ref('all')
