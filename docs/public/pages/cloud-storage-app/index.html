@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NimbusDrive — Cloud Storage SaaS</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-sans); color: var(--color-text); background: #f5f5f5; overflow-x: hidden; }
+
+/* ── Nav ── */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 180px; height: 64px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+.nav-logo { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; font-weight: 600; color: #000; text-decoration: none; }
+.nav-logo svg { width: 28px; height: 28px; }
+.nav-links { display: flex; align-items: center; gap: 2rem; }
+.nav-links a { text-decoration: none; color: var(--color-text-secondary); font-size: 0.95rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: #0077ff; }
+.btn-signup { background: #0077ff; color: #fff !important; padding: 8px 20px; border-radius: var(--radius-full); font-weight: 600; font-size: 0.9rem; transition: background 0.2s; }
+.btn-signup:hover { background: #0066dd; }
+
+/* ── Hero ── */
+.hero { padding: 160px 2rem 60px; text-align: center; background: #f5f5f5; }
+.hero-content { max-width: 576px; margin: 0 auto; }
+.hero h1 { font-size: clamp(2.5rem, 5vw, 3.875rem); font-weight: 500; line-height: 1.15; color: #000; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+.hero p { font-size: 1.25rem; color: #404040; line-height: 1.6; margin-bottom: 2rem; }
+.hero-cta { display: inline-flex; align-items: center; gap: 8px; background: #0077ff; color: #fff; padding: 14px 32px; border-radius: var(--radius-full); font-size: 1rem; font-weight: 600; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(0,119,255,0.25); }
+.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,119,255,0.35); }
+.hero-micro { font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.75rem; }
+
+/* ── Product Mockup ── */
+.mockup-section { padding: 0 2rem 5rem; max-width: 1200px; margin: 0 auto; }
+.file-manager { background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid rgba(0,0,0,0.06); }
+.fm-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid #eee; background: #fafafa; }
+.fm-toolbar-left { display: flex; align-items: center; gap: 12px; }
+.fm-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #737373; }
+.fm-breadcrumb span { color: #000; font-weight: 500; }
+.fm-search { display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; color: #a3a3a3; min-width: 200px; }
+.fm-search::before { content: '🔍'; font-size: 0.8rem; }
+.fm-toolbar-right { display: flex; align-items: center; gap: 8px; }
+.fm-view-btn { width: 32px; height: 32px; border-radius: 6px; border: 1px solid #e5e5e5; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; }
+.fm-view-btn.active { background: #0077ff; color: #fff; border-color: #0077ff; }
+.fm-upload { background: #0077ff; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+
+.fm-body { display: flex; min-height: 420px; }
+.fm-sidebar { width: 220px; border-right: 1px solid #eee; padding: 16px 0; background: #fafafa; }
+.fm-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px; font-size: 0.85rem; color: #404040; cursor: pointer; transition: background 0.15s; }
+.fm-sidebar-item:hover { background: rgba(0,119,255,0.05); }
+.fm-sidebar-item.active { background: rgba(0,119,255,0.08); color: #0077ff; font-weight: 600; }
+.fm-sidebar-icon { font-size: 1rem; width: 20px; text-align: center; }
+.fm-sidebar-section { padding: 12px 20px 6px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #a3a3a3; }
+
+.fm-main { flex: 1; padding: 20px; }
+.fm-files-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.fm-files-title { font-size: 1rem; font-weight: 600; color: #000; }
+.fm-files-count { font-size: 0.8rem; color: #a3a3a3; }
+.fm-files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.fm-file-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s; position: relative; }
+.fm-file-card:hover { border-color: #0077ff; box-shadow: 0 4px 12px rgba(0,119,255,0.08); transform: translateY(-1px); }
+.fm-file-card .collab-cursor { position: absolute; top: -8px; right: -8px; background: #f59e0b; color: #fff; font-size: 0.65rem; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-full); white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.fm-file-card .collab-cursor.blue { background: #3b82f6; }
+.fm-file-card .collab-cursor.pink { background: #ec4899; }
+.fm-file-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 10px; }
+.fm-file-icon.folder { background: #dbeafe; }
+.fm-file-icon.doc { background: #ede9fe; }
+.fm-file-icon.image { background: #fce7f3; }
+.fm-file-icon.video { background: #e0e7ff; }
+.fm-file-icon.code { background: #d1fae5; }
+.fm-file-icon.music { background: #fef3c7; }
+.fm-file-name { font-size: 0.85rem; font-weight: 500; color: #000; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fm-file-meta { font-size: 0.75rem; color: #a3a3a3; }
+
+.fm-statusbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; border-top: 1px solid #eee; background: #fafafa; font-size: 0.8rem; color: #737373; }
+.fm-storage { display: flex; align-items: center; gap: 10px; }
+.fm-storage-bar { width: 120px; height: 6px; background: #e5e5e5; border-radius: 3px; overflow: hidden; }
+.fm-storage-fill { width: 35%; height: 100%; background: linear-gradient(90deg, #0077ff, #6366f1); border-radius: 3px; }
+
+/* ── Features ── */
+.features { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+.feature-row { display: flex; align-items: center; gap: 80px; margin-bottom: 6rem; }
+.feature-row.reverse { flex-direction: row-reverse; }
+.feature-text { flex: 1; }
+.feature-text h2 { font-size: 2.5rem; font-weight: 500; color: #000; margin-bottom: 1rem; line-height: 1.2; letter-spacing: -0.02em; }
+.feature-text p { font-size: 1.1rem; color: #404040; line-height: 1.6; margin-bottom: 1.5rem; }
+.feature-text .btn-learn { color: #0077ff; font-weight: 600; text-decoration: none; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 6px; transition: gap 0.2s; }
+.feature-text .btn-learn:hover { gap: 10px; }
+.feature-mockup { flex: 1.2; }
+
+/* Feature mockup cards */
+.mockup-card { background: #fff; border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; }
+.mc-header { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px; }
+.mc-dot { width: 10px; height: 10px; border-radius: 50%; }
+.mc-dot.r { background: #ff5f57; }
+.mc-dot.y { background: #febc2e; }
+.mc-dot.g { background: #28c840; }
+.mc-title { font-size: 0.8rem; color: #a3a3a3; margin-left: 8px; }
+.mc-body { padding: 24px; }
+
+/* Preview modal mockup */
+.preview-modal { display: flex; gap: 16px; }
+.preview-image { width: 200px; height: 280px; background: linear-gradient(135deg, #ede9fe, #fce7f3); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+.preview-info { flex: 1; }
+.preview-info h4 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+.preview-info .meta { font-size: 0.8rem; color: #737373; margin-bottom: 12px; }
+.preview-info .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.preview-info .tag { background: #f0f0f0; padding: 3px 10px; border-radius: var(--radius-full); font-size: 0.75rem; color: #404040; }
+
+/* Command palette mockup */
+.cmd-palette { background: #fff; border-radius: 12px; box-shadow: 0 16px 48px rgba(0,0,0,0.12); border: 1px solid #e5e5e5; max-width: 380px; margin: 0 auto; overflow: hidden; }
+.cmd-search { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; font-size: 0.85rem; color: #a3a3a3; display: flex; align-items: center; gap: 8px; }
+.cmd-search::before { content: '🔍'; }
+.cmd-section { padding: 8px 0; }
+.cmd-label { padding: 4px 16px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #a3a3a3; }
+.cmd-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; font-size: 0.85rem; color: #404040; cursor: pointer; transition: background 0.1s; }
+.cmd-item:hover { background: #f5f5f5; }
+.cmd-item .shortcut { font-size: 0.75rem; color: #a3a3a3; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; }
+.cmd-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
+.cmd-ai { padding: 10px 16px; border-top: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #a3a3a3; }
+.cmd-ai::before { content: '✨'; }
+
+/* Storage providers mockup */
+.storage-providers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.sp-card { display: flex; align-items: center; gap: 12px; padding: 14px; border: 2px solid #eee; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+.sp-card:hover { border-color: #0077ff; }
+.sp-card.active { border-color: #0077ff; background: rgba(0,119,255,0.03); }
+.sp-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.sp-icon.nimbus { background: linear-gradient(135deg, #0077ff, #6366f1); color: #fff; }
+.sp-icon.aws { background: #232f3e; color: #ff9900; }
+.sp-icon.gcloud { background: #fff; border: 1px solid #eee; }
+.sp-icon.azure { background: #0078d4; color: #fff; }
+.sp-info h5 { font-size: 0.85rem; font-weight: 600; }
+.sp-info span { font-size: 0.75rem; color: #737373; }
+.sp-badge { margin-left: auto; background: #d1fae5; color: #059669; font-size: 0.7rem; font-weight: 600; padding: 3px 8px; border-radius: var(--radius-full); }
+
+/* ── Collab Section ── */
+.collab-section { padding: 5rem 2rem; background: #fff; text-align: center; }
+.collab-section h2 { font-size: 2.5rem; font-weight: 500; margin-bottom: 1rem; letter-spacing: -0.02em; }
+.collab-section p { font-size: 1.1rem; color: #404040; max-width: 500px; margin: 0 auto 3rem; line-height: 1.6; }
+.collab-demo { max-width: 800px; margin: 0 auto; background: #fafafa; border-radius: 16px; border: 1px solid #eee; padding: 32px; position: relative; }
+.collab-files { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.collab-file { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; width: 160px; text-align: center; position: relative; transition: all 0.2s; }
+.collab-file:hover { border-color: #0077ff; }
+.collab-file .file-emoji { font-size: 2rem; margin-bottom: 8px; }
+.collab-file .file-label { font-size: 0.85rem; font-weight: 500; }
+.collab-cursor-label { position: absolute; top: -10px; right: -10px; font-size: 0.7rem; font-weight: 600; color: #fff; padding: 3px 10px; border-radius: var(--radius-full); white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.collab-cursor-label.orange { background: #f59e0b; }
+.collab-cursor-label.blue { background: #3b82f6; }
+.collab-cursor-label.pink { background: #ec4899; }
+.collab-cursor-label.green { background: #10b981; }
+.collab-cursor-label::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid currentColor; }
+.collab-cursor-label.orange::after { border-top-color: #f59e0b; }
+.collab-cursor-label.blue::after { border-top-color: #3b82f6; }
+.collab-cursor-label.pink::after { border-top-color: #ec4899; }
+.collab-cursor-label.green::after { border-top-color: #10b981; }
+
+/* ── CTA ── */
+.cta-section { padding: 6rem 2rem; text-align: center; background: #f5f5f5; }
+.cta-section h2 { font-size: 2.5rem; font-weight: 500; margin-bottom: 1rem; letter-spacing: -0.02em; }
+.cta-section p { font-size: 1.1rem; color: #404040; margin-bottom: 2rem; }
+.cta-section .hero-cta { display: inline-flex; }
+
+/* ── Footer ── */
+.footer { background: #000; color: #fff; padding: 40px 180px; display: flex; align-items: center; justify-content: space-between; }
+.footer-left { display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 600; }
+.footer-left svg { width: 24px; height: 24px; }
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a { color: #737373; text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+.footer-links a:hover { color: #fff; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .feature-row, .feature-row.reverse { flex-direction: column; gap: 2rem; }
+  .fm-sidebar { display: none; }
+  .fm-files-grid { grid-template-columns: repeat(2, 1fr); }
+  .storage-providers { grid-template-columns: 1fr; }
+  .footer { flex-direction: column; gap: 1.5rem; padding: 2rem; text-align: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; }
+  .collab-files { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#0077ff"/><path d="M7 18c0-3.3 2.7-6 6-6h1c.6-2.2 2.6-4 5-4 2.8 0 5 2.2 5 5s-2.2 5-5 5h-1c-.6 2.2-2.6 4-5 4-2.8 0-5-2.2-5-5z" fill="#fff" opacity="0.9"/></svg>
+    NimbusDrive
+  </a>
+  <div class="nav-links">
+    <a href="#">Updates</a>
+    <a href="#">Pricing</a>
+    <a href="#" class="btn-signup">Sign up →</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Your files, beautifully organized</h1>
+    <p>The smarter and simpler way to store, share, and collaborate on files. Built for teams who value clarity.</p>
+    <a href="#" class="hero-cta">+ Upload File</a>
+    <div class="hero-micro">2GB storage free — no credit card required</div>
+  </div>
+</section>
+
+<!-- Product Mockup -->
+<div class="mockup-section">
+  <div class="file-manager">
+    <div class="fm-toolbar">
+      <div class="fm-toolbar-left">
+        <div class="fm-breadcrumb">My Files / <span>Design Projects</span></div>
+        <div class="fm-search">Search files...</div>
+      </div>
+      <div class="fm-toolbar-right">
+        <div class="fm-view-btn active">▦</div>
+        <div class="fm-view-btn">☰</div>
+        <button class="fm-upload">+ Upload</button>
+      </div>
+    </div>
+    <div class="fm-body">
+      <div class="fm-sidebar">
+        <div class="fm-sidebar-section">Main</div>
+        <div class="fm-sidebar-item active"><span class="fm-sidebar-icon">📁</span> My Files</div>
+        <div class="fm-sidebar-item"><span class="fm-sidebar-icon">👥</span> Shared</div>
+        <div class="fm-sidebar-item"><span class="fm-sidebar-icon">🕐</span> Recent</div>
+        <div class="fm-sidebar-item"><span class="fm-sidebar-icon">⭐</span> Starred</div>
+        <div class="fm-sidebar-section">Manage</div>
+        <div class="fm-sidebar-item"><span class="fm-sidebar-icon">🗑️</span> Trash</div>
+        <div class="fm-sidebar-item"><span class="fm-sidebar-icon">⚙️</span> Settings</div>
+      </div>
+      <div class="fm-main">
+        <div class="fm-files-header">
+          <div class="fm-files-title">Design Projects</div>
+          <div class="fm-files-count">8 items</div>
+        </div>
+        <div class="fm-files-grid">
+          <div class="fm-file-card">
+            <div class="collab-cursor orange">Alex</div>
+            <div class="fm-file-icon folder">📁</div>
+            <div class="fm-file-name">Brand Assets</div>
+            <div class="fm-file-meta">24 files · 128 MB</div>
+          </div>
+          <div class="fm-file-card">
+            <div class="fm-file-icon doc">📄</div>
+            <div class="fm-file-name">Q4 Report.pdf</div>
+            <div class="fm-file-meta">2.4 MB · Edited 2h ago</div>
+          </div>
+          <div class="fm-file-card">
+            <div class="collab-cursor blue">Sarah</div>
+            <div class="fm-file-icon image">🖼️</div>
+            <div class="fm-file-name">Hero Banner.png</div>
+            <div class="fm-file-meta">4.1 MB · Edited 30m ago</div>
+          </div>
+          <div class="fm-file-card">
+            <div class="fm-file-icon video">🎬</div>
+            <div class="fm-file-name">Product Demo.mp4</div>
+            <div class="fm-file-meta">156 MB · 3:42</div>
+          </div>
+          <div class="fm-file-card">
+            <div class="fm-file-icon code">💻</div>
+            <div class="fm-file-name">landing.html</div>
+            <div class="fm-file-meta">18 KB · Edited yesterday</div>
+          </div>
+          <div class="fm-file-card">
+            <div class="collab-cursor pink">Mike</div>
+            <div class="fm-file-icon music">🎵</div>
+            <div class="fm-file-name">Theme Song.mp3</div>
+            <div class="fm-file-meta">8.2 MB · 3:15</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fm-statusbar">
+      <div>8 items · 1 selected</div>
+      <div class="fm-storage">
+        <span>700 MB of 2 GB used</span>
+        <div class="fm-storage-bar"><div class="fm-storage-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features -->
+<section class="features">
+  <!-- Feature 1: Intuitive -->
+  <div class="feature-row">
+    <div class="feature-text">
+      <h2>Intuitive</h2>
+      <p>Navigate your files with ease. Our clean interface makes finding, previewing, and managing documents effortless. Everything just works the way you expect.</p>
+      <a href="#" class="btn-learn">Learn more →</a>
+    </div>
+    <div class="feature-mockup">
+      <div class="mockup-card">
+        <div class="mc-header">
+          <div class="mc-dot r"></div><div class="mc-dot y"></div><div class="mc-dot g"></div>
+          <span class="mc-title">File Preview</span>
+        </div>
+        <div class="mc-body">
+          <div class="preview-modal">
+            <div class="preview-image">📊</div>
+            <div class="preview-info">
+              <h4>Q4 Revenue Report</h4>
+              <div class="meta">PDF · 2.4 MB · Edited 2 hours ago</div>
+              <div class="tags">
+                <span class="tag">Finance</span>
+                <span class="tag">Q4 2025</span>
+                <span class="tag">Confidential</span>
+              </div>
+              <div style="margin-top: 16px; display: flex; gap: 8px;">
+                <span style="background: #0077ff; color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600;">Open</span>
+                <span style="background: #f0f0f0; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; color: #404040;">Share</span>
+                <span style="background: #f0f0f0; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; color: #404040;">Download</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 2: Smart -->
+  <div class="feature-row reverse">
+    <div class="feature-text">
+      <h2>Smart</h2>
+      <p>Right-click for instant actions. Our command palette gives you superpowers — rename, move, share, or ask our AI assistant anything about your files.</p>
+      <a href="#" class="btn-learn">Learn more →</a>
+    </div>
+    <div class="feature-mockup">
+      <div class="cmd-palette">
+        <div class="cmd-search">Search commands...</div>
+        <div class="cmd-section">
+          <div class="cmd-label">Suggestions</div>
+          <div class="cmd-item"><span>👁️ Preview</span><span class="shortcut">⌘ P</span></div>
+          <div class="cmd-item"><span>✏️ Rename</span><span class="shortcut">⌘ R</span></div>
+          <div class="cmd-item"><span>📁 Move to...</span><span class="shortcut">⌘ M</span></div>
+        </div>
+        <div class="cmd-divider"></div>
+        <div class="cmd-section">
+          <div class="cmd-label">Actions</div>
+          <div class="cmd-item"><span>🔗 Share</span><span class="shortcut">⌘ S</span></div>
+          <div class="cmd-item"><span>⬇️ Download</span><span class="shortcut">⌘ D</span></div>
+          <div class="cmd-item"><span>🗑️ Delete</span><span class="shortcut">⌘ ⌫</span></div>
+        </div>
+        <div class="cmd-ai">Ask Nimbus a question...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 3: Safe -->
+  <div class="feature-row">
+    <div class="feature-text">
+      <h2>Safe</h2>
+      <p>Your data, your choice. Connect to your preferred cloud provider and keep full control over where your files live. Enterprise-grade encryption included.</p>
+      <a href="#" class="btn-learn">Learn more →</a>
+    </div>
+    <div class="feature-mockup">
+      <div class="mockup-card">
+        <div class="mc-header">
+          <div class="mc-dot r"></div><div class="mc-dot y"></div><div class="mc-dot g"></div>
+          <span class="mc-title">Storage Providers</span>
+        </div>
+        <div class="mc-body">
+          <div class="storage-providers">
+            <div class="sp-card active">
+              <div class="sp-icon nimbus">☁️</div>
+              <div class="sp-info"><h5>Nimbus Cloud</h5><span>2 GB free</span></div>
+              <div class="sp-badge">Active</div>
+            </div>
+            <div class="sp-card">
+              <div class="sp-icon aws">🔶</div>
+              <div class="sp-info"><h5>Amazon AWS</h5><span>BYO bucket</span></div>
+            </div>
+            <div class="sp-card">
+              <div class="sp-icon gcloud">🔵</div>
+              <div class="sp-info"><h5>Google Cloud</h5><span>BYO bucket</span></div>
+            </div>
+            <div class="sp-card">
+              <div class="sp-icon azure">🔷</div>
+              <div class="sp-info"><h5>Microsoft Azure</h5><span>BYO bucket</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Collaboration Section -->
+<section class="collab-section">
+  <h2>Real-time collaboration</h2>
+  <p>Work together in real time. See who's viewing what, leave comments, and never worry about version conflicts again.</p>
+  <div class="collab-demo">
+    <div class="collab-files">
+      <div class="collab-file">
+        <div class="collab-cursor-label orange">Alex</div>
+        <div class="file-emoji">📄</div>
+        <div class="file-label">Brief.docx</div>
+      </div>
+      <div class="collab-file">
+        <div class="collab-cursor-label blue">Sarah</div>
+        <div class="file-emoji">🖼️</div>
+        <div class="file-label">Mockup.png</div>
+      </div>
+      <div class="collab-file">
+        <div class="collab-cursor-label pink">Mike</div>
+        <div class="file-emoji">📊</div>
+        <div class="file-label">Metrics.xlsx</div>
+      </div>
+      <div class="collab-file">
+        <div class="collab-cursor-label green">You</div>
+        <div class="file-emoji">💻</div>
+        <div class="file-label">App.tsx</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>The smarter way to share.</h2>
+  <p>Join 50,000+ teams already using NimbusDrive to organize their digital world.</p>
+  <a href="#" class="hero-cta">Get started free →</a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-left">
+    <svg viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="5" fill="#0077ff"/><path d="M6 15c0-2.8 2.2-5 5-5h.8c.5-1.9 2.2-3.4 4.2-3.4 2.4 0 4.3 1.9 4.3 4.3S18.4 15.2 16 15.2h-.8c-.5 1.9-2.2 3.4-4.2 3.4-2.4 0-4.3-1.9-4.3-4.3z" fill="#fff" opacity="0.9"/></svg>
+    NimbusDrive
+  </div>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Twitter</a>
+    <a href="#">Terms</a>
+    <a href="#">Privacy</a>
+  </div>
+</footer>
+
+</body>
+</html>

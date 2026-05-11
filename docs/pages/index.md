@@ -406,6 +406,24 @@ const pages = [
     rating: 9.5,
     description: '暗色系游戏工作室落地页，Canvas 粒子连线 + 游戏展示网格 + 团队卡片 + 招聘列表 + Marquee 滚动',
   },
+  {
+    id: 'cloud-storage-app',
+    title: 'NimbusDrive 云存储应用',
+    category: 'app',
+    tags: ['云存储', '文件管理', '协作', '明色主题'],
+    colors: ['#f5f5f5', '#0077ff', '#ffffff'],
+    rating: 9.3,
+    description: '明色系云存储 SaaS 落地页，灵感来自 Shuttle.zip，CSS 文件管理器 UI + 协作光标 + 命令面板 + 存储提供商选择器',
+  },
+  {
+    id: 'ai-music-studio',
+    title: 'MuseFlow AI 音乐创作',
+    category: 'creative',
+    tags: ['AI', '音乐', '暗色主题', '创意工具'],
+    colors: ['#0a0a0f', '#8b5cf6', '#ec4899'],
+    rating: 9.5,
+    description: '暗色极简 AI 音乐创作工具落地页，灵感来自 Haptic.app，CSS 音频波形动画 + 手机模型 + 哲学叙事 + 定价卡片',
+  },
 ]
 
 const categories = [

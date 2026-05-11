@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MuseFlow — AI Music Creation Tool</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================================
+       Dark Theme Overrides — MuseFlow
+       ================================================================ */
+    :root {
+      --muse-purple: #8b5cf6;
+      --muse-pink: #ec4899;
+      --muse-indigo: #6366f1;
+      --muse-gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+      --muse-gradient-r: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+      --muse-bg: #0a0a0f;
+      --muse-bg-card: #13131a;
+      --muse-bg-elevated: #1a1a24;
+      --muse-border: rgba(255,255,255,0.06);
+      --muse-text: rgba(255,255,255,0.90);
+      --muse-text-muted: rgba(255,255,255,0.50);
+      --muse-text-dim: rgba(255,255,255,0.35);
+      --muse-radius: 36px;
+    }
+
+    /* ================================================================
+       Reset & Base
+       ================================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: var(--font-sans), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--muse-bg);
+      color: var(--muse-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; border: none; cursor: pointer; background: none; color: inherit; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-8); }
+
+    /* ================================================================
+       Navigation
+       ================================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: var(--space-5) var(--space-8);
+      display: flex; align-items: center; justify-content: space-between;
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      background: rgba(10,10,15,0.65);
+      border-bottom: 1px solid var(--muse-border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: var(--space-3); font-weight: 600; font-size: var(--text-lg); letter-spacing: -0.02em; }
+    .nav-logo svg { width: 28px; height: 28px; }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-2) var(--space-6);
+      border-radius: var(--radius-full);
+      background: var(--muse-gradient);
+      color: #fff; font-weight: 500; font-size: var(--text-sm);
+      transition: opacity var(--duration-normal) var(--ease-default), transform var(--duration-normal) var(--ease-spring);
+    }
+    .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ================================================================
+       Hero Section
+       ================================================================ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: calc(var(--space-24) + 60px) var(--space-8) var(--space-16);
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+      pointer-events: none; border-radius: 50%;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-1) var(--space-4);
+      border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--muse-border);
+      font-size: var(--text-xs); color: var(--muse-text-muted);
+      margin-bottom: var(--space-10);
+      letter-spacing: 0.02em;
+    }
+    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muse-purple); animation: pulse-dot 2s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100%{ opacity:0.5; transform:scale(1); } 50%{ opacity:1; transform:scale(1.3); } }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+      max-width: 800px;
+      margin-bottom: var(--space-7);
+      background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.72) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      color: var(--muse-text-muted);
+      max-width: 540px;
+      margin-bottom: var(--space-10);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-actions { display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-4) var(--space-8);
+      border-radius: var(--radius-full);
+      background: var(--muse-gradient);
+      color: #fff; font-weight: 500; font-size: var(--text-base);
+      transition: all var(--duration-normal) var(--ease-default);
+      box-shadow: 0 0 40px rgba(139,92,246,0.25);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(139,92,246,0.35); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-4) var(--space-8);
+      border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--muse-border);
+      color: var(--muse-text); font-weight: 500; font-size: var(--text-base);
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+    .hero-note {
+      margin-top: var(--space-6);
+      font-size: var(--text-xs); color: var(--muse-text-dim);
+      display: flex; align-items: center; gap: var(--space-2);
+    }
+    .hero-note svg { width: 14px; height: 14px; opacity: 0.4; }
+
+    /* ================================================================
+       Waveform Animation Section
+       ================================================================ */
+    .waveform-section {
+      padding: var(--space-20) 0;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .waveform-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(139,92,246,0.06) 0%, transparent 70%);
+    }
+    .waveform-container {
+      display: flex; align-items: center; justify-content: center;
+      gap: 3px; height: 200px; position: relative; z-index: 1;
+    }
+    .waveform-bar {
+      width: 4px;
+      border-radius: 100px;
+      animation: waveform-pulse var(--dur) ease-in-out infinite var(--del);
+      transform-origin: center;
+    }
+    @keyframes waveform-pulse {
+      0%, 100% { height: var(--h-min); opacity: var(--op-min); }
+      50%      { height: var(--h-max); opacity: var(--op-max); }
+    }
+    /* Generated via a loop of classes in CSS */
+    .wb { height: var(--h-min); background: var(--bg); }
+
+    /* ================================================================
+       Feature Sections
+       ================================================================ */
+    .feature-section {
+      padding: var(--space-24) 0;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+      align-items: center;
+    }
+    .feature-grid.reversed .feature-text { order: 2; }
+    .feature-grid.reversed .feature-visual { order: 1; }
+    .feature-text h2 {
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-6);
+      background: linear-gradient(135deg, #fff 30%, var(--muse-purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .feature-text p {
+      font-size: var(--text-lg);
+      color: var(--muse-text-muted);
+      line-height: 1.8;
+      max-width: 480px;
+      font-weight: 300;
+    }
+    .feature-tag {
+      display: inline-block;
+      padding: var(--space-1) var(--space-4);
+      border-radius: var(--radius-full);
+      background: rgba(139,92,246,0.12);
+      color: var(--muse-purple);
+      font-size: var(--text-xs); font-weight: 500;
+      margin-bottom: var(--space-5);
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+
+    /* ================================================================
+       Phone Mockup (CSS Only)
+       ================================================================ */
+    .phone-mockup {
+      width: 280px;
+      height: 560px;
+      background: #111118;
+      border-radius: var(--muse-radius);
+      border: 2px solid rgba(255,255,255,0.08);
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 20px 60px rgba(0,0,0,0.5),
+        0 0 100px rgba(139,92,246,0.08);
+      margin: 0 auto;
+    }
+    .phone-notch {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 120px; height: 28px;
+      background: #000; border-radius: 0 0 18px 18px; z-index: 10;
+    }
+    .phone-notch::after {
+      content: ''; position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+      width: 10px; height: 10px; background: #1a1a24; border-radius: 50%;
+    }
+    .phone-screen {
+      position: absolute; inset: 0;
+      padding: 42px 20px 20px;
+      display: flex; flex-direction: column;
+    }
+    .phone-screen-header {
+      font-size: var(--text-xs); font-weight: 600; color: var(--muse-text);
+      text-align: center; margin-bottom: var(--space-4);
+      padding-top: var(--space-2);
+    }
+
+    /* Phone variant 1: Chat / Mood Input */
+    .phone-chat { flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    .chat-msg {
+      max-width: 85%; padding: var(--space-3) var(--space-4);
+      border-radius: 16px; font-size: 11px; line-height: 1.5;
+    }
+    .chat-msg.user {
+      align-self: flex-end;
+      background: var(--muse-gradient);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-msg.ai {
+      align-self: flex-start;
+      background: rgba(255,255,255,0.06);
+      color: var(--muse-text-muted);
+      border-bottom-left-radius: 4px;
+    }
+    .chat-msg.ai .ai-label { font-size: 9px; color: var(--muse-purple); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .chat-input-bar {
+      margin-top: auto;
+      display: flex; align-items: center; gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--muse-border);
+    }
+    .chat-input-bar span { font-size: 11px; color: var(--muse-text-dim); }
+    .chat-send {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--muse-gradient); display: flex; align-items: center; justify-content: center;
+      margin-left: auto;
+    }
+    .chat-send svg { width: 12px; height: 12px; fill: #fff; }
+
+    /* Phone variant 2: Player UI */
+    .phone-player { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: var(--space-5); }
+    .player-art {
+      width: 140px; height: 140px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--muse-purple), var(--muse-pink));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 40px rgba(139,92,246,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .player-art::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 60%);
+    }
+    .player-art svg { width: 48px; height: 48px; opacity: 0.9; z-index: 1; }
+    .player-track-name { font-size: 16px; font-weight: 600; color: #fff; }
+    .player-track-artist { font-size: 11px; color: var(--muse-text-muted); margin-top: 2px; }
+    .player-waveform {
+      display: flex; align-items: center; gap: 2px; height: 32px; width: 100%;
+      justify-content: center;
+    }
+    .pw-bar {
+      width: 2.5px; border-radius: 100px;
+      background: rgba(255,255,255,0.15);
+    }
+    .pw-bar.active { background: var(--muse-gradient); }
+    .player-progress {
+      width: 100%; height: 2px; background: rgba(255,255,255,0.08);
+      border-radius: 100px; position: relative; overflow: hidden;
+    }
+    .player-progress-fill {
+      position: absolute; left: 0; top: 0; height: 100%; width: 65%;
+      background: var(--muse-gradient); border-radius: 100px;
+    }
+    .player-times { display: flex; justify-content: space-between; width: 100%; font-size: 9px; color: var(--muse-text-dim); }
+    .player-controls { display: flex; align-items: center; gap: var(--space-6); margin-top: var(--space-2); }
+    .player-controls svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.7); }
+    .player-play {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--muse-gradient);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(139,92,246,0.35);
+    }
+    .player-play svg { width: 18px; height: 18px; fill: #fff; }
+
+    /* Phone variant 3: Library List */
+    .phone-library { flex: 1; display: flex; flex-direction: column; gap: var(--space-3); }
+    .lib-item {
+      display: flex; align-items: center; gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: rgba(255,255,255,0.04);
+      border-radius: 14px;
+      border: 1px solid var(--muse-border);
+      transition: background var(--duration-fast) var(--ease-default);
+    }
+    .lib-item:first-child { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.2); }
+    .lib-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .lib-icon.purple { background: rgba(139,92,246,0.15); }
+    .lib-icon.pink { background: rgba(236,72,153,0.15); }
+    .lib-icon.indigo { background: rgba(99,102,241,0.15); }
+    .lib-icon svg { width: 16px; height: 16px; }
+    .lib-info { flex: 1; min-width: 0; }
+    .lib-name { font-size: 11px; font-weight: 500; color: var(--muse-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lib-meta { font-size: 9px; color: var(--muse-text-dim); margin-top: 2px; }
+    .lib-mini-wave { display: flex; align-items: center; gap: 1.5px; height: 16px; flex-shrink: 0; }
+    .lib-mini-wave span { width: 2px; border-radius: 100px; background: var(--muse-purple); opacity: 0.4; }
+
+    /* ================================================================
+       Principles Section
+       ================================================================ */
+    .principles {
+      padding: var(--space-24) 0;
+      position: relative;
+    }
+    .principles::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 1px; height: 80px;
+      background: linear-gradient(180deg, transparent, var(--muse-border), transparent);
+    }
+    .principles-label {
+      text-align: center;
+      font-size: var(--text-xs); font-weight: 500;
+      color: var(--muse-purple);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: var(--space-12);
+    }
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .principle-card {
+      text-align: center;
+      padding: var(--space-10) var(--space-6);
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--muse-border);
+      transition: all var(--duration-slow) var(--ease-default);
+    }
+    .principle-card:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(139,92,246,0.15);
+      transform: translateY(-4px);
+    }
+    .principle-card p {
+      font-size: var(--text-lg);
+      line-height: 1.7;
+      color: var(--muse-text-muted);
+      font-weight: 300;
+      font-style: italic;
+    }
+    .principle-card p em { font-style: normal; color: var(--muse-text); font-weight: 500; }
+
+    /* ================================================================
+       Pricing Section
+       ================================================================ */
+    .pricing {
+      padding: var(--space-24) 0;
+    }
+    .pricing-header {
+      text-align: center;
+      margin-bottom: var(--space-16);
+    }
+    .pricing-header h2 {
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-4);
+    }
+    .pricing-header p {
+      color: var(--muse-text-muted);
+      font-size: var(--text-lg);
+      font-weight: 300;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      padding: var(--space-10);
+      border-radius: var(--radius-xl);
+      background: var(--muse-bg-card);
+      border: 1px solid var(--muse-border);
+      display: flex; flex-direction: column;
+      transition: all var(--duration-slow) var(--ease-default);
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(139,92,246,0.2);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .pricing-card.featured {
+      border-color: rgba(139,92,246,0.3);
+      background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(236,72,153,0.06));
+    }
+    .pricing-card.featured::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--muse-gradient);
+    }
+    .pricing-badge {
+      position: absolute; top: var(--space-4); right: var(--space-4);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      background: var(--muse-gradient);
+      font-size: 10px; font-weight: 600; color: #fff;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .pricing-tier { font-size: var(--text-sm); font-weight: 500; color: var(--muse-text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-4); }
+    .pricing-price { font-size: var(--text-5xl); font-weight: 700; letter-spacing: -0.04em; margin-bottom: var(--space-1); }
+    .pricing-price span { font-size: var(--text-lg); font-weight: 400; color: var(--muse-text-muted); }
+    .pricing-desc { font-size: var(--text-sm); color: var(--muse-text-dim); margin-bottom: var(--space-8); }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-8); flex: 1; }
+    .pricing-features li {
+      display: flex; align-items: center; gap: var(--space-3);
+      font-size: var(--text-sm); color: var(--muse-text-muted);
+    }
+    .pricing-features li svg { width: 16px; height: 16px; flex-shrink: 0; fill: var(--muse-purple); }
+    .pricing-btn {
+      display: block; width: 100%; text-align: center;
+      padding: var(--space-4);
+      border-radius: var(--radius-full);
+      font-weight: 500; font-size: var(--text-sm);
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+    .pricing-btn.primary { background: var(--muse-gradient); color: #fff; box-shadow: 0 4px 20px rgba(139,92,246,0.25); }
+    .pricing-btn.primary:hover { box-shadow: 0 8px 30px rgba(139,92,246,0.35); transform: translateY(-1px); }
+    .pricing-btn.secondary { background: rgba(255,255,255,0.06); border: 1px solid var(--muse-border); color: var(--muse-text); }
+    .pricing-btn.secondary:hover { background: rgba(255,255,255,0.1); }
+
+    /* ================================================================
+       Final CTA
+       ================================================================ */
+    .final-cta {
+      padding: var(--space-24) 0;
+      text-align: center;
+      position: relative;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .final-cta h2 {
+      font-size: clamp(2.25rem, 4vw, 3.25rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      margin-bottom: var(--space-6);
+      line-height: 1.15;
+      position: relative; z-index: 1;
+    }
+    .final-cta p {
+      color: var(--muse-text-muted); font-size: var(--text-lg);
+      margin-bottom: var(--space-10); font-weight: 300;
+      position: relative; z-index: 1;
+    }
+    .final-cta .btn-primary { position: relative; z-index: 1; font-size: var(--text-lg); padding: var(--space-5) var(--space-10); }
+
+    /* ================================================================
+       Footer
+       ================================================================ */
+    .footer {
+      padding: var(--space-12) 0 var(--space-10);
+      border-top: 1px solid var(--muse-border);
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: var(--space-6);
+    }
+    .footer-brand { display: flex; align-items: center; gap: var(--space-3); font-weight: 600; font-size: var(--text-base); opacity: 0.6; }
+    .footer-brand svg { width: 20px; height: 20px; }
+    .footer-links { display: flex; gap: var(--space-8); }
+    .footer-links a { font-size: var(--text-sm); color: var(--muse-text-dim); transition: color var(--duration-fast) var(--ease-default); }
+    .footer-links a:hover { color: var(--muse-text); }
+    .footer-copy { width: 100%; text-align: center; font-size: var(--text-xs); color: var(--muse-text-dim); margin-top: var(--space-8); }
+
+    /* ================================================================
+       Responsive
+       ================================================================ */
+    @media (max-width: 900px) {
+      .feature-grid { grid-template-columns: 1fr; gap: var(--space-10); }
+      .feature-grid.reversed .feature-text { order: 1; }
+      .feature-grid.reversed .feature-visual { order: 2; }
+      .principles-grid { grid-template-columns: 1fr; max-width: 540px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+      .hero h1 { font-size: clamp(2rem, 6vw, 3rem); }
+    }
+
+    /* ================================================================
+       Scroll Reveal (subtle)
+       ================================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       Navigation
+       ============================================================ -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 28 28" fill="none">
+        <rect x="1" y="10" width="3" height="8" rx="1.5" fill="#8b5cf6"/>
+        <rect x="6" y="6" width="3" height="16" rx="1.5" fill="#a78bfa"/>
+        <rect x="11" y="3" width="3" height="22" rx="1.5" fill="#c4b5fd"/>
+        <rect x="16" y="7" width="3" height="14" rx="1.5" fill="#ec4899"/>
+        <rect x="21" y="10" width="3" height="8" rx="1.5" fill="#f472b6"/>
+      </svg>
+      MuseFlow
+    </a>
+    <a href="#pricing" class="nav-cta">Try Free</a>
+  </nav>
+
+  <!-- ============================================================
+       Hero
+       ============================================================ -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Now available on web &amp; iOS
+    </div>
+    <h1>Music is the language of the soul. Now, AI speaks it.</h1>
+    <p>MuseFlow transforms your emotions into original compositions. No instruments needed. No music theory required. Just you and your feelings.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary">
+        Try now
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#features" class="btn-ghost">
+        See how it works
+      </a>
+    </div>
+    <p class="hero-note">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 110 14A7 7 0 018 1zm0 3a.75.75 0 00-.75.75v3.5c0 .2.08.39.21.53l2 2a.75.75 0 101.08-1.04L8.75 7.63V4.75A.75.75 0 008 4z"/></svg>
+      Featured by Apple · Product Hunt #1 · 10,000+ creators
+    </p>
+  </section>
+
+  <!-- ============================================================
+       Waveform Animation
+       ============================================================ -->
+  <section class="waveform-section" id="waveform" aria-label="Audio waveform visualization">
+    <div class="waveform-container" id="waveform-container"></div>
+  </section>
+
+  <!-- ============================================================
+       Feature 1 — Mood Input
+       ============================================================ -->
+  <section class="feature-section" id="features">
+    <div class="container">
+      <div class="feature-grid reveal">
+        <div class="feature-text">
+          <span class="feature-tag">Describe</span>
+          <h2>Describe your mood. We compose.</h2>
+          <p>Simply tell MuseFlow how you feel — "melancholy at sunset," "energetic morning run," or "peaceful rain" — and watch as a unique composition materializes from your words.</p>
+        </div>
+        <div class="feature-visual">
+          <div class="phone-mockup">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="phone-screen-header">New Composition</div>
+              <div class="phone-chat">
+                <div class="chat-msg user">I'm feeling peaceful but a little nostalgic, like watching the ocean at dusk</div>
+                <div class="chat-msg ai">
+                  <div class="ai-label">MuseFlow AI</div>
+                  Creating a composition with warm pads, gentle piano, and oceanic textures. Tempo: 72 BPM. Key: C minor. Generating...
+                </div>
+                <div class="chat-msg user">Can you make it a bit more hopeful towards the end?</div>
+                <div class="chat-msg ai">
+                  <div class="ai-label">MuseFlow AI</div>
+                  Adjusting the harmonic progression — shifting from C minor to Eb major in the final section. The ending now lifts with a gentle crescendo. ♪
+                </div>
+              </div>
+              <div class="chat-input-bar">
+                <span>Describe your next mood...</span>
+                <div class="chat-send">
+                  <svg viewBox="0 0 16 16"><path d="M2 14L14 8L2 2V6.5L10 8L2 9.5V14Z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Feature 2 — Player
+       ============================================================ -->
+  <section class="feature-section">
+    <div class="container">
+      <div class="feature-grid reversed reveal">
+        <div class="feature-text">
+          <span class="feature-tag">Listen</span>
+          <h2>Every beat tells a story.</h2>
+          <p>Each AI-generated track is a fully produced composition with dynamic arrangements, professional mixing, and emotional depth that evolves over time.</p>
+        </div>
+        <div class="feature-visual">
+          <div class="phone-mockup">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="phone-screen-header">Now Playing</div>
+              <div class="phone-player">
+                <div class="player-art">
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M24 6v36M18 10v28M12 14v20M6 18v12M30 10v28M36 14v20M42 18v12" stroke="rgba(255,255,255,0.8)" stroke-width="3" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="player-track-name">Dusk at the Shore</div>
+                <div class="player-track-artist">MuseFlow · AI Generated</div>
+                <div class="player-waveform" id="player-waveform"></div>
+                <div class="player-progress"><div class="player-progress-fill"></div></div>
+                <div class="player-times"><span>2:14</span><span>3:28</span></div>
+                <div class="player-controls">
+                  <svg viewBox="0 0 18 18"><path d="M14 3L6 9l8 6V3z" fill="currentColor"/><rect x="3" y="3" width="2" height="12" rx="1" fill="currentColor"/></svg>
+                  <div class="player-play">
+                    <svg viewBox="0 0 18 18"><path d="M5 3l10 6-10 6V3z" fill="#fff"/></svg>
+                  </div>
+                  <svg viewBox="0 0 18 18"><path d="M4 3l8 6-8 6V3zM13 3v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Feature 3 — Library
+       ============================================================ -->
+  <section class="feature-section">
+    <div class="container">
+      <div class="feature-grid reveal">
+        <div class="feature-text">
+          <span class="feature-tag">Collection</span>
+          <h2>Your library. Your masterpieces.</h2>
+          <p>Every composition you create lives in your personal library. Organize by mood, genre, or project. Download, share, or license your music — it's all yours.</p>
+        </div>
+        <div class="feature-visual">
+          <div class="phone-mockup">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="phone-screen-header">My Library</div>
+              <div class="phone-library">
+                <div class="lib-item">
+                  <div class="lib-icon purple">
+                    <svg viewBox="0 0 16 16" fill="#8b5cf6"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/><path d="M8 5v6l3.5 2" stroke="#8b5cf6" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="lib-info">
+                    <div class="lib-name">Dusk at the Shore</div>
+                    <div class="lib-meta">3:28 · Ambient · Today</div>
+                  </div>
+                  <div class="lib-mini-wave">
+                    <span style="height:6px"></span><span style="height:10px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:12px"></span><span style="height:6px"></span>
+                  </div>
+                </div>
+                <div class="lib-item">
+                  <div class="lib-icon pink">
+                    <svg viewBox="0 0 16 16" fill="#ec4899"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/><path d="M8 5v6l3.5 2" stroke="#ec4899" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="lib-info">
+                    <div class="lib-name">Morning Energy</div>
+                    <div class="lib-meta">2:45 · Electronic · Yesterday</div>
+                  </div>
+                  <div class="lib-mini-wave">
+                    <span style="height:8px"></span><span style="height:14px"></span><span style="height:6px"></span><span style="height:12px"></span><span style="height:10px"></span><span style="height:8px"></span>
+                  </div>
+                </div>
+                <div class="lib-item">
+                  <div class="lib-icon indigo">
+                    <svg viewBox="0 0 16 16" fill="#6366f1"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/><path d="M8 5v6l3.5 2" stroke="#6366f1" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="lib-info">
+                    <div class="lib-name">Rainy Window</div>
+                    <div class="lib-meta">4:12 · Classical · 3 days ago</div>
+                  </div>
+                  <div class="lib-mini-wave">
+                    <span style="height:10px"></span><span style="height:6px"></span><span style="height:12px"></span><span style="height:8px"></span><span style="height:14px"></span><span style="height:10px"></span>
+                  </div>
+                </div>
+                <div class="lib-item">
+                  <div class="lib-icon purple">
+                    <svg viewBox="0 0 16 16" fill="#8b5cf6"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/><path d="M8 5v6l3.5 2" stroke="#8b5cf6" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="lib-info">
+                    <div class="lib-name">Midnight Drive</div>
+                    <div class="lib-meta">5:01 · Lo-fi · Last week</div>
+                  </div>
+                  <div class="lib-mini-wave">
+                    <span style="height:12px"></span><span style="height:8px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:10px"></span><span style="height:8px"></span>
+                  </div>
+                </div>
+                <div class="lib-item">
+                  <div class="lib-icon pink">
+                    <svg viewBox="0 0 16 16" fill="#ec4899"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zm0 1.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/><path d="M8 5v6l3.5 2" stroke="#ec4899" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="lib-info">
+                    <div class="lib-name">Golden Hour</div>
+                    <div class="lib-meta">3:55 · Jazz · 2 weeks ago</div>
+                  </div>
+                  <div class="lib-mini-wave">
+                    <span style="height:8px"></span><span style="height:14px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:12px"></span><span style="height:8px"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Principles
+       ============================================================ -->
+  <section class="principles">
+    <div class="container">
+      <div class="principles-label">Our Philosophy</div>
+      <div class="principles-grid">
+        <div class="principle-card reveal">
+          <p>We believe music should be <em>accessible to everyone</em>, regardless of technical skill. Your feelings are enough.</p>
+        </div>
+        <div class="principle-card reveal">
+          <p>AI is a <em>collaborator, not a replacement</em> for human creativity. Technology amplifies your artistic vision.</p>
+        </div>
+        <div class="principle-card reveal">
+          <p>Every composition is <em>unique, like the emotion</em> that inspired it. No two pieces are ever the same.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Pricing
+       ============================================================ -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="pricing-header">
+        <h2>Simple, transparent pricing</h2>
+        <p>Start free. Upgrade when you're ready.</p>
+      </div>
+      <div class="pricing-grid">
+        <!-- Free -->
+        <div class="pricing-card reveal">
+          <div class="pricing-tier">Free</div>
+          <div class="pricing-price">$0 <span>/mo</span></div>
+          <div class="pricing-desc">Perfect for exploring AI music creation</div>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              5 compositions per month
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Standard quality audio
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Personal use license
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Web app access
+            </li>
+          </ul>
+          <a href="#" class="pricing-btn secondary">Get started</a>
+        </div>
+        <!-- Pro -->
+        <div class="pricing-card featured reveal">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-tier">Pro</div>
+          <div class="pricing-price">$12 <span>/mo</span></div>
+          <div class="pricing-desc">For serious creators and musicians</div>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Unlimited compositions
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              High-quality lossless audio
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Priority generation queue
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Advanced style controls
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              iOS &amp; Android apps
+            </li>
+          </ul>
+          <a href="#" class="pricing-btn primary">Start free trial</a>
+        </div>
+        <!-- Studio -->
+        <div class="pricing-card reveal">
+          <div class="pricing-tier">Studio</div>
+          <div class="pricing-price">$29 <span>/mo</span></div>
+          <div class="pricing-desc">For professionals and businesses</div>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Everything in Pro
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Commercial license
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              API access
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Stems &amp; multi-track export
+            </li>
+            <li>
+              <svg viewBox="0 0 16 16"><path d="M3.5 8l3 3 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Dedicated support
+            </li>
+          </ul>
+          <a href="#" class="pricing-btn secondary">Contact sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Final CTA
+       ============================================================ -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Your next composition<br>is one feeling away</h2>
+      <p>Join 10,000+ creators already making music with MuseFlow</p>
+      <a href="#" class="btn-primary">
+        Start creating for free
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Footer
+       ============================================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <svg viewBox="0 0 28 28" fill="none">
+            <rect x="1" y="10" width="3" height="8" rx="1.5" fill="#8b5cf6"/>
+            <rect x="6" y="6" width="3" height="16" rx="1.5" fill="#a78bfa"/>
+            <rect x="11" y="3" width="3" height="22" rx="1.5" fill="#c4b5fd"/>
+            <rect x="16" y="7" width="3" height="14" rx="1.5" fill="#ec4899"/>
+            <rect x="21" y="10" width="3" height="8" rx="1.5" fill="#f472b6"/>
+          </svg>
+          MuseFlow
+        </div>
+        <div class="footer-links">
+          <a href="#">Product</a>
+          <a href="#">Pricing</a>
+          <a href="#">Blog</a>
+          <a href="#">Changelog</a>
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+        </div>
+      </div>
+      <div class="footer-copy">© 2026 MuseFlow. Crafted with ♪ for creators everywhere.</div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JavaScript — Minimal: Waveform Generator + Scroll Reveal
+       ============================================================ -->
+  <script>
+    // ── Main Waveform Section ──
+    (function() {
+      const container = document.getElementById('waveform-container');
+      const BAR_COUNT = 50;
+      const colors = ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ec4899', '#f472b6', '#6366f1', '#818cf8'];
+      for (let i = 0; i < BAR_COUNT; i++) {
+        const bar = document.createElement('div');
+        const hMin = 8 + Math.random() * 20;
+        const hMax = 40 + Math.random() * 140;
+        const dur = 0.6 + Math.random() * 1.2;
+        const del = Math.random() * 1.5;
+        const color = colors[i % colors.length];
+        bar.className = 'waveform-bar';
+        bar.style.cssText = `
+          --h-min: ${hMin}px; --h-max: ${hMax}px;
+          --op-min: ${0.3 + Math.random()*0.3}; --op-max: ${0.7 + Math.random()*0.3};
+          --dur: ${dur}s; --del: ${del}s;
+          background: ${color};
+          opacity: 0;
+        `;
+        container.appendChild(bar);
+      }
+    })();
+
+    // ── Player Waveform ──
+    (function() {
+      const pw = document.getElementById('player-waveform');
+      if (!pw) return;
+      for (let i = 0; i < 40; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'pw-bar' + (i < 26 ? ' active' : '');
+        bar.style.height = (4 + Math.random() * 24) + 'px';
+        pw.appendChild(bar);
+      }
+    })();
+
+    // ── Scroll Reveal ──
+    (function() {
+      const els = document.querySelectorAll('.reveal');
+      if (!els.length) return;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => obs.observe(el));
+    })();
+  </script>
+
+</body>
+</html>

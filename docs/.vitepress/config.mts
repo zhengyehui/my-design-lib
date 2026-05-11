@@ -278,7 +278,8 @@ export default defineConfig({
           collapsed: true,
           items: [
             { text: '太空主题 404', link: '/pages/404-creative' },
-            { text: 'Pulse 上线预告', link: '/pages/coming-soon' }
+            { text: 'Pulse 上线预告', link: '/pages/coming-soon' },
+            { text: 'MuseFlow AI 音乐创作', link: '/pages/ai-music-studio' }
           ]
         },
         {
@@ -301,7 +302,8 @@ export default defineConfig({
           items: [
             { text: 'VitalFit 健身追踪', link: '/pages/fitness-app' },
             { text: 'SkyPulse 天气仪表盘', link: '/pages/weather-dashboard' },
-            { text: 'NeoBank 数字银行', link: '/pages/fintech-app' }
+            { text: 'NeoBank 数字银行', link: '/pages/fintech-app' },
+            { text: 'NimbusDrive 云存储', link: '/pages/cloud-storage-app' }
           ]
         },
         {
