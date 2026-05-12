@@ -67,7 +67,7 @@ const pages = [
   {
     id: 'dashboard-dark',
     title: 'Nexus 数据仪表盘',
-    category: 'dashboard',
+    category: 'app',
     tags: ['暗色', '数据', '管理后台'],
     colors: ['#0f0f14', '#6366f1', '#1a1a24'],
     rating: 9.0,
@@ -157,7 +157,7 @@ const pages = [
   {
     id: 'tech-blog',
     title: 'DevChronicle 技术博客',
-    category: 'blog',
+    category: 'content',
     tags: ['博客', '编辑设计', '文章列表', 'Newsletter'],
     colors: ['#ffffff', '#6366f1', '#f59e0b'],
     rating: 9.4,
@@ -166,7 +166,7 @@ const pages = [
   {
     id: 'analytics-dashboard',
     title: '数据分析仪表盘',
-    category: 'dashboard',
+    category: 'app',
     tags: ['仪表盘', '数据分析', '暗色主题', '图表'],
     colors: ['#0f0f14', '#6366f1', '#10b981'],
     rating: 9.5,
@@ -202,7 +202,7 @@ const pages = [
   {
     id: 'pricing-page',
     title: 'CloudStack 定价页',
-    category: 'pricing',
+    category: 'landing',
     tags: ['定价', 'SaaS', '对比表', 'FAQ'],
     colors: ['#6366f1', '#7c3aed', '#eef2ff'],
     rating: 9.3,
@@ -229,7 +229,7 @@ const pages = [
   {
     id: 'case-study',
     title: 'Arclight 品牌重塑案例',
-    category: 'case-study',
+    category: 'portfolio',
     tags: ['案例研究', '品牌重塑', 'B2B SaaS', '暗色'],
     colors: ['#07070d', '#6366f1', '#ec4899'],
     rating: 9.6,
@@ -238,7 +238,7 @@ const pages = [
   {
     id: 'docs-portal',
     title: 'DevDocs 现代文档门户',
-    category: 'docs',
+    category: 'content',
     tags: ['文档', '门户', '开发者体验', '代码高亮'],
     colors: ['#ffffff', '#6366f1', '#1e1e2e'],
     rating: 9.5,
@@ -247,7 +247,7 @@ const pages = [
   {
     id: 'job-board',
     title: 'TalentFlow 招聘平台',
-    category: 'careers',
+    category: 'industry',
     tags: ['招聘', '求职', 'SaaS平台', '深色Hero'],
     colors: ['#0f172a', '#6366f1', '#10b981'],
     rating: 9.4,
@@ -256,7 +256,7 @@ const pages = [
   {
     id: 'real-estate-luxury',
     title: 'Luxe Estates 奢华房产',
-    category: 'real-estate',
+    category: 'industry',
     tags: ['房产', '奢华', '暗色主题', '大图展示'],
     colors: ['#0d0d0d', '#c9a96e', '#161616'],
     rating: 9.5,
@@ -265,7 +265,7 @@ const pages = [
   {
     id: 'magazine-editorial',
     title: 'Mono Journal 杂志编辑',
-    category: 'editorial',
+    category: 'content',
     tags: ['杂志', '编辑设计', '报纸', '内容排版'],
     colors: ['#f8f6f1', '#c0392b', '#1a1a1a'],
     rating: 9.4,
@@ -292,7 +292,7 @@ const pages = [
   {
     id: 'saas-changelog',
     title: 'FlowSync 更新日志',
-    category: 'blog',
+    category: 'content',
     tags: ['更新日志', 'SaaS', '时间线', '标签筛选'],
     colors: ['#ffffff', '#6366f1', '#e2e8f0'],
     rating: 9.3,
@@ -301,7 +301,7 @@ const pages = [
   {
     id: 'edu-platform',
     title: 'LearnHub 在线学习平台',
-    category: 'education',
+    category: 'industry',
     tags: ['在线教育', '课程', '学习路径', '讲师'],
     colors: ['#0d9488', '#6366f1', '#f0fdfa'],
     rating: 9.4,
@@ -310,7 +310,7 @@ const pages = [
   {
     id: 'travel-booking',
     title: 'Voyager 旅行预订',
-    category: 'travel',
+    category: 'industry',
     tags: ['旅行', '预订', '奢华', '目的地'],
     colors: ['#0c1445', '#e8614d', '#c9a96e'],
     rating: 9.5,
@@ -319,7 +319,7 @@ const pages = [
   {
     id: 'crypto-web3',
     title: 'NovaChain Web3 DeFi 落地页',
-    category: 'web3',
+    category: 'industry',
     tags: ['Web3', 'DeFi', '暗色主题', '加密货币'],
     colors: ['#050510', '#06b6d4', '#8b5cf6'],
     rating: 9.5,
@@ -328,7 +328,7 @@ const pages = [
   {
     id: 'newsletter-landing',
     title: 'The Signal Newsletter 落地页',
-    category: 'newsletter',
+    category: 'content',
     tags: ['Newsletter', '内容创作', '极简', '订阅'],
     colors: ['#fafaf9', '#6366f1', '#ec4899'],
     rating: 9.4,
@@ -337,7 +337,7 @@ const pages = [
   {
     id: 'fashion-brand',
     title: 'Maison Élégance 时尚品牌',
-    category: 'fashion',
+    category: 'industry',
     tags: ['时尚', '奢侈品', '品牌', '衬线字体'],
     colors: ['#faf8f5', '#1a1a1a', '#b8956a'],
     rating: 9.4,
@@ -346,7 +346,7 @@ const pages = [
   {
     id: 'podcast-show',
     title: 'SoundWave 播客频道',
-    category: 'podcast',
+    category: 'creative',
     tags: ['播客', '音频', '媒体', '暗色主题', '波形动画'],
     colors: ['#0a0a0f', '#ff6b35', '#8b5cf6'],
     rating: 9.4,
@@ -364,7 +364,7 @@ const pages = [
   {
     id: 'health-ai',
     title: 'Lóvi Care AI 健康管理',
-    category: 'health',
+    category: 'industry',
     tags: ['健康', 'AI', '医疗', '护肤'],
     colors: ['#151581', '#5163FF', '#F6F6FA'],
     rating: 9.5,
@@ -382,7 +382,7 @@ const pages = [
   {
     id: 'architecture-studio',
     title: 'Atelier Noir 建筑设计工作室',
-    category: 'architecture',
+    category: 'portfolio',
     tags: ['建筑设计', '暗色主题', '作品集', '奢华'],
     colors: ['#0a0a0a', '#c9a96e', '#f5f0eb'],
     rating: 9.5,
@@ -391,7 +391,7 @@ const pages = [
   {
     id: 'nonprofit-impact',
     title: 'Hope Forward 公益教育平台',
-    category: 'nonprofit',
+    category: 'industry',
     tags: ['公益', '非营利', '教育', '暗色Hero'],
     colors: ['#0c1d3a', '#e8614d', '#faf8f5'],
     rating: 9.4,
@@ -400,7 +400,7 @@ const pages = [
   {
     id: 'game-studio',
     title: 'NexusForge 游戏工作室',
-    category: 'game',
+    category: 'creative',
     tags: ['游戏', '工作室', '暗色主题', '粒子动画', '招聘'],
     colors: ['#0a0a0f', '#ff4d00', '#ff8a00'],
     rating: 9.5,
@@ -428,35 +428,47 @@ const pages = [
 
 const categories = [
   { id: 'all', label: '全部', icon: '🎨' },
-  { id: 'landing', label: '落地页', icon: '🚀' },
-  { id: 'portfolio', label: '作品集', icon: '💼' },
-  { id: 'dashboard', label: '仪表盘', icon: '📊' },
+  { id: 'landing', label: 'SaaS 落地页', icon: '🚀' },
+  { id: 'portfolio', label: '作品集 & 机构', icon: '💼' },
+  { id: 'app', label: '应用 & 仪表盘', icon: '📊' },
   { id: 'ecommerce', label: '电商', icon: '🛒' },
-  { id: 'creative', label: '创意', icon: '✨' },
-  { id: 'blog', label: '博客', icon: '📝' },
-  { id: 'app', label: '应用', icon: '📱' },
-  { id: 'pricing', label: '定价', icon: '💰' },
-  { id: 'case-study', label: '案例', icon: '📋' },
-  { id: 'docs', label: '文档', icon: '📖' },
-  { id: 'careers', label: '招聘', icon: '💼' },
-  { id: 'real-estate', label: '房产', icon: '🏠' },
-  { id: 'editorial', label: '杂志', icon: '📰' },
-  { id: 'education', label: '教育', icon: '📚' },
-  { id: 'travel', label: '旅行', icon: '✈️' },
-  { id: 'web3', label: 'Web3', icon: '⛓️' },
-  { id: 'newsletter', label: 'Newsletter', icon: '📬' },
-  { id: 'fashion', label: '时尚', icon: '👗' },
-  { id: 'podcast', label: '播客', icon: '🎙️' },
-  { id: 'health', label: '健康', icon: '🏥' },
-  { id: 'architecture', label: '建筑', icon: '🏛️' },
-  { id: 'nonprofit', label: '公益', icon: '💚' },
-  { id: 'game', label: '游戏', icon: '🎮' },
+  { id: 'creative', label: '创意页面', icon: '✨' },
+  { id: 'content', label: '内容 & 编辑', icon: '📝' },
+  { id: 'industry', label: '行业垂直', icon: '🌍' },
 ]
 
 const activeCategory = ref('all')
+const searchQuery = ref('')
+
+// 过滤逻辑：支持分类 + 搜索
 const filteredPages = computed(() => {
-  if (activeCategory.value === 'all') return pages
-  return pages.filter(p => p.category === activeCategory.value)
+  let result = pages
+  if (activeCategory.value !== 'all') {
+    result = result.filter(p => p.category === activeCategory.value)
+  }
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.toLowerCase()
+    result = result.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q) ||
+      p.tags.some(t => t.toLowerCase().includes(q))
+    )
+  }
+  return result
+})
+
+// 分组视图："全部"且无搜索时，按分类分组展示
+const groupedPages = computed(() => {
+  if (activeCategory.value !== 'all' || searchQuery.value.trim()) return null
+  const groups = []
+  for (const cat of categories) {
+    if (cat.id === 'all') continue
+    const catPages = pages.filter(p => p.category === cat.id).sort((a, b) => b.rating - a.rating)
+    if (catPages.length > 0) {
+      groups.push({ ...cat, pages: catPages })
+    }
+  }
+  return groups
 })
 
 function getScoreColor(score) {
@@ -469,69 +481,137 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-  <meta name="description" content="My Design Lib 页面灵感画廊 — 30 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商结账、404 创意页、在线教育、旅行预订等。可预览、看源码、学设计。">
+  <meta name="description" content="My Design Lib 页面灵感画廊 — 42 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-  <meta property="og:description" content="完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等 5 个高质量页面模板。">
+  <meta property="og:description" content="42 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
-
 
   <!-- Hero -->
   <div class="gallery-hero">
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 {{ pages.length }} 个完整页面</span>
-      <span>🏷️ {{ categories.length - 1 }} 个分类</span>
+      <span>📦 42 个完整页面</span>
+      <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
   </div>
 
-  <!-- Filter -->
-  <div class="gallery-filter">
-    <button
-      v-for="cat in categories"
-      :key="cat.id"
-      :class="['filter-btn', { active: activeCategory === cat.id }]"
-      @click="activeCategory = cat.id"
-    >
-      {{ cat.icon }} {{ cat.label }}
-    </button>
+  <!-- Toolbar: Search + Filter -->
+  <div class="gallery-toolbar">
+    <div class="search-box">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="搜索页面名称、描述或标签..."
+        class="search-input"
+      />
+      <button v-if="searchQuery" @click="searchQuery = ''" class="search-clear" title="清除搜索">✕</button>
+    </div>
+    <div class="gallery-filter">
+      <button
+        v-for="cat in categories"
+        :key="cat.id"
+        :class="['filter-btn', { active: activeCategory === cat.id }]"
+        @click="activeCategory = cat.id"
+      >
+        {{ cat.icon }} {{ cat.label }}
+      </button>
+    </div>
   </div>
 
-  <!-- Grid -->
-  <div class="gallery-grid">
-    <a
-      v-for="page in filteredPages"
-      :key="page.id"
-      :href="`/pages/${page.id}.html`"
-      class="gallery-card"
-    >
-      <div class="card-preview">
-        <iframe
-          v-if="iframesReady"
-          :src="`/pages/${page.id}/index.html`"
-          scrolling="no"
-          loading="lazy"
-          tabindex="-1"
-          sandbox=""
-          :title="page.title"
-          class="card-iframe"
-        ></iframe>
-        <div class="card-overlay"></div>
-      </div>
-      <div class="card-info">
-        <h3>{{ page.title }}</h3>
-        <p>{{ page.description }}</p>
-        <div class="card-tags">
-          <span v-for="tag in page.tags" :key="tag" class="tag">{{ tag }}</span>
-        </div>
-      </div>
-    </a>
+  <!-- Search result hint -->
+  <div v-if="searchQuery.trim()" class="search-result-hint">
+    🔍 找到 <strong>{{ filteredPages.length }}</strong> 个匹配页面
   </div>
+
+  <!-- ===== 分组视图（"全部" + 无搜索） ===== -->
+  <template v-if="groupedPages">
+    <div v-for="group in groupedPages" :key="group.id" class="gallery-section">
+      <div class="section-header">
+        <span class="section-icon">{{ group.icon }}</span>
+        <span class="section-title">{{ group.label }}</span>
+        <span class="section-count">{{ group.pages.length }}</span>
+      </div>
+      <div class="gallery-grid">
+        <a
+          v-for="page in group.pages"
+          :key="page.id"
+          :href="`/pages/${page.id}.html`"
+          class="gallery-card"
+        >
+          <div class="card-preview">
+            <iframe
+              v-if="iframesReady"
+              :src="`/pages/${page.id}/index.html`"
+              scrolling="no"
+              loading="lazy"
+              tabindex="-1"
+              sandbox=""
+              :title="page.title"
+              class="card-iframe"
+            ></iframe>
+            <div class="card-overlay"></div>
+          </div>
+          <div class="card-info">
+            <div class="card-title-row">
+              <h3>{{ page.title }}</h3>
+              <span class="card-score" :style="{ color: getScoreColor(page.rating) }">{{ page.rating }}</span>
+            </div>
+            <p>{{ page.description }}</p>
+            <div class="card-tags">
+              <span v-for="tag in page.tags" :key="tag" class="tag">{{ tag }}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </template>
+
+  <!-- ===== 扁平视图（分类筛选 / 搜索） ===== -->
+  <template v-else>
+    <div class="gallery-grid">
+      <a
+        v-for="page in filteredPages"
+        :key="page.id"
+        :href="`/pages/${page.id}.html`"
+        class="gallery-card"
+      >
+        <div class="card-preview">
+          <iframe
+            v-if="iframesReady"
+            :src="`/pages/${page.id}/index.html`"
+            scrolling="no"
+            loading="lazy"
+            tabindex="-1"
+            sandbox=""
+            :title="page.title"
+            class="card-iframe"
+          ></iframe>
+          <div class="card-overlay"></div>
+        </div>
+        <div class="card-info">
+          <div class="card-title-row">
+            <h3>{{ page.title }}</h3>
+            <span class="card-score" :style="{ color: getScoreColor(page.rating) }">{{ page.rating }}</span>
+          </div>
+          <p>{{ page.description }}</p>
+          <div class="card-tags">
+            <span v-for="tag in page.tags" :key="tag" class="tag">{{ tag }}</span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div v-if="filteredPages.length === 0" class="gallery-empty">
+      没有找到匹配的页面 😅<br/>
+      <button class="reset-btn" @click="searchQuery = ''; activeCategory = 'all'">重置筛选</button>
+    </div>
+  </template>
 
   <!-- Footer -->
   <div class="gallery-footer">
@@ -569,25 +649,21 @@ body:has(.gallery-page) .VPDoc {
 body:has(.gallery-page) .VPDoc .container,
 body:has(.gallery-page) .VPDoc .content,
 body:has(.gallery-page) .VPDoc .content-container,
-body:has(.gallery-page) .VPDoc main {
+body:has(.gallery-page) main {
   max-width: none !important;
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-/* 页面容器和空间调整 - 为全局导航栏预留空间 */
-.gallery-page {
-  margin-top: 0;
-  padding-top: 0;
-}
-
-/* Hero */
+/* 页面容器 */
 .gallery-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 2rem 2rem;
 }
+
+/* Hero */
 .gallery-hero {
   text-align: center;
   padding: 5rem 0 2rem;
@@ -610,13 +686,71 @@ body:has(.gallery-page) .VPDoc main {
   color: #888;
 }
 
+/* ===== Toolbar: Search + Filter ===== */
+.gallery-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+.search-icon {
+  position: absolute;
+  left: 14px;
+  color: #999;
+  pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  padding: 0.7rem 2.5rem 0.7rem 2.8rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: #333;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+.search-input::placeholder { color: #aaa; }
+.search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #999;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 50%;
+  line-height: 1;
+}
+.search-clear:hover { background: #f3f4f6; color: #333; }
+
+.search-result-hint {
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
 /* Filter */
 .gallery-filter {
   display: flex;
   gap: 0.5rem;
   justify-content: center;
   flex-wrap: wrap;
-  margin: 1.5rem 0;
 }
 .filter-btn {
   padding: 0.5rem 1.2rem;
@@ -631,12 +765,42 @@ body:has(.gallery-page) .VPDoc main {
 .filter-btn:hover { border-color: #6366f1; color: #6366f1; }
 .filter-btn.active { background: #6366f1; border-color: #6366f1; color: #fff; }
 
+/* ===== Section Headers (Grouped View) ===== */
+.gallery-section {
+  margin-top: 2.5rem;
+}
+.gallery-section:first-child {
+  margin-top: 1rem;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 1.2rem;
+}
+.section-icon {
+  font-size: 1.3rem;
+}
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.section-count {
+  font-size: 0.8rem;
+  color: #999;
+  background: #f3f4f6;
+  padding: 2px 10px;
+  border-radius: 100px;
+}
+
 /* Grid */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 2rem;
-  margin-top: 2rem;
 }
 .gallery-card {
   border-radius: 16px;
@@ -683,23 +847,21 @@ body:has(.gallery-page) .VPDoc main {
   background: rgba(99, 102, 241, 0.05);
 }
 
-.card-score {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 1.1rem;
-  font-weight: 800;
-  padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(6px);
-  border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  z-index: 3;
-}
-
 /* Info */
 .card-info { padding: 1.2rem; background: #fff; }
-.card-info h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+.card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+.card-title-row h3 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+.card-score {
+  font-size: 1rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
 .card-info p { font-size: 0.85rem; color: #666; line-height: 1.5; margin-bottom: 0.8rem; }
 .card-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
 .tag {
@@ -708,6 +870,31 @@ body:has(.gallery-page) .VPDoc main {
   border-radius: 6px;
   font-size: 0.75rem;
   color: #666;
+}
+
+/* Empty state */
+.gallery-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #999;
+  font-size: 1.1rem;
+  line-height: 2;
+}
+.reset-btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 100px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #6366f1;
+  transition: all 0.2s;
+}
+.reset-btn:hover {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
 }
 
 /* Footer */
@@ -721,12 +908,13 @@ body:has(.gallery-page) .VPDoc main {
   line-height: 1.8;
 }
 
-.gallery-empty { text-align: center; padding: 4rem; color: #999; font-size: 1.1rem; }
-
+/* Responsive */
 @media (max-width: 640px) {
   .gallery-grid { grid-template-columns: 1fr; }
   .gallery-hero h1 { font-size: 1.8rem; }
-  .nav-links { gap: 0.8rem; font-size: 0.8rem; }
   .hero-stats { flex-direction: column; gap: 0.5rem; }
+  .gallery-filter { gap: 0.35rem; }
+  .filter-btn { padding: 0.4rem 0.9rem; font-size: 0.8rem; }
+  .section-title { font-size: 1rem; }
 }
 </style>

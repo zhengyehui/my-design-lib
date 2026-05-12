@@ -227,195 +227,87 @@ export default defineConfig({
           ]
         },
         {
-          text: '🚀 落地页',
+          text: '🚀 SaaS 落地页',
           collapsed: true,
           items: [
-            { text: 'NovaPay SaaS', link: '/pages/saas-landing' },
             { text: 'TechConf 科技大会', link: '/pages/conference-landing' },
+            { text: '3D 互动落地页', link: '/pages/3d-interactive-landing' },
+            { text: 'Ember Kitchen 餐厅', link: '/pages/restaurant-ember' },
             { text: 'NexusAI 智能平台', link: '/pages/ai-saas-landing' },
             { text: 'FlowDesk 极简产品', link: '/pages/product-minimal' },
-            { text: '3D 互动落地页', link: '/pages/3d-interactive-landing' },
-            { text: 'Ember Kitchen 餐厅', link: '/pages/restaurant-ember' }
+            { text: 'CloudStack 定价页', link: '/pages/pricing-page' },
+            { text: 'NovaPay SaaS', link: '/pages/saas-landing' }
           ]
         },
         {
-          text: '💼 作品集',
+          text: '💼 作品集 & 机构',
           collapsed: true,
           items: [
+            { text: 'Arclight 品牌重塑', link: '/pages/case-study' },
             { text: '创意作品集', link: '/pages/portfolio' },
+            { text: 'VOID 创意工作室', link: '/pages/studio-creative' },
+            { text: 'Atelier Noir 建筑设计', link: '/pages/architecture-studio' },
             { text: 'Studio Creative 设计机构', link: '/pages/agency-portfolio' },
-            { text: 'VOID 创意工作室', link: '/pages/studio-creative' }
+            { text: 'Atelier Lumière 摄影', link: '/pages/photography-portfolio' }
           ]
         },
         {
-          text: '📊 仪表盘与数据',
+          text: '📊 应用 & 仪表盘',
           collapsed: true,
           items: [
-            { text: 'Nexus 数据仪表盘', link: '/pages/dashboard-dark' },
-            { text: '数据分析仪表盘', link: '/pages/analytics-dashboard' }
+            { text: '数据分析仪表盘', link: '/pages/analytics-dashboard' },
+            { text: 'SkyPulse 天气仪表盘', link: '/pages/weather-dashboard' },
+            { text: 'NeoBank 数字银行', link: '/pages/fintech-app' },
+            { text: 'AuthKit 现代认证页', link: '/pages/auth-modern' },
+            { text: 'VitalFit 健身追踪', link: '/pages/fitness-app' },
+            { text: 'NimbusDrive 云存储', link: '/pages/cloud-storage-app' },
+            { text: 'Nexus 数据仪表盘', link: '/pages/dashboard-dark' }
           ]
         },
         {
-          text: '🛒 电商与应用',
+          text: '🛒 电商',
           collapsed: true,
           items: [
-            { text: 'ShopFlow 结账页', link: '/pages/checkout' },
-            { text: 'Bloom 生活方式电商', link: '/pages/product-showcase' },
             { text: 'Lumina Pro 产品详情', link: '/pages/product-detail-premium' },
-            { text: 'AuthKit 现代认证页', link: '/pages/auth-modern' }
-          ]
-        },
-        {
-          text: '📝 博客与更新',
-          collapsed: true,
-          items: [
-            { text: 'DevChronicle 技术博客', link: '/pages/tech-blog' },
-            { text: 'FlowSync 更新日志', link: '/pages/saas-changelog' }
+            { text: 'Bloom 生活方式电商', link: '/pages/product-showcase' },
+            { text: 'ShopFlow 结账页', link: '/pages/checkout' }
           ]
         },
         {
           text: '✨ 创意页面',
           collapsed: true,
           items: [
+            { text: 'MuseFlow AI 音乐创作', link: '/pages/ai-music-studio' },
+            { text: 'NexusForge 游戏工作室', link: '/pages/game-studio' },
+            { text: 'WaveSync 音乐播放器', link: '/pages/music-player' },
+            { text: 'SoundWave 播客频道', link: '/pages/podcast-show' },
             { text: '太空主题 404', link: '/pages/404-creative' },
-            { text: 'Pulse 上线预告', link: '/pages/coming-soon' },
-            { text: 'MuseFlow AI 音乐创作', link: '/pages/ai-music-studio' }
+            { text: 'Pulse 上线预告', link: '/pages/coming-soon' }
           ]
         },
         {
-          text: '💰 定价页',
+          text: '📝 内容 & 编辑',
           collapsed: true,
           items: [
-            { text: 'CloudStack 定价页', link: '/pages/pricing-page' }
-          ]
-        },
-        {
-          text: '🎵 媒体与创意',
-          collapsed: true,
-          items: [
-            { text: 'WaveSync 音乐播放器', link: '/pages/music-player' }
-          ]
-        },
-        {
-          text: '💪 应用与工具',
-          collapsed: true,
-          items: [
-            { text: 'VitalFit 健身追踪', link: '/pages/fitness-app' },
-            { text: 'SkyPulse 天气仪表盘', link: '/pages/weather-dashboard' },
-            { text: 'NeoBank 数字银行', link: '/pages/fintech-app' },
-            { text: 'NimbusDrive 云存储', link: '/pages/cloud-storage-app' }
-          ]
-        },
-        {
-          text: '📋 案例研究',
-          collapsed: true,
-          items: [
-            { text: 'Arclight 品牌重塑', link: '/pages/case-study' }
-          ]
-        },
-        {
-          text: '📖 文档与门户',
-          collapsed: true,
-          items: [
-            { text: 'DevDocs 文档门户', link: '/pages/docs-portal' }
-          ]
-        },
-        {
-          text: '💼 招聘与职业',
-          collapsed: true,
-          items: [
-            { text: 'TalentFlow 招聘平台', link: '/pages/job-board' }
-          ]
-        },
-        {
-          text: '🏠 房产',
-          collapsed: true,
-          items: [
-            { text: 'Luxe Estates 奢华房产', link: '/pages/real-estate-luxury' }
-          ]
-        },
-        {
-          text: '📰 杂志与编辑',
-          collapsed: true,
-          items: [
-            { text: 'Mono Journal 杂志', link: '/pages/magazine-editorial' }
-          ]
-        },
-        {
-          text: '📚 在线教育',
-          collapsed: true,
-          items: [
-            { text: 'LearnHub 在线学习', link: '/pages/edu-platform' }
-          ]
-        },
-        {
-          text: '✈️ 旅行与预订',
-          collapsed: true,
-          items: [
-            { text: 'Voyager 旅行预订', link: '/pages/travel-booking' }
-          ]
-        },
-        {
-          text: '⛓️ Web3 与加密',
-          collapsed: true,
-          items: [
-            { text: 'NovaChain Web3 DeFi', link: '/pages/crypto-web3' }
-          ]
-        },
-        {
-          text: '📬 Newsletter',
-          collapsed: true,
-          items: [
+            { text: 'DevDocs 文档门户', link: '/pages/docs-portal' },
+            { text: 'DevChronicle 技术博客', link: '/pages/tech-blog' },
+            { text: 'Mono Journal 杂志', link: '/pages/magazine-editorial' },
+            { text: 'FlowSync 更新日志', link: '/pages/saas-changelog' },
             { text: 'The Signal 订阅页', link: '/pages/newsletter-landing' }
           ]
         },
         {
-          text: '👗 时尚品牌',
+          text: '🌍 行业垂直',
           collapsed: true,
           items: [
-            { text: 'Maison Élégance 时尚品牌', link: '/pages/fashion-brand' }
-          ]
-        },
-        {
-          text: '🎙️ 播客',
-          collapsed: true,
-          items: [
-            { text: 'SoundWave 播客频道', link: '/pages/podcast-show' }
-          ]
-        },
-        {
-          text: '🏥 健康',
-          collapsed: true,
-          items: [
-            { text: 'Lóvi Care AI 健康管理', link: '/pages/health-ai' }
-          ]
-        },
-        {
-          text: '📷 摄影',
-          collapsed: true,
-          items: [
-            { text: 'Atelier Lumière 摄影作品集', link: '/pages/photography-portfolio' }
-          ]
-        },
-        {
-          text: '🏛️ 建筑设计',
-          collapsed: true,
-          items: [
-            { text: 'Atelier Noir 建筑设计工作室', link: '/pages/architecture-studio' }
-          ]
-        },
-        {
-          text: '💚 公益与社会',
-          collapsed: true,
-          items: [
+            { text: 'Luxe Estates 奢华房产', link: '/pages/real-estate-luxury' },
+            { text: 'Voyager 旅行预订', link: '/pages/travel-booking' },
+            { text: 'Lóvi Care AI 健康', link: '/pages/health-ai' },
+            { text: 'NovaChain Web3 DeFi', link: '/pages/crypto-web3' },
+            { text: 'Maison Élégance 时尚', link: '/pages/fashion-brand' },
+            { text: 'LearnHub 在线学习', link: '/pages/edu-platform' },
+            { text: 'TalentFlow 招聘平台', link: '/pages/job-board' },
             { text: 'Hope Forward 公益教育', link: '/pages/nonprofit-impact' }
-          ]
-        },
-        {
-          text: '🎮 游戏与工作室',
-          collapsed: true,
-          items: [
-            { text: 'NexusForge 游戏工作室', link: '/pages/game-studio' }
           ]
         }
       ]
