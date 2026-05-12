@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，30 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，43 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -268,6 +268,7 @@ export default defineConfig({
           text: '🛒 电商',
           collapsed: true,
           items: [
+            { text: 'KŌDA 运动潮牌商城', link: '/pages/streetwear-store' },
             { text: 'Lumina Pro 产品详情', link: '/pages/product-detail-premium' },
             { text: 'Bloom 生活方式电商', link: '/pages/product-showcase' },
             { text: 'ShopFlow 结账页', link: '/pages/checkout' }

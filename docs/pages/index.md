@@ -424,6 +424,15 @@ const pages = [
     rating: 9.5,
     description: '暗色极简 AI 音乐创作工具落地页，灵感来自 Haptic.app，CSS 音频波形动画 + 手机模型 + 哲学叙事 + 定价卡片',
   },
+  {
+    id: 'streetwear-store',
+    title: 'KŌDA 运动潮牌商城',
+    category: 'ecommerce',
+    tags: ['电商', '潮牌', '暗色主题', '运动品牌', 'Marquee'],
+    colors: ['#0a0a0a', '#ff4d00', '#00ff88'],
+    rating: 9.5,
+    description: '暗色系运动潮牌商城，灵感来自 Outfit/ASICS/Nike SNKRS，包含 Hero 网格背景 + Marquee 滚动 + 产品网格 + Quick Add 浮层 + 特色产品规格展示 + 品牌宣言',
+  },
 ]
 
 const categories = [
@@ -481,12 +490,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-  <meta name="description" content="My Design Lib 页面灵感画廊 — 42 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+  <meta name="description" content="My Design Lib 页面灵感画廊 — 43 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-  <meta property="og:description" content="42 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+  <meta property="og:description" content="43 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -495,7 +504,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 42 个完整页面</span>
+      <span>📦 43 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
