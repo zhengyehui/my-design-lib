@@ -442,6 +442,15 @@ const pages = [
     rating: 9.4,
     description: '精品咖啡品牌电商，灵感来自 WatchHouse，暗色 Hero + 胶片噪点 + Marquee 滚动 + 产品卡片 + 订阅方案 + 产地故事',
   },
+  {
+    id: 'luxury-candle',
+    title: 'Maison Lumière 奢华香薰蜡烛',
+    category: 'ecommerce',
+    tags: ['电商', '香薰', '蜡烛', '奢华', '暗色'],
+    colors: ['#08080d', '#C9A96E', '#C4722F'],
+    rating: 9.5,
+    description: '奢华香薰蜡烛品牌电商，暗色 Hero + 浮动光球动画 + CSS 蜡烛火焰 + 产品网格 + 品牌故事 + 用户评价',
+  },
 ]
 
 const categories = [

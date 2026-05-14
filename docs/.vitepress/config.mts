@@ -272,7 +272,8 @@ export default defineConfig({
             { text: 'Lumina Pro 产品详情', link: '/pages/product-detail-premium' },
             { text: 'Bloom 生活方式电商', link: '/pages/product-showcase' },
             { text: 'ShopFlow 结账页', link: '/pages/checkout' },
-            { text: 'Terroir Coffee 精品咖啡', link: '/pages/coffee-subscription' }
+            { text: 'Terroir Coffee 精品咖啡', link: '/pages/coffee-subscription' },
+            { text: 'Maison Lumière 奢华香薰', link: '/pages/luxury-candle' }
           ]
         },
         {

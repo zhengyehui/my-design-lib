@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maison Lumière — 奢华香薰蜡烛</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep: #08080d;
+    --bg-surface: #0f0f16;
+    --bg-card: #14141e;
+    --gold: #C9A96E;
+    --gold-light: #E2C992;
+    --gold-dark: #A08548;
+    --cream: #FAF8F4;
+    --cream-dim: #b8b0a4;
+    --amber: #C4722F;
+    --burgundy: #722F37;
+    --rose: #9B6B6B;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-deep);
+    color: var(--cream);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ========== NAVIGATION ========== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(8,8,13,0.6);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(201,169,110,0.08);
+    transition: all 0.4s ease;
+  }
+  .nav.scrolled { background: rgba(8,8,13,0.92); padding: 0.8rem 3rem; }
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+  }
+  .nav-brand span { color: var(--cream); font-weight: 400; }
+  .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+  .nav-links a {
+    color: var(--cream-dim); text-decoration: none;
+    font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 400; transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cart {
+    position: relative; display: flex; align-items: center; gap: 0.4rem;
+    color: var(--cream); font-size: 0.82rem; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer;
+  }
+  .nav-cart svg { width: 18px; height: 18px; stroke: var(--cream); fill: none; stroke-width: 1.5; }
+  .cart-count {
+    position: absolute; top: -6px; right: -10px;
+    background: var(--gold); color: var(--bg-deep);
+    width: 16px; height: 16px; border-radius: 50%;
+    font-size: 0.6rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ========== HERO ========== */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 50%, rgba(114,47,55,0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 40%, rgba(201,169,110,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 80% at 50% 50%, rgba(15,15,22,1) 0%, var(--bg-deep) 100%);
+  }
+
+  /* Floating candle glow */
+  .glow-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.3;
+    animation: float 8s ease-in-out infinite;
+  }
+  .glow-orb:nth-child(1) {
+    width: 300px; height: 300px; top: 20%; left: 15%;
+    background: radial-gradient(circle, rgba(201,169,110,0.4), transparent);
+    animation-delay: 0s;
+  }
+  .glow-orb:nth-child(2) {
+    width: 250px; height: 250px; top: 60%; right: 10%;
+    background: radial-gradient(circle, rgba(114,47,55,0.35), transparent);
+    animation-delay: -3s; animation-duration: 10s;
+  }
+  .glow-orb:nth-child(3) {
+    width: 200px; height: 200px; bottom: 15%; left: 40%;
+    background: radial-gradient(circle, rgba(196,114,47,0.25), transparent);
+    animation-delay: -5s; animation-duration: 12s;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center; padding: 2rem;
+    max-width: 800px;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid rgba(201,169,110,0.3);
+    padding: 0.5rem 1.5rem; border-radius: 999px;
+    margin-bottom: 2rem;
+    animation: fadeInUp 1s ease 0.2s both;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700; line-height: 1.08;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 1s ease 0.4s both;
+  }
+  .hero h1 em {
+    font-style: italic; color: var(--gold);
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--cream-dim);
+    max-width: 500px; margin: 0 auto 2.5rem;
+    font-weight: 300; line-height: 1.7;
+    animation: fadeInUp 1s ease 0.6s both;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 0.8rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--bg-deep); font-weight: 600;
+    font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 1rem 2.5rem; border: none; border-radius: 999px;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.4s ease;
+    animation: fadeInUp 1s ease 0.8s both;
+  }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,169,110,0.3); }
+  .hero-cta svg { width: 16px; height: 16px; transition: transform 0.3s; }
+  .hero-cta:hover svg { transform: translateX(4px); }
+
+  /* Candle flame SVG in hero */
+  .hero-flame {
+    position: absolute; z-index: 1;
+    bottom: 10%; right: 15%;
+    width: 120px; height: 200px;
+    opacity: 0.15;
+    animation: flicker 3s ease-in-out infinite alternate;
+  }
+  @keyframes flicker {
+    0% { opacity: 0.12; transform: scaleY(1) scaleX(1); }
+    33% { opacity: 0.18; transform: scaleY(1.02) scaleX(0.98); }
+    66% { opacity: 0.14; transform: scaleY(0.98) scaleX(1.01); }
+    100% { opacity: 0.16; transform: scaleY(1.01) scaleX(0.99); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== MARQUEE ========== */
+  .marquee-section {
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(201,169,110,0.1);
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+    overflow: hidden;
+  }
+  .marquee-track {
+    display: flex; gap: 3rem;
+    animation: marquee 30s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem; color: var(--cream-dim);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 2rem;
+    flex-shrink: 0;
+  }
+  .marquee-item .dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ========== COLLECTIONS ========== */
+  .section { padding: 6rem 3rem; max-width: 1400px; margin: 0 auto; }
+  .section-header {
+    text-align: center; margin-bottom: 4rem;
+  }
+  .section-header .label {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem; display: block;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 600;
+    line-height: 1.2;
+  }
+  .section-header p {
+    color: var(--cream-dim); margin-top: 1rem;
+    max-width: 500px; margin-left: auto; margin-right: auto;
+    font-weight: 300;
+  }
+
+  .collections-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .collection-card {
+    position: relative; border-radius: 16px;
+    overflow: hidden; cursor: pointer;
+    aspect-ratio: 3/4;
+    background: var(--bg-card);
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .collection-card:hover { transform: translateY(-8px); }
+  .collection-card .card-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .collection-card:hover .card-bg { transform: scale(1.05); }
+  .collection-card:nth-child(1) .card-bg {
+    background: linear-gradient(160deg, #1a1520 0%, #2a1a28 40%, #1a1520 100%);
+  }
+  .collection-card:nth-child(2) .card-bg {
+    background: linear-gradient(160deg, #1a1815 0%, #2a2218 40%, #1a1815 100%);
+  }
+  .collection-card:nth-child(3) .card-bg {
+    background: linear-gradient(160deg, #151a1a 0%, #182a28 40%, #151a1a 100%);
+  }
+  .card-content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(8,8,13,0.85) 0%, transparent 60%);
+  }
+  .card-emoji {
+    font-size: 3rem; margin-bottom: 1rem;
+    filter: grayscale(0.2);
+  }
+  .card-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .card-content p {
+    font-size: 0.85rem; color: var(--cream-dim);
+    font-weight: 300; margin-bottom: 1rem;
+  }
+  .card-link {
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: gap 0.3s;
+  }
+  .card-link:hover { gap: 0.8rem; }
+
+  /* ========== PRODUCTS ========== */
+  .products-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  .product-card {
+    background: var(--bg-card);
+    border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(201,169,110,0.06);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    cursor: pointer;
+  }
+  .product-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(201,169,110,0.15);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .product-img {
+    aspect-ratio: 1; position: relative;
+    overflow: hidden;
+  }
+  .product-img .img-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .product-card:hover .img-placeholder { transform: scale(1.08); }
+  .product-card:nth-child(1) .img-placeholder { background: linear-gradient(135deg, #1a1520, #2a1a28); }
+  .product-card:nth-child(2) .img-placeholder { background: linear-gradient(135deg, #1a1815, #2a2218); }
+  .product-card:nth-child(3) .img-placeholder { background: linear-gradient(135deg, #151a1a, #182a28); }
+  .product-card:nth-child(4) .img-placeholder { background: linear-gradient(135deg, #1a1518, #281a20); }
+  .product-card:nth-child(5) .img-placeholder { background: linear-gradient(135deg, #181a15, #202818); }
+  .product-card:nth-child(6) .img-placeholder { background: linear-gradient(135deg, #1a181a, #28202a); }
+
+  .product-badge {
+    position: absolute; top: 1rem; left: 1rem;
+    background: var(--gold); color: var(--bg-deep);
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.3rem 0.8rem; border-radius: 999px;
+  }
+  .product-wishlist {
+    position: absolute; top: 1rem; right: 1rem;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(8,8,13,0.6); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .product-wishlist:hover { background: rgba(201,169,110,0.2); border-color: var(--gold); }
+  .product-wishlist svg { width: 16px; height: 16px; stroke: var(--cream); fill: none; stroke-width: 1.5; }
+
+  .product-info { padding: 1.25rem 1.5rem 1.5rem; }
+  .product-info .product-category {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .product-info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .product-info .product-notes {
+    font-size: 0.8rem; color: var(--cream-dim);
+    font-weight: 300; margin-bottom: 0.8rem;
+  }
+  .product-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .product-price {
+    font-size: 1.1rem; font-weight: 600; color: var(--cream);
+  }
+  .product-price .original {
+    font-size: 0.8rem; color: var(--cream-dim);
+    text-decoration: line-through; font-weight: 400;
+    margin-left: 0.5rem;
+  }
+  .add-to-cart {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .add-to-cart:hover { transform: scale(1.1); box-shadow: 0 4px 20px rgba(201,169,110,0.3); }
+  .add-to-cart svg { width: 18px; height: 18px; stroke: var(--bg-deep); fill: none; stroke-width: 2; }
+
+  /* ========== BRAND STORY ========== */
+  .story-section {
+    padding: 8rem 3rem;
+    background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-surface) 50%, var(--bg-deep) 100%);
+  }
+  .story-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center;
+  }
+  .story-visual {
+    position: relative; aspect-ratio: 4/5;
+    border-radius: 20px; overflow: hidden;
+    background: linear-gradient(135deg, #1a1520, #2a1a28);
+  }
+  .story-visual .candle-visual {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem;
+  }
+  .candle-body {
+    width: 80px; height: 120px;
+    background: linear-gradient(180deg, #f5f0e8 0%, #e8ddd0 100%);
+    border-radius: 8px 8px 4px 4px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .candle-wick {
+    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    width: 2px; height: 20px; background: #333;
+  }
+  .candle-flame {
+    position: absolute; top: -45px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 24px;
+    background: radial-gradient(ellipse, #FFD700 0%, #FF8C00 40%, transparent 70%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flame 2s ease-in-out infinite alternate;
+    filter: blur(0.5px);
+  }
+  .candle-glow {
+    position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(255,215,0,0.15), transparent 70%);
+    border-radius: 50%;
+    animation: glow-pulse 3s ease-in-out infinite alternate;
+  }
+  @keyframes flame {
+    0% { transform: translateX(-50%) scaleY(1) scaleX(1) rotate(-2deg); }
+    50% { transform: translateX(-50%) scaleY(1.1) scaleX(0.9) rotate(1deg); }
+    100% { transform: translateX(-50%) scaleY(0.95) scaleX(1.05) rotate(-1deg); }
+  }
+  @keyframes glow-pulse {
+    0% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+  }
+  .story-visual .year-badge {
+    position: absolute; bottom: 2rem; right: 2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem; font-weight: 700;
+    color: rgba(201,169,110,0.15);
+  }
+
+  .story-text .label {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem; display: block;
+  }
+  .story-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 600; line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  .story-text h2 em {
+    font-style: italic; color: var(--gold);
+  }
+  .story-text p {
+    color: var(--cream-dim); font-weight: 300;
+    line-height: 1.8; margin-bottom: 1.2rem;
+    font-size: 0.95rem;
+  }
+  .story-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 2.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(201,169,110,0.1);
+  }
+  .stat-item .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700;
+    color: var(--gold);
+  }
+  .stat-item .stat-label {
+    font-size: 0.75rem; color: var(--cream-dim);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  /* ========== REVIEWS ========== */
+  .reviews-section {
+    padding: 6rem 3rem;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .reviews-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 3rem;
+  }
+  .review-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(201,169,110,0.06);
+    border-radius: 16px; padding: 2rem;
+    transition: all 0.4s;
+  }
+  .review-card:hover {
+    border-color: rgba(201,169,110,0.15);
+    transform: translateY(-4px);
+  }
+  .review-stars {
+    color: var(--gold); font-size: 0.9rem;
+    letter-spacing: 0.1em; margin-bottom: 1rem;
+  }
+  .review-card blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-style: italic;
+    line-height: 1.7; color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .review-author {
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .review-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  }
+  .review-author-info .name {
+    font-size: 0.85rem; font-weight: 500;
+  }
+  .review-author-info .title {
+    font-size: 0.75rem; color: var(--cream-dim);
+  }
+
+  /* ========== NEWSLETTER ========== */
+  .newsletter-section {
+    padding: 6rem 3rem;
+    background: var(--bg-surface);
+  }
+  .newsletter-inner {
+    max-width: 700px; margin: 0 auto;
+    text-align: center;
+  }
+  .newsletter-inner .label {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem; display: block;
+  }
+  .newsletter-inner h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-weight: 600; margin-bottom: 1rem;
+  }
+  .newsletter-inner p {
+    color: var(--cream-dim); font-weight: 300;
+    margin-bottom: 2rem;
+  }
+  .newsletter-form {
+    display: flex; gap: 0.75rem;
+    max-width: 480px; margin: 0 auto;
+  }
+  .newsletter-form input {
+    flex: 1; padding: 0.9rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid rgba(201,169,110,0.15);
+    border-radius: 999px; color: var(--cream);
+    font-family: 'Inter', sans-serif; font-size: 0.9rem;
+    outline: none; transition: border-color 0.3s;
+  }
+  .newsletter-form input::placeholder { color: rgba(250,248,244,0.3); }
+  .newsletter-form input:focus { border-color: var(--gold); }
+  .newsletter-form button {
+    padding: 0.9rem 2rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--bg-deep); font-weight: 600;
+    font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+    border: none; border-radius: 999px; cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s;
+  }
+  .newsletter-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(201,169,110,0.3);
+  }
+
+  /* ========== FOOTER ========== */
+  .footer {
+    padding: 4rem 3rem 2rem;
+    border-top: 1px solid rgba(201,169,110,0.08);
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .footer-brand span { color: var(--cream); font-weight: 400; }
+  .footer-desc {
+    color: var(--cream-dim); font-size: 0.85rem;
+    font-weight: 300; line-height: 1.7;
+    max-width: 300px;
+  }
+  .footer-col h5 {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--cream); margin-bottom: 1rem;
+  }
+  .footer-col a {
+    display: block; color: var(--cream-dim);
+    text-decoration: none; font-size: 0.85rem;
+    padding: 0.3rem 0; transition: color 0.3s;
+    font-weight: 300;
+  }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    max-width: 1200px; margin: 3rem auto 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(201,169,110,0.06);
+    display: flex; justify-content: space-between;
+    font-size: 0.75rem; color: rgba(250,248,244,0.3);
+  }
+
+  /* ========== SCROLL ANIMATIONS ========== */
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .reveal.visible {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 1024px) {
+    .collections-grid, .products-grid, .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+    .story-inner { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .section { padding: 4rem 1.5rem; }
+    .collections-grid, .products-grid, .reviews-grid { grid-template-columns: 1fr; }
+    .newsletter-form { flex-direction: column; }
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <div class="nav-brand">Maison <span>Lumière</span></div>
+  <div class="nav-links">
+    <a href="#collections">系列</a>
+    <a href="#products">商店</a>
+    <a href="#story">品牌故事</a>
+    <a href="#reviews">评价</a>
+  </div>
+  <div class="nav-cart">
+    <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span class="cart-count">2</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="glow-orb"></div>
+    <div class="glow-orb"></div>
+    <div class="glow-orb"></div>
+  </div>
+  <svg class="hero-flame" viewBox="0 0 100 180">
+    <defs>
+      <radialGradient id="fg" cx="50%" cy="40%"><stop offset="0%" stop-color="#FFD700" stop-opacity="0.6"/><stop offset="60%" stop-color="#FF8C00" stop-opacity="0.2"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+    </defs>
+    <ellipse cx="50" cy="80" rx="35" ry="50" fill="url(#fg)"/>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-badge">Est. 2018 · Paris</div>
+    <h1>The Art of<br><em>Light & Scent</em></h1>
+    <p class="hero-sub">手工浇注的奢华香薰蜡烛，以天然大豆蜡与法国格拉斯精油，为您的空间注入温暖与诗意。</p>
+    <a href="#products" class="hero-cta">
+      探索系列
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="dot"></span>天然大豆蜡</div>
+    <div class="marquee-item"><span class="dot"></span>法国格拉斯精油</div>
+    <div class="marquee-item"><span class="dot"></span>手工浇注</div>
+    <div class="marquee-item"><span class="dot"></span>60+ 小时燃烧</div>
+    <div class="marquee-item"><span class="dot"></span>可持续包装</div>
+    <div class="marquee-item"><span class="dot"></span>无烟棉芯</div>
+    <div class="marquee-item"><span class="dot"></span>巴黎工坊</div>
+    <div class="marquee-item"><span class="dot"></span>限量系列</div>
+    <!-- Duplicate for seamless loop -->
+    <div class="marquee-item"><span class="dot"></span>天然大豆蜡</div>
+    <div class="marquee-item"><span class="dot"></span>法国格拉斯精油</div>
+    <div class="marquee-item"><span class="dot"></span>手工浇注</div>
+    <div class="marquee-item"><span class="dot"></span>60+ 小时燃烧</div>
+    <div class="marquee-item"><span class="dot"></span>可持续包装</div>
+    <div class="marquee-item"><span class="dot"></span>无烟棉芯</div>
+    <div class="marquee-item"><span class="dot"></span>巴黎工坊</div>
+    <div class="marquee-item"><span class="dot"></span>限量系列</div>
+  </div>
+</div>
+
+<!-- Collections -->
+<section class="section" id="collections">
+  <div class="section-header reveal">
+    <span class="label">精选系列</span>
+    <h2>探索我们的香氛世界</h2>
+    <p>每个系列都是一段嗅觉旅程，从巴黎街头到普罗旺斯花田</p>
+  </div>
+  <div class="collections-grid">
+    <div class="collection-card reveal">
+      <div class="card-bg"></div>
+      <div class="card-content">
+        <div class="card-emoji">🌙</div>
+        <h3>Nuit Parisienne</h3>
+        <p>巴黎夜晚的浪漫气息 — 琥珀、乌木与一丝晚香玉</p>
+        <a href="#" class="card-link">探索系列 →</a>
+      </div>
+    </div>
+    <div class="collection-card reveal">
+      <div class="card-bg"></div>
+      <div class="card-content">
+        <div class="card-emoji">🌿</div>
+        <h3>Jardin Secret</h3>
+        <p>秘密花园的清新 — 无花果叶、迷迭香与雪松</p>
+        <a href="#" class="card-link">探索系列 →</a>
+      </div>
+    </div>
+    <div class="collection-card reveal">
+      <div class="card-bg"></div>
+      <div class="card-content">
+        <div class="card-emoji">🔥</div>
+        <h3>Feu Sacré</h3>
+        <p>圣火的温暖 — 乳香、零陵香豆与烟熏檀木</p>
+        <a href="#" class="card-link">探索系列 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="section" id="products">
+  <div class="section-header reveal">
+    <span class="label">畅销单品</span>
+    <h2>匠心之作</h2>
+    <p>每一支蜡烛都经过 72 小时的慢速冷却，确保香气的完美释放</p>
+  </div>
+  <div class="products-grid">
+    <div class="product-card reveal">
+      <div class="product-img">
+        <div class="img-placeholder">🕯️</div>
+        <span class="product-badge">畅销</span>
+        <div class="product-wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Nuit Parisienne</div>
+        <h4>巴黎之夜</h4>
+        <div class="product-notes">琥珀 · 乌木 · 晚香玉</div>
+        <div class="product-bottom">
+          <div class="product-price">¥498</div>
+          <button class="add-to-cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img">
+        <div class="img-placeholder">🕯️</div>
+        <div class="product-wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Jardin Secret</div>
+        <h4>无花果花园</h4>
+        <div class="product-notes">无花果叶 · 迷迭香 · 雪松</div>
+        <div class="product-bottom">
+          <div class="product-price">¥458</div>
+          <button class="add-to-cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img">
+        <div class="img-placeholder">🕯️</div>
+        <span class="product-badge">新品</span>
+        <div class="product-wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Feu Sacré</div>
+        <h4>圣火之吻</h4>
+        <div class="product-notes">乳香 · 零陵香豆 · 檀木</div>
+        <div class="product-bottom">
+          <div class="product-price">¥528</div>
+          <button class="add-to-cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img">
+        <div class="img-placeholder">🕯️</div>
+        <div class="product-wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Nuit Parisienne</div>
+        <h4>塞纳河畔</h4>
+        <div class="product-notes">鸢尾花 · 白麝香 · 紫罗兰叶</div>
+        <div class="product-bottom">
+          <div class="product-price">¥468</div>
+          <button class="add-to-cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img">
+        <div class="img-placeholder">🕯️</div>
+        <div class="product-wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Jardin Secret</div>
+        <h4>薰衣草田</h4>
+        <div class="product-notes">薰衣草 · 蜂蜜 · 干草</div>
+        <div class="product-bottom">
+          <div class="product-price">¥438</div>
+          <button class="add-to-cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-img">
+        <div class="img-placeholder">🕯️</div>
+        <span class="product-badge">限量</span>
+        <div class="product-wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Feu Sacré</div>
+        <h4>冬至之夜</h4>
+        <div class="product-notes">肉桂 · 丁香 · 烟熏皮革</div>
+        <div class="product-bottom">
+          <div class="product-price">¥568 <span class="original">¥628</span></div>
+          <button class="add-to-cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Brand Story -->
+<section class="story-section" id="story">
+  <div class="story-inner">
+    <div class="story-visual reveal">
+      <div class="candle-visual">
+        <div class="candle-glow"></div>
+        <div style="position:relative;">
+          <div class="candle-flame"></div>
+          <div class="candle-wick"></div>
+          <div class="candle-body"></div>
+        </div>
+      </div>
+      <div class="year-badge">2018</div>
+    </div>
+    <div class="story-text reveal">
+      <span class="label">品牌故事</span>
+      <h2>在光与影之间，<br>寻找<em>家的温度</em></h2>
+      <p>Maison Lumière 诞生于巴黎玛黑区的一间小小工坊。创始人 Émilie 在一次格拉斯的旅行中，被手工蜡烛的温暖光芒深深打动，决定将这份感动带回城市。</p>
+      <p>我们坚持使用 100% 天然大豆蜡，搭配来自法国格拉斯的顶级精油。每一支蜡烛都在巴黎工坊手工浇注，经过 72 小时的慢速冷却，确保香气的层次与持久。</p>
+      <p>从原料到包装，我们践行可持续理念 — 可回收的玻璃容器、FSC 认证的包装纸、植物油墨印刷。</p>
+      <div class="story-stats">
+        <div class="stat-item">
+          <div class="stat-number">72h</div>
+          <div class="stat-label">慢速冷却</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">天然大豆蜡</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">60+</div>
+          <div class="stat-label">小时燃烧时间</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section class="reviews-section" id="reviews">
+  <div class="section-header reveal">
+    <span class="label">用户评价</span>
+    <h2>他们的光影故事</h2>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <blockquote>"巴黎之夜的香气让我想起在玛黑区散步的傍晚，温暖而迷人。这已经成为我每晚冥想的仪式。"</blockquote>
+      <div class="review-author">
+        <div class="review-avatar">🌸</div>
+        <div class="review-author-info">
+          <div class="name">林小雅</div>
+          <div class="title">室内设计师</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <blockquote>"作为香薰蜡烛爱好者，Maison Lumière 的品质让我惊艳。燃烧均匀，香气持久而不刺鼻，包装也很精致。"</blockquote>
+      <div class="review-author">
+        <div class="review-avatar">🎨</div>
+        <div class="review-author-info">
+          <div class="name">张明远</div>
+          <div class="title">品牌策划师</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <blockquote>"送给女朋友的生日礼物，她非常喜欢。礼盒包装很有仪式感，蜡烛燃烧后的玻璃杯还可以做花瓶。"</blockquote>
+      <div class="review-author">
+        <div class="review-avatar">✨</div>
+        <div class="review-author-info">
+          <div class="name">王子轩</div>
+          <div class="title">产品经理</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter-section">
+  <div class="newsletter-inner reveal">
+    <span class="label">加入我们</span>
+    <h2>订阅光影通讯</h2>
+    <p>获取新品首发、独家限量系列信息，以及巴黎工坊的幕后故事</p>
+    <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='已订阅 ✓'; this.querySelector('button').style.background='#22c55e'">
+      <input type="email" placeholder="您的邮箱地址" required>
+      <button type="submit">订阅</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Maison <span>Lumière</span></div>
+      <p class="footer-desc">手工浇注的奢华香薰蜡烛，以光与 scent 的艺术，为每一个空间注入温暖与诗意。</p>
+    </div>
+    <div class="footer-col">
+      <h5>系列</h5>
+      <a href="#">Nuit Parisienne</a>
+      <a href="#">Jardin Secret</a>
+      <a href="#">Feu Sacré</a>
+      <a href="#">限量系列</a>
+    </div>
+    <div class="footer-col">
+      <h5>品牌</h5>
+      <a href="#">我们的故事</a>
+      <a href="#">可持续理念</a>
+      <a href="#">巴黎工坊</a>
+      <a href="#">媒体合作</a>
+    </div>
+    <div class="footer-col">
+      <h5>服务</h5>
+      <a href="#">配送说明</a>
+      <a href="#">退换政策</a>
+      <a href="#">联系我们</a>
+      <a href="#">常见问题</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Maison Lumière. All rights reserved.</span>
+    <span>Crafted with 🕯️ in Paris</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
