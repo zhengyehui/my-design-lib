@@ -460,6 +460,15 @@ const pages = [
     rating: 9.4,
     description: '现代 SaaS 帮助中心，暗色渐变搜索 Hero + 分类网格 + 热门文章 + 编辑推荐 + FAQ 手风琴 + 联系 CTA',
   },
+  {
+    id: 'wine-ecommerce',
+    title: 'Cuvée Noir 葡萄酒电商',
+    category: 'ecommerce',
+    tags: ['电商', '葡萄酒', '奢华', '暗色主题'],
+    colors: ['#08080d', '#C41E3A', '#C9A96E'],
+    rating: 9.4,
+    description: '暗色系奢华葡萄酒电商，灵感来自 Awwwards 精选电商，SVG 酒杯装饰 + 品鉴笔记风味轮 + 庄萄园故事 + 会员俱乐部定价',
+  },
 ]
 
 const categories = [
