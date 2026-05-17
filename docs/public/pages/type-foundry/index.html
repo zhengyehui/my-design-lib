@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mono Type Foundry — Crafting Letters Since 1998</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #0a0a0a;
+      color: #f5f0eb;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    ::selection {
+      background: #c9a96e;
+      color: #0a0a0a;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Grain Overlay ─────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 128px;
+    }
+
+    /* ── Navigation ────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      mix-blend-mode: difference;
+    }
+
+    .nav-logo {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .nav-links a:hover { opacity: 1; }
+
+    /* ── Hero ──────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 48px 80px;
+      position: relative;
+    }
+
+    .hero-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(64px, 12vw, 180px);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      margin-bottom: 48px;
+    }
+
+    .hero-title span {
+      display: block;
+      opacity: 0;
+      animation: fadeUp 0.8s forwards;
+    }
+
+    .hero-title span:nth-child(1) { animation-delay: 0.3s; }
+    .hero-title span:nth-child(2) { animation-delay: 0.5s; }
+    .hero-title span:nth-child(3) { animation-delay: 0.7s; color: #c9a96e; }
+
+    .hero-meta {
+      display: flex;
+      gap: 48px;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+
+    .hero-meta-item {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 235, 0.5);
+    }
+
+    .hero-meta-item strong {
+      display: block;
+      font-size: 28px;
+      font-weight: 300;
+      color: #f5f0eb;
+      letter-spacing: -0.02em;
+      margin-top: 4px;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 48px;
+      left: 48px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 235, 0.4);
+      writing-mode: vertical-rl;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
+    /* ── Marquee ───────────────────────────────────────────── */
+    .marquee-section {
+      padding: 32px 0;
+      border-top: 1px solid rgba(245, 240, 235, 0.1);
+      border-bottom: 1px solid rgba(245, 240, 235, 0.1);
+      overflow: hidden;
+    }
+
+    .marquee-track {
+      display: flex;
+      animation: marquee 30s linear infinite;
+      white-space: nowrap;
+    }
+
+    .marquee-item {
+      flex-shrink: 0;
+      padding: 0 48px;
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 200;
+      font-style: italic;
+      color: rgba(245, 240, 235, 0.15);
+      letter-spacing: -0.02em;
+    }
+
+    .marquee-item.accent { color: #c9a96e; font-weight: 700; font-style: normal; }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── About Section ─────────────────────────────────────── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      padding: 120px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .about-left {
+      position: sticky;
+      top: 120px;
+      align-self: start;
+    }
+
+    .about-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 24px;
+    }
+
+    .about-heading {
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .about-heading em {
+      font-style: italic;
+      color: #c9a96e;
+    }
+
+    .about-right {
+      padding-top: 8px;
+    }
+
+    .about-text {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(245, 240, 235, 0.65);
+      margin-bottom: 32px;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(245, 240, 235, 0.1);
+    }
+
+    .stat-number {
+      font-size: 48px;
+      font-weight: 200;
+      letter-spacing: -0.03em;
+      color: #c9a96e;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 235, 0.4);
+      margin-top: 8px;
+    }
+
+    /* ── Font Specimens ────────────────────────────────────── */
+    .specimens {
+      padding: 80px 48px 120px;
+    }
+
+    .specimens-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 64px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .specimens-title {
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    .specimens-count {
+      font-size: 13px;
+      color: rgba(245, 240, 235, 0.4);
+    }
+
+    .specimen-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .specimen-card {
+      background: #111111;
+      padding: 56px 48px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.4s;
+    }
+
+    .specimen-card:hover {
+      background: #1a1a1a;
+    }
+
+    .specimen-card::after {
+      content: attr(data-number);
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 11px;
+      color: rgba(245, 240, 235, 0.2);
+      letter-spacing: 0.1em;
+    }
+
+    .specimen-name {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 20px;
+    }
+
+    .specimen-display {
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      transition: letter-spacing 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .specimen-card:hover .specimen-display {
+      letter-spacing: 0.02em;
+    }
+
+    .specimen-meta {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      color: rgba(245, 240, 235, 0.35);
+      letter-spacing: 0.05em;
+    }
+
+    .specimen-card:nth-child(1) .specimen-display {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .specimen-card:nth-child(2) .specimen-display {
+      font-family: 'Helvetica Neue', Helvetica, sans-serif;
+      font-weight: 100;
+      letter-spacing: 0.1em;
+    }
+
+    .specimen-card:nth-child(3) .specimen-display {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .specimen-card:nth-child(4) .specimen-display {
+      font-family: 'Georgia', serif;
+      font-weight: 900;
+      font-variant: small-caps;
+    }
+
+    /* ── Showcase Section ──────────────────────────────────── */
+    .showcase {
+      padding: 0 48px 120px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .showcase-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 48px;
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 320px 320px;
+      gap: 4px;
+    }
+
+    .showcase-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .showcase-item:nth-child(1) {
+      grid-row: 1 / 3;
+      background: linear-gradient(135deg, #1a1510 0%, #0d0b08 100%);
+    }
+
+    .showcase-item:nth-child(2) {
+      background: #c9a96e;
+    }
+
+    .showcase-item:nth-child(3) {
+      background: #111;
+    }
+
+    .showcase-item:nth-child(4) {
+      background: #111;
+    }
+
+    .showcase-item:nth-child(5) {
+      background: linear-gradient(135deg, #15120e 0%, #0a0907 100%);
+    }
+
+    .showcase-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+    }
+
+    .showcase-big-text {
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    .showcase-item:nth-child(2) .showcase-big-text {
+      color: #0a0a0a;
+    }
+
+    .showcase-tag {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 235, 0.5);
+      margin-bottom: 12px;
+    }
+
+    .showcase-item:nth-child(2) .showcase-tag {
+      color: rgba(10, 10, 10, 0.5);
+    }
+
+    /* ── Large Type Section ────────────────────────────────── */
+    .large-type {
+      padding: 80px 0;
+      overflow: hidden;
+    }
+
+    .large-type-row {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      white-space: nowrap;
+      margin-bottom: 8px;
+    }
+
+    .large-type-text {
+      font-size: clamp(60px, 10vw, 140px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: rgba(245, 240, 235, 0.06);
+      transition: color 0.4s;
+    }
+
+    .large-type-text:hover {
+      color: rgba(245, 240, 235, 0.15);
+    }
+
+    .large-type-text.gold {
+      color: #c9a96e;
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* ── Services Section ──────────────────────────────────── */
+    .services {
+      padding: 120px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .services-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 64px;
+    }
+
+    .service-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      align-items: center;
+      gap: 32px;
+      padding: 32px 0;
+      border-top: 1px solid rgba(245, 240, 235, 0.1);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .service-item:last-child {
+      border-bottom: 1px solid rgba(245, 240, 235, 0.1);
+    }
+
+    .service-item:hover {
+      background: rgba(245, 240, 235, 0.02);
+    }
+
+    .service-number {
+      font-size: 12px;
+      color: rgba(245, 240, 235, 0.3);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .service-name {
+      font-size: clamp(24px, 3vw, 40px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      transition: padding-left 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .service-item:hover .service-name {
+      padding-left: 16px;
+    }
+
+    .service-arrow {
+      font-size: 20px;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      color: #c9a96e;
+    }
+
+    .service-item:hover .service-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ── Contact / CTA ─────────────────────────────────────── */
+    .cta {
+      padding: 120px 48px;
+      text-align: center;
+      position: relative;
+    }
+
+    .cta-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 32px;
+    }
+
+    .cta-heading {
+      font-size: clamp(40px, 6vw, 80px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 48px;
+    }
+
+    .cta-heading em {
+      font-style: italic;
+      font-weight: 300;
+      color: #c9a96e;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 48px;
+      border: 1px solid #c9a96e;
+      color: #c9a96e;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #c9a96e;
+      transform: translateY(101%);
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .cta-btn:hover {
+      color: #0a0a0a;
+    }
+
+    .cta-btn:hover::before {
+      transform: translateY(0);
+    }
+
+    .cta-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .footer {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 48px;
+      padding: 64px 48px;
+      border-top: 1px solid rgba(245, 240, 235, 0.1);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-brand {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      color: rgba(245, 240, 235, 0.4);
+      line-height: 1.7;
+    }
+
+    .footer-col-title {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li { margin-bottom: 12px; }
+
+    .footer-links a {
+      font-size: 13px;
+      color: rgba(245, 240, 235, 0.5);
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover { color: #f5f0eb; }
+
+    .footer-bottom {
+      padding: 24px 48px;
+      border-top: 1px solid rgba(245, 240, 235, 0.05);
+      text-align: center;
+      font-size: 11px;
+      color: rgba(245, 240, 235, 0.25);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 24px 60px; }
+      .hero-meta { flex-direction: column; gap: 24px; }
+      .about { grid-template-columns: 1fr; gap: 48px; padding: 80px 24px; }
+      .about-left { position: static; }
+      .specimens { padding: 60px 24px; }
+      .specimen-grid { grid-template-columns: 1fr; }
+      .specimen-card { padding: 40px 24px; }
+      .showcase { padding: 0 24px 80px; }
+      .showcase-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .showcase-item { min-height: 200px; }
+      .showcase-item:nth-child(1) { grid-row: auto; }
+      .services { padding: 80px 24px; }
+      .service-item { grid-template-columns: 48px 1fr; gap: 16px; }
+      .service-arrow { display: none; }
+      .cta { padding: 80px 24px; }
+      .footer { grid-template-columns: 1fr 1fr; padding: 48px 24px; gap: 32px; }
+    }
+
+    /* ── Smooth Scrollbar ──────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #c9a96e; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">Mono</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#specimens">Fonts</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-label">Type Foundry · Est. 1998</div>
+    <h1 class="hero-title">
+      <span>Crafting</span>
+      <span>Letters</span>
+      <span>With Soul</span>
+    </h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <strong>127</strong> Typefaces
+      </div>
+      <div class="hero-meta-item">
+        <strong>24</strong> Years
+      </div>
+      <div class="hero-meta-item">
+        <strong>40+</strong> Languages
+      </div>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <span class="marquee-item">Typography</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Letterpress</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Kerning</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Serif</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Sans-Serif</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Display</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Monospace</span>
+      <span class="marquee-item accent">·</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee-item">Typography</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Letterpress</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Kerning</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Serif</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Sans-Serif</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Display</span>
+      <span class="marquee-item accent">·</span>
+      <span class="marquee-item">Monospace</span>
+      <span class="marquee-item accent">·</span>
+    </div>
+  </div>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="about-left">
+      <div class="about-label">About the Foundry</div>
+      <h2 class="about-heading">
+        We design type<br>for <em>brands</em> that<br>dare to speak<br>loudly.
+      </h2>
+    </div>
+    <div class="about-right">
+      <p class="about-text">
+        Mono Type Foundry is an independent type design studio based in Barcelona. 
+        We create custom typefaces and retail fonts for brands, publishers, and 
+        digital products that demand a distinctive voice.
+      </p>
+      <p class="about-text">
+        Our philosophy is simple: every letterform carries emotion. A well-crafted 
+        typeface doesn't just convey words — it conveys intention, personality, 
+        and trust. We believe typography is the silent ambassador of design.
+      </p>
+      <p class="about-text">
+        From editorial serif families to variable display faces, our work spans 
+        the full spectrum of contemporary type design. Each project begins with 
+        research and ends with pixels — and occasionally, lead.
+      </p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-number">127</div>
+          <div class="stat-label">Typefaces Released</div>
+        </div>
+        <div>
+          <div class="stat-number">340+</div>
+          <div class="stat-label">Client Projects</div>
+        </div>
+        <div>
+          <div class="stat-number">18</div>
+          <div class="stat-label">Awards Won</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Font Specimens -->
+  <section class="specimens" id="specimens">
+    <div class="specimens-header">
+      <div class="specimens-title">Featured Typefaces</div>
+      <div class="specimens-count">04 / 127</div>
+    </div>
+    <div class="specimen-grid">
+      <div class="specimen-card" data-number="01">
+        <div class="specimen-name">Mono Serif Display</div>
+        <div class="specimen-display">Aa Bb Cc</div>
+        <div class="specimen-meta">
+          <span>Display · 6 Weights</span>
+          <span>2024</span>
+          <span>Latin · Cyrillic</span>
+        </div>
+      </div>
+      <div class="specimen-card" data-number="02">
+        <div class="specimen-name">Mono Sans Variable</div>
+        <div class="specimen-display">Helvetica</div>
+        <div class="specimen-meta">
+          <span>Sans-serif · Variable</span>
+          <span>2023</span>
+          <span>40+ Languages</span>
+        </div>
+      </div>
+      <div class="specimen-card" data-number="03">
+        <div class="specimen-name">Mono Code Pro</div>
+        <div class="specimen-display">Functions</div>
+        <div class="specimen-meta">
+          <span>Monospace · 4 Weights</span>
+          <span>2025</span>
+          <span>Programming Ligatures</span>
+        </div>
+      </div>
+      <div class="specimen-card" data-number="04">
+        <div class="specimen-name">Mono Editorial</div>
+        <div class="specimen-display">Opulent</div>
+        <div class="specimen-meta">
+          <span>Oldstyle · 8 Weights</span>
+          <span>2024</span>
+          <span>Latin Extended</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase Grid -->
+  <section class="showcase">
+    <div class="showcase-label">Selected Work</div>
+    <div class="showcase-grid">
+      <div class="showcase-item">
+        <div class="showcase-content">
+          <div class="showcase-tag">Custom Typeface</div>
+          <div class="showcase-big-text">Kinetic<br>Brand</div>
+        </div>
+      </div>
+      <div class="showcase-item">
+        <div class="showcase-content">
+          <div class="showcase-tag">Retail Font</div>
+          <div class="showcase-big-text" style="font-size: 48px;">Mono<br>Sans</div>
+        </div>
+      </div>
+      <div class="showcase-item">
+        <div class="showcase-content">
+          <div class="showcase-tag">Editorial</div>
+          <div class="showcase-big-text" style="font-size: 40px;">Vol. 09</div>
+        </div>
+      </div>
+      <div class="showcase-item">
+        <div class="showcase-content">
+          <div class="showcase-tag">Variable Font</div>
+          <div class="showcase-big-text" style="font-size: 40px;">Fluid<br>Type</div>
+        </div>
+      </div>
+      <div class="showcase-item">
+        <div class="showcase-content">
+          <div class="showcase-tag">Brand Identity</div>
+          <div class="showcase-big-text" style="font-size: 40px;">Atelier<br>Noir</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Large Type Section -->
+  <section class="large-type">
+    <div class="large-type-row" style="animation: marquee 20s linear infinite;">
+      <span class="large-type-text">Every letter tells a story</span>
+      <span class="large-type-text gold">·</span>
+      <span class="large-type-text">Every letter tells a story</span>
+      <span class="large-type-text gold">·</span>
+      <span class="large-type-text">Every letter tells a story</span>
+      <span class="large-type-text gold">·</span>
+    </div>
+    <div class="large-type-row" style="animation: marquee 25s linear infinite reverse;">
+      <span class="large-type-text" style="font-style: italic; font-weight: 300;">Precision · Craft · Emotion</span>
+      <span class="large-type-text gold">·</span>
+      <span class="large-type-text" style="font-style: italic; font-weight: 300;">Precision · Craft · Emotion</span>
+      <span class="large-type-text gold">·</span>
+      <span class="large-type-text" style="font-style: italic; font-weight: 300;">Precision · Craft · Emotion</span>
+      <span class="large-type-text gold">·</span>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="services-label">What We Do</div>
+    <div class="service-item">
+      <div class="service-number">01</div>
+      <div class="service-name">Custom Type Design</div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-item">
+      <div class="service-number">02</div>
+      <div class="service-name">Typeface Extension</div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-item">
+      <div class="service-number">03</div>
+      <div class="service-name">Variable Font Engineering</div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-item">
+      <div class="service-number">04</div>
+      <div class="service-name">Type Consulting & Licensing</div>
+      <div class="service-arrow">→</div>
+    </div>
+    <div class="service-item">
+      <div class="service-number">05</div>
+      <div class="service-name">Brand Typography Systems</div>
+      <div class="service-arrow">→</div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <div class="cta-label">Start a Project</div>
+    <h2 class="cta-heading">Let's craft your<br><em>typographic voice</em></h2>
+    <button class="cta-btn">
+      <span>Get in Touch →</span>
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>
+      <div class="footer-brand">Mono</div>
+      <p class="footer-text">
+        Independent type foundry<br>
+        Barcelona, Spain<br>
+        Est. 1998
+      </p>
+    </div>
+    <div>
+      <div class="footer-col-title">Foundry</div>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Typefaces</a></li>
+        <li><a href="#">Custom Work</a></li>
+        <li><a href="#">Licensing</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Resources</div>
+      <ul class="footer-links">
+        <li><a href="#">Specimens</a></li>
+        <li><a href="#">Glyphs</a></li>
+        <li><a href="#">OpenType Features</a></li>
+        <li><a href="#">Web Fonts</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Connect</div>
+      <ul class="footer-links">
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Twitter</a></li>
+        <li><a href="#">Dribbble</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    © 2025 Mono Type Foundry. All rights reserved. Crafting letters with soul.
+  </div>
+
+</body>
+</html>

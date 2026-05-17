@@ -469,6 +469,15 @@ const pages = [
     rating: 9.4,
     description: '暗色系奢华葡萄酒电商，灵感来自 Awwwards 精选电商，SVG 酒杯装饰 + 品鉴笔记风味轮 + 庄萄园故事 + 会员俱乐部定价',
   },
+  {
+    id: 'type-foundry',
+    title: 'Mono Type Foundry 字体铸造厂',
+    category: 'creative',
+    tags: ['字体铸造厂', '排版', '暗色主题', 'Marquee'],
+    colors: ['#0a0a0a', '#c9a96e', '#f5f0eb'],
+    rating: 9.5,
+    description: '暗色系字体铸造厂落地页，灵感来自 SILENCIO/monotype，超大排版 Hero + Marquee 滚动 + 字体展示网格 + 双向大字排版 + 服务列表',
+  },
 ]
 
 const categories = [
