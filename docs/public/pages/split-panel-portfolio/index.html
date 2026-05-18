@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Prism — Vera Chen 创意总监作品集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Tokens ─────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --color-primary: #6366f1;
+  --color-primary-light: #818cf8;
+  --color-primary-dark: #4f46e5;
+  --font-serif: 'Playfair Display', 'Georgia', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #333 #0a0a0a;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: #0a0a0a;
+  color: #ffffff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout: Split Panel ────────────────────────────────── */
+.split-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  min-height: 100vh;
+}
+
+/* ── Left Sidebar (Fixed) ───────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 380px;
+  height: 100vh;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  z-index: 10;
+  background: #0a0a0a;
+}
+
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #fff 0%, #666 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 18px;
+  color: #0a0a0a;
+}
+
+.logo-text {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero-name {
+  font-family: var(--font-serif);
+  font-size: 42px;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+.hero-name em {
+  font-style: italic;
+  color: rgba(255,255,255,0.5);
+}
+
+.hero-role {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+  max-width: 280px;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 14px 28px;
+  background: #ffffff;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 100px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-spring);
+  width: fit-content;
+}
+
+.hero-cta:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 30px rgba(255,255,255,0.15);
+}
+
+.hero-cta svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.hero-cta:hover svg {
+  transform: translateX(3px);
+}
+
+/* ── Sidebar Bottom ─────────────────────────────────────── */
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sidebar-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-number {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.social-links {
+  display: flex;
+  gap: 16px;
+}
+
+.social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.3s var(--ease-out);
+}
+
+.social-link:hover {
+  border-color: rgba(255,255,255,0.4);
+  color: #ffffff;
+  background: rgba(255,255,255,0.05);
+}
+
+.local-time {
+  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+  font-family: var(--font-sans);
+}
+
+/* ── Right Gallery (Scrollable) ─────────────────────────── */
+.gallery {
+  grid-column: 2;
+  padding: 60px 60px 120px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+/* ── Gallery Header ─────────────────────────────────────── */
+.gallery-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.gallery-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 1px;
+}
+
+.gallery-count {
+  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── Project Card ───────────────────────────────────────── */
+.project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+
+.project-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.project-number {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  color: rgba(255,255,255,0.25);
+  font-style: italic;
+}
+
+.project-tag {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px;
+}
+
+.project-year {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  margin-left: auto;
+  letter-spacing: 1px;
+}
+
+.project-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111;
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+
+.project-card:hover .project-image {
+  transform: scale(1.03);
+}
+
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.7) 100%);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out);
+  display: flex;
+  align-items: flex-end;
+  padding: 32px;
+}
+
+.project-card:hover .project-overlay {
+  opacity: 1;
+}
+
+.project-overlay-text {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-overlay-text svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.project-card:hover .project-overlay-text svg {
+  transform: translateX(4px);
+}
+
+.project-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 8px;
+}
+
+.project-title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.3;
+  max-width: 500px;
+  transition: color 0.3s;
+}
+
+.project-card:hover .project-title {
+  color: rgba(255,255,255,0.7);
+}
+
+.project-desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.4);
+  max-width: 320px;
+  line-height: 1.6;
+  text-align: right;
+}
+
+/* ── Large Feature Project ──────────────────────────────── */
+.project-card.featured {
+  gap: 20px;
+}
+
+.project-card.featured .project-image-wrapper {
+  aspect-ratio: 21 / 9;
+}
+
+.project-card.featured .project-title {
+  font-size: 36px;
+}
+
+/* ── Dual Grid Projects ─────────────────────────────────── */
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.project-grid .project-card {
+  gap: 16px;
+}
+
+.project-grid .project-image-wrapper {
+  aspect-ratio: 4 / 3;
+}
+
+.project-grid .project-title {
+  font-size: 22px;
+}
+
+.project-grid .project-desc {
+  text-align: left;
+  max-width: none;
+}
+
+/* ── Marquee ────────────────────────────────────────────── */
+.marquee-section {
+  padding: 48px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+  margin: 0 -60px;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 60px;
+  animation: marquee 25s linear infinite;
+  width: max-content;
+}
+
+.marquee-item {
+  font-family: var(--font-serif);
+  font-size: 48px;
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(255,255,255,0.08);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.marquee-item.active {
+  color: rgba(255,255,255,0.2);
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── Services Section ───────────────────────────────────── */
+.services-section {
+  padding: 80px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.services-title {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 400;
+  margin-bottom: 48px;
+  color: rgba(255,255,255,0.6);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.service-item {
+  padding: 32px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  transition: all 0.4s var(--ease-out);
+}
+
+.service-item:hover {
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.02);
+  transform: translateY(-4px);
+}
+
+.service-number {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 16px;
+}
+
+.service-name {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.service-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.7;
+}
+
+/* ── Contact Footer ─────────────────────────────────────── */
+.contact-section {
+  padding: 80px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.contact-heading {
+  font-family: var(--font-serif);
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1.15;
+  max-width: 500px;
+}
+
+.contact-heading em {
+  font-style: italic;
+  color: rgba(255,255,255,0.4);
+}
+
+.contact-info {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-email {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.contact-email:hover {
+  color: #ffffff;
+}
+
+.contact-location {
+  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── Animations ─────────────────────────────────────────── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+
+/* ── Scroll Progress Bar ────────────────────────────────── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 380px;
+  right: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  z-index: 100;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0.3) 100%);
+  transition: width 0.1s linear;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .split-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 32px 24px;
+  }
+  .gallery {
+    grid-column: 1;
+    padding: 40px 24px 80px 24px;
+  }
+  .scroll-progress { left: 0; }
+  .hero-name { font-size: 32px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .contact-section { flex-direction: column; gap: 32px; align-items: flex-start; }
+  .contact-info { text-align: left; }
+  .project-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress"><div class="scroll-progress-bar" id="progressBar"></div></div>
+
+<div class="split-layout">
+
+  <!-- ── Left Sidebar ─────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="logo">
+        <div class="logo-mark">P</div>
+        <div class="logo-text">Studio Prism</div>
+      </div>
+
+      <div class="hero-text">
+        <h1 class="hero-name fade-up">Vera <em>Chen</em></h1>
+        <p class="hero-role fade-up stagger-1">
+          Creative Director & Brand Designer based in Shanghai.
+          Crafting visual identities that bridge Eastern aesthetics
+          with global design language.
+        </p>
+        <button class="hero-cta fade-up stagger-2">
+          Book a Call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-stats">
+        <div class="stat-item fade-up">
+          <span class="stat-number" data-target="47">0</span>
+          <span class="stat-label">Projects</span>
+        </div>
+        <div class="stat-item fade-up stagger-1">
+          <span class="stat-number" data-target="12">0</span>
+          <span class="stat-label">Years</span>
+        </div>
+        <div class="stat-item fade-up stagger-2">
+          <span class="stat-number" data-target="8">0</span>
+          <span class="stat-label">Awards</span>
+        </div>
+        <div class="stat-item fade-up stagger-3">
+          <span class="stat-number" data-target="36">0</span>
+          <span class="stat-label">Clients</span>
+        </div>
+      </div>
+
+      <div class="social-links fade-up">
+        <a href="#" class="social-link" title="Twitter">𝕏</a>
+        <a href="#" class="social-link" title="Instagram">IG</a>
+        <a href="#" class="social-link" title="Dribbble">Dr</a>
+        <a href="#" class="social-link" title="LinkedIn">Li</a>
+        <a href="#" class="social-link" title="Behance">Be</a>
+      </div>
+
+      <div class="local-time fade-up" id="localTime"></div>
+    </div>
+  </aside>
+
+  <!-- ── Right Gallery ────────────────────────────────── -->
+  <main class="gallery">
+
+    <!-- Gallery Header -->
+    <div class="gallery-header fade-up">
+      <span class="gallery-title">Selected Works</span>
+      <span class="gallery-count">06 Projects — 2018–2025</span>
+    </div>
+
+    <!-- Project 1: Featured -->
+    <article class="project-card featured" data-delay="0">
+      <div class="project-meta">
+        <span class="project-number">01</span>
+        <span class="project-tag">Brand Identity</span>
+        <span class="project-year">2025</span>
+      </div>
+      <div class="project-image-wrapper">
+        <div class="project-image" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%); width:100%; height:100%;"></div>
+        <div class="project-overlay">
+          <span class="project-overlay-text">
+            View Case Study
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="project-info">
+        <h2 class="project-title">Lumière — 高端护肤品牌重塑</h2>
+        <p class="project-desc">Complete brand identity system including packaging, digital presence, and retail experience design for a luxury skincare line.</p>
+      </div>
+    </article>
+
+    <!-- Marquee -->
+    <div class="marquee-section">
+      <div class="marquee-track">
+        <span class="marquee-item active">Branding</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Typography</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item active">Visual Identity</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Art Direction</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item active">Packaging</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Digital Design</span>
+        <span class="marquee-item">·</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="marquee-item active">Branding</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Typography</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item active">Visual Identity</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Art Direction</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item active">Packaging</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Digital Design</span>
+        <span class="marquee-item">·</span>
+      </div>
+    </div>
+
+    <!-- Project 2 & 3: Grid -->
+    <div class="project-grid">
+      <article class="project-card" data-delay="0">
+        <div class="project-meta">
+          <span class="project-number">02</span>
+          <span class="project-tag">Web Design</span>
+          <span class="project-year">2024</span>
+        </div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background: linear-gradient(160deg, #0c0c0c 0%, #1a1a1a 30%, #2d1b69 60%, #6b21a8 100%); width:100%; height:100%;"></div>
+          <div class="project-overlay">
+            <span class="project-overlay-text">
+              View Case Study
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="project-info">
+          <h2 class="project-title">Aether — Web3 身份平台</h2>
+          <p class="project-desc">Immersive web experience for a decentralized identity protocol.</p>
+        </div>
+      </article>
+
+      <article class="project-card" data-delay="0.15">
+        <div class="project-meta">
+          <span class="project-number">03</span>
+          <span class="project-tag">Packaging</span>
+          <span class="project-year">2024</span>
+        </div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background: linear-gradient(135deg, #1c1917 0%, #44403c 30%, #78716c 60%, #d6d3d1 100%); width:100%; height:100%;"></div>
+          <div class="project-overlay">
+            <span class="project-overlay-text">
+              View Case Study
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="project-info">
+          <h2 class="project-title">Mono — 精品咖啡包装</h2>
+          <p class="project-desc">Minimalist packaging system for artisanal coffee roasters.</p>
+        </div>
+      </article>
+    </div>
+
+    <!-- Project 4: Featured -->
+    <article class="project-card featured" data-delay="0">
+      <div class="project-meta">
+        <span class="project-number">04</span>
+        <span class="project-tag">Art Direction</span>
+        <span class="project-year">2023</span>
+      </div>
+      <div class="project-image-wrapper">
+        <div class="project-image" style="background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 30%, #2d1050 60%, #ff6b6b 100%); width:100%; height:100%;"></div>
+        <div class="project-overlay">
+          <span class="project-overlay-text">
+            View Case Study
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="project-info">
+        <h2 class="project-title">Resonance — 当代艺术展视觉</h2>
+        <p class="project-desc">Complete art direction for a cross-cultural contemporary art exhibition spanning Shanghai and Berlin, including print, digital, and spatial design.</p>
+      </div>
+    </article>
+
+    <!-- Project 5 & 6: Grid -->
+    <div class="project-grid">
+      <article class="project-card" data-delay="0">
+        <div class="project-meta">
+          <span class="project-number">05</span>
+          <span class="project-tag">Digital Product</span>
+          <span class="project-year">2023</span>
+        </div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background: linear-gradient(135deg, #022c22 0%, #064e3b 30%, #059669 60%, #34d399 100%); width:100%; height:100%;"></div>
+          <div class="project-overlay">
+            <span class="project-overlay-text">
+              View Case Study
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="project-info">
+          <h2 class="project-title">Canopy — 可持续时尚平台</h2>
+          <p class="project-desc">UI/UX design for a sustainable fashion marketplace connecting conscious consumers with ethical brands.</p>
+        </div>
+      </article>
+
+      <article class="project-card" data-delay="0.15">
+        <div class="project-meta">
+          <span class="project-number">06</span>
+          <span class="project-tag">Brand System</span>
+          <span class="project-year">2022</span>
+        </div>
+        <div class="project-image-wrapper">
+          <div class="project-image" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #4338ca 60%, #818cf8 100%); width:100%; height:100%;"></div>
+          <div class="project-overlay">
+            <span class="project-overlay-text">
+              View Case Study
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="project-info">
+          <h2 class="project-title">NovaPay — 金融科技品牌</h2>
+          <p class="project-desc">End-to-end brand identity for a next-generation payment platform.</p>
+        </div>
+      </article>
+    </div>
+
+    <!-- Services -->
+    <section class="services-section">
+      <h2 class="services-title fade-up">Services</h2>
+      <div class="services-grid">
+        <div class="service-item fade-up">
+          <div class="service-number">01</div>
+          <h3 class="service-name">Brand Identity</h3>
+          <p class="service-desc">Logo systems, color palettes, typography guidelines, and comprehensive brand books that tell your story.</p>
+        </div>
+        <div class="service-item fade-up stagger-1">
+          <div class="service-number">02</div>
+          <h3 class="service-name">Digital Design</h3>
+          <p class="service-desc">Web experiences, mobile interfaces, and digital products that balance beauty with usability.</p>
+        </div>
+        <div class="service-item fade-up stagger-2">
+          <div class="service-number">03</div>
+          <h3 class="service-name">Art Direction</h3>
+          <p class="service-desc">Campaign visual direction, photography art direction, and spatial design for exhibitions and retail.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact-section">
+      <h2 class="contact-heading fade-up">
+        Let's create<br>something<br><em>together</em>
+      </h2>
+      <div class="contact-info fade-up stagger-1">
+        <a href="mailto:hello@studioprism.design" class="contact-email">hello@studioprism.design</a>
+        <span class="contact-location">Shanghai · Tokyo · Berlin</span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ── Local Time ──────────────────────────────────────
+function updateTime() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  const tzStr = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const el = document.getElementById('localTime');
+  if (el) el.textContent = timeStr + ' · ' + tzStr;
+}
+updateTime();
+setInterval(updateTime, 1000);
+
+// ── Scroll Progress Bar ─────────────────────────────
+window.addEventListener('scroll', () => {
+  const gallery = document.querySelector('.gallery');
+  if (!gallery) return;
+  const rect = gallery.getBoundingClientRect();
+  const total = gallery.scrollHeight - window.innerHeight;
+  const scrolled = -rect.top;
+  const pct = Math.max(0, Math.min(100, (scrolled / total) * 100));
+  document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// ── Intersection Observer: Fade-in ──────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.project-card, .fade-up').forEach(el => observer.observe(el));
+
+// ── Animated Counters ───────────────────────────────
+function animateCounters() {
+  document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const duration = 2000;
+    const start = performance.now();
+
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target) + '+';
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounters();
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+const statsEl = document.querySelector('.sidebar-stats');
+if (statsEl) statsObserver.observe(statsEl);
+
+// ── Parallax effect on project images ───────────────
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('.project-card').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const vh = window.innerHeight;
+    if (rect.top < vh && rect.bottom > 0) {
+      const progress = (vh - rect.top) / (vh + rect.height);
+      const img = card.querySelector('.project-image');
+      if (img) {
+        img.style.transform = `translateY(${(progress - 0.5) * 20}px) scale(1.03)`;
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

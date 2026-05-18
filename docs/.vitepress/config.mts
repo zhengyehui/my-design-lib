@@ -248,7 +248,8 @@ export default defineConfig({
             { text: 'VOID 创意工作室', link: '/pages/studio-creative' },
             { text: 'Atelier Noir 建筑设计', link: '/pages/architecture-studio' },
             { text: 'Studio Creative 设计机构', link: '/pages/agency-portfolio' },
-            { text: 'Atelier Lumière 摄影', link: '/pages/photography-portfolio' }
+            { text: 'Atelier Lumière 摄影', link: '/pages/photography-portfolio' },
+            { text: 'Studio Prism 创意总监', link: '/pages/split-panel-portfolio' }
           ]
         },
         {

@@ -478,6 +478,15 @@ const pages = [
     rating: 9.5,
     description: '暗色系字体铸造厂落地页，灵感来自 SILENCIO/monotype，超大排版 Hero + Marquee 滚动 + 字体展示网格 + 双向大字排版 + 服务列表',
   },
+  {
+    id: 'split-panel-portfolio',
+    title: 'Studio Prism 创意总监作品集',
+    category: 'portfolio',
+    tags: ['作品集', '分屏布局', '衬线字体', '暗色主题', '创意总监'],
+    colors: ['#0a0a0a', '#ffffff', '#333333'],
+    rating: 9.5,
+    description: '灵感来自 endless.design/andagain.uk 的分屏布局创意总监作品集，左侧固定边栏 + 右侧滚动画廊 + Playfair Display 衬线字体 + Marquee 滚动 + 数字计数器动画',
+  },
 ]
 
 const categories = [
