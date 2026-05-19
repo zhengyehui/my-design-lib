@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexusBase — 知识库中心</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --kb-bg: #fafbfc;
+    --kb-surface: #ffffff;
+    --kb-sidebar: #0f172a;
+    --kb-sidebar-hover: #1e293b;
+    --kb-sidebar-active: rgba(99, 102, 241, 0.15);
+    --kb-accent: #6366f1;
+    --kb-accent-light: #818cf8;
+    --kb-accent-glow: rgba(99, 102, 241, 0.12);
+    --kb-text: #0f172a;
+    --kb-text-secondary: #64748b;
+    --kb-text-muted: #94a3b8;
+    --kb-border: #e2e8f0;
+    --kb-tag-bg: #f1f5f9;
+    --kb-featured-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    --kb-warm: #f59e0b;
+    --kb-green: #10b981;
+    --kb-rose: #f43f5e;
+  }
+
+  body {
+    font-family: 'Inter', var(--font-sans);
+    background: var(--kb-bg);
+    color: var(--kb-text);
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══════ Sidebar ═══════ */
+  .sidebar {
+    width: 280px;
+    background: var(--kb-sidebar);
+    color: #cbd5e1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 1.5rem 1.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .sidebar-logo .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--kb-featured-gradient);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .sidebar-logo .logo-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.02em;
+  }
+
+  .sidebar-logo .logo-badge {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    background: rgba(99, 102, 241, 0.3);
+    color: var(--kb-accent-light);
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .sidebar-search {
+    padding: 1rem 1.25rem;
+  }
+
+  .sidebar-search input {
+    width: 100%;
+    height: 38px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.06);
+    color: #f8fafc;
+    padding: 0 12px 0 36px;
+    font-size: 0.85rem;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .sidebar-search input::placeholder { color: #64748b; }
+  .sidebar-search input:focus {
+    border-color: var(--kb-accent);
+    background: rgba(99, 102, 241, 0.08);
+  }
+
+  .sidebar-search-wrap {
+    position: relative;
+  }
+
+  .sidebar-search-wrap::before {
+    content: '⌕';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 14px;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 0.5rem 0;
+  }
+
+  .nav-section {
+    padding: 0.5rem 0;
+  }
+
+  .nav-section-title {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #475569;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.55rem 1.5rem;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.15s;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+  }
+
+  .nav-item:hover {
+    background: var(--kb-sidebar-hover);
+    color: #e2e8f0;
+  }
+
+  .nav-item.active {
+    background: var(--kb-sidebar-active);
+    color: var(--kb-accent-light);
+    border-left-color: var(--kb-accent);
+  }
+
+  .nav-item .nav-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .nav-item .nav-count {
+    margin-left: auto;
+    font-size: 0.7rem;
+    background: rgba(255,255,255,0.08);
+    padding: 1px 7px;
+    border-radius: 10px;
+    color: #64748b;
+  }
+
+  .sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-footer .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer .user-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sidebar-footer .user-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sidebar-footer .user-role {
+    font-size: 0.7rem;
+    color: #64748b;
+  }
+
+  /* ═══════ Main Content ═══════ */
+  .main {
+    margin-left: 280px;
+    flex: 1;
+    min-height: 100vh;
+  }
+
+  /* Top Bar */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(250, 251, 252, 0.88);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--kb-border);
+    padding: 0 2.5rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--kb-text-muted);
+  }
+
+  .breadcrumb a {
+    color: var(--kb-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .breadcrumb a:hover { color: var(--kb-accent); }
+  .breadcrumb .sep { color: var(--kb-border); }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .topbar-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--kb-border);
+    background: var(--kb-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--kb-text-secondary);
+    transition: all 0.15s;
+  }
+
+  .topbar-btn:hover {
+    border-color: var(--kb-accent);
+    color: var(--kb-accent);
+  }
+
+  .topbar-stats {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0 1rem;
+    font-size: 0.8rem;
+    color: var(--kb-text-muted);
+  }
+
+  .topbar-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .topbar-stat strong {
+    color: var(--kb-text);
+    font-weight: 700;
+  }
+
+  /* Content Area */
+  .content {
+    padding: 2rem 2.5rem 3rem;
+    max-width: 1200px;
+  }
+
+  /* Hero / Featured Article */
+  .featured {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    cursor: pointer;
+    transition: transform 0.3s var(--ease-default), box-shadow 0.3s;
+  }
+
+  .featured:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+  }
+
+  .featured-bg {
+    background: var(--kb-featured-gradient);
+    padding: 3rem 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-bg::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    right: -20%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .featured-bg::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .featured-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.35rem 0.9rem;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.95);
+    margin-bottom: 1.25rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .featured-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+  }
+
+  .featured-desc {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+    max-width: 520px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.5rem;
+  }
+
+  .featured-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .featured-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .featured-author .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: white;
+    font-weight: 700;
+  }
+
+  .featured-author span {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+  }
+
+  .featured-meta .dot {
+    width: 3px;
+    height: 3px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+  }
+
+  .featured-meta .meta-item {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* Section Headers */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--kb-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title .icon {
+    font-size: 1.1rem;
+  }
+
+  .section-link {
+    font-size: 0.85rem;
+    color: var(--kb-accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.15s;
+  }
+
+  .section-link:hover { opacity: 0.8; }
+
+  /* Category Pills */
+  .category-pills {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--kb-border);
+    background: var(--kb-surface);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--kb-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .pill:hover {
+    border-color: var(--kb-accent);
+    color: var(--kb-accent);
+    background: var(--kb-accent-glow);
+  }
+
+  .pill.active {
+    background: var(--kb-accent);
+    color: white;
+    border-color: var(--kb-accent);
+  }
+
+  .pill .pill-count {
+    font-size: 0.7rem;
+    background: rgba(0,0,0,0.1);
+    padding: 1px 6px;
+    border-radius: 8px;
+  }
+
+  .pill.active .pill-count {
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* Article Grid */
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .article-card {
+    background: var(--kb-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--kb-border);
+    overflow: hidden;
+    transition: all 0.25s var(--ease-default);
+    cursor: pointer;
+  }
+
+  .article-card:hover {
+    border-color: var(--kb-accent);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .article-thumb {
+    height: 160px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .article-thumb-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    position: relative;
+  }
+
+  .article-thumb-inner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.04) 100%);
+  }
+
+  .article-category-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 1;
+    backdrop-filter: blur(8px);
+  }
+
+  .badge-getting-started { background: rgba(16, 185, 129, 0.15); color: #059669; }
+  .badge-guide { background: rgba(99, 102, 241, 0.15); color: #4f46e5; }
+  .badge-reference { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+  .badge-tutorial { background: rgba(244, 63, 94, 0.15); color: #e11d48; }
+  .badge-deep-dive { background: rgba(139, 92, 246, 0.15); color: #7c3aed; }
+  .badge-quick-tip { background: rgba(6, 182, 212, 0.15); color: #0891b2; }
+
+  .article-body {
+    padding: 1.15rem;
+  }
+
+  .article-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--kb-text);
+    margin-bottom: 0.4rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .article-excerpt {
+    font-size: 0.82rem;
+    color: var(--kb-text-secondary);
+    line-height: 1.5;
+    margin-bottom: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .article-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--kb-border);
+  }
+
+  .article-author {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .article-author .mini-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .article-author span {
+    font-size: 0.75rem;
+    color: var(--kb-text-muted);
+    font-weight: 500;
+  }
+
+  .article-reading-time {
+    font-size: 0.75rem;
+    color: var(--kb-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Popular / Sidebar Widgets */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .popular-list {
+    background: var(--kb-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--kb-border);
+    padding: 1.5rem;
+  }
+
+  .popular-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--kb-border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .popular-item:last-child { border-bottom: none; }
+
+  .popular-item:hover { background: var(--kb-accent-glow); margin: 0 -1rem; padding-left: 1rem; padding-right: 1rem; border-radius: var(--radius-md); }
+
+  .popular-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    background: var(--kb-tag-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--kb-text-muted);
+    flex-shrink: 0;
+  }
+
+  .popular-rank.top-3 {
+    background: var(--kb-accent-glow);
+    color: var(--kb-accent);
+  }
+
+  .popular-info h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--kb-text);
+    margin-bottom: 2px;
+    line-height: 1.35;
+  }
+
+  .popular-info .meta {
+    font-size: 0.75rem;
+    color: var(--kb-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tags Cloud Widget */
+  .tags-widget {
+    background: var(--kb-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--kb-border);
+    padding: 1.5rem;
+  }
+
+  .tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+  }
+
+  .tag-chip {
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+    background: var(--kb-tag-bg);
+    font-size: 0.78rem;
+    color: var(--kb-text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+
+  .tag-chip:hover {
+    background: var(--kb-accent-glow);
+    color: var(--kb-accent);
+    border-color: var(--kb-accent);
+  }
+
+  /* Quick Start Banner */
+  .quickstart {
+    background: var(--kb-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--kb-border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .quickstart-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .quickstart-text h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+
+  .quickstart-text p {
+    font-size: 0.85rem;
+    color: var(--kb-text-secondary);
+  }
+
+  .quickstart-btn {
+    margin-left: auto;
+    padding: 0.6rem 1.5rem;
+    background: var(--kb-accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .quickstart-btn:hover {
+    background: #4f46e5;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  /* Recently Updated */
+  .updates-list {
+    background: var(--kb-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--kb-border);
+    padding: 1.5rem;
+  }
+
+  .update-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--kb-border);
+  }
+
+  .update-item:last-child { border-bottom: none; }
+
+  .update-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .update-dot.new { background: var(--kb-green); }
+  .update-dot.updated { background: var(--kb-warm); }
+  .update-dot.fix { background: var(--kb-rose); }
+
+  .update-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .update-info h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--kb-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .update-info .update-meta {
+    font-size: 0.75rem;
+    color: var(--kb-text-muted);
+  }
+
+  .update-badge {
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.65rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .update-badge.new { background: rgba(16,185,129,0.1); color: #059669; }
+  .update-badge.updated { background: rgba(245,158,11,0.1); color: #d97706; }
+  .update-badge.fix { background: rgba(244,63,94,0.1); color: #e11d48; }
+
+  /* ═══════ Animations ═══════ */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .article-card {
+    animation: fadeInUp 0.5s ease both;
+  }
+
+  .article-card:nth-child(1) { animation-delay: 0.05s; }
+  .article-card:nth-child(2) { animation-delay: 0.1s; }
+  .article-card:nth-child(3) { animation-delay: 0.15s; }
+  .article-card:nth-child(4) { animation-delay: 0.2s; }
+  .article-card:nth-child(5) { animation-delay: 0.25s; }
+  .article-card:nth-child(6) { animation-delay: 0.3s; }
+
+  .featured {
+    animation: fadeInUp 0.6s ease both;
+  }
+
+  /* ═══════ Responsive ═══════ */
+  @media (max-width: 1024px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .two-col { grid-template-columns: 1fr; }
+    .articles-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    .content { padding: 1.25rem; }
+    .articles-grid { grid-template-columns: 1fr; }
+    .featured-title { font-size: 1.6rem; }
+    .featured-bg { padding: 2rem 1.5rem; }
+    .quickstart { flex-direction: column; text-align: center; }
+    .quickstart-btn { margin-left: 0; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+  .sidebar::-webkit-scrollbar-thumb { background: #334155; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ Sidebar ═══════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">N</div>
+    <div>
+      <div class="logo-text">NexusBase</div>
+    </div>
+    <span class="logo-badge">v2.4</span>
+  </div>
+
+  <div class="sidebar-search">
+    <div class="sidebar-search-wrap">
+      <input type="text" placeholder="搜索文档... ⌘K">
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-title">概览</div>
+      <a class="nav-item active" href="#">
+        <span class="nav-icon">📖</span> 快速开始
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">🗺️</span> 学习路线
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">💡</span> 最佳实践
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">核心概念</div>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">🏗️</span> 架构设计
+        <span class="nav-count">12</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">🔐</span> 安全指南
+        <span class="nav-count">8</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">⚡</span> 性能优化
+        <span class="nav-count">6</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">🧪</span> 测试策略
+        <span class="nav-count">5</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">📦</span> 部署运维
+        <span class="nav-count">9</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">API 参考</div>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">🔌</span> REST API
+        <span class="nav-count">24</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">📊</span> GraphQL
+        <span class="nav-count">16</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">🪝</span> Webhooks
+        <span class="nav-count">7</span>
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">📜</span> SDK 参考
+        <span class="nav-count">11</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">社区</div>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">💬</span> 讨论区
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">🎯</span> 贡献指南
+      </a>
+      <a class="nav-item" href="#">
+        <span class="nav-icon">📋</span> 更新日志
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="avatar">A</div>
+    <div class="user-info">
+      <div class="user-name">Alex Chen</div>
+      <div class="user-role">Pro 会员</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════ Main Content ═══════ -->
+<main class="main">
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <nav class="breadcrumb">
+        <a href="#">首页</a>
+        <span class="sep">/</span>
+        <span>快速开始</span>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-stats">
+        <div class="topbar-stat">📄 <strong>128</strong> 篇文章</div>
+        <div class="topbar-stat">👥 <strong>2.4k</strong> 开发者</div>
+        <div class="topbar-stat">⭐ <strong>4.9</strong></div>
+      </div>
+      <button class="topbar-btn" title="GitHub">⭐</button>
+      <button class="topbar-btn" title="主题切换">◐</button>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- Quick Start Banner -->
+    <div class="quickstart">
+      <div class="quickstart-icon">🚀</div>
+      <div class="quickstart-text">
+        <h3>5 分钟快速上手</h3>
+        <p>从安装到部署，一站式指南助你快速启动项目</p>
+      </div>
+      <button class="quickstart-btn">开始阅读 →</button>
+    </div>
+
+    <!-- Featured Article -->
+    <div class="featured">
+      <div class="featured-bg">
+        <div class="featured-label">⭐ 精选推荐</div>
+        <h1 class="featured-title">构建现代化微服务架构：从单体到分布式的完整指南</h1>
+        <p class="featured-desc">深入理解微服务设计模式、服务网格、事件驱动架构，以及如何在生产环境中安全地迁移你的应用。</p>
+        <div class="featured-meta">
+          <div class="featured-author">
+            <div class="avatar">S</div>
+            <span>Sarah Mitchell</span>
+          </div>
+          <div class="dot"></div>
+          <span class="meta-item">2026年5月15日</span>
+          <div class="dot"></div>
+          <span class="meta-item">18 分钟阅读</span>
+          <div class="dot"></div>
+          <span class="meta-item">2.1k 次阅读</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Pills -->
+    <div class="category-pills">
+      <div class="pill active">全部 <span class="pill-count">128</span></div>
+      <div class="pill">🚀 入门 <span class="pill-count">24</span></div>
+      <div class="pill">📖 指南 <span class="pill-count">36</span></div>
+      <div class="pill">📚 参考 <span class="pill-count">42</span></div>
+      <div class="pill">🎓 教程 <span class="pill-count">18</span></div>
+      <div class="pill">🔬 深度 <span class="pill-count">8</span></div>
+    </div>
+
+    <!-- Article Grid -->
+    <div class="section-header">
+      <h2 class="section-title"><span class="icon">📝</span> 最新文章</h2>
+      <a href="#" class="section-link">查看全部 →</a>
+    </div>
+
+    <div class="articles-grid">
+      <!-- Card 1 -->
+      <article class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-inner" style="background: linear-gradient(135deg, #dbeafe, #ede9fe);">🛡️</div>
+          <span class="article-category-badge badge-guide">指南</span>
+        </div>
+        <div class="article-body">
+          <h3 class="article-title">OAuth 2.0 实战：安全认证完整流程解析</h3>
+          <p class="article-excerpt">从 Authorization Code 到 PKCE，详解现代 Web 应用的安全认证最佳实践。</p>
+          <div class="article-footer">
+            <div class="article-author">
+              <div class="mini-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">J</div>
+              <span>James Park</span>
+            </div>
+            <span class="article-reading-time">📖 12 分钟</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-inner" style="background: linear-gradient(135deg, #d1fae5, #ccfbf1);">⚡</div>
+          <span class="article-category-badge badge-deep-dive">深度</span>
+        </div>
+        <div class="article-body">
+          <h3 class="article-title">React Server Components 深度解析</h3>
+          <p class="article-excerpt">理解 RSC 的工作原理、流式渲染、以及如何在大型项目中有效利用服务端组件。</p>
+          <div class="article-footer">
+            <div class="article-author">
+              <div class="mini-avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">L</div>
+              <span>Lisa Wang</span>
+            </div>
+            <span class="article-reading-time">📖 15 分钟</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-inner" style="background: linear-gradient(135deg, #fef3c7, #fde68a);">🧪</div>
+          <span class="article-category-badge badge-tutorial">教程</span>
+        </div>
+        <div class="article-body">
+          <h3 class="article-title">端到端测试自动化：Playwright 完全指南</h3>
+          <p class="article-excerpt">从零搭建 E2E 测试框架，覆盖页面交互、API 测试、CI/CD 集成全流程。</p>
+          <div class="article-footer">
+            <div class="article-author">
+              <div class="mini-avatar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">M</div>
+              <span>Mike Torres</span>
+            </div>
+            <span class="article-reading-time">📖 10 分钟</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-inner" style="background: linear-gradient(135deg, #fce7f3, #ede9fe);">🎨</div>
+          <span class="article-category-badge badge-guide">指南</span>
+        </div>
+        <div class="article-body">
+          <h3 class="article-title">设计系统构建：从 Token 到组件库的完整路径</h3>
+          <p class="article-excerpt">如何系统化地构建可扩展的设计系统，包括 Token 管理、组件文档、版本发布。</p>
+          <div class="article-footer">
+            <div class="article-author">
+              <div class="mini-avatar" style="background: linear-gradient(135deg, #ec4899, #a855f7);">E</div>
+              <span>Emma Davis</span>
+            </div>
+            <span class="article-reading-time">📖 14 分钟</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-inner" style="background: linear-gradient(135deg, #e0e7ff, #c7d2fe);">📦</div>
+          <span class="article-category-badge badge-reference">参考</span>
+        </div>
+        <div class="article-body">
+          <h3 class="article-title">Docker 容器化最佳实践与常见陷阱</h3>
+          <p class="article-excerpt">多阶段构建、镜像优化、安全扫描、编排策略——生产级 Docker 使用全攻略。</p>
+          <div class="article-footer">
+            <div class="article-author">
+              <div class="mini-avatar" style="background: linear-gradient(135deg, #6366f1, #3b82f6);">R</div>
+              <span>Ryan Kim</span>
+            </div>
+            <span class="article-reading-time">📖 11 分钟</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="article-card">
+        <div class="article-thumb">
+          <div class="article-thumb-inner" style="background: linear-gradient(135deg, #ccfbf1, #a7f3d0);">🔔</div>
+          <span class="article-category-badge badge-quick-tip">速查</span>
+        </div>
+        <div class="article-body">
+          <h3 class="article-title">TypeScript 高级类型体操：10 个实用技巧</h3>
+          <p class="article-excerpt">条件类型、映射类型、模板字面量类型——提升你的 TypeScript 类型功力。</p>
+          <div class="article-footer">
+            <div class="article-author">
+              <div class="mini-avatar" style="background: linear-gradient(135deg, #06b6d4, #10b981);">K</div>
+              <span>Kate Liu</span>
+            </div>
+            <span class="article-reading-time">📖 8 分钟</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Two Column: Popular + Tags -->
+    <div class="two-col">
+      <div>
+        <div class="section-header">
+          <h2 class="section-title"><span class="icon">🔥</span> 热门文章</h2>
+          <a href="#" class="section-link">查看全部 →</a>
+        </div>
+        <div class="popular-list">
+          <div class="popular-item">
+            <div class="popular-rank top-3">1</div>
+            <div class="popular-info">
+              <h4>Next.js 15 App Router 完全指南</h4>
+              <div class="meta"><span>3.2k 阅读</span><span>·</span><span>2 天前</span></div>
+            </div>
+          </div>
+          <div class="popular-item">
+            <div class="popular-rank top-3">2</div>
+            <div class="popular-info">
+              <h4>PostgreSQL vs MongoDB：2026 年选型指南</h4>
+              <div class="meta"><span>2.8k 阅读</span><span>·</span><span>5 天前</span></div>
+            </div>
+          </div>
+          <div class="popular-item">
+            <div class="popular-rank top-3">3</div>
+            <div class="popular-info">
+              <h4>CSS Container Queries 实战：响应式组件设计</h4>
+              <div class="meta"><span>2.1k 阅读</span><span>·</span><span>1 周前</span></div>
+            </div>
+          </div>
+          <div class="popular-item">
+            <div class="popular-rank">4</div>
+            <div class="popular-info">
+              <h4>GraphQL Federation：微服务 API 网关方案</h4>
+              <div class="meta"><span>1.9k 阅读</span><span>·</span><span>1 周前</span></div>
+            </div>
+          </div>
+          <div class="popular-item">
+            <div class="popular-rank">5</div>
+            <div class="popular-info">
+              <h4>Bun vs Deno vs Node.js 性能基准测试</h4>
+              <div class="meta"><span>1.7k 阅读</span><span>·</span><span>2 周前</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-header">
+          <h2 class="section-title"><span class="icon">🏷️</span> 热门标签</h2>
+        </div>
+        <div class="tags-widget">
+          <div class="tags-cloud">
+            <span class="tag-chip">React</span>
+            <span class="tag-chip">Next.js</span>
+            <span class="tag-chip">TypeScript</span>
+            <span class="tag-chip">Node.js</span>
+            <span class="tag-chip">PostgreSQL</span>
+            <span class="tag-chip">Docker</span>
+            <span class="tag-chip">GraphQL</span>
+            <span class="tag-chip">Redis</span>
+            <span class="tag-chip">Kubernetes</span>
+            <span class="tag-chip">Tailwind CSS</span>
+            <span class="tag-chip">Prisma</span>
+            <span class="tag-chip">Vite</span>
+            <span class="tag-chip">Svelte</span>
+            <span class="tag-chip">Rust</span>
+            <span class="tag-chip">Go</span>
+            <span class="tag-chip">AWS</span>
+            <span class="tag-chip">Vercel</span>
+            <span class="tag-chip">CI/CD</span>
+            <span class="tag-chip">Testing</span>
+            <span class="tag-chip">OAuth</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem;">
+          <div class="section-header">
+            <h2 class="section-title"><span class="icon">📋</span> 最近更新</h2>
+          </div>
+          <div class="updates-list">
+            <div class="update-item">
+              <div class="update-dot new"></div>
+              <div class="update-info">
+                <h4>Edge Runtime 部署指南</h4>
+                <div class="update-meta">2 小时前</div>
+              </div>
+              <span class="update-badge new">新增</span>
+            </div>
+            <div class="update-item">
+              <div class="update-dot updated"></div>
+              <div class="update-info">
+                <h4>认证模块安全补丁</h4>
+                <div class="update-meta">6 小时前</div>
+              </div>
+              <span class="update-badge updated">更新</span>
+            </div>
+            <div class="update-item">
+              <div class="update-dot new"></div>
+              <div class="update-info">
+                <h4>AI Embedding API 参考</h4>
+                <div class="update-meta">1 天前</div>
+              </div>
+              <span class="update-badge new">新增</span>
+            </div>
+            <div class="update-item">
+              <div class="update-dot fix"></div>
+              <div class="update-info">
+                <h4>WebSocket 连接池修复</h4>
+                <div class="update-meta">2 天前</div>
+              </div>
+              <span class="update-badge fix">修复</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// Category pill toggle
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+
+// Sidebar nav active state
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+// Search shortcut (Cmd+K / Ctrl+K)
+document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    document.querySelector('.sidebar-search input').focus();
+  }
+});
+</script>
+</body>
+</html>
