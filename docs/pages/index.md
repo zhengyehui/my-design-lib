@@ -496,6 +496,15 @@ const pages = [
     rating: 9.4,
     description: '灵感来自 WikiWand 的现代知识库中心，深色侧边栏 + 精选文章渐变 Hero + 分类药丸筛选 + 文章卡片网格 + 热门排行 + 标签云 + 更新日志',
   },
+  {
+    id: 'beauty-skincare',
+    title: 'AURA Beauty 美妆电商',
+    category: 'ecommerce',
+    tags: ['美妆', '护肤', '纯净美妆', '电商', '玫瑰金'],
+    colors: ['#c9a087', '#faf8f5', '#1a1a1a'],
+    rating: 9.4,
+    description: '高端纯净美妆电商，Cormorant Garamond 衬线字体 + 玫瑰金配色 + 产品浮动动画 + 成分轨道旋转 + 护肤步骤流程 + Instagram 网格',
+  },
 ]
 
 const categories = [
@@ -567,7 +576,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 50 个完整页面</span>
+      <span>📦 51 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
