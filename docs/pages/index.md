@@ -505,6 +505,15 @@ const pages = [
     rating: 9.4,
     description: '高端纯净美妆电商，Cormorant Garamond 衬线字体 + 玫瑰金配色 + 产品浮动动画 + 成分轨道旋转 + 护肤步骤流程 + Instagram 网格',
   },
+  {
+    id: 'canvas-generative-art',
+    title: 'Canvas 创意编码工作室',
+    category: 'creative',
+    tags: ['生成艺术', '创意编码', '暗色主题', 'CSS动画', 'Shader'],
+    colors: ['#05050a', '#00d4ff', '#6366f1'],
+    rating: 9.5,
+    description: '暗色系创意编码工作室落地页，CSS-only 生成艺术画廊 + 动态模糊光球背景 + 斐波那契螺旋 + 矩阵雨 + 无限滚动 Marquee',
+  },
 ]
 
 const categories = [
@@ -576,7 +585,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 51 个完整页面</span>
+      <span>📦 52 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

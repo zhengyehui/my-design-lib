@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas — Generative Art Studio</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: #05050a;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    ::selection {
+      background: #00d4ff;
+      color: #05050a;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Grain Overlay ─────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 128px;
+    }
+
+    /* ── Animated Background Orbs ──────────────────────────── */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.3;
+      animation: orbFloat 20s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, #6366f1, transparent 70%);
+      top: -200px; left: -100px;
+      animation-duration: 25s;
+    }
+
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #00d4ff, transparent 70%);
+      top: 30%; right: -150px;
+      animation-duration: 30s;
+      animation-delay: -5s;
+    }
+
+    .orb-3 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, #ec4899, transparent 70%);
+      bottom: -100px; left: 30%;
+      animation-duration: 22s;
+      animation-delay: -10s;
+    }
+
+    .orb-4 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, #8b5cf6, transparent 70%);
+      top: 60%; left: -50px;
+      animation-duration: 28s;
+      animation-delay: -15s;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(80px, -60px) scale(1.1); }
+      50% { transform: translate(-40px, 80px) scale(0.95); }
+      75% { transform: translate(60px, 40px) scale(1.05); }
+    }
+
+    /* ── Navigation ────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(5, 5, 10, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #00d4ff, #6366f1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .nav-links a {
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #00d4ff;
+    }
+
+    .nav-cta {
+      padding: 0.55rem 1.4rem;
+      background: linear-gradient(135deg, #00d4ff, #6366f1);
+      border: none;
+      border-radius: var(--radius-full);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 212, 255, 0.3);
+    }
+
+    /* ── Hero ──────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      color: #00d4ff;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero-badge .pulse {
+      width: 8px;
+      height: 8px;
+      background: #00d4ff;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.8s ease-out 0.1s both;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, #00d4ff 0%, #6366f1 40%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: #94a3b8;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+
+    .btn-primary {
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, #00d4ff, #6366f1);
+      border: none;
+      border-radius: var(--radius-full);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0, 212, 255, 0.35);
+    }
+
+    .btn-secondary {
+      padding: 0.85rem 2rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-full);
+      color: #e2e8f0;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-3px);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Generative Art Preview (Hero Decoration) ─────────── */
+    .hero-art {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      opacity: 0.15;
+    }
+
+    .hero-art .line {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+      animation: lineSweep 8s ease-in-out infinite;
+    }
+
+    .hero-art .line:nth-child(1) { top: 20%; width: 60%; left: 20%; animation-delay: 0s; }
+    .hero-art .line:nth-child(2) { top: 35%; width: 40%; left: 35%; animation-delay: 2s; }
+    .hero-art .line:nth-child(3) { top: 50%; width: 70%; left: 15%; animation-delay: 4s; }
+    .hero-art .line:nth-child(4) { top: 65%; width: 50%; left: 25%; animation-delay: 6s; }
+    .hero-art .line:nth-child(5) { top: 80%; width: 45%; left: 30%; animation-delay: 1s; }
+
+    @keyframes lineSweep {
+      0%, 100% { opacity: 0; transform: scaleX(0.3); }
+      50% { opacity: 1; transform: scaleX(1); }
+    }
+
+    /* ── Generative Art Grid ───────────────────────────────── */
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #00d4ff;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: #94a3b8;
+      max-width: 550px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
+
+    .art-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .art-card {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .art-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(0, 212, 255, 0.15);
+    }
+
+    .art-card .art-canvas {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .art-card .art-label {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      padding: 0.3rem 0.8rem;
+      border-radius: var(--radius-full);
+    }
+
+    /* ── Art Piece 1: Rotating Rings ──────────────────────── */
+    .art-rings {
+      background: #0a0a14;
+    }
+
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid;
+      animation: ringRotate linear infinite;
+    }
+
+    .ring:nth-child(1) { width: 120px; height: 120px; border-color: #00d4ff; animation-duration: 8s; }
+    .ring:nth-child(2) { width: 90px; height: 90px; border-color: #6366f1; animation-duration: 6s; animation-direction: reverse; }
+    .ring:nth-child(3) { width: 60px; height: 60px; border-color: #ec4899; animation-duration: 4s; }
+    .ring:nth-child(4) { width: 30px; height: 30px; border-color: #8b5cf6; animation-duration: 3s; animation-direction: reverse; }
+
+    @keyframes ringRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Art Piece 2: Wave Grid ──────────────────────────── */
+    .art-wave {
+      background: #08080f;
+    }
+
+    .wave-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 4px;
+      width: 80%;
+      height: 80%;
+    }
+
+    .wave-cell {
+      border-radius: 50%;
+      background: #00d4ff;
+      animation: wavePulse 3s ease-in-out infinite;
+    }
+
+    @keyframes wavePulse {
+      0%, 100% { transform: scale(0.3); opacity: 0.3; }
+      50% { transform: scale(1); opacity: 0.8; }
+    }
+
+    /* ── Art Piece 3: Spiral ─────────────────────────────── */
+    .art-spiral {
+      background: #0a0a14;
+    }
+
+    .spiral-dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #6366f1;
+      animation: spiralGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes spiralGlow {
+      0%, 100% { opacity: 0.3; box-shadow: 0 0 0 transparent; }
+      50% { opacity: 1; box-shadow: 0 0 12px #6366f1; }
+    }
+
+    /* ── Art Piece 4: Matrix Rain ────────────────────────── */
+    .art-matrix {
+      background: #050510;
+      overflow: hidden;
+    }
+
+    .matrix-col {
+      position: absolute;
+      top: -20%;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #00ff88;
+      opacity: 0.6;
+      animation: matrixFall linear infinite;
+      line-height: 1.2;
+      letter-spacing: 0.1em;
+    }
+
+    @keyframes matrixFall {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(300%); }
+    }
+
+    /* ── Art Piece 5: Gradient Mesh ──────────────────────── */
+    .art-mesh {
+      background: conic-gradient(from 45deg, #00d4ff, #6366f1, #ec4899, #8b5cf6, #00d4ff);
+      animation: meshSpin 12s linear infinite;
+    }
+
+    .art-mesh::after {
+      content: '';
+      position: absolute;
+      inset: 15%;
+      background: #0a0a14;
+      border-radius: 50%;
+    }
+
+    @keyframes meshSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Art Piece 6: Particle Constellation ─────────────── */
+    .art-constellation {
+      background: #060612;
+    }
+
+    .constellation-line {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), transparent);
+      transform-origin: left center;
+    }
+
+    .constellation-dot {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #00d4ff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00d4ff;
+    }
+
+    /* ── Features Section ──────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .feature-card {
+      padding: 2rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      transition: all 0.4s;
+    }
+
+    .feature-card:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(0, 212, 255, 0.2);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    /* ── Showcase Marquee ─────────────────────────────────── */
+    .marquee-section {
+      position: relative;
+      z-index: 1;
+      padding: 4rem 0;
+      overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 2rem;
+      animation: marqueeScroll 30s linear infinite;
+      width: max-content;
+    }
+
+    .marquee-item {
+      flex-shrink: 0;
+      padding: 1rem 2rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      white-space: nowrap;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .marquee-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── Pricing Section ──────────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      padding: 2.5rem 2rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-xl);
+      text-align: center;
+      transition: all 0.4s;
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      background: rgba(0, 212, 255, 0.04);
+      border-color: rgba(0, 212, 255, 0.2);
+      transform: scale(1.03);
+    }
+
+    .pricing-card.featured::before {
+      content: '最受欢迎';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.3rem 1rem;
+      background: linear-gradient(135deg, #00d4ff, #6366f1);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .pricing-card.featured:hover {
+      transform: scale(1.03) translateY(-6px);
+    }
+
+    .pricing-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-price {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.3rem;
+    }
+
+    .pricing-price .currency {
+      font-size: 1.2rem;
+      vertical-align: top;
+      color: #94a3b8;
+    }
+
+    .pricing-period {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 2rem;
+    }
+
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+
+    .pricing-features li {
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .pricing-features .check {
+      color: #00d4ff;
+      font-weight: 700;
+    }
+
+    .pricing-btn {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: #e2e8f0;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .pricing-btn:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .pricing-card.featured .pricing-btn {
+      background: linear-gradient(135deg, #00d4ff, #6366f1);
+      border: none;
+      color: #fff;
+    }
+
+    .pricing-card.featured .pricing-btn:hover {
+      box-shadow: 0 8px 30px rgba(0, 212, 255, 0.3);
+    }
+
+    /* ── Testimonials ─────────────────────────────────────── */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .testimonial-card {
+      padding: 2rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .author-info .name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .author-info .role {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    /* ── CTA Section ──────────────────────────────────────── */
+    .cta-section {
+      position: relative;
+      z-index: 1;
+      padding: 8rem 3rem;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .footer {
+      position: relative;
+      z-index: 1;
+      padding: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-align: center;
+      color: #475569;
+      font-size: 0.85rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #00d4ff;
+    }
+
+    /* ── Scroll Reveal ────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 6rem 1.5rem 3rem; }
+      .hero-actions { flex-direction: column; }
+      .section { padding: 4rem 1.5rem; }
+      .art-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-card.featured { transform: none; }
+      .pricing-card.featured:hover { transform: translateY(-6px); }
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="logo-icon">◆</div>
+      Canvas
+    </div>
+    <ul class="nav-links">
+      <li><a href="#gallery">作品集</a></li>
+      <li><a href="#features">功能</a></li>
+      <li><a href="#pricing">定价</a></li>
+      <li><a href="#testimonials">评价</a></li>
+    </ul>
+    <button class="nav-cta">开始创作</button>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-art">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+
+    <div class="hero-badge">
+      <span class="pulse"></span>
+      v2.0 — 全新 Shader 引擎已上线
+    </div>
+
+    <h1>
+      <span class="gradient-text">生成艺术</span><br>
+      从代码开始
+    </h1>
+
+    <p class="hero-subtitle">
+      Canvas 是面向创意编码者的实时生成艺术平台。<br>
+      用代码创造无限可能的视觉作品。
+    </p>
+
+    <div class="hero-actions">
+      <button class="btn-primary">免费试用 →</button>
+      <button class="btn-secondary">▶ 观看演示</button>
+    </div>
+  </section>
+
+  <!-- Generative Art Gallery -->
+  <section class="section" id="gallery">
+    <div class="section-header reveal">
+      <div class="section-label">✨ 作品画廊</div>
+      <h2 class="section-title">代码创造的艺术</h2>
+      <p class="section-desc">每一件作品都由算法生成，独一无二。探索社区最热门的生成艺术。</p>
+    </div>
+
+    <div class="art-grid reveal">
+      <!-- Art 1: Rotating Rings -->
+      <div class="art-card">
+        <div class="art-canvas art-rings">
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+        </div>
+        <div class="art-label">Orbital Mechanics</div>
+      </div>
+
+      <!-- Art 2: Wave Grid -->
+      <div class="art-card">
+        <div class="art-canvas art-wave">
+          <div class="wave-grid" id="waveGrid"></div>
+        </div>
+        <div class="art-label">Wave Propagation</div>
+      </div>
+
+      <!-- Art 3: Spiral -->
+      <div class="art-card">
+        <div class="art-canvas art-spiral" id="spiralCanvas"></div>
+        <div class="art-label">Fibonacci Spiral</div>
+      </div>
+
+      <!-- Art 4: Matrix Rain -->
+      <div class="art-card">
+        <div class="art-canvas art-matrix" id="matrixCanvas"></div>
+        <div class="art-label">Digital Rain</div>
+      </div>
+
+      <!-- Art 5: Gradient Mesh -->
+      <div class="art-card">
+        <div class="art-canvas art-mesh"></div>
+        <div class="art-label">Color Spectrum</div>
+      </div>
+
+      <!-- Art 6: Constellation -->
+      <div class="art-card">
+        <div class="art-canvas art-constellation" id="constellationCanvas"></div>
+        <div class="art-label">Star Network</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <div class="marquee-item"><span class="dot" style="background:#00d4ff"></span> Processing</div>
+      <div class="marquee-item"><span class="dot" style="background:#6366f1"></span> p5.js</div>
+      <div class="marquee-item"><span class="dot" style="background:#ec4899"></span> Three.js</div>
+      <div class="marquee-item"><span class="dot" style="background:#8b5cf6"></span> GLSL</div>
+      <div class="marquee-item"><span class="dot" style="background:#10b981"></span> Shader Art</div>
+      <div class="marquee-item"><span class="dot" style="background:#f59e0b"></span> Canvas API</div>
+      <div class="marquee-item"><span class="dot" style="background:#ef4444"></span> WebGL</div>
+      <div class="marquee-item"><span class="dot" style="background:#06b6d4"></span> SVG</div>
+      <div class="marquee-item"><span class="dot" style="background:#00d4ff"></span> CSS Art</div>
+      <div class="marquee-item"><span class="dot" style="background:#6366f1"></span> Creative Coding</div>
+      <!-- Duplicate for seamless loop -->
+      <div class="marquee-item"><span class="dot" style="background:#00d4ff"></span> Processing</div>
+      <div class="marquee-item"><span class="dot" style="background:#6366f1"></span> p5.js</div>
+      <div class="marquee-item"><span class="dot" style="background:#ec4899"></span> Three.js</div>
+      <div class="marquee-item"><span class="dot" style="background:#8b5cf6"></span> GLSL</div>
+      <div class="marquee-item"><span class="dot" style="background:#10b981"></span> Shader Art</div>
+      <div class="marquee-item"><span class="dot" style="background:#f59e0b"></span> Canvas API</div>
+      <div class="marquee-item"><span class="dot" style="background:#ef4444"></span> WebGL</div>
+      <div class="marquee-item"><span class="dot" style="background:#06b6d4"></span> SVG</div>
+      <div class="marquee-item"><span class="dot" style="background:#00d4ff"></span> CSS Art</div>
+      <div class="marquee-item"><span class="dot" style="background:#6366f1"></span> Creative Coding</div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="section-header reveal">
+      <div class="section-label">⚡ 核心功能</div>
+      <h2 class="section-title">为创意编码者而生</h2>
+      <p class="section-desc">从草稿到成品，一站式生成艺术创作工具链。</p>
+    </div>
+
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(0,212,255,0.1); color: #00d4ff;">🎨</div>
+        <h3>实时预览</h3>
+        <p>代码即所见。修改参数的瞬间，画布同步更新，零延迟创作体验。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(99,102,241,0.1); color: #6366f1;">🧬</div>
+        <h3>变异引擎</h3>
+        <p>一键生成参数变异，从一件作品衍生出无限变体，找到最美的那个。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(236,72,153,0.1); color: #ec4899;">📦</div>
+        <h3>一键导出</h3>
+        <p>高清 PNG、SVG 矢量、动画 GIF、MP4 视频，多种格式一键导出。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(139,92,246,0.1); color: #8b5cf6;">🌐</div>
+        <h3>社区分享</h3>
+        <p>发布你的作品到社区画廊，获取灵感，参与每周创作挑战。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(16,185,129,0.1); color: #10b981;">🔗</div>
+        <h3>参数链接</h3>
+        <p>生成唯一分享链接，任何人打开即可看到你的作品并调整参数。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: rgba(245,158,11,0.1); color: #f59e0b;">🖥️</div>
+        <h3>离线渲染</h3>
+        <p>支持本地离线渲染引擎，批量生成高分辨率艺术作品，适合打印输出。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section" id="pricing">
+    <div class="section-header reveal">
+      <div class="section-label">💎 定价方案</div>
+      <h2 class="section-title">选择适合你的计划</h2>
+      <p class="section-desc">从免费开始，随时升级。所有方案均含 14 天免费试用。</p>
+    </div>
+
+    <div class="pricing-grid reveal">
+      <div class="pricing-card">
+        <div class="pricing-name">入门版</div>
+        <div class="pricing-price"><span class="currency">¥</span>0</div>
+        <div class="pricing-period">永久免费</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 10 个项目</li>
+          <li><span class="check">✓</span> 基础 Shader 库</li>
+          <li><span class="check">✓</span> PNG 导出</li>
+          <li><span class="check">✓</span> 社区画廊访问</li>
+        </ul>
+        <button class="pricing-btn">免费开始</button>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-name">专业版</div>
+        <div class="pricing-price"><span class="currency">¥</span>79</div>
+        <div class="pricing-period">每月 / 年付 ¥699</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 无限项目</li>
+          <li><span class="check">✓</span> 完整 Shader 库</li>
+          <li><span class="check">✓</span> 所有导出格式</li>
+          <li><span class="check">✓</span> 变异引擎</li>
+          <li><span class="check">✓</span> 优先渲染队列</li>
+        </ul>
+        <button class="pricing-btn">开始试用</button>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-name">团队版</div>
+        <div class="pricing-price"><span class="currency">¥</span>299</div>
+        <div class="pricing-period">每月 / 按团队计费</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 专业版全部功能</li>
+          <li><span class="check">✓</span> 团队协作空间</li>
+          <li><span class="check">✓</span> API 访问</li>
+          <li><span class="check">✓</span> 专属客户经理</li>
+          <li><span class="check">✓</span> SLA 保障</li>
+        </ul>
+        <button class="pricing-btn">联系销售</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" id="testimonials">
+    <div class="section-header reveal">
+      <div class="section-label">💬 用户评价</div>
+      <h2 class="section-title">创意者的首选工具</h2>
+    </div>
+
+    <div class="testimonials-grid reveal">
+      <div class="testimonial-card">
+        <p class="testimonial-text">"Canvas 彻底改变了我的创作流程。从想法到成品，以前需要一天，现在只需要一个小时。实时预览功能太惊艳了。"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background: linear-gradient(135deg, #00d4ff, #6366f1);">L</div>
+          <div class="author-info">
+            <div class="name">Lin Chen</div>
+            <div class="role">独立创意编码者</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <p class="testimonial-text">"变异引擎是杀手级功能。我输入一组参数，一键生成 50 个变体，总能找到意想不到的惊喜。社区分享也很方便。"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">S</div>
+          <div class="author-info">
+            <div class="name">Sarah Kim</div>
+            <div class="role">数字艺术家</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <p class="testimonial-text">"团队版的协作功能非常实用。我们工作室 5 个人同时在 Canvas 上创作，实时同步，效率提升了 3 倍。"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">M</div>
+          <div class="author-info">
+            <div class="name">Marco Rossi</div>
+            <div class="role">Studio Flux 创意总监</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section reveal">
+    <h2>开始你的<span style="background: linear-gradient(135deg, #00d4ff, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">生成艺术</span>之旅</h2>
+    <p>免费注册，立即开始创作。无需信用卡。</p>
+    <button class="btn-primary" style="font-size: 1.1rem; padding: 1rem 2.5rem;">立即免费注册 →</button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="#">关于我们</a></li>
+      <li><a href="#">文档</a></li>
+      <li><a href="#">博客</a></li>
+      <li><a href="#">社区</a></li>
+      <li><a href="#">隐私政策</a></li>
+    </ul>
+    <p>© 2026 Canvas Generative Art Studio. Crafted with ◆ and algorithms.</p>
+  </footer>
+
+  <script>
+    // ── Wave Grid Generation ────────────────────────────────
+    const waveGrid = document.getElementById('waveGrid');
+    for (let i = 0; i < 64; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'wave-cell';
+      const row = Math.floor(i / 8);
+      const col = i % 8;
+      const delay = (row + col) * 0.15;
+      cell.style.animationDelay = delay + 's';
+      const hue = 180 + (row * 8 + col) * 2;
+      cell.style.background = `hsl(${hue}, 80%, 60%)`;
+      waveGrid.appendChild(cell);
+    }
+
+    // ── Spiral Generation ───────────────────────────────────
+    const spiralCanvas = document.getElementById('spiralCanvas');
+    const goldenAngle = 137.508;
+    for (let i = 1; i <= 80; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'spiral-dot';
+      const angle = i * goldenAngle * (Math.PI / 180);
+      const radius = Math.sqrt(i) * 12;
+      const x = 50 + radius * Math.cos(angle);
+      const y = 50 + radius * Math.sin(angle);
+      dot.style.left = x + '%';
+      dot.style.top = y + '%';
+      dot.style.animationDelay = (i * 0.05) + 's';
+      const hue = (i * 8) % 360;
+      dot.style.background = `hsl(${hue}, 70%, 60%)`;
+      dot.style.boxShadow = `0 0 8px hsl(${hue}, 70%, 60%)`;
+      spiralCanvas.appendChild(dot);
+    }
+
+    // ── Matrix Rain ─────────────────────────────────────────
+    const matrixCanvas = document.getElementById('matrixCanvas');
+    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン01';
+    for (let i = 0; i < 12; i++) {
+      const col = document.createElement('div');
+      col.className = 'matrix-col';
+      col.style.left = (i * 8.5 + 2) + '%';
+      let text = '';
+      for (let j = 0; j < 15; j++) {
+        text += chars[Math.floor(Math.random() * chars.length)] + '<br>';
+      }
+      col.innerHTML = text;
+      col.style.animationDuration = (3 + Math.random() * 4) + 's';
+      col.style.animationDelay = (Math.random() * 3) + 's';
+      col.style.fontSize = (10 + Math.random() * 4) + 'px';
+      matrixCanvas.appendChild(col);
+    }
+
+    // ── Constellation ───────────────────────────────────────
+    const constellationCanvas = document.getElementById('constellationCanvas');
+    const points = [];
+    for (let i = 0; i < 20; i++) {
+      const x = 10 + Math.random() * 80;
+      const y = 10 + Math.random() * 80;
+      points.push({ x, y });
+      const dot = document.createElement('div');
+      dot.className = 'constellation-dot';
+      dot.style.left = x + '%';
+      dot.style.top = y + '%';
+      dot.style.animationDelay = (Math.random() * 2) + 's';
+      constellationCanvas.appendChild(dot);
+    }
+    // Draw lines between nearby points
+    for (let i = 0; i < points.length; i++) {
+      for (let j = i + 1; j < points.length; j++) {
+        const dx = points[j].x - points[i].x;
+        const dy = points[j].y - points[i].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 30) {
+          const line = document.createElement('div');
+          line.className = 'constellation-line';
+          const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+          line.style.left = points[i].x + '%';
+          line.style.top = points[i].y + '%';
+          line.style.width = dist + '%';
+          line.style.transform = `rotate(${angle}deg)`;
+          constellationCanvas.appendChild(line);
+        }
+      }
+    }
+
+    // ── Scroll Reveal ───────────────────────────────────────
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
