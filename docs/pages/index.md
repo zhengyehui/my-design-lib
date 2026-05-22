@@ -514,6 +514,15 @@ const pages = [
     rating: 9.5,
     description: '暗色系创意编码工作室落地页，CSS-only 生成艺术画廊 + 动态模糊光球背景 + 斐波那契螺旋 + 矩阵雨 + 无限滚动 Marquee',
   },
+  {
+    id: 'art-gallery',
+    title: 'Galerie Noir 当代艺术画廊',
+    category: 'portfolio',
+    tags: ['艺术画廊', '极简', '衬线字体', 'Marquee', '展览'],
+    colors: ['#faf9f7', '#1a1a1a', '#c9a96e'],
+    rating: 9.5,
+    description: '博物馆级当代艺术画廊，灵感来自 Goodman Gallery，Playfair Display 衬线字体 + 12 列不等宽作品网格 + CSS 抽象艺术装饰 + Marquee 滚动 + 展览日程',
+  },
 ]
 
 const categories = [
@@ -585,7 +594,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 52 个完整页面</span>
+      <span>📦 53 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

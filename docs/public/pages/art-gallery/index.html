@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galerie Noir — 当代艺术画廊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ─────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #faf9f7;
+      --bg-warm: #f5f0eb;
+      --text: #1a1a1a;
+      --text-secondary: #6b6b6b;
+      --text-muted: #999;
+      --accent: #c9a96e;
+      --accent-dark: #a8873d;
+      --border: #e8e4df;
+      --serif: 'Playfair Display', 'Georgia', serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Navigation ───────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      background: rgba(250, 249, 247, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, padding 0.3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: var(--border);
+      padding: 1rem 3rem;
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ── Hero ─────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 169, 110, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      max-width: 800px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.5rem;
+      border: 1px solid var(--text);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.4s;
+    }
+    .hero-cta:hover {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .hero-cta svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.3s;
+    }
+    .hero-cta:hover svg { transform: translateX(4px); }
+    .hero-scroll {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-scroll-line::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0% { top: -100%; }
+      50% { top: 100%; }
+      100% { top: 100%; }
+    }
+
+    /* ── Section Common ───────────────────────────────── */
+    .section {
+      padding: 6rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+    .section-link {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+    .section-link:hover { color: var(--accent); }
+    .section-link svg { width: 14px; height: 14px; }
+
+    /* ── Featured Exhibition ──────────────────────────── */
+    .featured {
+      padding: 0 3rem 6rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .featured-image {
+      aspect-ratio: 4/3;
+      background: var(--bg-warm);
+      overflow: hidden;
+      position: relative;
+    }
+    .featured-image-inner {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 50%, #2c2c2c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .featured-image-inner::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg at 50% 50%, 
+        transparent 0deg, 
+        rgba(201, 169, 110, 0.08) 60deg, 
+        transparent 120deg,
+        rgba(201, 169, 110, 0.05) 200deg,
+        transparent 280deg
+      );
+      animation: rotate 20s linear infinite;
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .featured-image-inner .art-placeholder {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .art-placeholder .art-frame {
+      width: 180px;
+      height: 240px;
+      border: 2px solid rgba(201, 169, 110, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      position: relative;
+    }
+    .art-frame::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(201, 169, 110, 0.15);
+    }
+    .art-frame .abstract-art {
+      width: 120px;
+      height: 160px;
+      position: relative;
+    }
+    .abstract-art .shape {
+      position: absolute;
+      border-radius: 50%;
+    }
+    .abstract-art .shape-1 {
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, rgba(201, 169, 110, 0.4) 0%, transparent 70%);
+      top: 10px;
+      left: 20px;
+    }
+    .abstract-art .shape-2 {
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, rgba(160, 120, 80, 0.3) 0%, transparent 70%);
+      bottom: 20px;
+      right: 10px;
+    }
+    .abstract-art .shape-3 {
+      width: 40px;
+      height: 100px;
+      background: linear-gradient(180deg, rgba(201, 169, 110, 0.2) 0%, transparent 100%);
+      top: 30px;
+      left: 40px;
+      border-radius: 20px;
+    }
+    .art-placeholder .art-caption {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .featured-info { padding: 2rem 0; }
+    .featured-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.3rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .featured-info h2 {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .featured-info .artist {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+    .featured-info .artist strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .featured-info p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .featured-meta {
+      display: flex;
+      gap: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item .meta-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+    .meta-item .meta-value {
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    /* ── Gallery Grid ─────────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--bg-warm);
+    }
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 26, 26, 0);
+      transition: background 0.4s;
+    }
+    .gallery-item:hover::after {
+      background: rgba(26, 26, 26, 0.15);
+    }
+    .gallery-item-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Different artwork styles */
+    .artwork-1 { 
+      grid-column: span 5; 
+      aspect-ratio: 3/4;
+      background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    .artwork-2 { 
+      grid-column: span 4; 
+      aspect-ratio: 1/1;
+      background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
+    }
+    .artwork-3 { 
+      grid-column: span 3; 
+      aspect-ratio: 2/3;
+      background: linear-gradient(180deg, #0c0c0c 0%, #1a1a1a 50%, #2a2a2a 100%);
+    }
+    .artwork-4 { 
+      grid-column: span 4; 
+      aspect-ratio: 4/3;
+      background: linear-gradient(45deg, #f5e6d3 0%, #e8d5b7 50%, #d4c4a8 100%);
+    }
+    .artwork-5 { 
+      grid-column: span 8; 
+      aspect-ratio: 21/9;
+      background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 30%, #1a1a1a 60%, #333 100%);
+    }
+    .artwork-6 { 
+      grid-column: span 6; 
+      aspect-ratio: 3/2;
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%);
+    }
+    .artwork-7 { 
+      grid-column: span 6; 
+      aspect-ratio: 3/2;
+      background: linear-gradient(160deg, #faf0e6 0%, #f5deb3 50%, #deb887 100%);
+    }
+
+    /* Artwork decorations */
+    .gallery-item-inner .art-deco {
+      position: absolute;
+      pointer-events: none;
+    }
+    .deco-circle {
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .deco-line {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+    .deco-glow {
+      border-radius: 50%;
+      filter: blur(40px);
+    }
+
+    .gallery-item .item-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem;
+      z-index: 2;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .gallery-item:hover .item-info {
+      transform: translateY(0);
+    }
+    .item-info .item-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 0.2rem;
+    }
+    .item-info .item-artist {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.6);
+    }
+    .gallery-item.light-art .item-info .item-title { color: var(--text); }
+    .gallery-item.light-art .item-info .item-artist { color: var(--text-secondary); }
+
+    /* ── Artists Section ──────────────────────────────── */
+    .artists-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+    .artist-card {
+      text-align: center;
+      padding: 2rem 1rem;
+      transition: transform 0.3s;
+    }
+    .artist-card:hover { transform: translateY(-4px); }
+    .artist-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .artist-avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 500;
+      color: #fff;
+    }
+    .avatar-1 { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+    .avatar-2 { background: linear-gradient(135deg, #2d1b69, #11998e); }
+    .avatar-3 { background: linear-gradient(135deg, #c9a96e, #a8873d); }
+    .avatar-4 { background: linear-gradient(135deg, #1a1a1a, #333); }
+    .artist-name {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+    .artist-discipline {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Exhibition Schedule ──────────────────────────── */
+    .exhibitions-list {
+      display: flex;
+      flex-direction: column;
+    }
+    .exhibition-row {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .exhibition-row:first-child {
+      border-top: 1px solid var(--border);
+    }
+    .exhibition-row:hover {
+      background: rgba(201, 169, 110, 0.03);
+    }
+    .exhibition-date {
+      font-family: var(--serif);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .exhibition-date .date-day {
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .exhibition-title-group h3 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+    .exhibition-title-group p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .exhibition-status {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border: 1px solid;
+    }
+    .status-current {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .status-upcoming {
+      color: var(--text-secondary);
+      border-color: var(--border);
+    }
+
+    /* ── Marquee ──────────────────────────────────────── */
+    .marquee-section {
+      padding: 4rem 0;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .marquee-track {
+      display: flex;
+      gap: 4rem;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+    }
+    .marquee-item .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── Quote / Philosophy ───────────────────────────── */
+    .philosophy {
+      padding: 8rem 3rem;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .philosophy-quote {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.4;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 2rem;
+    }
+    .philosophy-quote::before {
+      content: '"';
+      font-size: 4rem;
+      color: var(--accent);
+      line-height: 0;
+      vertical-align: -0.5em;
+      margin-right: 0.1em;
+    }
+    .philosophy-author {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+    .philosophy-author strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ── Contact / Visit ──────────────────────────────── */
+    .visit-section {
+      background: var(--text);
+      color: #fff;
+      padding: 6rem 3rem;
+    }
+    .visit-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 4rem;
+    }
+    .visit-col h3 {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+    }
+    .visit-col p, .visit-col a {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.8;
+    }
+    .visit-col a:hover { color: var(--accent); }
+    .visit-col .address-line {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    /* ── Footer ───────────────────────────────────────── */
+    .footer {
+      background: var(--text);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer p {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+    }
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── Animations ───────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ───────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .featured-grid { grid-template-columns: 1fr; }
+      .artists-grid { grid-template-columns: repeat(2, 1fr); }
+      .visit-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .gallery-grid { grid-template-columns: repeat(6, 1fr); }
+      .artwork-1, .artwork-5 { grid-column: span 6; }
+      .artwork-2, .artwork-3 { grid-column: span 3; }
+      .artwork-4 { grid-column: span 6; }
+      .artwork-6, .artwork-7 { grid-column: span 6; }
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .section { padding: 4rem 1.5rem; }
+      .featured { padding: 0 1.5rem 4rem; }
+      .exhibition-row { grid-template-columns: 1fr; gap: 0.8rem; }
+      .artists-grid { grid-template-columns: 1fr 1fr; }
+      .philosophy { padding: 5rem 1.5rem; }
+      .visit-section { padding: 4rem 1.5rem; }
+      .footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-logo">Galerie <span>Noir</span></div>
+    <ul class="nav-links">
+      <li><a href="#exhibitions">展览</a></li>
+      <li><a href="#collection">馆藏</a></li>
+      <li><a href="#artists">艺术家</a></li>
+      <li><a href="#schedule">日程</a></li>
+      <li><a href="#visit">访问</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-label">当代艺术 · 2026 春季展</div>
+    <h1>在光影与<em>静默</em>之间</h1>
+    <p class="hero-sub">探索当代艺术的边界，感受视觉与灵魂的对话。Galerie Noir 致力于呈现最具突破性的当代艺术展览。</p>
+    <a href="#exhibitions" class="hero-cta">
+      探索当前展览
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Featured Exhibition -->
+  <section class="featured" id="exhibitions">
+    <div class="section-header">
+      <div>
+        <div class="section-label">当前展览</div>
+        <h2 class="section-title">Featured Exhibition</h2>
+      </div>
+      <a href="#" class="section-link">
+        查看全部展览
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="featured-grid fade-in">
+      <div class="featured-image">
+        <div class="featured-image-inner">
+          <div class="art-placeholder">
+            <div class="art-frame">
+              <div class="abstract-art">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+              </div>
+            </div>
+            <div class="art-caption">Mixed Media on Canvas</div>
+          </div>
+        </div>
+      </div>
+      <div class="featured-info">
+        <div class="featured-tag">特别展览</div>
+        <h2>虚空花园</h2>
+        <p class="artist">艺术家 <strong>林墨白</strong> × <strong>Elena Voss</strong></p>
+        <p>一场关于存在与虚无的跨文化对话。两位艺术家以各自独特的视觉语言，探索东方哲学与西方抽象表现主义的交汇点，创造出一个超越时空的虚拟花园。</p>
+        <div class="featured-meta">
+          <div class="meta-item">
+            <div class="meta-label">展期</div>
+            <div class="meta-value">2026.03.15 — 06.30</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">展厅</div>
+            <div class="meta-value">主展厅 A</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">作品数</div>
+            <div class="meta-value">42 件</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Grid -->
+  <section class="section" id="collection">
+    <div class="section-header">
+      <div>
+        <div class="section-label">馆藏精选</div>
+        <h2 class="section-title">Permanent Collection</h2>
+      </div>
+      <a href="#" class="section-link">
+        浏览全部馆藏
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="gallery-grid">
+      <!-- Artwork 1 -->
+      <div class="gallery-item artwork-1 fade-in">
+        <div class="gallery-item-inner">
+          <div class="art-deco deco-circle" style="width:120px;height:120px;top:20%;left:30%;border-color:rgba(201,169,110,0.15);"></div>
+          <div class="art-deco deco-glow" style="width:80px;height:80px;background:rgba(99,102,241,0.15);top:40%;left:50%;"></div>
+        </div>
+        <div class="item-info">
+          <div class="item-title">星尘记忆 #7</div>
+          <div class="item-artist">张晓峰 · 2024</div>
+        </div>
+      </div>
+      <!-- Artwork 2 -->
+      <div class="gallery-item artwork-2 fade-in">
+        <div class="gallery-item-inner">
+          <div class="art-deco deco-glow" style="width:100px;height:100px;background:rgba(17,153,142,0.2);top:30%;left:40%;"></div>
+          <div class="art-deco deco-circle" style="width:60px;height:60px;bottom:20%;right:20%;border-color:rgba(255,255,255,0.1);"></div>
+        </div>
+        <div class="item-info">
+          <div class="item-title">潮汐之间</div>
+          <div class="item-artist">Elena Voss · 2023</div>
+        </div>
+      </div>
+      <!-- Artwork 3 -->
+      <div class="gallery-item artwork-3 fade-in">
+        <div class="gallery-item-inner">
+          <div class="art-deco deco-line" style="width:60%;top:50%;left:20%;"></div>
+          <div class="art-deco deco-circle" style="width:40px;height:40px;top:30%;left:35%;border-color:rgba(201,169,110,0.2);"></div>
+        </div>
+        <div class="item-info">
+          <div class="item-title">黑镜系列</div>
+          <div class="item-artist">田中悠 · 2025</div>
+        </div>
+      </div>
+      <!-- Artwork 4 -->
+      <div class="gallery-item artwork-4 light-art fade-in">
+        <div class="gallery-item-inner">
+          <div class="art-deco deco-circle" style="width:100px;height:100px;top:25%;left:30%;border-color:rgba(160,120,80,0.2);"></div>
+        </div>
+        <div class="item-info">
+          <div class="item-title">暖阳下的静物</div>
+          <div class="item-artist">Marie Leclerc · 2024</div>
+        </div>
+      </div>
+      <!-- Artwork 5 - Wide -->
+      <div class="gallery-item artwork-5 fade-in">
+        <div class="gallery-item-inner">
+          <div class="art-deco deco-line" style="width:40%;top:40%;left:10%;background:rgba(201,169,110,0.1);"></div>
+          <div class="art-deco deco-line" style="width:30%;top:60%;right:15%;background:rgba(255,255,255,0.05);"></div>
+          <div class="art-deco deco-glow" style="width:200px;height:60px;background:rgba(201,169,110,0.08);top:35%;left:40%;border-radius:30px;"></div>
+        </div>
+        <div class="item-info">
+          <div class="item-title">地平线 · 无尽的旅程</div>
+          <div class="item-artist">林墨白 · 2025</div>
+        </div>
+      </div>
+      <!-- Artwork 6 -->
+      <div class="gallery-item artwork-6 fade-in">
+        <div class="gallery-item-inner">
+          <div class="art-deco deco-glow" style="width:60px;height:60px;background:rgba(99,102,241,0.1);top:40%;left:45%;"></div>
+          <div class="art-deco deco-circle" style="width:80px;height:80px;bottom:25%;left:30%;border-color:rgba(255,255,255,0.06);"></div>
+        </div>
+        <div class="item-info">
+          <div class="item-title">数字废墟</div>
+          <div class="item-artist">Marco Bellini · 2025</div>
+        </div>
+      </div>
+      <!-- Artwork 7 -->
+      <div class="gallery-item artwork-7 light-art fade-in">
+        <div class="gallery-item-inner">
+          <div class="art-deco deco-circle" style="width:60px;height:60px;top:30%;right:25%;border-color:rgba(160,120,80,0.15);"></div>
+        </div>
+        <div class="item-info">
+          <div class="item-title">晨曦手记</div>
+          <div class="item-artist">苏然 · 2024</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <div class="marquee-item">当代艺术 <span class="dot"></span></div>
+      <div class="mar-item">装置 <span class="dot"></span></div>
+      <div class="marquee-item">油画 <span class="dot"></span></div>
+      <div class="marquee-item">雕塑 <span class="dot"></span></div>
+      <div class="marquee-item">数字艺术 <span class="dot"></span></div>
+      <div class="marquee-item">摄影 <span class="dot"></span></div>
+      <div class="marquee-item">行为艺术 <span class="dot"></span></div>
+      <div class="marquee-item">版画 <span class="dot"></span></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="marquee-item">当代艺术 <span class="dot"></span></div>
+      <div class="marquee-item">装置 <span class="dot"></span></div>
+      <div class="marquee-item">油画 <span class="dot"></span></div>
+      <div class="marquee-item">雕塑 <span class="dot"></span></div>
+      <div class="marquee-item">数字艺术 <span class="dot"></span></div>
+      <div class="marquee-item">摄影 <span class="dot"></span></div>
+      <div class="marquee-item">行为艺术 <span class="dot"></span></div>
+      <div class="marquee-item">版画 <span class="dot"></span></div>
+    </div>
+  </div>
+
+  <!-- Artists -->
+  <section class="section" id="artists">
+    <div class="section-header">
+      <div>
+        <div class="section-label">驻留艺术家</div>
+        <h2 class="section-title">Featured Artists</h2>
+      </div>
+      <a href="#" class="section-link">
+        查看全部艺术家
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="artists-grid">
+      <div class="artist-card fade-in">
+        <div class="artist-avatar">
+          <div class="artist-avatar-inner avatar-1">林</div>
+        </div>
+        <div class="artist-name">林墨白</div>
+        <div class="artist-discipline">装置 · 油画</div>
+      </div>
+      <div class="artist-card fade-in">
+        <div class="artist-avatar">
+          <div class="artist-avatar-inner avatar-2">EV</div>
+        </div>
+        <div class="artist-name">Elena Voss</div>
+        <div class="artist-discipline">抽象表现 · 混合媒介</div>
+      </div>
+      <div class="artist-card fade-in">
+        <div class="artist-avatar">
+          <div class="artist-avatar-inner avatar-3">ML</div>
+        </div>
+        <div class="artist-name">Marie Leclerc</div>
+        <div class="artist-discipline">雕塑 · 空间艺术</div>
+      </div>
+      <div class="artist-card fade-in">
+        <div class="artist-avatar">
+          <div class="artist-avatar-inner avatar-4">田</div>
+        </div>
+        <div class="artist-name">田中悠</div>
+        <div class="artist-discipline">数字艺术 · 摄影</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy Quote -->
+  <section class="philosophy fade-in">
+    <p class="philosophy-quote">艺术不是对现实的复制，而是对现实的重新想象。在 Galerie Noir，我们相信每一件作品都是一扇通往未知世界的窗户。</p>
+    <p class="philosophy-author"><strong>— Sophie Laurent</strong>，Galerie Noir 创始人</p>
+  </section>
+
+  <!-- Exhibition Schedule -->
+  <section class="section" id="schedule">
+    <div class="section-header">
+      <div>
+        <div class="section-label">展览日程</div>
+        <h2 class="section-title">Upcoming Exhibitions</h2>
+      </div>
+    </div>
+    <div class="exhibitions-list">
+      <div class="exhibition-row fade-in">
+        <div class="exhibition-date">
+          <span class="date-day">15</span>
+          Mar — Jun 2026
+        </div>
+        <div class="exhibition-title-group">
+          <h3>虚空花园</h3>
+          <p>林墨白 × Elena Voss · 跨文化对话展览</p>
+        </div>
+        <div class="exhibition-status status-current">展出中</div>
+      </div>
+      <div class="exhibition-row fade-in">
+        <div class="exhibition-date">
+          <span class="date-day">01</span>
+          Jul — Sep 2026
+        </div>
+        <div class="exhibition-title-group">
+          <h3>算法之美</h3>
+          <p>生成艺术与人工智能的交汇</p>
+        </div>
+        <div class="exhibition-status status-upcoming">即将开幕</div>
+      </div>
+      <div class="exhibition-row fade-in">
+        <div class="exhibition-date">
+          <span class="date-day">15</span>
+          Oct — Dec 2026
+        </div>
+        <div class="exhibition-title-group">
+          <h3>物质的诗学</h3>
+          <p>田中悠 · 数字与物理的边界探索</p>
+        </div>
+        <div class="exhibition-status status-upcoming">即将开幕</div>
+      </div>
+      <div class="exhibition-row fade-in">
+        <div class="exhibition-date">
+          <span class="date-day">20</span>
+          Jan — Mar 2027
+        </div>
+        <div class="exhibition-title-group">
+          <h3>新锐力量 2027</h3>
+          <p>年度青年艺术家群展</p>
+        </div>
+        <div class="exhibition-status status-upcoming">规划中</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visit / Contact -->
+  <section class="visit-section" id="visit">
+    <div class="visit-inner">
+      <div class="visit-col">
+        <h3>访问画廊</h3>
+        <p>
+          <span class="address-line">上海市黄浦区外滩源壹号</span>
+          <span class="address-line">3 楼 Galerie Noir</span>
+          <span class="address-line">200002</span>
+        </p>
+        <br>
+        <p>
+          <span class="address-line">周二至周日 10:00 — 18:00</span>
+          <span class="address-line">周四延长至 21:00</span>
+          <span class="address-line">周一闭馆</span>
+        </p>
+      </div>
+      <div class="visit-col">
+        <h3>联系我们</h3>
+        <p>
+          <a href="mailto:info@galerienoir.art">info@galerienoir.art</a><br>
+          <a href="tel:+862163336688">+86 21 6333 6688</a>
+        </p>
+        <br>
+        <p>
+          <span class="address-line">媒体合作：press@galerienoir.art</span>
+          <span class="address-line">作品咨询：collection@galerienoir.art</span>
+        </p>
+      </div>
+      <div class="visit-col">
+        <h3>关注我们</h3>
+        <p>
+          <a href="#">Instagram — @galeriesnoir</a><br>
+          <a href="#">微信公众号 — GalerieNoir</a><br>
+          <a href="#">小红书 — Galerie Noir 画廊</a>
+        </p>
+        <br>
+        <p>订阅我们的通讯，获取最新展览资讯与艺术家专访。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 Galerie Noir. All rights reserved.</p>
+    <ul class="footer-links">
+      <li><a href="#">隐私政策</a></li>
+      <li><a href="#">使用条款</a></li>
+      <li><a href="#">无障碍声明</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
