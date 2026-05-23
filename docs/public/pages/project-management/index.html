@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskPilot — 项目管理仪表盘</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0a12;
+      color: #e2e8f0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated Background ─────────────────── */
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 800px 600px at 15% 20%, rgba(99, 102, 241, 0.08), transparent),
+        radial-gradient(ellipse 600px 400px at 85% 80%, rgba(16, 185, 129, 0.06), transparent),
+        radial-gradient(ellipse 400px 300px at 50% 50%, rgba(139, 92, 246, 0.04), transparent);
+    }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ── Layout ──────────────────────────────── */
+    .app-layout {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ─────────────────────────────── */
+    .sidebar {
+      width: 260px;
+      background: rgba(15, 15, 25, 0.8);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0;
+      flex-shrink: 0;
+    }
+
+    .sidebar-brand {
+      padding: 0 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 8px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .brand-text {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+
+    .sidebar-section {
+      padding: 16px 16px 8px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #4a5568;
+      padding: 0 8px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+    }
+
+    .sidebar-nav li {
+      margin-bottom: 2px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover {
+      background: rgba(255,255,255,0.05);
+      color: #e2e8f0;
+    }
+
+    .sidebar-nav a.active {
+      background: rgba(99, 102, 241, 0.12);
+      color: #818cf8;
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      padding: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .user-role {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* ── Main Content ────────────────────────── */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    /* ── Top Bar ─────────────────────────────── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(10, 10, 18, 0.6);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .topbar-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .topbar-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .topbar-breadcrumb span { color: #475569; }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      color: #64748b;
+      font-size: 13px;
+      min-width: 220px;
+    }
+
+    .search-box svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.5;
+    }
+
+    .topbar-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 16px;
+    }
+
+    .topbar-btn:hover {
+      background: rgba(255,255,255,0.06);
+      color: #e2e8f0;
+    }
+
+    .notification-dot {
+      position: relative;
+    }
+
+    .notification-dot::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: 50%;
+      border: 2px solid #0a0a12;
+    }
+
+    /* ── Stats Row ───────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 28px 32px 0;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 22px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      border-color: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+    }
+
+    .stat-card:nth-child(1)::before { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+    .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #f59e0b, #f97316); }
+    .stat-card:nth-child(3)::before { background: linear-gradient(90deg, #10b981, #06b6d4); }
+    .stat-card:nth-child(4)::before { background: linear-gradient(90deg, #ef4444, #ec4899); }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .stat-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .stat-icon.purple { background: rgba(99, 102, 241, 0.15); }
+    .stat-icon.amber { background: rgba(245, 158, 11, 0.15); }
+    .stat-icon.green { background: rgba(16, 185, 129, 0.15); }
+    .stat-icon.red { background: rgba(239, 68, 68, 0.15); }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .stat-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .stat-change.up {
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .stat-change.down {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* ── Content Area ────────────────────────── */
+    .content-area {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      padding: 24px 32px 32px;
+      flex: 1;
+    }
+
+    /* ── Kanban Board ────────────────────────── */
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-content: start;
+    }
+
+    .kanban-column {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 20px;
+      min-height: 400px;
+    }
+
+    .column-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .column-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .column-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .column-dot.todo { background: #6366f1; }
+    .column-dot.progress { background: #f59e0b; }
+    .column-dot.done { background: #10b981; }
+
+    .column-count {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      background: rgba(255,255,255,0.06);
+      padding: 2px 10px;
+      border-radius: 10px;
+    }
+
+    .task-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .task-card:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+      background: rgba(255,255,255,0.06);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .task-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .task-label.design {
+      background: rgba(139, 92, 246, 0.15);
+      color: #a78bfa;
+    }
+
+    .task-label.dev {
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+    }
+
+    .task-label.urgent {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    .task-label.research {
+      background: rgba(6, 182, 212, 0.15);
+      color: #22d3ee;
+    }
+
+    .task-label.marketing {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+    }
+
+    .task-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .task-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .task-avatars {
+      display: flex;
+    }
+
+    .task-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      margin-left: -6px;
+      border: 2px solid #0f0f19;
+    }
+
+    .task-avatar:first-child { margin-left: 0; }
+
+    .task-due {
+      font-size: 11px;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .task-due.overdue { color: #ef4444; }
+
+    .task-progress {
+      margin-top: 12px;
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .task-progress-bar {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+
+    .task-progress-bar.purple { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+    .task-progress-bar.green { background: linear-gradient(90deg, #10b981, #06b6d4); }
+    .task-progress-bar.amber { background: linear-gradient(90deg, #f59e0b, #f97316); }
+
+    .add-task-btn {
+      width: 100%;
+      padding: 12px;
+      border: 2px dashed rgba(255,255,255,0.08);
+      border-radius: 12px;
+      background: transparent;
+      color: #4a5568;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .add-task-btn:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    /* ── Right Panel ─────────────────────────── */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 22px;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-title .see-all {
+      font-size: 12px;
+      color: #6366f1;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* ── Sprint Progress ─────────────────────── */
+    .sprint-progress {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .progress-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .progress-ring {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    .progress-ring circle {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      transform: rotate(-90deg);
+      transform-origin: center;
+    }
+
+    .progress-ring .bg { stroke: rgba(255,255,255,0.06); }
+
+    .progress-ring .fill {
+      stroke-dasharray: 126;
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    .progress-info {
+      flex: 1;
+    }
+
+    .progress-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 4px;
+    }
+
+    .progress-detail {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* ── Team Activity ───────────────────────── */
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .activity-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .activity-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .activity-text {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    .activity-text strong {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    .activity-time {
+      font-size: 11px;
+      color: #4a5568;
+      margin-top: 3px;
+    }
+
+    /* ── Deadline Tracker ────────────────────── */
+    .deadline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .deadline-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: all 0.2s;
+    }
+
+    .deadline-item:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .deadline-date {
+      text-align: center;
+      min-width: 44px;
+    }
+
+    .deadline-day {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .deadline-month {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+    }
+
+    .deadline-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .deadline-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 2px;
+    }
+
+    .deadline-project {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .deadline-urgency {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .deadline-urgency.high { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+    .deadline-urgency.medium { background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.3); }
+    .deadline-urgency.low { background: #10b981; }
+
+    /* ── Scrollbar ───────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+    /* ── Animations ──────────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stat-card { animation: fadeInUp 0.5s ease both; }
+    .stat-card:nth-child(1) { animation-delay: 0.05s; }
+    .stat-card:nth-child(2) { animation-delay: 0.1s; }
+    .stat-card:nth-child(3) { animation-delay: 0.15s; }
+    .stat-card:nth-child(4) { animation-delay: 0.2s; }
+
+    .kanban-column { animation: fadeInUp 0.5s ease both; animation-delay: 0.25s; }
+    .kanban-column:nth-child(2) { animation-delay: 0.3s; }
+    .kanban-column:nth-child(3) { animation-delay: 0.35s; }
+
+    .panel-card { animation: fadeInUp 0.5s ease both; }
+    .panel-card:nth-child(1) { animation-delay: 0.3s; }
+    .panel-card:nth-child(2) { animation-delay: 0.35s; }
+    .panel-card:nth-child(3) { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  <div class="bg-grid"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">T</div>
+        <div class="brand-text">TaskPilot</div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-label">主菜单</div>
+        <ul class="sidebar-nav">
+          <li><a href="#" class="active"><span class="nav-icon">📊</span>仪表盘</a></li>
+          <li><a href="#"><span class="nav-icon">📋</span>看板 <span class="nav-badge">12</span></a></li>
+          <li><a href="#"><span class="nav-icon">📅</span>日程</a></li>
+          <li><a href="#"><span class="nav-icon">📈</span>报告</a></li>
+          <li><a href="#"><span class="nav-icon">👥</span>团队</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-label">项目</div>
+        <ul class="sidebar-nav">
+          <li><a href="#"><span class="nav-icon" style="color:#6366f1">●</span>品牌重塑 v3 <span class="nav-badge">5</span></a></li>
+          <li><a href="#"><span class="nav-icon" style="color:#10b981">●</span>App 2.0 发布</a></li>
+          <li><a href="#"><span class="nav-icon" style="color:#f59e0b">●</span>营销活动 Q2</a></li>
+          <li><a href="#"><span class="nav-icon" style="color:#ef4444">●</span>API 重构</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="user-card">
+          <div class="user-avatar">W</div>
+          <div class="user-info">
+            <div class="user-name">Weta Zheng</div>
+            <div class="user-role">产品负责人</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 class="topbar-title">仪表盘</h1>
+          <div class="topbar-breadcrumb">
+            品牌重塑 v3 <span>›</span> 仪表盘
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            搜索任务... ⌘K
+          </div>
+          <button class="topbar-btn notification-dot">🔔</button>
+          <button class="topbar-btn">⚙️</button>
+        </div>
+      </header>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">总任务数</span>
+            <div class="stat-icon purple">📋</div>
+          </div>
+          <div class="stat-value">47</div>
+          <div class="stat-change up">↑ 12% 较上周</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">进行中</span>
+            <div class="stat-icon amber">⚡</div>
+          </div>
+          <div class="stat-value">18</div>
+          <div class="stat-change up">↑ 3 新任务</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">已完成</span>
+            <div class="stat-icon green">✅</div>
+          </div>
+          <div class="stat-value">23</div>
+          <div class="stat-change up">↑ 8 本周完成</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">逾期任务</span>
+            <div class="stat-icon red">⚠️</div>
+          </div>
+          <div class="stat-value">6</div>
+          <div class="stat-change down">↓ 需要关注</div>
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="content-area">
+        <!-- Kanban Board -->
+        <div class="kanban-board">
+          <!-- To Do Column -->
+          <div class="kanban-column">
+            <div class="column-header">
+              <div class="column-title">
+                <div class="column-dot todo"></div>
+                待办
+              </div>
+              <span class="column-count">5</span>
+            </div>
+
+            <div class="task-card">
+              <span class="task-label design">设计</span>
+              <div class="task-title">重新设计 Settings 页面信息架构</div>
+              <div class="task-meta">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">A</div>
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">M</div>
+                </div>
+                <span class="task-due">📅 5月28日</span>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <span class="task-label research">调研</span>
+              <div class="task-title">竞品分析: Notion vs Coda vs TaskPilot</div>
+              <div class="task-meta">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">L</div>
+                </div>
+                <span class="task-due">📅 5月30日</span>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <span class="task-label marketing">营销</span>
+              <div class="task-title">撰写 Product Hunt 发布文案</div>
+              <div class="task-meta">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#f59e0b,#f97316)">S</div>
+                </div>
+                <span class="task-due overdue">⚠️ 5月22日</span>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <span class="task-label dev">开发</span>
+              <div class="task-title">实现实时协作光标同步</div>
+              <div class="task-meta">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">K</div>
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">A</div>
+                </div>
+                <span class="task-due">📅 6月2日</span>
+              </div>
+            </div>
+
+            <button class="add-task-btn">+ 添加任务</button>
+          </div>
+
+          <!-- In Progress Column -->
+          <div class="kanban-column">
+            <div class="column-header">
+              <div class="column-title">
+                <div class="column-dot progress"></div>
+                进行中
+              </div>
+              <span class="column-count">4</span>
+            </div>
+
+            <div class="task-card">
+              <span class="task-label urgent">紧急</span>
+              <div class="task-title">修复 iOS 端推送通知延迟问题</div>
+              <div class="task-progress">
+                <div class="task-progress-bar amber" style="width:65%"></div>
+              </div>
+              <div class="task-meta" style="margin-top:10px">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#ef4444,#dc2626)">R</div>
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">K</div>
+                </div>
+                <span class="task-due overdue">⚠️ 5月24日</span>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <span class="task-label dev">开发</span>
+              <div class="task-title">构建 Kanban 拖拽排序功能</div>
+              <div class="task-progress">
+                <div class="task-progress-bar purple" style="width:40%"></div>
+              </div>
+              <div class="task-meta" style="margin-top:10px">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">A</div>
+                </div>
+                <span class="task-due">📅 6月1日</span>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <span class="task-label design">设计</span>
+              <div class="task-title">暗色模式设计系统规范文档</div>
+              <div class="task-progress">
+                <div class="task-progress-bar green" style="width:80%"></div>
+              </div>
+              <div class="task-meta" style="margin-top:10px">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">M</div>
+                </div>
+                <span class="task-due">📅 5月26日</span>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <span class="task-label dev">开发</span>
+              <div class="task-title">API v2 接口文档自动生成</div>
+              <div class="task-progress">
+                <div class="task-progress-bar purple" style="width:55%"></div>
+              </div>
+              <div class="task-meta" style="margin-top:10px">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">L</div>
+                </div>
+                <span class="task-due">📅 5月29日</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Done Column -->
+          <div class="kanban-column">
+            <div class="column-header">
+              <div class="column-title">
+                <div class="column-dot done"></div>
+                已完成
+              </div>
+              <span class="column-count">3</span>
+            </div>
+
+            <div class="task-card" style="opacity:0.7">
+              <span class="task-label dev">开发</span>
+              <div class="task-title">用户认证流程 OAuth 2.0 集成</div>
+              <div class="task-progress">
+                <div class="task-progress-bar green" style="width:100%"></div>
+              </div>
+              <div class="task-meta" style="margin-top:10px">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">K</div>
+                </div>
+                <span class="task-due" style="color:#10b981">✓ 5月20日完成</span>
+              </div>
+            </div>
+
+            <div class="task-card" style="opacity:0.7">
+              <span class="task-label design">设计</span>
+              <div class="task-title">新版 Dashboard 高保真原型</div>
+              <div class="task-progress">
+                <div class="task-progress-bar green" style="width:100%"></div>
+              </div>
+              <div class="task-meta" style="margin-top:10px">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">A</div>
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">M</div>
+                </div>
+                <span class="task-due" style="color:#10b981">✓ 5月18日完成</span>
+              </div>
+            </div>
+
+            <div class="task-card" style="opacity:0.7">
+              <span class="task-label marketing">营销</span>
+              <div class="task-title">品牌视觉指南 v2 定稿</div>
+              <div class="task-progress">
+                <div class="task-progress-bar green" style="width:100%"></div>
+              </div>
+              <div class="task-meta" style="margin-top:10px">
+                <div class="task-avatars">
+                  <div class="task-avatar" style="background:linear-gradient(135deg,#f59e0b,#f97316)">S</div>
+                </div>
+                <span class="task-due" style="color:#10b981">✓ 5月15日完成</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+          <!-- Sprint Progress -->
+          <div class="panel-card">
+            <div class="panel-title">
+              Sprint 进度
+              <a class="see-all">查看详情</a>
+            </div>
+            <div class="sprint-progress">
+              <div class="progress-item">
+                <svg class="progress-ring" viewBox="0 0 48 48">
+                  <circle class="bg" cx="24" cy="24" r="20"/>
+                  <circle class="fill" cx="24" cy="24" r="20" stroke="#6366f1" style="stroke-dashoffset:38"/>
+                </svg>
+                <div class="progress-info">
+                  <div class="progress-name">设计任务</div>
+                  <div class="progress-detail">7/10 已完成</div>
+                </div>
+              </div>
+              <div class="progress-item">
+                <svg class="progress-ring" viewBox="0 0 48 48">
+                  <circle class="bg" cx="24" cy="24" r="20"/>
+                  <circle class="fill" cx="24" cy="24" r="20" stroke="#10b981" style="stroke-dashoffset:57"/>
+                </svg>
+                <div class="progress-info">
+                  <div class="progress-name">开发任务</div>
+                  <div class="progress-detail">11/20 已完成</div>
+                </div>
+              </div>
+              <div class="progress-item">
+                <svg class="progress-ring" viewBox="0 0 48 48">
+                  <circle class="bg" cx="24" cy="24" r="20"/>
+                  <circle class="fill" cx="24" cy="24" r="20" stroke="#f59e0b" style="stroke-dashoffset:76"/>
+                </svg>
+                <div class="progress-info">
+                  <div class="progress-name">营销任务</div>
+                  <div class="progress-detail">5/12 已完成</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Team Activity -->
+          <div class="panel-card">
+            <div class="panel-title">
+              团队动态
+              <a class="see-all">全部</a>
+            </div>
+            <div class="activity-list">
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">A</div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Alex</strong> 完成了「Dashboard 高保真原型」</div>
+                  <div class="activity-time">10 分钟前</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">K</div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Kira</strong> 在「推送通知修复」中评论</div>
+                  <div class="activity-time">25 分钟前</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:linear-gradient(135deg,#f59e0b,#f97316)">S</div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Sara</strong> 创建了新任务「PH 发布文案」</div>
+                  <div class="activity-time">1 小时前</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">M</div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Maya</strong> 上传了 3 个设计稿到「Settings」</div>
+                  <div class="activity-time">2 小时前</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deadline Tracker -->
+          <div class="panel-card">
+            <div class="panel-title">
+              即将到来
+              <a class="see-all">日历</a>
+            </div>
+            <div class="deadline-list">
+              <div class="deadline-item">
+                <div class="deadline-date">
+                  <div class="deadline-day">24</div>
+                  <div class="deadline-month">五月</div>
+                </div>
+                <div class="deadline-info">
+                  <div class="deadline-title">推送通知修复</div>
+                  <div class="deadline-project">App 2.0 发布</div>
+                </div>
+                <div class="deadline-urgency high"></div>
+              </div>
+              <div class="deadline-item">
+                <div class="deadline-date">
+                  <div class="deadline-day">26</div>
+                  <div class="deadline-month">五月</div>
+                </div>
+                <div class="deadline-info">
+                  <div class="deadline-title">暗色模式规范</div>
+                  <div class="deadline-project">品牌重塑 v3</div>
+                </div>
+                <div class="deadline-urgency medium"></div>
+              </div>
+              <div class="deadline-item">
+                <div class="deadline-date">
+                  <div class="deadline-day">02</div>
+                  <div class="deadline-month">六月</div>
+                </div>
+                <div class="deadline-info">
+                  <div class="deadline-title">协作光标同步</div>
+                  <div class="deadline-project">App 2.0 发布</div>
+                </div>
+                <div class="deadline-urgency low"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
