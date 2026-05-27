@@ -532,6 +532,15 @@ const pages = [
     rating: 9.4,
     description: '暗色系项目管理仪表盘，毛玻璃侧边栏 + SVG 圆环进度图 + Kanban 看板 + 任务卡片 + 团队动态 + 截止日期追踪',
   },
+  {
+    id: 'sentinel-guard',
+    title: 'SentinelGuard 零信任安全平台',
+    category: 'landing',
+    tags: ['零信任', '安全', 'SaaS', '暗色主题', '企业'],
+    colors: ['#06060f', '#00d4ff', '#6366f1'],
+    rating: 9.4,
+    description: '零信任安全 SaaS 落地页，暗色科技风 + 电光青配色 + CSS 产品控制台 Demo + 六宫格特性 + 三栏定价',
+  },
 ]
 
 const categories = [
@@ -594,7 +603,7 @@ function getScoreColor(score) {
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-  <meta property="og:description" content="54 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+  <meta property="og:description" content="55 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -603,7 +612,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 54 个完整页面</span>
+      <span>📦 55 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
