@@ -541,6 +541,15 @@ const pages = [
     rating: 9.4,
     description: '零信任安全 SaaS 落地页，暗色科技风 + 电光青配色 + CSS 产品控制台 Demo + 六宫格特性 + 三栏定价',
   },
+  {
+    id: 'inkwell-editorial',
+    title: 'InkWell 长文阅读体验',
+    category: 'content',
+    tags: ['长文阅读', '编辑设计', '排版', '字体', '沉浸式'],
+    colors: ['#faf9f7', '#c9a96e', '#1a1a1a'],
+    rating: 9.5,
+    description: '沉浸式长文阅读体验，灵感来自 Medium/The Pudding，阅读进度条 + 浮动目录 + 首字下沉 + Pull Quote + CSS 几何插图 + Newsletter CTA',
+  },
 ]
 
 const categories = [
@@ -603,7 +612,7 @@ function getScoreColor(score) {
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-  <meta property="og:description" content="55 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+  <meta property="og:description" content="56 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -612,7 +621,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 55 个完整页面</span>
+      <span>📦 56 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

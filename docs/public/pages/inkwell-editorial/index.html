@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InkWell 长文阅读 — 沉浸式编辑体验</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   InkWell — 沉浸式长文阅读体验
+   灵感来自: Medium / The Pudding / Wait But Why
+   ============================================================ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink-cream: #faf9f7;
+  --ink-warm: #f5f0eb;
+  --ink-charcoal: #1a1a1a;
+  --ink-graphite: #2d2d2d;
+  --ink-gray: #6b6b6b;
+  --ink-light-gray: #999;
+  --ink-border: #e8e4df;
+  --ink-gold: #c9a96e;
+  --ink-gold-light: #dfc99a;
+  --ink-accent: #6366f1;
+  --ink-accent-ghost: rgba(99, 102, 241, 0.08);
+  --ink-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --ink-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ink-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --reading-width: 720px;
+  --toc-width: 220px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--ink-sans);
+  background: var(--ink-cream);
+  color: var(--ink-charcoal);
+  line-height: 1.8;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Reading Progress Bar ──────────────────────────────── */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ink-gold), var(--ink-accent));
+  z-index: 1000;
+  transition: width 0.1s linear;
+}
+
+/* ── Floating Nav ──────────────────────────────────────── */
+.floating-nav {
+  position: fixed;
+  top: 16px;
+  right: 32px;
+  z-index: 999;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(250, 249, 247, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--ink-border);
+  border-radius: 100px;
+  font-size: 13px;
+  color: var(--ink-gray);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.nav-pill:hover {
+  background: rgba(250, 249, 247, 0.95);
+  border-color: var(--ink-gold);
+  color: var(--ink-charcoal);
+}
+.nav-pill svg { width: 14px; height: 14px; }
+
+/* ── Hero ──────────────────────────────────────────────── */
+.article-hero {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 2rem 80px;
+  overflow: hidden;
+}
+.article-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(201, 169, 110, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 500px at 80% 60%, rgba(99, 102, 241, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 300px at 50% 80%, rgba(201, 169, 110, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Decorative line art */
+.hero-decoration {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--ink-gold), transparent);
+}
+.hero-decoration::after {
+  content: '◆';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--ink-gold);
+  font-size: 10px;
+  background: var(--ink-cream);
+  padding: 0 8px;
+}
+
+.hero-category {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 20px;
+  border: 1px solid var(--ink-gold);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-gold);
+  margin-bottom: 2.5rem;
+}
+.hero-category::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-gold);
+}
+
+.hero-title {
+  position: relative;
+  font-family: var(--ink-serif);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--ink-charcoal);
+  max-width: 800px;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--ink-gold);
+}
+
+.hero-subtitle {
+  position: relative;
+  font-size: 1.2rem;
+  color: var(--ink-gray);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+
+.hero-meta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ink-gold), var(--ink-accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  font-family: var(--ink-serif);
+}
+.author-info {
+  text-align: left;
+}
+.author-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink-charcoal);
+}
+.author-detail {
+  font-size: 13px;
+  color: var(--ink-light-gray);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.author-detail .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--ink-light-gray);
+}
+
+/* ── Table of Contents (Floating Left) ─────────────────── */
+.toc-sidebar {
+  position: fixed;
+  left: max(2rem, calc((100vw - var(--reading-width)) / 2 - var(--toc-width) - 60px));
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--toc-width);
+  z-index: 100;
+}
+.toc-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-light-gray);
+  margin-bottom: 16px;
+}
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.toc-list li a {
+  display: block;
+  padding: 6px 0 6px 14px;
+  font-size: 13px;
+  color: var(--ink-light-gray);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all 0.25s;
+  line-height: 1.4;
+}
+.toc-list li a:hover {
+  color: var(--ink-charcoal);
+}
+.toc-list li a.active {
+  color: var(--ink-charcoal);
+  border-left-color: var(--ink-gold);
+  font-weight: 500;
+}
+
+/* ── Article Body ──────────────────────────────────────── */
+.article-body {
+  max-width: var(--reading-width);
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+.article-body h2 {
+  font-family: var(--ink-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink-charcoal);
+  margin: 4rem 0 1.5rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.article-body h2:first-child {
+  margin-top: 0;
+}
+
+.article-body h3 {
+  font-family: var(--ink-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink-graphite);
+  margin: 3rem 0 1rem;
+  line-height: 1.35;
+}
+
+.article-body p {
+  margin-bottom: 1.6rem;
+  color: var(--ink-graphite);
+  font-size: 1.06rem;
+  line-height: 1.85;
+}
+
+.article-body p.lead {
+  font-size: 1.25rem;
+  line-height: 1.75;
+  color: var(--ink-charcoal);
+  font-weight: 400;
+}
+.article-body p.lead::first-letter {
+  float: left;
+  font-family: var(--ink-serif);
+  font-size: 4.5rem;
+  font-weight: 900;
+  line-height: 0.8;
+  margin: 4px 12px 0 0;
+  color: var(--ink-gold);
+}
+
+/* ── Drop Cap First Letter ─────────────────────────────── */
+
+/* ── Pull Quote ────────────────────────────────────────── */
+.pull-quote {
+  position: relative;
+  margin: 3.5rem -2rem;
+  padding: 2.5rem 3rem;
+  background: linear-gradient(135deg, var(--ink-warm) 0%, rgba(201, 169, 110, 0.08) 100%);
+  border-left: 4px solid var(--ink-gold);
+  border-radius: 0 12px 12px 0;
+}
+.pull-quote::before {
+  content: '"';
+  position: absolute;
+  top: 8px;
+  left: 20px;
+  font-family: var(--ink-serif);
+  font-size: 5rem;
+  color: var(--ink-gold);
+  opacity: 0.25;
+  line-height: 1;
+}
+.pull-quote p {
+  font-family: var(--ink-serif);
+  font-size: 1.35rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--ink-charcoal);
+  margin-bottom: 0.8rem;
+}
+.pull-quote cite {
+  display: block;
+  font-family: var(--ink-sans);
+  font-style: normal;
+  font-size: 0.85rem;
+  color: var(--ink-light-gray);
+  font-weight: 500;
+}
+
+/* ── Image Section ─────────────────────────────────────── */
+.image-section {
+  margin: 3.5rem -2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ink-warm);
+}
+.image-placeholder {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.image-placeholder.art-1 {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+.image-placeholder.art-2 {
+  background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
+}
+.image-placeholder.art-3 {
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 40%, #c9a96e 100%);
+}
+/* CSS geometric art inside placeholders */
+.image-placeholder .geo-art {
+  position: absolute;
+  inset: 0;
+}
+.geo-art .circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+}
+.geo-art .line {
+  position: absolute;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  transform-origin: left center;
+}
+.geo-art .dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(201, 169, 110, 0.6);
+}
+.image-caption {
+  padding: 1rem 1.5rem;
+  font-size: 0.85rem;
+  color: var(--ink-light-gray);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ── Inline Image Grid ─────────────────────────────────── */
+.image-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 3rem -2rem;
+}
+.image-grid .grid-item {
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  position: relative;
+}
+.grid-item.g1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+.grid-item.g2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.grid-item.g3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.grid-item.g4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+.grid-item .grid-label {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ── Code Block ────────────────────────────────────────── */
+.code-block {
+  margin: 2.5rem 0;
+  background: var(--ink-charcoal);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.code-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.code-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.code-dot.red { background: #ff5f56; }
+.code-dot.yellow { background: #ffbd2e; }
+.code-dot.green { background: #27c93f; }
+.code-filename {
+  margin-left: 8px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  font-family: var(--ink-mono);
+}
+.code-block pre {
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-family: var(--ink-mono);
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #e2e8f0;
+}
+.code-block .kw { color: #c792ea; }
+.code-block .fn { color: #82aaff; }
+.code-block .str { color: #c3e88d; }
+.code-block .cm { color: #546e7a; }
+.code-block .num { color: #f78c6c; }
+.code-block .op { color: #89ddff; }
+
+/* ── Highlight Box ─────────────────────────────────────── */
+.highlight-box {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: var(--ink-accent-ghost);
+  border-radius: 12px;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+}
+.highlight-box .hl-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-accent);
+  margin-bottom: 0.8rem;
+}
+.highlight-box p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+.highlight-box p:last-child { margin-bottom: 0; }
+
+/* ── Stats Row ─────────────────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin: 3rem 0;
+  background: var(--ink-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.stat-item {
+  background: var(--ink-warm);
+  padding: 2rem;
+  text-align: center;
+}
+.stat-number {
+  font-family: var(--ink-serif);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--ink-charcoal);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.stat-number .gold { color: var(--ink-gold); }
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--ink-light-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* ── Divider ───────────────────────────────────────────── */
+.section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 4rem 0;
+  color: var(--ink-gold);
+  font-size: 12px;
+}
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(to right, transparent, var(--ink-border), transparent);
+}
+
+/* ── Author Card ───────────────────────────────────────── */
+.author-card {
+  margin: 5rem 0 3rem;
+  padding: 2.5rem;
+  background: var(--ink-warm);
+  border-radius: 16px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+.author-card .avatar-lg {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ink-gold), var(--ink-accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 26px;
+  font-family: var(--ink-serif);
+  flex-shrink: 0;
+}
+.author-card .author-bio h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.author-card .author-bio .role {
+  font-size: 0.85rem;
+  color: var(--ink-gold);
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+}
+.author-card .author-bio p {
+  font-size: 0.9rem;
+  color: var(--ink-gray);
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+.author-social {
+  display: flex;
+  gap: 12px;
+  margin-top: 1rem;
+}
+.author-social a {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-gray);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.author-social a:hover {
+  border-color: var(--ink-gold);
+  color: var(--ink-gold);
+}
+
+/* ── Related Articles ──────────────────────────────────── */
+.related-section {
+  margin: 4rem 0;
+}
+.related-section h3 {
+  font-family: var(--ink-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.related-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--ink-border);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+  background: #fff;
+}
+.related-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  border-color: var(--ink-gold);
+}
+.related-thumb {
+  aspect-ratio: 16/10;
+  position: relative;
+}
+.related-thumb.t1 { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+.related-thumb.t2 { background: linear-gradient(135deg, #667eea, #764ba2); }
+.related-thumb.t3 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.related-thumb .thumb-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 3px 10px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+}
+.related-info {
+  padding: 1rem 1.2rem;
+}
+.related-info h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  line-height: 1.35;
+}
+.related-info p {
+  font-size: 0.8rem;
+  color: var(--ink-light-gray);
+  line-height: 1.5;
+}
+
+/* ── Newsletter CTA ────────────────────────────────────── */
+.newsletter-cta {
+  margin: 5rem -2rem 0;
+  padding: 4rem 3rem;
+  background: var(--ink-charcoal);
+  border-radius: 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.newsletter-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 200px at 20% 50%, rgba(201, 169, 110, 0.15), transparent),
+    radial-gradient(circle 200px at 80% 50%, rgba(99, 102, 241, 0.1), transparent);
+  pointer-events: none;
+}
+.newsletter-cta h3 {
+  position: relative;
+  font-family: var(--ink-serif);
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.newsletter-cta p {
+  position: relative;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+.newsletter-form {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.newsletter-form input {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: var(--ink-sans);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.newsletter-form input::placeholder { color: rgba(255,255,255,0.3); }
+.newsletter-form input:focus { border-color: var(--ink-gold); }
+.newsletter-form button {
+  padding: 14px 24px;
+  background: var(--ink-gold);
+  color: var(--ink-charcoal);
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--ink-sans);
+  white-space: nowrap;
+}
+.newsletter-form button:hover {
+  background: var(--ink-gold-light);
+  transform: translateY(-1px);
+}
+
+/* ── Footer ────────────────────────────────────────────── */
+.article-footer {
+  max-width: var(--reading-width);
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  color: var(--ink-light-gray);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--ink-border);
+}
+.article-footer a {
+  color: var(--ink-gold);
+  text-decoration: none;
+}
+
+/* ── Tags ──────────────────────────────────────────────── */
+.article-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+}
+.article-tags .tag {
+  padding: 5px 14px;
+  background: var(--ink-warm);
+  border: 1px solid var(--ink-border);
+  border-radius: 100px;
+  font-size: 12px;
+  color: var(--ink-gray);
+  font-weight: 500;
+}
+
+/* ── Blockquote ────────────────────────────────────────── */
+.article-body blockquote {
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  border-left: 3px solid var(--ink-accent);
+  background: var(--ink-accent-ghost);
+  border-radius: 0 8px 8px 0;
+}
+.article-body blockquote p {
+  font-style: italic;
+  color: var(--ink-gray);
+  margin-bottom: 0;
+}
+
+/* ── Inline Code ───────────────────────────────────────── */
+.article-body code {
+  font-family: var(--ink-mono);
+  font-size: 0.88em;
+  padding: 2px 7px;
+  background: var(--ink-warm);
+  border: 1px solid var(--ink-border);
+  border-radius: 5px;
+  color: var(--ink-accent);
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  .toc-sidebar { display: none; }
+}
+@media (max-width: 768px) {
+  .article-hero { min-height: 70vh; padding: 80px 1.5rem 60px; }
+  .hero-title { font-size: 2.2rem; }
+  .pull-quote { margin: 2.5rem 0; padding: 2rem; }
+  .image-section, .image-grid, .newsletter-cta { margin-left: 0; margin-right: 0; }
+  .newsletter-cta { padding: 3rem 1.5rem; }
+  .newsletter-form { flex-direction: column; }
+  .related-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: 1fr; }
+  .author-card { flex-direction: column; align-items: center; text-align: center; }
+  .floating-nav { right: 16px; top: 12px; }
+  .nav-pill span.hide-mobile { display: none; }
+  .article-body p.lead::first-letter { font-size: 3.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div class="reading-progress" id="progressBar"></div>
+
+<!-- Floating Nav -->
+<div class="floating-nav">
+  <a href="/pages/" class="nav-pill">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    <span class="hide-mobile">画廊</span>
+  </a>
+  <a href="#" class="nav-pill" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+    <span class="hide-mobile">顶部</span>
+  </a>
+</div>
+
+<!-- Hero -->
+<header class="article-hero">
+  <div class="hero-decoration"></div>
+  <div class="hero-category">长文阅读 · 设计思考</div>
+  <h1 class="hero-title">当设计成为<em>语言</em><br>—— 构建有灵魂的数字体验</h1>
+  <p class="hero-subtitle">从像素到叙事，探索设计如何超越视觉，成为连接人与技术的桥梁。一篇关于设计哲学、系统思维与创意表达的深度思考。</p>
+  <div class="hero-meta">
+    <div class="author-avatar">L</div>
+    <div class="author-info">
+      <div class="author-name">Lin Zhao</div>
+      <div class="author-detail">
+        <span>2026 年 5 月 29 日</span>
+        <span class="dot"></span>
+        <span>阅读 12 分钟</span>
+        <span class="dot"></span>
+        <span>4,820 字</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Table of Contents -->
+<nav class="toc-sidebar" id="toc">
+  <div class="toc-label">目录</div>
+  <ul class="toc-list">
+    <li><a href="#section-1" class="active">设计的觉醒</a></li>
+    <li><a href="#section-2">字体即界面</a></li>
+    <li><a href="#section-3">色彩的情绪</a></li>
+    <li><a href="#section-4">系统化思维</a></li>
+    <li><a href="#section-5">数据与美学</a></li>
+    <li><a href="#section-6">面向未来</a></li>
+  </ul>
+</nav>
+
+<!-- Article Body -->
+<article class="article-body">
+
+  <p class="lead" id="section-1">设计不仅仅是看起来怎样，更是<em>感觉</em>怎样。当我们在屏幕上创造出一个按钮、一个页面、一个完整的数字世界时，我们实际上是在编写一种新的语言——一种用像素、色彩和动效构成的语言。</p>
+
+  <p>这种语言有自己的语法和修辞。一个精心设计的渐变不仅仅是装饰，它是一个视觉隐喻，暗示着从一种状态到另一种状态的转变。一个微妙的阴影不仅仅是深度的暗示，它是层次结构的无声宣言。</p>
+
+  <p>回顾过去二十年的数字设计演变，我们见证了从拟物化到扁平化，再到新拟物化的轮回。但在这表面的风格变迁之下，有一个不变的真理：好的设计永远在为人服务。</p>
+
+  <div class="pull-quote">
+    <p>设计是意图的可视化表达。每一个像素的选择，都应该能回答「为什么」这个问题。</p>
+    <cite>— Dieter Rams, 产品设计十原则</cite>
+  </div>
+
+  <p>当我们谈论数字体验时，我们实际上是在谈论<code>节奏</code>。页面加载的节奏、内容呈现的节奏、交互动画的节奏。这些节奏共同构成了一首数字交响曲，而设计师就是这首交响曲的指挥家。</p>
+
+  <h2 id="section-2">字体即界面</h2>
+
+  <p>Typography 是设计中最被低估的超能力。一组精心选择的字体组合，可以在用户意识到之前，就传达出品牌的个性和态度。Playfair Display 的优雅衬线诉说着传统与精致，而 Inter 的现代无衬线则传递着效率与清晰。</p>
+
+  <p>在阅读场景中，字体的选择更加至关重要。研究表明，最佳的阅读体验来自 <strong>16-18px</strong> 的正文字号、<strong>1.6-1.8</strong> 的行高、以及 <strong>60-80 字符</strong>的行宽。这些看似简单的数字，背后是几十年的排版研究和用户体验实验。</p>
+
+  <div class="image-section">
+    <div class="image-placeholder art-1">
+      <div class="geo-art">
+        <div class="circle" style="width:200px;height:200px;top:20%;left:15%;"></div>
+        <div class="circle" style="width:120px;height:120px;top:40%;right:20%;border-color:rgba(201,169,110,0.2);"></div>
+        <div class="line" style="width:300px;top:50%;left:10%;transform:rotate(-15deg);"></div>
+        <div class="dot" style="top:30%;left:40%;"></div>
+        <div class="dot" style="top:60%;right:30%;background:rgba(99,102,241,0.5);"></div>
+        <div class="line" style="width:200px;top:70%;right:15%;transform:rotate(10deg);background:rgba(201,169,110,0.08);"></div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;color:rgba(255,255,255,0.08);letter-spacing:0.1em;">Aa</div>
+      </div>
+    </div>
+    <div class="image-caption">Fig 1.0 — 字体选择如何塑造阅读体验的视觉隐喻</div>
+  </div>
+
+  <h3>层级与呼吸</h3>
+
+  <p>好的排版层级就像建筑的空间设计。标题是建筑的轮廓，副标题是楼层的划分，正文是房间的内部，而留白则是走廊和广场。没有留白的文字页面，就像没有窗户的房间——令人窒息。</p>
+
+  <p>在设计系统中，我们通常使用 <code>--text-xs</code> 到 <code>--text-6xl</code> 的字号梯度，配合 <code>--leading-tight</code> 到 <code>--leading-relaxed</code> 的行高变化，构建出丰富的视觉层次。但记住：层级的目的不是制造复杂，而是引导视线。</p>
+
+  <h2 id="section-3">色彩的情绪</h2>
+
+  <p>色彩是设计中最直接的情感触发器。一个品牌的主色调，往往在用户阅读任何文字之前，就已经传达了品牌的核心态度。靛蓝紫的 <code>#6366f1</code> 传递着科技感与创造力，金色的 <code>#c9a96e</code> 则诉说着品质与温度。</p>
+
+  <div class="image-grid">
+    <div class="grid-item g1">
+      <span class="grid-label">Indigo · 科技</span>
+    </div>
+    <div class="grid-item g2">
+      <span class="grid-label">Rose · 热情</span>
+    </div>
+    <div class="grid-item g3">
+      <span class="grid-label">Cyan · 清新</span>
+    </div>
+    <div class="grid-item g4">
+      <span class="grid-label">Emerald · 生长</span>
+    </div>
+  </div>
+
+  <p>但在实际项目中，色彩系统远比选择一个主色复杂得多。你需要考虑可访问性（WCAG 对比度标准）、语义色彩（成功、警告、错误）、暗色模式适配、以及品牌在不同场景下的色彩表现。</p>
+
+  <div class="pull-quote">
+    <p>色彩不是装饰，是信息。每一个色值都应该有它的理由，就像每一个词语都应该服务于叙事。</p>
+    <cite>— Josef Albers, 《色彩互动学》</cite>
+  </div>
+
+  <div class="highlight-box">
+    <div class="hl-label">💡 设计洞察</div>
+    <p>在构建 Design Tokens 时，建议将色彩分为三个层级：<strong>基础色板</strong>（原始色值）、<strong>语义色彩</strong>（用途定义）、<strong>组件色彩</strong>（具体应用）。这种三层架构让主题切换变得简单而一致。</p>
+  </div>
+
+  <h2 id="section-4">系统化思维</h2>
+
+  <p>现代设计不再是创造孤立的页面或组件，而是构建一个<strong>活的系统</strong>。这个系统需要有清晰的规则、灵活的组合方式、以及自我进化的能力。这就是 Design System 的核心价值。</p>
+
+  <p>一个成熟的设计系统包含四个层次：</p>
+
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-number"><span class="gold">01</span></div>
+      <div class="stat-label">设计原则</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number"><span class="gold">02</span></div>
+      <div class="stat-label">Design Tokens</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number"><span class="gold">03</span></div>
+      <div class="stat-label">组件库</div>
+    </div>
+  </div>
+
+  <p>设计原则定义了「什么是对的」，Design Tokens 将抽象原则转化为具体的数值，组件库让这些数值可以被复用，而文档则确保团队中的每个人都能理解和使用这个系统。</p>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dot red"></div>
+      <div class="code-dot yellow"></div>
+      <div class="code-dot green"></div>
+      <span class="code-filename">tokens.css</span>
+    </div>
+    <pre><span class="cm">/* Design Tokens — 一切的起点 */</span>
+<span class="op">:</span><span class="fn">root</span> <span class="op">{</span>
+  <span class="cm">/* 主色：靛蓝紫，现代感强 */</span>
+  <span class="op">--</span><span class="fn">color-primary</span><span class="op">:</span>       <span class="str">#6366f1</span><span class="op">;</span>
+  <span class="op">--</span><span class="fn">color-primary-light</span><span class="op">:</span> <span class="str">#818cf8</span><span class="op">;</span>
+  <span class="op">--</span><span class="fn">color-primary-dark</span><span class="op">:</span>  <span class="str">#4f46e5</span><span class="op">;</span>
+  
+  <span class="cm">/* 排版阶梯 */</span>
+  <span class="op">--</span><span class="fn">text-base</span><span class="op">:</span> <span class="num">1rem</span><span class="op">;</span>
+  <span class="op">--</span><span class="fn">text-lg</span><span class="op">:</span>   <span class="num">1.125rem</span><span class="op">;</span>
+  <span class="op">--</span><span class="fn">text-xl</span><span class="op">:</span>   <span class="num">1.25rem</span><span class="op">;</span>
+  
+  <span class="cm">/* 间距系统：8px 基数 */</span>
+  <span class="op">--</span><span class="fn">space-4</span><span class="op">:</span>  <span class="num">1rem</span><span class="op">;</span>
+  <span class="op">--</span><span class="fn">space-8</span><span class="op">:</span>  <span class="num">2rem</span><span class="op">;</span>
+  <span class="op">--</span><span class="fn">space-12</span><span class="op">:</span> <span class="num">3rem</span><span class="op">;</span>
+<span class="op">}</span></pre>
+  </div>
+
+  <p>好的 Design Tokens 不是静态的变量列表，而是产品设计语言的 DNA。它们编码了品牌个性、可用性标准、和技术约束。当设计师修改一个 token 值时，整个系统应该像涟漪一样，自然地传播变化。</p>
+
+  <div class="section-divider">◆</div>
+
+  <h2 id="section-5">数据与美学</h2>
+
+  <p>在数据驱动的时代，设计师面临一个独特的挑战：如何让数据不仅仅是数字，而是故事？一个好的数据可视化，应该让用户在三秒内理解趋势，在十秒内发现洞察，在一分钟内做出决策。</p>
+
+  <p>这要求我们同时运用两种思维：<strong>分析思维</strong>（理解数据的含义）和<strong>美学思维</strong>（选择最佳的视觉编码方式）。柱状图、折线图、热力图、散点图——每种图表类型都有它最适合的数据关系。</p>
+
+  <div class="image-section">
+    <div class="image-placeholder art-2">
+      <div class="geo-art">
+        <!-- Simulated chart bars -->
+        <div style="position:absolute;bottom:20%;left:10%;width:40px;height:60%;background:rgba(255,255,255,0.08);border-radius:4px 4px 0 0;"></div>
+        <div style="position:absolute;bottom:20%;left:20%;width:40px;height:45%;background:rgba(201,169,110,0.2);border-radius:4px 4px 0 0;"></div>
+        <div style="position:absolute;bottom:20%;left:30%;width:40px;height:75%;background:rgba(255,255,255,0.06);border-radius:4px 4px 0 0;"></div>
+        <div style="position:absolute;bottom:20%;left:40%;width:40px;height:55%;background:rgba(201,169,110,0.15);border-radius:4px 4px 0 0;"></div>
+        <div style="position:absolute;bottom:20%;left:50%;width:40px;height:90%;background:rgba(255,255,255,0.1);border-radius:4px 4px 0 0;"></div>
+        <div style="position:absolute;bottom:20%;left:60%;width:40px;height:65%;background:rgba(201,169,110,0.25);border-radius:4px 4px 0 0;"></div>
+        <div style="position:absolute;bottom:20%;left:70%;width:40px;height:80%;background:rgba(255,255,255,0.07);border-radius:4px 4px 0 0;"></div>
+        <div style="position:absolute;bottom:20%;left:80%;width:40px;height:50%;background:rgba(201,169,110,0.18);border-radius:4px 4px 0 0;"></div>
+        <!-- Baseline -->
+        <div style="position:absolute;bottom:20%;left:8%;right:8%;height:1px;background:rgba(255,255,255,0.15);"></div>
+      </div>
+    </div>
+    <div class="image-caption">Fig 2.0 — 数据可视化的节奏感：让数字讲述故事</div>
+  </div>
+
+  <p>但数据可视化中最容易被忽视的，是<strong>留白</strong>和<strong>标注</strong>。一张信息过载的图表，就像一篇没有段落的文章——技术上正确，体验上灾难。给数据呼吸的空间，让用户的眼睛有时间去发现、去理解、去惊叹。</p>
+
+  <blockquote>
+    <p>简约不是缺少什么，而是恰到好处。—— Albert Einstein</p>
+  </blockquote>
+
+  <h2 id="section-6">面向未来</h2>
+
+  <p>AI 正在改变设计的每一个环节。从自动生成配色方案到智能布局建议，从代码生成到用户行为预测。但这并不意味着设计师会被取代——相反，设计师的角色正在从「创造者」进化为「策展人」和「品味守护者」。</p>
+
+  <p>当 AI 可以在一秒钟内生成一百个设计方案时，设计师的价值不在于生产数量，而在于<strong>选择的智慧</strong>和<strong>叙事的深度</strong>。哪个方案最好？为什么？它讲述了什么故事？它如何与品牌 DNA 共鸣？这些问题，AI 暂时还无法回答。</p>
+
+  <div class="pull-quote">
+    <p>技术赋予我们能力，但设计赋予我们意义。在 AI 时代，这比以往任何时候都更加重要。</p>
+    <cite>— 本文作者</cite>
+  </div>
+
+  <p>未来的设计系统将不再是静态的规范文档，而是<strong>活的、可对话的、自适应的</strong>智能系统。它会学习用户的行为模式，理解品牌的情感调性，在约束中寻找创新的可能。</p>
+
+  <p>而这一切的起点，依然是那句最朴素的 Design Mantra：</p>
+
+  <p style="text-align:center;font-family:var(--ink-serif);font-size:1.6rem;font-weight:700;color:var(--ink-charcoal);margin:3rem 0;letter-spacing:0.02em;">
+    为人而设计，<span style="color:var(--ink-gold);">以人为本</span>。
+  </p>
+
+  <!-- Tags -->
+  <div class="article-tags">
+    <span class="tag">设计系统</span>
+    <span class="tag">Design Tokens</span>
+    <span class="tag">排版</span>
+    <span class="tag">色彩理论</span>
+    <span class="tag">AI 设计</span>
+    <span class="tag">用户体验</span>
+    <span class="tag">长文阅读</span>
+  </div>
+
+  <!-- Author Card -->
+  <div class="author-card">
+    <div class="avatar-lg">L</div>
+    <div class="author-bio">
+      <h4>Lin Zhao</h4>
+      <div class="role">Design Engineer · 创意编码者</div>
+      <p>在代码与像素之间寻找诗意。曾就职于多家科技公司担任设计系统负责人，热衷于探索设计与技术的交叉地带。相信好的设计应该像好的文章一样——清晰、有节奏、令人回味。</p>
+      <div class="author-social">
+        <a href="#" title="Twitter">𝕏</a>
+        <a href="#" title="GitHub">⌨</a>
+        <a href="#" title="Dribbble">◉</a>
+      </div>
+    </div>
+  </div>
+
+</article>
+
+<!-- Related Articles -->
+<section style="max-width:720px;margin:0 auto;padding:0 2rem 4rem;">
+  <div class="related-section">
+    <h3>相关阅读</h3>
+    <div class="related-grid">
+      <a href="/pages/docs-portal.html" class="related-card">
+        <div class="related-thumb t1">
+          <span class="thumb-label">文档</span>
+        </div>
+        <div class="related-info">
+          <h4>DevDocs 现代文档门户</h4>
+          <p>灵感来自 Stripe/Railway，三栏布局 + 代码高亮</p>
+        </div>
+      </a>
+      <a href="/pages/tech-blog.html" class="related-card">
+        <div class="related-thumb t2">
+          <span class="thumb-label">博客</span>
+        </div>
+        <div class="related-info">
+          <h4>DevChronicle 技术博客</h4>
+          <p>现代技术博客，Featured 文章 + Newsletter 订阅</p>
+        </div>
+      </a>
+      <a href="/pages/newsletter-landing.html" class="related-card">
+        <div class="related-thumb t3">
+          <span class="thumb-label">Newsletter</span>
+        </div>
+        <div class="related-info">
+          <h4>The Signal 订阅页</h4>
+          <p>渐变文字标题 + 邮箱表单 + 往期精选</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Newsletter CTA -->
+  <div class="newsletter-cta">
+    <h3>订阅《设计手札》</h3>
+    <p>每周精选一篇深度设计文章，直达你的收件箱</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="your@email.com">
+      <button>订阅</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="article-footer">
+  <p>© 2026 <a href="/">My Design Lib</a> — 为 AI 编程助手优化的设计库</p>
+  <p style="margin-top:0.3rem;">📧 weta_zheng@qq.com &nbsp;|&nbsp; 💬 微信 weta010730</p>
+</footer>
+
+<script>
+// Reading progress bar
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// TOC active state
+const tocLinks = document.querySelectorAll('.toc-list a');
+const sections = [];
+tocLinks.forEach(link => {
+  const id = link.getAttribute('href').slice(1);
+  const el = document.getElementById(id);
+  if (el) sections.push({ id, el, link });
+});
+
+function updateTOC() {
+  let current = sections[0];
+  for (const s of sections) {
+    if (s.el.getBoundingClientRect().top <= 200) current = s;
+  }
+  tocLinks.forEach(l => l.classList.remove('active'));
+  if (current) current.link.classList.add('active');
+}
+window.addEventListener('scroll', updateTOC);
+</script>
+
+</body>
+</html>
