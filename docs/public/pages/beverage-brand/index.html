@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fizz & Folk — 欧洲手工气泡饮品</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Brand Colors ── */
+:root {
+  --brand-coral: #FE3E29;
+  --brand-coral-dark: #D9301F;
+  --brand-cream: #F4F2EA;
+  --brand-cream-dark: #E8E4D8;
+  --brand-dark: #1A1A1A;
+  --brand-white: #FFFFFF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--brand-dark);
+  background: var(--brand-cream);
+  overflow-x: hidden;
+}
+
+/* ── Header ── */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 3rem;
+  transition: background 0.3s, backdrop-filter 0.3s;
+}
+.header.scrolled {
+  background: rgba(244, 242, 234, 0.92);
+  backdrop-filter: blur(12px);
+}
+.header-nav {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.header-nav a {
+  text-decoration: none;
+  color: var(--brand-white);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: opacity 0.2s;
+}
+.header.scrolled .header-nav a { color: var(--brand-dark); }
+.header-nav a:hover { opacity: 0.7; }
+
+.logo {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--brand-white);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.header.scrolled .logo { color: var(--brand-dark); }
+
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border: 1.5px solid var(--brand-white);
+  border-radius: var(--radius-full);
+  color: var(--brand-white);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.3s;
+}
+.header.scrolled .header-cta {
+  border-color: var(--brand-dark);
+  color: var(--brand-dark);
+}
+.header-cta:hover {
+  background: var(--brand-white);
+  color: var(--brand-coral);
+}
+.header.scrolled .header-cta:hover {
+  background: var(--brand-dark);
+  color: var(--brand-white);
+}
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  background: var(--brand-coral);
+  color: var(--brand-white);
+  padding: 10rem 3rem 8rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 88%, 70% 83%, 55% 90%, 40% 85%, 25% 92%, 10% 86%, 0 90%);
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: var(--weight-bold);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-sub {
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  opacity: 0.9;
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2.5rem;
+  background: var(--brand-white);
+  color: var(--brand-coral);
+  text-decoration: none;
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
+}
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--brand-white);
+  opacity: 0.6;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ── Marquee ── */
+.marquee-section {
+  background: var(--brand-dark);
+  color: var(--brand-white);
+  padding: 1.2rem 0;
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  animation: marquee 25s linear infinite;
+  white-space: nowrap;
+}
+.marquee-item {
+  flex-shrink: 0;
+  padding: 0 2rem;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.marquee-item .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--brand-coral);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── Story Section ── */
+.story {
+  padding: 6rem 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.story-label {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--brand-coral);
+  margin-bottom: 1.5rem;
+}
+
+.story h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+}
+
+.story-text {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--brand-dark);
+  opacity: 0.8;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.story-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  color: var(--brand-coral);
+  text-decoration: none;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-base);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: gap 0.3s;
+}
+.story-link:hover { gap: 0.8rem; }
+
+/* ── Products ── */
+.products {
+  padding: 4rem 3rem 6rem;
+}
+
+.products-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.products-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.products-header p {
+  font-size: var(--text-lg);
+  color: var(--brand-dark);
+  opacity: 0.6;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background: var(--brand-white);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s;
+  cursor: pointer;
+  position: relative;
+}
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+}
+
+.product-visual {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-visual::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  border-radius: 50%;
+  opacity: 0.15;
+}
+
+.product-card:nth-child(1) .product-visual { background: #E8F5E9; }
+.product-card:nth-child(1) .product-visual::before { background: #4CAF50; }
+.product-card:nth-child(2) .product-visual { background: #FFF3E0; }
+.product-card:nth-child(2) .product-visual::before { background: #FF9800; }
+.product-card:nth-child(3) .product-visual { background: #FCE4EC; }
+.product-card:nth-child(3) .product-visual::before { background: #E91E63; }
+
+/* Bottle CSS Illustration */
+.bottle {
+  position: relative;
+  z-index: 1;
+}
+.bottle-cap {
+  width: 18px;
+  height: 14px;
+  margin: 0 auto 2px;
+  border-radius: 3px 3px 0 0;
+}
+.bottle-neck {
+  width: 20px;
+  height: 30px;
+  margin: 0 auto;
+  border-radius: 4px 4px 0 0;
+}
+.bottle-body {
+  width: 52px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 8px 8px 12px 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bottle-label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brand-white);
+  text-align: center;
+  line-height: 1.3;
+}
+.bottle-bubbles {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.bubble {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  position: absolute;
+  animation: float 3s ease-in-out infinite;
+}
+.bubble:nth-child(1) { left: -8px; animation-delay: 0s; }
+.bubble:nth-child(2) { left: 4px; animation-delay: 0.5s; }
+.bubble:nth-child(3) { left: 12px; animation-delay: 1s; }
+@keyframes float {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-20px); opacity: 1; }
+}
+
+.product-card:nth-child(1) .bottle-cap,
+.product-card:nth-child(1) .bottle-neck { background: #388E3C; }
+.product-card:nth-child(1) .bottle-body { background: #4CAF50; }
+
+.product-card:nth-child(2) .bottle-cap,
+.product-card:nth-child(2) .bottle-neck { background: #E65100; }
+.product-card:nth-child(2) .bottle-body { background: #FF9800; }
+
+.product-card:nth-child(3) .bottle-cap,
+.product-card:nth-child(3) .bottle-neck { background: #AD1457; }
+.product-card:nth-child(3) .bottle-body { background: #E91E63; }
+
+.product-info {
+  padding: 1.5rem;
+}
+
+.product-name {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  margin-bottom: 0.3rem;
+}
+
+.product-desc {
+  font-size: var(--text-sm);
+  color: var(--brand-dark);
+  opacity: 0.6;
+  margin-bottom: 1rem;
+  line-height: var(--leading-normal);
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-price {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--brand-coral);
+}
+
+.product-btn {
+  padding: 0.5rem 1.2rem;
+  background: var(--brand-dark);
+  color: var(--brand-white);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.product-btn:hover {
+  background: var(--brand-coral);
+  transform: scale(1.05);
+}
+
+/* ── Values ── */
+.values {
+  padding: 6rem 3rem;
+  background: var(--brand-white);
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.value-item {
+  text-align: center;
+  padding: 2rem;
+}
+
+.value-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.5rem;
+  background: var(--brand-cream);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.value-item h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  margin-bottom: 0.75rem;
+}
+
+.value-item p {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  opacity: 0.7;
+}
+
+/* ── Testimonials ── */
+.testimonials {
+  padding: 6rem 3rem;
+  background: var(--brand-coral);
+  color: var(--brand-white);
+  text-align: center;
+}
+
+.testimonials h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: var(--weight-bold);
+  margin-bottom: 3rem;
+  letter-spacing: -0.02em;
+}
+
+.testimonial-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: transform 0.3s;
+}
+.testimonial-card:hover {
+  transform: translateY(-4px);
+}
+
+.testimonial-quote {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  margin-bottom: 1.5rem;
+  opacity: 0.95;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+}
+
+.testimonial-name {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+}
+
+.testimonial-role {
+  font-size: var(--text-xs);
+  opacity: 0.7;
+}
+
+/* ── Newsletter ── */
+.newsletter {
+  padding: 6rem 3rem;
+  text-align: center;
+}
+
+.newsletter h2 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: var(--weight-bold);
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.newsletter p {
+  font-size: var(--text-lg);
+  opacity: 0.6;
+  margin-bottom: 2rem;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 0.9rem 1.5rem;
+  border: 2px solid var(--brand-dark);
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);
+  font-family: var(--font-sans);
+  background: var(--brand-white);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.newsletter-input:focus { border-color: var(--brand-coral); }
+.newsletter-input::placeholder { color: #aaa; }
+
+.newsletter-btn {
+  padding: 0.9rem 2rem;
+  background: var(--brand-coral);
+  color: var(--brand-white);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.newsletter-btn:hover {
+  background: var(--brand-coral-dark);
+  transform: scale(1.03);
+}
+
+/* ── Footer ── */
+.footer {
+  background: var(--brand-coral);
+  color: var(--brand-white);
+  padding: 4rem 3rem 2rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.footer-brand .logo {
+  font-size: var(--text-3xl);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.footer-brand p {
+  font-size: var(--text-sm);
+  opacity: 0.8;
+  line-height: var(--leading-relaxed);
+  max-width: 280px;
+}
+
+.footer-col h4 {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.footer-col ul {
+  list-style: none;
+}
+
+.footer-col li {
+  margin-bottom: 0.6rem;
+}
+
+.footer-col a {
+  color: var(--brand-white);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.footer-col a:hover { opacity: 1; }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  font-size: var(--text-sm);
+  opacity: 0.7;
+}
+
+.footer-social {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-social a {
+  color: var(--brand-white);
+  text-decoration: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  transition: background 0.2s;
+}
+.footer-social a:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .header { padding: 1rem 1.5rem; }
+  .header-nav { display: none; }
+  .hero { padding: 8rem 1.5rem 6rem; }
+  .products-grid { grid-template-columns: 1fr; max-width: 400px; }
+  .values-grid { grid-template-columns: 1fr; }
+  .testimonial-cards { grid-template-columns: 1fr; }
+  .newsletter-form { flex-direction: column; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header" id="header">
+  <a href="#" class="logo">Fizz & Folk</a>
+  <ul class="header-nav">
+    <li><a href="#story">故事</a></li>
+    <li><a href="#products">产品</a></li>
+    <li><a href="#values">理念</a></li>
+    <li><a href="#reviews">评价</a></li>
+  </ul>
+  <a href="#products" class="header-cta">立即选购 →</a>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-badge">🇪🇺 欧洲手工酿造 · Est. 2019</span>
+    <h1>为每一刻<br>干杯</h1>
+    <p class="hero-sub">来自巴塞罗那的手工气泡饮品，用天然果汁与矿泉水酿造，不含酒精，只为那一口清爽。</p>
+    <a href="#products" class="hero-cta">探索口味 →</a>
+  </div>
+  <div class="hero-scroll">
+    <span>向下探索</span>
+    <span>↓</span>
+  </div>
+</section>
+
+<!-- Marquee -->
+<section class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">天然果汁 <span class="dot"></span> 手工酿造 <span class="dot"></span> 零酒精 <span class="dot"></span> 可持续包装 <span class="dot"></span> 巴塞罗那风味 <span class="dot"></span> 无添加糖 <span class="dot"></span></span>
+    <span class="marquee-item">天然果汁 <span class="dot"></span> 手工酿造 <span class="dot"></span> 零酒精 <span class="dot"></span> 可持续包装 <span class="dot"></span> 巴塞罗那风味 <span class="dot"></span> 无添加糖 <span class="dot"></span></span>
+  </div>
+</section>
+
+<!-- Story -->
+<section class="story" id="story">
+  <span class="story-label">我们的故事</span>
+  <h2>从一间小厨房<br>到整个欧洲</h2>
+  <p class="story-text">
+    2019 年，两位好友在巴塞罗那的一间小厨房里，用当地的新鲜柠檬和传统气泡水配方，
+    试着酿造第一批饮品。没有花哨的营销，没有巨额投资——只有对品质的执着和对口味的热爱。
+    如今，Fizz & Folk 的气泡饮品已经出现在欧洲 12 个国家的餐桌上。
+  </p>
+  <a href="#" class="story-link">了解更多 →</a>
+</section>
+
+<!-- Products -->
+<section class="products" id="products">
+  <div class="products-header">
+    <h2>我们的饮品</h2>
+    <p>三款经典口味，每一口都是自然的馈赠</p>
+  </div>
+  <div class="products-grid">
+    <!-- Product 1: Limón -->
+    <div class="product-card">
+      <div class="product-visual">
+        <div class="bottle">
+          <div class="bottle-cap"></div>
+          <div class="bottle-neck"></div>
+          <div class="bottle-body">
+            <div class="bottle-bubbles">
+              <div class="bubble"></div>
+              <div class="bubble"></div>
+              <div class="bubble"></div>
+            </div>
+            <span class="bottle-label">Fizz<br>& Folk<br>Limón</span>
+          </div>
+        </div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Limón 柠檬气泡</h3>
+        <p class="product-desc">新鲜柠檬汁与矿泉水的完美结合，酸甜清爽，每一口都像地中海的微风。</p>
+        <div class="product-footer">
+          <span class="product-price">€2.90</span>
+          <button class="product-btn">加入购物车</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 2: Naranja -->
+    <div class="product-card">
+      <div class="product-visual">
+        <div class="bottle">
+          <div class="bottle-cap"></div>
+          <div class="bottle-neck"></div>
+          <div class="bottle-body">
+            <div class="bottle-bubbles">
+              <div class="bubble"></div>
+              <div class="bubble"></div>
+              <div class="bubble"></div>
+            </div>
+            <span class="bottle-label">Fizz<br>& Folk<br>Naranja</span>
+          </div>
+        </div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Naranja 橙子气泡</h3>
+        <p class="product-desc">西班牙瓦伦西亚血橙的浓郁风味，气泡细腻，适合搭配任何餐点。</p>
+        <div class="product-footer">
+          <span class="product-price">€2.90</span>
+          <button class="product-btn">加入购物车</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 3: Fresa -->
+    <div class="product-card">
+      <div class="product-visual">
+        <div class="bottle">
+          <div class="bottle-cap"></div>
+          <div class="bottle-neck"></div>
+          <div class="bottle-body">
+            <div class="bottle-bubbles">
+              <div class="bubble"></div>
+              <div class="bubble"></div>
+              <div class="bubble"></div>
+            </div>
+            <span class="bottle-label">Fizz<br>& Folk<br>Fresa</span>
+          </div>
+        </div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">Fresa 草莓气泡</h3>
+        <p class="product-desc">当季草莓的自然甜蜜，粉色的浪漫，是夏日午后的最佳伴侣。</p>
+        <div class="product-footer">
+          <span class="product-price">€3.20</span>
+          <button class="product-btn">加入购物车</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="values" id="values">
+  <div class="values-grid">
+    <div class="value-item">
+      <div class="value-icon">🌿</div>
+      <h3>100% 天然</h3>
+      <p>不使用人工色素、防腐剂或甜味剂。每一种口味都来自真实的水果。</p>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">♻️</div>
+      <h3>可持续包装</h3>
+      <p>100% 可回收玻璃瓶，铝制瓶盖，大豆油墨印刷标签。对地球温柔以待。</p>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">🤝</div>
+      <h3>社区共创</h3>
+      <p>与欧洲各地的果园主直接合作，确保每一杯都承载着土地的故事。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials" id="reviews">
+  <h2>他们说</h2>
+  <div class="testimonial-cards">
+    <div class="testimonial-card">
+      <p class="testimonial-quote">"终于找到了一款不含酒精又好喝的气泡饮品！周末聚会时朋友们都很喜欢。"</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">ML</div>
+        <div>
+          <div class="testimonial-name">María López</div>
+          <div class="testimonial-role">马德里 · 美食博主</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-quote">"Limón 口味是我在巴塞罗那旅行时发现的，现在它已经成了我家冰箱的常客。"</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">TK</div>
+        <div>
+          <div class="testimonial-name">Thomas Keller</div>
+          <div class="testimonial-role">柏林 · 软件工程师</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter">
+  <h2>加入我们的大家庭</h2>
+  <p>订阅获取新品资讯、独家优惠和季节限定口味</p>
+  <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='已订阅 ✓'; this.querySelector('button').style.background='#4CAF50'">
+    <input type="email" class="newsletter-input" placeholder="your@email.com" required>
+    <button type="submit" class="newsletter-btn">订阅</button>
+  </form>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">Fizz & Folk</a>
+      <p>来自巴塞罗那的手工气泡饮品，为每一刻干杯。</p>
+    </div>
+    <div class="footer-col">
+      <h4>产品</h4>
+      <ul>
+        <li><a href="#">Limón 柠檬</a></li>
+        <li><a href="#">Naranja 橙子</a></li>
+        <li><a href="#">Fresa 草莓</a></li>
+        <li><a href="#">季节限定</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>品牌</h4>
+      <ul>
+        <li><a href="#">我们的故事</a></li>
+        <li><a href="#">可持续发展</a></li>
+        <li><a href="#">合作伙伴</a></li>
+        <li><a href="#">媒体资料</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>支持</h4>
+      <ul>
+        <li><a href="#">联系我们</a></li>
+        <li><a href="#">配送信息</a></li>
+        <li><a href="#">退换政策</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Fizz & Folk. Todos los derechos reservados.</span>
+    <div class="footer-social">
+      <a href="#">IG</a>
+      <a href="#">TW</a>
+      <a href="#">FB</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Header scroll effect
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Intersection Observer for fade-in
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.product-card, .value-item, .testimonial-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
