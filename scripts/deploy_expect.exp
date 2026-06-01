@@ -1,0 +1,15 @@
+#!/usr/bin/expect
+set timeout 300
+
+# Step 1: Upload tarball
+spawn scp -P 11928 /tmp/design-lib-dist.tar.gz root@192.168.124.17:/tmp/
+expect "password:"
+send "Weta@0928\r"
+expect eof
+
+# Step 2: Extract on remote
+spawn ssh -p 11928 root@192.168.124.17 "cd /var/www/design-lib && tar xzf /tmp/design-lib-dist.tar.gz && rm /tmp/design-lib-dist.tar.gz && echo 'DEPLOY_OK'"
+expect "password:"
+send "Weta@0928\r"
+expect "DEPLOY_OK"
+expect eof

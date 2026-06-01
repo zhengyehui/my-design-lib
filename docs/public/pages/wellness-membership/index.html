@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VitaPlus — 你的健康管理会员</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ─────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: #fafdf9;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ── Announcement Bar ─────────────────────────────── */
+.announce-bar {
+  background: linear-gradient(90deg, #059669, #10b981);
+  color: #fff;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.announce-bar strong { font-weight: 700; }
+.announce-bar a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-left: 0.5rem;
+  font-weight: 600;
+}
+
+/* ── Navigation ───────────────────────────────────── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  padding: 0 2rem;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #059669;
+}
+.nav-logo .logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1rem;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: #059669; }
+.nav-cta {
+  background: #059669;
+  color: #fff !important;
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.25s;
+  border: none;
+  cursor: pointer;
+}
+.nav-cta:hover {
+  background: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(5,150,105,0.3);
+}
+
+/* ── Hero ──────────────────────────────────────────── */
+.hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 2rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.2);
+  color: #059669;
+  padding: 0.35rem 1rem;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.hero-badge .pulse {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #0a1f14;
+  margin-bottom: 1.5rem;
+}
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, #059669, #10b981, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-desc {
+  font-size: 1.15rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 520px;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  padding: 0.85rem 2rem;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(5,150,105,0.35);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text-secondary);
+  padding: 0.85rem 1.5rem;
+  border-radius: 100px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.btn-secondary:hover {
+  border-color: #059669;
+  color: #059669;
+  background: rgba(16,185,129,0.04);
+}
+.hero-stats {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+.hero-stat-num {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #059669;
+}
+.hero-stat-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.15rem;
+}
+
+/* Hero Visual */
+.hero-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-card-stack {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4/3;
+}
+.hero-phone {
+  position: absolute;
+  width: 260px;
+  height: 520px;
+  background: #fff;
+  border-radius: 36px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  overflow: hidden;
+  z-index: 2;
+}
+.phone-notch {
+  width: 120px;
+  height: 28px;
+  background: #0a1f14;
+  border-radius: 0 0 18px 18px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3;
+}
+.phone-screen {
+  padding: 1.5rem 1.25rem;
+}
+.phone-greeting {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}
+.phone-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+.phone-health-score {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border-radius: 16px;
+  padding: 1.25rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.score-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 6px solid #d1fae5;
+  border-top-color: #059669;
+  border-right-color: #10b981;
+  margin: 0 auto 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #059669;
+  animation: scoreRotate 3s ease-in-out infinite;
+}
+@keyframes scoreRotate {
+  0%, 100% { border-color: #d1fae5 #10b981 #059669 #d1fae5; }
+  50% { border-color: #d1fae5 #059669 #10b981 #d1fae5; }
+}
+.score-label {
+  font-size: 0.7rem;
+  color: #059669;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.phone-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.metric-pill {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.metric-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.metric-info {
+  font-size: 0.65rem;
+}
+.metric-value {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+.metric-name {
+  color: var(--color-text-muted);
+}
+
+/* Floating Cards */
+.float-card {
+  position: absolute;
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03);
+  z-index: 3;
+  animation: floatY 4s ease-in-out infinite;
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.float-card-1 {
+  left: 0;
+  top: 15%;
+  animation-delay: 0s;
+}
+.float-card-2 {
+  left: 10%;
+  bottom: 15%;
+  animation-delay: 1.5s;
+}
+.float-card-1 .fc-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.float-card-1 .fc-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+.float-card-1 .fc-sub {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+}
+.float-card-2 .fc-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.float-card-2 .fc-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+.float-card-2 .fc-sub {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Logos Bar ─────────────────────────────────────── */
+.logos-bar {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 2rem 0;
+  background: #fff;
+}
+.logos-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: center;
+}
+.logos-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.logos-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+.logos-row span {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  letter-spacing: 0.02em;
+}
+
+/* ── How It Works ──────────────────────────────────── */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #059669;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0a1f14;
+  margin-bottom: 1rem;
+  line-height: 1.15;
+}
+.section-desc {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  position: relative;
+}
+.steps-grid::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: linear-gradient(90deg, #d1fae5, #10b981, #d1fae5);
+  z-index: 0;
+}
+.step-card {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.step-num {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  box-shadow: 0 4px 20px rgba(5,150,105,0.3);
+}
+.step-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #0a1f14;
+}
+.step-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+/* ── Features ──────────────────────────────────────── */
+.features-section {
+  background: #fff;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.feature-card {
+  background: #fafdf9;
+  border: 1px solid rgba(16,185,129,0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10b981, #06b6d4);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(16,185,129,0.1);
+  border-color: rgba(16,185,129,0.2);
+}
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.fi-green { background: linear-gradient(135deg, #ecfdf5, #d1fae5); }
+.fi-blue { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
+.fi-purple { background: linear-gradient(135deg, #f5f3ff, #ede9fe); }
+.fi-amber { background: linear-gradient(135deg, #fffbeb, #fef3c7); }
+.fi-rose { background: linear-gradient(135deg, #fff1f2, #ffe4e6); }
+.fi-cyan { background: linear-gradient(135deg, #ecfeff, #cffafe); }
+.feature-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #0a1f14;
+}
+.feature-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Biomarker Showcase ────────────────────────────── */
+.biomarker-section {
+  background: linear-gradient(180deg, #fafdf9 0%, #ecfdf5 100%);
+}
+.biomarker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+.bio-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(16,185,129,0.08);
+  transition: all 0.3s;
+}
+.bio-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(16,185,129,0.08);
+}
+.bio-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+.bio-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #059669;
+  margin-bottom: 0.25rem;
+}
+.bio-name {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+.bio-bar {
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 100px;
+  margin-top: 0.75rem;
+  overflow: hidden;
+}
+.bio-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #10b981, #06b6d4);
+  transition: width 1.5s ease-out;
+}
+
+/* ── Pricing ───────────────────────────────────────── */
+.pricing-section {
+  background: #fff;
+  border-top: 1px solid var(--color-border);
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+.price-card {
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  position: relative;
+  transition: all 0.3s;
+}
+.price-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+}
+.price-card.featured {
+  border: 2px solid #059669;
+  background: linear-gradient(180deg, #ecfdf5 0%, #fff 30%);
+  transform: scale(1.03);
+  box-shadow: 0 20px 60px rgba(5,150,105,0.12);
+}
+.price-card.featured:hover {
+  transform: scale(1.03) translateY(-4px);
+}
+.price-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  padding: 0.3rem 1.25rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.price-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0a1f14;
+  margin-bottom: 0.5rem;
+}
+.price-desc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+.price-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.price-dollar {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+.price-num {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #0a1f14;
+  line-height: 1;
+}
+.price-period {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+.price-billing {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+.price-features {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.price-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  padding: 0.4rem 0;
+}
+.price-features li::before {
+  content: '✓';
+  color: #10b981;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.price-btn {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: none;
+}
+.price-btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text);
+}
+.price-btn-outline:hover {
+  border-color: #059669;
+  color: #059669;
+  background: rgba(16,185,129,0.04);
+}
+.price-btn-primary {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+}
+.price-btn-primary:hover {
+  box-shadow: 0 6px 24px rgba(5,150,105,0.35);
+  transform: translateY(-1px);
+}
+
+/* ── Doctors Team ──────────────────────────────────── */
+.team-section {
+  background: #fafdf9;
+}
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.team-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  transition: all 0.3s;
+}
+.team-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.06);
+}
+.team-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #fff;
+}
+.ta-1 { background: linear-gradient(135deg, #059669, #10b981); }
+.ta-2 { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+.ta-3 { background: linear-gradient(135deg, #0891b2, #22d3ee); }
+.ta-4 { background: linear-gradient(135deg, #d97706, #fbbf24); }
+.team-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0a1f14;
+  margin-bottom: 0.25rem;
+}
+.team-role {
+  font-size: 0.8rem;
+  color: #059669;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.team-bio {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* ── Testimonials ──────────────────────────────────── */
+.testimonials-section {
+  background: #fff;
+  border-top: 1px solid var(--color-border);
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.testimonial-card {
+  background: #fafdf9;
+  border: 1px solid rgba(16,185,129,0.08);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s;
+}
+.testimonial-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(16,185,129,0.08);
+}
+.testimonial-stars {
+  color: #fbbf24;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+.testimonial-text {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+.ta-g { background: linear-gradient(135deg, #059669, #10b981); }
+.ta-p { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+.ta-b { background: linear-gradient(135deg, #0891b2, #22d3ee); }
+.testimonial-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0a1f14;
+}
+.testimonial-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ── FAQ ────────────────────────────────────────────── */
+.faq-section {
+  background: #fafdf9;
+}
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.faq-item {
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  background: #fff;
+  transition: all 0.3s;
+}
+.faq-item:hover {
+  border-color: rgba(16,185,129,0.2);
+}
+.faq-question {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0a1f14;
+  text-align: left;
+  font-family: inherit;
+}
+.faq-arrow {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  transition: transform 0.3s;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+.faq-item.open .faq-arrow { transform: rotate(180deg); }
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.faq-item.open .faq-answer {
+  max-height: 200px;
+  padding: 0 1.5rem 1.25rem;
+}
+.faq-answer p {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+/* ── CTA Banner ────────────────────────────────────── */
+.cta-section {
+  padding: 5rem 2rem;
+  text-align: center;
+}
+.cta-box {
+  max-width: 800px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #059669, #10b981);
+  border-radius: 32px;
+  padding: 4rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.cta-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.cta-box::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.cta-box h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+.cta-box p {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  color: #059669;
+  padding: 0.9rem 2.5rem;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+}
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+
+/* ── Footer ────────────────────────────────────────── */
+.footer {
+  background: #0a1f14;
+  color: rgba(255,255,255,0.7);
+  padding: 4rem 2rem 2rem;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.footer-brand-icon {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.85rem;
+}
+.footer-tagline {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 300px;
+  margin-bottom: 1.25rem;
+}
+.footer-social {
+  display: flex;
+  gap: 0.75rem;
+}
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.25s;
+}
+.footer-social a:hover {
+  background: #10b981;
+  color: #fff;
+}
+.footer-col h4 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+.footer-col ul {
+  list-style: none;
+}
+.footer-col li {
+  margin-bottom: 0.6rem;
+}
+.footer-col a {
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: #10b981; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+.footer-bottom a { margin-left: 1.5rem; }
+.footer-bottom a:hover { color: #10b981; }
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+  .hero-desc { margin: 0 auto 2rem; }
+  .hero-actions { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-visual { display: none; }
+  .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps-grid::before { display: none; }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .biomarker-grid { grid-template-columns: repeat(2, 1fr); }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+  .price-card.featured { transform: none; }
+  .price-card.featured:hover { transform: translateY(-4px); }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .hero h1 { font-size: 2.25rem; }
+  .section-title { font-size: 1.75rem; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .biomarker-grid { grid-template-columns: 1fr 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Announcement Bar -->
+<div class="announce-bar">
+  🎉 限时优惠：年度会员立减 $50 — <a href="#pricing">立即加入</a>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="logo-icon">♡</div>
+      VitaPlus
+    </a>
+    <ul class="nav-links">
+      <li><a href="#how-it-works">运作方式</a></li>
+      <li><a href="#features">功能</a></li>
+      <li><a href="#pricing">定价</a></li>
+      <li><a href="#team">医疗团队</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#" class="nav-cta">成为会员</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="pulse"></span>
+      已服务 500,000+ 用户
+    </div>
+    <h1>让你的健康<br><span class="gradient-text">每年都在变好</span></h1>
+    <p class="hero-desc">
+      120+ 项生物标志物检测。为你量身定制的健康方案。
+      从数据到行动，一切尽在掌握。
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary">成为会员 →</button>
+      <button class="btn-secondary">▶ 查看演示</button>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">120+</div>
+        <div class="hero-stat-label">生物标志物检测</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">98%</div>
+        <div class="hero-stat-label">用户满意度</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">2,000+</div>
+        <div class="hero-stat-label">合作检测点</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-stack">
+      <!-- Floating Cards -->
+      <div class="float-card float-card-1">
+        <div class="fc-icon">🫀</div>
+        <div class="fc-title">心血管健康</div>
+        <div class="fc-sub">风险评分：低</div>
+      </div>
+      <div class="float-card float-card-2">
+        <div class="fc-icon">🧬</div>
+        <div class="fc-title">生物年龄</div>
+        <div class="fc-sub">比实际年龄年轻 3.2 岁</div>
+      </div>
+      <!-- Phone Mockup -->
+      <div class="hero-phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-greeting">Good morning,</div>
+          <div class="phone-name">Alex 👋</div>
+          <div class="phone-health-score">
+            <div class="score-ring">92</div>
+            <div class="score-label">综合健康评分</div>
+          </div>
+          <div class="phone-metrics">
+            <div class="metric-pill">
+              <div class="metric-dot" style="background:#10b981"></div>
+              <div class="metric-info">
+                <div class="metric-value">5.4%</div>
+                <div class="metric-name">血糖</div>
+              </div>
+            </div>
+            <div class="metric-pill">
+              <div class="metric-dot" style="background:#6366f1"></div>
+              <div class="metric-info">
+                <div class="metric-value">180</div>
+                <div class="metric-name">胆固醇</div>
+              </div>
+            </div>
+            <div class="metric-pill">
+              <div class="metric-dot" style="background:#f59e0b"></div>
+              <div class="metric-info">
+                <div class="metric-value">正常</div>
+                <div class="metric-name">甲状腺</div>
+              </div>
+            </div>
+            <div class="metric-pill">
+              <div class="metric-dot" style="background:#ef4444"></div>
+              <div class="metric-info">
+                <div class="metric-value">偏低</div>
+                <div class="metric-name">维D</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Logos Bar -->
+<div class="logos-bar">
+  <div class="logos-inner">
+    <div class="logos-label">被信赖于</div>
+    <div class="logos-row">
+      <span>Forbes</span>
+      <span>WSJ</span>
+      <span>Fortune</span>
+      <span>TechCrunch</span>
+      <span>Bloomberg</span>
+      <span>Wired</span>
+    </div>
+  </div>
+</div>
+
+<!-- How It Works -->
+<section class="section" id="how-it-works">
+  <div class="section-label">🔬 运作方式</div>
+  <h2 class="section-title">四步开启你的健康之旅</h2>
+  <p class="section-desc">从一次简单的血液检测开始，到获得个性化健康方案，全程有专业医疗团队支持。</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-title">检测基线</div>
+      <div class="step-desc">一次简单的 10 分钟抽血，检测 120+ 项生物标志物</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-title">数据解读</div>
+      <div class="step-desc">AI + 医生团队为你解读所有数据，生成完整健康画像</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-title">定制方案</div>
+      <div class="step-desc">基于你的数据，AI 生成循证健康方案（饮食、运动、补剂）</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-title">持续追踪</div>
+      <div class="step-desc">24/7 专属医疗团队支持，定期复检追踪改善进度</div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section features-section" id="features">
+  <div class="section-label">✨ 核心功能</div>
+  <h2 class="section-title">你的健康，全面掌控</h2>
+  <p class="section-desc">不仅仅是检测，更是一套完整的健康管理系统。</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon fi-green">🩸</div>
+      <div class="feature-title">120+ 生物标志物</div>
+      <div class="feature-desc">涵盖心血管、代谢、激素、维生素、炎症等全身系统，一次检测全面了解。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-blue">📊</div>
+      <div class="feature-title">统一健康数据</div>
+      <div class="feature-desc">上传历史报告，连接 Apple Health、Whoop、Oura 等可穿戴设备，数据一站管理。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-purple">🤖</div>
+      <div class="feature-title">AI 健康顾问</div>
+      <div class="feature-desc">基于你的数据训练的 AI 顾问，随时回答健康问题，提供个性化建议。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-amber">📋</div>
+      <div class="feature-title">个性化方案</div>
+      <div class="feature-desc">临床级别的行动方案，精确到饮食、运动、补剂、生活方式的每一项建议。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-rose">👨‍⚕️</div>
+      <div class="feature-title">24/7 医疗团队</div>
+      <div class="feature-desc">随时与你的专属医疗团队沟通，获取专业指导，无需排队等候。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-cyan">🔄</div>
+      <div class="feature-title">定期复检</div>
+      <div class="feature-desc">追踪你的健康趋势，验证方案效果，持续优化你的健康策略。</div>
+    </div>
+  </div>
+</section>
+
+<!-- Biomarker Showcase -->
+<section class="section biomarker-section">
+  <div class="section-label">🧬 生物标志物</div>
+  <h2 class="section-title">检测你身体的每一个信号</h2>
+  <p class="section-desc">120+ 项指标，覆盖 8 大健康系统。</p>
+  <div class="biomarker-grid">
+    <div class="bio-card">
+      <div class="bio-icon">🫀</div>
+      <div class="bio-value">24 项</div>
+      <div class="bio-name">心血管指标</div>
+      <div class="bio-bar"><div class="bio-bar-fill" style="width:85%"></div></div>
+    </div>
+    <div class="bio-card">
+      <div class="bio-icon">⚡</div>
+      <div class="bio-value">18 项</div>
+      <div class="bio-name">代谢功能</div>
+      <div class="bio-bar"><div class="bio-bar-fill" style="width:72%"></div></div>
+    </div>
+    <div class="bio-card">
+      <div class="bio-icon">🧪</div>
+      <div class="bio-value">16 项</div>
+      <div class="bio-name">激素水平</div>
+      <div class="bio-bar"><div class="bio-bar-fill" style="width:65%"></div></div>
+    </div>
+    <div class="bio-card">
+      <div class="bio-icon">🛡️</div>
+      <div class="bio-value">12 项</div>
+      <div class="bio-name">免疫功能</div>
+      <div class="bio-bar"><div class="bio-bar-fill" style="width:55%"></div></div>
+    </div>
+    <div class="bio-card">
+      <div class="bio-icon">🦴</div>
+      <div class="bio-value">10 项</div>
+      <div class="bio-name">骨骼健康</div>
+      <div class="bio-bar"><div class="bio-bar-fill" style="width:48%"></div></div>
+    </div>
+    <div class="bio-card">
+      <div class="bio-icon">🧬</div>
+      <div class="bio-value">8 项</div>
+      <div class="bio-name">营养状态</div>
+      <div class="bio-bar"><div class="bio-bar-fill" style="width:40%"></div></div>
+    </div>
+    <div class="bio-card">
+      <div class="bio-icon">🔬</div>
+      <div class="bio-value">14 项</div>
+      <div class="bio-name">肝脏功能</div>
+      <div class="bio-bar"><div class="bio-bar-fill" style="width:60%"></div></div>
+    </div>
+    <div class="bio-card">
+      <div class="bio-icon">💧</div>
+      <div class="bio-value">18 项</div>
+      <div class="bio-name">肾脏功能</div>
+      <div class="bio-bar"><div class="bio-bar-fill" style="width:70%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="section pricing-section" id="pricing">
+  <div class="section-label">💰 定价方案</div>
+  <h2 class="section-title">选择适合你的方案</h2>
+  <p class="section-desc">透明定价，无隐藏费用。所有方案均含 120+ 项检测。</p>
+  <div class="pricing-grid">
+    <!-- Basic -->
+    <div class="price-card">
+      <div class="price-name">基础版</div>
+      <div class="price-desc">适合初次体验全面健康检测的用户</div>
+      <div class="price-amount">
+        <span class="price-dollar">$</span>
+        <span class="price-num">199</span>
+      </div>
+      <div class="price-billing">/年</div>
+      <ul class="price-features">
+        <li>120+ 生物标志物检测</li>
+        <li>AI 健康报告解读</li>
+        <li>个性化健康评分</li>
+        <li>基础健康方案</li>
+        <li>App 数据追踪</li>
+      </ul>
+      <button class="price-btn price-btn-outline">选择基础版</button>
+    </div>
+    <!-- Pro -->
+    <div class="price-card featured">
+      <div class="price-badge">🔥 最受欢迎</div>
+      <div class="price-name">专业版</div>
+      <div class="price-desc">获得完整的健康管理体验和持续支持</div>
+      <div class="price-amount">
+        <span class="price-dollar">$</span>
+        <span class="price-num">399</span>
+      </div>
+      <div class="price-billing">/年</div>
+      <ul class="price-features">
+        <li>基础版全部功能</li>
+        <li>24/7 专属医疗团队</li>
+        <li>AI 健康顾问无限咨询</li>
+        <li>个性化补剂方案</li>
+        <li>可穿戴设备连接</li>
+        <li>每季度复检</li>
+        <li>历史数据趋势分析</li>
+      </ul>
+      <button class="price-btn price-btn-primary">选择专业版</button>
+    </div>
+    <!-- Elite -->
+    <div class="price-card">
+      <div class="price-name">精英版</div>
+      <div class="price-desc">顶级全面的健康管理和长寿优化方案</div>
+      <div class="price-amount">
+        <span class="price-dollar">$</span>
+        <span class="price-num">799</span>
+      </div>
+      <div class="price-billing">/年</div>
+      <ul class="price-features">
+        <li>专业版全部功能</li>
+        <li>首席医疗官 1v1 咨询</li>
+        <li>基因检测分析</li>
+        <li>肠道微生物组检测</li>
+        <li>癌症早筛（Grail Galleri）</li>
+        <li>每月复检</li>
+        <li>肽类治疗方案</li>
+        <li>处方药管理</li>
+      </ul>
+      <button class="price-btn price-btn-outline">选择精英版</button>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section class="section team-section" id="team">
+  <div class="section-label">👨‍⚕️ 医疗团队</div>
+  <h2 class="section-title">由顶尖医生和科学家打造</h2>
+  <p class="section-desc">40 年以上的健康与长寿领域专业经验。</p>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar ta-1">陈</div>
+      <div class="team-name">陈博士</div>
+      <div class="team-role">首席长寿官</div>
+      <div class="team-bio">Board-certified 长寿医学专家，曾任 Virta Health 产品负责人</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar ta-2">李</div>
+      <div class="team-name">李博士</div>
+      <div class="team-role">临床医学总监</div>
+      <div class="team-bio">整合医学先驱，领导北美最大的整合医疗诊所</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar ta-3">王</div>
+      <div class="team-name">王教授</div>
+      <div class="team-role">UCLA 医学教授</div>
+      <div class="team-bio">代谢健康与长寿领域权威，NYT 畅销书作者</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar ta-4">张</div>
+      <div class="team-name">张博士</div>
+      <div class="team-role">首席医疗官</div>
+      <div class="team-bio">全国性医疗实践创始人，专注个性化健康管理</div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section testimonials-section">
+  <div class="section-label">💬 用户评价</div>
+  <h2 class="section-title">改变生活的真实故事</h2>
+  <p class="section-desc">60% 的会员表示 VitaPlus 发现了之前被忽略的健康问题。</p>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"我花了大半年觉得身体不对劲。结果一个简单的血液检测就找到了激素失衡的根本原因。VitaPlus 让我重获掌控感。"</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar ta-g">C</div>
+        <div>
+          <div class="testimonial-name">陈小姐，29 岁</div>
+          <div class="testimonial-meta">会员 8 个月</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"他们告诉我糖尿病风险被高估了，但 VitaPlus 的检测发现我的 A1c 确实很高。如果不是这次检测，我可能永远不会知道。"</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar ta-p">T</div>
+        <div>
+          <div class="testimonial-name">Thach，37 岁</div>
+          <div class="testimonial-meta">会员 1 年</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"我之前在健康上投入了很多努力但毫无效果，直到获得了真正能告诉我该关注什么的检测。VitaPlus 给了我一个节省时间和金钱的补剂方案。"</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar ta-b">J</div>
+        <div>
+          <div class="testimonial-name">Joel，55 岁</div>
+          <div class="testimonial-meta">会员 2 年</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-section" id="faq">
+  <div class="section-label">❓ 常见问题</div>
+  <h2 class="section-title">你可能想知道的</h2>
+  <div class="faq-list">
+    <div class="faq-item open">
+      <button class="faq-question">
+        VitaPlus 和普通体检有什么区别？
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">
+        <p>普通体检通常只检测 20-30 项基础指标。VitaPlus 检测 120+ 项生物标志物，覆盖心血管、代谢、激素、营养等 8 大系统，加上 AI 分析和个性化方案，提供远超普通体检的深度健康洞察。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        检测过程复杂吗？
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">
+        <p>非常简单。你可以在全美 2,000+ 个 Quest 检测点完成抽血，仅需 10 分钟。也支持上门采血服务。结果通常在 3-5 个工作日内出。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        我的数据安全吗？
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">
+        <p>绝对安全。我们使用银行级加密技术保护你的所有健康数据。你的数据永远不会被出售或分享给第三方。你可以随时导出或删除你的数据。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        可以使用 HSA/FSA 支付吗？
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">
+        <p>可以！VitaPlus 的所有方案均支持 HSA（健康储蓄账户）和 FSA（弹性支出账户）支付，让你的健康投资更加灵活。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        AI 建议可靠吗？
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">
+        <p>我们的 AI 模型基于循证医学训练，每条建议都有科学文献支持。同时，所有个性化方案都经过持证医生审核，确保安全性和准确性。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">
+        可以随时取消吗？
+        <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">
+        <p>当然可以。所有方案均无长期合约，你可以随时取消。我们还提供 30 天无理由退款保证，让你零风险体验。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Banner -->
+<section class="cta-section">
+  <div class="cta-box">
+    <h2>开始你的健康升级之旅</h2>
+    <p>加入 500,000+ 已经在使用 VitaPlus 的用户</p>
+    <button class="cta-btn">成为会员 →</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div class="footer-brand-icon">♡</div>
+          VitaPlus
+        </div>
+        <p class="footer-tagline">让你的健康每年都在变好。120+ 生物标志物检测，AI 驱动的个性化健康方案。</p>
+        <div class="footer-social">
+          <a href="#">𝕏</a>
+          <a href="#">in</a>
+          <a href="#">ig</a>
+          <a href="#">yt</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>产品</h4>
+        <ul>
+          <li><a href="#">健康检测</a></li>
+          <li><a href="#">AI 顾问</a></li>
+          <li><a href="#">可穿戴连接</a></li>
+          <li><a href="#">医疗团队</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>资源</h4>
+        <ul>
+          <li><a href="#">健康博客</a></li>
+          <li><a href="#">研究论文</a></li>
+          <li><a href="#">帮助中心</a></li>
+          <li><a href="#">API 文档</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>公司</h4>
+        <ul>
+          <li><a href="#">关于我们</a></li>
+          <li><a href="#">医疗团队</a></li>
+          <li><a href="#">职业机会</a></li>
+          <li><a href="#">联系我们</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 VitaPlus. All rights reserved.</span>
+      <div>
+        <a href="#">隐私政策</a>
+        <a href="#">服务条款</a>
+        <a href="#">Cookie 设置</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- FAQ Toggle Script -->
+<script>
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+</script>
+
+</body>
+</html>

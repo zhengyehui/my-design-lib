@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Courier — 暗色极简邮件客户端</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ──────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg-card: #141414;
+  --bg-card-hover: #1a1a1a;
+  --surface: #1c1c1c;
+  --border: rgba(255,255,255,0.06);
+  --border-hover: rgba(255,255,255,0.12);
+  --text-primary: rgba(255,255,255,0.95);
+  --text-secondary: rgba(255,255,255,0.6);
+  --text-muted: rgba(255,255,255,0.35);
+  --accent: #5890E7;
+  --accent-glow: rgba(88,144,231,0.15);
+  --accent-subtle: rgba(88,144,231,0.08);
+  --serif: 'Georgia', 'Times New Roman', serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --glass: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Navigation ────────────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 3rem;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.nav-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.nav-logo-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text-primary); }
+
+.nav-cta {
+  padding: 0.5rem 1.25rem;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: var(--text-primary) !important;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.nav-cta:hover {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: var(--border-hover);
+}
+
+/* ── Hero ──────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(88,144,231,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: var(--accent-subtle);
+  border: 1px solid rgba(88,144,231,0.15);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 800px;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.btn-primary {
+  padding: 0.85rem 2rem;
+  background: var(--text-primary);
+  color: var(--bg);
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-default);
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px rgba(255,255,255,0.1);
+}
+
+.btn-glass {
+  padding: 0.85rem 2rem;
+  background: var(--glass);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-default);
+  text-decoration: none;
+}
+
+.btn-glass:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--border-hover);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Hero Mockup ───────────────────────────────────────── */
+.hero-mockup {
+  margin-top: 4rem;
+  width: 100%;
+  max-width: 900px;
+  animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.mockup-window {
+  background: #111;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+.mockup-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #161616;
+  border-bottom: 1px solid var(--border);
+}
+
+.mockup-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.mockup-dot:nth-child(1) { background: #ff5f57; }
+.mockup-dot:nth-child(2) { background: #febc2e; }
+.mockup-dot:nth-child(3) { background: #28c840; }
+
+.mockup-toolbar-title {
+  flex: 1;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.mockup-body {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 420px;
+}
+
+/* Sidebar */
+.mockup-sidebar {
+  background: #0e0e0e;
+  border-right: 1px solid var(--border);
+  padding: 1.25rem;
+}
+
+.sidebar-section {
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 2px;
+}
+
+.sidebar-item:hover {
+  background: rgba(255,255,255,0.04);
+  color: var(--text-primary);
+}
+
+.sidebar-item.active {
+  background: rgba(88,144,231,0.1);
+  color: var(--accent);
+}
+
+.sidebar-item .icon {
+  width: 18px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.sidebar-item .count {
+  margin-left: auto;
+  font-size: 0.7rem;
+  background: rgba(255,255,255,0.06);
+  padding: 0.1rem 0.45rem;
+  border-radius: 100px;
+  color: var(--text-muted);
+}
+
+/* Mail List */
+.mail-list {
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.mail-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mail-list-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.mail-list-count {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.mail-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.mail-item:hover { background: rgba(255,255,255,0.02); }
+
+.mail-item.unread { background: rgba(88,144,231,0.03); }
+
+.mail-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.mail-content { flex: 1; min-width: 0; }
+
+.mail-from {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mail-subject {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mail-preview {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.15rem;
+}
+
+.mail-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.mail-time {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.mail-unread-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+/* Detail Panel */
+.mail-detail {
+  padding: 1.5rem 2rem;
+}
+
+.mail-detail-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mail-detail-subject {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.mail-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.mail-detail-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.mail-detail-body {
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.mail-detail-body p { margin-bottom: 1rem; }
+
+.mail-detail-body .signature {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.mail-detail-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.mail-action-btn {
+  padding: 0.5rem 1rem;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.mail-action-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+}
+
+/* ── Section Shared ────────────────────────────────────── */
+.section {
+  padding: 6rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+/* ── Feature Cards ─────────────────────────────────────── */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2rem;
+  transition: all 0.3s var(--ease-default);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-subtle), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.feature-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.feature-card:hover::before { opacity: 1; }
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--accent-subtle);
+  border: 1px solid rgba(88,144,231,0.12);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  margin-bottom: 1.25rem;
+}
+
+.feature-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.feature-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Speed Section ─────────────────────────────────────── */
+.speed-section {
+  padding: 6rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.speed-demo {
+  margin-top: 3rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2.5rem;
+}
+
+.speed-bar-container {
+  margin-bottom: 1.5rem;
+}
+
+.speed-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.speed-label span:first-child {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.speed-label span:last-child {
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.speed-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.speed-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: var(--accent);
+  animation: speedFill 2s ease-out forwards;
+  width: 0;
+}
+
+@keyframes speedFill {
+  to { width: var(--target-width); }
+}
+
+.speed-bar-fill:nth-child(1) { --target-width: 98%; animation-delay: 0.3s; }
+
+/* ── Keyboard Shortcuts Section ────────────────────────── */
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.shortcut-item:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-card-hover);
+}
+
+.shortcut-action {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.shortcut-keys {
+  display: flex;
+  gap: 0.35rem;
+}
+
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 26px;
+  padding: 0 0.5rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Security Section ──────────────────────────────────── */
+.security-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.security-item {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.security-item:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.security-icon {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.security-item h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.security-item p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ── Testimonial ───────────────────────────────────────── */
+.testimonial-section {
+  padding: 6rem 3rem;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.testimonial-quote {
+  font-family: var(--serif);
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-primary);
+  font-style: italic;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.testimonial-quote::before {
+  content: '"';
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 4rem;
+  color: var(--accent);
+  opacity: 0.3;
+  font-style: normal;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.testimonial-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.testimonial-role {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ── CTA Section ───────────────────────────────────────── */
+.cta-section {
+  padding: 6rem 3rem;
+  text-align: center;
+  position: relative;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(88,144,231,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.cta-section p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+
+.cta-steps {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.cta-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cta-step-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-subtle);
+  border: 1px solid rgba(88,144,231,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.cta-step-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ── Footer ────────────────────────────────────────────── */
+.footer {
+  padding: 3rem;
+  border-top: 1px solid var(--border);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-top: 0.75rem;
+  max-width: 280px;
+}
+
+.footer-col h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.footer-col a {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 0.3rem 0;
+  transition: color 0.15s;
+}
+
+.footer-col a:hover { color: var(--text-primary); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.footer-socials {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-socials a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+  font-size: 0.85rem;
+}
+
+.footer-socials a:hover { color: var(--text-primary); }
+
+/* ── Divider ───────────────────────────────────────────── */
+.divider {
+  max-width: 1100px;
+  margin: 0 auto;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 7rem 1.5rem 3rem; }
+  .hero-actions { flex-direction: column; width: 100%; max-width: 300px; }
+  .section { padding: 4rem 1.5rem; }
+  .features-grid { grid-template-columns: 1fr; }
+  .shortcuts-grid { grid-template-columns: 1fr; }
+  .security-grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-steps { flex-direction: column; gap: 1.5rem; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .mockup-body { grid-template-columns: 1fr; }
+  .mockup-sidebar { display: none; }
+}
+
+/* ── Scan Line Animation ───────────────────────────────── */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.15;
+  animation: scanMove 4s linear infinite;
+}
+
+@keyframes scanMove {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* ── Floating Particles ────────────────────────────────── */
+.particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: float 6s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { left: 15%; animation-delay: 0s; }
+.particle:nth-child(2) { left: 35%; animation-delay: 1.5s; }
+.particle:nth-child(3) { left: 55%; animation-delay: 3s; }
+.particle:nth-child(4) { left: 75%; animation-delay: 4.5s; }
+.particle:nth-child(5) { left: 90%; animation-delay: 0.8s; }
+
+@keyframes float {
+  0% { bottom: -10px; opacity: 0; }
+  20% { opacity: 0.4; }
+  80% { opacity: 0.4; }
+  100% { bottom: 100%; opacity: 0; }
+}
+
+/* ── Inbox Count Animation ─────────────────────────────── */
+.inbox-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  background: var(--accent-subtle);
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  border: 1px solid rgba(88,144,231,0.12);
+}
+
+.inbox-count .num {
+  font-weight: 700;
+  animation: countUp 1.5s ease-out forwards;
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">✉</div>
+    <span class="nav-logo-text">Courier</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#speed">Speed</a></li>
+    <li><a href="#shortcuts">Shortcuts</a></li>
+    <li><a href="#security">Security</a></li>
+    <li><a href="#" class="nav-cta">Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+  
+  <div class="hero-badge">
+    <span></span>
+    Now in Public Beta
+  </div>
+  
+  <h1>Email, <em>reimagined</em><br>for the modern inbox</h1>
+  
+  <p class="hero-sub">
+    A dark, minimal email client that respects your focus. 
+    Zero clutter. Zero distractions. Just your messages.
+  </p>
+  
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">Download for Mac</a>
+    <a href="#" class="btn-glass">Watch Demo →</a>
+  </div>
+  
+  <div class="hero-mockup">
+    <div class="mockup-window">
+      <div class="mockup-toolbar">
+        <div class="mockup-dot"></div>
+        <div class="mockup-dot"></div>
+        <div class="mockup-dot"></div>
+        <span class="mockup-toolbar-title">Courier — Inbox</span>
+      </div>
+      <div class="mockup-body">
+        <!-- Sidebar -->
+        <div class="mockup-sidebar">
+          <div class="sidebar-section">
+            <div class="sidebar-label">Mailbox</div>
+            <div class="sidebar-item active">
+              <span class="icon">📥</span> Inbox
+              <span class="count">12</span>
+            </div>
+            <div class="sidebar-item">
+              <span class="icon">⭐</span> Starred
+              <span class="count">3</span>
+            </div>
+            <div class="sidebar-item">
+              <span class="icon">📤</span> Sent
+            </div>
+            <div class="sidebar-item">
+              <span class="icon">📝</span> Drafts
+              <span class="count">1</span>
+            </div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Labels</div>
+            <div class="sidebar-item">
+              <span class="icon" style="color:#5890E7;">●</span> Work
+            </div>
+            <div class="sidebar-item">
+              <span class="icon" style="color:#10b981;">●</span> Personal
+            </div>
+            <div class="sidebar-item">
+              <span class="icon" style="color:#f59e0b;">●</span> Finance
+            </div>
+          </div>
+        </div>
+        
+        <!-- Mail List -->
+        <div class="mail-list">
+          <div class="mail-list-header">
+            <span class="mail-list-title">Inbox</span>
+            <span class="mail-list-count">12 messages</span>
+          </div>
+          
+          <div class="mail-item unread">
+            <div class="mail-avatar" style="background: linear-gradient(135deg, #5890E7, #7c3aed);">AK</div>
+            <div class="mail-content">
+              <div class="mail-from">Alex Kim <span class="inbox-count"><span class="num">New</span></span></div>
+              <div class="mail-subject">Re: Q2 Product Roadmap — Final Review</div>
+              <div class="mail-preview">Hey team, I've finished reviewing the roadmap and have a few thoughts on the timeline...</div>
+            </div>
+            <div class="mail-meta">
+              <span class="mail-time">2m ago</span>
+              <div class="mail-unread-dot"></div>
+            </div>
+          </div>
+          
+          <div class="mail-item unread">
+            <div class="mail-avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">SL</div>
+            <div class="mail-content">
+              <div class="mail-from">Sarah Lin</div>
+              <div class="mail-subject">Design System v3.0 — Component Updates</div>
+              <div class="mail-preview">The new component library is ready for review. I've updated the token system...</div>
+            </div>
+            <div class="mail-meta">
+              <span class="mail-time">15m ago</span>
+              <div class="mail-unread-dot"></div>
+            </div>
+          </div>
+          
+          <div class="mail-item">
+            <div class="mail-avatar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">MJ</div>
+            <div class="mail-content">
+              <div class="mail-from">Marcus Johnson</div>
+              <div class="mail-subject">Weekly Standup Notes — May 28</div>
+              <div class="mail-preview">Here's a summary of today's standup. Key points: API migration on track...</div>
+            </div>
+            <div class="mail-meta">
+              <span class="mail-time">1h ago</span>
+            </div>
+          </div>
+          
+          <div class="mail-item">
+            <div class="mail-avatar" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">EP</div>
+            <div class="mail-content">
+              <div class="mail-from">Elena Petrova</div>
+              <div class="mail-subject">Conference Talk — Abstract Accepted!</div>
+              <div class="mail-preview">Great news! Your talk "Building Design Systems at Scale" has been accepted...</div>
+            </div>
+            <div class="mail-meta">
+              <span class="mail-time">3h ago</span>
+            </div>
+          </div>
+          
+          <div class="mail-item">
+            <div class="mail-avatar" style="background: linear-gradient(135deg, #6366f1, #3b82f6);">RN</div>
+            <div class="mail-content">
+              <div class="mail-from">Raj Nair</div>
+              <div class="mail-subject">Invoice #2847 — May Services</div>
+              <div class="mail-preview">Please find attached the invoice for May consulting services. Net 30 terms...</div>
+            </div>
+            <div class="mail-meta">
+              <span class="mail-time">5h ago</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Detail Panel -->
+        <div class="mail-detail">
+          <div class="mail-detail-header">
+            <div class="mail-detail-subject">Re: Q2 Product Roadmap — Final Review</div>
+            <div class="mail-detail-meta">
+              <div class="mail-detail-avatar" style="background: linear-gradient(135deg, #5890E7, #7c3aed);">AK</div>
+              <div>
+                <div style="font-weight:600; color: var(--text-primary); font-size:0.85rem;">Alex Kim</div>
+                <div>alex@company.com · 2 minutes ago</div>
+              </div>
+            </div>
+          </div>
+          <div class="mail-detail-body">
+            <p>Hey team,</p>
+            <p>I've finished reviewing the Q2 roadmap and overall it looks solid. A few thoughts:</p>
+            <p>The API migration timeline seems aggressive but achievable if we prioritize the core endpoints first. I'd suggest we tackle authentication and user management in Sprint 1, then move to the data layer in Sprint 2.</p>
+            <p>For the design system updates, Sarah's proposal to move to CSS custom properties aligns perfectly with our performance goals. Let's greenlight that work.</p>
+            <p>Happy to discuss in our Thursday sync.</p>
+            <div class="signature">
+              Best,<br>Alex Kim<br>VP of Engineering
+            </div>
+          </div>
+          <div class="mail-detail-actions">
+            <button class="mail-action-btn">↩ Reply</button>
+            <button class="mail-action-btn">↪ Forward</button>
+            <button class="mail-action-btn">📎 Attach</button>
+            <button class="mail-action-btn">⋯ More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="section-label">Features</div>
+  <div class="section-title">Everything you need.<br>Nothing you don't.</div>
+  <p class="section-desc">
+    Built for people who live in their inbox but refuse to be overwhelmed by it.
+  </p>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Instant Search</h3>
+      <p>Find any email in milliseconds. Full-text search across your entire mailbox with fuzzy matching and smart filters.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Smart Focus</h3>
+      <p>AI-powered priority inbox that learns what matters to you. Important emails surface first, noise stays buried.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⌨️</div>
+      <h3>Keyboard First</h3>
+      <p>Navigate your entire inbox without touching a mouse. Vim-inspired shortcuts for power users, discoverable for everyone.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>End-to-End Encryption</h3>
+      <p>Your emails are encrypted at rest and in transit. Zero-knowledge architecture means only you can read your mail.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔗</div>
+      <h3>Seamless Integrations</h3>
+      <p>Connect with Slack, Notion, Linear, and 50+ tools. Turn emails into tasks, calendar events, or CRM entries.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <h3>Themes & Customization</h3>
+      <p>Dark, light, or create your own. Customize every aspect of the interface to match your workflow and style.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Speed -->
+<section class="speed-section" id="speed">
+  <div class="section-label">Performance</div>
+  <div class="section-title">Blazingly fast.<br>By design.</div>
+  <p class="section-desc">
+    Courier loads your entire mailbox in under 200ms. No spinning wheels, no waiting.
+  </p>
+  
+  <div class="speed-demo">
+    <div class="speed-bar-container">
+      <div class="speed-label">
+        <span>Courier</span>
+        <span>142ms</span>
+      </div>
+      <div class="speed-bar">
+        <div class="speed-bar-fill" style="--target-width: 98%; animation-delay: 0.3s;"></div>
+      </div>
+    </div>
+    <div class="speed-bar-container">
+      <div class="speed-label">
+        <span>Outlook</span>
+        <span>2,340ms</span>
+      </div>
+      <div class="speed-bar">
+        <div class="speed-bar-fill" style="--target-width: 45%; animation-delay: 0.5s; background: #64748b;"></div>
+      </div>
+    </div>
+    <div class="speed-bar-container">
+      <div class="speed-label">
+        <span>Gmail</span>
+        <span>1,890ms</span>
+      </div>
+      <div class="speed-bar">
+        <div class="speed-bar-fill" style="--target-width: 52%; animation-delay: 0.7s; background: #64748b;"></div>
+      </div>
+    </div>
+    <div class="speed-bar-container">
+      <div class="speed-label">
+        <span>Apple Mail</span>
+        <span>890ms</span>
+      </div>
+      <div class="speed-bar">
+        <div class="speed-bar-fill" style="--target-width: 68%; animation-delay: 0.9s; background: #64748b;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Keyboard Shortcuts -->
+<section class="section" id="shortcuts">
+  <div class="section-label">Keyboard</div>
+  <div class="section-title">Shortcuts that<br>feel like home</div>
+  <p class="section-desc">
+    Every action has a shortcut. Learn once, fly forever.
+  </p>
+  
+  <div class="shortcuts-grid">
+    <div class="shortcut-item">
+      <span class="shortcut-action">Compose new email</span>
+      <div class="shortcut-keys"><kbd>C</kbd></div>
+    </div>
+    <div class="shortcut-item">
+      <span class="shortcut-action">Reply to sender</span>
+      <div class="shortcut-keys"><kbd>R</kbd></div>
+    </div>
+    <div class="shortcut-item">
+      <span class="shortcut-action">Reply all</span>
+      <div class="shortcut-keys"><kbd>Shift</kbd><kbd>R</kbd></div>
+    </div>
+    <div class="shortcut-item">
+      <span class="shortcut-action">Forward email</span>
+      <div class="shortcut-keys"><kbd>F</kbd></div>
+    </div>
+    <div class="shortcut-item">
+      <span class="shortcut-action">Archive & next</span>
+      <div class="shortcut-keys"><kbd>E</kbd></div>
+    </div>
+    <div class="shortcut-item">
+      <span class="shortcut-action">Star / unstar</span>
+      <div class="shortcut-keys"><kbd>S</kbd></div>
+    </div>
+    <div class="shortcut-item">
+      <span class="shortcut-action">Search emails</span>
+      <div class="shortcut-keys"><kbd>/</kbd></div>
+    </div>
+    <div class="shortcut-item">
+      <span class="shortcut-action">Mark as unread</span>
+      <div class="shortcut-keys"><kbd>Shift</kbd><kbd>U</kbd></div>
+    </div>
+    <div class="shortcut-item">
+      <span class="shortcut-action">Move to folder</span>
+      <div class="shortcut-keys"><kbd>V</kbd></div>
+    </div>
+    <div class="shortcut-item">
+      <span class="shortcut-action">Toggle sidebar</span>
+      <div class="shortcut-keys"><kbd>[</kbd></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Testimonial -->
+<section class="testimonial-section">
+  <div class="testimonial-quote">
+    Courier replaced three apps on my dock. It's the email client I didn't know I needed — until I couldn't go back.
+  </div>
+  <div class="testimonial-author">
+    <div class="testimonial-avatar">JW</div>
+    <div>
+      <div class="testimonial-name">Jamie Wong</div>
+      <div class="testimonial-role">Lead Designer at Vercel</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Security -->
+<section class="section" id="security">
+  <div class="section-label">Security</div>
+  <div class="section-title">Your privacy,<br>non-negotiable</div>
+  <p class="section-desc">
+    We never read, scan, or sell your email data. Your inbox is yours alone.
+  </p>
+  
+  <div class="security-grid">
+    <div class="security-item">
+      <div class="security-icon">🔐</div>
+      <h4>E2E Encryption</h4>
+      <p>AES-256 encryption for all emails at rest and in transit</p>
+    </div>
+    <div class="security-item">
+      <div class="security-icon">🛡️</div>
+      <h4>Zero Knowledge</h4>
+      <p>We can't read your emails even if we wanted to</p>
+    </div>
+    <div class="security-item">
+      <div class="security-icon">🌍</div>
+      <h4>GDPR Compliant</h4>
+      <p>Full compliance with EU data protection regulations</p>
+    </div>
+    <div class="security-item">
+      <div class="security-icon">🔍</div>
+      <h4>Open Source</h4>
+      <p>Auditable code — verify our security claims yourself</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready to reclaim<br>your inbox?</h2>
+  <p>Join 12,000+ professionals who've already made the switch.</p>
+  
+  <div class="cta-steps">
+    <div class="cta-step">
+      <div class="cta-step-num">1</div>
+      <div class="cta-step-text">Download Courier</div>
+    </div>
+    <div class="cta-step">
+      <div class="cta-step-num">2</div>
+      <div class="cta-step-text">Connect your accounts</div>
+    </div>
+    <div class="cta-step">
+      <div class="cta-step-num">3</div>
+      <div class="cta-step-text">Experience the difference</div>
+    </div>
+  </div>
+  
+  <a href="#" class="btn-primary" style="display: inline-block;">Download for Mac</a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom: 0.5rem;">
+        <div class="nav-logo-icon">✉</div>
+        <span class="nav-logo-text">Courier</span>
+      </div>
+      <p>A dark, minimal email client built for focus. No clutter, no distractions — just your messages.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+      <a href="#">Changelog</a>
+      <a href="#">Download</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#">Documentation</a>
+      <a href="#">API Reference</a>
+      <a href="#">Blog</a>
+      <a href="#">Status</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Courier. All rights reserved.</span>
+    <div class="footer-socials">
+      <a href="#">Twitter</a>
+      <a href="#">GitHub</a>
+      <a href="#">Discord</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
