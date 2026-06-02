@@ -568,6 +568,15 @@ const pages = [
     rating: 9.4,
     description: '暗色极简邮件客户端 — 三栏邮件 UI mockup + Serif Hero + 毛玻璃按钮 + 速度对比动画 + 键盘快捷键网格 + 安全特性展示',
   },
+  {
+    id: 'motion-studio',
+    title: 'Kinetic Studio 动态设计工作室',
+    category: 'creative',
+    tags: ['动态设计', '视频制作', '暗色主题', 'Bento Grid', 'Marquee'],
+    colors: ['#06060c', '#6366f1', '#ec4899'],
+    rating: 9.4,
+    description: '暗色系动态设计工作室落地页，浮动光球背景 + 渐变文字 Hero + Showreel 视频区 + CSS 时间线进度条 + Bento Grid 服务网格 + 作品展示 + Marquee 客户滚动',
+  },
 ]
 
 const categories = [
@@ -625,12 +634,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 58 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 59 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-  <meta property="og:description" content="58 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+  <meta property="og:description" content="59 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -639,7 +648,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 58 个完整页面</span>
+      <span>📦 59 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

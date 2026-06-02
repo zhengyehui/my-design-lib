@@ -295,7 +295,8 @@ export default defineConfig({
             { text: '太空主题 404', link: '/pages/404-creative' },
             { text: 'Pulse 上线预告', link: '/pages/coming-soon' },
             { text: 'Mono 字体铸造厂', link: '/pages/type-foundry' },
-            { text: 'Canvas 创意编码工作室', link: '/pages/canvas-generative-art' }
+            { text: 'Canvas 创意编码工作室', link: '/pages/canvas-generative-art' },
+            { text: 'Kinetic 动态设计工作室', link: '/pages/motion-studio' }
           ]
         },
         {
