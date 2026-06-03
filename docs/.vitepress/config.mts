@@ -71,7 +71,7 @@ export default defineConfig({
     // Open Graph（社交分享）
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 58 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 60 个完整页面，纯 HTML+CSS，零依赖。' }],
     ['meta', { property: 'og:url', content: 'http://101.37.166.208:11930' }],
     ['meta', { property: 'og:site_name', content: 'My Design Lib' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -79,14 +79,14 @@ export default defineConfig({
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 58 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 60 个完整页面，纯 HTML+CSS，零依赖。' }],
 
     // Schema.org 结构化数据
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "My Design Lib",
-      "description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 58 个完整页面",
+      "description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 60 个完整页面",
       "url": "http://101.37.166.208:11930",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
@@ -324,7 +324,8 @@ export default defineConfig({
             { text: 'Maison Élégance 时尚', link: '/pages/fashion-brand' },
             { text: 'LearnHub 在线学习', link: '/pages/edu-platform' },
             { text: 'TalentFlow 招聘平台', link: '/pages/job-board' },
-            { text: 'Hope Forward 公益教育', link: '/pages/nonprofit-impact' }
+            { text: 'Hope Forward 公益教育', link: '/pages/nonprofit-impact' },
+            { text: 'Voltara Electric 电动汽车', link: '/pages/voltara-ev' }
           ]
         }
       ]
