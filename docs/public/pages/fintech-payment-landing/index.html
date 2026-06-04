@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeroPay — 下一代支付平台</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --warm-yellow: #F9E9A9;
+  --warm-yellow-deep: #F5D76E;
+  --accent-magenta: #FF678B;
+  --accent-purple: #9b5de5;
+  --accent-cyan: #00d4ff;
+  --dark-bg: #0d0d1a;
+  --dark-surface: #151528;
+  --dark-text: #f0f0f5;
+  --warm-cream: #FFF8E7;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', var(--font-sans);
+  color: var(--color-text);
+  background: var(--warm-cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sticky Nav ─────────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 248, 231, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+}
+.nav-logo {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--dark-bg);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.nav-logo span { color: var(--accent-magenta); }
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--dark-bg);
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.nav-links a:hover { opacity: 1; }
+.nav-cta {
+  padding: 0.6rem 1.5rem;
+  background: var(--dark-bg);
+  color: var(--warm-cream) !important;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  opacity: 1 !important;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13,13,26,0.3);
+}
+
+/* ── Hero ───────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 6rem;
+  position: relative;
+  background: var(--warm-yellow);
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,103,139,0.2), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -150px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(155,93,229,0.15), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  background: rgba(255,255,255,0.7);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--dark-bg);
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0,0,0,0.08);
+  position: relative;
+  z-index: 1;
+}
+.hero-badge .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-magenta);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+.hero h1 {
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--dark-bg);
+  max-width: 900px;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1.5rem;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent-magenta), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  color: rgba(13,13,26,0.6);
+  max-width: 550px;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2.5rem;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+.btn-primary {
+  padding: 1rem 2.5rem;
+  background: var(--dark-bg);
+  color: var(--warm-cream);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-spring);
+  text-decoration: none;
+}
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(13,13,26,0.3);
+}
+.btn-secondary {
+  padding: 1rem 2.5rem;
+  background: rgba(255,255,255,0.6);
+  color: var(--dark-bg);
+  border: 2px solid rgba(13,13,26,0.15);
+  border-radius: var(--radius-full);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(13,13,26,0.3);
+}
+
+/* ── Partner Logos ──────────────────────────────────── */
+.partners {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--warm-cream);
+}
+.partners-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(13,13,26,0.4);
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+.partners-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.partner-logo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: rgba(13,13,26,0.2);
+  letter-spacing: -0.02em;
+  transition: color 0.3s;
+}
+.partner-logo:hover { color: rgba(13,13,26,0.5); }
+
+/* ── Stats Section ──────────────────────────────────── */
+.stats {
+  padding: 5rem 2rem;
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+.stats-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  text-align: center;
+}
+.stat-item { padding: 1.5rem; }
+.stat-number {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--warm-yellow), var(--accent-magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+.stat-label {
+  font-size: 0.95rem;
+  color: rgba(240,240,245,0.5);
+  font-weight: 500;
+}
+
+/* ── Features Scrollytelling ────────────────────────── */
+.features {
+  padding: 8rem 2rem;
+  background: var(--warm-cream);
+}
+.features-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 5rem;
+}
+.features-header .section-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: rgba(255,103,139,0.1);
+  color: var(--accent-magenta);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+.features-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--dark-bg);
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+.features-header p {
+  font-size: 1.1rem;
+  color: rgba(13,13,26,0.5);
+  line-height: 1.6;
+}
+
+.feature-row {
+  max-width: 1100px;
+  margin: 0 auto 6rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.feature-row.reverse { direction: rtl; }
+.feature-row.reverse > * { direction: ltr; }
+
+.feature-visual {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+}
+.feature-visual-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Visual 1: Payment Flow */
+.vis-payment {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+}
+.vis-payment .flow-line {
+  position: absolute;
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-magenta), var(--accent-purple), var(--accent-cyan));
+  top: 50%;
+  left: 10%;
+  border-radius: 2px;
+}
+.vis-payment .flow-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: flowMove 3s ease-in-out infinite;
+}
+.vis-payment .flow-dot:nth-child(2) {
+  left: 10%;
+  background: var(--accent-magenta);
+  animation-delay: 0s;
+}
+.vis-payment .flow-dot:nth-child(3) {
+  left: 45%;
+  background: var(--accent-purple);
+  animation-delay: 1s;
+}
+.vis-payment .flow-dot:nth-child(4) {
+  left: 80%;
+  background: var(--accent-cyan);
+  animation-delay: 2s;
+}
+@keyframes flowMove {
+  0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
+  50% { transform: translateY(-50%) scale(1.5); opacity: 0.7; }
+}
+.vis-payment .amount {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--warm-yellow);
+  letter-spacing: -0.02em;
+}
+.vis-payment .label-row {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2rem;
+}
+.vis-payment .label-item {
+  text-align: center;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.vis-payment .label-item.active { color: var(--warm-yellow); }
+
+/* Visual 2: Dashboard Card */
+.vis-dashboard {
+  background: linear-gradient(135deg, var(--warm-yellow), #fce588);
+}
+.vis-dashboard .dash-card {
+  width: 80%;
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+.vis-dashboard .dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.vis-dashboard .dash-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--dark-bg);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.vis-dashboard .dash-badge {
+  padding: 0.25rem 0.75rem;
+  background: rgba(16,185,129,0.1);
+  color: var(--color-success);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.vis-dashboard .dash-amount {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--dark-bg);
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.vis-dashboard .dash-bars {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  height: 50px;
+}
+.vis-dashboard .dash-bar {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  transition: height 0.5s ease;
+}
+.vis-dashboard .dash-bar:nth-child(1) { height: 30%; background: rgba(99,102,241,0.2); }
+.vis-dashboard .dash-bar:nth-child(2) { height: 50%; background: rgba(99,102,241,0.3); }
+.vis-dashboard .dash-bar:nth-child(3) { height: 40%; background: rgba(99,102,241,0.25); }
+.vis-dashboard .dash-bar:nth-child(4) { height: 70%; background: rgba(99,102,241,0.4); }
+.vis-dashboard .dash-bar:nth-child(5) { height: 60%; background: rgba(99,102,241,0.35); }
+.vis-dashboard .dash-bar:nth-child(6) { height: 85%; background: var(--color-primary); }
+.vis-dashboard .dash-bar:nth-child(7) { height: 75%; background: rgba(99,102,241,0.45); }
+
+/* Visual 3: Security Shield */
+.vis-security {
+  background: linear-gradient(135deg, #0d0d1a, #1a1a2e);
+}
+.vis-security .shield {
+  width: 120px;
+  height: 140px;
+  position: relative;
+}
+.vis-security .shield-body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple));
+  clip-path: polygon(50% 0%, 100% 20%, 100% 70%, 50% 100%, 0% 70%, 0% 20%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: shieldGlow 3s ease-in-out infinite;
+}
+@keyframes shieldGlow {
+  0%, 100% { filter: drop-shadow(0 0 15px rgba(0,212,255,0.3)); }
+  50% { filter: drop-shadow(0 0 30px rgba(0,212,255,0.6)); }
+}
+.vis-security .shield-icon {
+  font-size: 2.5rem;
+  color: white;
+}
+.vis-security .shield-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 50%;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+.vis-security .shield-rings:nth-child(2) {
+  width: 260px;
+  height: 260px;
+  animation-delay: 1s;
+}
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+.feature-content h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--dark-bg);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.feature-content p {
+  font-size: 1.05rem;
+  color: rgba(13,13,26,0.55);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: rgba(13,13,26,0.7);
+  font-weight: 500;
+}
+.feature-list li::before {
+  content: '✓';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: rgba(16,185,129,0.1);
+  color: var(--color-success);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* ── Pricing Teaser ─────────────────────────────────── */
+.pricing {
+  padding: 6rem 2rem;
+  background: var(--dark-bg);
+  color: var(--dark-text);
+  text-align: center;
+}
+.pricing-header {
+  max-width: 600px;
+  margin: 0 auto 4rem;
+}
+.pricing-header .section-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: rgba(249,233,169,0.15);
+  color: var(--warm-yellow);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+.pricing-header h2 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+.pricing-header p {
+  font-size: 1.05rem;
+  color: rgba(240,240,245,0.5);
+  line-height: 1.6;
+}
+.pricing-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.pricing-card {
+  background: var(--dark-surface);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 2rem;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 0.3s, border-color 0.3s;
+  position: relative;
+}
+.pricing-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.12);
+}
+.pricing-card.featured {
+  border-color: var(--warm-yellow);
+  background: linear-gradient(180deg, rgba(249,233,169,0.08), var(--dark-surface));
+}
+.pricing-card.featured::before {
+  content: '最受欢迎';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.3rem 1rem;
+  background: var(--warm-yellow);
+  color: var(--dark-bg);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+.pricing-card .plan-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(240,240,245,0.4);
+  margin-bottom: 0.5rem;
+}
+.pricing-card .plan-price {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.25rem;
+}
+.pricing-card .plan-price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(240,240,245,0.4);
+}
+.pricing-card .plan-desc {
+  font-size: 0.9rem;
+  color: rgba(240,240,245,0.4);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+.pricing-card .plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+.pricing-card .plan-features li {
+  font-size: 0.9rem;
+  color: rgba(240,240,245,0.6);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pricing-card .plan-features li::before {
+  content: '→';
+  color: var(--warm-yellow);
+  font-weight: 700;
+}
+.pricing-card .plan-btn {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+}
+.pricing-card .plan-btn.dark {
+  background: rgba(255,255,255,0.08);
+  color: var(--dark-text);
+}
+.pricing-card .plan-btn.dark:hover {
+  background: rgba(255,255,255,0.15);
+}
+.pricing-card .plan-btn.yellow {
+  background: var(--warm-yellow);
+  color: var(--dark-bg);
+}
+.pricing-card .plan-btn.yellow:hover {
+  background: var(--warm-yellow-deep);
+  box-shadow: 0 4px 15px rgba(249,233,169,0.3);
+}
+
+/* ── FAQ ────────────────────────────────────────────── */
+.faq {
+  padding: 6rem 2rem;
+  background: var(--warm-cream);
+}
+.faq-inner {
+  max-width: 750px;
+  margin: 0 auto;
+}
+.faq-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.faq-header h2 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--dark-bg);
+}
+.faq-item {
+  border-bottom: 1px solid rgba(13,13,26,0.08);
+}
+.faq-question {
+  width: 100%;
+  padding: 1.5rem 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--dark-bg);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: inherit;
+}
+.faq-question .arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+  color: rgba(13,13,26,0.3);
+}
+.faq-item.open .faq-question .arrow { transform: rotate(180deg); }
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+.faq-item.open .faq-answer {
+  max-height: 200px;
+  padding-bottom: 1.5rem;
+}
+.faq-answer p {
+  font-size: 0.95rem;
+  color: rgba(13,13,26,0.55);
+  line-height: 1.7;
+}
+
+/* ── CTA Section ────────────────────────────────────── */
+.cta {
+  padding: 6rem 2rem;
+  background: linear-gradient(135deg, var(--accent-magenta), var(--accent-purple));
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.cta::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%);
+  border-radius: 50%;
+}
+.cta h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+.cta p {
+  font-size: 1.15rem;
+  opacity: 0.85;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+.cta .btn-cta {
+  display: inline-block;
+  padding: 1rem 3rem;
+  background: white;
+  color: var(--accent-magenta);
+  border-radius: var(--radius-full);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-spring);
+  position: relative;
+  z-index: 1;
+}
+.cta .btn-cta:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+.footer {
+  padding: 4rem 2rem 2rem;
+  background: var(--dark-bg);
+  color: rgba(240,240,245,0.4);
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand .footer-logo {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--dark-text);
+  margin-bottom: 0.75rem;
+}
+.footer-brand .footer-logo span { color: var(--warm-yellow); }
+.footer-brand p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 280px;
+}
+.footer-col h4 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(240,240,245,0.6);
+  margin-bottom: 1rem;
+}
+.footer-col a {
+  display: block;
+  color: rgba(240,240,245,0.4);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.3rem 0;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--warm-yellow); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .feature-row { grid-template-columns: 1fr; gap: 2rem; }
+  .feature-row.reverse { direction: ltr; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .pricing-cards { grid-template-columns: 1fr; max-width: 400px; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .hero-actions { flex-direction: column; align-items: center; }
+}
+
+/* ── Scroll Reveal ──────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">Wero<span>Pay</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">功能</a></li>
+    <li><a href="#pricing">定价</a></li>
+    <li><a href="#faq">常见问题</a></li>
+    <li><a href="#" class="nav-cta">免费试用</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    全新 3.0 版本已上线
+  </div>
+  <h1>让支付变得<br><span class="highlight">简单而优雅</span></h1>
+  <p class="hero-sub">为现代企业打造的下一代支付基础设施。一站式处理收款、对账、结算，让专注业务回归本质。</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">开始免费试用</a>
+    <a href="#" class="btn-secondary">观看演示 →</a>
+  </div>
+</section>
+
+<!-- Partners -->
+<section class="partners">
+  <p class="partners-label">已服务超过 2,000+ 企业</p>
+  <div class="partners-grid">
+    <span class="partner-logo">Shopify</span>
+    <span class="partner-logo">Stripe</span>
+    <span class="partner-logo">Notion</span>
+    <span class="partner-logo">Linear</span>
+    <span class="partner-logo">Vercel</span>
+    <span class="partner-logo">Figma</span>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-number">€2.8B</div>
+      <div class="stat-label">年处理交易额</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">99.99%</div>
+      <div class="stat-label">系统可用性</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">150ms</div>
+      <div class="stat-label">平均响应时间</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">40+</div>
+      <div class="stat-label">支持支付方式</div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="features-header reveal">
+    <span class="section-tag">核心能力</span>
+    <h2>为增长型企业<br>量身打造</h2>
+    <p>从初创公司到全球企业，WeroPay 提供灵活、安全、高效的支付解决方案。</p>
+  </div>
+
+  <!-- Feature 1: Payment Flow -->
+  <div class="feature-row reveal">
+    <div class="feature-visual">
+      <div class="feature-visual-inner vis-payment">
+        <div class="amount">€12,450.00</div>
+        <div class="flow-line"></div>
+        <div class="flow-dot"></div>
+        <div class="flow-dot"></div>
+        <div class="flow-dot"></div>
+        <div class="label-row">
+          <span class="label-item active">发起</span>
+          <span class="label-item">验证</span>
+          <span class="label-item active">完成</span>
+        </div>
+      </div>
+    </div>
+    <div class="feature-content">
+      <h3>无缝支付流转</h3>
+      <p>从发起交易到资金到账，每一步都经过精心优化。支持 40+ 种支付方式，覆盖全球主要市场。</p>
+      <ul class="feature-list">
+        <li>实时交易状态追踪</li>
+        <li>智能路由选择最优通道</li>
+        <li>自动重试失败交易</li>
+        <li>多币种自动转换</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 2: Dashboard -->
+  <div class="feature-row reverse reveal">
+    <div class="feature-visual">
+      <div class="feature-visual-inner vis-dashboard">
+        <div class="dash-card">
+          <div class="dash-header">
+            <span class="dash-title">本月收入</span>
+            <span class="dash-badge">+23.5%</span>
+          </div>
+          <div class="dash-amount">€84,230</div>
+          <div class="dash-bars">
+            <div class="dash-bar"></div>
+            <div class="dash-bar"></div>
+            <div class="dash-bar"></div>
+            <div class="dash-bar"></div>
+            <div class="dash-bar"></div>
+            <div class="dash-bar"></div>
+            <div class="dash-bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-content">
+      <h3>智能数据洞察</h3>
+      <p>实时仪表盘让你一目了然地掌握业务全貌。从交易趋势到客户行为，数据驱动每一个决策。</p>
+      <ul class="feature-list">
+        <li>实时收入可视化图表</li>
+        <li>自定义数据看板</li>
+        <li>智能异常检测预警</li>
+        <li>一键导出财务报表</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 3: Security -->
+  <div class="feature-row reveal">
+    <div class="feature-visual">
+      <div class="feature-visual-inner vis-security">
+        <div class="shield-rings"></div>
+        <div class="shield-rings"></div>
+        <div class="shield">
+          <div class="shield-body">
+            <span class="shield-icon">🛡️</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-content">
+      <h3>银行级安全防护</h3>
+      <p>PCI DSS Level 1 认证，端到端加密，让你和你的客户都安心。安全不是功能，是我们的基因。</p>
+      <ul class="feature-list">
+        <li>PCI DSS Level 1 认证</li>
+        <li>AES-256 端到端加密</li>
+        <li>3D Secure 2.0 支持</li>
+        <li>实时欺诈检测引擎</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="pricing-header reveal">
+    <span class="section-tag">透明定价</span>
+    <h2>简单、公平、无隐藏费用</h2>
+    <p>选择适合你的方案，随时升级或降级，没有合同约束。</p>
+  </div>
+  <div class="pricing-cards">
+    <div class="pricing-card reveal">
+      <div class="plan-name">入门版</div>
+      <div class="plan-price">€0 <span>/月</span></div>
+      <div class="plan-desc">适合刚起步的创业者和小型项目</div>
+      <ul class="plan-features">
+        <li>每月 1,000 笔交易</li>
+        <li>基础数据看板</li>
+        <li>邮件客服支持</li>
+        <li>标准 API 接入</li>
+      </ul>
+      <button class="plan-btn dark">免费开始</button>
+    </div>
+    <div class="pricing-card featured reveal">
+      <div class="plan-name">专业版</div>
+      <div class="plan-price">€49 <span>/月</span></div>
+      <div class="plan-desc">适合快速成长的中型企业</div>
+      <ul class="plan-features">
+        <li>无限交易笔数</li>
+        <li>高级数据分析</li>
+        <li>优先客服支持</li>
+        <li>自定义结算周期</li>
+        <li>多团队协作</li>
+      </ul>
+      <button class="plan-btn yellow">立即升级</button>
+    </div>
+    <div class="pricing-card reveal">
+      <div class="plan-name">企业版</div>
+      <div class="plan-price">定制</div>
+      <div class="plan-desc">为大型企业和复杂场景量身定制</div>
+      <ul class="plan-features">
+        <li>专属客户经理</li>
+        <li>SLA 保障协议</li>
+        <li>私有化部署选项</li>
+        <li>定制化合规方案</li>
+      </ul>
+      <button class="plan-btn dark">联系销售</button>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="faq-inner">
+    <div class="faq-header reveal">
+      <h2>常见问题</h2>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question">
+        接入 WeroPay 需要多长时间？
+        <span class="arrow">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p>标准接入仅需 15 分钟。我们提供完善的 API 文档和 SDK，支持主流编程语言。企业版定制方案通常在 1-2 周内完成。</p>
+      </div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question">
+        支持哪些支付方式？
+        <span class="arrow">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p>支持信用卡/借记卡、Apple Pay、Google Pay、iDEAL、Bancontact、SOFORT、Klarna 等 40+ 种支付方式，覆盖全球主要市场。</p>
+      </div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question">
+        资金多久到账？
+        <span class="arrow">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p>标准到账时间为 T+1 个工作日。专业版和企业版用户可享受 T+0 实时结算服务，资金即时到达指定账户。</p>
+      </div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question">
+        数据安全如何保障？
+        <span class="arrow">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p>我们通过 PCI DSS Level 1 认证，采用 AES-256 端到端加密，支持 3D Secure 2.0。所有数据存储在欧洲数据中心，符合 GDPR 要求。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>准备好改变支付体验了吗？</h2>
+  <p>加入 2,000+ 企业的信赖之选，今天就开始你的 WeroPay 之旅。</p>
+  <a href="#" class="btn-cta">免费开始 →</a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">Wero<span>Pay</span></div>
+      <p>为现代企业打造的下一代支付基础设施。</p>
+    </div>
+    <div class="footer-col">
+      <h4>产品</h4>
+      <a href="#">在线收款</a>
+      <a href="#">订阅计费</a>
+      <a href="#"> invoicing</a>
+      <a href="#">数据分析</a>
+    </div>
+    <div class="footer-col">
+      <h4>资源</h4>
+      <a href="#">API 文档</a>
+      <a href="#">SDK 下载</a>
+      <a href="#">开发者博客</a>
+      <a href="#">系统状态</a>
+    </div>
+    <div class="footer-col">
+      <h4>公司</h4>
+      <a href="#">关于我们</a>
+      <a href="#">职业机会</a>
+      <a href="#">联系我们</a>
+      <a href="#">法律条款</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 WeroPay. All rights reserved.
+  </div>
+</footer>
+
+<script>
+// FAQ Accordion
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// Scroll Reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
