@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FleetPulse — 物流运输平台</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --lp-dark: #111111;
+  --lp-dark-alt: #1a1a1a;
+  --lp-light: #fafafa;
+  --lp-white: #ffffff;
+  --lp-accent: #2563eb;
+  --lp-accent-light: #3b82f6;
+  --lp-accent-glow: rgba(37, 99, 235, 0.25);
+  --lp-gray: #888888;
+  --lp-border: #2a2a2a;
+  --lp-text-dim: #666666;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', var(--font-sans);
+  background: var(--lp-dark);
+  color: var(--lp-white);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ═══ NAVIGATION ═══ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(17, 17, 17, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  color: var(--lp-white);
+  text-transform: uppercase;
+}
+.nav-logo span { color: var(--lp-accent); }
+.nav-links { display: flex; gap: 2.5rem; align-items: center; }
+.nav-links a {
+  color: var(--lp-gray);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--lp-white); }
+.nav-cta {
+  padding: 0.6rem 1.6rem;
+  background: var(--lp-accent);
+  color: var(--lp-white) !important;
+  border-radius: 6px;
+  font-weight: 600 !important;
+  transition: background 0.3s, transform 0.2s !important;
+}
+.nav-cta:hover { background: var(--lp-accent-light); transform: translateY(-1px); }
+
+/* ═══ HERO ═══ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 4rem 6rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -100px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--lp-accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--lp-border), transparent);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--lp-accent-light);
+  margin-bottom: 2rem;
+  width: fit-content;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--lp-accent);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+.hero h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  max-width: 900px;
+  margin-bottom: 2rem;
+}
+.hero h1 .highlight {
+  color: var(--lp-accent);
+  position: relative;
+}
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--lp-gray);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+.hero-actions { display: flex; gap: 1rem; align-items: center; }
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2.2rem;
+  background: var(--lp-accent);
+  color: var(--lp-white);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.btn-primary:hover { background: var(--lp-accent-light); transform: translateY(-2px); box-shadow: 0 8px 30px var(--lp-accent-glow); }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2.2rem;
+  background: transparent;
+  color: var(--lp-white);
+  border: 1px solid var(--lp-border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.btn-secondary:hover { border-color: var(--lp-gray); background: rgba(255,255,255,0.03); }
+
+/* ═══ STATS BAR ═══ */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--lp-dark-alt);
+  border-top: 1px solid var(--lp-border);
+  border-bottom: 1px solid var(--lp-border);
+}
+.stat-item {
+  padding: 3rem 2rem;
+  text-align: center;
+  border-right: 1px solid var(--lp-border);
+  transition: background 0.3s;
+}
+.stat-item:last-child { border-right: none; }
+.stat-item:hover { background: rgba(255,255,255,0.02); }
+.stat-number {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 3.2rem;
+  color: var(--lp-accent);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.stat-suffix {
+  font-size: 1.5rem;
+  color: var(--lp-accent-light);
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--lp-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+/* ═══ SERVICES (Numbered Steps) ═══ */
+.services {
+  padding: 8rem 4rem;
+  position: relative;
+}
+.section-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--lp-accent);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  line-height: 1.05;
+}
+.section-desc {
+  color: var(--lp-gray);
+  font-size: 1.05rem;
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 4rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.service-card {
+  padding: 3rem 2.5rem;
+  border: 1px solid var(--lp-border);
+  position: relative;
+  transition: all 0.4s;
+  cursor: default;
+}
+.service-card:hover {
+  background: rgba(255,255,255,0.02);
+  border-color: var(--lp-accent);
+  z-index: 2;
+}
+.service-number {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 4rem;
+  color: rgba(37, 99, 235, 0.15);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+  transition: color 0.3s;
+}
+.service-card:hover .service-number { color: rgba(37, 99, 235, 0.4); }
+.service-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+}
+.service-card p {
+  color: var(--lp-gray);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* ═══ FLEET SHOWCASE ═══ */
+.fleet {
+  background: var(--lp-light);
+  color: var(--lp-dark);
+  padding: 8rem 4rem;
+  position: relative;
+}
+.fleet::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ddd, transparent);
+}
+.fleet .section-label { color: var(--lp-accent); }
+.fleet .section-title { color: var(--lp-dark); }
+.fleet .section-desc { color: var(--lp-text-dim); }
+
+.fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.fleet-card {
+  background: var(--lp-white);
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 2.5rem;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+.fleet-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background: var(--lp-accent);
+  transition: height 0.4s;
+}
+.fleet-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+.fleet-card:hover::after { height: 100%; }
+.fleet-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+.fleet-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  color: var(--lp-dark);
+}
+.fleet-card .badge {
+  padding: 0.3rem 0.8rem;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--lp-accent);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.fleet-card p {
+  color: var(--lp-text-dim);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+.fleet-specs {
+  display: flex;
+  gap: 2rem;
+}
+.fleet-spec {
+  font-size: 0.8rem;
+}
+.fleet-spec strong {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--lp-dark);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+}
+.fleet-spec span { color: var(--lp-text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ═══ PROCESS TIMELINE ═══ */
+.process {
+  padding: 8rem 4rem;
+}
+.timeline {
+  display: flex;
+  gap: 0;
+  margin-top: 3rem;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 48px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--lp-border);
+}
+.timeline-step {
+  flex: 1;
+  padding: 0 2rem;
+  position: relative;
+  text-align: center;
+}
+.timeline-dot {
+  width: 20px;
+  height: 20px;
+  background: var(--lp-dark);
+  border: 3px solid var(--lp-accent);
+  border-radius: 50%;
+  margin: 0 auto 2rem;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s;
+}
+.timeline-step:hover .timeline-dot {
+  background: var(--lp-accent);
+  box-shadow: 0 0 20px var(--lp-accent-glow);
+}
+.timeline-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--lp-accent);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.timeline-step h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.timeline-step p {
+  color: var(--lp-gray);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ═══ MARQUEE ═══ */
+.marquee-section {
+  padding: 2rem 0;
+  overflow: hidden;
+  border-top: 1px solid var(--lp-border);
+  border-bottom: 1px solid var(--lp-border);
+  background: var(--lp-dark-alt);
+}
+.marquee-track {
+  display: flex;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+.marquee-item {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.08);
+  white-space: nowrap;
+  padding: 0 3rem;
+}
+.marquee-item .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--lp-accent);
+  border-radius: 50%;
+  margin: 0 3rem;
+  vertical-align: middle;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ═══ COVERAGE MAP ═══ */
+.coverage {
+  padding: 8rem 4rem;
+  background: var(--lp-dark-alt);
+  position: relative;
+}
+.coverage-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 3rem;
+}
+.coverage-map {
+  aspect-ratio: 1;
+  background: var(--lp-dark);
+  border: 1px solid var(--lp-border);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.map-dots {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.map-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--lp-accent);
+  border-radius: 50%;
+  animation: map-pulse 3s ease-in-out infinite;
+}
+.map-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--lp-accent);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: map-ring 3s ease-in-out infinite;
+}
+.map-dot:nth-child(1) { top: 30%; left: 25%; animation-delay: 0s; }
+.map-dot:nth-child(2) { top: 45%; left: 55%; animation-delay: 0.5s; }
+.map-dot:nth-child(3) { top: 35%; left: 70%; animation-delay: 1s; }
+.map-dot:nth-child(4) { top: 60%; left: 40%; animation-delay: 1.5s; }
+.map-dot:nth-child(5) { top: 50%; left: 80%; animation-delay: 2s; }
+.map-dot:nth-child(6) { top: 25%; left: 60%; animation-delay: 0.3s; }
+.map-dot:nth-child(7) { top: 70%; left: 30%; animation-delay: 1.2s; }
+@keyframes map-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.3); }
+}
+@keyframes map-ring {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+  50% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+
+.coverage-info h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.coverage-info p {
+  color: var(--lp-gray);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+.coverage-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.coverage-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--lp-gray);
+}
+.coverage-list li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--lp-accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ═══ TESTIMONIAL ═══ */
+.testimonial {
+  padding: 8rem 4rem;
+  text-align: center;
+  border-top: 1px solid var(--lp-border);
+  border-bottom: 1px solid var(--lp-border);
+}
+.testimonial blockquote {
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  font-weight: 500;
+  line-height: 1.5;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  color: var(--lp-white);
+}
+.testimonial blockquote::before {
+  content: '"';
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 4rem;
+  color: var(--lp-accent);
+  display: block;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+.testimonial-author {
+  font-size: 0.9rem;
+  color: var(--lp-gray);
+}
+.testimonial-author strong {
+  color: var(--lp-white);
+  font-weight: 600;
+}
+
+/* ═══ CTA ═══ */
+.cta-section {
+  padding: 8rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--lp-accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+.cta-section p {
+  color: var(--lp-gray);
+  font-size: 1.1rem;
+  max-width: 500px;
+  margin: 0 auto 3rem;
+  line-height: 1.7;
+  position: relative;
+}
+.cta-section .btn-primary {
+  font-size: 1.05rem;
+  padding: 1.2rem 3rem;
+  position: relative;
+}
+
+/* ═══ FOOTER ═══ */
+.footer {
+  padding: 4rem;
+  border-top: 1px solid var(--lp-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-left {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.footer-left span { color: var(--lp-accent); }
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a {
+  color: var(--lp-gray);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--lp-white); }
+.footer-copy {
+  color: var(--lp-text-dim);
+  font-size: 0.8rem;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 1024px) {
+  .nav { padding: 1rem 2rem; }
+  .hero { padding: 7rem 2rem 4rem; }
+  .services, .fleet, .process, .coverage, .testimonial, .cta-section { padding: 5rem 2rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .fleet-grid { grid-template-columns: 1fr; }
+  .coverage-grid { grid-template-columns: 1fr; }
+  .timeline { flex-direction: column; gap: 2rem; }
+  .timeline::before { display: none; }
+}
+@media (max-width: 640px) {
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .stat-item:nth-child(2) { border-right: none; }
+  .nav-links { display: none; }
+  .hero { padding: 6rem 1.5rem 3rem; }
+  .footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">Fleet<span>Pulse</span></div>
+  <div class="nav-links">
+    <a href="#services">服务</a>
+    <a href="#fleet">车队</a>
+    <a href="#coverage">覆盖</a>
+    <a href="#contact">联系</a>
+    <a href="#" class="nav-cta">获取报价</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span></span>
+    覆盖全国 328 个城市
+  </div>
+  <h1>全程直达<br><span class="highlight">零中转</span>运输</h1>
+  <p class="hero-sub">从始发到签收，全程可视化追踪。专业冷链、危化品、大件运输，7×24 小时运营保障。</p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">立即咨询 →</a>
+    <a href="#fleet" class="btn-secondary">查看车队 ▸</a>
+  </div>
+</section>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number">70<span class="stat-suffix">+</span></div>
+    <div class="stat-label">运输车辆</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">140<span class="stat-suffix">+</span></div>
+    <div class="stat-label">年行业经验</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">99.7<span class="stat-suffix">%</span></div>
+    <div class="stat-label">准时送达率</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">24<span class="stat-suffix">/7</span></div>
+    <div class="stat-label">全天候运营</div>
+  </div>
+</div>
+
+<!-- Services -->
+<section class="services" id="services">
+  <div class="section-label">我们的服务</div>
+  <h2 class="section-title">三步直达<br>运输全程</h2>
+  <p class="section-desc">从智能调度到末端配送，每一步都经过精密计算，确保货物安全准时到达。</p>
+  
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-number">01</div>
+      <h3>智能调度</h3>
+      <p>AI 驱动的路线优化系统，实时匹配最优运输方案。自动规避拥堵路段，降低 23% 运输成本。</p>
+    </div>
+    <div class="service-card">
+      <div class="service-number">02</div>
+      <h3>全程追踪</h3>
+      <p>GPS + IoT 传感器双重监控，温度、湿度、震动实时上报。客户端小程序一键查看货物状态。</p>
+    </div>
+    <div class="service-card">
+      <div class="service-number">03</div>
+      <h3>末端交付</h3>
+      <p>最后一公里专业配送团队，支持预约时段、电子签收、异常即时响应。签收满意率 98.6%。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">冷链物流 <span class="dot"></span> 危化品运输 <span class="dot"></span> 大件物流 <span class="dot"></span> 电商仓配 <span class="dot"></span> 跨境货运 <span class="dot"></span> 同城急运 <span class="dot"></span> 冷链物流 <span class="dot"></span> 危化品运输 <span class="dot"></span> 大件物流 <span class="dot"></span> 电商仓配 <span class="dot"></span> 跨境货运 <span class="dot"></span> 同城急运 <span class="dot"></span></span>
+  </div>
+</div>
+
+<!-- Fleet Showcase (Light Section) -->
+<section class="fleet" id="fleet">
+  <div class="section-label">我们的车队</div>
+  <h2 class="section-title">专业车队<br>覆盖全场景</h2>
+  <p class="section-desc">从 4.2 米厢货到 17.5 米半挂车，满足不同规模的运输需求。</p>
+
+  <div class="fleet-grid">
+    <div class="fleet-card">
+      <div class="fleet-card-header">
+        <h3>冷链运输车</h3>
+        <span class="badge">温控</span>
+      </div>
+      <p>全程 -18°C 至 4°C 精准温控，医药冷链 GSP 认证。适用于生鲜、医药、乳制品运输。</p>
+      <div class="fleet-specs">
+        <div class="fleet-spec"><strong>15辆</strong><span>在运营</span></div>
+        <div class="fleet-spec"><strong>-18~4°C</strong><span>温控范围</span></div>
+        <div class="fleet-spec"><strong>GSP</strong><span>认证资质</span></div>
+      </div>
+    </div>
+    <div class="fleet-card">
+      <div class="fleet-card-header">
+        <h3>重型半挂车</h3>
+        <span class="badge">大件</span>
+      </div>
+      <p>17.5 米低平板半挂，承重 30-80 吨。工业设备、建材、风电叶片等超大件运输。</p>
+      <div class="fleet-specs">
+        <div class="fleet-spec"><strong>22辆</strong><span>在运营</span></div>
+        <div class="fleet-spec"><strong>80T</strong><span>最大承重</span></div>
+        <div class="fleet-spec"><strong>17.5m</strong><span>车板长度</span></div>
+      </div>
+    </div>
+    <div class="fleet-card">
+      <div class="fleet-card-header">
+        <h3>厢式货车</h3>
+        <span class="badge">通用</span>
+      </div>
+      <p>4.2 米至 9.6 米多规格厢货，适用于普货、电商包裹、零担拼车等日常运输场景。</p>
+      <div class="fleet-specs">
+        <div class="fleet-spec"><strong>28辆</strong><span>在运营</span></div>
+        <div class="fleet-spec"><strong>4.2~9.6m</strong><span>车型覆盖</span></div>
+        <div class="fleet-spec"><strong>全险</strong><span>货运保障</span></div>
+      </div>
+    </div>
+    <div class="fleet-card">
+      <div class="fleet-card-header">
+        <h3>危化品专车</h3>
+        <span class="badge">资质</span>
+      </div>
+      <p>具备危险品运输许可证，防爆、防静电设计。化工原料、油漆涂料等危化品合规运输。</p>
+      <div class="fleet-specs">
+        <div class="fleet-spec"><strong>5辆</strong><span>在运营</span></div>
+        <div class="fleet-spec"><strong>2类~9类</strong><span>危化品类</span></div>
+        <div class="fleet-spec"><strong>AES</strong><span>合规认证</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process Timeline -->
+<section class="process" id="process">
+  <div class="section-label">运输流程</div>
+  <h2 class="section-title">从下单到签收<br>全程透明</h2>
+  <p class="section-desc">标准化操作流程，每一步都有迹可循。</p>
+
+  <div class="timeline">
+    <div class="timeline-step">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">J0 — 当日</div>
+      <h3>在线下单</h3>
+      <p>填写货物信息，系统自动报价并匹配最优车型。</p>
+    </div>
+    <div class="timeline-step">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">J+1</div>
+      <h3>装车出发</h3>
+      <p>司机到达装货点，GPS 定位实时同步，运输启动。</p>
+    </div>
+    <div class="timeline-step">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">途中</div>
+      <h3>在途监控</h3>
+      <p>温度、位置、速度全程追踪，异常自动预警通知。</p>
+    </div>
+    <div class="timeline-step">
+      <div class="timeline-dot"></div>
+      <div class="timeline-label">J+N</div>
+      <h3>末端交付</h3>
+      <p>预约时段送达，电子签收确认，运输单自动归档。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Coverage Map -->
+<section class="coverage" id="coverage">
+  <div class="section-label">服务网络</div>
+  <h2 class="section-title">覆盖全国<br>辐射亚洲</h2>
+
+  <div class="coverage-grid">
+    <div class="coverage-map">
+      <div class="map-dots">
+        <div class="map-dot"></div>
+        <div class="map-dot"></div>
+        <div class="map-dot"></div>
+        <div class="map-dot"></div>
+        <div class="map-dot"></div>
+        <div class="map-dot"></div>
+        <div class="map-dot"></div>
+      </div>
+    </div>
+    <div class="coverage-info">
+      <h3>328 个城市<br>实时覆盖</h3>
+      <p>以北京、上海、广州、成都四大枢纽为核心，辐射全国主要经济圈。跨境线路覆盖东南亚六国。</p>
+      <ul class="coverage-list">
+        <li>华北枢纽 — 北京/天津</li>
+        <li>华东枢纽 — 上海/杭州</li>
+        <li>华南枢纽 — 广州/深圳</li>
+        <li>西南枢纽 — 成都/重庆</li>
+        <li>东南亚 — 新加坡/曼谷</li>
+        <li>中亚线路 — 乌鲁木齐</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonial -->
+<section class="testimonial">
+  <blockquote>
+    FleetPulse 把我们的跨省运输时效从 72 小时压缩到 38 小时，冷链断链率降到 0.2% 以下。
+  </blockquote>
+  <div class="testimonial-author">
+    <strong>张明远</strong> — 鲜活优选 供应链总监
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2>准备好了吗</h2>
+  <p>无论是一车还是一百车，我们都有方案。立即获取专属运输报价。</p>
+  <a href="#" class="btn-primary">获取免费报价 →</a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-left">Fleet<span>Pulse</span></div>
+  <div class="footer-links">
+    <a href="#">关于我们</a>
+    <a href="#">服务条款</a>
+    <a href="#">隐私政策</a>
+    <a href="#">加入车队</a>
+  </div>
+  <div class="footer-copy">© 2026 FleetPulse. All rights reserved.</div>
+</footer>
+
+</body>
+</html>

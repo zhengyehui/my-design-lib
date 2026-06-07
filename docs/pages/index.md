@@ -613,6 +613,15 @@ const pages = [
     rating: 9.5,
     description: '暗色系创意开发者作品集，终端风格 Hero + 打字机动画 + 项目网格渐变预览 + 技能进度条 + 时间线经历 + CSS 网格线背景',
   },
+  {
+    id: 'logistics-hero',
+    title: 'FleetPulse 物流运输平台',
+    category: 'industry',
+    tags: ['物流运输', '工业风', '暗色主题', '行业垂直', '车队展示'],
+    colors: ['#111111', '#2563eb', '#fafafa'],
+    rating: 9.4,
+    description: '工业风物流运输平台落地页，Barlow Condensed 超粗体标题 + 三步服务卡片 + 滚动字幕 + 浅色车队展示 + 时间线流程 + CSS 地图脉冲点',
+  },
 ]
 
 const categories = [
@@ -670,12 +679,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 63 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 64 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-  <meta property="og:description" content="63 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+  <meta property="og:description" content="64 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -684,7 +693,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 63 个完整页面</span>
+      <span>📦 64 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
