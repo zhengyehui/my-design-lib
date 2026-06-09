@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMIÈRE — 奢华珠宝商城</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════
+   LUMIÈRE — 奢华珠宝商城
+   Color Palette: Deep Navy + Champagne Gold + Ivory
+   Inspired by: Tamannaah Fine Jewellery / Awwwards luxury jewelry
+   ══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --lj-navy: #0a1628;
+  --lj-navy-light: #162240;
+  --lj-navy-mid: #1a2d4a;
+  --lj-gold: #c9a96e;
+  --lj-gold-light: #dfc49a;
+  --lj-gold-dark: #a8883e;
+  --lj-ivory: #faf8f5;
+  --lj-cream: #f5f0eb;
+  --lj-warm-white: #fffdf9;
+  --lj-charcoal: #1a1a1a;
+  --lj-warm-gray: #8a7e74;
+  --lj-light-gray: #e8e2dd;
+  --lj-rose: #d4a89a;
+  --lj-soft-shadow: 0 4px 30px rgba(10, 22, 40, 0.08);
+  --lj-gold-glow: 0 0 40px rgba(201, 169, 110, 0.15);
+  --font-serif: 'Cormorant Garamond', 'Georgia', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  color: var(--lj-charcoal);
+  background: var(--lj-warm-white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Navigation ─────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.5rem 4rem;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent;
+}
+.nav.scrolled {
+  background: rgba(250, 248, 245, 0.95);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  padding: 1rem 4rem;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+}
+.nav-logo {
+  font-family: var(--font-serif);
+  font-size: 1.8rem; font-weight: 300;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  text-decoration: none; transition: color 0.4s;
+}
+.nav:not(.scrolled) .nav-logo { color: #fff; }
+.nav.scrolled .nav-logo { color: var(--lj-charcoal); }
+
+.nav-links {
+  display: flex; gap: 2.5rem; list-style: none; align-items: center;
+}
+.nav-links a {
+  text-decoration: none; font-size: 0.8rem; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  transition: color 0.3s; position: relative;
+}
+.nav:not(.scrolled) .nav-links a { color: rgba(255,255,255,0.85); }
+.nav:not(.scrolled) .nav-links a:hover { color: var(--lj-gold-light); }
+.nav.scrolled .nav-links a { color: var(--lj-charcoal); }
+.nav.scrolled .nav-links a:hover { color: var(--lj-gold); }
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0;
+  height: 1px; transition: width 0.3s;
+}
+.nav-links a:hover::after { width: 100%; }
+.nav:not(.scrolled) .nav-links a::after { background: var(--lj-gold-light); }
+.nav.scrolled .nav-links a::after { background: var(--lj-gold); }
+
+.nav-icons { display: flex; gap: 1.5rem; align-items: center; }
+.nav-icon {
+  width: 20px; height: 20px; cursor: pointer; transition: color 0.3s;
+}
+.nav:not(.scrolled) .nav-icon { color: rgba(255,255,255,0.85); }
+.nav.scrolled .nav-icon { color: var(--lj-charcoal); }
+.nav-icon:hover { color: var(--lj-gold); }
+
+/* ── Hero ───────────────────────────────────────────────── */
+.hero {
+  position: relative; height: 100vh; min-height: 700px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--lj-navy);
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: 
+    radial-gradient(ellipse at 30% 20%, rgba(201, 169, 110, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(201, 169, 110, 0.08) 0%, transparent 40%),
+    linear-gradient(135deg, #0a1628 0%, #162240 40%, #1a2d4a 70%, #0a1628 100%);
+}
+/* Floating diamond shapes */
+.hero-diamond {
+  position: absolute; border: 1px solid rgba(201, 169, 110, 0.15);
+  animation: diamondFloat 8s ease-in-out infinite;
+}
+.hero-diamond:nth-child(1) {
+  width: 120px; height: 120px; top: 15%; left: 10%;
+  transform: rotate(45deg); animation-delay: 0s;
+}
+.hero-diamond:nth-child(2) {
+  width: 80px; height: 80px; top: 60%; right: 15%;
+  transform: rotate(45deg); animation-delay: 2s;
+  border-color: rgba(201, 169, 110, 0.1);
+}
+.hero-diamond:nth-child(3) {
+  width: 60px; height: 60px; bottom: 20%; left: 20%;
+  transform: rotate(45deg); animation-delay: 4s;
+  border-color: rgba(201, 169, 110, 0.08);
+}
+@keyframes diamondFloat {
+  0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.6; }
+  50% { transform: rotate(45deg) translateY(-20px); opacity: 1; }
+}
+
+/* Floating sparkle particles */
+.hero-sparkle {
+  position: absolute; width: 3px; height: 3px;
+  background: var(--lj-gold); border-radius: 50%;
+  animation: sparkle 4s ease-in-out infinite;
+}
+.hero-sparkle:nth-child(4) { top: 20%; left: 25%; animation-delay: 0s; }
+.hero-sparkle:nth-child(5) { top: 40%; right: 20%; animation-delay: 1s; }
+.hero-sparkle:nth-child(6) { top: 70%; left: 40%; animation-delay: 2s; }
+.hero-sparkle:nth-child(7) { top: 30%; right: 35%; animation-delay: 0.5s; }
+.hero-sparkle:nth-child(8) { top: 55%; left: 15%; animation-delay: 1.5s; }
+.hero-sparkle:nth-child(9) { top: 80%; right: 25%; animation-delay: 3s; }
+.hero-sparkle:nth-child(10) { top: 15%; right: 45%; animation-delay: 2.5s; }
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.hero-content {
+  position: relative; z-index: 2; text-align: center;
+  max-width: 800px; padding: 0 2rem;
+}
+.hero-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem; font-weight: 500;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--lj-gold); margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 1s 0.3s forwards;
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 300;
+  color: #fff; line-height: 1.1; margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 1s 0.5s forwards;
+}
+.hero-title em {
+  font-style: italic; color: var(--lj-gold-light);
+  font-weight: 400;
+}
+.hero-subtitle {
+  font-size: 1rem; font-weight: 300;
+  color: rgba(255,255,255,0.6); line-height: 1.8;
+  max-width: 500px; margin: 0 auto 2.5rem;
+  opacity: 0; animation: fadeUp 1s 0.7s forwards;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 0.8rem;
+  padding: 1rem 2.5rem;
+  background: transparent;
+  border: 1px solid var(--lj-gold);
+  color: var(--lj-gold-light);
+  font-family: var(--font-sans);
+  font-size: 0.8rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.4s ease;
+  opacity: 0; animation: fadeUp 1s 0.9s forwards;
+}
+.hero-cta:hover {
+  background: var(--lj-gold); color: var(--lj-navy);
+  box-shadow: var(--lj-gold-glow);
+}
+.hero-cta svg { width: 16px; height: 16px; transition: transform 0.3s; }
+.hero-cta:hover svg { transform: translateX(4px); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll indicator */
+.hero-scroll {
+  position: absolute; bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: rgba(255,255,255,0.4); font-size: 0.7rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+.hero-scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--lj-gold), transparent);
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ── Marquee ────────────────────────────────────────────── */
+.marquee-section {
+  background: var(--lj-navy);
+  padding: 1rem 0;
+  overflow: hidden; border-top: 1px solid rgba(201, 169, 110, 0.15);
+}
+.marquee-track {
+  display: flex; gap: 3rem;
+  animation: marqueeScroll 30s linear infinite;
+  width: max-content;
+}
+.marquee-item {
+  font-family: var(--font-serif);
+  font-size: 0.9rem; font-weight: 400;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(201, 169, 110, 0.5);
+  white-space: nowrap; display: flex; align-items: center; gap: 3rem;
+}
+.marquee-item::after {
+  content: '◆'; font-size: 0.5rem; color: var(--lj-gold);
+}
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── Section Common ─────────────────────────────────────── */
+.section { padding: 6rem 4rem; }
+.section-dark { background: var(--lj-navy); color: #fff; }
+.section-ivory { background: var(--lj-ivory); }
+.section-cream { background: var(--lj-cream); }
+
+.section-header {
+  text-align: center; margin-bottom: 4rem;
+}
+.section-eyebrow {
+  font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--lj-gold); margin-bottom: 1rem;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300; line-height: 1.2;
+}
+.section-dark .section-title { color: #fff; }
+.section-title em { font-style: italic; color: var(--lj-gold); }
+.section-divider {
+  width: 60px; height: 1px;
+  background: var(--lj-gold); margin: 1.5rem auto 0;
+}
+
+/* ── Collections Grid ───────────────────────────────────── */
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.collection-card {
+  position: relative; overflow: hidden;
+  aspect-ratio: 3/4; cursor: pointer;
+  border-radius: 2px;
+}
+.collection-card-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.collection-card:hover .collection-card-bg { transform: scale(1.05); }
+
+.collection-card:nth-child(1) .collection-card-bg {
+  background: linear-gradient(135deg, #2a1f3d 0%, #4a3060 50%, #1a1028 100%);
+}
+.collection-card:nth-child(2) .collection-card-bg {
+  background: linear-gradient(135deg, #1a2d4a 0%, #2a4a6a 50%, #0a1628 100%);
+}
+.collection-card:nth-child(3) .collection-card-bg {
+  background: linear-gradient(135deg, #3d2a1f 0%, #6a4a2a 50%, #2a1a0a 100%);
+}
+
+.collection-card-content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+}
+.collection-card-label {
+  font-size: 0.65rem; font-weight: 500;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--lj-gold); margin-bottom: 0.5rem;
+}
+.collection-card-name {
+  font-family: var(--font-serif);
+  font-size: 1.8rem; font-weight: 400;
+  color: #fff; line-height: 1.2; margin-bottom: 0.5rem;
+}
+.collection-card-count {
+  font-size: 0.75rem; color: rgba(255,255,255,0.6);
+}
+/* Decorative gem shape in card */
+.collection-gem {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 80px; height: 80px;
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  transition: all 0.6s;
+}
+.collection-card:hover .collection-gem {
+  border-color: rgba(201, 169, 110, 0.5);
+  transform: translate(-50%, -50%) rotate(45deg) scale(1.2);
+}
+.collection-gem::before {
+  content: ''; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 40px; height: 40px;
+  border: 1px solid rgba(201, 169, 110, 0.15);
+}
+
+/* ── Featured Products ──────────────────────────────────── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+.product-card {
+  text-decoration: none; color: inherit;
+  cursor: pointer; position: relative;
+}
+.product-image {
+  position: relative; aspect-ratio: 3/4;
+  overflow: hidden; margin-bottom: 1.2rem;
+  background: var(--lj-cream);
+}
+.product-image-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.product-card:hover .product-image-bg { transform: scale(1.05); }
+
+/* Product image decorative elements */
+.product-img-decor {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-serif);
+  font-size: 3rem; color: var(--lj-gold);
+  opacity: 0.3;
+}
+
+.product-badge {
+  position: absolute; top: 1rem; left: 1rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--lj-gold); color: var(--lj-navy);
+  font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase;
+}
+
+.product-actions {
+  position: absolute; top: 0; right: 0;
+  padding: 1rem; display: flex; flex-direction: column;
+  gap: 0.5rem; opacity: 0; transform: translateX(10px);
+  transition: all 0.3s;
+}
+.product-card:hover .product-actions {
+  opacity: 1; transform: translateX(0);
+}
+.product-action-btn {
+  width: 36px; height: 36px;
+  background: #fff; border: none;
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: all 0.2s; color: var(--lj-charcoal);
+}
+.product-action-btn:hover {
+  background: var(--lj-gold); color: #fff;
+}
+.product-action-btn svg { width: 16px; height: 16px; }
+
+.product-info { padding: 0 0.2rem; }
+.product-category {
+  font-size: 0.65rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--lj-warm-gray); margin-bottom: 0.3rem;
+}
+.product-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem; font-weight: 500;
+  margin-bottom: 0.3rem; line-height: 1.3;
+}
+.product-price {
+  font-size: 0.9rem; font-weight: 500;
+  color: var(--lj-gold-dark);
+}
+.product-price .original {
+  text-decoration: line-through; color: var(--lj-warm-gray);
+  font-weight: 400; margin-left: 0.5rem; font-size: 0.8rem;
+}
+
+/* Product colors */
+.p-color-1 .product-image-bg {
+  background: linear-gradient(135deg, #f5f0eb 0%, #e8e2dd 100%);
+}
+.p-color-2 .product-image-bg {
+  background: linear-gradient(135deg, #f0e8f5 0%, #e2d8ed 100%);
+}
+.p-color-3 .product-image-bg {
+  background: linear-gradient(135deg, #e8f0f5 0%, #d8e2ed 100%);
+}
+.p-color-4 .product-image-bg {
+  background: linear-gradient(135deg, #f5f0e8 0%, #ede5d8 100%);
+}
+
+/* ── Heritage Section ───────────────────────────────────── */
+.heritage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0; min-height: 500px;
+}
+.heritage-visual {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #162240 0%, #0a1628 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.heritage-gem-large {
+  width: 200px; height: 200px;
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  transform: rotate(45deg);
+  position: relative;
+  animation: heritageRotate 20s linear infinite;
+}
+.heritage-gem-large::before {
+  content: ''; position: absolute;
+  top: 20%; left: 20%; right: 20%; bottom: 20%;
+  border: 1px solid rgba(201, 169, 110, 0.15);
+}
+.heritage-gem-large::after {
+  content: ''; position: absolute;
+  top: 40%; left: 40%; right: 40%; bottom: 40%;
+  background: rgba(201, 169, 110, 0.05);
+}
+@keyframes heritageRotate {
+  from { transform: rotate(45deg); }
+  to { transform: rotate(405deg); }
+}
+
+.heritage-content {
+  padding: 4rem; display: flex;
+  flex-direction: column; justify-content: center;
+  background: var(--lj-ivory);
+}
+.heritage-eyebrow {
+  font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--lj-gold); margin-bottom: 1.5rem;
+}
+.heritage-title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem; font-weight: 300;
+  line-height: 1.2; margin-bottom: 1.5rem;
+}
+.heritage-title em { font-style: italic; color: var(--lj-gold); }
+.heritage-text {
+  font-size: 0.95rem; color: var(--lj-warm-gray);
+  line-height: 1.9; margin-bottom: 2rem;
+}
+.heritage-stats {
+  display: flex; gap: 3rem; margin-bottom: 2rem;
+}
+.heritage-stat-number {
+  font-family: var(--font-serif);
+  font-size: 2.5rem; font-weight: 300;
+  color: var(--lj-gold); line-height: 1;
+}
+.heritage-stat-label {
+  font-size: 0.7rem; color: var(--lj-warm-gray);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-top: 0.3rem;
+}
+
+/* ── Testimonials ───────────────────────────────────────── */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.testimonial-card {
+  background: var(--lj-navy-light);
+  border: 1px solid rgba(201, 169, 110, 0.1);
+  padding: 2.5rem; position: relative;
+  transition: all 0.4s;
+}
+.testimonial-card:hover {
+  border-color: rgba(201, 169, 110, 0.3);
+  transform: translateY(-4px);
+  box-shadow: var(--lj-gold-glow);
+}
+.testimonial-quote {
+  font-family: var(--font-serif);
+  font-size: 3rem; color: var(--lj-gold);
+  opacity: 0.3; line-height: 1;
+  margin-bottom: 1rem;
+}
+.testimonial-text {
+  font-size: 0.95rem; color: rgba(255,255,255,0.7);
+  line-height: 1.8; margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex; align-items: center; gap: 1rem;
+}
+.testimonial-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--lj-gold), var(--lj-gold-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.1rem; color: var(--lj-navy); font-weight: 600;
+}
+.testimonial-name {
+  font-size: 0.85rem; font-weight: 500; color: #fff;
+}
+.testimonial-role {
+  font-size: 0.7rem; color: rgba(255,255,255,0.4);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.testimonial-stars {
+  display: flex; gap: 2px; margin-bottom: 1rem;
+}
+.testimonial-stars svg {
+  width: 14px; height: 14px;
+  color: var(--lj-gold); fill: var(--lj-gold);
+}
+
+/* ── Instagram Grid ─────────────────────────────────────── */
+.instagram-section { text-align: center; }
+.instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem; margin-top: 3rem;
+}
+.instagram-item {
+  aspect-ratio: 1; overflow: hidden;
+  position: relative; cursor: pointer;
+}
+.instagram-item-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.5s;
+}
+.instagram-item:hover .instagram-item-bg { transform: scale(1.08); }
+
+.instagram-overlay {
+  position: absolute; inset: 0;
+  background: rgba(10, 22, 40, 0.6);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.3s;
+}
+.instagram-item:hover .instagram-overlay { opacity: 1; }
+.instagram-overlay svg { width: 24px; height: 24px; color: #fff; }
+
+/* Instagram color palette */
+.ig-1 .instagram-item-bg { background: linear-gradient(135deg, #f5e6e0, #dfc4b3); }
+.ig-2 .instagram-item-bg { background: linear-gradient(135deg, #e6e0f5, #c4b3df); }
+.ig-3 .instagram-item-bg { background: linear-gradient(135deg, #e0f5e6, #b3dfc4); }
+.ig-4 .instagram-item-bg { background: linear-gradient(135deg, #f5f0e6, #dfd3b3); }
+.ig-5 .instagram-item-bg { background: linear-gradient(135deg, #e0e6f5, #b3c4df); }
+.ig-6 .instagram-item-bg { background: linear-gradient(135deg, #f5e6f0, #dfb3c4); }
+
+.instagram-handle {
+  margin-top: 1.5rem;
+  font-size: 0.8rem; letter-spacing: 0.15em;
+}
+.instagram-handle a {
+  color: var(--lj-gold); text-decoration: none;
+  transition: color 0.3s;
+}
+.instagram-handle a:hover { color: var(--lj-gold-dark); }
+
+/* ── Newsletter ─────────────────────────────────────────── */
+.newsletter {
+  text-align: center;
+  padding: 5rem 4rem;
+  background: var(--lj-navy);
+  position: relative; overflow: hidden;
+}
+.newsletter-bg-pattern {
+  position: absolute; inset: 0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(201, 169, 110, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(201, 169, 110, 0.04) 0%, transparent 50%);
+}
+.newsletter-content { position: relative; z-index: 1; }
+.newsletter-title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem; font-weight: 300;
+  color: #fff; margin-bottom: 0.8rem;
+}
+.newsletter-subtitle {
+  font-size: 0.9rem; color: rgba(255,255,255,0.5);
+  margin-bottom: 2rem;
+}
+.newsletter-form {
+  display: flex; gap: 0; max-width: 480px;
+  margin: 0 auto;
+}
+.newsletter-input {
+  flex: 1; padding: 1rem 1.5rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  border-right: none;
+  color: #fff; font-family: var(--font-sans);
+  font-size: 0.85rem; outline: none;
+  transition: border-color 0.3s;
+}
+.newsletter-input::placeholder { color: rgba(255,255,255,0.3); }
+.newsletter-input:focus { border-color: var(--lj-gold); }
+.newsletter-btn {
+  padding: 1rem 2rem;
+  background: var(--lj-gold); border: 1px solid var(--lj-gold);
+  color: var(--lj-navy); font-family: var(--font-sans);
+  font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.3s;
+  white-space: nowrap;
+}
+.newsletter-btn:hover {
+  background: var(--lj-gold-light);
+  box-shadow: var(--lj-gold-glow);
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+.footer {
+  background: var(--lj-charcoal); color: rgba(255,255,255,0.5);
+  padding: 4rem 4rem 2rem;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem; margin-bottom: 3rem;
+}
+.footer-brand-name {
+  font-family: var(--font-serif);
+  font-size: 1.5rem; font-weight: 300;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: #fff; margin-bottom: 1rem;
+}
+.footer-brand-text {
+  font-size: 0.85rem; line-height: 1.8;
+  max-width: 300px;
+}
+.footer-col-title {
+  font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--lj-gold); margin-bottom: 1.5rem;
+}
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 0.8rem; }
+.footer-col a {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none; font-size: 0.85rem;
+  transition: color 0.3s;
+}
+.footer-col a:hover { color: var(--lj-gold-light); }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.75rem;
+}
+.footer-socials { display: flex; gap: 1rem; }
+.footer-social {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s; color: rgba(255,255,255,0.5);
+  text-decoration: none;
+}
+.footer-social:hover {
+  border-color: var(--lj-gold); color: var(--lj-gold);
+}
+.footer-social svg { width: 16px; height: 16px; }
+
+/* ── Scroll Animations ──────────────────────────────────── */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal.visible {
+  opacity: 1; transform: translateY(0);
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .section { padding: 4rem 2rem; }
+  .nav { padding: 1.2rem 2rem; }
+  .nav.scrolled { padding: 0.8rem 2rem; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .collections-grid { grid-template-columns: repeat(2, 1fr); }
+  .heritage { grid-template-columns: 1fr; }
+  .heritage-visual { min-height: 300px; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .instagram-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+  .products-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .collections-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 2.5rem; }
+  .nav-links { display: none; }
+  .newsletter-form { flex-direction: column; }
+  .newsletter-input { border-right: 1px solid rgba(201, 169, 110, 0.2); }
+  .footer-grid { grid-template-columns: 1fr; }
+  .heritage-stats { flex-wrap: wrap; gap: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ Navigation ═══ -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">Lumière</a>
+  <ul class="nav-links">
+    <li><a href="#collections">收藏系列</a></li>
+    <li><a href="#products">珠宝精选</a></li>
+    <li><a href="#heritage">品牌故事</a></li>
+    <li><a href="#testimonials">客户评价</a></li>
+  </ul>
+  <div class="nav-icons">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+  </div>
+</nav>
+
+<!-- ═══ Hero ═══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <!-- Decorative elements -->
+  <div class="hero-diamond"></div>
+  <div class="hero-diamond"></div>
+  <div class="hero-diamond"></div>
+  <div class="hero-sparkle"></div>
+  <div class="hero-sparkle"></div>
+  <div class="hero-sparkle"></div>
+  <div class="hero-sparkle"></div>
+  <div class="hero-sparkle"></div>
+  <div class="hero-sparkle"></div>
+  <div class="hero-sparkle"></div>
+  
+  <div class="hero-content">
+    <p class="hero-eyebrow">Since 1987 · Haute Joaillerie</p>
+    <h1 class="hero-title">Timeless <em>Elegance</em><br>Crafted for You</h1>
+    <p class="hero-subtitle">每一件珠宝都是一段永恒的故事，承载着匠人的执着与佩戴者的光芒</p>
+    <a href="#collections" class="hero-cta">
+      探索系列
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══ Marquee ═══ -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Diamonds</span>
+    <span class="marquee-item">Sapphires</span>
+    <span class="marquee-item">Emeralds</span>
+    <span class="marquee-item">Rubies</span>
+    <span class="marquee-item">Pearls</span>
+    <span class="marquee-item">Gold</span>
+    <span class="marquee-item">Platinum</span>
+    <span class="marquee-item">Bespoke</span>
+    <span class="marquee-item">Heritage</span>
+    <span class="marquee-item">Craftsmanship</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="marquee-item">Diamonds</span>
+    <span class="marquee-item">Sapphires</span>
+    <span class="marquee-item">Emeralds</span>
+    <span class="marquee-item">Rubies</span>
+    <span class="marquee-item">Pearls</span>
+    <span class="marquee-item">Gold</span>
+    <span class="marquee-item">Platinum</span>
+    <span class="marquee-item">Bespoke</span>
+    <span class="marquee-item">Heritage</span>
+    <span class="marquee-item">Craftsmanship</span>
+  </div>
+</div>
+
+<!-- ═══ Collections ═══ -->
+<section class="section section-ivory" id="collections">
+  <div class="section-header reveal">
+    <p class="section-eyebrow">Curated Collections</p>
+    <h2 class="section-title">探索 <em>珠宝</em> 系列</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="collections-grid">
+    <div class="collection-card reveal">
+      <div class="collection-card-bg"></div>
+      <div class="collection-gem"></div>
+      <div class="collection-card-content">
+        <p class="collection-card-label">New Arrival</p>
+        <h3 class="collection-card-name">Éternité 永恒系列</h3>
+        <p class="collection-card-count">24 件作品</p>
+      </div>
+    </div>
+    <div class="collection-card reveal">
+      <div class="collection-card-bg"></div>
+      <div class="collection-gem"></div>
+      <div class="collection-card-content">
+        <p class="collection-card-label">Signature</p>
+        <h3 class="collection-card-name">Lumière 光韵系列</h3>
+        <p class="collection-card-count">18 件作品</p>
+      </div>
+    </div>
+    <div class="collection-card reveal">
+      <div class="collection-card-bg"></div>
+      <div class="collection-gem"></div>
+      <div class="collection-card-content">
+        <p class="collection-card-label">Bridal</p>
+        <h3 class="collection-card-name">Seraphina 婚嫁系列</h3>
+        <p class="collection-card-count">32 件作品</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Featured Products ═══ -->
+<section class="section" id="products">
+  <div class="section-header reveal">
+    <p class="section-eyebrow">精选珠宝</p>
+    <h2 class="section-title">匠心 <em>杰作</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="products-grid">
+    <a class="product-card p-color-1 reveal" href="#">
+      <div class="product-image">
+        <div class="product-image-bg"></div>
+        <div class="product-img-decor">◇</div>
+        <div class="product-badge">New</div>
+        <div class="product-actions">
+          <button class="product-action-btn" title="收藏">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <button class="product-action-btn" title="加入购物车">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Éternité 系列</p>
+        <h3 class="product-name">月光石吊坠项链</h3>
+        <p class="product-price">¥28,800</p>
+      </div>
+    </a>
+    <a class="product-card p-color-2 reveal" href="#">
+      <div class="product-image">
+        <div class="product-image-bg"></div>
+        <div class="product-img-decor">◇</div>
+        <div class="product-actions">
+          <button class="product-action-btn" title="收藏">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <button class="product-action-btn" title="加入购物车">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Lumière 系列</p>
+        <h3 class="product-name">星辉蓝宝石耳环</h3>
+        <p class="product-price">¥42,600</p>
+      </div>
+    </a>
+    <a class="product-card p-color-3 reveal" href="#">
+      <div class="product-image">
+        <div class="product-image-bg"></div>
+        <div class="product-img-decor">◇</div>
+        <div class="product-actions">
+          <button class="product-action-btn" title="收藏">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <button class="product-action-btn" title="加入购物车">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Seraphina 系列</p>
+        <h3 class="product-name">钻石婚戒套装</h3>
+        <p class="product-price">¥86,000 <span class="original">¥98,000</span></p>
+      </div>
+    </a>
+    <a class="product-card p-color-4 reveal" href="#">
+      <div class="product-image">
+        <div class="product-image-bg"></div>
+        <div class="product-img-decor">◇</div>
+        <div class="product-badge">限量</div>
+        <div class="product-actions">
+          <button class="product-action-btn" title="收藏">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <button class="product-action-btn" title="加入购物车">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Éternité 系列</p>
+        <h3 class="product-name">祖母绿手镯</h3>
+        <p class="product-price">¥125,000</p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ Heritage ═══ -->
+<section class="heritage" id="heritage">
+  <div class="heritage-visual">
+    <div class="heritage-gem-large"></div>
+  </div>
+  <div class="heritage-content reveal">
+    <p class="heritage-eyebrow">Our Heritage</p>
+    <h2 class="heritage-title">三代传承的<em>匠心</em>工艺</h2>
+    <p class="heritage-text">
+      自 1987 年以来，Lumière 始终坚持以最严苛的标准甄选每一颗宝石。
+      我们的工匠来自巴黎旺多姆广场最负盛名的珠宝工坊，
+      每一件作品都经过数百小时的精心打磨，只为呈现珠宝最纯粹的光芒。
+    </p>
+    <div class="heritage-stats">
+      <div>
+        <div class="heritage-stat-number">37+</div>
+        <div class="heritage-stat-label">年历史</div>
+      </div>
+      <div>
+        <div class="heritage-stat-number">12K</div>
+        <div class="heritage-stat-label">件作品</div>
+      </div>
+      <div>
+        <div class="heritage-stat-number">48</div>
+        <div class="heritage-stat-label">个国家</div>
+      </div>
+    </div>
+    <a href="#" class="hero-cta" style="border-color: var(--lj-gold); color: var(--lj-gold-dark); display: inline-flex;">
+      品牌故事
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ Testimonials ═══ -->
+<section class="section section-dark" id="testimonials">
+  <div class="section-header reveal">
+    <p class="section-eyebrow">Client Stories</p>
+    <h2 class="section-title">客户 <em>心声</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <div class="testimonial-quote">"</div>
+      <div class="testimonial-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testimonial-text">
+        "Lumière 的工匠为我定制了结婚十周年纪念戒指，每一处细节都超出预期。
+        这不仅是一件珠宝，更是一段可以传世的记忆。"
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">C</div>
+        <div>
+          <div class="testimonial-name">Catherine Laurent</div>
+          <div class="testimonial-role">Paris, France</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="testimonial-quote">"</div>
+      <div class="testimonial-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testimonial-text">
+        "从选购到定制，整个过程都充满仪式感。
+        蓝宝石耳环的光泽在任何场合都令人惊艳，已经成为我最珍贵的收藏。"
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">M</div>
+        <div>
+          <div class="testimonial-name">Mia Tanaka</div>
+          <div class="testimonial-role">Tokyo, Japan</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="testimonial-quote">"</div>
+      <div class="testimonial-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="testimonial-text">
+        "第一次走进 Lumière 的旗舰店里，就被那份宁静而奢华的氛围所打动。
+        他们对宝石品质的执着让我完全信赖这个品牌。"
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">S</div>
+        <div>
+          <div class="testimonial-name">Sarah Mitchell</div>
+          <div class="testimonial-role">New York, USA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Instagram Grid ═══ -->
+<section class="section section-cream instagram-section">
+  <div class="section-header reveal">
+    <p class="section-eyebrow">@lumiere.jewelry</p>
+    <h2 class="section-title">关注我们的 <em>灵感</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="instagram-grid">
+    <div class="instagram-item ig-1">
+      <div class="instagram-item-bg"></div>
+      <div class="instagram-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+      </div>
+    </div>
+    <div class="instagram-item ig-2">
+      <div class="instagram-item-bg"></div>
+      <div class="instagram-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+      </div>
+    </div>
+    <div class="instagram-item ig-3">
+      <div class="instagram-item-bg"></div>
+      <div class="instagram-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+      </div>
+    </div>
+    <div class="instagram-item ig-4">
+      <div class="instagram-item-bg"></div>
+      <div class="instagram-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+      </div>
+    </div>
+    <div class="instagram-item ig-5">
+      <div class="instagram-item-bg"></div>
+      <div class="instagram-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+      </div>
+    </div>
+    <div class="instagram-item ig-6">
+      <div class="instagram-item-bg"></div>
+      <div class="instagram-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+      </div>
+    </div>
+  </div>
+  <p class="instagram-handle">Follow us on Instagram <a href="#">@lumiere.jewelry</a></p>
+</section>
+
+<!-- ═══ Newsletter ═══ -->
+<section class="newsletter">
+  <div class="newsletter-bg-pattern"></div>
+  <div class="newsletter-content reveal">
+    <h2 class="newsletter-title">加入 Lumière 世界</h2>
+    <p class="newsletter-subtitle">率先了解新品发布、独家活动和限量系列</p>
+    <form class="newsletter-form" onsubmit="event.preventDefault()">
+      <input type="email" class="newsletter-input" placeholder="您的邮箱地址">
+      <button type="submit" class="newsletter-btn">订阅</button>
+    </form>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Lumière</div>
+      <p class="footer-brand-text">
+        自 1987 年以来，以匠心工艺和永恒设计，为世界各地的珠宝爱好者打造传世之作。
+      </p>
+    </div>
+    <div class="footer-col">
+      <h4 class="footer-col-title">购物指南</h4>
+      <ul>
+        <li><a href="#">全部珠宝</a></li>
+        <li><a href="#">新品到货</a></li>
+        <li><a href="#">婚嫁系列</a></li>
+        <li><a href="#">定制服务</a></li>
+        <li><a href="#">礼品卡</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 class="footer-col-title">品牌服务</h4>
+      <ul>
+        <li><a href="#">品牌故事</a></li>
+        <li><a href="#">匠心工艺</a></li>
+        <li><a href="#">宝石鉴定</a></li>
+        <li><a href="#">售后保养</a></li>
+        <li><a href="#">尺寸指南</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 class="footer-col-title">联系我们</h4>
+      <ul>
+        <li><a href="#">预约到店</a></li>
+        <li><a href="#">在线咨询</a></li>
+        <li><a href="#">全球门店</a></li>
+        <li><a href="#">加入我们</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Lumière Fine Jewellery. All rights reserved.</span>
+    <div class="footer-socials">
+      <a href="#" class="footer-social">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+      </a>
+      <a href="#" class="footer-social">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+      </a>
+      <a href="#" class="footer-social">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Navigation scroll effect ──
+const nav = document.getElementById('nav');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  nav.classList.toggle('scrolled', scrollY > 80);
+  lastScroll = scrollY;
+});
+
+// ── Scroll reveal ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
