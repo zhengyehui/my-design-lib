@@ -71,7 +71,7 @@ export default defineConfig({
     // Open Graph（社交分享）
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 66 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 67 个完整页面，纯 HTML+CSS，零依赖。' }],
     ['meta', { property: 'og:url', content: 'http://101.37.166.208:11930' }],
     ['meta', { property: 'og:site_name', content: 'My Design Lib' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -300,7 +300,8 @@ export default defineConfig({
             { text: 'Pulse 上线预告', link: '/pages/coming-soon' },
             { text: 'Mono 字体铸造厂', link: '/pages/type-foundry' },
             { text: 'Canvas 创意编码工作室', link: '/pages/canvas-generative-art' },
-            { text: 'Kinetic 动态设计工作室', link: '/pages/motion-studio' }
+            { text: 'Kinetic 动态设计工作室', link: '/pages/motion-studio' },
+            { text: 'Lux Audio 音效工作室', link: '/pages/lux-audio-studio' }
           ]
         },
         {

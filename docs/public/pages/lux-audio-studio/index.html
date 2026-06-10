@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lux Audio Studio — Immersive Sound Design</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ──────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #06060c;
+  --bg-surface: #0c0c16;
+  --bg-card: #111120;
+  --accent-warm: #ff6b35;
+  --accent-warm-dim: rgba(255, 107, 53, 0.15);
+  --accent-cool: #06b6d4;
+  --accent-cool-dim: rgba(6, 182, 212, 0.12);
+  --text-primary: #f0ece4;
+  --text-secondary: rgba(240, 236, 228, 0.55);
+  --text-muted: rgba(240, 236, 228, 0.3);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --glow-warm: 0 0 60px rgba(255, 107, 53, 0.25);
+  --glow-cool: 0 0 60px rgba(6, 182, 212, 0.2);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Grain Overlay ─────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Navigation ────────────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 3rem;
+  background: rgba(6, 6, 12, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.nav-logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-warm), var(--accent-cool));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.nav-logo-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--accent-warm); }
+
+.nav-cta {
+  padding: 0.6rem 1.5rem;
+  background: var(--accent-warm);
+  color: #fff !important;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.nav-cta:hover {
+  background: #ff8555;
+  box-shadow: var(--glow-warm);
+}
+
+/* ── Hero Section ──────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(255, 107, 53, 0.08), transparent),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(6, 182, 212, 0.06), transparent),
+    var(--bg-deep);
+}
+
+/* Floating orbs */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: orbFloat 12s ease-in-out infinite;
+}
+.hero-orb--warm {
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 107, 53, 0.12);
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+}
+.hero-orb--cool {
+  width: 300px;
+  height: 300px;
+  background: rgba(6, 182, 212, 0.1);
+  bottom: 15%;
+  right: 10%;
+  animation-delay: -4s;
+}
+.hero-orb--small {
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 107, 53, 0.08);
+  top: 60%;
+  left: 40%;
+  animation-delay: -8s;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 8rem 3rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
+}
+
+.hero-left { max-width: 640px; }
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: var(--accent-warm-dim);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  margin-bottom: 2rem;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent-warm), #ff9a6c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-desc {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  max-width: 480px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: var(--accent-warm);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: #ff8555;
+  box-shadow: var(--glow-warm);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.btn-ghost:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+/* ── Hero Right: Waveform Visual ───────────────────────── */
+.hero-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.waveform-container {
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 1;
+  position: relative;
+}
+
+.waveform-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+
+.waveform-ring:nth-child(1) {
+  inset: 0;
+  border-color: rgba(255, 107, 53, 0.15);
+  animation-delay: 0s;
+}
+.waveform-ring:nth-child(2) {
+  inset: 10%;
+  border-color: rgba(6, 182, 212, 0.12);
+  animation-delay: -0.5s;
+}
+.waveform-ring:nth-child(3) {
+  inset: 20%;
+  border-color: rgba(255, 107, 53, 0.1);
+  animation-delay: -1s;
+}
+.waveform-ring:nth-child(4) {
+  inset: 30%;
+  border-color: rgba(6, 182, 212, 0.08);
+  animation-delay: -1.5s;
+}
+
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.03); opacity: 0.6; }
+}
+
+/* Central waveform bars */
+.waveform-bars {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 120px;
+}
+
+.wave-bar {
+  width: 4px;
+  border-radius: 4px;
+  animation: waveAnim 1.2s ease-in-out infinite;
+}
+
+.wave-bar:nth-child(odd) { background: var(--accent-warm); }
+.wave-bar:nth-child(even) { background: var(--accent-cool); }
+
+.wave-bar:nth-child(1) { height: 30%; animation-delay: 0s; }
+.wave-bar:nth-child(2) { height: 50%; animation-delay: 0.1s; }
+.wave-bar:nth-child(3) { height: 80%; animation-delay: 0.2s; }
+.wave-bar:nth-child(4) { height: 60%; animation-delay: 0.3s; }
+.wave-bar:nth-child(5) { height: 100%; animation-delay: 0.15s; }
+.wave-bar:nth-child(6) { height: 70%; animation-delay: 0.25s; }
+.wave-bar:nth-child(7) { height: 90%; animation-delay: 0.05s; }
+.wave-bar:nth-child(8) { height: 45%; animation-delay: 0.35s; }
+.wave-bar:nth-child(9) { height: 75%; animation-delay: 0.2s; }
+.wave-bar:nth-child(10) { height: 55%; animation-delay: 0.1s; }
+.wave-bar:nth-child(11) { height: 85%; animation-delay: 0.3s; }
+.wave-bar:nth-child(12) { height: 40%; animation-delay: 0.15s; }
+.wave-bar:nth-child(13) { height: 95%; animation-delay: 0.25s; }
+.wave-bar:nth-child(14) { height: 65%; animation-delay: 0.05s; }
+.wave-bar:nth-child(15) { height: 50%; animation-delay: 0.35s; }
+.wave-bar:nth-child(16) { height: 80%; animation-delay: 0.2s; }
+.wave-bar:nth-child(17) { height: 35%; animation-delay: 0.1s; }
+.wave-bar:nth-child(18) { height: 70%; animation-delay: 0.3s; }
+.wave-bar:nth-child(19) { height: 90%; animation-delay: 0.15s; }
+.wave-bar:nth-child(20) { height: 45%; animation-delay: 0.25s; }
+
+@keyframes waveAnim {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.4); }
+}
+
+/* ── Stats Bar ─────────────────────────────────────────── */
+.stats-bar {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 3rem 4rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border-subtle);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.stat-item {
+  background: var(--bg-surface);
+  padding: 2rem;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--accent-warm), var(--accent-cool));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 0.25rem;
+}
+
+/* ── Section Common ────────────────────────────────────── */
+.section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 6rem 3rem;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  margin-bottom: 1.5rem;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-warm);
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 560px;
+}
+
+/* ── Services Grid ─────────────────────────────────────── */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.service-card {
+  position: relative;
+  padding: 2.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  transition: all 0.4s;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-warm), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.service-card:hover {
+  border-color: rgba(255, 107, 53, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.service-card:hover::before { opacity: 1; }
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-icon--warm { background: var(--accent-warm-dim); }
+.service-icon--cool { background: var(--accent-cool-dim); }
+.service-icon--mix {
+  background: linear-gradient(135deg, var(--accent-warm-dim), var(--accent-cool-dim));
+}
+
+.service-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.service-card p {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.service-tag {
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ── Projects Horizontal Scroll ────────────────────────── */
+.projects-section {
+  padding: 6rem 0;
+  overflow: hidden;
+}
+
+.projects-header {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 3rem 3rem;
+}
+
+.projects-scroll {
+  display: flex;
+  gap: 2rem;
+  padding: 0 3rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.projects-scroll::-webkit-scrollbar { display: none; }
+
+.project-card {
+  flex: 0 0 420px;
+  scroll-snap-align: start;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.4s;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 107, 53, 0.15);
+}
+
+.project-preview {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+}
+
+.project-preview-bg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.project-preview-bg--1 {
+  background: linear-gradient(135deg, #1a0a00, #2d1600, #0a0a1a);
+}
+.project-preview-bg--2 {
+  background: linear-gradient(135deg, #001a1a, #002020, #0a001a);
+}
+.project-preview-bg--3 {
+  background: linear-gradient(135deg, #1a0010, #200018, #0a0a1a);
+}
+.project-preview-bg--4 {
+  background: linear-gradient(135deg, #0a0a1a, #10102a, #1a0a00);
+}
+
+/* Mini waveform in project cards */
+.mini-waveform {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 60px;
+}
+
+.mini-bar {
+  width: 3px;
+  border-radius: 3px;
+  background: var(--accent-warm);
+  opacity: 0.6;
+  animation: miniWave 1.5s ease-in-out infinite;
+}
+
+.mini-bar:nth-child(1) { height: 20%; animation-delay: 0s; }
+.mini-bar:nth-child(2) { height: 45%; animation-delay: 0.1s; }
+.mini-bar:nth-child(3) { height: 70%; animation-delay: 0.2s; }
+.mini-bar:nth-child(4) { height: 55%; animation-delay: 0.15s; }
+.mini-bar:nth-child(5) { height: 90%; animation-delay: 0.05s; }
+.mini-bar:nth-child(6) { height: 65%; animation-delay: 0.25s; }
+.mini-bar:nth-child(7) { height: 80%; animation-delay: 0.1s; }
+.mini-bar:nth-child(8) { height: 40%; animation-delay: 0.3s; }
+.mini-bar:nth-child(9) { height: 75%; animation-delay: 0.2s; }
+.mini-bar:nth-child(10) { height: 50%; animation-delay: 0.15s; }
+.mini-bar:nth-child(11) { height: 85%; animation-delay: 0.05s; }
+.mini-bar:nth-child(12) { height: 35%; animation-delay: 0.25s; }
+
+@keyframes miniWave {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.3); }
+}
+
+.project-play {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 107, 53, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+}
+
+.project-play:hover {
+  transform: scale(1.1);
+  background: var(--accent-warm);
+}
+
+.project-play::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 12px solid #fff;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  margin-left: 3px;
+}
+
+.project-info {
+  padding: 1.5rem;
+}
+
+.project-category {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-cool);
+  margin-bottom: 0.5rem;
+}
+
+.project-info h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.project-info p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.project-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.project-meta span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ── Process Section ───────────────────────────────────── */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border-subtle);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 3rem;
+}
+
+.process-step {
+  background: var(--bg-surface);
+  padding: 2.5rem 2rem;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.process-step:hover { background: var(--bg-card); }
+
+.process-number {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(180deg, var(--accent-warm), transparent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.4;
+  margin-bottom: 1.25rem;
+}
+
+.process-step h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.process-step p {
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ── Testimonials ──────────────────────────────────────── */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.testimonial-card {
+  padding: 2.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.testimonial-card:hover {
+  border-color: rgba(255, 107, 53, 0.15);
+}
+
+.testimonial-quote {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.testimonial-quote::before {
+  content: '"';
+  font-size: 3rem;
+  line-height: 0;
+  vertical-align: -0.5em;
+  color: var(--accent-warm);
+  opacity: 0.4;
+  margin-right: 0.25rem;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.testimonial-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.testimonial-avatar--1 { background: var(--accent-warm-dim); color: var(--accent-warm); }
+.testimonial-avatar--2 { background: var(--accent-cool-dim); color: var(--accent-cool); }
+.testimonial-avatar--3 { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
+.testimonial-avatar--4 { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+
+.testimonial-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.testimonial-role {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── CTA Section ───────────────────────────────────────── */
+.cta-section {
+  position: relative;
+  padding: 8rem 3rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.cta-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255, 107, 53, 0.1), transparent),
+    var(--bg-deep);
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cta-content h2 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.cta-content p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* ── Footer ────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-warm), var(--accent-cool));
+}
+
+.footer-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: var(--text-primary); }
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero-content { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .process-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .section { padding: 4rem 1.5rem; }
+  .hero-content { padding: 6rem 1.5rem 3rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .process-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: 1fr; margin: 0 1.5rem 3rem; }
+  .project-card { flex: 0 0 320px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">LX</div>
+    <span class="nav-logo-text">Lux Audio</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get in Touch</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-orb hero-orb--warm"></div>
+    <div class="hero-orb hero-orb--cool"></div>
+    <div class="hero-orb hero-orb--small"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-tag">Award-Winning Sound Design</div>
+      <h1>We shape<br><span class="highlight">sound</span> into<br>experience</h1>
+      <p class="hero-desc">Immersive audio design for film, games, and installations. We craft sonic landscapes that transform how audiences feel, react, and remember.</p>
+      <div class="hero-actions">
+        <a href="#work" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Listen to Reel
+        </a>
+        <a href="#services" class="btn-ghost">Our Services</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="waveform-container">
+        <div class="waveform-ring"></div>
+        <div class="waveform-ring"></div>
+        <div class="waveform-ring"></div>
+        <div class="waveform-ring"></div>
+        <div class="waveform-bars">
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number">200+</div>
+    <div class="stat-label">Projects Delivered</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">47</div>
+    <div class="stat-label">Awards Won</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">12</div>
+    <div class="stat-label">Years of Craft</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">98%</div>
+    <div class="stat-label">Client Retention</div>
+  </div>
+</div>
+
+<!-- Services -->
+<section class="section" id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">Crafting sonic<br>identities that resonate</h2>
+  <p class="section-desc">From intimate documentary scores to blockbuster game soundscapes, we design audio experiences that linger long after the curtain falls.</p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon service-icon--warm">🎬</div>
+      <h3>Film & Television</h3>
+      <p>Full post-production sound design, Foley, ADR mixing, and Dolby Atmos spatial audio for narrative and documentary work.</p>
+      <div class="service-tags">
+        <span class="service-tag">5.1 / 7.1 / Atmos</span>
+        <span class="service-tag">Foley</span>
+        <span class="service-tag">ADR</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon service-icon--cool">🎮</div>
+      <h3>Interactive & Gaming</h3>
+      <p>Adaptive audio systems, dynamic soundtracks, spatial audio engines, and real-time procedural sound for immersive gameplay.</p>
+      <div class="service-tags">
+        <span class="service-tag">Wwise / FMOD</span>
+        <span class="service-tag">Spatial</span>
+        <span class="service-tag">Procedural</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon service-icon--mix">🏛️</div>
+      <h3>Installations & Experiential</h3>
+      <p>Immersive sound environments for museums, galleries, brand activations, and architectural spaces that captivate audiences.</p>
+      <div class="service-tags">
+        <span class="service-tag">Multi-channel</span>
+        <span class="service-tag">Generative</span>
+        <span class="service-tag">Reactive</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon service-icon--warm">🎵</div>
+      <h3>Music Production</h3>
+      <p>Original compositions, orchestral scoring, electronic production, and sonic branding for commercials and content.</p>
+      <div class="service-tags">
+        <span class="service-tag">Orchestral</span>
+        <span class="service-tag">Electronic</span>
+        <span class="service-tag">Sonic Brand</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon service-icon--cool">🎧</div>
+      <h3>Podcast & Voice</h3>
+      <p>Premium podcast production, voice-over direction, audio branding packages, and spatial voice experiences.</p>
+      <div class="service-tags">
+        <span class="service-tag">Production</span>
+        <span class="service-tag">Voice Direction</span>
+        <span class="service-tag">Branding</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon service-icon--mix">🔬</div>
+      <h3>Sonic Research</h3>
+      <p>Psychoacoustic research, sound perception studies, and custom audio tool development for cutting-edge applications.</p>
+      <div class="service-tags">
+        <span class="service-tag">Psychoacoustics</span>
+        <span class="service-tag">DSP</span>
+        <span class="service-tag">R&D</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section class="projects-section" id="work">
+  <div class="projects-header">
+    <div class="section-label">Selected Work</div>
+    <h2 class="section-title">Recent projects</h2>
+    <p class="section-desc">A curated selection of our most impactful sound design work across film, gaming, and experiential media.</p>
+  </div>
+
+  <div class="projects-scroll">
+    <div class="project-card">
+      <div class="project-preview">
+        <div class="project-preview-bg project-preview-bg--1">
+          <div class="mini-waveform">
+            <div class="mini-bar"></div><div class="mini-bar"></div><div class="mini-bar"></div>
+            <div class="mini-bar"></div><div class="mini-bar"></div><div class="mini-bar"></div>
+            <div class="mini-bar"></div><div class="mini-bar"></div><div class="mini-bar"></div>
+            <div class="mini-bar"></div><div class="mini-bar"></div><div class="mini-bar"></div>
+          </div>
+        </div>
+        <div class="project-play"></div>
+      </div>
+      <div class="project-info">
+        <div class="project-category">Film — Dolby Atmos</div>
+        <h3>Echoes of Tomorrow</h3>
+        <p>Full Atmos mix for a sci-fi feature film. Designed alien soundscapes using granular synthesis and field recordings from Iceland.</p>
+        <div class="project-meta">
+          <span>🕐 14 weeks</span>
+          <span>🏆 Best Sound Design, Sundance</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-preview">
+        <div class="project-preview-bg project-preview-bg--2">
+          <div class="mini-waveform">
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+            <div class="mini-bar" style="background: var(--accent-cool)"></div>
+          </div>
+        </div>
+        <div class="project-play"></div>
+      </div>
+      <div class="project-info">
+        <div class="project-category">Gaming — Adaptive Audio</div>
+        <h3>Neon District: Requiem</h3>
+        <p>Complete audio system for a AAA cyberpunk RPG. 4,000+ sound assets, adaptive music engine, and HRTF spatial audio.</p>
+        <div class="project-meta">
+          <span>🕐 22 months</span>
+          <span>🏆 Audio Achievement, DICE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-preview">
+        <div class="project-preview-bg project-preview-bg--3">
+          <div class="mini-waveform">
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+            <div class="mini-bar" style="background: #8b5cf6"></div>
+          </div>
+        </div>
+        <div class="project-play"></div>
+      </div>
+      <div class="project-info">
+        <div class="project-category">Installation — Spatial</div>
+        <h3>Breathing Walls</h3>
+        <p>Generative sound installation for MoMA PS1. 32-channel reactive audio system responding to visitor movement and ambient noise.</p>
+        <div class="project-meta">
+          <span>🕐 3 months</span>
+          <span>📍 MoMA PS1, New York</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-preview">
+        <div class="project-preview-bg project-preview-bg--4">
+          <div class="mini-waveform">
+            <div class="mini-bar"></div><div class="mini-bar"></div><div class="mini-bar"></div>
+            <div class="mini-bar"></div><div class="mini-bar"></div><div class="mini-bar"></div>
+            <div class="mini-bar"></div><div class="mini-bar"></div><div class="mini-bar"></div>
+            <div class="mini-bar"></div><div class="mini-bar"></div><div class="mini-bar"></div>
+          </div>
+        </div>
+        <div class="project-play"></div>
+      </div>
+      <div class="project-info">
+        <div class="project-category">Brand — Sonic Identity</div>
+        <h3>Aether Sonic Brand</h3>
+        <p>Complete sonic identity for a luxury headphone brand. Logo sound, UI sounds, retail ambience, and brand anthem composition.</p>
+        <div class="project-meta">
+          <span>🕐 8 weeks</span>
+          <span>🏆 Red Dot Design Award</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="section" id="process">
+  <div class="section-label">Our Process</div>
+  <h2 class="section-title">From concept to<br>final master</h2>
+  <p class="section-desc">A disciplined creative process refined over 12 years. Every project follows our four-phase methodology.</p>
+
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="process-number">01</div>
+      <h3>Discovery</h3>
+      <p>Deep-dive into the creative vision, audience, and technical requirements. We listen before we design.</p>
+    </div>
+    <div class="process-step">
+      <div class="process-number">02</div>
+      <h3>Concept</h3>
+      <p>Sonic mood boards, reference libraries, and prototype soundscapes. We iterate until the vision clicks.</p>
+    </div>
+    <div class="process-step">
+      <div class="process-number">03</div>
+      <h3>Production</h3>
+      <p>Full-scale sound design, recording, composition, and mixing in our Dolby Atmos-certified studio.</p>
+    </div>
+    <div class="process-step">
+      <div class="process-number">04</div>
+      <h3>Delivery</h3>
+      <p>Final mastering, format conversion, platform integration, and ongoing support. We don't disappear after handoff.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section" id="testimonials">
+  <div class="section-label">Client Voices</div>
+  <h2 class="section-title">Trusted by studios<br>and brands worldwide</h2>
+
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <p class="testimonial-quote">Lux Audio transformed our film's emotional core through sound. The Atmos mix at Sundance literally brought the audience to tears. Their understanding of narrative audio is unmatched.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar testimonial-avatar--1">SR</div>
+        <div>
+          <div class="testimonial-name">Sarah Rodriguez</div>
+          <div class="testimonial-role">Director, Echoes of Tomorrow</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-quote">The adaptive audio system they built for Neon District redefined what our players expect from game sound. 4,000 assets, all seamlessly integrated. Pure technical artistry.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar testimonial-avatar--2">MK</div>
+        <div>
+          <div class="testimonial-name">Marcus Kim</div>
+          <div class="testimonial-role">Audio Director, Vertex Games</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-quote">Working with Lux on our sonic identity was transformative. They didn't just create sounds — they captured the soul of our brand in audio form.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar testimonial-avatar--3">AL</div>
+        <div>
+          <div class="testimonial-name">Anna Lindström</div>
+          <div class="testimonial-role">CMO, Aether Audio</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-quote">The Breathing Walls installation exceeded every expectation. Visitors spent an average of 23 minutes inside — unheard of for a sound art piece. Lux nailed the generative audio.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar testimonial-avatar--4">JT</div>
+        <div>
+          <div class="testimonial-name">James Thornton</div>
+          <div class="testimonial-role">Curator, MoMA PS1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-bg"></div>
+  <div class="cta-content">
+    <h2>Let's create<br>something <span style="background: linear-gradient(135deg, var(--accent-warm), var(--accent-cool)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">extraordinary</span></h2>
+    <p>Whether you need a full sound design package or a single sonic element, we're ready to bring your vision to life.</p>
+    <div class="cta-actions">
+      <a href="mailto:hello@luxaudio.studio" class="btn-primary">
+        Start a Project
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#" class="btn-ghost">View Full Portfolio</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-left">
+    <div class="footer-logo"></div>
+    <span class="footer-text">© 2026 Lux Audio Studio. All rights reserved.</span>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#">Instagram</a></li>
+    <li><a href="#">Vimeo</a></li>
+    <li><a href="#">LinkedIn</a></li>
+    <li><a href="#">hello@luxaudio.studio</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>

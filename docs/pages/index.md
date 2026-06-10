@@ -640,6 +640,15 @@ const pages = [
     rating: 9.5,
     description: '奢华珠宝品牌电商，灵感来自 Tamannaah Fine Jewellery，深海军蓝 Hero + 菱形浮动动画 + 粒子闪烁 + Marquee 滚动 + 产品网格 + 品牌传承分栏 + 客户评价',
   },
+  {
+    id: 'lux-audio-studio',
+    title: 'Lux Audio 音效工作室',
+    category: 'creative',
+    tags: ['音效设计', '暗色主题', '创意工作室', '波形动画', '横滚画廊'],
+    colors: ['#06060c', '#ff6b35', '#06b6d4'],
+    rating: 9.4,
+    description: '暗色系音效设计工作室落地页，CSS 音频波形条动画 + 脉冲环形装饰 + 横向滚动画廊 + 毛玻璃导航 + 噪点纹理 + 四栏流程网格 + 客户评价',
+  },
 ]
 
 const categories = [
@@ -697,12 +706,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 66 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 67 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="66 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="67 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -711,7 +720,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 66 个完整页面</span>
+      <span>📦 67 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
