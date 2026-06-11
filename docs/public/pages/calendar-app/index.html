@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chronos — Calendar & Events Planner</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cal-bg: #0a0a12;
+  --cal-surface: #12121e;
+  --cal-surface-2: #1a1a2e;
+  --cal-border: #2a2a3e;
+  --cal-text: #e8e8f0;
+  --cal-text-dim: #7a7a9a;
+  --cal-text-muted: #4a4a6a;
+  --cal-accent: #6366f1;
+  --cal-accent-light: #818cf8;
+  --cal-accent-glow: rgba(99, 102, 241, 0.15);
+  --cal-success: #10b981;
+  --cal-warning: #f59e0b;
+  --cal-danger: #ef4444;
+  --cal-info: #3b82f6;
+  --cal-pink: #ec4899;
+  --cal-cyan: #06b6d4;
+  --cal-radius: 12px;
+  --cal-radius-sm: 8px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--cal-bg);
+  color: var(--cal-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Layout ─────────────────────────────────── */
+.app-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 300px;
+  grid-template-rows: 60px 1fr;
+  height: 100vh;
+}
+
+/* ── Sidebar ────────────────────────────────── */
+.sidebar {
+  grid-row: 1 / -1;
+  background: var(--cal-surface);
+  border-right: 1px solid var(--cal-border);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px 16px;
+  border-bottom: 1px solid var(--cal-border);
+}
+.sidebar-logo .logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--cal-accent), var(--cal-pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+.sidebar-logo h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cal-text);
+}
+.sidebar-logo span {
+  font-size: 0.7rem;
+  color: var(--cal-text-dim);
+  display: block;
+  margin-top: 2px;
+}
+
+/* New Event Button */
+.new-event-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--cal-accent), var(--cal-accent-light));
+  border: none;
+  border-radius: var(--cal-radius);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px var(--cal-accent-glow);
+}
+.new-event-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 30px rgba(99, 102, 241, 0.25);
+}
+
+/* Mini Calendar */
+.mini-calendar {
+  background: var(--cal-surface-2);
+  border-radius: var(--cal-radius);
+  padding: 14px;
+}
+.mini-cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.mini-cal-header h3 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cal-text);
+}
+.mini-cal-nav {
+  display: flex;
+  gap: 4px;
+}
+.mini-cal-nav button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: var(--cal-surface);
+  color: var(--cal-text-dim);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.mini-cal-nav button:hover { background: var(--cal-accent); color: #fff; }
+
+.mini-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+}
+.mini-cal-grid .day-label {
+  font-size: 0.65rem;
+  color: var(--cal-text-muted);
+  font-weight: 500;
+  padding: 4px 0;
+}
+.mini-cal-grid .day {
+  font-size: 0.72rem;
+  padding: 5px 0;
+  border-radius: 6px;
+  color: var(--cal-text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.mini-cal-grid .day:hover { background: var(--cal-surface); color: var(--cal-text); }
+.mini-cal-grid .day.today {
+  background: var(--cal-accent);
+  color: #fff;
+  font-weight: 600;
+}
+.mini-cal-grid .day.has-event::after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  background: var(--cal-accent-light);
+  border-radius: 50%;
+  margin: 1px auto 0;
+}
+.mini-cal-grid .day.today.has-event::after { background: #fff; }
+.mini-cal-grid .day.other-month { color: var(--cal-text-muted); opacity: 0.4; }
+
+/* Calendar Tags */
+.cal-tags { padding: 0 4px; }
+.cal-tags h4 {
+  font-size: 0.75rem;
+  color: var(--cal-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.cal-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--cal-radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.82rem;
+  color: var(--cal-text-dim);
+}
+.cal-tag:hover { background: var(--cal-surface-2); color: var(--cal-text); }
+.cal-tag .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cal-tag .count {
+  margin-left: auto;
+  font-size: 0.7rem;
+  background: var(--cal-surface-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--cal-text-muted);
+}
+
+/* ── Header ─────────────────────────────────── */
+.header {
+  grid-column: 2 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--cal-surface);
+  border-bottom: 1px solid var(--cal-border);
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-left h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.header-nav {
+  display: flex;
+  gap: 4px;
+}
+.header-nav button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--cal-border);
+  background: transparent;
+  color: var(--cal-text-dim);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.header-nav button:hover { border-color: var(--cal-accent); color: var(--cal-accent); }
+.today-btn {
+  width: auto !important;
+  padding: 0 12px !important;
+  font-size: 0.8rem !important;
+  font-weight: 500;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.view-toggles {
+  display: flex;
+  background: var(--cal-surface-2);
+  border-radius: var(--cal-radius-sm);
+  padding: 3px;
+}
+.view-toggle {
+  padding: 5px 14px;
+  border: none;
+  background: transparent;
+  color: var(--cal-text-dim);
+  font-size: 0.78rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+.view-toggle.active {
+  background: var(--cal-accent);
+  color: #fff;
+}
+.view-toggle:hover:not(.active) { color: var(--cal-text); }
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--cal-surface-2);
+  border: 1px solid var(--cal-border);
+  border-radius: var(--cal-radius-sm);
+  padding: 6px 12px;
+}
+.search-bar input {
+  background: none;
+  border: none;
+  color: var(--cal-text);
+  font-size: 0.82rem;
+  width: 140px;
+  outline: none;
+}
+.search-bar input::placeholder { color: var(--cal-text-muted); }
+.search-bar svg { color: var(--cal-text-muted); }
+
+/* ── Main Calendar Grid ─────────────────────── */
+.calendar-main {
+  padding: 16px 20px;
+  overflow-y: auto;
+  background: var(--cal-bg);
+}
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.cal-weekday {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cal-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 8px 0;
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(100px, 1fr);
+  gap: 4px;
+}
+.cal-cell {
+  background: var(--cal-surface);
+  border-radius: var(--cal-radius-sm);
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+  position: relative;
+}
+.cal-cell:hover {
+  border-color: var(--cal-accent);
+  box-shadow: 0 0 0 1px var(--cal-accent-glow);
+}
+.cal-cell.today {
+  background: var(--cal-surface-2);
+  border-color: var(--cal-accent);
+}
+.cal-cell.other-month { opacity: 0.3; }
+.cal-cell .date-num {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--cal-text-dim);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cal-cell.today .date-num {
+  color: var(--cal-accent);
+}
+.cal-cell.today .date-num .num-circle {
+  background: var(--cal-accent);
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+/* Event chips */
+.event-chip {
+  font-size: 0.68rem;
+  padding: 3px 6px;
+  border-radius: 4px;
+  margin-bottom: 3px;
+  color: #fff;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+.event-chip.work { background: rgba(99, 102, 241, 0.3); color: var(--cal-accent-light); border-left: 2px solid var(--cal-accent); }
+.event-chip.personal { background: rgba(16, 185, 129, 0.2); color: var(--cal-success); border-left: 2px solid var(--cal-success); }
+.event-chip.health { background: rgba(236, 72, 153, 0.2); color: var(--cal-pink); border-left: 2px solid var(--cal-pink); }
+.event-chip.deadline { background: rgba(239, 68, 68, 0.2); color: var(--cal-danger); border-left: 2px solid var(--cal-danger); }
+.event-chip.social { background: rgba(6, 182, 212, 0.2); color: var(--cal-cyan); border-left: 2px solid var(--cal-cyan); }
+.event-chip.travel { background: rgba(245, 158, 11, 0.2); color: var(--cal-warning); border-left: 2px solid var(--cal-warning); }
+.event-more {
+  font-size: 0.65rem;
+  color: var(--cal-text-muted);
+  padding: 2px 4px;
+  cursor: pointer;
+}
+.event-more:hover { color: var(--cal-accent-light); }
+
+/* ── Right Panel ────────────────────────────── */
+.right-panel {
+  background: var(--cal-surface);
+  border-left: 1px solid var(--cal-border);
+  padding: 20px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.stat-card {
+  background: var(--cal-surface-2);
+  border-radius: var(--cal-radius);
+  padding: 14px;
+  text-align: center;
+}
+.stat-card .stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-card .stat-label {
+  font-size: 0.68rem;
+  color: var(--cal-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.stat-card.accent .stat-value { color: var(--cal-accent-light); }
+.stat-card.success .stat-value { color: var(--cal-success); }
+.stat-card.warning .stat-value { color: var(--cal-warning); }
+.stat-card.pink .stat-value { color: var(--cal-pink); }
+
+/* Upcoming Events */
+.upcoming-section h3 {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--cal-text-dim);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.upcoming-event {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--cal-radius-sm);
+  margin-bottom: 6px;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.upcoming-event:hover { background: var(--cal-surface-2); }
+.upcoming-event .event-time {
+  min-width: 46px;
+  font-size: 0.72rem;
+  color: var(--cal-text-muted);
+  font-weight: 500;
+  padding-top: 2px;
+}
+.upcoming-event .event-bar {
+  width: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+.upcoming-event .event-bar.work { background: var(--cal-accent); }
+.upcoming-event .event-bar.personal { background: var(--cal-success); }
+.upcoming-event .event-bar.health { background: var(--cal-pink); }
+.upcoming-event .event-bar.deadline { background: var(--cal-danger); }
+.upcoming-event .event-bar.social { background: var(--cal-cyan); }
+.upcoming-event .event-bar.travel { background: var(--cal-warning); }
+.upcoming-event .event-details { flex: 1; min-width: 0; }
+.upcoming-event .event-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--cal-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.upcoming-event .event-loc {
+  font-size: 0.7rem;
+  color: var(--cal-text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Weekly Activity */
+.activity-section h3 {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--cal-text-dim);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.activity-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 80px;
+  padding-top: 8px;
+}
+.activity-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+.activity-bar {
+  width: 100%;
+  border-radius: 4px 4px 2px 2px;
+  background: linear-gradient(180deg, var(--cal-accent), rgba(99, 102, 241, 0.3));
+  transition: all 0.3s;
+  min-height: 4px;
+}
+.activity-bar-wrapper:hover .activity-bar {
+  background: linear-gradient(180deg, var(--cal-accent-light), var(--cal-accent));
+  box-shadow: 0 0 12px var(--cal-accent-glow);
+}
+.activity-bar-label {
+  font-size: 0.62rem;
+  color: var(--cal-text-muted);
+  font-weight: 500;
+}
+
+/* Focus time */
+.focus-section h3 {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--cal-text-dim);
+  margin-bottom: 12px;
+}
+.focus-ring-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+}
+.focus-ring {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+.focus-ring svg {
+  transform: rotate(-90deg);
+}
+.focus-ring .ring-bg {
+  fill: none;
+  stroke: var(--cal-surface-2);
+  stroke-width: 8;
+}
+.focus-ring .ring-progress {
+  fill: none;
+  stroke: var(--cal-accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 314;
+  stroke-dashoffset: 78;
+  transition: stroke-dashoffset 1s ease;
+}
+.focus-ring .ring-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.focus-ring .ring-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--cal-text);
+}
+.focus-ring .ring-label {
+  font-size: 0.65rem;
+  color: var(--cal-text-muted);
+}
+
+/* ── New Event Modal ────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--cal-surface);
+  border: 1px solid var(--cal-border);
+  border-radius: 16px;
+  padding: 28px;
+  width: 420px;
+  max-width: 90vw;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.modal h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--cal-text);
+}
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--cal-text-dim);
+  margin-bottom: 6px;
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--cal-surface-2);
+  border: 1px solid var(--cal-border);
+  border-radius: var(--cal-radius-sm);
+  color: var(--cal-text);
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--cal-accent);
+}
+.form-group textarea { resize: vertical; min-height: 60px; }
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+.modal-actions button {
+  padding: 8px 20px;
+  border-radius: var(--cal-radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+.btn-cancel {
+  background: var(--cal-surface-2);
+  color: var(--cal-text-dim);
+  border: 1px solid var(--cal-border) !important;
+}
+.btn-cancel:hover { color: var(--cal-text); border-color: var(--cal-text-dim) !important; }
+.btn-create {
+  background: var(--cal-accent);
+  color: #fff;
+}
+.btn-create:hover { background: var(--cal-accent-light); }
+
+/* ── Scrollbar ──────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--cal-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--cal-text-muted); }
+
+/* ── Responsive ─────────────────────────────── */
+@media (max-width: 1200px) {
+  .app-layout { grid-template-columns: 220px 1fr 260px; }
+}
+@media (max-width: 1000px) {
+  .app-layout { grid-template-columns: 1fr; grid-template-rows: 60px auto; }
+  .sidebar, .right-panel { display: none; }
+  .header { grid-column: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">C</div>
+      <div>
+        <h1>Chronos</h1>
+        <span>Calendar & Planner</span>
+      </div>
+    </div>
+
+    <button class="new-event-btn" onclick="document.querySelector('.modal-overlay').classList.add('show')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New Event
+    </button>
+
+    <!-- Mini Calendar -->
+    <div class="mini-calendar">
+      <div class="mini-cal-header">
+        <h3>June 2026</h3>
+        <div class="mini-cal-nav">
+          <button>‹</button>
+          <button>›</button>
+        </div>
+      </div>
+      <div class="mini-cal-grid">
+        <div class="day-label">Mo</div><div class="day-label">Tu</div><div class="day-label">We</div>
+        <div class="day-label">Th</div><div class="day-label">Fr</div><div class="day-label">Sa</div><div class="day-label">Su</div>
+        <div class="day other-month">25</div><div class="day other-month">26</div><div class="day other-month">27</div>
+        <div class="day other-month">28</div><div class="day other-month">29</div><div class="day other-month">30</div><div class="day">1</div>
+        <div class="day">2</div><div class="day has-event">3</div><div class="day">4</div>
+        <div class="day has-event">5</div><div class="day">6</div><div class="day">7</div><div class="day">8</div>
+        <div class="day">9</div><div class="day">10</div><div class="day today has-event">11</div>
+        <div class="day">12</div><div class="day has-event">13</div><div class="day">14</div><div class="day">15</div>
+        <div class="day has-event">16</div><div class="day">17</div><div class="day">18</div>
+        <div class="day has-event">19</div><div class="day">20</div><div class="day">21</div><div class="day">22</div>
+        <div class="day has-event">23</div><div class="day">24</div><div class="day">25</div>
+        <div class="day">26</div><div class="day has-event">27</div><div class="day">28</div><div class="day">29</div>
+        <div class="day">30</div><div class="day other-month">1</div><div class="day other-month">2</div>
+        <div class="day other-month">3</div><div class="day other-month">4</div><div class="day other-month">5</div><div class="day other-month">6</div>
+      </div>
+    </div>
+
+    <!-- Calendar Tags -->
+    <div class="cal-tags">
+      <h4>Calendars</h4>
+      <div class="cal-tag"><div class="dot" style="background:var(--cal-accent)"></div> Work <span class="count">12</span></div>
+      <div class="cal-tag"><div class="dot" style="background:var(--cal-success)"></div> Personal <span class="count">8</span></div>
+      <div class="cal-tag"><div class="dot" style="background:var(--cal-pink)"></div> Health <span class="count">4</span></div>
+      <div class="cal-tag"><div class="dot" style="background:var(--cal-danger)"></div> Deadlines <span class="count">3</span></div>
+      <div class="cal-tag"><div class="dot" style="background:var(--cal-cyan)"></div> Social <span class="count">5</span></div>
+      <div class="cal-tag"><div class="dot" style="background:var(--cal-warning)"></div> Travel <span class="count">2</span></div>
+    </div>
+  </aside>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <h2>June 2026</h2>
+      <div class="header-nav">
+        <button>‹</button>
+        <button>›</button>
+        <button class="today-btn">Today</button>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="view-toggles">
+        <button class="view-toggle">Day</button>
+        <button class="view-toggle">Week</button>
+        <button class="view-toggle active">Month</button>
+        <button class="view-toggle">Year</button>
+      </div>
+      <div class="search-bar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search events...">
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Calendar -->
+  <main class="calendar-main">
+    <div class="cal-weekdays">
+      <div class="cal-weekday">Mon</div>
+      <div class="cal-weekday">Tue</div>
+      <div class="cal-weekday">Wed</div>
+      <div class="cal-weekday">Thu</div>
+      <div class="cal-weekday">Fri</div>
+      <div class="cal-weekday">Sat</div>
+      <div class="cal-weekday">Sun</div>
+    </div>
+    <div class="cal-grid">
+      <!-- Week 1 (May 25 - May 31) -->
+      <div class="cal-cell other-month"><div class="date-num"><span>25</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>26</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>27</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>28</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>29</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>30</span></div></div>
+      <div class="cal-cell"><div class="date-num"><span>1</span></div></div>
+
+      <!-- Week 2 -->
+      <div class="cal-cell"><div class="date-num"><span>2</span></div></div>
+      <div class="cal-cell"><div class="date-num"><span>3</span></div><div class="event-chip work">Sprint Review</div><div class="event-chip personal">Yoga Class</div></div>
+      <div class="cal-cell"><div class="date-num"><span>4</span></div><div class="event-chip deadline">API Freeze</div></div>
+      <div class="cal-cell"><div class="date-num"><span>5</span></div><div class="event-chip work">Team Standup</div><div class="event-chip health">Dentist</div></div>
+      <div class="cal-cell"><div class="date-num"><span>6</span></div></div>
+      <div class="cal-cell"><div class="date-num"><span>7</span></div><div class="event-chip social">Coffee with Alex</div></div>
+      <div class="cal-cell"><div class="date-num"><span>8</span></div></div>
+
+      <!-- Week 3 -->
+      <div class="cal-cell"><div class="date-num"><span>9</span></div></div>
+      <div class="cal-cell"><div class="date-num"><span>10</span></div><div class="event-chip work">Design Review</div></div>
+      <div class="cal-cell today"><div class="date-num"><div class="num-circle">11</div></div><div class="event-chip work">Client Demo</div><div class="event-chip social">Lunch Meeting</div><div class="event-chip personal">Gym</div><div class="event-more">+2 more</div></div>
+      <div class="cal-cell"><div class="date-num"><span>12</span></div><div class="event-chip work">Backlog Grooming</div></div>
+      <div class="cal-cell"><div class="date-num"><span>13</span></div><div class="event-chip deadline">Release v2.4</div><div class="event-chip personal">Piano Lesson</div></div>
+      <div class="cal-cell"><div class="date-num"><span>14</span></div></div>
+      <div class="cal-cell"><div class="date-num"><span>15</span></div></div>
+
+      <!-- Week 4 -->
+      <div class="cal-cell"><div class="date-num"><span>16</span></div><div class="event-chip travel">Flight to Tokyo</div><div class="event-chip work">Prep Slides</div></div>
+      <div class="cal-cell"><div class="date-num"><span>17</span></div><div class="event-chip travel">Tokyo Conference</div></div>
+      <div class="cal-cell"><div class="date-num"><span>18</span></div><div class="event-chip travel">Client Meeting</div></div>
+      <div class="cal-cell"><div class="date-num"><span>19</span></div><div class="event-chip travel">Workshop</div><div class="event-chip work">Retro</div></div>
+      <div class="cal-cell"><div class="date-num"><span>20</span></div><div class="event-chip travel">Return Flight</div></div>
+      <div class="cal-cell"><div class="date-num"><span>21</span></div></div>
+      <div class="cal-cell"><div class="date-num"><span>22</span></div></div>
+
+      <!-- Week 5 -->
+      <div class="cal-cell"><div class="date-num"><span>23</span></div><div class="event-chip work">Sprint Planning</div><div class="event-chip health">Annual Checkup</div></div>
+      <div class="cal-cell"><div class="date-num"><span>24</span></div></div>
+      <div class="cal-cell"><div class="date-num"><span>25</span></div><div class="event-chip deadline">Proposal Due</div></div>
+      <div class="cal-cell"><div class="date-num"><span>26</span></div><div class="event-chip work">1:1 with Manager</div></div>
+      <div class="cal-cell"><div class="date-num"><span>27</span></div><div class="event-chip social">Team Happy Hour</div><div class="event-chip personal">Book Club</div></div>
+      <div class="cal-cell"><div class="date-num"><span>28</span></div></div>
+      <div class="cal-cell"><div class="date-num"><span>29</span></div></div>
+
+      <!-- Week 6 -->
+      <div class="cal-cell"><div class="date-num"><span>30</span></div><div class="event-chip work">Month Review</div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>1</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>2</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>3</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>4</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>5</span></div></div>
+      <div class="cal-cell other-month"><div class="date-num"><span>6</span></div></div>
+    </div>
+  </main>
+
+  <!-- Right Panel -->
+  <aside class="right-panel">
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card accent">
+        <div class="stat-value">24</div>
+        <div class="stat-label">This Month</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-value">8</div>
+        <div class="stat-label">This Week</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Overdue</div>
+      </div>
+      <div class="stat-card pink">
+        <div class="stat-value">92%</div>
+        <div class="stat-label">Completed</div>
+      </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="upcoming-section">
+      <h3>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Upcoming
+      </h3>
+      <div class="upcoming-event">
+        <div class="event-time">2:00 PM</div>
+        <div class="event-bar work"></div>
+        <div class="event-details">
+          <div class="event-name">Client Demo</div>
+          <div class="event-loc">Zoom — Design Team</div>
+        </div>
+      </div>
+      <div class="upcoming-event">
+        <div class="event-time">12:30 PM</div>
+        <div class="event-bar social"></div>
+        <div class="event-details">
+          <div class="event-name">Lunch Meeting</div>
+          <div class="event-loc">Café Lumière, Downtown</div>
+        </div>
+      </div>
+      <div class="upcoming-event">
+        <div class="event-time">6:00 PM</div>
+        <div class="event-bar personal"></div>
+        <div class="event-details">
+          <div class="event-name">Gym Session</div>
+          <div class="event-loc">Core & Cardio Day</div>
+        </div>
+      </div>
+      <div class="upcoming-event">
+        <div class="event-time">8:00 PM</div>
+        <div class="event-bar health"></div>
+        <div class="event-details">
+          <div class="event-name">Evening Meditation</div>
+          <div class="event-loc">Home — Headspace App</div>
+        </div>
+      </div>
+      <div class="upcoming-event">
+        <div class="event-time">Thu 10:00</div>
+        <div class="event-bar work"></div>
+        <div class="event-details">
+          <div class="event-name">Backlog Grooming</div>
+          <div class="event-loc">Conference Room B</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Activity -->
+    <div class="activity-section">
+      <h3>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>
+        Weekly Activity
+      </h3>
+      <div class="activity-bars">
+        <div class="activity-bar-wrapper"><div class="activity-bar" style="height:60%"></div><div class="activity-bar-label">Mon</div></div>
+        <div class="activity-bar-wrapper"><div class="activity-bar" style="height:80%"></div><div class="activity-bar-label">Tue</div></div>
+        <div class="activity-bar-wrapper"><div class="activity-bar" style="height:45%"></div><div class="activity-bar-label">Wed</div></div>
+        <div class="activity-bar-wrapper"><div class="activity-bar" style="height:90%"></div><div class="activity-bar-label">Thu</div></div>
+        <div class="activity-bar-wrapper"><div class="activity-bar" style="height:70%"></div><div class="activity-bar-label">Fri</div></div>
+        <div class="activity-bar-wrapper"><div class="activity-bar" style="height:25%"></div><div class="activity-bar-label">Sat</div></div>
+        <div class="activity-bar-wrapper"><div class="activity-bar" style="height:15%"></div><div class="activity-bar-label">Sun</div></div>
+      </div>
+    </div>
+
+    <!-- Focus Time -->
+    <div class="focus-section">
+      <h3>🎯 Focus Time</h3>
+      <div class="focus-ring-container">
+        <div class="focus-ring">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="50"/>
+            <circle class="ring-progress" cx="60" cy="60" r="50"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-value">5.2h</div>
+            <div class="ring-label">of 7h goal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- New Event Modal -->
+<div class="modal-overlay" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal">
+    <h2>Create New Event</h2>
+    <div class="form-group">
+      <label>Event Name</label>
+      <input type="text" placeholder="e.g., Team Meeting">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" value="2026-06-11">
+      </div>
+      <div class="form-group">
+        <label>Time</label>
+        <input type="time" value="10:00">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Calendar</label>
+      <select>
+        <option>Work</option>
+        <option>Personal</option>
+        <option>Health</option>
+        <option>Deadline</option>
+        <option>Social</option>
+        <option>Travel</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Location (optional)</label>
+      <input type="text" placeholder="e.g., Conference Room A">
+    </div>
+    <div class="form-group">
+      <label>Notes (optional)</label>
+      <textarea placeholder="Add any notes or details..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.querySelector('.modal-overlay').classList.remove('show')">Cancel</button>
+      <button class="btn-create" onclick="document.querySelector('.modal-overlay').classList.remove('show')">Create Event</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
