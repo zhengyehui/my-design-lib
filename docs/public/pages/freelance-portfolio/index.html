@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lena Voss — Cinematographer & Visual Storyteller</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Design Tokens -->
+  <link rel="stylesheet" href="/tokens/tokens.css">
+
+  <style>
+    /* ── Override tokens with cinematic palette ── */
+    :root {
+      --cinema-bg:         #0a0a0f;
+      --cinema-bg-elevated: #111118;
+      --cinema-bg-card:    #14141c;
+      --cinema-amber:      #c9a96e;
+      --cinema-amber-light: #dfc28a;
+      --cinema-amber-dark: #a8873f;
+      --cinema-amber-glow: rgba(201, 169, 110, 0.15);
+      --cinema-text:       #e8e6e1;
+      --cinema-text-muted: #8a8980;
+      --cinema-text-dim:   #5a5950;
+      --cinema-border:     rgba(201, 169, 110, 0.12);
+      --cinema-border-hover: rgba(201, 169, 110, 0.35);
+      --cinema-grain:      rgba(255,255,255,0.02);
+      --cinema-vignette:   radial-gradient(ellipse at center, transparent 50%, rgba(10,10,15,0.6) 100%);
+
+      --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--cinema-bg);
+      color: var(--cinema-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Film grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+
+    ::selection {
+      background: var(--cinema-amber);
+      color: var(--cinema-bg);
+    }
+
+    a {
+      color: var(--cinema-amber);
+      text-decoration: none;
+      transition: color var(--duration-normal) var(--ease-default);
+    }
+
+    a:hover {
+      color: var(--cinema-amber-light);
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* ── Navigation ── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.5s var(--ease-default);
+      mix-blend-mode: normal;
+    }
+
+    .nav--scrolled {
+      background: rgba(10, 10, 15, 0.92);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+      padding: 1rem 3rem;
+      border-bottom: 1px solid var(--cinema-border);
+    }
+
+    .nav__logo {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cinema-amber);
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cinema-text-muted);
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav__links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--cinema-amber);
+      transition: width 0.4s var(--ease-out);
+    }
+
+    .nav__links a:hover {
+      color: var(--cinema-amber);
+    }
+
+    .nav__links a:hover::after {
+      width: 100%;
+    }
+
+    /* ── Hero Section ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem;
+      overflow: hidden;
+    }
+
+    /* Cinematic vignette + ambient glow */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201, 169, 110, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 20% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(201, 169, 110, 0.03) 0%, transparent 50%),
+        var(--cinema-vignette);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Horizontal film lines */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 3px,
+          rgba(201, 169, 110, 0.015) 3px,
+          rgba(201, 169, 110, 0.015) 4px
+        );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--cinema-amber);
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s 0.3s var(--ease-out) forwards;
+    }
+
+    .hero__eyebrow::before,
+    .hero__eyebrow::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--cinema-amber-dark);
+    }
+
+    .hero__title {
+      font-family: var(--font-heading);
+      font-size: clamp(4rem, 12vw, 10rem);
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      line-height: 0.95;
+      color: var(--cinema-text);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1.2s 0.5s var(--ease-out) forwards;
+      text-shadow: 0 0 80px rgba(201, 169, 110, 0.1);
+    }
+
+    .hero__title span {
+      display: block;
+      font-style: italic;
+      color: var(--cinema-amber);
+      font-size: 0.55em;
+      letter-spacing: 0.25em;
+      margin-top: 0.3em;
+      font-weight: 400;
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-body);
+      font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--cinema-text-muted);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s 0.8s var(--ease-out) forwards;
+    }
+
+    .hero__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cinema-bg);
+      background: var(--cinema-amber);
+      border: none;
+      cursor: pointer;
+      transition: all 0.4s var(--ease-default);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s 1s var(--ease-out) forwards;
+    }
+
+    .hero__cta:hover {
+      background: var(--cinema-amber-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(201, 169, 110, 0.3);
+      color: var(--cinema-bg);
+    }
+
+    .hero__cta svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.3s ease;
+    }
+
+    .hero__cta:hover svg {
+      transform: translateX(4px);
+    }
+
+    .hero__scroll {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--cinema-text-dim);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s 1.5s var(--ease-out) forwards;
+    }
+
+    .hero__scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--cinema-amber-dark), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── Section Common ── */
+    .section {
+      padding: 8rem 2rem;
+      position: relative;
+    }
+
+    .section__container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section__label {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cinema-amber);
+      margin-bottom: 1rem;
+    }
+
+    .section__label::before {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--cinema-amber-dark);
+    }
+
+    .section__heading {
+      font-family: var(--font-heading);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+      color: var(--cinema-text);
+      margin-bottom: 1rem;
+    }
+
+    .section__description {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--cinema-text-muted);
+      max-width: 550px;
+      line-height: 1.7;
+    }
+
+    .section__divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--cinema-border), transparent);
+      margin: 0;
+      border: none;
+    }
+
+    /* ── Film Reel Gallery ── */
+    .reel {
+      padding: 6rem 0;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--cinema-bg) 0%, var(--cinema-bg-elevated) 50%, var(--cinema-bg) 100%);
+    }
+
+    .reel__header {
+      padding: 0 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .reel__scroll-wrapper {
+      position: relative;
+    }
+
+    .reel__scroll-wrapper::before,
+    .reel__scroll-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .reel__scroll-wrapper::before {
+      left: 0;
+      background: linear-gradient(to right, var(--cinema-bg), transparent);
+    }
+
+    .reel__scroll-wrapper::after {
+      right: 0;
+      background: linear-gradient(to left, var(--cinema-bg), transparent);
+    }
+
+    .reel__track {
+      display: flex;
+      gap: 1.5rem;
+      padding: 2rem 3rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      cursor: grab;
+    }
+
+    .reel__track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .reel__track:active {
+      cursor: grabbing;
+    }
+
+    /* Film Project Cards */
+    .film-card {
+      flex: 0 0 380px;
+      height: 520px;
+      scroll-snap-align: start;
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+    }
+
+    .film-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(201, 169, 110, 0.08);
+    }
+
+    /* Gradient placeholder backgrounds for each card */
+    .film-card__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .film-card:nth-child(1) .film-card__bg {
+      background:
+        linear-gradient(135deg, #1a1520 0%, #2a1a15 30%, #0a0a15 60%, #151520 100%),
+        radial-gradient(circle at 30% 40%, rgba(201, 169, 110, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+    }
+
+    .film-card:nth-child(2) .film-card__bg {
+      background:
+        linear-gradient(160deg, #0d1520 0%, #15201a 40%, #0a0f15 70%, #0a0a18 100%),
+        radial-gradient(circle at 60% 30%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(201, 169, 110, 0.1) 0%, transparent 50%);
+    }
+
+    .film-card:nth-child(3) .film-card__bg {
+      background:
+        linear-gradient(200deg, #1a0a0a 0%, #201515 30%, #151010 60%, #0a0a10 100%),
+        radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(201, 169, 110, 0.12) 0%, transparent 40%);
+    }
+
+    .film-card:nth-child(4) .film-card__bg {
+      background:
+        linear-gradient(180deg, #0a0f1a 0%, #0f1520 40%, #15100a 80%, #0a0a0f 100%),
+        radial-gradient(circle at 40% 60%, rgba(201, 169, 110, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
+    }
+
+    .film-card:nth-child(5) .film-card__bg {
+      background:
+        linear-gradient(135deg, #0f1510 0%, #151a0f 30%, #101510 60%, #0a0f0a 100%),
+        radial-gradient(circle at 50% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 20% 70%, rgba(201, 169, 110, 0.1) 0%, transparent 50%);
+    }
+
+    .film-card:nth-child(6) .film-card__bg {
+      background:
+        linear-gradient(220deg, #15101a 0%, #1a1520 30%, #0a0a15 60%, #0f0a15 100%),
+        radial-gradient(circle at 60% 50%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 30% 30%, rgba(201, 169, 110, 0.1) 0%, transparent 40%);
+    }
+
+    /* Cinematic film strip sprocket holes */
+    .film-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 0%, transparent 8%),
+        linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .film-card__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10, 10, 15, 0.95) 100%);
+      z-index: 2;
+    }
+
+    .film-card__content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem;
+      z-index: 3;
+    }
+
+    .film-card__tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cinema-amber);
+      background: rgba(201, 169, 110, 0.12);
+      border: 1px solid rgba(201, 169, 110, 0.2);
+      padding: 0.35rem 0.8rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.75rem;
+    }
+
+    .film-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--cinema-text);
+      margin-bottom: 0.35rem;
+      line-height: 1.2;
+    }
+
+    .film-card__year {
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--cinema-text-dim);
+    }
+
+    /* Play button overlay on hover */
+    .film-card__play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      z-index: 4;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(201, 169, 110, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(201, 169, 110, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.4s var(--ease-out);
+    }
+
+    .film-card__play svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--cinema-amber);
+      margin-left: 3px;
+    }
+
+    .film-card:hover .film-card__play {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* ── Selected Works ── */
+    .works {
+      background: var(--cinema-bg);
+    }
+
+    .work-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 6rem;
+    }
+
+    .work-showcase:last-child {
+      margin-bottom: 0;
+    }
+
+    .work-showcase--reverse .work-showcase__visual {
+      order: 2;
+    }
+
+    .work-showcase--reverse .work-showcase__info {
+      order: 1;
+    }
+
+    .work-showcase__visual {
+      position: relative;
+      aspect-ratio: 16/10;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .work-showcase__image {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .work-showcase:nth-child(1) .work-showcase__image {
+      background:
+        linear-gradient(135deg, #12111a 0%, #1a1520 30%, #201510 60%, #0f1015 100%);
+      background-size: 200% 200%;
+    }
+
+    .work-showcase:nth-child(2) .work-showcase__image {
+      background:
+        linear-gradient(160deg, #0d1520 0%, #152020 30%, #1a2015 60%, #0a1510 100%);
+      background-size: 200% 200%;
+    }
+
+    .work-showcase:nth-child(3) .work-showcase__image {
+      background:
+        linear-gradient(200deg, #1a0a15 0%, #201520 30%, #151520 60%, #100a15 100%);
+      background-size: 200% 200%;
+    }
+
+    .work-showcase__image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 40% 40%, rgba(201, 169, 110, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+    }
+
+    .work-showcase__image-label {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cinema-amber);
+    }
+
+    .work-showcase__image-label::before {
+      content: '';
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--cinema-amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Floating camera icon in visual */
+    .work-showcase__visual::after {
+      content: '▶';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      color: rgba(201, 169, 110, 0.2);
+      z-index: 3;
+      mix-blend-mode: screen;
+    }
+
+    .work-showcase__visual:hover .work-showcase__image {
+      transform: scale(1.05);
+    }
+
+    .work-showcase__visual {
+      transition: transform 0.8s var(--ease-out);
+    }
+
+    .work-showcase__visual:hover {
+      transform: scale(1.02);
+    }
+
+    .work-showcase__info {
+      padding: 1rem 0;
+    }
+
+    .work-showcase__number {
+      font-family: var(--font-heading);
+      font-size: 5rem;
+      font-weight: 400;
+      color: rgba(201, 169, 110, 0.08);
+      line-height: 1;
+      margin-bottom: -1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .work-showcase__category {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--cinema-amber);
+      margin-bottom: 1rem;
+    }
+
+    .work-showcase__title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      line-height: 1.15;
+      color: var(--cinema-text);
+      margin-bottom: 1.25rem;
+    }
+
+    .work-showcase__desc {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--cinema-text-muted);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .work-showcase__meta {
+      display: flex;
+      gap: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--cinema-border);
+    }
+
+    .work-showcase__meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .work-showcase__meta-label {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cinema-text-dim);
+    }
+
+    .work-showcase__meta-value {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--cinema-text);
+    }
+
+    .work-showcase__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cinema-amber);
+      transition: gap 0.3s ease;
+    }
+
+    .work-showcase__link:hover {
+      gap: 1rem;
+    }
+
+    .work-showcase__link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ── About Section ── */
+    .about {
+      background: linear-gradient(180deg, var(--cinema-bg) 0%, var(--cinema-bg-elevated) 50%, var(--cinema-bg) 100%);
+    }
+
+    .about__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about__portrait {
+      position: relative;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, #151520 0%, #1a1525 30%, #201515 60%, #0f0f15 100%);
+    }
+
+    .about__portrait::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(201, 169, 110, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 30% 70%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
+      z-index: 1;
+    }
+
+    .about__portrait::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(10, 10, 15, 0.6) 100%);
+      z-index: 2;
+    }
+
+    .about__portrait-label {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 3;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cinema-amber);
+    }
+
+    /* Decorative camera silhouette */
+    .about__portrait-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      font-size: 6rem;
+      opacity: 0.06;
+      color: var(--cinema-amber);
+      mix-blend-mode: screen;
+    }
+
+    .about__content {
+      padding-top: 1rem;
+    }
+
+    .about__text {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--cinema-text-muted);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .about__text strong {
+      color: var(--cinema-text);
+      font-weight: 500;
+    }
+
+    .about__text em {
+      color: var(--cinema-amber);
+      font-style: italic;
+      font-family: var(--font-heading);
+    }
+
+    .about__stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--cinema-border);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat__number {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      font-weight: 400;
+      color: var(--cinema-amber);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .stat__label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cinema-text-dim);
+    }
+
+    /* ── Contact Section ── */
+    .contact {
+      background: var(--cinema-bg);
+      text-align: center;
+    }
+
+    .contact__inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact__heading {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      color: var(--cinema-text);
+      margin-bottom: 1.5rem;
+    }
+
+    .contact__heading em {
+      color: var(--cinema-amber);
+      font-style: italic;
+    }
+
+    .contact__text {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--cinema-text-muted);
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    .contact__email {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 3rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cinema-bg);
+      background: var(--cinema-amber);
+      border: none;
+      cursor: pointer;
+      transition: all 0.4s var(--ease-default);
+      margin-bottom: 3rem;
+    }
+
+    .contact__email:hover {
+      background: var(--cinema-amber-light);
+      color: var(--cinema-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(201, 169, 110, 0.25);
+    }
+
+    .contact__social {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .contact__social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--cinema-border);
+      color: var(--cinema-text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: all 0.3s var(--ease-default);
+    }
+
+    .contact__social-link:hover {
+      border-color: var(--cinema-amber);
+      color: var(--cinema-amber);
+      background: rgba(201, 169, 110, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .contact__social-link svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--cinema-border);
+      text-align: center;
+    }
+
+    .footer__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer__copy {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--cinema-text-dim);
+    }
+
+    .footer__links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer__links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--cinema-text-dim);
+      transition: color 0.3s ease;
+    }
+
+    .footer__links a:hover {
+      color: var(--cinema-amber);
+    }
+
+    /* ── Scroll reveal animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+
+    .reveal--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal--delay-1 { transition-delay: 0.1s; }
+    .reveal--delay-2 { transition-delay: 0.2s; }
+    .reveal--delay-3 { transition-delay: 0.3s; }
+    .reveal--delay-4 { transition-delay: 0.4s; }
+
+    /* ── Keyframes ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 0.8; transform: scaleY(1.2); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .work-showcase {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .work-showcase--reverse .work-showcase__visual,
+      .work-showcase--reverse .work-showcase__info {
+        order: unset;
+      }
+
+      .about__grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .about__portrait {
+        max-height: 500px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .nav__links {
+        display: none;
+      }
+
+      .hero__title {
+        letter-spacing: 0.08em;
+      }
+
+      .film-card {
+        flex: 0 0 300px;
+        height: 440px;
+      }
+
+      .about__stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      .footer__inner {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .film-card {
+        flex: 0 0 280px;
+        height: 400px;
+      }
+
+      .section {
+        padding: 5rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ Navigation ═══════════ -->
+  <nav class="nav" id="nav">
+    <div class="nav__logo">LV</div>
+    <ul class="nav__links">
+      <li><a href="#reel">Reel</a></li>
+      <li><a href="#works">Works</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══════════ Hero ═══════════ -->
+  <section class="hero" id="hero">
+    <div class="hero__content">
+      <div class="hero__eyebrow">Independent Filmmaker</div>
+      <h1 class="hero__title">
+        LENA VOSS
+        <span>Cinematographer</span>
+      </h1>
+      <p class="hero__subtitle">
+        Crafting visual narratives that resonate. Specializing in narrative cinema,
+        documentaries, and commercial storytelling.
+      </p>
+      <a href="#works" class="hero__cta">
+        View Selected Works
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+    <div class="hero__scroll">
+      <div class="hero__scroll-line"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- ═══════════ Film Reel Gallery ═══════════ -->
+  <section class="reel" id="reel">
+    <div class="reel__header section__container">
+      <div class="section__label">Selected Reel</div>
+      <h2 class="section__heading">Filmography</h2>
+      <p class="section__description">
+        A curated selection of films, documentaries, and visual projects spanning eight years of visual storytelling.
+      </p>
+    </div>
+
+    <div class="reel__scroll-wrapper">
+      <div class="reel__track" id="reelTrack">
+
+        <!-- Card 1 -->
+        <article class="film-card">
+          <div class="film-card__bg"></div>
+          <div class="film-card__overlay"></div>
+          <div class="film-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+          </div>
+          <div class="film-card__content">
+            <span class="film-card__tag">Feature Film</span>
+            <h3 class="film-card__title">The Last Horizon</h3>
+            <span class="film-card__year">2024</span>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="film-card">
+          <div class="film-card__bg"></div>
+          <div class="film-card__overlay"></div>
+          <div class="film-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+          </div>
+          <div class="film-card__content">
+            <span class="film-card__tag">Documentary</span>
+            <h3 class="film-card__title">Beneath Still Waters</h3>
+            <span class="film-card__year">2024</span>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="film-card">
+          <div class="film-card__bg"></div>
+          <div class="film-card__overlay"></div>
+          <div class="film-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+          </div>
+          <div class="film-card__content">
+            <span class="film-card__tag">Music Video</span>
+            <h3 class="film-card__title">Ember & Ash</h3>
+            <span class="film-card__year">2023</span>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="film-card">
+          <div class="film-card__bg"></div>
+          <div class="film-card__overlay"></div>
+          <div class="film-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+          </div>
+          <div class="film-card__content">
+            <span class="film-card__tag">Short Film</span>
+            <h3 class="film-card__title">Quiet Machines</h3>
+            <span class="film-card__year">2023</span>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="film-card">
+          <div class="film-card__bg"></div>
+          <div class="film-card__overlay"></div>
+          <div class="film-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+          </div>
+          <div class="film-card__content">
+            <span class="film-card__tag">Commercial</span>
+            <h3 class="film-card__title">Origins — Brand Film</h3>
+            <span class="film-card__year">2022</span>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="film-card">
+          <div class="film-card__bg"></div>
+          <div class="film-card__overlay"></div>
+          <div class="film-card__play">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+          </div>
+          <div class="film-card__content">
+            <span class="film-card__tag">Feature Film</span>
+            <h3 class="film-card__title">Paper Lanterns</h3>
+            <span class="film-card__year">2022</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="section__divider">
+
+  <!-- ═══════════ Selected Works ═══════════ -->
+  <section class="section works" id="works">
+    <div class="section__container">
+      <div class="section__label">Portfolio</div>
+      <h2 class="section__heading">Selected Works</h2>
+      <p class="section__description" style="margin-bottom: 4rem;">
+        Three projects that define the scope and vision of my cinematographic practice.
+      </p>
+
+      <!-- Work 1 — Left Layout -->
+      <div class="work-showcase reveal">
+        <div class="work-showcase__visual">
+          <div class="work-showcase__image"></div>
+          <span class="work-showcase__image-label">View Project</span>
+        </div>
+        <div class="work-showcase__info">
+          <div class="work-showcase__number">01</div>
+          <div class="work-showcase__category">Feature Film — Drama</div>
+          <h3 class="work-showcase__title">The Last Horizon</h3>
+          <p class="work-showcase__desc">
+            A meditative journey through loss and rediscovery set against the stark beauty
+            of Iceland's volcanic landscapes. Shot on ARRI Alexa 65 with natural light,
+            the film explores the tension between memory and the present through layered
+            visual compositions and long takes.
+          </p>
+          <div class="work-showcase__meta">
+            <div class="work-showcase__meta-item">
+              <span class="work-showcase__meta-label">Year</span>
+              <span class="work-showcase__meta-value">2024</span>
+            </div>
+            <div class="work-showcase__meta-item">
+              <span class="work-showcase__meta-label">Format</span>
+              <span class="work-showcase__meta-value">65mm</span>
+            </div>
+            <div class="work-showcase__meta-item">
+              <span class="work-showcase__meta-label">Director</span>
+              <span class="work-showcase__meta-value">M. Tanaka</span>
+            </div>
+          </div>
+          <a href="#" class="work-showcase__link">
+            Explore Project
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Work 2 — Reverse Layout -->
+      <div class="work-showcase work-showcase--reverse reveal">
+        <div class="work-showcase__visual">
+          <div class="work-showcase__image"></div>
+          <span class="work-showcase__image-label">View Project</span>
+        </div>
+        <div class="work-showcase__info">
+          <div class="work-showcase__number">02</div>
+          <div class="work-showcase__category">Documentary — Nature</div>
+          <h3 class="work-showcase__title">Beneath Still Waters</h3>
+          <p class="work-showcase__desc">
+            An intimate underwater documentary following marine biologists studying
+            coral reef ecosystems in the Pacific. Combining macro photography with
+            sweeping oceanic vistas, the film reveals both the fragility and resilience
+            of underwater ecosystems.
+          </p>
+          <div class="work-showcase__meta">
+            <div class="work-showcase__meta-item">
+              <span class="work-showcase__meta-label">Year</span>
+              <span class="work-showcase__meta-value">2024</span>
+            </div>
+            <div class="work-showcase__meta-item">
+              <span class="work-showcase__meta-label">Format</span>
+              <span class="work-showcase__meta-value">8K Red</span>
+            </div>
+            <div class="work-showcase__meta-item">
+              <span class="work-showcase__meta-label">Director</span>
+              <span class="work-showcase__meta-value">R. Okonkwo</span>
+            </div>
+          </div>
+          <a href="#" class="work-showcase__link">
+            Explore Project
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Work 3 — Left Layout -->
+      <div class="work-showcase reveal">
+        <div class="work-showcase__visual">
+          <div class="work-showcase__image"></div>
+          <span class="work-showcase__image-label">View Project</span>
+        </div>
+        <div class="work-showcase__info">
+          <div class="work-showcase__number">03</div>
+          <div class="work-showcase__category">Short Film — Experimental</div>
+          <h3 class="work-showcase__title">Quiet Machines</h3>
+          <p class="work-showcase__desc">
+            A visually driven short exploring the poetry of industrial spaces after hours.
+            Without dialogue, the film uses light, shadow, and mechanical rhythm to create
+            a meditation on human absence in spaces designed for human labor.
+          </p>
+          <div class="work-showcase__meta">
+            <div class="work-showcase__meta-item">
+              <span class="work-showcase__meta-label">Year</span>
+              <span class="work-showcase__meta-value">2023</span>
+            </div>
+            <div class="work-showcase__meta-item">
+              <span class="work-showcase__meta-label">Format</span>
+              <span class="work-showcase__meta-value">35mm</span>
+            </div>
+            <div class="work-showcase__meta-item">
+              <span class="work-showcase__meta-label">Awards</span>
+              <span class="work-showcase__meta-value">5 Festivals</span>
+            </div>
+          </div>
+          <a href="#" class="work-showcase__link">
+            Explore Project
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="section__divider">
+
+  <!-- ═══════════ About ═══════════ -->
+  <section class="section about" id="about">
+    <div class="section__container">
+      <div class="about__grid">
+
+        <div class="about__portrait reveal">
+          <div class="about__portrait-icon">◎</div>
+          <div class="about__portrait-label">Lena Voss — Behind the Lens</div>
+        </div>
+
+        <div class="about__content">
+          <div class="section__label reveal">About</div>
+          <h2 class="section__heading reveal">The Visionary Behind the Lens</h2>
+
+          <p class="about__text reveal">
+            Lena Voss is an award-winning cinematographer based in Los Angeles,
+            with a passion for translating emotion into visual language. Over the
+            past <strong>eight years</strong>, she has lensed features, documentaries,
+            and commercial projects across four continents.
+          </p>
+
+          <p class="about__text reveal">
+            Her work is characterized by a meticulous approach to <em>natural light</em>,
+            an intuitive sense of composition, and a belief that every frame should
+            tell a story. From the stark deserts of Namibia to the neon-soaked streets
+            of Tokyo, Lena's camera finds beauty in the in-between moments.
+          </p>
+
+          <p class="about__text reveal">
+            When not on set, she mentors emerging filmmakers and curates visual
+            essays exploring the intersection of cinema and memory.
+          </p>
+
+          <div class="about__stats">
+            <div class="stat reveal reveal--delay-1">
+              <div class="stat__number">8</div>
+              <div class="stat__label">Years Active</div>
+            </div>
+            <div class="stat reveal reveal--delay-2">
+              <div class="stat__number">42</div>
+              <div class="stat__label">Films Shot</div>
+            </div>
+            <div class="stat reveal reveal--delay-3">
+              <div class="stat__number">12</div>
+              <div class="stat__label">Awards</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="section__divider">
+
+  <!-- ═══════════ Contact ═══════════ -->
+  <section class="section contact" id="contact">
+    <div class="contact__inner">
+      <div class="section__label" style="justify-content: center;">Get in Touch</div>
+      <h2 class="contact__heading reveal">Let's Create<br><em>Something Beautiful</em></h2>
+      <p class="contact__text reveal">
+        Available for feature films, documentaries, branded content, and
+        music video productions. Based in Los Angeles, available worldwide.
+      </p>
+      <a href="mailto:lena@lenavoss.film" class="contact__email reveal">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        lena@lenavoss.film
+      </a>
+      <div class="contact__social reveal">
+        <a href="#" class="contact__social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="1.5"></rect><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"></circle></svg>
+        </a>
+        <a href="#" class="contact__social-link" aria-label="Vimeo">
+          <svg viewBox="0 0 24 24"><path d="M22 7.42c-.1 2.16-1.61 5.12-4.55 8.86C14.4 20.06 11.7 22 9.44 22c-1.4 0-2.58-1.29-3.54-3.87L4.12 12.1C3.44 9.63 2.71 8.39 1.93 8.39c-.16 0-.74.35-1.72 1.04L0 8.32c1.07-.94 2.13-1.88 3.17-2.82C4.57 4.27 5.65 3.6 6.42 3.56c1.85-.12 2.99 1.09 3.41 3.64.46 2.74.78 4.45.96 5.12.53 2.24 1.11 3.36 1.74 3.36.49 0 1.23-.78 2.23-2.34.99-1.56 1.53-2.75 1.6-3.56.13-1.35-.39-2.03-1.55-2.03-.55 0-1.12.13-1.7.38C12.52 2.44 14.27 1.4 16.5 1.4c1.67 0 3.06.52 4.18 1.55 1.11 1.03 1.65 2.47 1.52 4.47z" fill="currentColor"></path></svg>
+        </a>
+        <a href="#" class="contact__social-link" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="1.5"></path><rect x="2" y="9" width="4" height="12" fill="none" stroke="currentColor" stroke-width="1.5"></rect><circle cx="4" cy="4" r="2" fill="none" stroke="currentColor" stroke-width="1.5"></circle></svg>
+        </a>
+        <a href="#" class="contact__social-link" aria-label="Twitter">
+          <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ Footer ═══════════ -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__copy">© 2024 Lena Voss. All rights reserved.</span>
+      <ul class="footer__links">
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Credits</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ═══════════ Minimal JS — Scroll & Drag ═══════════ -->
+  <script>
+    // ── Nav scroll effect ──
+    const nav = document.getElementById('nav');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      nav.classList.toggle('nav--scrolled', y > 80);
+      lastScroll = y;
+    }, { passive: true });
+
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal--visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // ── Film reel drag-to-scroll ──
+    const track = document.getElementById('reelTrack');
+    let isDown = false, startX, scrollLeft;
+
+    track.addEventListener('mousedown', (e) => {
+      isDown = true;
+      track.style.cursor = 'grabbing';
+      startX = e.pageX - track.offsetLeft;
+      scrollLeft = track.scrollLeft;
+    });
+
+    track.addEventListener('mouseleave', () => {
+      isDown = false;
+      track.style.cursor = 'grab';
+    });
+
+    track.addEventListener('mouseup', () => {
+      isDown = false;
+      track.style.cursor = 'grab';
+    });
+
+    track.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - track.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      track.scrollLeft = scrollLeft - walk;
+    });
+  </script>
+
+</body>
+</html>

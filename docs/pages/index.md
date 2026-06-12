@@ -658,6 +658,24 @@ const pages = [
     rating: 9.4,
     description: '暗色系日历与事件规划器，三栏应用布局 + 月视图网格 + 彩色事件标签 + 环形进度图 + 迷你日历 + 每周活动柱状图 + 新建事件弹窗',
   },
+  {
+    id: 'freelance-portfolio',
+    title: 'Lena Voss 独立电影人作品集',
+    category: 'portfolio',
+    tags: ['电影', '作品集', '暗色主题', '衬线字体', '横向滚动'],
+    colors: ['#0a0a0f', '#c9a96e', '#1a1a1a'],
+    rating: 9.5,
+    description: '暗色系独立电影人作品集，Playfair Display 衬线字体 + 胶片噪点纹理 + 横向滚动画廊 + 交错项目展示 + 毛玻璃导航',
+  },
+  {
+    id: 'recipe-blog',
+    title: 'TasteNote 美食食谱博客',
+    category: 'content',
+    tags: ['食谱', '美食博客', '编辑设计', '暖色调', '衬线字体'],
+    colors: ['#faf8f4', '#3C2415', '#C9705B'],
+    rating: 9.4,
+    description: '暖色调美食食谱博客，DM Serif Display 衬线字体 + CSS 渐变食物插画 + 食谱网格 + 分类筛选 + Newsletter 订阅',
+  },
 ]
 
 const categories = [
@@ -729,7 +747,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 68 个完整页面</span>
+      <span>📦 70 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
