@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GridWork — 设计素材商城</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --border: #e5e5e5;
+  --border-hover: #1a1a1a;
+  --text-primary: #1a1a1a;
+  --text-secondary: #808080;
+  --text-muted: #b3b3b3;
+  --accent: #1a1a1a;
+  --accent-inverse: #ffffff;
+  --tag-bg: #f0f0f0;
+  --tag-active-bg: #1a1a1a;
+  --tag-active-text: #ffffff;
+  --card-radius: 2px;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+body {
+  font-family: var(--font-display);
+  background: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── Top Bar ─────────────────────────────────────── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-8);
+}
+
+.topbar__brand {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--text-xl);
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.topbar__brand span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--text-primary);
+  color: var(--accent-inverse);
+  border-radius: var(--card-radius);
+  font-size: var(--text-sm);
+  margin-right: var(--space-3);
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+.topbar__tabs {
+  display: flex;
+  gap: var(--space-1);
+  margin-left: var(--space-12);
+}
+
+.topbar__tab {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--card-radius);
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.topbar__tab:hover {
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.topbar__tab.active {
+  color: var(--accent-inverse);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.topbar__actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.topbar__search {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  background: var(--bg);
+  color: var(--text-secondary);
+  width: 220px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.topbar__search::placeholder { color: var(--text-muted); }
+.topbar__search:focus { border-color: var(--text-primary); }
+
+.topbar__subscribe {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--text-primary);
+  border-radius: var(--card-radius);
+  background: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.topbar__subscribe:hover {
+  background: var(--text-primary);
+  color: var(--accent-inverse);
+}
+
+/* ── Section Headers ─────────────────────────────── */
+.section-header {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: var(--space-8) var(--space-8) var(--space-4);
+}
+
+.section-header::after {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+  margin-left: var(--space-4);
+  vertical-align: middle;
+}
+
+/* ── Product Grid ────────────────────────────────── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin: 0 var(--space-8);
+  border: 1px solid var(--border);
+}
+
+.product-card {
+  background: var(--surface);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card__preview {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card__preview-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover .product-card__preview-bg {
+  transform: scale(1.05);
+}
+
+.product-card__preview-content {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.product-card__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--border);
+  min-height: 48px;
+}
+
+.product-card__id {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.product-card__name {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: right;
+  letter-spacing: -0.01em;
+}
+
+.product-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.product-card:hover .product-card__overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.product-card__overlay-btn {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: var(--space-2) var(--space-6);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: var(--card-radius);
+  background: none;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.product-card__overlay-btn:hover {
+  background: #fff;
+  color: var(--text-primary);
+  border-color: #fff;
+}
+
+.product-card__overlay-price {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ── Newsletter Section ──────────────────────────── */
+.newsletter {
+  margin: var(--space-16) var(--space-8);
+  padding: var(--space-16) var(--space-12);
+  background: var(--text-primary);
+  color: var(--accent-inverse);
+  text-align: center;
+}
+
+.newsletter__title {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin-bottom: var(--space-3);
+}
+
+.newsletter__subtitle {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-8);
+}
+
+.newsletter__form {
+  display: flex;
+  max-width: 480px;
+  margin: 0 auto;
+  gap: 0;
+}
+
+.newsletter__input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-right: none;
+  border-radius: var(--card-radius) 0 0 var(--card-radius);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  outline: none;
+}
+
+.newsletter__input::placeholder { color: var(--text-muted); }
+
+.newsletter__btn {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: var(--space-3) var(--space-6);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 0 var(--card-radius) var(--card-radius) 0;
+  background: #fff;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.15s ease;
+}
+
+.newsletter__btn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+/* ── Stats Bar ───────────────────────────────────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin: var(--space-16) var(--space-8) 0;
+  border: 1px solid var(--border);
+}
+
+.stats__item {
+  background: var(--surface);
+  padding: var(--space-10) var(--space-8);
+  text-align: center;
+}
+
+.stats__number {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.stats__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ── Footer ──────────────────────────────────────── */
+.footer {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--space-8);
+  padding: var(--space-16) var(--space-8);
+  margin: var(--space-8) var(--space-8) 0;
+  border-top: 1px solid var(--border);
+}
+
+.footer__brand {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-4);
+}
+
+.footer__desc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 280px;
+}
+
+.footer__col-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.footer__link {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: var(--space-1) 0;
+  transition: color 0.15s ease;
+}
+
+.footer__link:hover { color: var(--text-primary); }
+
+.footer__bottom {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ── Featured Row ────────────────────────────────── */
+.featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin: 0 var(--space-8);
+  border: 1px solid var(--border);
+}
+
+.featured-card {
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.featured-card__preview {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-card__preview-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.featured-card:hover .featured-card__preview-bg {
+  transform: scale(1.04);
+}
+
+.featured-card__badge {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: var(--card-radius);
+  color: #fff;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.featured-card__info {
+  padding: var(--space-5) var(--space-6);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.featured-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.featured-card__id {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.featured-card__name {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.featured-card__price {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 1024px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .topbar__tabs { display: none; }
+  .topbar__search { width: 140px; }
+  .footer { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .featured { grid-template-columns: 1fr; }
+}
+
+/* ── Scan Line Animation ─────────────────────────── */
+.product-card__preview::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-card__preview::after {
+  opacity: 1;
+  animation: scanline 1.5s ease-in-out infinite;
+}
+
+@keyframes scanline {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* ── Type Badge Animations ───────────────────────── */
+.type-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 1px;
+  margin-left: var(--space-2);
+}
+
+.type-badge--figma { background: #f0e6ff; color: #7b61ff; }
+.type-badge--sketch { background: #fff3e0; color: #f5a623; }
+.type-badge--css { background: #e3f2fd; color: #2196f3; }
+.type-badge--svg { background: #e8f5e9; color: #4caf50; }
+</style>
+</head>
+<body>
+
+<!-- ── Top Bar ─────────────────────────────────────── -->
+<header class="topbar">
+  <a class="topbar__brand" href="#">
+    <span>GW</span>GridWork
+  </a>
+  <nav class="topbar__tabs">
+    <button class="topbar__tab active" data-filter="all">全部</button>
+    <button class="topbar__tab" data-filter="mockup">Mockups</button>
+    <button class="topbar__tab" data-filter="component">Components</button>
+    <button class="topbar__tab" data-filter="template">Templates</button>
+    <button class="topbar__tab" data-filter="icon">Icons</button>
+  </nav>
+  <div class="topbar__actions">
+    <input class="topbar__search" type="text" placeholder="搜索素材... ⌘K">
+    <button class="topbar__subscribe">订阅</button>
+  </div>
+</header>
+
+<!-- ── Featured Section ────────────────────────────── -->
+<div class="section-header">精选素材 — Featured</div>
+<div class="featured">
+  <div class="featured-card">
+    <div class="featured-card__preview">
+      <div class="featured-card__preview-bg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+        <div style="text-align: center; color: white;">
+          <div style="font-size: 64px; opacity: 0.2; font-family: var(--font-mono); font-weight: 700;">M</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6;">3D Mockup Pack</div>
+        </div>
+      </div>
+      <div class="featured-card__badge">精选</div>
+    </div>
+    <div class="featured-card__info">
+      <div class="featured-card__meta">
+        <span class="featured-card__id">M 001</span>
+        <span class="featured-card__name">Premium Device Mockups <span class="type-badge type-badge--figma">Figma</span></span>
+      </div>
+      <span class="featured-card__price">$49</span>
+    </div>
+  </div>
+  <div class="featured-card">
+    <div class="featured-card__preview">
+      <div class="featured-card__preview-bg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center;">
+        <div style="text-align: center; color: white;">
+          <div style="font-size: 64px; opacity: 0.2; font-family: var(--font-mono); font-weight: 700;">C</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6;">Component Library</div>
+        </div>
+      </div>
+      <div class="featured-card__badge">新上架</div>
+    </div>
+    <div class="featured-card__info">
+      <div class="featured-card__meta">
+        <span class="featured-card__id">C 012</span>
+        <span class="featured-card__name">SaaS Dashboard Kit <span class="type-badge type-badge--figma">Figma</span></span>
+      </div>
+      <span class="featured-card__price">$79</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── 3D Mockups ──────────────────────────────────── -->
+<div class="section-header">3D Mockups — M 系列</div>
+<div class="product-grid" id="grid-mockups">
+  <div class="product-card" data-type="mockup">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #e0e5ec, #c8d6e5);"></div>
+      <span class="product-card__preview-content">MacBook Pro</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$29</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">M 002</span>
+      <span class="product-card__name">MacBook Display</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="mockup">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #a8edea, #fed6e3);"></div>
+      <span class="product-card__preview-content">iPhone 16</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$19</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">M 003</span>
+      <span class="product-card__name">iPhone Frame</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="mockup">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #d4fc79, #96e6a1);"></div>
+      <span class="product-card__preview-content">iPad Pro</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$24</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">M 004</span>
+      <span class="product-card__name">iPad Landscape</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="mockup">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #ffecd2, #fcb69f);"></div>
+      <span class="product-card__preview-content">Apple Watch</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$15</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">M 005</span>
+      <span class="product-card__name">Watch Series</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="mockup">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #c3cfe2, #f5f7fa);"></div>
+      <span class="product-card__preview-content">Samsung S24</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$19</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">M 006</span>
+      <span class="product-card__name">Galaxy Frame</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="mockup">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #e6e9f0, #eef1f5);"></div>
+      <span class="product-card__preview-content">iMac 24"</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$34</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">M 007</span>
+      <span class="product-card__name">iMac Stand</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="mockup">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #fbc2eb, #a6c1ee);"></div>
+      <span class="product-card__preview-content">Print Pack</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$39</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">M 008</span>
+      <span class="product-card__name">Print Stationery</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="mockup">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #d299c2, #fef9d7);"></div>
+      <span class="product-card__preview-content">Packaging</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$44</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">M 009</span>
+      <span class="product-card__name">Box Packaging</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Components ──────────────────────────────────── -->
+<div class="section-header">UI Components — C 系列</div>
+<div class="product-grid" id="grid-components">
+  <div class="product-card" data-type="component">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: #1a1a2e; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 80%; height: 60%; border-radius: 8px; background: linear-gradient(135deg, #16213e, #0f3460); padding: 12px;">
+          <div style="width: 60%; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; margin-bottom: 6px;"></div>
+          <div style="width: 40%; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-bottom: 10px;"></div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <div style="height: 20px; background: rgba(99,102,241,0.3); border-radius: 3px;"></div>
+            <div style="height: 20px; background: rgba(6,182,212,0.3); border-radius: 3px;"></div>
+            <div style="height: 20px; background: rgba(245,158,11,0.3); border-radius: 3px;"></div>
+            <div style="height: 20px; background: rgba(16,185,129,0.3); border-radius: 3px;"></div>
+          </div>
+        </div>
+      </div>
+      <span class="product-card__preview-content" style="color: rgba(255,255,255,0.5);">Dashboard</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$59</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">C 001</span>
+      <span class="product-card__name">Dark Dashboard <span class="type-badge type-badge--figma">Figma</span></span>
+    </div>
+  </div>
+  <div class="product-card" data-type="component">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: #fafafa; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 80%; height: 60%; border-radius: 4px; background: #fff; border: 1px solid #e5e5e5; padding: 12px;">
+          <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #818cf8);"></div>
+            <div>
+              <div style="width: 48px; height: 4px; background: #1a1a1a; border-radius: 2px; margin-bottom: 3px;"></div>
+              <div style="width: 32px; height: 3px; background: #ccc; border-radius: 2px;"></div>
+            </div>
+          </div>
+          <div style="width: 100%; height: 3px; background: #f0f0f0; border-radius: 2px; margin-bottom: 4px;"></div>
+          <div style="width: 85%; height: 3px; background: #f0f0f0; border-radius: 2px;"></div>
+        </div>
+      </div>
+      <span class="product-card__preview-content">Social Cards</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$34</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">C 002</span>
+      <span class="product-card__name">Social Components <span class="type-badge type-badge--css">CSS</span></span>
+    </div>
+  </div>
+  <div class="product-card" data-type="component">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center;">
+        <div style="width: 75%; height: 50%; display: flex; flex-direction: column; gap: 6px;">
+          <div style="flex: 1; background: rgba(255,255,255,0.15); border-radius: 4px; backdrop-filter: blur(4px);"></div>
+          <div style="height: 28px; background: rgba(255,255,255,0.9); border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 40px; height: 4px; background: #667eea; border-radius: 2px;"></div>
+          </div>
+        </div>
+      </div>
+      <span class="product-card__preview-content" style="color: rgba(255,255,255,0.5);">Glass Cards</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$28</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">C 003</span>
+      <span class="product-card__name">Glassmorphism Set <span class="type-badge type-badge--css">CSS</span></span>
+    </div>
+  </div>
+  <div class="product-card" data-type="component">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: #0a0a0f; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 75%; height: 55%; display: flex; gap: 3px;">
+          <div style="flex: 1; background: #1a1a2e; border-radius: 3px; display: flex; flex-direction: column; justify-content: flex-end; padding: 4px;">
+            <div style="height: 60%; background: linear-gradient(to top, rgba(99,102,241,0.4), transparent); border-radius: 2px 2px 0 0;"></div>
+          </div>
+          <div style="flex: 1; background: #1a1a2e; border-radius: 3px; display: flex; flex-direction: column; justify-content: flex-end; padding: 4px;">
+            <div style="height: 80%; background: linear-gradient(to top, rgba(16,185,129,0.4), transparent); border-radius: 2px 2px 0 0;"></div>
+          </div>
+          <div style="flex: 1; background: #1a1a2e; border-radius: 3px; display: flex; flex-direction: column; justify-content: flex-end; padding: 4px;">
+            <div style="height: 45%; background: linear-gradient(to top, rgba(245,158,11,0.4), transparent); border-radius: 2px 2px 0 0;"></div>
+          </div>
+          <div style="flex: 1; background: #1a1a2e; border-radius: 3px; display: flex; flex-direction: column; justify-content: flex-end; padding: 4px;">
+            <div style="height: 90%; background: linear-gradient(to top, rgba(239,68,68,0.4), transparent); border-radius: 2px 2px 0 0;"></div>
+          </div>
+          <div style="flex: 1; background: #1a1a2e; border-radius: 3px; display: flex; flex-direction: column; justify-content: flex-end; padding: 4px;">
+            <div style="height: 30%; background: linear-gradient(to top, rgba(6,182,212,0.4), transparent); border-radius: 2px 2px 0 0;"></div>
+          </div>
+        </div>
+      </div>
+      <span class="product-card__preview-content" style="color: rgba(255,255,255,0.5);">Charts</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$45</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">C 004</span>
+      <span class="product-card__name">Analytics Charts <span class="type-badge type-badge--svg">SVG</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Templates ───────────────────────────────────── -->
+<div class="section-header">Templates — T 系列</div>
+<div class="product-grid" id="grid-templates">
+  <div class="product-card" data-type="template">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); display: flex; align-items: center; justify-content: center;">
+        <div style="width: 75%; height: 70%; border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 8px;">
+          <div style="width: 30%; height: 3px; background: rgba(99,102,241,0.6); border-radius: 2px; margin-bottom: 8px;"></div>
+          <div style="width: 60%; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; margin-bottom: 4px;"></div>
+          <div style="width: 45%; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-bottom: 12px;"></div>
+          <div style="display: flex; gap: 4px;">
+            <div style="flex: 1; height: 30px; background: rgba(99,102,241,0.15); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 30px; background: rgba(6,182,212,0.15); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 30px; background: rgba(245,158,11,0.15); border-radius: 2px;"></div>
+          </div>
+        </div>
+      </div>
+      <span class="product-card__preview-content" style="color: rgba(255,255,255,0.4);">SaaS Landing</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$69</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">T 001</span>
+      <span class="product-card__name">SaaS Landing Page</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="template">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: #fff; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 75%; height: 70%; border: 1px solid #e5e5e5; border-radius: 4px; padding: 8px;">
+          <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+            <div style="width: 16px; height: 16px; border-radius: 3px; background: #1a1a1a;"></div>
+            <div style="flex: 1; display: flex; gap: 4px; align-items: center;">
+              <div style="width: 30px; height: 3px; background: #ccc; border-radius: 2px;"></div>
+              <div style="width: 24px; height: 3px; background: #ccc; border-radius: 2px;"></div>
+              <div style="width: 28px; height: 3px; background: #ccc; border-radius: 2px;"></div>
+            </div>
+          </div>
+          <div style="width: 100%; height: 3px; background: #f0f0f0; border-radius: 2px; margin-bottom: 3px;"></div>
+          <div style="width: 90%; height: 3px; background: #f0f0f0; border-radius: 2px; margin-bottom: 6px;"></div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;">
+            <div style="height: 24px; background: #f8f8f8; border-radius: 2px;"></div>
+            <div style="height: 24px; background: #f8f8f8; border-radius: 2px;"></div>
+            <div style="height: 24px; background: #f8f8f8; border-radius: 2px;"></div>
+          </div>
+        </div>
+      </div>
+      <span class="product-card__preview-content">Portfolio</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$39</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">T 002</span>
+      <span class="product-card__name">Portfolio Template</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="template">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); display: flex; align-items: center; justify-content: center;">
+        <div style="width: 70%; height: 60%; background: rgba(255,255,255,0.9); border-radius: 6px; padding: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+          <div style="width: 100%; height: 24px; background: linear-gradient(135deg, #ff6b6b, #ffa8a8); border-radius: 3px; margin-bottom: 6px;"></div>
+          <div style="width: 50%; height: 4px; background: #ddd; border-radius: 2px; margin-bottom: 4px;"></div>
+          <div style="width: 70%; height: 3px; background: #eee; border-radius: 2px;"></div>
+        </div>
+      </div>
+      <span class="product-card__preview-content" style="color: rgba(180,60,60,0.5);">E-commerce</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$54</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">T 003</span>
+      <span class="product-card__name">Shop Template</span>
+    </div>
+  </div>
+  <div class="product-card" data-type="template">
+    <div class="product-card__preview">
+      <div class="product-card__preview-bg" style="background: #111827; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 75%; height: 70%; border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; padding: 8px;">
+          <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444;"></div>
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b;"></div>
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></div>
+          </div>
+          <div style="width: 50%; height: 3px; background: rgba(99,102,241,0.5); border-radius: 2px; margin-bottom: 6px;"></div>
+          <div style="font-family: monospace; font-size: 5px; color: rgba(255,255,255,0.3); line-height: 1.6;">
+            <div>$ npm create saas-app</div>
+            <div style="color: #10b981;">✓ Ready</div>
+            <div style="color: #f59e0b;">⚡ Deploying...</div>
+          </div>
+        </div>
+      </div>
+      <span class="product-card__preview-content" style="color: rgba(255,255,255,0.4);">Docs</span>
+      <div class="product-card__overlay">
+        <span class="product-card__overlay-price">$44</span>
+        <button class="product-card__overlay-btn">预览</button>
+        <button class="product-card__overlay-btn">加入购物车</button>
+      </div>
+    </div>
+    <div class="product-card__info">
+      <span class="product-card__id">T 004</span>
+      <span class="product-card__name">Developer Docs</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Stats ───────────────────────────────────────── -->
+<div class="stats">
+  <div class="stats__item">
+    <div class="stats__number">2,400+</div>
+    <div class="stats__label">设计素材</div>
+  </div>
+  <div class="stats__item">
+    <div class="stats__number">180+</div>
+    <div class="stats__label">设计师</div>
+  </div>
+  <div class="stats__item">
+    <div class="stats__number">4.9</div>
+    <div class="stats__label">平均评分</div>
+  </div>
+  <div class="stats__item">
+    <div class="stats__number">24h</div>
+    <div class="stats__label">交付速度</div>
+  </div>
+</div>
+
+<!-- ── Newsletter ──────────────────────────────────── -->
+<section class="newsletter">
+  <h2 class="newsletter__title">每周精选素材</h2>
+  <p class="newsletter__subtitle">获取最新设计灵感、免费素材和独家折扣 →</p>
+  <form class="newsletter__form" onsubmit="return false;">
+    <input class="newsletter__input" type="email" placeholder="your@email.com">
+    <button class="newsletter__btn">订阅</button>
+  </form>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────── -->
+<footer class="footer">
+  <div>
+    <div class="footer__brand">GridWork</div>
+    <p class="footer__desc">为设计师和开发者提供的高质量设计素材平台。Mockup、组件、模板，一站获取。</p>
+  </div>
+  <div>
+    <div class="footer__col-title">素材</div>
+    <a class="footer__link" href="#">3D Mockups</a>
+    <a class="footer__link" href="#">UI Components</a>
+    <a class="footer__link" href="#">Templates</a>
+    <a class="footer__link" href="#">Icon Sets</a>
+    <a class="footer__link" href="#">免费素材</a>
+  </div>
+  <div>
+    <div class="footer__col-title">资源</div>
+    <a class="footer__link" href="#">设计指南</a>
+    <a class="footer__link" href="#">色彩工具</a>
+    <a class="footer__link" href="#">字体配对</a>
+    <a class="footer__link" href="#">API 文档</a>
+  </div>
+  <div>
+    <div class="footer__col-title">关于</div>
+    <a class="footer__link" href="#">关于我们</a>
+    <a class="footer__link" href="#">成为卖家</a>
+    <a class="footer__link" href="#">许可协议</a>
+    <a class="footer__link" href="#">联系我们</a>
+  </div>
+  <div class="footer__bottom">
+    <span>© 2026 GridWork. All rights reserved.</span>
+    <span>Swiss Design Principles</span>
+  </div>
+</footer>
+
+<script>
+// Tab filtering
+document.querySelectorAll('.topbar__tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.topbar__tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const filter = tab.dataset.filter;
+    document.querySelectorAll('.section-header, .product-grid, .featured, .stats').forEach(el => {
+      if (filter === 'all') {
+        el.style.display = '';
+      } else {
+        const section = el.previousElementSibling || el;
+        // Simple show/hide based on grid type
+        if (el.classList.contains('product-grid')) {
+          el.style.display = '';
+        } else if (el.classList.contains('featured') && filter === 'mockup') {
+          el.style.display = '';
+        } else if (!el.classList.contains('product-grid') && !el.classList.contains('featured')) {
+          el.style.display = '';
+        }
+      }
+    });
+    // Filter product cards
+    document.querySelectorAll('.product-card').forEach(card => {
+      if (filter === 'all') {
+        card.style.display = '';
+      } else {
+        card.style.display = card.dataset.type === filter ? '' : 'none';
+      }
+    });
+    // Hide grids with no visible cards
+    document.querySelectorAll('.product-grid').forEach(grid => {
+      const visibleCards = grid.querySelectorAll('.product-card:not([style*="display: none"])');
+      const sectionHeader = grid.previousElementSibling;
+      if (visibleCards.length === 0) {
+        grid.style.display = 'none';
+        if (sectionHeader && sectionHeader.classList.contains('section-header')) {
+          sectionHeader.style.display = 'none';
+        }
+      } else {
+        grid.style.display = '';
+        if (sectionHeader && sectionHeader.classList.contains('section-header')) {
+          sectionHeader.style.display = '';
+        }
+      }
+    });
+    // Featured card filter
+    const featured = document.querySelector('.featured');
+    if (featured) {
+      if (filter === 'component' || filter === 'template' || filter === 'icon') {
+        featured.style.display = 'none';
+        const fh = featured.previousElementSibling;
+        if (fh && fh.classList.contains('section-header')) fh.style.display = 'none';
+      } else {
+        featured.style.display = '';
+        const fh = featured.previousElementSibling;
+        if (fh && fh.classList.contains('section-header')) fh.style.display = '';
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>

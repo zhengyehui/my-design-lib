@@ -676,6 +676,15 @@ const pages = [
     rating: 9.4,
     description: '暖色调美食食谱博客，DM Serif Display 衬线字体 + CSS 渐变食物插画 + 食谱网格 + 分类筛选 + Newsletter 订阅',
   },
+  {
+    id: 'design-marketplace',
+    title: 'GridWork 设计素材商城',
+    category: 'ecommerce',
+    tags: ['设计素材', '电商', '瑞士风格', 'Mockup商城', '产品网格'],
+    colors: ['#fafafa', '#1a1a1a', '#6366f1'],
+    rating: 9.3,
+    description: '瑞士风格设计素材商城，Space Mono 等宽字体编号系统 + 1px 网格布局 + 产品卡片 Hover 扫描线动画 + Tab 分类筛选 + Newsletter 订阅',
+  },
 ]
 
 const categories = [
@@ -733,12 +742,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 68 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 71 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="68 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="71 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -747,7 +756,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 70 个完整页面</span>
+      <span>📦 71 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
