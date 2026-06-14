@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurelio Resort — 意大利奢华度假酒店</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --hotel-cream: #f8f6f3;
+  --hotel-warm: #f3efe8;
+  --hotel-gold: #c4a882;
+  --hotel-gold-light: #d4bfa0;
+  --hotel-gold-dark: #a08660;
+  --hotel-dark: #1a1a1a;
+  --hotel-text: #2d2d2d;
+  --hotel-text-light: #6b6b6b;
+  --hotel-border: #e8e4de;
+  --hotel-white: #ffffff;
+  --font-serif: 'Playfair Display', 'Georgia', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--hotel-text);
+  background: var(--hotel-cream);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ===== NAVIGATION ===== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.25rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.4s, box-shadow 0.4s, padding 0.4s;
+}
+.nav.scrolled {
+  background: rgba(248, 246, 243, 0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 var(--hotel-border);
+  padding: 0.8rem 3rem;
+}
+.nav-logo {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--hotel-white);
+  text-decoration: none;
+  transition: color 0.4s;
+}
+.nav.scrolled .nav-logo { color: var(--hotel-dark); }
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.nav.scrolled .nav-links a { color: var(--hotel-text-light); }
+.nav-links a:hover { color: var(--hotel-gold); }
+.nav-cta {
+  padding: 0.6rem 1.6rem;
+  background: var(--hotel-white);
+  color: var(--hotel-dark) !important;
+  border-radius: 0;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase;
+  font-weight: 600 !important;
+  transition: background 0.3s, color 0.3s !important;
+}
+.nav.scrolled .nav-cta {
+  background: var(--hotel-dark);
+  color: var(--hotel-white) !important;
+}
+.nav-cta:hover { background: var(--hotel-gold) !important; color: var(--hotel-white) !important; }
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(26,26,26,0.65) 0%, rgba(26,26,26,0.3) 50%, rgba(26,26,26,0.55) 100%),
+    linear-gradient(180deg,
+      #3d3225 0%,
+      #5a4a38 20%,
+      #7a6a52 40%,
+      #8a7a62 55%,
+      #6a5a45 75%,
+      #3d3225 100%
+    );
+  background-size: cover;
+}
+/* Decorative mountain/landscape silhouette */
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background:
+    radial-gradient(ellipse 120% 100% at 20% 100%, rgba(90,74,56,0.8) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 80% at 80% 100%, rgba(61,50,37,0.9) 0%, transparent 50%);
+}
+/* Subtle light rays */
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 30%;
+  right: 30%;
+  height: 70%;
+  background: radial-gradient(ellipse at center top, rgba(196,168,130,0.15) 0%, transparent 70%);
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 0 2rem;
+  animation: heroFadeIn 1.2s ease-out;
+}
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--hotel-gold-light);
+  margin-bottom: 1.5rem;
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 400;
+  color: var(--hotel-white);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--hotel-gold-light);
+}
+.hero-subtitle {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto 2.5rem;
+}
+.hero-cta {
+  display: inline-block;
+  padding: 1rem 3rem;
+  background: var(--hotel-gold);
+  color: var(--hotel-white);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background 0.3s, transform 0.3s;
+}
+.hero-cta:hover {
+  background: var(--hotel-gold-dark);
+  transform: translateY(-2px);
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ===== SECTION COMMON ===== */
+.section {
+  padding: 7rem 3rem;
+}
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--hotel-gold);
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  color: var(--hotel-dark);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+.section-desc {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--hotel-text-light);
+  line-height: 1.8;
+  max-width: 560px;
+}
+.divider {
+  width: 60px;
+  height: 1px;
+  background: var(--hotel-gold);
+  margin: 2rem 0;
+}
+
+/* ===== INTRO / ABOUT ===== */
+.intro {
+  background: var(--hotel-white);
+}
+.intro-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.intro-image {
+  position: relative;
+  aspect-ratio: 4/5;
+  background: linear-gradient(145deg, #c4a882 0%, #a08660 40%, #7a6a52 100%);
+  overflow: hidden;
+}
+.intro-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(0,0,0,0.2) 0%, transparent 40%);
+}
+.intro-image-text {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  right: 2rem;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6;
+}
+.intro-text {
+  padding-right: 2rem;
+}
+.intro-text p {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--hotel-text-light);
+  line-height: 1.9;
+  margin-bottom: 1.5rem;
+}
+.intro-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--hotel-border);
+}
+.stat-number {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--hotel-dark);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hotel-text-light);
+  margin-top: 0.5rem;
+}
+
+/* ===== ROOMS GALLERY ===== */
+.rooms {
+  background: var(--hotel-cream);
+  padding-bottom: 5rem;
+}
+.rooms-header {
+  max-width: 1200px;
+  margin: 0 auto 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.rooms-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-rows: auto auto;
+  gap: 1.5rem;
+  padding: 0 3rem;
+}
+.room-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  group: true;
+}
+.room-card:first-child {
+  grid-row: 1 / 3;
+}
+.room-image {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.25, 0, 0.25, 1);
+}
+.room-card:hover .room-image {
+  transform: scale(1.05);
+}
+/* CSS gradient placeholders for room images */
+.room-img-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  transition: transform 0.8s cubic-bezier(0.25, 0, 0.25, 1);
+}
+.room-card:hover .room-img-placeholder {
+  transform: scale(1.05);
+}
+.room-img-1 {
+  background: linear-gradient(135deg, #8a7a62 0%, #c4a882 30%, #d4bfa0 50%, #a08660 80%, #6a5a45 100%);
+}
+.room-img-2 {
+  background: linear-gradient(145deg, #5a4a38 0%, #8a7a62 40%, #c4a882 100%);
+}
+.room-img-3 {
+  background: linear-gradient(160deg, #3d3225 0%, #6a5a45 50%, #a08660 100%);
+}
+.room-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(26,26,26,0.7) 0%, transparent 50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  transition: background 0.4s;
+}
+.room-card:hover .room-overlay {
+  background: linear-gradient(to top, rgba(26,26,26,0.85) 0%, rgba(26,26,26,0.1) 60%);
+}
+.room-type {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hotel-gold-light);
+  margin-bottom: 0.5rem;
+}
+.room-name {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--hotel-white);
+  margin-bottom: 0.5rem;
+}
+.room-price {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+}
+.room-price strong {
+  font-size: 1.1rem;
+  color: var(--hotel-white);
+}
+
+/* ===== AMENITIES ===== */
+.amenities {
+  background: var(--hotel-dark);
+  color: var(--hotel-white);
+  padding: 7rem 3rem;
+}
+.amenities-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.amenities .section-label { color: var(--hotel-gold); }
+.amenities .section-title { color: var(--hotel-white); }
+.amenities .section-desc { color: rgba(255,255,255,0.6); }
+.amenities .divider { background: var(--hotel-gold-dark); }
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+}
+.amenity-card {
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: border-color 0.3s, background 0.3s;
+}
+.amenity-card:hover {
+  border-color: var(--hotel-gold-dark);
+  background: rgba(255,255,255,0.03);
+}
+.amenity-icon {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+.amenity-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
+}
+.amenity-desc {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+}
+
+/* ===== EXPERIENCES ===== */
+.experiences {
+  background: var(--hotel-white);
+}
+.exp-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-top: 4rem;
+}
+.exp-card {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--hotel-border);
+}
+.exp-number {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 400;
+  color: var(--hotel-gold-light);
+  line-height: 1;
+}
+.exp-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--hotel-dark);
+  margin-bottom: 0.5rem;
+}
+.exp-desc {
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: var(--hotel-text-light);
+  line-height: 1.7;
+}
+
+/* ===== TESTIMONIAL ===== */
+.testimonial {
+  background: var(--hotel-warm);
+  padding: 7rem 3rem;
+  text-align: center;
+}
+.testimonial-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.testimonial-quote {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--hotel-dark);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+.testimonial-quote::before {
+  content: '"';
+  font-family: var(--font-serif);
+  font-size: 6rem;
+  color: var(--hotel-gold-light);
+  position: absolute;
+  top: -2.5rem;
+  left: -1rem;
+  line-height: 1;
+  opacity: 0.4;
+}
+.testimonial-author {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--hotel-dark);
+  letter-spacing: 0.05em;
+}
+.testimonial-role {
+  font-size: 0.75rem;
+  color: var(--hotel-text-light);
+  margin-top: 0.25rem;
+}
+.testimonial-stars {
+  color: var(--hotel-gold);
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 2rem;
+}
+
+/* ===== BOOKING BAR ===== */
+.booking {
+  background: var(--hotel-dark);
+  padding: 5rem 3rem;
+}
+.booking-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+.booking .section-label { color: var(--hotel-gold); }
+.booking .section-title { color: var(--hotel-white); margin-bottom: 3rem; }
+.booking-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 1px;
+  background: rgba(255,255,255,0.1);
+}
+.booking-field {
+  background: rgba(255,255,255,0.05);
+  padding: 1.5rem 2rem;
+  text-align: left;
+}
+.booking-field label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--hotel-gold-light);
+  margin-bottom: 0.5rem;
+}
+.booking-field input,
+.booking-field select {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--hotel-white);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 300;
+  outline: none;
+}
+.booking-field input::placeholder { color: rgba(255,255,255,0.4); }
+.booking-field select option { background: var(--hotel-dark); color: var(--hotel-white); }
+.booking-btn {
+  background: var(--hotel-gold);
+  color: var(--hotel-white);
+  border: none;
+  padding: 1.5rem 3rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.booking-btn:hover { background: var(--hotel-gold-dark); }
+
+/* ===== NEWSLETTER ===== */
+.newsletter {
+  background: var(--hotel-cream);
+  padding: 6rem 3rem;
+  text-align: center;
+}
+.newsletter-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.newsletter .section-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.newsletter .section-desc {
+  max-width: 100%;
+  margin-bottom: 2.5rem;
+}
+.newsletter-form {
+  display: flex;
+  gap: 0;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.newsletter-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--hotel-border);
+  border-right: none;
+  background: var(--hotel-white);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--hotel-text);
+  outline: none;
+  transition: border-color 0.3s;
+}
+.newsletter-input:focus { border-color: var(--hotel-gold); }
+.newsletter-input::placeholder { color: var(--hotel-text-light); }
+.newsletter-btn {
+  padding: 1rem 2rem;
+  background: var(--hotel-dark);
+  color: var(--hotel-white);
+  border: 1px solid var(--hotel-dark);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.newsletter-btn:hover { background: var(--hotel-gold-dark); border-color: var(--hotel-gold-dark); }
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--hotel-dark);
+  color: rgba(255,255,255,0.5);
+  padding: 5rem 3rem 3rem;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 4rem;
+}
+.footer-brand {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--hotel-white);
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+.footer-about {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  font-weight: 300;
+  max-width: 300px;
+}
+.footer-col-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--hotel-gold);
+  margin-bottom: 1.5rem;
+}
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.footer-links a {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--hotel-white); }
+.footer-bottom {
+  max-width: 1200px;
+  margin: 4rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+.footer-social {
+  display: flex;
+  gap: 1.5rem;
+}
+.footer-social a {
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.3s;
+}
+.footer-social a:hover { color: var(--hotel-gold); }
+
+/* ===== SCROLL ANIMATIONS ===== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .intro-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .rooms-grid { grid-template-columns: 1fr 1fr; }
+  .room-card:first-child { grid-row: auto; }
+  .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+  .exp-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .section { padding: 4rem 1.5rem; }
+  .rooms-grid { grid-template-columns: 1fr; padding: 0 1.5rem; }
+  .amenities-grid { grid-template-columns: 1fr; }
+  .booking-form { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .newsletter-form { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">AURELIO</a>
+  <ul class="nav-links">
+    <li><a href="#about">关于</a></li>
+    <li><a href="#rooms">客房</a></li>
+    <li><a href="#amenities">设施</a></li>
+    <li><a href="#experiences">体验</a></li>
+    <li><a href="#booking" class="nav-cta">立即预订</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-label">Since 1897 · Lake Como, Italy</p>
+    <h1 class="hero-title">Where Time<br>Stands <em>Still</em></h1>
+    <p class="hero-subtitle">隐匿于科莫湖畔的百年庄园，以意大利匠心精神，为每一位旅人编织一段关于时间与美的故事。</p>
+    <a href="#booking" class="hero-cta">探索庄园</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    SCROLL
+  </div>
+</section>
+
+<!-- About / Intro -->
+<section class="section intro" id="about">
+  <div class="intro-grid">
+    <div class="intro-image fade-up">
+      <div class="intro-image-text">"Un luogo dove il tempo si ferma"<br>— 一个时间驻足的地方</div>
+    </div>
+    <div class="intro-text fade-up">
+      <p class="section-label">Our Story</p>
+      <h2 class="section-title">一座庄园，<br>百年传承</h2>
+      <div class="divider"></div>
+      <p>Aurelio Resort 坐落于意大利科莫湖东岸，前身是一座建于 1897 年的丝绸贸易商家族庄园。经过三年精心修复，我们在保留原始石雕拱门、手工壁画和百年橄榄树的同时，融入了当代设计美学。</p>
+      <p>每一间客房都面向湖景，每一扇窗户都框住一幅阿尔卑斯山脉的画卷。这里没有电视的喧嚣，只有湖水的低语和花园中柠檬树的清香。</p>
+      <div class="intro-stats">
+        <div>
+          <div class="stat-number">127</div>
+          <div class="stat-label">年历史</div>
+        </div>
+        <div>
+          <div class="stat-number">18</div>
+          <div class="stat-label">间客房</div>
+        </div>
+        <div>
+          <div class="stat-number">4.9</div>
+          <div class="stat-label">客户评分</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Rooms Gallery -->
+<section class="section rooms" id="rooms">
+  <div class="rooms-header" style="max-width:1200px;margin:0 auto 4rem;">
+    <div>
+      <p class="section-label fade-up">Accommodations</p>
+      <h2 class="section-title fade-up">湖景客房</h2>
+    </div>
+  </div>
+  <div class="rooms-grid">
+    <div class="room-card fade-up">
+      <div class="room-img-placeholder room-img-1"></div>
+      <div class="room-overlay">
+        <span class="room-type">Signature Suite</span>
+        <h3 class="room-name">Lago 套房</h3>
+        <p class="room-price">从 <strong>€580</strong> / 晚起</p>
+      </div>
+    </div>
+    <div class="room-card fade-up">
+      <div class="room-img-placeholder room-img-2"></div>
+      <div class="room-overlay">
+        <span class="room-type">Deluxe Room</span>
+        <h3 class="room-name">Giardino 花园房</h3>
+        <p class="room-price">从 <strong>€380</strong> / 晚起</p>
+      </div>
+    </div>
+    <div class="room-card fade-up">
+      <div class="room-img-placeholder room-img-3"></div>
+      <div class="room-overlay">
+        <span class="room-type">Penthouse</span>
+        <h3 class="room-name">Cima 顶层套房</h3>
+        <p class="room-price">从 <strong>€920</strong> / 晚起</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Amenities -->
+<section class="amenities" id="amenities">
+  <div class="amenities-inner">
+    <p class="section-label fade-up">Amenities</p>
+    <h2 class="section-title fade-up">庄园设施</h2>
+    <div class="divider fade-up"></div>
+    <p class="section-desc fade-up">从无边泳池到米其林星级餐厅，我们为您的每一刻时光精心雕琢。</p>
+    <div class="amenities-grid">
+      <div class="amenity-card fade-up">
+        <span class="amenity-icon">🏊</span>
+        <h3 class="amenity-name">无边泳池</h3>
+        <p class="amenity-desc">俯瞰科莫湖的无边际泳池，配备私人日光浴区和鸡尾酒吧。</p>
+      </div>
+      <div class="amenity-card fade-up">
+        <span class="amenity-icon">🍷</span>
+        <h3 class="amenity-name">葡萄酒窖</h3>
+        <p class="amenity-desc">超过 300 种意大利精选佳酿，每周由侍酒师带领品鉴之旅。</p>
+      </div>
+      <div class="amenity-card fade-up">
+        <span class="amenity-icon">🧖</span>
+        <h3 class="amenity-name">水疗中心</h3>
+        <p class="amenity-desc">使用本地有机橄榄油与柠檬精华的特色护理，恢复身心平衡。</p>
+      </div>
+      <div class="amenity-card fade-up">
+        <span class="amenity-icon">⛵</span>
+        <h3 class="amenity-name">私人码头</h3>
+        <p class="amenity-desc">专属木制游艇码头，提供科莫湖环湖巡游和日落航行体验。</p>
+      </div>
+      <div class="amenity-card fade-up">
+        <span class="amenity-icon">🍽️</span>
+        <h3 class="amenity-name">湖景餐厅</h3>
+        <p class="amenity-desc">米其林星级主厨掌勺，以当季本地食材诠释伦巴第传统风味。</p>
+      </div>
+      <div class="amenity-card fade-up">
+        <span class="amenity-icon">🚴</span>
+        <h3 class="amenity-name">骑行探索</h3>
+        <p class="amenity-desc">提供专业公路自行车，探索湖畔古道与隐秘的山间小径。</p>
+      </div>
+      <div class="amenity-card fade-up">
+        <span class="amenity-icon">👨‍🍳</span>
+        <h3 class="amenity-name">烹饪课程</h3>
+        <p class="amenity-desc">在庄园厨房跟随大厨学习正宗意大利手工意面和提拉米苏。</p>
+      </div>
+      <div class="amenity-card fade-up">
+        <span class="amenity-icon">🌿</span>
+        <h3 class="amenity-name">有机花园</h3>
+        <p class="amenity-desc">占地两亩的香草与蔬果花园，餐厅食材皆采自这里的新鲜出品。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experiences -->
+<section class="section experiences" id="experiences">
+  <div style="max-width:1200px;margin:0 auto;">
+    <p class="section-label fade-up">Experiences</p>
+    <h2 class="section-title fade-up">定制体验</h2>
+    <div class="divider fade-up"></div>
+    <p class="section-desc fade-up">每一段旅程都应独一无二。我们的礼宾团队将为您打造专属的科莫湖记忆。</p>
+  </div>
+  <div class="exp-grid">
+    <div class="exp-card fade-up">
+      <span class="exp-number">01</span>
+      <div>
+        <h3 class="exp-title">直升机俯瞰科莫</h3>
+        <p class="exp-desc">乘坐私人直升机，从空中俯瞰科莫湖的 Y 字形全貌和湖畔的百年庄园群落。</p>
+      </div>
+    </div>
+    <div class="exp-card fade-up">
+      <span class="exp-number">02</span>
+      <div>
+        <h3 class="exp-title">丝绸工坊探访</h3>
+        <p class="exp-desc">深入科莫丝绸博物馆，了解这座湖畔小城延续数百年的丝绸织造传统。</p>
+      </div>
+    </div>
+    <div class="exp-card fade-up">
+      <span class="exp-number">03</span>
+      <div>
+        <h3 class="exp-title">阿马尔菲海岸一日</h3>
+        <p class="exp-desc">专车前往阿马尔菲海岸，途经波西塔诺和拉维罗，品味柠檬酒与地中海阳光。</p>
+      </div>
+    </div>
+    <div class="exp-card fade-up">
+      <span class="exp-number">04</span>
+      <div>
+        <h3 class="exp-title">庄园婚礼定制</h3>
+        <p class="exp-desc">在百年橄榄树下举办梦幻婚礼，从鲜花布置到晚宴菜单全程定制。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonial -->
+<section class="testimonial">
+  <div class="testimonial-inner fade-up">
+    <div class="testimonial-stars">★ ★ ★ ★ ★</div>
+    <p class="testimonial-quote">在 Aurelio 的五天是我人生中最宁静的时光。清晨在阳台上看着湖面的薄雾，傍晚在花园里品尝侍酒师推荐的本地红酒——这里不是酒店，是一个让人忘记时间的梦境。</p>
+    <p class="testimonial-author">Charlotte Wei</p>
+    <p class="testimonial-role">Condé Nast Traveler 金榜旅行家</p>
+  </div>
+</section>
+
+<!-- Booking Bar -->
+<section class="booking" id="booking">
+  <div class="booking-inner">
+    <p class="section-label fade-up">Reservations</p>
+    <h2 class="section-title fade-up">开启您的旅程</h2>
+    <div class="booking-form fade-up">
+      <div class="booking-field">
+        <label>入住日期</label>
+        <input type="text" placeholder="选择日期" value="2026-07-15">
+      </div>
+      <div class="booking-field">
+        <label>退房日期</label>
+        <input type="text" placeholder="选择日期" value="2026-07-20">
+      </div>
+      <div class="booking-field">
+        <label>房型</label>
+        <select>
+          <option>Lago 套房</option>
+          <option>Giardino 花园房</option>
+          <option>Cima 顶层套房</option>
+        </select>
+      </div>
+      <button class="booking-btn">
+        查询可用
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter">
+  <div class="newsletter-inner fade-up">
+    <p class="section-label">Stay Connected</p>
+    <h2 class="section-title">庄园通讯</h2>
+    <p class="section-desc" style="margin:0 auto 2.5rem;">订阅我们的季度通讯，获取庄园近况、季节限定体验和独家优惠。</p>
+    <form class="newsletter-form" onsubmit="return false;">
+      <input type="email" class="newsletter-input" placeholder="您的邮箱地址">
+      <button type="submit" class="newsletter-btn">订阅</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">AURELIO</div>
+      <p class="footer-about">坐落于意大利科莫湖畔的百年奢华庄园，以匠心传承与当代美学，为旅人编织关于时间与美的故事。</p>
+    </div>
+    <div>
+      <h4 class="footer-col-title">探索</h4>
+      <ul class="footer-links">
+        <li><a href="#about">庄园故事</a></li>
+        <li><a href="#rooms">客房套房</a></li>
+        <li><a href="#amenities">设施服务</a></li>
+        <li><a href="#experiences">定制体验</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-col-title">实用信息</h4>
+      <ul class="footer-links">
+        <li><a href="#">到达交通</a></li>
+        <li><a href="#">常见问题</a></li>
+        <li><a href="#">隐私政策</a></li>
+        <li><a href="#">取消条款</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-col-title">联系</h4>
+      <ul class="footer-links">
+        <li><a href="#">+39 031 234 5678</a></li>
+        <li><a href="#">info@aurelio-resort.it</a></li>
+        <li><a href="#">Via Regina 48</a></li>
+        <li><a href="#">Cernobbio, Como, Italy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Aurelio Resort. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+      <a href="#">WeChat</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Fade-up on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
