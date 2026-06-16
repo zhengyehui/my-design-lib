@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — SaaS Onboarding Wizard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --accent: #06b6d4;
+  --accent-light: #22d3ee;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg: #0a0a12;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --bg-card-hover: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(99, 102, 241, 0.5);
+  --text: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Background Effects ──────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  top: -30%; left: -10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float-orb 12s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -20%; right: -5%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float-orb 15s ease-in-out infinite reverse;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes float-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* ── Grid Background ─────────────────────────────────── */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Container ───────────────────────────────────────── */
+.wizard-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 580px;
+  padding: 2rem;
+}
+
+/* ── Header ──────────────────────────────────────────── */
+.wizard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.wizard-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.logo-icon {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.logo-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.wizard-header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #fff 30%, var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.wizard-header p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ── Step Progress ───────────────────────────────────── */
+.step-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.step-dot {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 2px solid var(--border);
+  color: var(--text-muted);
+  background: var(--bg);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.step-dot.active {
+  border-color: var(--primary);
+  color: #fff;
+  background: var(--primary);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.step-dot.completed {
+  border-color: var(--success);
+  color: #fff;
+  background: var(--success);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.3);
+}
+
+.step-dot .check-icon {
+  display: none;
+  width: 16px; height: 16px;
+}
+
+.step-dot.completed .check-icon { display: block; }
+.step-dot.completed .step-num { display: none; }
+
+.step-line {
+  width: 48px; height: 2px;
+  background: var(--border);
+  transition: background 0.4s ease;
+  flex-shrink: 0;
+}
+
+.step-line.active {
+  background: linear-gradient(90deg, var(--success), var(--primary));
+}
+
+/* ── Step Label ──────────────────────────────────────── */
+.step-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+}
+
+.step-label {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  width: 70px;
+  transition: color 0.3s;
+}
+
+.step-label.active {
+  color: var(--primary-light);
+  font-weight: 600;
+}
+
+.step-label.completed {
+  color: var(--success);
+}
+
+/* ── Card ────────────────────────────────────────────── */
+.wizard-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.wizard-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+/* ── Step Content ────────────────────────────────────── */
+.step-content {
+  display: none;
+  animation: fadeSlideIn 0.4s ease;
+}
+
+.step-content.active {
+  display: block;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.step-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Form Elements ───────────────────────────────────── */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.92rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* ── Avatar Upload ───────────────────────────────────── */
+.avatar-upload {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.avatar-circle {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.avatar-circle:hover { transform: scale(1.05); }
+
+.avatar-badge {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 24px; height: 24px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+.avatar-info {
+  flex: 1;
+}
+
+.avatar-info h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.avatar-info p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── Role Selector ───────────────────────────────────── */
+.role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.2rem;
+}
+
+.role-card {
+  padding: 0.9rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.role-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.role-card.selected {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.role-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.role-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* ── Workspace Options ───────────────────────────────── */
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.2rem;
+}
+
+.workspace-card {
+  padding: 1rem 0.6rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.workspace-card:hover {
+  background: var(--bg-card-hover);
+}
+
+.workspace-card.selected {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.workspace-emoji {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.workspace-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* ── Team Size Slider ────────────────────────────────── */
+.size-options {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+
+.size-chip {
+  padding: 0.5rem 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-secondary);
+}
+
+.size-chip:hover {
+  background: var(--bg-card-hover);
+  color: var(--text);
+}
+
+.size-chip.selected {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--primary-light);
+}
+
+/* ── Invite Cards ────────────────────────────────────── */
+.invite-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.2rem;
+}
+
+.invite-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.invite-row:hover {
+  background: var(--bg-card-hover);
+}
+
+.invite-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.invite-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.invite-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.invite-email {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.invite-role {
+  padding: 0.3rem 0.7rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.invite-remove {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.invite-remove:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.add-invite-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px dashed rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--primary-light);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-invite-btn:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: var(--primary);
+}
+
+/* ── Completion Step ─────────────────────────────────── */
+.completion-content {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.completion-icon {
+  width: 80px; height: 80px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--success), #34d399);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse-glow 2s ease-in-out infinite;
+  position: relative;
+}
+
+.completion-icon svg {
+  width: 36px; height: 36px;
+  stroke: #fff;
+  stroke-width: 3;
+  fill: none;
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: draw-check 0.6s ease 0.3s forwards;
+}
+
+@keyframes draw-check {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.5); }
+}
+
+.completion-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--success), var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.completion-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.completion-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  padding: 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+}
+
+/* ── Confetti ────────────────────────────────────────── */
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  width: 8px; height: 8px;
+  top: -10px;
+  animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg) scale(0.5); opacity: 0; }
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--success), #059669);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
+}
+
+.btn .arrow {
+  font-size: 1.1rem;
+  transition: transform 0.2s;
+}
+
+.btn:hover .arrow { transform: translateX(3px); }
+
+/* ── Footer ──────────────────────────────────────────── */
+.wizard-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.wizard-footer a {
+  color: var(--primary-light);
+  text-decoration: none;
+}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 600px) {
+  .wizard-container { padding: 1rem; }
+  .wizard-card { padding: 1.5rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .role-grid { grid-template-columns: 1fr; }
+  .workspace-grid { grid-template-columns: 1fr 1fr; }
+  .completion-stats { grid-template-columns: 1fr; }
+  .step-line { width: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="wizard-container">
+  <!-- Header -->
+  <div class="wizard-header">
+    <div class="wizard-logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">Pulse</span>
+    </div>
+    <h1>设置你的工作空间</h1>
+    <p>只需几步，即可开始高效协作</p>
+  </div>
+
+  <!-- Step Progress -->
+  <div class="step-progress">
+    <div class="step-item">
+      <div class="step-dot active" id="dot-1">
+        <span class="step-num">1</span>
+        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>
+    <div class="step-line" id="line-1"></div>
+    <div class="step-item">
+      <div class="step-dot" id="dot-2">
+        <span class="step-num">2</span>
+        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>
+    <div class="step-line" id="line-2"></div>
+    <div class="step-item">
+      <div class="step-dot" id="dot-3">
+        <span class="step-num">3</span>
+        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>
+    <div class="step-line" id="line-3"></div>
+    <div class="step-item">
+      <div class="step-dot" id="dot-4">
+        <span class="step-num">4</span>
+        <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step Labels -->
+  <div class="step-labels">
+    <div class="step-label active" id="label-1">个人资料</div>
+    <div class="step-label" id="label-2">工作空间</div>
+    <div class="step-label" id="label-3">邀请团队</div>
+    <div class="step-label" id="label-4">完成</div>
+  </div>
+
+  <!-- Wizard Card -->
+  <div class="wizard-card">
+
+    <!-- Step 1: Profile -->
+    <div class="step-content active" id="step-1">
+      <div class="avatar-upload">
+        <div class="avatar-circle">
+          A
+          <div class="avatar-badge">📷</div>
+        </div>
+        <div class="avatar-info">
+          <h4>上传头像</h4>
+          <p>支持 JPG、PNG，最大 2MB</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">姓名</label>
+          <input type="text" class="form-input" placeholder="张三" value="Alex Chen">
+        </div>
+        <div class="form-group">
+          <label class="form-label">邮箱</label>
+          <input type="email" class="form-input" placeholder="alex@example.com" value="alex@pulse.io">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">你的角色</label>
+        <div class="role-grid">
+          <div class="role-card selected" onclick="selectRole(this)">
+            <div class="role-icon">👨‍💻</div>
+            <div class="role-name">开发者</div>
+          </div>
+          <div class="role-card" onclick="selectRole(this)">
+            <div class="role-icon">🎨</div>
+            <div class="role-name">设计师</div>
+          </div>
+          <div class="role-card" onclick="selectRole(this)">
+            <div class="role-icon">📊</div>
+            <div class="role-name">产品经理</div>
+          </div>
+          <div class="role-card" onclick="selectRole(this)">
+            <div class="role-icon">🚀</div>
+            <div class="role-name">创业者</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="goToStep(2)">继续 <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+    <!-- Step 2: Workspace -->
+    <div class="step-content" id="step-2">
+      <div class="step-title">配置工作空间</div>
+      <div class="step-subtitle">设置你的团队工作空间基本信息</div>
+
+      <div class="form-group">
+        <label class="form-label">团队名称</label>
+        <input type="text" class="form-input" placeholder="我的团队" value="Pulse Design Studio">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">所属行业</label>
+        <div class="workspace-grid">
+          <div class="workspace-card selected" onclick="selectWorkspace(this)">
+            <div class="workspace-emoji">💻</div>
+            <div class="workspace-name">科技</div>
+          </div>
+          <div class="workspace-card" onclick="selectWorkspace(this)">
+            <div class="workspace-emoji">🎨</div>
+            <div class="workspace-name">设计</div>
+          </div>
+          <div class="workspace-card" onclick="selectWorkspace(this)">
+            <div class="workspace-emoji">📈</div>
+            <div class="workspace-name">金融</div>
+          </div>
+          <div class="workspace-card" onclick="selectWorkspace(this)">
+            <div class="workspace-emoji">🏥</div>
+            <div class="workspace-name">医疗</div>
+          </div>
+          <div class="workspace-card" onclick="selectWorkspace(this)">
+            <div class="workspace-emoji">🎓</div>
+            <div class="workspace-name">教育</div>
+          </div>
+          <div class="workspace-card" onclick="selectWorkspace(this)">
+            <div class="workspace-emoji">🛍️</div>
+            <div class="workspace-name">电商</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">团队规模</label>
+        <div class="size-options">
+          <div class="size-chip" onclick="selectSize(this)">1 人</div>
+          <div class="size-chip selected" onclick="selectSize(this)">2-5 人</div>
+          <div class="size-chip" onclick="selectSize(this)">6-20 人</div>
+          <div class="size-chip" onclick="selectSize(this)">21-50 人</div>
+          <div class="size-chip" onclick="selectSize(this)">50+ 人</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goToStep(1)">← 返回</button>
+        <button class="btn btn-primary" onclick="goToStep(3)">继续 <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+    <!-- Step 3: Invite Team -->
+    <div class="step-content" id="step-3">
+      <div class="step-title">邀请团队成员</div>
+      <div class="step-subtitle">邀请你的同事一起协作（可稍后设置）</div>
+
+      <div class="invite-list">
+        <div class="invite-row">
+          <div class="invite-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">S</div>
+          <div class="invite-info">
+            <div class="invite-name">Sarah Kim</div>
+            <div class="invite-email">sarah@pulse.io</div>
+          </div>
+          <div class="invite-role">管理员</div>
+          <button class="invite-remove">×</button>
+        </div>
+        <div class="invite-row">
+          <div class="invite-avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">M</div>
+          <div class="invite-info">
+            <div class="invite-name">Mike Johnson</div>
+            <div class="invite-email">mike@pulse.io</div>
+          </div>
+          <div class="invite-role">编辑者</div>
+          <button class="invite-remove">×</button>
+        </div>
+        <div class="invite-row">
+          <div class="invite-avatar" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">L</div>
+          <div class="invite-info">
+            <div class="invite-name">Lisa Wang</div>
+            <div class="invite-email">lisa@pulse.io</div>
+          </div>
+          <div class="invite-role">查看者</div>
+          <button class="invite-remove">×</button>
+        </div>
+      </div>
+
+      <button class="add-invite-btn">+ 添加更多成员</button>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goToStep(2)">← 返回</button>
+        <button class="btn btn-primary" onclick="goToStep(4)">完成设置 <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+    <!-- Step 4: Completion -->
+    <div class="step-content" id="step-4">
+      <div class="completion-content">
+        <div class="completion-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="completion-title">🎉 准备就绪！</div>
+        <div class="completion-subtitle">
+          你的工作空间已经配置完成<br>
+          邀请链接已发送给 3 位团队成员
+        </div>
+
+        <div class="completion-stats">
+          <div class="stat-card">
+            <div class="stat-value">3</div>
+            <div class="stat-label">团队成员</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">∞</div>
+            <div class="stat-label">项目空间</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">✓</div>
+            <div class="stat-label">已就绪</div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-success" onclick="window.location.reload()">进入工作空间 🚀</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="wizard-footer">
+    <p>需要帮助？查看 <a href="#">文档</a> 或联系 <a href="#">支持团队</a></p>
+  </div>
+</div>
+
+<!-- Confetti Container -->
+<div class="confetti-container" id="confetti"></div>
+
+<script>
+let currentStep = 1;
+
+function goToStep(step) {
+  // Mark previous steps as completed
+  for (let i = 1; i < step; i++) {
+    document.getElementById('dot-' + i).classList.add('completed');
+    document.getElementById('dot-' + i).classList.remove('active');
+    document.getElementById('line-' + i).classList.add('active');
+    document.getElementById('label-' + i).classList.remove('active');
+    document.getElementById('label-' + i).classList.add('completed');
+  }
+
+  // Mark current step
+  for (let i = step; i <= 4; i++) {
+    document.getElementById('dot-' + i).classList.remove('active', 'completed');
+    document.getElementById('label-' + i).classList.remove('active', 'completed');
+    if (i > 1) document.getElementById('line-' + (i-1)).classList.remove('active');
+  }
+  document.getElementById('dot-' + step).classList.add('active');
+  document.getElementById('label-' + step).classList.add('active');
+
+  // Switch content
+  document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('step-' + step).classList.add('active');
+
+  currentStep = step;
+
+  // Confetti on completion
+  if (step === 4) launchConfetti();
+}
+
+function selectRole(el) {
+  el.closest('.role-grid').querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectWorkspace(el) {
+  el.closest('.workspace-grid').querySelectorAll('.workspace-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectSize(el) {
+  el.closest('.size-options').querySelectorAll('.size-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function launchConfetti() {
+  const container = document.getElementById('confetti');
+  const colors = ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#ef4444'];
+  for (let i = 0; i < 80; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + '%';
+    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.width = (Math.random() * 8 + 4) + 'px';
+    confetti.style.height = (Math.random() * 8 + 4) + 'px';
+    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    confetti.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+    confetti.style.animationDelay = (Math.random() * 0.8) + 's';
+    container.appendChild(confetti);
+  }
+  setTimeout(() => { container.innerHTML = ''; }, 4000);
+}
+</script>
+
+</body>
+</html>

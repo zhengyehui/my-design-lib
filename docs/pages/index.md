@@ -703,6 +703,15 @@ const pages = [
     rating: 9.4,
     description: '灵感来自 Tresmares Capital 的另类投资机构落地页，不对称大标题 Hero + 深色统计栏 + 投资方案卡片网格 + 欧洲地图脉冲动画 + 团队成员展示',
   },
+  {
+    id: 'saas-onboarding',
+    title: 'Pulse SaaS 引导向导',
+    category: 'app',
+    tags: ['SaaS', 'Onboarding', '多步表单', '暗色主题', '向导'],
+    colors: ['#0a0a12', '#6366f1', '#06b6d4'],
+    rating: 9.4,
+    description: 'SaaS 多步骤引导向导，灵感来自现代 SaaS 首次使用流程，步骤进度条 + 毛玻璃卡片 + 角色选择器 + 团队邀请 + 完成庆祝动画',
+  },
 ]
 
 const categories = [
@@ -760,12 +769,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 73 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 74 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="73 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="74 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -774,7 +783,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 73 个完整页面</span>
+      <span>📦 74 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
