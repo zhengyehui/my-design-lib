@@ -1,32 +1,30 @@
 #!/usr/bin/env python3
-"""Deploy dist to remote server via paramiko."""
-import sys
-import os
-import time
-
+import sys, os, time
 sys.path.insert(0, '/Users/weta/Library/Python/3.9/lib/python/site-packages')
 import paramiko
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect('192.168.124.17', port=11928, username='root', password='Weta@0928')
+ssh.connect("192.168.124.17", port=11928, username="root", password="Weta@0928")
 
 sftp = ssh.open_sftp()
-dist_dir = os.path.join(os.path.dirname(__file__), '..', 'docs', '.vitepress', 'dist')
-dist_dir = os.path.abspath(dist_dir)
+local_dist = os.path.expanduser('~/desktop/project/design-lib/docs/.vitepress/dist')
 remote_base = '/var/www/design-lib/'
 
+# Ensure remote base exists
 ssh.exec_command(f'mkdir -p {remote_base}')
+time.sleep(0.1)
 
 uploaded = 0
-for root, dirs, files in os.walk(dist_dir):
+skipped = 0
+for root, dirs, files in os.walk(local_dist):
     for f in files:
         local_path = os.path.join(root, f)
-        rel_path = os.path.relpath(local_path, dist_dir)
+        rel_path = os.path.relpath(local_path, local_dist)
         remote_path = os.path.join(remote_base, rel_path)
         remote_dir = os.path.dirname(remote_path)
         ssh.exec_command(f'mkdir -p {remote_dir}')
-        time.sleep(0.03)
+        time.sleep(0.02)
         sftp.put(local_path, remote_path)
         uploaded += 1
 

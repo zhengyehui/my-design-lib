@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sonora Sound — 音效设计工作室</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;500;700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --warm-gray: #E8E4E0;
+  --warm-cream: #F5F0EB;
+  --deep-black: #0a0a0a;
+  --text-dark: #1a1a1a;
+  --text-medium: #555;
+  --text-light: #888;
+  --accent-coral: #E85D4A;
+  --white: #FFFFFF;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dark);
+  background: var(--white);
+  overflow-x: hidden;
+}
+
+/* ========== Split Screen Hero ========== */
+.split-hero {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.split-left {
+  flex: 0 0 60%;
+  background: var(--warm-gray);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5rem 3.5rem;
+  position: relative;
+}
+
+.split-right {
+  flex: 0 0 40%;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2.5rem 3.5rem;
+}
+
+/* Logo — Hand-drawn script style */
+.logo {
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.logo span {
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: var(--text-light);
+  display: block;
+  margin-top: 0.25rem;
+  letter-spacing: 0.05em;
+}
+
+/* Navigation */
+.nav-main {
+  margin-top: auto;
+  padding-bottom: 2rem;
+}
+
+.nav-main .nav-category {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: color var(--duration-normal) var(--ease-default);
+}
+
+.nav-main .nav-category:hover {
+  color: var(--accent-coral);
+}
+
+.nav-sub {
+  display: flex;
+  gap: 2rem;
+  margin-left: 0.25rem;
+}
+
+.nav-sub a {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-medium);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color var(--duration-normal) var(--ease-default);
+}
+
+.nav-sub a:hover {
+  color: var(--text-dark);
+}
+
+/* Right panel — minimal */
+.right-content {
+  text-align: right;
+}
+
+.right-content .tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+.right-content .location {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  letter-spacing: 0.04em;
+}
+
+.right-content .availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-medium);
+  letter-spacing: 0.06em;
+}
+
+.availability-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-coral);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ========== Brand Showcase Section ========== */
+.brand-showcase {
+  background: var(--deep-black);
+  padding: 5rem 0;
+  overflow: hidden;
+}
+
+.brand-marquee {
+  display: flex;
+  gap: 4rem;
+  animation: marquee 25s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.brand-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+  transition: all 0.4s var(--ease-default);
+}
+
+.brand-name:hover {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ========== Services Section ========== */
+.services {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--warm-gray);
+}
+
+.service-item {
+  padding: 4rem 3rem;
+  border-right: 1px solid var(--warm-gray);
+  position: relative;
+  transition: background var(--duration-normal) var(--ease-default);
+}
+
+.service-item:last-child {
+  border-right: none;
+}
+
+.service-item:hover {
+  background: var(--warm-cream);
+}
+
+.service-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 2rem;
+}
+
+.service-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.service-desc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-medium);
+  max-width: 280px;
+}
+
+/* ========== Work Gallery ========== */
+.work-section {
+  background: var(--warm-cream);
+  padding: 5rem 3.5rem;
+}
+
+.work-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+}
+
+.work-header h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.work-header .view-all {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-medium);
+  text-decoration: none;
+  border-bottom: 1px solid var(--text-dark);
+  padding-bottom: 2px;
+  transition: color var(--duration-normal);
+}
+
+.work-header .view-all:hover {
+  color: var(--accent-coral);
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.work-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16/10;
+  cursor: pointer;
+  background: var(--deep-black);
+}
+
+.work-card-bg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* CSS waveform animation in each card */
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 60px;
+}
+
+.waveform .bar {
+  width: 4px;
+  border-radius: 2px;
+  animation: wave 1.2s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+.work-card:nth-child(1) .waveform .bar { background: #6366f1; }
+.work-card:nth-child(2) .waveform .bar { background: #ec4899; }
+.work-card:nth-child(3) .waveform .bar { background: #06b6d4; }
+.work-card:nth-child(4) .waveform .bar { background: #f59e0b; }
+
+.work-card:nth-child(1) .bar:nth-child(1) { animation-delay: 0s; }
+.work-card:nth-child(1) .bar:nth-child(2) { animation-delay: 0.1s; }
+.work-card:nth-child(1) .bar:nth-child(3) { animation-delay: 0.2s; }
+.work-card:nth-child(1) .bar:nth-child(4) { animation-delay: 0.3s; }
+.work-card:nth-child(1) .bar:nth-child(5) { animation-delay: 0.15s; }
+.work-card:nth-child(1) .bar:nth-child(6) { animation-delay: 0.25s; }
+.work-card:nth-child(1) .bar:nth-child(7) { animation-delay: 0.35s; }
+.work-card:nth-child(1) .bar:nth-child(8) { animation-delay: 0.05s; }
+.work-card:nth-child(1) .bar:nth-child(9) { animation-delay: 0.2s; }
+.work-card:nth-child(1) .bar:nth-child(10) { animation-delay: 0.3s; }
+.work-card:nth-child(1) .bar:nth-child(11) { animation-delay: 0.1s; }
+.work-card:nth-child(1) .bar:nth-child(12) { animation-delay: 0.25s; }
+
+.work-card:nth-child(2) .bar:nth-child(1) { animation-delay: 0.1s; }
+.work-card:nth-child(2) .bar:nth-child(2) { animation-delay: 0.25s; }
+.work-card:nth-child(2) .bar:nth-child(3) { animation-delay: 0.05s; }
+.work-card:nth-child(2) .bar:nth-child(4) { animation-delay: 0.35s; }
+.work-card:nth-child(2) .bar:nth-child(5) { animation-delay: 0.15s; }
+.work-card:nth-child(2) .bar:nth-child(6) { animation-delay: 0.3s; }
+.work-card:nth-child(2) .bar:nth-child(7) { animation-delay: 0.2s; }
+.work-card:nth-child(2) .bar:nth-child(8) { animation-delay: 0.1s; }
+.work-card:nth-child(2) .bar:nth-child(9) { animation-delay: 0.25s; }
+.work-card:nth-child(2) .bar:nth-child(10) { animation-delay: 0.05s; }
+.work-card:nth-child(2) .bar:nth-child(11) { animation-delay: 0.35s; }
+.work-card:nth-child(2) .bar:nth-child(12) { animation-delay: 0.15s; }
+
+.work-card:nth-child(3) .bar:nth-child(1) { animation-delay: 0.2s; }
+.work-card:nth-child(3) .bar:nth-child(2) { animation-delay: 0.1s; }
+.work-card:nth-child(3) .bar:nth-child(3) { animation-delay: 0.3s; }
+.work-card:nth-child(3) .bar:nth-child(4) { animation-delay: 0.05s; }
+.work-card:nth-child(3) .bar:nth-child(5) { animation-delay: 0.2s; }
+.work-card:nth-child(3) .bar:nth-child(6) { animation-delay: 0.35s; }
+.work-card:nth-child(3) .bar:nth-child(7) { animation-delay: 0.15s; }
+.work-card:nth-child(3) .bar:nth-child(8) { animation-delay: 0.25s; }
+.work-card:nth-child(3) .bar:nth-child(9) { animation-delay: 0.1s; }
+.work-card:nth-child(3) .bar:nth-child(10) { animation-delay: 0.3s; }
+.work-card:nth-child(3) .bar:nth-child(11) { animation-delay: 0.2s; }
+.work-card:nth-child(3) .bar:nth-child(12) { animation-delay: 0.05s; }
+
+.work-card:nth-child(4) .bar:nth-child(1) { animation-delay: 0.3s; }
+.work-card:nth-child(4) .bar:nth-child(2) { animation-delay: 0.15s; }
+.work-card:nth-child(4) .bar:nth-child(3) { animation-delay: 0.05s; }
+.work-card:nth-child(4) .bar:nth-child(4) { animation-delay: 0.25s; }
+.work-card:nth-child(4) .bar:nth-child(5) { animation-delay: 0.1s; }
+.work-card:nth-child(4) .bar:nth-child(6) { animation-delay: 0.35s; }
+.work-card:nth-child(4) .bar:nth-child(7) { animation-delay: 0.2s; }
+.work-card:nth-child(4) .bar:nth-child(8) { animation-delay: 0.3s; }
+.work-card:nth-child(4) .bar:nth-child(9) { animation-delay: 0.05s; }
+.work-card:nth-child(4) .bar:nth-child(10) { animation-delay: 0.15s; }
+.work-card:nth-child(4) .bar:nth-child(11) { animation-delay: 0.25s; }
+.work-card:nth-child(4) .bar:nth-child(12) { animation-delay: 0.1s; }
+
+.work-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  color: white;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s var(--ease-default);
+}
+
+.work-card:hover .work-card-overlay {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.work-card-overlay h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.work-card-overlay p {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* ========== Process Section ========== */
+.process {
+  padding: 6rem 3.5rem;
+  background: var(--white);
+}
+
+.process h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 4rem;
+  max-width: 600px;
+  line-height: 1.2;
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.process-step {
+  padding: 2rem 0;
+  border-top: 2px solid var(--deep-black);
+}
+
+.process-step .step-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1.5rem;
+}
+
+.process-step h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--text-dark);
+}
+
+.process-step p {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text-medium);
+}
+
+/* ========== Testimonials ========== */
+.testimonials {
+  background: var(--warm-gray);
+  padding: 6rem 3.5rem;
+}
+
+.testimonials h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  position: relative;
+}
+
+.testimonial-card::before {
+  content: '"';
+  font-family: 'Caveat', cursive;
+  font-size: 4rem;
+  color: var(--accent-coral);
+  opacity: 0.3;
+  position: absolute;
+  top: 1rem;
+  left: 1.5rem;
+  line-height: 1;
+}
+
+.testimonial-text {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.testimonial-author {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.testimonial-author strong {
+  color: var(--text-dark);
+}
+
+/* ========== Contact CTA ========== */
+.contact-cta {
+  background: var(--deep-black);
+  padding: 6rem 3.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-cta::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 93, 74, 0.15), transparent 70%);
+  top: -100px;
+  right: -100px;
+}
+
+.contact-cta::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.1), transparent 70%);
+  bottom: -80px;
+  left: -80px;
+}
+
+.contact-cta h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-cta p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  background: var(--white);
+  color: var(--deep-black);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.04em;
+  transition: all var(--duration-normal) var(--ease-default);
+  position: relative;
+  z-index: 1;
+}
+
+.cta-btn:hover {
+  background: var(--accent-coral);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(232, 93, 74, 0.3);
+}
+
+.cta-btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--duration-normal);
+}
+
+.cta-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* ========== Footer ========== */
+.footer {
+  background: var(--deep-black);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2rem 3.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left {
+  font-family: 'Caveat', cursive;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-right {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-right a {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.3);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color var(--duration-normal);
+}
+
+.footer-right a:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 1024px) {
+  .split-hero {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .split-left, .split-right {
+    flex: none;
+    padding: 3rem 2rem;
+  }
+  .split-right {
+    text-align: left;
+    border-top: 1px solid var(--warm-gray);
+  }
+  .nav-main .nav-category {
+    font-size: 2.5rem;
+  }
+  .services {
+    grid-template-columns: 1fr;
+  }
+  .service-item {
+    border-right: none;
+    border-bottom: 1px solid var(--warm-gray);
+  }
+  .work-grid {
+    grid-template-columns: 1fr;
+  }
+  .process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .brand-name {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+  .work-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .footer {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Split Screen Hero ===== -->
+<section class="split-hero">
+  <div class="split-left">
+    <div class="logo">
+      Sonora
+      <span>Sound Design Studio</span>
+    </div>
+
+    <nav class="nav-main">
+      <div class="nav-category">Work</div>
+      <div class="nav-sub">
+        <a href="#">Sound Design</a>
+        <a href="#">Music</a>
+        <a href="#">Mix</a>
+      </div>
+      <div class="nav-category" style="margin-top: 1.5rem;">About</div>
+      <div class="nav-category" style="margin-top: 1.5rem;">Contact</div>
+    </nav>
+  </div>
+
+  <div class="split-right">
+    <div class="right-content">
+      <div class="tagline">Crafting Sound Since 2019</div>
+      <div class="location">London · Berlin · Tokyo</div>
+      <div class="availability">
+        <span class="availability-dot"></span>
+        AVAILABLE FOR Q3 2026
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Brand Showcase Marquee ===== -->
+<section class="brand-showcase">
+  <div class="brand-marquee">
+    <span class="brand-name">NIKE</span>
+    <span class="brand-name">APPLE</span>
+    <span class="brand-name">SPOTIFY</span>
+    <span class="brand-name">YETI</span>
+    <span class="brand-name">ADIDAS</span>
+    <span class="brand-name">NETFLIX</span>
+    <span class="brand-name">HYPEBEAST</span>
+    <span class="brand-name">RIVIAN</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="brand-name">NIKE</span>
+    <span class="brand-name">APPLE</span>
+    <span class="brand-name">SPOTIFY</span>
+    <span class="brand-name">YETI</span>
+    <span class="brand-name">ADIDAS</span>
+    <span class="brand-name">NETFLIX</span>
+    <span class="brand-name">HYPEBEAST</span>
+    <span class="brand-name">RIVIAN</span>
+  </div>
+</section>
+
+<!-- ===== Services ===== -->
+<section class="services">
+  <div class="service-item">
+    <div class="service-number">01 — Sound Design</div>
+    <h3 class="service-title">Sound Design</h3>
+    <p class="service-desc">From concept to final mix, we create immersive audio landscapes that elevate visual storytelling. Foley, synthesis, field recordings — every texture matters.</p>
+  </div>
+  <div class="service-item">
+    <div class="service-number">02 — Original Music</div>
+    <h3 class="service-title">Original Music</h3>
+    <p class="service-desc">Bespoke compositions for film, advertising, and digital experiences. Our composers blend orchestral, electronic, and experimental palettes.</p>
+  </div>
+  <div class="service-item">
+    <div class="service-number">03 — Mix & Master</div>
+    <h3 class="service-title">Mix & Master</h3>
+    <p class="service-desc">Precision mixing and mastering in Dolby Atmos and stereo. We ensure your sound translates perfectly across every playback system.</p>
+  </div>
+</section>
+
+<!-- ===== Work Gallery ===== -->
+<section class="work-section">
+  <div class="work-header">
+    <h2>Selected Work</h2>
+    <a href="#" class="view-all">View All Projects →</a>
+  </div>
+
+  <div class="work-grid">
+    <div class="work-card">
+      <div class="work-card-bg" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+        <div class="waveform">
+          <div class="bar" style="height: 40px;"></div>
+          <div class="bar" style="height: 25px;"></div>
+          <div class="bar" style="height: 55px;"></div>
+          <div class="bar" style="height: 35px;"></div>
+          <div class="bar" style="height: 60px;"></div>
+          <div class="bar" style="height: 20px;"></div>
+          <div class="bar" style="height: 45px;"></div>
+          <div class="bar" style="height: 50px;"></div>
+          <div class="bar" style="height: 30px;"></div>
+          <div class="bar" style="height: 40px;"></div>
+          <div class="bar" style="height: 55px;"></div>
+          <div class="bar" style="height: 25px;"></div>
+        </div>
+      </div>
+      <div class="work-card-overlay">
+        <h3>Nike — Air Max Day</h3>
+        <p>Sound Design · 2026</p>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-bg" style="background: linear-gradient(135deg, #2d1b2e, #1a1a2e);">
+        <div class="waveform">
+          <div class="bar" style="height: 30px;"></div>
+          <div class="bar" style="height: 50px;"></div>
+          <div class="bar" style="height: 20px;"></div>
+          <div class="bar" style="height: 60px;"></div>
+          <div class="bar" style="height: 35px;"></div>
+          <div class="bar" style="height: 45px;"></div>
+          <div class="bar" style="height: 25px;"></div>
+          <div class="bar" style="height: 55px;"></div>
+          <div class="bar" style="height: 40px;"></div>
+          <div class="bar" style="height: 30px;"></div>
+          <div class="bar" style="height: 50px;"></div>
+          <div class="bar" style="height: 20px;"></div>
+        </div>
+      </div>
+      <div class="work-card-overlay">
+        <h3>Apple — Spatial Audio Campaign</h3>
+        <p>Original Music · 2025</p>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-bg" style="background: linear-gradient(135deg, #0a2540, #0d3756);">
+        <div class="waveform">
+          <div class="bar" style="height: 45px;"></div>
+          <div class="bar" style="height: 20px;"></div>
+          <div class="bar" style="height: 50px;"></div>
+          <div class="bar" style="height: 35px;"></div>
+          <div class="bar" style="height: 55px;"></div>
+          <div class="bar" style="height: 25px;"></div>
+          <div class="bar" style="height: 40px;"></div>
+          <div class="bar" style="height: 60px;"></div>
+          <div class="bar" style="height: 30px;"></div>
+          <div class="bar" style="height: 45px;"></div>
+          <div class="bar" style="height: 20px;"></div>
+          <div class="bar" style="height: 50px;"></div>
+        </div>
+      </div>
+      <div class="work-card-overlay">
+        <h3>Yeti — Wilderness Series</h3>
+        <p>Sound Design + Mix · 2026</p>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-bg" style="background: linear-gradient(135deg, #2d2015, #1a1510);">
+        <div class="waveform">
+          <div class="bar" style="height: 55px;"></div>
+          <div class="bar" style="height: 30px;"></div>
+          <div class="bar" style="height: 40px;"></div>
+          <div class="bar" style="height: 60px;"></div>
+          <div class="bar" style="height: 25px;"></div>
+          <div class="bar" style="height: 50px;"></div>
+          <div class="bar" style="height: 35px;"></div>
+          <div class="bar" style="height: 20px;"></div>
+          <div class="bar" style="height: 45px;"></div>
+          <div class="bar" style="height: 55px;"></div>
+          <div class="bar" style="height: 30px;"></div>
+          <div class="bar" style="height: 40px;"></div>
+        </div>
+      </div>
+      <div class="work-card-overlay">
+        <h3>Spotify Wrapped 2025</h3>
+        <p>Original Music · 2025</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Process ===== -->
+<section class="process">
+  <h2>How We Work</h2>
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="step-num">Step 01</div>
+      <h3>Brief & Listen</h3>
+      <p>We start by deeply understanding your vision — the story, the mood, the audience. Then we listen to everything.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">Step 02</div>
+      <h3>Concept & Sketch</h3>
+      <p>Sound concepts and sonic sketches. Rough compositions and texture explorations that capture the emotional core.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">Step 03</div>
+      <h3>Produce & Refine</h3>
+      <p>Full production with iterative feedback. Every element is crafted, layered, and polished to perfection.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">Step 04</div>
+      <h3>Deliver & Support</h3>
+      <p>Final delivery in any format — stereo, 5.1, Dolby Atmos. Ongoing support for revisions and adaptations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Testimonials ===== -->
+<section class="testimonials">
+  <h2>What They Say</h2>
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <p class="testimonial-text">Sonora transformed our campaign with sound that feels alive. They don't just add audio — they create an entire emotional dimension.</p>
+      <div class="testimonial-author"><strong>Sarah Chen</strong> — Creative Director, Nike</div>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-text">The attention to sonic detail is extraordinary. Every footstep, every ambient texture tells a story. Best in the business.</p>
+      <div class="testimonial-author"><strong>Marcus Webb</strong> — Film Director</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Contact CTA ===== -->
+<section class="contact-cta">
+  <h2>Let's Make Sound</h2>
+  <p>Available for projects, collaborations, and creative partnerships</p>
+  <a href="mailto:hello@sonorasound.studio" class="cta-btn">
+    Start a Project
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  </a>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <div class="footer-left">Sonora Sound</div>
+  <div class="footer-right">
+    <a href="#">Instagram</a>
+    <a href="#">Vimeo</a>
+    <a href="#">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>
