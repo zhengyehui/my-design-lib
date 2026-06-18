@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 76 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -721,6 +721,15 @@ const pages = [
     rating: 9.4,
     description: '暖色调音效设计工作室，灵感来自 Field Day Sound，分屏 Hero + 品牌 Marquee + CSS 波形动画作品展示 + 客户评价',
   },
+  {
+    id: 'design-resources',
+    title: 'DesignMint 设计资源目录',
+    category: 'content',
+    tags: ['资源目录', '设计工具', '内容策展', 'Marquee'],
+    colors: ['#0d9488', '#06b6d4', '#fafbfc'],
+    rating: 9.4,
+    description: '精选设计资源目录，毛玻璃导航 + 渐变 Hero + 分类筛选 + 编辑精选 + 横向滚动热门 + 资源卡片网格 + Newsletter',
+  },
 ]
 
 const categories = [
@@ -778,12 +787,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 75 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 76 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="75 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="76 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -792,7 +801,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 75 个完整页面</span>
+      <span>📦 76 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

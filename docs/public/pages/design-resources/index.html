@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DesignMint — 精选设计资源目录</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       BASE RESET
+       ============================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'Inter', var(--font-sans);
+      color: #0f172a;
+      background: #fafbfc;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================================
+       NAVBAR
+       ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 1.25rem;
+    }
+    .nav-logo .mint-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, #0d9488, #06b6d4);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 0.9rem;
+    }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-size: 0.875rem; font-weight: 500;
+      color: #475569; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #0d9488; }
+    .nav-cta {
+      padding: 0.5rem 1.25rem; border-radius: 8px;
+      background: #0d9488; color: #fff !important;
+      font-weight: 600; font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover { background: #0f766e; transform: translateY(-1px); }
+
+    /* ============================================================
+       HERO
+       ============================================================ */
+    .hero {
+      position: relative;
+      padding: 8rem 2rem 4rem;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, #f0fdfa 0%, #fafbfc 100%);
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(13,148,136,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; top: 100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 1rem; border-radius: 100px;
+      background: rgba(13,148,136,0.08);
+      border: 1px solid rgba(13,148,136,0.15);
+      font-size: 0.8rem; font-weight: 600;
+      color: #0d9488; margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #0d9488;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      letter-spacing: -0.03em;
+    }
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, #0d9488, #06b6d4, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.125rem;
+      color: #64748b;
+      max-width: 560px;
+      margin: 0 auto 2rem;
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 3rem;
+      margin-top: 2.5rem;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat .num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      color: #0d9488;
+    }
+    .hero-stat .label {
+      font-size: 0.8rem; color: #94a3b8;
+      font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ============================================================
+       SEARCH BAR
+       ============================================================ */
+    .search-section {
+      max-width: 640px; margin: -1rem auto 0;
+      padding: 0 2rem; position: relative; z-index: 10;
+    }
+    .search-bar {
+      display: flex; align-items: center;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      transition: all 0.3s;
+    }
+    .search-bar:focus-within {
+      border-color: #0d9488;
+      box-shadow: 0 4px 24px rgba(13,148,136,0.12);
+    }
+    .search-bar svg { color: #94a3b8; flex-shrink: 0; }
+    .search-bar input {
+      flex: 1; border: none; outline: none;
+      font-size: 0.95rem; padding: 0.6rem 0.75rem;
+      background: transparent; color: #0f172a;
+      font-family: inherit;
+    }
+    .search-bar input::placeholder { color: #94a3b8; }
+    .search-btn {
+      padding: 0.6rem 1.5rem; border-radius: 10px;
+      background: #0d9488; color: #fff;
+      border: none; font-weight: 600; font-size: 0.875rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: inherit;
+    }
+    .search-btn:hover { background: #0f766e; }
+
+    /* ============================================================
+       CATEGORY TABS
+       ============================================================ */
+    .categories {
+      display: flex; justify-content: center; gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 2.5rem 2rem 1rem;
+      max-width: 900px; margin: 0 auto;
+    }
+    .cat-btn {
+      padding: 0.5rem 1.25rem; border-radius: 100px;
+      border: 1px solid #e2e8f0; background: #fff;
+      font-size: 0.85rem; font-weight: 500;
+      color: #64748b; cursor: pointer;
+      transition: all 0.2s; font-family: inherit;
+    }
+    .cat-btn:hover { border-color: #0d9488; color: #0d9488; }
+    .cat-btn.active {
+      background: #0d9488; color: #fff;
+      border-color: #0d9488;
+    }
+    .cat-btn .count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 20px; height: 20px; border-radius: 10px;
+      background: rgba(0,0,0,0.06);
+      font-size: 0.7rem; font-weight: 600;
+      margin-left: 0.35rem; padding: 0 6px;
+    }
+    .cat-btn.active .count { background: rgba(255,255,255,0.25); }
+
+    /* ============================================================
+       FEATURED SECTION
+       ============================================================ */
+    .section { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem; font-weight: 700;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-link {
+      font-size: 0.875rem; font-weight: 600;
+      color: #0d9488; transition: color 0.2s;
+    }
+    .section-link:hover { color: #0f766e; }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .featured-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .featured-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+      border-color: transparent;
+    }
+    .featured-card.large {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+    }
+    .featured-visual {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+    }
+    .featured-card.large .featured-visual { height: 280px; }
+    .featured-visual .gradient-bg {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .featured-visual .icon-large {
+      font-size: 4rem;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+    }
+    .featured-info {
+      padding: 1.25rem 1.5rem;
+    }
+    .featured-card.large .featured-info {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 2rem;
+    }
+    .featured-tag {
+      display: inline-flex; align-items: center;
+      padding: 0.25rem 0.75rem; border-radius: 6px;
+      font-size: 0.7rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+      width: fit-content;
+    }
+    .featured-info h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem; font-weight: 700;
+      margin-bottom: 0.5rem; line-height: 1.3;
+    }
+    .featured-card.large .featured-info h3 { font-size: 1.5rem; }
+    .featured-info p {
+      font-size: 0.875rem; color: #64748b;
+      line-height: 1.6; margin-bottom: 1rem;
+    }
+    .featured-meta {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 0.8rem; color: #94a3b8;
+    }
+    .featured-meta .rating {
+      display: flex; align-items: center; gap: 0.25rem;
+      color: #f59e0b; font-weight: 600;
+    }
+
+    /* ============================================================
+       RESOURCE GRID
+       ============================================================ */
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .resource-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .resource-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+      border-color: transparent;
+    }
+    .resource-visual {
+      height: 160px;
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .resource-visual .icon-med {
+      font-size: 3rem;
+      transition: transform 0.3s;
+    }
+    .resource-card:hover .icon-med { transform: scale(1.1); }
+    .resource-body {
+      padding: 1.25rem;
+    }
+    .resource-tag {
+      display: inline-flex; align-items: center;
+      padding: 0.2rem 0.6rem; border-radius: 5px;
+      font-size: 0.65rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      margin-bottom: 0.6rem;
+    }
+    .resource-body h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      margin-bottom: 0.4rem; line-height: 1.3;
+    }
+    .resource-body p {
+      font-size: 0.8rem; color: #64748b;
+      line-height: 1.5; margin-bottom: 0.75rem;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .resource-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .resource-footer .author {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem; color: #94a3b8;
+    }
+    .resource-footer .author .avatar {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem;
+    }
+    .resource-footer .score {
+      font-size: 0.8rem; font-weight: 700;
+      display: flex; align-items: center; gap: 0.2rem;
+    }
+
+    /* ============================================================
+       TRENDING MARQUEE
+       ============================================================ */
+    .trending-section {
+      padding: 2.5rem 0;
+      overflow: hidden;
+      background: linear-gradient(180deg, #fafbfc 0%, #f0fdfa 50%, #fafbfc 100%);
+    }
+    .trending-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding: 0 2rem;
+    }
+    .trending-track {
+      display: flex; gap: 1.25rem;
+      animation: scroll-left 40s linear infinite;
+      width: max-content;
+    }
+    .trending-track:hover { animation-play-state: paused; }
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .trending-item {
+      flex-shrink: 0;
+      width: 260px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      display: flex; align-items: center; gap: 0.75rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .trending-item:hover {
+      border-color: #0d9488;
+      box-shadow: 0 4px 16px rgba(13,148,136,0.1);
+    }
+    .trending-item .rank {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem; font-weight: 800;
+      color: #cbd5e1; min-width: 30px;
+    }
+    .trending-item:nth-child(-n+3) .rank { color: #0d9488; }
+    .trending-item .info h5 {
+      font-size: 0.85rem; font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+    .trending-item .info span {
+      font-size: 0.7rem; color: #94a3b8;
+    }
+
+    /* ============================================================
+       NEWSLETTER CTA
+       ============================================================ */
+    .newsletter {
+      max-width: 1200px; margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    .newsletter-inner {
+      background: linear-gradient(135deg, #0d9488, #0891b2);
+      border-radius: 20px;
+      padding: 3.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem;
+      position: relative; overflow: hidden;
+    }
+    .newsletter-inner::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 250px; height: 250px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .newsletter-inner::after {
+      content: '';
+      position: absolute; bottom: -60px; left: 30%;
+      width: 180px; height: 180px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .newsletter-text { position: relative; z-index: 1; flex: 1; }
+    .newsletter-text h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.75rem; font-weight: 700;
+      color: #fff; margin-bottom: 0.5rem;
+    }
+    .newsletter-text p {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95rem;
+    }
+    .newsletter-form {
+      display: flex; gap: 0.5rem;
+      position: relative; z-index: 1;
+      flex-shrink: 0;
+    }
+    .newsletter-form input {
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      border: 2px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      font-size: 0.9rem;
+      width: 280px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .newsletter-form input::placeholder { color: rgba(255,255,255,0.5); }
+    .newsletter-form input:focus { border-color: rgba(255,255,255,0.5); }
+    .newsletter-form button {
+      padding: 0.75rem 1.75rem;
+      border-radius: 10px;
+      background: #fff;
+      color: #0d9488;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .newsletter-form button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 2rem;
+    }
+    .footer p {
+      font-size: 0.8rem; color: #94a3b8;
+    }
+    .footer a { color: #0d9488; font-weight: 500; }
+
+    /* ============================================================
+       COLOR SCHEMES FOR VISUALS
+       ============================================================ */
+    .vis-teal { background: linear-gradient(135deg, #ccfbf1, #99f6e4); }
+    .vis-indigo { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); }
+    .vis-amber { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+    .vis-rose { background: linear-gradient(135deg, #ffe4e6, #fecdd3); }
+    .vis-sky { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
+    .vis-violet { background: linear-gradient(135deg, #ede9fe, #ddd6fe); }
+    .vis-emerald { background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+    .vis-orange { background: linear-gradient(135deg, #ffedd5, #fed7aa); }
+    .vis-slate { background: linear-gradient(135deg, #f1f5f9, #e2e8f0); }
+
+    .tag-tools { background: #ecfdf5; color: #059669; }
+    .tag-articles { background: #eff6ff; color: #2563eb; }
+    .tag-templates { background: #fef3c7; color: #d97706; }
+    .tag-videos { background: #fce7f3; color: #db2777; }
+    .tag-podcasts { background: #ede9fe; color: #7c3aed; }
+    .tag-open-source { background: #ecfdf5; color: #059669; }
+    .tag-courses { background: #fff7ed; color: #ea580c; }
+    .tag-communities { background: #f0f9ff; color: #0284c7; }
+
+    .feat-tag-tools { background: #059669; color: #fff; }
+    .feat-tag-articles { background: #2563eb; color: #fff; }
+    .feat-tag-templates { background: #d97706; color: #fff; }
+
+    .avatar-teal { background: #ccfbf1; color: #0d9488; }
+    .avatar-indigo { background: #e0e7ff; color: #6366f1; }
+    .avatar-amber { background: #fef3c7; color: #d97706; }
+    .avatar-rose { background: #ffe4e6; color: #e11d48; }
+    .avatar-sky { background: #e0f2fe; color: #0284c7; }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .featured-grid { grid-template-columns: 1fr; }
+      .featured-card.large { grid-template-columns: 1fr; }
+      .newsletter-inner { flex-direction: column; text-align: center; padding: 2.5rem 1.5rem; }
+      .newsletter-form { flex-direction: column; width: 100%; }
+      .newsletter-form input { width: 100%; }
+      .hero-stats { gap: 1.5rem; }
+      .resource-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <span class="mint-icon">🌿</span>
+      DesignMint
+    </a>
+    <div class="nav-links">
+      <a href="#tools">工具</a>
+      <a href="#articles">文章</a>
+      <a href="#templates">模板</a>
+      <a href="#trending">热门</a>
+      <a href="#" class="nav-cta">提交资源</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      每周更新 · 已收录 2,400+ 精选资源
+    </div>
+    <h1>发现最佳<span class="gradient-text">设计资源</span></h1>
+    <p>为设计师和开发者精心策展的工具、文章、模板与灵感。告别信息过载，只看最好的。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">2,400+</div>
+        <div class="label">精选资源</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">180+</div>
+        <div class="label">贡献者</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">50K</div>
+        <div class="label">月活用户</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <div class="search-section">
+    <div class="search-bar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="搜索工具、文章、模板...">
+      <button class="search-btn">搜索</button>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="categories">
+    <button class="cat-btn active">全部 <span class="count">2.4K</span></button>
+    <button class="cat-btn">🛠 工具 <span class="count">340</span></button>
+    <button class="cat-btn">📖 文章 <span class="count">520</span></button>
+    <button class="cat-btn">📐 模板 <span class="count">280</span></button>
+    <button class="cat-btn">🎬 视频 <span class="count">190</span></button>
+    <button class="cat-btn">🎧 播客 <span class="count">85</span></button>
+    <button class="cat-btn">💻 开源 <span class="count">420</span></button>
+    <button class="cat-btn">📚 课程 <span class="count">160</span></button>
+    <button class="cat-btn">👥 社区 <span class="count">95</span></button>
+  </div>
+
+  <!-- FEATURED -->
+  <section class="section" id="tools">
+    <div class="section-header">
+      <h2 class="section-title">⭐ 编辑精选</h2>
+      <a href="#" class="section-link">查看全部 →</a>
+    </div>
+    <div class="featured-grid">
+      <!-- Large featured card -->
+      <div class="featured-card large">
+        <div class="featured-visual">
+          <div class="gradient-bg vis-teal">
+            <span class="icon-large">🎨</span>
+          </div>
+        </div>
+        <div class="featured-info">
+          <span class="featured-tag feat-tag-tools">🏆 本月最佳</span>
+          <h3>Figma — 协作设计的未来</h3>
+          <p>浏览器端实时协作设计工具，已成为 UI/UX 设计行业标准。支持组件系统、自动布局、Dev Mode 开发交付，以及强大的插件生态。</p>
+          <div class="featured-meta">
+            <span class="rating">★ 9.8</span>
+            <span>设计工具</span>
+            <span>免费 + Pro</span>
+          </div>
+        </div>
+      </div>
+      <!-- Smaller cards -->
+      <div class="featured-card">
+        <div class="featured-visual">
+          <div class="gradient-bg vis-indigo">
+            <span class="icon-large">⚡</span>
+          </div>
+        </div>
+        <div class="featured-info">
+          <span class="featured-tag feat-tag-articles">深度文章</span>
+          <h3>2026 设计系统趋势报告</h3>
+          <p>从 Token 驱动到 AI 辅助，解读今年设计系统的五大演变方向。</p>
+          <div class="featured-meta">
+            <span class="rating">★ 9.5</span>
+            <span>12 min 阅读</span>
+          </div>
+        </div>
+      </div>
+      <div class="featured-card">
+        <div class="featured-visual">
+          <div class="gradient-bg vis-amber">
+            <span class="icon-large">📦</span>
+          </div>
+        </div>
+        <div class="featured-info">
+          <span class="featured-tag feat-tag-templates">模板</span>
+          <h3>Shadcn/ui — 可复制的组件</h3>
+          <p>Beautifully designed components built with Radix UI and Tailwind CSS。代码即设计，复制即用。</p>
+          <div class="featured-meta">
+            <span class="rating">★ 9.7</span>
+            <span>开源免费</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDING MARQUEE -->
+  <section class="trending-section" id="trending">
+    <div class="trending-header">
+      <h2 class="section-title" style="justify-content:center;">🔥 本周热门</h2>
+    </div>
+    <div class="trending-track">
+      <div class="trending-item"><span class="rank">01</span><div class="info"><h5>Linear — 项目管理新标杆</h5><span>工具 · 3.2K 收藏</span></div></div>
+      <div class="trending-item"><span class="rank">02</span><div class="info"><h5>CSS Container Queries 实战</h5><span>文章 · 2.8K 阅读</span></div></div>
+      <div class="trending-item"><span class="rank">03</span><div class="info"><h5>暗色主题设计指南</h5><span>文章 · 2.5K 阅读</span></div></div>
+      <div class="trending-item"><span class="rank">04</span><div class="info"><h5>v0 by Vercel</h5><span>工具 · 2.1K 收藏</span></div></div>
+      <div class="trending-item"><span class="rank">05</span><div class="info"><h5>Framer Motion 12 发布</h5><span>开源 · 1.9K Star</span></div></div>
+      <div class="trending-item"><span class="rank">06</span><div class="info"><h5>响应式排版最佳实践</h5><span>文章 · 1.8K 阅读</span></div></div>
+      <div class="trending-item"><span class="rank">07</span><div class="info"><h5>Midjourney V7 提示词库</h5><span>工具 · 1.7K 收藏</span></div></div>
+      <div class="trending-item"><span class="rank">08</span><div class="info"><h5>WebGPU 入门教程</h5><span>课程 · 1.5K 学习</span></div></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="trending-item"><span class="rank">01</span><div class="info"><h5>Linear — 项目管理新标杆</h5><span>工具 · 3.2K 收藏</span></div></div>
+      <div class="trending-item"><span class="rank">02</span><div class="info"><h5>CSS Container Queries 实战</h5><span>文章 · 2.8K 阅读</span></div></div>
+      <div class="trending-item"><span class="rank">03</span><div class="info"><h5>暗色主题设计指南</h5><span>文章 · 2.5K 阅读</span></div></div>
+      <div class="trending-item"><span class="rank">04</span><div class="info"><h5>v0 by Vercel</h5><span>工具 · 2.1K 收藏</span></div></div>
+      <div class="trending-item"><span class="rank">05</span><div class="info"><h5>Framer Motion 12 发布</h5><span>开源 · 1.9K Star</span></div></div>
+      <div class="trending-item"><span class="rank">06</span><div class="info"><h5>响应式排版最佳实践</h5><span>文章 · 1.8K 阅读</span></div></div>
+      <div class="trending-item"><span class="rank">07</span><div class="info"><h5>Midjourney V7 提示词库</h5><span>工具 · 1.7K 收藏</span></div></div>
+      <div class="trending-item"><span class="rank">08</span><div class="info"><h5>WebGPU 入门教程</h5><span>课程 · 1.5K 学习</span></div></div>
+    </div>
+  </section>
+
+  <!-- RESOURCE GRID: TOOLS -->
+  <section class="section" id="articles">
+    <div class="section-header">
+      <h2 class="section-title">🛠 最新工具</h2>
+      <a href="#" class="section-link">查看全部 →</a>
+    </div>
+    <div class="resource-grid">
+      <div class="resource-card">
+        <div class="resource-visual vis-sky">
+          <span class="icon-med">🎯</span>
+        </div>
+        <div class="resource-body">
+          <span class="resource-tag tag-tools">工具</span>
+          <h4>Rive — 交互动画引擎</h4>
+          <p>实时运行时动画，支持矢量动画、状态机和交互事件。比 Lottie 更轻量、更强大。</p>
+          <div class="resource-footer">
+            <div class="author"><span class="avatar avatar-sky">R</span> Rive Team</div>
+            <div class="score" style="color:#0d9488;">★ 9.4</div>
+          </div>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-visual vis-violet">
+          <span class="icon-med">🔮</span>
+        </div>
+        <div class="resource-body">
+          <span class="resource-tag tag-open-source">开源</span>
+          <h4>Aceternity UI — 动效组件库</h4>
+          <p>基于 Tailwind 和 Framer Motion 的炫酷动效组件集合。开箱即用的视差、粒子、光效。</p>
+          <div class="resource-footer">
+            <div class="author"><span class="avatar avatar-indigo">A</span> Aceternity</div>
+            <div class="score" style="color:#0d9488;">★ 9.3</div>
+          </div>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-visual vis-emerald">
+          <span class="icon-med">🧩</span>
+        </div>
+        <div class="resource-body">
+          <span class="resource-tag tag-tools">工具</span>
+          <h4>Cadl — 设计 Token 管理</h4>
+          <p>声明式设计 Token 编辑器，自动生成 CSS/SCSS/JSON/Swift/Kotlin 多平台变量。</p>
+          <div class="resource-footer">
+            <div class="author"><span class="avatar avatar-teal">C</span> Cadl Labs</div>
+            <div class="score" style="color:#0d9488;">★ 9.1</div>
+          </div>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-visual vis-orange">
+          <span class="icon-med">📐</span>
+        </div>
+        <div class="resource-body">
+          <span class="resource-tag tag-templates">模板</span>
+          <h4>Cult UI — 极简组件集</h4>
+          <p>70+ 精心设计的 Tailwind 组件，灵感来自 Vercel/Linear 的极简美学。零依赖。</p>
+          <div class="resource-footer">
+            <div class="author"><span class="avatar avatar-amber">C</span> Cult UI</div>
+            <div class="score" style="color:#0d9488;">★ 9.2</div>
+          </div>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-visual vis-rose">
+          <span class="icon-med">🎬</span>
+        </div>
+        <div class="resource-body">
+          <span class="resource-tag tag-videos">视频</span>
+          <h4>Fireship — 100 秒系列</h4>
+          <p>用 100 秒讲清一个技术概念。前端、后端、DevOps、AI 全覆盖。YouTube 200万+ 订阅。</p>
+          <div class="resource-footer">
+            <div class="author"><span class="avatar avatar-rose">F</span> Fireship</div>
+            <div class="score" style="color:#0d9488;">★ 9.6</div>
+          </div>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-visual vis-teal">
+          <span class="icon-med">🧠</span>
+        </div>
+        <div class="resource-body">
+          <span class="resource-tag tag-articles">文章</span>
+          <h4>Refs vs State 完全指南</h4>
+          <p>深入理解 React 中 useRef 与 useState 的区别、使用场景和常见误区。</p>
+          <div class="resource-footer">
+            <div class="author"><span class="avatar avatar-teal">D</span> Dan Abramov</div>
+            <div class="score" style="color:#0d9488;">★ 9.5</div>
+          </div>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-visual vis-indigo">
+          <span class="icon-med">🎙</span>
+        </div>
+        <div class="resource-body">
+          <span class="resource-tag tag-podcasts">播客</span>
+          <h4>Design Better Podcast</h4>
+          <p>Supernova 团队出品，邀请顶级设计领袖分享设计思维、团队管理和产品创新。</p>
+          <div class="resource-footer">
+            <div class="author"><span class="avatar avatar-indigo">S</span> Supernova</div>
+            <div class="score" style="color:#0d9488;">★ 9.0</div>
+          </div>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-visual vis-amber">
+          <span class="icon-med">🎓</span>
+        </div>
+        <div class="resource-body">
+          <span class="resource-tag tag-courses">课程</span>
+          <h4>Advanced CSS Grid Masterclass</h4>
+          <p>从基础到高级的 Grid 布局完全指南。包含 20+ 实战项目，适合中级开发者。</p>
+          <div class="resource-footer">
+            <div class="author"><span class="avatar avatar-amber">U</span> Udemy</div>
+            <div class="score" style="color:#0d9488;">★ 9.2</div>
+          </div>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-visual vis-slate">
+          <span class="icon-med">💬</span>
+        </div>
+        <div class="resource-body">
+          <span class="resource-tag tag-communities">社区</span>
+          <h4>Discord Designers Hub</h4>
+          <p>全球最大的设计师 Discord 社区之一。实时讨论、作品点评、求职招聘、灵感分享。</p>
+          <div class="resource-footer">
+            <div class="author"><span class="avatar avatar-sky">D</span> Community</div>
+            <div class="score" style="color:#0d9488;">★ 8.9</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <div class="newsletter-inner">
+      <div class="newsletter-text">
+        <h2>每周精选，直达收件箱</h2>
+        <p>订阅 DesignMint 周报，每周五获取 5 个最值得关注的设计资源。</p>
+      </div>
+      <form class="newsletter-form" onsubmit="event.preventDefault()">
+        <input type="email" placeholder="your@email.com">
+        <button type="submit">免费订阅</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 DesignMint — 由社区驱动的设计资源目录 · <a href="#">关于我们</a> · <a href="#">提交资源</a> · <a href="#">API</a></p>
+  </footer>
+
+  <script>
+    // Category tab switching
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

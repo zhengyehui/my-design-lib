@@ -323,7 +323,8 @@ export default defineConfig({
             { text: 'Pulse 帮助中心', link: '/pages/help-center' },
             { text: 'NexusBase 知识库', link: '/pages/knowledge-base' },
             { text: 'CaseFlow 客户故事集', link: '/pages/customer-stories' },
-            { text: 'TasteNote 美食食谱', link: '/pages/recipe-blog' }
+            { text: 'TasteNote 美食食谱', link: '/pages/recipe-blog' },
+            { text: 'DesignMint 设计资源目录', link: '/pages/design-resources' }
           ]
         },
         {
