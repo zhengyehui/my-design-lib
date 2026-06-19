@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmos Express — 太空旅行</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #e2e8f0;
+  background: #050510;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Starfield Background ─────────────────────────────── */
+.starfield {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.starfield .layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 200%; height: 200%;
+}
+.starfield .layer-1 { animation: drift 120s linear infinite; }
+.starfield .layer-2 { animation: drift 80s linear infinite reverse; }
+.starfield .layer-3 { animation: drift 60s linear infinite; }
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+}
+.star.tiny { width: 1px; height: 1px; opacity: 0.4; }
+.star.small { width: 1.5px; height: 1.5px; opacity: 0.6; }
+.star.medium { width: 2px; height: 2px; opacity: 0.8; }
+
+@keyframes drift {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-50%, -50%); }
+}
+
+/* Twinkling animation for select stars */
+.star.twinkle {
+  animation: twinkle 3s ease-in-out infinite alternate;
+}
+@keyframes twinkle {
+  from { opacity: 0.3; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.5); }
+}
+
+/* ── Navigation ────────────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(5, 5, 16, 0.7);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.nav-logo .logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+.nav-links a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: #00d4ff; }
+.btn-nav {
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  color: #fff !important;
+  padding: 0.5rem 1.3rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* ── Hero ─────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.08), transparent 70%);
+  top: -200px;
+  right: -200px;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.06), transparent 70%);
+  bottom: -100px;
+  left: -100px;
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #00d4ff;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+.hero-badge .pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00d4ff;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+  50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(0, 212, 255, 0); }
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 600px;
+  line-height: 1.7;
+  margin: 0 auto 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.btn-hero {
+  padding: 1rem 2.5rem;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.btn-hero-primary {
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 4px 30px rgba(0, 212, 255, 0.3);
+}
+.btn-hero-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 40px rgba(0, 212, 255, 0.4);
+}
+.btn-hero-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.btn-hero-secondary:hover {
+  border-color: #00d4ff;
+  background: rgba(0, 212, 255, 0.05);
+}
+
+/* Hero orbit decoration */
+.hero-orbit {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbit-spin 30s linear infinite;
+}
+.hero-orbit::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #00d4ff;
+  border-radius: 50%;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+}
+.hero-orbit-2 {
+  width: 700px;
+  height: 700px;
+  animation-duration: 45s;
+  animation-direction: reverse;
+  border-color: rgba(139, 92, 246, 0.03);
+}
+.hero-orbit-2::after {
+  background: #8b5cf6;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+  width: 6px;
+  height: 6px;
+}
+@keyframes orbit-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ── Stats Bar ────────────────────────────────────────── */
+.stats-bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  padding: 4rem 2rem;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(5, 5, 16, 0.8);
+  backdrop-filter: blur(20px);
+}
+.stat { text-align: center; }
+.stat-num {
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+/* ── Section Common ───────────────────────────────────── */
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 7rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #00d4ff;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+.section-desc {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 600px;
+  line-height: 1.7;
+}
+
+/* ── Destinations ─────────────────────────────────────── */
+.destinations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.dest-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.4s;
+  cursor: pointer;
+}
+.dest-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 212, 255, 0.1);
+}
+.dest-visual {
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+.dest-visual .planet {
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+/* Moon */
+.dest-moon .planet {
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle at 35% 35%, #e8e8e8, #9ca3af 40%, #6b7280 80%);
+  box-shadow: inset -20px -10px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(200, 200, 200, 0.1);
+}
+.dest-moon .planet::before {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.15);
+  top: 30%;
+  left: 25%;
+}
+.dest-moon .planet::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  top: 55%;
+  right: 25%;
+}
+.dest-moon {
+  background: linear-gradient(180deg, #0a0a1a 0%, #111827 100%);
+}
+/* Mars */
+.dest-mars .planet {
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle at 40% 35%, #e87040, #c2410c 50%, #7c2d12 90%);
+  box-shadow: inset -25px -15px 50px rgba(0, 0, 0, 0.4), 0 0 80px rgba(232, 112, 64, 0.15);
+}
+.dest-mars .planet::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  top: 40%;
+  left: 15%;
+  filter: blur(4px);
+}
+.dest-mars {
+  background: linear-gradient(180deg, #0a0a1a 0%, #1a0a05 100%);
+}
+/* ISS */
+.dest-iss {
+  background: linear-gradient(180deg, #050520 0%, #0a0a30 100%);
+}
+.dest-iss .planet {
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle at 40% 35%, #3b82f6, #1d4ed8 60%, #1e3a5f);
+  box-shadow: inset -15px -10px 30px rgba(0, 0, 0, 0.4), 0 0 40px rgba(59, 130, 246, 0.2);
+}
+.dest-iss .solar-panel {
+  position: absolute;
+  top: 50%;
+  width: 60px;
+  height: 8px;
+  background: linear-gradient(90deg, #94a3b8, #cbd5e1, #94a3b8);
+  transform: translateY(-50%);
+}
+.dest-iss .solar-panel.left {
+  left: calc(50% - 110px);
+}
+.dest-iss .solar-panel.right {
+  right: calc(50% - 110px);
+}
+.dest-iss .solar-panel::before,
+.dest-iss .solar-panel::after {
+  content: '';
+  position: absolute;
+  width: 35px;
+  height: 2px;
+  background: #64748b;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.dest-iss .solar-panel.left::before { left: -40px; }
+.dest-iss .solar-panel.left::after { left: 65px; }
+.dest-iss .solar-panel.right::before { left: -40px; }
+.dest-iss .solar-panel.right::after { left: 65px; }
+
+.dest-info {
+  padding: 1.8rem;
+}
+.dest-tag {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.8rem;
+}
+.tag-lunar { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+.tag-mars { background: rgba(232, 112, 64, 0.15); color: #e87040; }
+.tag-orbital { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+
+.dest-info h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+.dest-info p {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+}
+.dest-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+.dest-meta span { display: flex; align-items: center; gap: 0.3rem; }
+.dest-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #00d4ff;
+  margin-top: 0.8rem;
+}
+
+/* ── Journey Timeline ─────────────────────────────────── */
+.journey {
+  position: relative;
+  z-index: 1;
+  padding: 7rem 2rem;
+  background: rgba(255, 255, 255, 0.01);
+}
+.journey-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.timeline {
+  margin-top: 3rem;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #00d4ff, #8b5cf6, rgba(139, 92, 246, 0.1));
+}
+.timeline-item {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+}
+.timeline-dot {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 900;
+  position: relative;
+  z-index: 1;
+}
+.timeline-item:nth-child(1) .timeline-dot { background: rgba(0, 212, 255, 0.15); color: #00d4ff; }
+.timeline-item:nth-child(2) .timeline-dot { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
+.timeline-item:nth-child(3) .timeline-dot { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+.timeline-item:nth-child(4) .timeline-dot { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.timeline-item:nth-child(5) .timeline-dot { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+
+.timeline-content h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+.timeline-content .duration {
+  font-size: 0.8rem;
+  color: #00d4ff;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.timeline-content p {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ── Pricing ──────────────────────────────────────────── */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.price-card {
+  padding: 2.5rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.3s;
+  position: relative;
+}
+.price-card:hover {
+  border-color: rgba(0, 212, 255, 0.2);
+  transform: translateY(-4px);
+}
+.price-card.featured {
+  border-color: rgba(0, 212, 255, 0.3);
+  background: rgba(0, 212, 255, 0.04);
+}
+.price-card.featured::before {
+  content: '最受欢迎';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.3rem 1rem;
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.price-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.5rem;
+}
+.price-amount {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.3rem;
+}
+.price-card.featured .price-amount {
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.price-unit {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 1.5rem;
+}
+.price-features {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.price-features li {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.price-features li:last-child { border-bottom: none; }
+.price-features .check { color: #10b981; font-weight: 700; }
+.btn-price {
+  display: block;
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+}
+.btn-price-outline {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.btn-price-outline:hover {
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+.btn-price-fill {
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+}
+.btn-price-fill:hover {
+  box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+}
+
+/* ── Testimonials ─────────────────────────────────────── */
+.testimonials {
+  position: relative;
+  z-index: 1;
+  padding: 7rem 2rem;
+  background: rgba(255, 255, 255, 0.01);
+}
+.testimonials-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.testimonial-card {
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.testimonial-stars {
+  color: #f59e0b;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+}
+.testimonial-card blockquote {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.author-info .name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+}
+.author-info .role {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── FAQ ──────────────────────────────────────────────── */
+.faq { max-width: 800px; margin: 0 auto; }
+.faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.5rem 0;
+}
+.faq-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  user-select: none;
+}
+.faq-q .arrow {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.3);
+  transition: transform 0.3s;
+}
+.faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.faq-item.open .faq-a { max-height: 200px; }
+.faq-a p {
+  padding-top: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* ── CTA ──────────────────────────────────────────────── */
+.cta-section {
+  position: relative;
+  z-index: 1;
+  padding: 8rem 2rem;
+  text-align: center;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.1), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+.cta-section p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 500px;
+  margin: 0 auto 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+.cta-section .btn-hero {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Footer ───────────────────────────────────────────── */
+.footer {
+  position: relative;
+  z-index: 1;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.85rem;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+.footer-links a {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: #00d4ff; }
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav { padding: 0.8rem 1.2rem; }
+  .nav-links { gap: 1rem; }
+  .nav-links a:not(.btn-nav) { display: none; }
+  .stats-bar { gap: 2rem; padding: 3rem 1.5rem; }
+  .stat-num { font-size: 2rem; }
+  .section { padding: 4rem 1.5rem; }
+  .destinations-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+  .hero { padding: 7rem 1.5rem 3rem; }
+  .hero-orbit { width: 300px; height: 300px; }
+  .hero-orbit-2 { width: 450px; height: 450px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Starfield -->
+<div class="starfield" id="starfield"></div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <span class="logo-icon">✦</span>
+    Cosmos Express
+  </a>
+  <div class="nav-links">
+    <a href="#destinations">目的地</a>
+    <a href="#journey">旅程</a>
+    <a href="#pricing">定价</a>
+    <a href="#faq">FAQ</a>
+    <a href="#" class="btn-nav">预约旅程</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-orbit"></div>
+  <div class="hero-orbit hero-orbit-2"></div>
+  <div class="hero-badge">
+    <span class="pulse"></span>
+    2026 年第三次商业载人飞行任务即将启航
+  </div>
+  <h1>
+    探索宇宙的<br>
+    <span class="gradient-text">无限可能</span>
+  </h1>
+  <p class="hero-sub">
+    Cosmos Express 为人类开启太空旅行新纪元。从近地轨道到月球漫步，我们让每个人都能触碰星辰。
+  </p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-hero btn-hero-primary">开始你的旅程 →</a>
+    <a href="#journey" class="btn-hero btn-hero-secondary">了解旅程详情</a>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">12</div>
+    <div class="stat-label">次成功飞行</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">147</div>
+    <div class="stat-label">位太空旅客</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">安全记录</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">4.9</div>
+    <div class="stat-label">旅客评分</div>
+  </div>
+</div>
+
+<!-- Destinations -->
+<section class="section" id="destinations">
+  <div class="section-label">✦ 目的地</div>
+  <h2 class="section-title">选择你的星际目的地</h2>
+  <p class="section-desc">三种独特体验，从近地轨道到月球表面，每一段旅程都是人生巅峰。</p>
+  <div class="destinations-grid">
+    <!-- Moon -->
+    <div class="dest-card dest-moon">
+      <div class="dest-visual">
+        <div class="planet"></div>
+      </div>
+      <div class="dest-info">
+        <span class="dest-tag tag-lunar">月球之旅</span>
+        <h3>月面漫步</h3>
+        <p>环绕月球飞行，近距离观赏月球表面的陨石坑与月海，在零重力中漂浮于地球与月球之间。</p>
+        <div class="dest-meta">
+          <span>⏱ 7 天</span>
+          <span>🚀 猎鹰 Heavy</span>
+          <span>👤 最多 6 人</span>
+        </div>
+        <div class="dest-price">起价 $38,000,000</div>
+      </div>
+    </div>
+    <!-- Mars -->
+    <div class="dest-card dest-mars">
+      <div class="dest-visual">
+        <div class="planet"></div>
+      </div>
+      <div class="dest-info">
+        <span class="dest-tag tag-mars">火星轨道</span>
+        <h3>火星远征</h3>
+        <p>人类历史上首次商业火星轨道飞行。在漫长的旅途中凝视那颗红色星球，见证人类文明的新边疆。</p>
+        <div class="dest-meta">
+          <span>⏱ 180 天</span>
+          <span>🚀 星舰</span>
+          <span>👤 最多 8 人</span>
+        </div>
+        <div class="dest-price">起价 $120,000,000</div>
+      </div>
+    </div>
+    <!-- ISS -->
+    <div class="dest-card dest-iss">
+      <div class="dest-visual">
+        <div class="planet"></div>
+        <div class="solar-panel left"></div>
+        <div class="solar-panel right"></div>
+      </div>
+      <div class="dest-info">
+        <span class="dest-tag tag-orbital">近地轨道</span>
+        <h3>轨道空间站</h3>
+        <p>在距离地球 400 公里的轨道上，体验失重环境，俯瞰蓝色星球的壮丽弧线与日夜交替。</p>
+        <div class="dest-meta">
+          <span>⏱ 5 天</span>
+          <span>🚀 龙飞船</span>
+          <span>👤 最多 4 人</span>
+        </div>
+        <div class="dest-price">起价 $8,500,000</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Journey Timeline -->
+<div class="journey" id="journey">
+  <div class="journey-inner">
+    <div class="section-label">✦ 旅程体验</div>
+    <h2 class="section-title">你的太空之旅</h2>
+    <p class="section-desc">从报名到归来，每一步都经过精心设计，确保安全与极致体验。</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">01</div>
+        <div class="timeline-content">
+          <div class="duration">出发前 6 个月</div>
+          <h3>筛选与训练</h3>
+          <p>通过全面的身体检查后，你将接受为期 12 周的太空适应性训练，包括失重模拟、紧急逃生和航天器操作。</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">02</div>
+        <div class="timeline-content">
+          <div class="duration">出发前 1 个月</div>
+          <h3>最终准备</h3>
+          <p>定制你的太空服，熟悉航天器布局，与你的飞行同伴进行团队协作演练。个性化你的舱内空间。</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">03</div>
+        <div class="timeline-content">
+          <div class="duration">发射日 T-0</div>
+          <h3>点火升空</h3>
+          <p>在倒计时的最后 10 秒，感受 3G 加速度将你推向太空。当发动机熄火的那一刻，你将第一次体验失重。</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">04</div>
+        <div class="timeline-content">
+          <div class="duration">在轨期间</div>
+          <h3>太空漫游</h3>
+          <p>从太空视角俯瞰地球，进行太空行走，进行科学实验，记录你人生中最震撼的时刻。全程高清直播。</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">05</div>
+        <div class="timeline-content">
+          <div class="duration">返航归来</div>
+          <h3>地球欢迎仪式</h3>
+          <p>安全着陆后，你将获得太空旅行证书，参加庆功晚宴，并收到全程纪录片的独家拷贝。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pricing -->
+<section class="section" id="pricing">
+  <div class="section-label">✦ 定价方案</div>
+  <h2 class="section-title">选择你的方案</h2>
+  <p class="section-desc">每种方案都包含完整的太空体验，从训练到归来。</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-name">近地轨道体验</div>
+      <div class="price-amount">$8.5M</div>
+      <div class="price-unit">每人 / 5 天旅程</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> 失重体验 3 天</li>
+        <li><span class="check">✓</span> 地球全景观测窗</li>
+        <li><span class="check">✓</span> 12 周训练课程</li>
+        <li><span class="check">✓</span> 定制太空服</li>
+        <li><span class="check">✓</span> 全程直播</li>
+        <li><span class="check">✓</span> 旅行纪录片</li>
+      </ul>
+      <a href="#" class="btn-price btn-price-outline">了解更多</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-name">月球之旅</div>
+      <div class="price-amount">$38M</div>
+      <div class="price-unit">每人 / 7 天旅程</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> 环绕月球飞行</li>
+        <li><span class="check">✓</span> 月面近距观测</li>
+        <li><span class="check">✓</span> 太空行走体验</li>
+        <li><span class="check">✓</span> 24 周高级训练</li>
+        <li><span class="check">✓</span> VIP 舱内套房</li>
+        <li><span class="check">✓</span> 月球纪念品套装</li>
+      </ul>
+      <a href="#" class="btn-price btn-price-fill">立即预约</a>
+    </div>
+    <div class="price-card">
+      <div class="price-name">火星远征</div>
+      <div class="price-amount">$120M</div>
+      <div class="price-unit">每人 / 180 天旅程</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> 火星轨道飞行</li>
+        <li><span class="check">✓</span> 深空通信体验</li>
+        <li><span class="check">✓</span> 科学实验参与</li>
+        <li><span class="check">✓</span> 36 周极限训练</li>
+        <li><span class="check">✓</span> 私人舱室套房</li>
+        <li><span class="check">✓</span> 终身宇航员身份</li>
+      </ul>
+      <a href="#" class="btn-price btn-price-outline">联系我们</a>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<div class="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-label">✦ 旅客心声</div>
+    <h2 class="section-title">他们已经触碰过星辰</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <blockquote>"当你第一次从太空看到地球，那种震撼是任何语言都无法描述的。蓝色星球在黑暗中如此脆弱而美丽，Cosmos Express 让这一切成为可能。"</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: rgba(0, 212, 255, 0.15); color: #00d4ff;">陈</div>
+          <div class="author-info">
+            <div class="name">陈明远</div>
+            <div class="role">月球之旅 · 2025 年 8 月</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <blockquote>"失重环境中的漂浮感让我重新认识了身体与空间的关系。训练团队非常专业，整个旅程的安全措施让我完全放心。"</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6;">S</div>
+          <div class="author-info">
+            <div class="name">Sarah Mitchell</div>
+            <div class="role">近地轨道 · 2025 年 11 月</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <blockquote>"作为第一批火星远征的旅客，在深空中看到那颗红色星球逐渐变大，是我人生中最激动的时刻。这不是旅行，这是人类的冒险。"</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: rgba(236, 72, 153, 0.15); color: #ec4899;">A</div>
+          <div class="author-info">
+            <div class="name">Alexandre Dubois</div>
+            <div class="role">火星远征 · 2026 年 1 月</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="section-label">✦ 常见问题</div>
+  <h2 class="section-title">你可能想知道</h2>
+  <p class="section-desc">我们整理了旅客最关心的问题。</p>
+  <div class="faq" style="margin-top: 2rem;">
+    <div class="faq-item open">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span>太空旅行安全吗？</span>
+        <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">
+        <p>安全是我们的第一优先级。12 次飞行任务零事故记录，每次任务都经过数千小时的模拟测试。我们的航天器通过了 NASA 和 ESA 的双重认证。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span>需要什么身体条件？</span>
+        <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">
+        <p>年龄 18-75 岁，无严重心血管疾病，BMI 在 18.5-35 之间。我们提供完整的体检评估，大部分健康成年人都能通过筛选。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span>训练需要多长时间？</span>
+        <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">
+        <p>近地轨道旅程需要 12 周训练，月球之旅需要 24 周，火星远征需要 36 周。训练在我们位于佛罗里达的太空训练中心进行。</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span>可以取消或改期吗？</span>
+        <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">
+        <p>出发前 6 个月可全额退款，3 个月内退款 75%。因天气或技术原因的推迟，我们提供免费改期和额外补偿。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>准备好了吗？<br><span class="gradient-text">星辰大海在等你</span></h2>
+  <p>加入 147 位已经触碰过星辰的先行者，开启你的人生巅峰之旅。</p>
+  <a href="#" class="btn-hero btn-hero-primary">预约 2026 年度名额 →</a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-links">
+    <a href="#">关于我们</a>
+    <a href="#">安全信息</a>
+    <a href="#">媒体报道</a>
+    <a href="#">合作伙伴</a>
+    <a href="#">隐私政策</a>
+  </div>
+  <p>© 2026 Cosmos Express. All rights reserved. Made with ✦ for humanity's future.</p>
+</footer>
+
+<script>
+// Generate starfield
+(function() {
+  const container = document.getElementById('starfield');
+  const layers = [
+    { count: 200, classes: ['tiny'], speed: 'layer-1' },
+    { count: 100, classes: ['small'], speed: 'layer-2' },
+    { count: 40, classes: ['medium'], speed: 'layer-3' }
+  ];
+  
+  layers.forEach(layer => {
+    const div = document.createElement('div');
+    div.className = 'layer ' + layer.speed;
+    
+    for (let i = 0; i < layer.count; i++) {
+      const star = document.createElement('div');
+      star.className = 'star ' + layer.classes[Math.floor(Math.random() * layer.classes.length)];
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      if (Math.random() > 0.85) {
+        star.classList.add('twinkle');
+        star.style.animationDelay = (Math.random() * 3) + 's';
+      }
+      div.appendChild(star);
+    }
+    container.appendChild(div);
+  });
+})();
+</script>
+</body>
+</html>

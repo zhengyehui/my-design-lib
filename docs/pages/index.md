@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 76 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 77 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -730,6 +730,15 @@ const pages = [
     rating: 9.4,
     description: '精选设计资源目录，毛玻璃导航 + 渐变 Hero + 分类筛选 + 编辑精选 + 横向滚动热门 + 资源卡片网格 + Newsletter',
   },
+  {
+    id: 'space-tourism',
+    title: 'Cosmos Express 太空旅行',
+    category: 'industry',
+    tags: ['太空旅游', '暗色主题', '科技', 'CSS动画', '沉浸式'],
+    colors: ['#050510', '#00d4ff', '#8b5cf6'],
+    rating: 9.5,
+    description: '沉浸式太空旅游落地页，CSS 星空粒子背景 + 轨道环装饰 + CSS-only 行星插画 + 旅程时间线 + 定价三栏 + FAQ 手风琴',
+  },
 ]
 
 const categories = [
@@ -801,7 +810,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 76 个完整页面</span>
+      <span>📦 77 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
