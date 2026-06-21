@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 78 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 79 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -747,6 +747,15 @@ const pages = [
     colors: ['#faf9f7', '#0f0f0f', '#c41e3a'],
     rating: 9.5,
     description: '品牌设计工作室作品集，灵感来自 Pentagram/Moving Brands，Playfair Display 衬线字体 + 深浅区块交替 + CSS 品牌视觉 + Marquee 客户滚动 + 案例详情 + 服务网格',
+  },
+  {
+    id: 'sprout-ai',
+    title: 'Sprout AI 可爱机器人伙伴',
+    category: 'landing',
+    tags: ['AI', '机器人', '落地页', '插画风格', '动画'],
+    colors: ['#D1E3FF', '#4ade80', '#22d3ee'],
+    rating: 9.4,
+    description: 'AI 机器人伙伴落地页，灵感来自 Fauna Robotics，CSS 纯手绘机器人角色 + Blob 渐变背景动画 + 功能网格 + 使用步骤 + 用户评价',
   },
 ]
 
