@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FRAME — 黑色电影数字体验</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Inter', var(--font-sans);
+      background: #08080d;
+      color: #e8e4df;
+      overflow-x: hidden;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    ::selection {
+      background: #c9a96e;
+      color: #08080d;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Film Grain Overlay ────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ── Vignette ──────────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(8,8,13,0.6) 100%);
+    }
+
+    /* ── Navigation ────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(8,8,13,0.9) 0%, transparent 100%);
+      transition: background 0.4s;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: 0.3em;
+      color: #c9a96e;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(232,228,223,0.6);
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #c9a96e;
+    }
+
+    /* ── Hero — Film Countdown ─────────────────────────────── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Animated concentric circles */
+    .hero-circles {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      opacity: 0.12;
+    }
+
+    .hero-circles .ring {
+      position: absolute;
+      border: 1px solid #c9a96e;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: ringPulse 4s ease-in-out infinite;
+    }
+
+    .hero-circles .ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+    .hero-circles .ring:nth-child(2) { width: 300px; height: 300px; animation-delay: 0.3s; }
+    .hero-circles .ring:nth-child(3) { width: 400px; height: 400px; animation-delay: 0.6s; }
+    .hero-circles .ring:nth-child(4) { width: 500px; height: 500px; animation-delay: 0.9s; }
+    .hero-circles .ring:nth-child(5) { width: 600px; height: 600px; animation-delay: 1.2s; }
+
+    /* Crosshair lines */
+    .hero-crosshair {
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(201,169,110,0.15), transparent);
+      top: 0;
+    }
+    .hero-crosshair:nth-child(1) { left: 25%; }
+    .hero-crosshair:nth-child(2) { left: 50%; }
+    .hero-crosshair:nth-child(3) { left: 75%; }
+
+    .hero-crosshair-h {
+      position: absolute;
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(to right, transparent, rgba(201,169,110,0.1), transparent);
+      left: 0;
+    }
+    .hero-crosshair-h:nth-child(4) { top: 33%; }
+    .hero-crosshair-h:nth-child(5) { top: 66%; }
+
+    @keyframes ringPulse {
+      0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .hero-subtitle {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: #faf8f5;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.6s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: #c9a96e;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: rgba(232,228,223,0.5);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s forwards;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      border: 1px solid rgba(201,169,110,0.4);
+      color: #c9a96e;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.4s;
+      opacity: 0;
+      animation: fadeUp 1s 1.2s forwards;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .hero-cta:hover {
+      background: #c9a96e;
+      color: #08080d;
+      border-color: #c9a96e;
+    }
+
+    .hero-cta svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.3s;
+    }
+
+    .hero-cta:hover svg {
+      transform: translateX(4px);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Film strip border decoration */
+    .film-strip-border {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .film-strip-border .perf {
+      width: 14px;
+      height: 10px;
+      border: 1px solid rgba(201,169,110,0.15);
+      border-radius: 2px;
+      margin: 15px 6px;
+    }
+
+    /* ── Section: Now Showing ──────────────────────────────── */
+    .section {
+      position: relative;
+      padding: 8rem 3rem;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: #faf8f5;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-desc {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: rgba(232,228,223,0.55);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    /* ── Film Strip Horizontal Scroll ──────────────────────── */
+    .film-strip-section {
+      padding: 6rem 0;
+      overflow: hidden;
+    }
+
+    .film-strip-header {
+      padding: 0 3rem 3rem;
+    }
+
+    .film-strip-track {
+      display: flex;
+      gap: 1.5rem;
+      padding: 0 3rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .film-strip-track::-webkit-scrollbar { display: none; }
+
+    .film-frame {
+      flex: 0 0 380px;
+      scroll-snap-align: start;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .film-frame:hover {
+      transform: scale(1.03);
+    }
+
+    .film-frame-img {
+      width: 100%;
+      height: 260px;
+      background: linear-gradient(135deg, #1a1520, #0d0b12);
+      border: 1px solid rgba(201,169,110,0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* CSS-only cinematic still compositions */
+    .film-frame-img .scene {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* Scene 1: Noir cityscape */
+    .scene-noir .building {
+      position: absolute;
+      bottom: 0;
+      background: #0f0d14;
+    }
+    .scene-noir .building:nth-child(1) { left: 5%; width: 18%; height: 70%; }
+    .scene-noir .building:nth-child(2) { left: 25%; width: 14%; height: 85%; }
+    .scene-noir .building:nth-child(3) { left: 41%; width: 20%; height: 60%; }
+    .scene-noir .building:nth-child(4) { left: 63%; width: 16%; height: 75%; }
+    .scene-noir .building:nth-child(5) { left: 81%; width: 19%; height: 55%; }
+
+    .scene-noir .window {
+      position: absolute;
+      width: 4px;
+      height: 5px;
+      background: rgba(201,169,110,0.6);
+      animation: windowFlicker 3s infinite;
+    }
+
+    @keyframes windowFlicker {
+      0%, 90%, 100% { opacity: 0.6; }
+      92% { opacity: 0.1; }
+      95% { opacity: 0.8; }
+    }
+
+    .scene-noir .moon {
+      position: absolute;
+      top: 20px;
+      right: 40px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #c9a96e 0%, rgba(201,169,110,0.3) 50%, transparent 70%);
+      box-shadow: 0 0 40px rgba(201,169,110,0.3);
+    }
+
+    .scene-noir .fog {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(to top, rgba(201,169,110,0.08), transparent);
+    }
+
+    /* Scene 2: Spotlight */
+    .scene-spotlight .spot {
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 120px solid transparent;
+      border-right: 120px solid transparent;
+      border-top: 280px solid rgba(201,169,110,0.06);
+      filter: blur(8px);
+    }
+
+    .scene-spotlight .figure {
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 80px;
+      background: linear-gradient(to bottom, #1a1520, #0d0b12);
+      border-radius: 20px 20px 5px 5px;
+      box-shadow: 0 0 60px rgba(201,169,110,0.15);
+    }
+
+    .scene-spotlight .floor {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 15%;
+      background: linear-gradient(to top, rgba(201,169,110,0.05), transparent);
+    }
+
+    /* Scene 3: Typewriter */
+    .scene-typewriter .desk {
+      position: absolute;
+      bottom: 0;
+      left: 10%;
+      right: 10%;
+      height: 35%;
+      background: linear-gradient(to top, #1a1520, transparent);
+    }
+
+    .scene-typewriter .paper {
+      position: absolute;
+      bottom: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 55%;
+      height: 50%;
+      background: rgba(250,248,245,0.06);
+      border: 1px solid rgba(201,169,110,0.1);
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      gap: 6px;
+    }
+
+    .scene-typewriter .paper .line {
+      height: 2px;
+      background: rgba(201,169,110,0.2);
+      border-radius: 1px;
+    }
+    .scene-typewriter .paper .line:nth-child(1) { width: 80%; }
+    .scene-typewriter .paper .line:nth-child(2) { width: 65%; }
+    .scene-typewriter .paper .line:nth-child(3) { width: 90%; }
+    .scene-typewriter .paper .line:nth-child(4) { width: 45%; }
+    .scene-typewriter .paper .line:nth-child(5) { width: 70%; }
+
+    .scene-typewriter .cursor-blink {
+      width: 2px;
+      height: 10px;
+      background: #c9a96e;
+      animation: blink 1s step-end infinite;
+      margin-top: 4px;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* Scene 4: Reel */
+    .scene-reel .reel {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      border: 2px solid rgba(201,169,110,0.2);
+      border-radius: 50%;
+      animation: reelSpin 8s linear infinite;
+    }
+
+    .scene-reel .reel::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      border: 2px solid rgba(201,169,110,0.3);
+      border-radius: 50%;
+    }
+
+    .scene-reel .reel .spoke {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 50px;
+      height: 1px;
+      background: rgba(201,169,110,0.15);
+      transform-origin: 0 0;
+    }
+    .scene-reel .reel .spoke:nth-child(1) { transform: rotate(0deg); }
+    .scene-reel .reel .spoke:nth-child(2) { transform: rotate(60deg); }
+    .scene-reel .reel .spoke:nth-child(3) { transform: rotate(120deg); }
+    .scene-reel .reel .spoke:nth-child(4) { transform: rotate(180deg); }
+    .scene-reel .reel .spoke:nth-child(5) { transform: rotate(240deg); }
+    .scene-reel .reel .spoke:nth-child(6) { transform: rotate(300deg); }
+
+    .scene-reel .sprocket {
+      position: absolute;
+      width: 8px;
+      height: 12px;
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 2px;
+    }
+    .scene-reel .sprocket:nth-child(8) { top: 5px; left: 50%; transform: translateX(-50%); }
+    .scene-reel .sprocket:nth-child(9) { bottom: 5px; left: 50%; transform: translateX(-50%); }
+    .scene-reel .sprocket:nth-child(10) { left: 5px; top: 50%; transform: translateY(-50%); }
+    .scene-reel .sprocket:nth-child(11) { right: 5px; top: 50%; transform: translateY(-50%); }
+
+    @keyframes reelSpin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Scene 5: Rain */
+    .scene-rain .rain-line {
+      position: absolute;
+      width: 1px;
+      height: 20px;
+      background: linear-gradient(to bottom, transparent, rgba(201,169,110,0.15), transparent);
+      animation: rainFall 0.8s linear infinite;
+    }
+
+    @keyframes rainFall {
+      from { transform: translateY(-30px); opacity: 0; }
+      20% { opacity: 1; }
+      to { transform: translateY(300px); opacity: 0; }
+    }
+
+    .scene-rain .puddle {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 8px;
+      background: radial-gradient(ellipse, rgba(201,169,110,0.1), transparent);
+      border-radius: 50%;
+      animation: puddleRipple 2s ease-in-out infinite;
+    }
+
+    @keyframes puddleRipple {
+      0%, 100% { transform: translateX(-50%) scaleX(1); opacity: 0.5; }
+      50% { transform: translateX(-50%) scaleX(1.3); opacity: 0.8; }
+    }
+
+    .scene-rain .silhouette {
+      position: absolute;
+      bottom: 12%;
+      right: 25%;
+      width: 24px;
+      height: 60px;
+      background: #0d0b12;
+      border-radius: 12px 12px 3px 3px;
+    }
+
+    /* Scene 6: Neon */
+    .scene-neon .neon-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-style: italic;
+      font-weight: 700;
+      color: #c9a96e;
+      text-shadow: 0 0 10px rgba(201,169,110,0.5), 0 0 30px rgba(201,169,110,0.3), 0 0 60px rgba(201,169,110,0.1);
+      animation: neonFlicker 4s infinite;
+    }
+
+    @keyframes neonFlicker {
+      0%, 100% { opacity: 1; }
+      92% { opacity: 1; }
+      93% { opacity: 0.4; }
+      94% { opacity: 1; }
+      96% { opacity: 0.7; }
+      97% { opacity: 1; }
+    }
+
+    .scene-neon .wall {
+      position: absolute;
+      inset: 0;
+      background: 
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,169,110,0.03) 39px, rgba(201,169,110,0.03) 40px),
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(201,169,110,0.03) 39px, rgba(201,169,110,0.03) 40px);
+    }
+
+    .film-frame-info {
+      padding: 1.2rem 0.5rem 0;
+    }
+
+    .film-frame-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #faf8f5;
+      margin-bottom: 0.3rem;
+    }
+
+    .film-frame-info p {
+      font-size: 0.8rem;
+      color: rgba(232,228,223,0.4);
+      font-weight: 300;
+    }
+
+    .film-frame-info .year {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: #c9a96e;
+      margin-top: 0.5rem;
+    }
+
+    /* Sprocket holes decoration */
+    .sprocket-row {
+      display: flex;
+      gap: 12px;
+      padding: 0.8rem 3rem;
+    }
+
+    .sprocket-hole {
+      width: 10px;
+      height: 7px;
+      border: 1px solid rgba(201,169,110,0.1);
+      border-radius: 1.5px;
+      flex-shrink: 0;
+    }
+
+    /* ── Directors Section ─────────────────────────────────── */
+    .directors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .director-card {
+      position: relative;
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(201,169,110,0.08);
+      background: rgba(255,255,255,0.01);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .director-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #c9a96e, transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .director-card:hover::before {
+      opacity: 1;
+    }
+
+    .director-card:hover {
+      background: rgba(201,169,110,0.03);
+      border-color: rgba(201,169,110,0.2);
+      transform: translateY(-4px);
+    }
+
+    .director-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.7;
+      color: rgba(232,228,223,0.75);
+      margin-bottom: 1.5rem;
+    }
+
+    .director-quote::before {
+      content: '"';
+      font-size: 3rem;
+      line-height: 0;
+      vertical-align: -0.5em;
+      color: rgba(201,169,110,0.3);
+      margin-right: 0.1em;
+    }
+
+    .director-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #c9a96e;
+    }
+
+    .director-role {
+      font-size: 0.7rem;
+      color: rgba(232,228,223,0.35);
+      margin-top: 0.2rem;
+    }
+
+    /* ── Scene Breakdown ───────────────────────────────────── */
+    .scene-breakdown {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+
+    .scene-visual {
+      position: relative;
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, #0d0b12, #1a1520);
+      border: 1px solid rgba(201,169,110,0.08);
+      overflow: hidden;
+    }
+
+    /* CSS composition: Film noir detective scene */
+    .scene-visual .comp {
+      position: absolute;
+      inset: 0;
+    }
+
+    .comp-detective .desk-lamp {
+      position: absolute;
+      top: 20%;
+      right: 30%;
+      width: 3px;
+      height: 50px;
+      background: rgba(201,169,110,0.3);
+    }
+
+    .comp-detective .lamp-glow {
+      position: absolute;
+      top: 15%;
+      right: 20%;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(201,169,110,0.12), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .comp-detective .hat {
+      position: absolute;
+      bottom: 35%;
+      left: 30%;
+      width: 60px;
+      height: 20px;
+      background: #1a1520;
+      border-radius: 50% 50% 0 0;
+    }
+
+    .comp-detective .hat::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: -10px;
+      width: 80px;
+      height: 8px;
+      background: #1a1520;
+      border-radius: 50%;
+    }
+
+    .comp-detective .figure-body {
+      position: absolute;
+      bottom: 15%;
+      left: 25%;
+      width: 50px;
+      height: 70px;
+      background: linear-gradient(to bottom, #1a1520, #0d0b12);
+      border-radius: 15px 15px 0 0;
+    }
+
+    .comp-detective .smoke {
+      position: absolute;
+      bottom: 55%;
+      left: 35%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(232,228,223,0.08);
+      animation: smokeRise 3s ease-out infinite;
+    }
+
+    .comp-detective .smoke:nth-child(5) { animation-delay: 1s; left: 37%; }
+    .comp-detective .smoke:nth-child(6) { animation-delay: 2s; left: 33%; }
+
+    @keyframes smokeRise {
+      0% { transform: translateY(0) scale(1); opacity: 0.15; }
+      100% { transform: translateY(-60px) scale(3); opacity: 0; }
+    }
+
+    .comp-detective .window-light {
+      position: absolute;
+      top: 0;
+      right: 10%;
+      width: 80px;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(201,169,110,0.04), transparent 60%);
+      clip-path: polygon(30% 0, 70% 0, 100% 100%, 0% 100%);
+    }
+
+    .scene-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #faf8f5;
+      margin-bottom: 1rem;
+    }
+
+    .scene-text p {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: rgba(232,228,223,0.5);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .scene-meta {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .scene-meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .scene-meta-item .label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(201,169,110,0.6);
+      margin-bottom: 0.3rem;
+    }
+
+    .scene-meta-item .value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #faf8f5;
+    }
+
+    /* ── Marquee ───────────────────────────────────────────── */
+    .marquee-section {
+      padding: 4rem 0;
+      overflow: hidden;
+      border-top: 1px solid rgba(201,169,110,0.06);
+      border-bottom: 1px solid rgba(201,169,110,0.06);
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 30s linear infinite;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    .marquee-item {
+      flex-shrink: 0;
+      padding: 0 3rem;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      font-style: italic;
+      color: rgba(201,169,110,0.12);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .marquee-item .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: rgba(201,169,110,0.25);
+      border-radius: 50%;
+      margin: 0 2rem;
+      vertical-align: middle;
+    }
+
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── Archive Grid ──────────────────────────────────────── */
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      margin-top: 3rem;
+      background: rgba(201,169,110,0.06);
+    }
+
+    .archive-cell {
+      background: #08080d;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+      transition: all 0.4s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .archive-cell::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,169,110,0.04), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .archive-cell:hover::after {
+      opacity: 1;
+    }
+
+    .archive-cell:hover {
+      background: #0d0b12;
+    }
+
+    .archive-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: rgba(201,169,110,0.08);
+      line-height: 1;
+      transition: color 0.4s;
+    }
+
+    .archive-cell:hover .archive-number {
+      color: rgba(201,169,110,0.2);
+    }
+
+    .archive-cell h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #faf8f5;
+      margin-bottom: 0.3rem;
+    }
+
+    .archive-cell p {
+      font-size: 0.75rem;
+      color: rgba(232,228,223,0.35);
+    }
+
+    /* ── CTA Section ───────────────────────────────────────── */
+    .cta-section {
+      padding: 10rem 3rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .cta-section .glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(201,169,110,0.06), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 900;
+      font-style: italic;
+      color: #faf8f5;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-desc {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(232,228,223,0.45);
+      max-width: 440px;
+      margin: 0 auto 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.1rem 3rem;
+      background: #c9a96e;
+      color: #08080d;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.4s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-btn:hover {
+      background: #dbc48a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(201,169,110,0.25);
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .footer {
+      padding: 4rem 3rem;
+      border-top: 1px solid rgba(201,169,110,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0.3em;
+      color: rgba(201,169,110,0.4);
+      text-transform: uppercase;
+    }
+
+    .footer-text {
+      font-size: 0.7rem;
+      color: rgba(232,228,223,0.25);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(232,228,223,0.3);
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #c9a96e;
+    }
+
+    /* ── Scroll Reveal ─────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .directors-grid { grid-template-columns: 1fr; }
+      .scene-breakdown { grid-template-columns: 1fr; gap: 2rem; }
+      .archive-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .section { padding: 5rem 1.5rem; }
+      .film-frame { flex: 0 0 300px; }
+      .archive-grid { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">Frame</div>
+    <ul class="nav-links">
+      <li><a href="#films">Films</a></li>
+      <li><a href="#directors">Directors</a></li>
+      <li><a href="#archive">Archive</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-circles">
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+    </div>
+    <div class="hero-crosshair"></div>
+    <div class="hero-crosshair"></div>
+    <div class="hero-crosshair"></div>
+    <div class="hero-crosshair-h"></div>
+    <div class="hero-crosshair-h"></div>
+
+    <div class="hero-content">
+      <p class="hero-subtitle">Est. 1947 — Digital Cinema Experience</p>
+      <h1 class="hero-title"><em>FRAME</em></h1>
+      <p class="hero-desc">Where shadow meets light, every frame tells a story. A curated collection of cinematic moments from the golden age of noir to the digital frontier.</p>
+      <a href="#films" class="hero-cta">
+        Enter the Archive
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="film-strip-border">
+      <div class="perf"></div><div class="perf"></div><div class="perf"></div><div class="perf"></div>
+      <div class="perf"></div><div class="perf"></div><div class="perf"></div><div class="perf"></div>
+      <div class="perf"></div><div class="perf"></div><div class="perf"></div><div class="perf"></div>
+      <div class="perf"></div><div class="perf"></div><div class="perf"></div><div class="perf"></div>
+      <div class="perf"></div><div class="perf"></div><div class="perf"></div><div class="perf"></div>
+      <div class="perf"></div><div class="perf"></div><div class="perf"></div><div class="perf"></div>
+      <div class="perf"></div><div class="perf"></div><div class="perf"></div><div class="perf"></div>
+      <div class="perf"></div><div class="perf"></div><div class="perf"></div><div class="perf"></div>
+    </div>
+  </section>
+
+  <!-- Film Strip Section -->
+  <section class="film-strip-section" id="films">
+    <div class="film-strip-header">
+      <p class="section-label reveal">Now Showing</p>
+      <h2 class="section-title reveal reveal-delay-1">Featured Scenes</h2>
+      <p class="section-desc reveal reveal-delay-2">Each frame is a window into a world crafted by master storytellers. Hover to explore.</p>
+    </div>
+
+    <div class="sprocket-row">
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+    </div>
+
+    <div class="film-strip-track">
+      <!-- Frame 1: Noir Cityscape -->
+      <div class="film-frame">
+        <div class="film-frame-img">
+          <div class="scene scene-noir">
+            <div class="moon"></div>
+            <div class="building"><div class="window" style="top:20%;left:30%"></div><div class="window" style="top:40%;left:60%"></div><div class="window" style="top:60%;left:40%"></div></div>
+            <div class="building"><div class="window" style="top:15%;left:45%"></div><div class="window" style="top:35%;left:25%"></div><div class="window" style="top:55%;left:55%"></div><div class="window" style="top:70%;left:35%"></div></div>
+            <div class="building"><div class="window" style="top:25%;left:50%"></div><div class="window" style="top:50%;left:30%"></div></div>
+            <div class="building"><div class="window" style="top:20%;left:40%"></div><div class="window" style="top:45%;left:60%"></div><div class="window" style="top:65%;left:35%"></div></div>
+            <div class="building"><div class="window" style="top:30%;left:50%"></div><div class="window" style="top:55%;left:30%"></div></div>
+            <div class="fog"></div>
+          </div>
+        </div>
+        <div class="film-frame-info">
+          <h3>Midnight Boulevard</h3>
+          <p>A city that never sleeps, illuminated by flickering neon and moral ambiguity</p>
+          <span class="year">1947 · Film Noir</span>
+        </div>
+      </div>
+
+      <!-- Frame 2: Spotlight -->
+      <div class="film-frame">
+        <div class="film-frame-img">
+          <div class="scene scene-spotlight">
+            <div class="spot"></div>
+            <div class="figure"></div>
+            <div class="floor"></div>
+          </div>
+        </div>
+        <div class="film-frame-info">
+          <h3>The Interrogation</h3>
+          <p>One light, one chair, one truth waiting to be uncovered</p>
+          <span class="year">1952 · Crime Drama</span>
+        </div>
+      </div>
+
+      <!-- Frame 3: Typewriter -->
+      <div class="film-frame">
+        <div class="film-frame-img">
+          <div class="scene scene-typewriter">
+            <div class="paper">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="cursor-blink"></div>
+            </div>
+            <div class="desk"></div>
+          </div>
+        </div>
+        <div class="film-frame-info">
+          <h3>Confessions at Dawn</h3>
+          <p>Every great story begins with a single keystroke in the quiet hours</p>
+          <span class="year">1961 · Mystery</span>
+        </div>
+      </div>
+
+      <!-- Frame 4: Film Reel -->
+      <div class="film-frame">
+        <div class="film-frame-img">
+          <div class="scene scene-reel">
+            <div class="reel">
+              <div class="spoke"></div>
+              <div class="spoke"></div>
+              <div class="spoke"></div>
+              <div class="spoke"></div>
+              <div class="spoke"></div>
+              <div class="spoke"></div>
+            </div>
+            <div class="sprocket"></div>
+            <div class="sprocket"></div>
+            <div class="sprocket"></div>
+            <div class="sprocket"></div>
+          </div>
+        </div>
+        <div class="film-frame-info">
+          <h3>Reel to Reel</h3>
+          <p>The mechanical heartbeat of cinema — celluloid dreams spinning eternally</p>
+          <span class="year">1938 · Documentary</span>
+        </div>
+      </div>
+
+      <!-- Frame 5: Rain -->
+      <div class="film-frame">
+        <div class="film-frame-img">
+          <div class="scene scene-rain">
+            <div class="rain-line" style="left:10%;animation-delay:0s"></div>
+            <div class="rain-line" style="left:20%;animation-delay:0.2s"></div>
+            <div class="rain-line" style="left:35%;animation-delay:0.5s"></div>
+            <div class="rain-line" style="left:45%;animation-delay:0.1s"></div>
+            <div class="rain-line" style="left:55%;animation-delay:0.4s"></div>
+            <div class="rain-line" style="left:65%;animation-delay:0.3s"></div>
+            <div class="rain-line" style="left:75%;animation-delay:0.6s"></div>
+            <div class="rain-line" style="left:85%;animation-delay:0.15s"></div>
+            <div class="rain-line" style="left:92%;animation-delay:0.45s"></div>
+            <div class="silhouette"></div>
+            <div class="puddle"></div>
+          </div>
+        </div>
+        <div class="film-frame-info">
+          <h3>Rain on Elm Street</h3>
+          <p>Solitude finds its poetry in the rhythm of falling rain</p>
+          <span class="year">1955 · Thriller</span>
+        </div>
+      </div>
+
+      <!-- Frame 6: Neon -->
+      <div class="film-frame">
+        <div class="film-frame-img">
+          <div class="scene scene-neon">
+            <div class="wall"></div>
+            <div class="neon-text">Café</div>
+          </div>
+        </div>
+        <div class="film-frame-info">
+          <h3>Neon Nocturne</h3>
+          <p>Where the city's pulse beats loudest — in the glow of a flickering sign</p>
+          <span class="year">1968 · Neo-Noir</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sprocket-row" style="margin-top:1rem">
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+      <div class="sprocket-hole"></div><div class="sprocket-hole"></div><div class="sprocket-hole"></div>
+    </div>
+  </section>
+
+  <!-- Directors Section -->
+  <section class="section" id="directors">
+    <p class="section-label reveal">The Visionaries</p>
+    <h2 class="section-title reveal reveal-delay-1">Directors Who<br>Shaped the Dark</h2>
+    <p class="section-desc reveal reveal-delay-2">The masters of shadow and silence, whose lenses captured the human condition in its most raw and beautiful form.</p>
+
+    <div class="directors-grid">
+      <div class="director-card reveal">
+        <p class="director-quote">Light defines shadow. Without darkness, cinema has nothing to reveal.</p>
+        <p class="director-name">Fritz Lang</p>
+        <p class="director-role">Metropolis · M · The Big Heat</p>
+      </div>
+      <div class="director-card reveal reveal-delay-1">
+        <p class="director-quote">In noir, the detective doesn't solve the mystery — the mystery solves him.</p>
+        <p class="director-name">Billy Wilder</p>
+        <p class="director-role">Sunset Boulevard · Double Indemnity</p>
+      </div>
+      <div class="director-card reveal reveal-delay-2">
+        <p class="director-quote">The city is a labyrinth, and every alley is a subplot.</p>
+        <p class="director-name">Jacques Tourneur</p>
+        <p class="director-role">Out of the Past · Cat People</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene Breakdown -->
+  <section class="section" id="about">
+    <div class="scene-breakdown">
+      <div class="scene-visual reveal">
+        <div class="comp comp-detective">
+          <div class="window-light"></div>
+          <div class="lamp-glow"></div>
+          <div class="desk-lamp"></div>
+          <div class="figure-body"></div>
+          <div class="hat"></div>
+          <div class="smoke"></div>
+          <div class="smoke"></div>
+          <div class="smoke"></div>
+        </div>
+      </div>
+      <div class="scene-text reveal reveal-delay-1">
+        <p class="section-label">Behind the Lens</p>
+        <h3>The Art of<br>Chiaroscuro</h3>
+        <p>Born from German Expressionism and forged in the streets of post-war Hollywood, film noir transformed cinema into a canvas of moral shadows. High-contrast lighting, Dutch angles, and rain-slicked streets became the visual language of disillusionment.</p>
+        <p>Today, FRAME preserves and reimagines this aesthetic for the digital age — where every pixel can cast a shadow, and every interaction tells a story.</p>
+        <div class="scene-meta">
+          <div class="scene-meta-item">
+            <span class="label">Founded</span>
+            <span class="value">1947</span>
+          </div>
+          <div class="scene-meta-item">
+            <span class="label">Films Curated</span>
+            <span class="value">2,847</span>
+          </div>
+          <div class="scene-meta-item">
+            <span class="label">Directors</span>
+            <span class="value">196</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <span class="marquee-item">Film Noir <span class="dot"></span> Chiaroscuro <span class="dot"></span> Expressionism <span class="dot"></span> Hard-Boiled <span class="dot"></span> Femme Fatale <span class="dot"></span> Voice-Over <span class="dot"></span> Dutch Angle <span class="dot"></span> Low-Key Lighting <span class="dot"></span> Rain <span class="dot"></span> Shadows <span class="dot"></span></span>
+      <span class="marquee-item">Film Noir <span class="dot"></span> Chiaroscuro <span class="dot"></span> Expressionism <span class="dot"></span> Hard-Boiled <span class="dot"></span> Femme Fatale <span class="dot"></span> Voice-Over <span class="dot"></span> Dutch Angle <span class="dot"></span> Low-Key Lighting <span class="dot"></span> Rain <span class="dot"></span> Shadows <span class="dot"></span></span>
+    </div>
+  </div>
+
+  <!-- Archive Grid -->
+  <section class="section" id="archive">
+    <p class="section-label reveal">The Archive</p>
+    <h2 class="section-title reveal reveal-delay-1">Essential Viewing</h2>
+    <p class="section-desc reveal reveal-delay-2">The definitive collection of noir masterpieces, curated for the discerning cinephile.</p>
+
+    <div class="archive-grid reveal reveal-delay-3">
+      <div class="archive-cell">
+        <span class="archive-number">01</span>
+        <div>
+          <h4>The Maltese Falcon</h4>
+          <p>1941 · John Huston</p>
+        </div>
+      </div>
+      <div class="archive-cell">
+        <span class="archive-number">02</span>
+        <div>
+          <h4>Double Indemnity</h4>
+          <p>1944 · Billy Wilder</p>
+        </div>
+      </div>
+      <div class="archive-cell">
+        <span class="archive-number">03</span>
+        <div>
+          <h4>The Big Sleep</h4>
+          <p>1946 · Howard Hawks</p>
+        </div>
+      </div>
+      <div class="archive-cell">
+        <span class="archive-number">04</span>
+        <div>
+          <h4>Out of the Past</h4>
+          <p>1947 · Jacques Tourneur</p>
+        </div>
+      </div>
+      <div class="archive-cell">
+        <span class="archive-number">05</span>
+        <div>
+          <h4>Sunset Boulevard</h4>
+          <p>1950 · Billy Wilder</p>
+        </div>
+      </div>
+      <div class="archive-cell">
+        <span class="archive-number">06</span>
+        <div>
+          <h4>In a Lonely Place</h4>
+          <p>1950 · Nicholas Ray</p>
+        </div>
+      </div>
+      <div class="archive-cell">
+        <span class="archive-number">07</span>
+        <div>
+          <h4>The Third Man</h4>
+          <p>1949 · Carol Reed</p>
+        </div>
+      </div>
+      <div class="archive-cell">
+        <span class="archive-number">08</span>
+        <div>
+          <h4>Touch of Evil</h4>
+          <p>1958 · Orson Welles</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="glow"></div>
+    <h2 class="cta-title reveal">Every Frame<br>a Masterpiece</h2>
+    <p class="cta-desc reveal reveal-delay-1">Step into the shadows. Explore the archive. Let the darkness reveal what light cannot.</p>
+    <button class="cta-btn reveal reveal-delay-2">
+      Explore Full Collection
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-logo">Frame</div>
+    <p class="footer-text">A digital cinema experience — curated with shadow and light</p>
+    <ul class="footer-links">
+      <li><a href="#">Archive</a></li>
+      <li><a href="#">Directors</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </footer>
+
+  <!-- Scroll Reveal Script -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

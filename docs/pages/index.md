@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 79 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 80 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -757,6 +757,15 @@ const pages = [
     rating: 9.4,
     description: 'AI 机器人伙伴落地页，灵感来自 Fauna Robotics，CSS 纯手绘机器人角色 + Blob 渐变背景动画 + 功能网格 + 使用步骤 + 用户评价',
   },
+  {
+    id: 'cinema-noir',
+    title: 'FRAME 黑色电影数字体验',
+    category: 'creative',
+    tags: ['黑色电影', '暗色主题', 'CSS动画', '水平滚动', '电影'],
+    colors: ['#08080d', '#c9a96e', '#faf8f5'],
+    rating: 9.5,
+    description: '暗色电影体验页，灵感来自 Awwwards 黑色电影美学，CSS-only 电影场景画廊 + 胶片齿孔 + 同心圆取景器 + 霓虹闪烁 + 雨中剪影 + 导演语录 + 档案网格',
+  },
 ]
 
 const categories = [
@@ -814,12 +823,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 78 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 80 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="78 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="80 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -828,7 +837,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 78 个完整页面</span>
+      <span>📦 80 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
