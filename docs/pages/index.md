@@ -766,6 +766,15 @@ const pages = [
     rating: 9.5,
     description: '暗色电影体验页，灵感来自 Awwwards 黑色电影美学，CSS-only 电影场景画廊 + 胶片齿孔 + 同心圆取景器 + 霓虹闪烁 + 雨中剪影 + 导演语录 + 档案网格',
   },
+  {
+    id: 'vinyl-record-store',
+    title: 'Groove Vault 黑胶唱片商城',
+    category: 'ecommerce',
+    tags: ['黑胶唱片', '音乐商城', '暗色主题', 'Marquee', '复古'],
+    colors: ['#0a0a0f', '#e8c547', '#1a1a24'],
+    rating: 9.4,
+    description: '暗色系黑胶唱片电商，灵感来自 Rough Trade/Amoeba Music，CSS 唱片旋转动画 + 唱片封套网格 + 流派筛选 + 热门发行 + 购物车浮层 + Newsletter',
+  },
 ]
 
 const categories = [

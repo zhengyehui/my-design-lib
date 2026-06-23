@@ -292,7 +292,8 @@ export default defineConfig({
             { text: 'AURA Beauty 美妆电商', link: '/pages/beauty-skincare' },
             { text: 'Fizz & Folk 气泡饮品', link: '/pages/beverage-brand' },
             { text: 'LUMIÈRE 奢华珠宝', link: '/pages/jewelry-luxe' },
-            { text: 'GridWork 设计素材商城', link: '/pages/design-marketplace' }
+            { text: 'GridWork 设计素材商城', link: '/pages/design-marketplace' },
+            { text: 'Groove Vault 黑胶唱片', link: '/pages/vinyl-record-store' }
           ]
         },
         {
