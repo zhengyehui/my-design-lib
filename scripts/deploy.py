@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-import sys, os, time
+"""Deploy design-lib to server via paramiko SFTP."""
+import sys
+import os
+import time
+
 sys.path.insert(0, '/Users/weta/Library/Python/3.9/lib/python/site-packages')
 import paramiko
 
@@ -11,12 +15,11 @@ sftp = ssh.open_sftp()
 local_dist = os.path.expanduser('~/desktop/project/design-lib/docs/.vitepress/dist')
 remote_base = '/var/www/design-lib/'
 
-# Ensure remote base exists
+# Ensure remote base directory exists
 ssh.exec_command(f'mkdir -p {remote_base}')
-time.sleep(0.1)
+time.sleep(0.5)
 
 uploaded = 0
-skipped = 0
 for root, dirs, files in os.walk(local_dist):
     for f in files:
         local_path = os.path.join(root, f)
@@ -24,7 +27,7 @@ for root, dirs, files in os.walk(local_dist):
         remote_path = os.path.join(remote_base, rel_path)
         remote_dir = os.path.dirname(remote_path)
         ssh.exec_command(f'mkdir -p {remote_dir}')
-        time.sleep(0.02)
+        time.sleep(0.03)
         sftp.put(local_path, remote_path)
         uploaded += 1
 

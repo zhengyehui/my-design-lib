@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INDEX Studio — 极简主义设计事务所</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  /* ── Reset & Base ─────────────────────────────────── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --accent: #ff3300;
+    --bg: #f5f3ef;
+    --ink: #0a0a0a;
+    --dot: #c8c4bc;
+    --mono: var(--font-mono);
+    --sans: var(--font-sans);
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--mono);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: var(--leading-normal);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ── Dotted Grid Background ───────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, var(--dot) 0.8px, transparent 0.8px);
+    background-size: 28px 28px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; }
+
+  /* ── Utility ──────────────────────────────────────── */
+  .mono { font-family: var(--mono); }
+  .sans { font-family: var(--sans); }
+  .accent { color: var(--accent); }
+  .uppercase { text-transform: uppercase; letter-spacing: 0.08em; }
+  .bracket::before { content: '['; }
+  .bracket::after  { content: ']'; }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 var(--space-8);
+  }
+
+  /* ── Corner Brackets ──────────────────────────────── */
+  .corners {
+    position: relative;
+    padding: var(--space-10) var(--space-8);
+  }
+  .corners::before,
+  .corners::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: var(--ink);
+    border-style: solid;
+  }
+  .corners::before {
+    top: 0; left: 0;
+    border-width: 1px 0 0 1px;
+  }
+  .corners::after {
+    bottom: 0; right: 0;
+    border-width: 0 1px 1px 0;
+  }
+
+  /* ── Header ───────────────────────────────────────── */
+  .site-header {
+    padding: var(--space-6) 0;
+    border-bottom: 1px dashed var(--dot);
+  }
+  .site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: var(--mono);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+  .logo span { color: var(--accent); }
+  .nav-links {
+    display: flex;
+    gap: var(--space-6);
+    list-style: none;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.3s var(--ease-out);
+  }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── Hero ─────────────────────────────────────────── */
+  .hero {
+    padding: var(--space-24) 0 var(--space-16);
+    border-bottom: 1px dashed var(--dot);
+  }
+  .hero-number {
+    font-size: var(--text-xs);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: var(--space-4);
+  }
+  .hero-title {
+    font-family: var(--mono);
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-8);
+  }
+  .hero-title em {
+    font-style: normal;
+    color: var(--accent);
+    display: inline-block;
+    position: relative;
+  }
+  .hero-title em::after {
+    content: '';
+    position: absolute;
+    bottom: 0.08em;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--accent);
+  }
+  .hero-meta {
+    display: flex;
+    gap: var(--space-10);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--dot);
+    padding-top: var(--space-6);
+  }
+  .hero-meta dt { margin-bottom: var(--space-1); }
+  .hero-meta dd { color: var(--ink); font-weight: var(--weight-bold); }
+
+  /* ── Manifesto ────────────────────────────────────── */
+  .manifesto {
+    padding: var(--space-16) 0;
+    border-bottom: 1px dashed var(--dot);
+  }
+  .manifesto-text {
+    font-family: var(--sans);
+    font-size: clamp(1.15rem, 2.5vw, 1.6rem);
+    line-height: 1.8;
+    max-width: 720px;
+    color: var(--text-secondary);
+  }
+  .manifesto-text strong {
+    color: var(--ink);
+    font-weight: var(--weight-bold);
+  }
+
+  /* ── Section Header ───────────────────────────────── */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    margin-bottom: var(--space-10);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--dot);
+  }
+  .section-num {
+    font-size: var(--text-xs);
+    color: var(--accent);
+    letter-spacing: 0.15em;
+  }
+  .section-label {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Projects (Receipt Style) ─────────────────────── */
+  .projects {
+    padding: var(--space-16) 0;
+  }
+  .project-item {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: var(--space-6);
+    padding: var(--space-8) 0;
+    border-bottom: 1px dashed var(--dot);
+    align-items: start;
+    transition: background 0.2s;
+  }
+  .project-item:hover { background: rgba(255,51,0,0.03); }
+  .project-idx {
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-bold);
+    line-height: 1;
+    color: var(--accent);
+  }
+  .project-body {}
+  .project-title {
+    font-family: var(--sans);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    margin-bottom: var(--space-2);
+  }
+  .project-desc {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 520px;
+    font-family: var(--sans);
+  }
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+  .project-tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border: 1px solid var(--dot);
+    border-radius: 0;
+    background: transparent;
+  }
+  .project-year {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    text-align: right;
+    white-space: nowrap;
+    padding-top: 4px;
+  }
+
+  /* ── Project Card (Visual) ────────────────────────── */
+  .project-visual {
+    margin-top: var(--space-6);
+    aspect-ratio: 16/9;
+    background: var(--ink);
+    border: 1px solid var(--dot);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .project-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent) 0%, transparent 60%);
+    opacity: 0.15;
+    transition: opacity 0.4s;
+  }
+  .project-visual:hover::before { opacity: 0.35; }
+  .project-visual-label {
+    position: absolute;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    font-size: var(--text-xs);
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+  .project-visual-corner {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    font-size: var(--text-xs);
+    color: #fff;
+    opacity: 0.4;
+  }
+
+  /* ── Services Grid ────────────────────────────────── */
+  .services {
+    padding: var(--space-16) 0;
+    border-top: 1px dashed var(--dot);
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-1);
+    background: var(--dot);
+    border: 1px solid var(--dot);
+  }
+  .service-card {
+    background: var(--bg);
+    padding: var(--space-8);
+    position: relative;
+    transition: background 0.2s;
+  }
+  .service-card:hover { background: #fff; }
+  .service-card::before,
+  .service-card::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--accent);
+    border-style: solid;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .service-card::before {
+    top: 8px; left: 8px;
+    border-width: 1px 0 0 1px;
+  }
+  .service-card::after {
+    bottom: 8px; right: 8px;
+    border-width: 0 1px 1px 0;
+  }
+  .service-card:hover::before,
+  .service-card:hover::after { opacity: 1; }
+  .service-num {
+    font-size: var(--text-xs);
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: var(--space-4);
+  }
+  .service-name {
+    font-family: var(--sans);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    margin-bottom: var(--space-3);
+  }
+  .service-desc {
+    font-family: var(--sans);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Stats Marquee ────────────────────────────────── */
+  .stats-bar {
+    padding: var(--space-10) 0;
+    border-top: 1px dashed var(--dot);
+    border-bottom: 1px dashed var(--dot);
+    overflow: hidden;
+  }
+  .stats-inner {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-16);
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-bold);
+    line-height: 1;
+    margin-bottom: var(--space-2);
+  }
+  .stat-label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-secondary);
+  }
+
+  /* ── Clients ──────────────────────────────────────── */
+  .clients {
+    padding: var(--space-12) 0;
+    border-bottom: 1px dashed var(--dot);
+  }
+  .clients-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-8);
+    list-style: none;
+    margin-top: var(--space-6);
+  }
+  .clients-list li {
+    font-family: var(--sans);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--dot);
+    transition: color 0.3s;
+    cursor: default;
+  }
+  .clients-list li:hover { color: var(--ink); }
+
+  /* ── Philosophy (Split) ───────────────────────────── */
+  .philosophy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px dashed var(--dot);
+  }
+  .philosophy-left {
+    padding: var(--space-16) var(--space-8);
+    background: var(--ink);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .philosophy-quote {
+    font-family: var(--sans);
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.35;
+    max-width: 400px;
+  }
+  .philosophy-quote em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .philosophy-right {
+    padding: var(--space-16) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .philosophy-body {
+    font-family: var(--sans);
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--space-6);
+  }
+  .philosophy-principles {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .philosophy-principles li {
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-left: var(--space-5);
+    position: relative;
+    font-family: var(--mono);
+  }
+  .philosophy-principles li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  /* ── Contact ──────────────────────────────────────── */
+  .contact {
+    padding: var(--space-16) 0 var(--space-12);
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+  .contact-left {}
+  .contact-heading {
+    font-family: var(--mono);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: var(--space-6);
+  }
+  .contact-email {
+    font-family: var(--mono);
+    font-size: var(--text-lg);
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 2px;
+    transition: opacity 0.2s;
+  }
+  .contact-email:hover { opacity: 0.7; }
+  .contact-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--space-6);
+    text-align: right;
+  }
+  .contact-line {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+  }
+  .contact-line strong {
+    color: var(--ink);
+    display: block;
+    font-size: var(--text-sm);
+    margin-top: var(--space-1);
+  }
+
+  /* ── Footer ───────────────────────────────────────── */
+  .site-footer {
+    padding: var(--space-6) 0;
+    border-top: 1px dashed var(--dot);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-line {
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 var(--space-3);
+  }
+
+  /* ── Responsive ───────────────────────────────────── */
+  @media (max-width: 768px) {
+    .hero-title { font-size: clamp(2rem, 8vw, 3.5rem); }
+    .hero-meta { flex-direction: column; gap: var(--space-4); }
+    .project-item { grid-template-columns: 40px 1fr; }
+    .project-year { grid-column: 2; text-align: left; margin-top: var(--space-2); }
+    .services-grid { grid-template-columns: 1fr; }
+    .stats-inner { flex-direction: column; gap: var(--space-8); align-items: center; }
+    .philosophy { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .contact-right { text-align: left; }
+    .nav-links { display: none; }
+    .clients-list { gap: var(--space-3) var(--space-5); }
+  }
+
+  /* ── Animations ───────────────────────────────────── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in {
+    opacity: 0;
+    animation: fadeInUp 0.6s var(--ease-out) forwards;
+  }
+  .fade-in:nth-child(1) { animation-delay: 0.1s; }
+  .fade-in:nth-child(2) { animation-delay: 0.2s; }
+  .fade-in:nth-child(3) { animation-delay: 0.3s; }
+  .fade-in:nth-child(4) { animation-delay: 0.4s; }
+  .fade-in:nth-child(5) { animation-delay: 0.5s; }
+
+  /* ── Scroll Reveal ────────────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="logo"><span>■</span> INDEX STUDIO</div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#projects">项目</a></li>
+          <li><a href="#services">服务</a></li>
+          <li><a href="#philosophy">理念</a></li>
+          <li><a href="#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-number fade-in">EST. 2019 — DESIGN AGENCY</div>
+      <h1 class="hero-title fade-in">
+        WE BUILD<br>
+        <em>CLARITY</em><br>
+        FROM NOISE
+      </h1>
+      <div class="hero-meta fade-in">
+        <dl>
+          <dt>所在地</dt>
+          <dd>Tokyo / Berlin</dd>
+        </dl>
+        <dl>
+          <dt>专注领域</dt>
+          <dd>品牌 / 界面 / 体验</dd>
+        </dl>
+        <dl>
+          <dt>成员</dt>
+          <dd>12 人</dd>
+        </dl>
+        <dl>
+          <dt>状态</dt>
+          <dd class="accent">● 可预约</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manifesto -->
+  <section class="manifesto">
+    <div class="container">
+      <p class="manifesto-text reveal">
+        我们相信 <strong>设计的本质是去除</strong>。在信息过载的时代，真正的奢侈不是加法——而是克制。每一个像素都必须证明自己的存在价值，否则就应该消失。我们为那些理解 <strong>"少即是多"</strong> 不是口号、而是信仰的品牌工作。
+      </p>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2 class="section-label">精选项目</h2>
+      </div>
+
+      <article class="project-item reveal">
+        <span class="project-idx">01</span>
+        <div class="project-body">
+          <h3 class="project-title">VOID 杂志 — 数字出版重塑</h3>
+          <p class="project-desc">为独立艺术杂志 VOID 设计全新数字阅读体验。极简排版系统 + 无图片纯文字叙事，回归内容本身的力量。</p>
+          <div class="project-tags">
+            <span class="project-tag">编辑设计</span>
+            <span class="project-tag">排版系统</span>
+            <span class="project-tag">响应式</span>
+          </div>
+          <div class="project-visual">
+            <span class="project-visual-corner">↗</span>
+            <span class="project-visual-label">VOID Magazine / 2024</span>
+          </div>
+        </div>
+        <span class="project-year">2024</span>
+      </article>
+
+      <article class="project-item reveal">
+        <span class="project-idx">02</span>
+        <div class="project-body">
+          <h3 class="project-title">FORMA 家具 — 品牌视觉系统</h3>
+          <p class="project-desc">极简家具品牌 FORMA 的完整视觉识别。从 Logo 到包装到展厅导视，统一的几何语言贯穿每个触点。</p>
+          <div class="project-tags">
+            <span class="project-tag">品牌设计</span>
+            <span class="project-tag">视觉识别</span>
+            <span class="project-tag">包装</span>
+          </div>
+          <div class="project-visual">
+            <span class="project-visual-corner">↗</span>
+            <span class="project-visual-label">FORMA / 2024</span>
+          </div>
+        </div>
+        <span class="project-year">2024</span>
+      </article>
+
+      <article class="project-item reveal">
+        <span class="project-idx">03</span>
+        <div class="project-body">
+          <h3 class="project-title">NØRD 银行 — Fintech 界面设计</h3>
+          <p class="project-desc">为北欧数字银行 NØRD 设计全套银行应用界面。冷色调克制美学 + 高信息密度 + 无障碍优先。</p>
+          <div class="project-tags">
+            <span class="project-tag">UI 设计</span>
+            <span class="project-tag">Fintech</span>
+            <span class="project-tag">Design System</span>
+          </div>
+          <div class="project-visual">
+            <span class="project-visual-corner">↗</span>
+            <span class="project-visual-label">NØRD Bank / 2023</span>
+          </div>
+        </div>
+        <span class="project-year">2023</span>
+      </article>
+
+      <article class="project-item reveal">
+        <span class="project-idx">04</span>
+        <div class="project-body">
+          <h3 class="project-title">ARCHIV 档案馆 — 数字典藏</h3>
+          <p class="project-desc">为柏林当代艺术档案馆设计线上数据库。时间线浏览 + 元数据筛选 + 极简黑白界面，让艺术品自己说话。</p>
+          <div class="project-tags">
+            <span class="project-tag">Web App</span>
+            <span class="project-tag">数据可视化</span>
+            <span class="project-tag">文化机构</span>
+          </div>
+          <div class="project-visual">
+            <span class="project-visual-corner">↗</span>
+            <span class="project-visual-label">ARCHIV Berlin / 2023</span>
+          </div>
+        </div>
+        <span class="project-year">2023</span>
+      </article>
+
+      <article class="project-item reveal">
+        <span class="project-idx">05</span>
+        <div class="project-body">
+          <h3 class="project-title">SIGNAL — 声音装置体验</h3>
+          <p class="project-desc">为慕尼黑声音艺术节设计互动装置界面。实时音频可视化 + 触摸交互 + 极简控制面板。</p>
+          <div class="project-tags">
+            <span class="project-tag">互动装置</span>
+            <span class="project-tag">音频可视化</span>
+            <span class="project-tag">沉浸式</span>
+          </div>
+          <div class="project-visual">
+            <span class="project-visual-corner">↗</span>
+            <span class="project-visual-label">SIGNAL Festival / 2023</span>
+          </div>
+        </div>
+        <span class="project-year">2023</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat fade-in">
+        <div class="stat-num accent">47</div>
+        <div class="stat-label">已完成项目</div>
+      </div>
+      <div class="stat fade-in">
+        <div class="stat-num">6</div>
+        <div class="stat-label">年设计经验</div>
+      </div>
+      <div class="stat fade-in">
+        <div class="stat-num">12</div>
+        <div class="stat-label">团队成员</div>
+      </div>
+      <div class="stat fade-in">
+        <div class="stat-num">3</div>
+        <div class="stat-label">国际奖项</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2 class="section-label">服务能力</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-num">01</div>
+          <h3 class="service-name">品牌策略</h3>
+          <p class="service-desc">品牌定位、视觉识别系统、命名策略。我们从第一性原理出发，找到品牌的本质。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-num">02</div>
+          <h3 class="service-name">界面设计</h3>
+          <p class="service-desc">Web 应用、移动端、设计系统。每一个交互都经过深思熟虑，每一个像素都有存在的理由。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-num">03</div>
+          <h3 class="service-name">体验架构</h3>
+          <p class="service-desc">信息架构、用户旅程、可用性研究。我们设计的不是界面，而是理解和信任的路径。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-num">04</div>
+          <h3 class="service-name">编辑设计</h3>
+          <p class="service-desc">数字出版、杂志排版、内容策略。让文字和版式本身成为设计的主角。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-num">05</div>
+          <h3 class="service-name">空间导视</h3>
+          <p class="service-desc">展厅设计、环境图形、空间导视系统。将数字美学延伸到物理空间。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-num">06</div>
+          <h3 class="service-name">技术实现</h3>
+          <p class="service-desc">前端开发、动效实现、性能优化。设计稿不是终点——落地才是。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clients -->
+  <section class="clients">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2 class="section-label">合作伙伴</h2>
+      </div>
+      <ul class="clients-list">
+        <li>VOID Magazine</li>
+        <li>FORMA</li>
+        <li>NØRD Bank</li>
+        <li>ARCHIV Berlin</li>
+        <li>Mono & Co</li>
+        <li>SIGNAL Festival</li>
+        <li>Type Foundry</li>
+        <li>Haus Studio</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Philosophy -->
+  <section class="philosophy" id="philosophy">
+    <div class="philosophy-left">
+      <blockquote class="philosophy-quote">
+        "好的设计是<br><em>看不见的</em>设计。"
+      </blockquote>
+    </div>
+    <div class="philosophy-right">
+      <p class="philosophy-body">
+        INDEX Studio 成立于 2019 年，由一群相信"克制即力量"的设计师组成。我们在东京和柏林两地办公，为全球品牌提供品牌策略、界面设计和体验架构服务。
+      </p>
+      <ul class="philosophy-principles">
+        <li>减法优先 — 去除一切不必要的</li>
+        <li>功能即美 — 形式追随功能</li>
+        <li>细节即品质 — 每个像素都有理由</li>
+        <li>克制即奢侈 — 少即是多</li>
+        <li>时间即检验 — 拒绝流行趋势</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <h2 class="section-label">开始合作</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-left">
+          <h3 class="contact-heading">LET'S<br>TALK.</h3>
+          <a href="mailto:hello@index.studio" class="contact-email">hello@index.studio</a>
+        </div>
+        <div class="contact-right">
+          <div class="contact-line">
+            东京工作室
+            <strong>〒106-0032 東京都港区六本木 7-14-8</strong>
+          </div>
+          <div class="contact-line">
+            柏林工作室
+            <strong>Kreuzberg, Oranienstraße 42</strong>
+          </div>
+          <div class="contact-line">
+            预约咨询
+            <strong>每周一至五 10:00–18:00 JST</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <span>© 2024 INDEX STUDIO</span>
+      <span><span class="footer-line"></span> 東京 / ベルリン</span>
+      <span>BUILT WITH INTENT</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
