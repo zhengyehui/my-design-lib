@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeScope — AI Code Monitoring Dashboard</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       CodeScope — AI Code Monitoring Dashboard
+       Dark theme developer dashboard with error tracking,
+       code diffs, performance charts, and AI insights.
+       ============================================================ */
+
+    :root {
+      --cs-bg:          #0a0b0f;
+      --cs-bg-alt:      #0f1016;
+      --cs-surface:     #14151d;
+      --cs-surface-alt: #1a1b26;
+      --cs-surface-hover: #1e1f2e;
+      --cs-border:      #232438;
+      --cs-border-light:#2a2b42;
+      --cs-primary:     #6366f1;
+      --cs-primary-light:#818cf8;
+      --cs-primary-glow:rgba(99,102,241,0.15);
+      --cs-cyan:        #22d3ee;
+      --cs-cyan-glow:   rgba(34,211,238,0.12);
+      --cs-green:       #10b981;
+      --cs-green-bg:    rgba(16,185,129,0.1);
+      --cs-red:         #ef4444;
+      --cs-red-bg:      rgba(239,68,68,0.08);
+      --cs-orange:      #f59e0b;
+      --cs-orange-bg:   rgba(245,158,11,0.1);
+      --cs-purple:      #a78bfa;
+      --cs-text:        #e2e8f0;
+      --cs-text-sec:    #94a3b8;
+      --cs-text-muted:  #64748b;
+      --cs-sidebar-w:   260px;
+      --cs-topbar-h:    64px;
+      --cs-radius:      10px;
+      --cs-radius-sm:   6px;
+      --cs-shadow:      0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--cs-bg);
+      color: var(--cs-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Sidebar ──────────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--cs-sidebar-w);
+      height: 100vh;
+      background: var(--cs-bg-alt);
+      border-right: 1px solid var(--cs-border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform 0.3s;
+    }
+
+    .sidebar-logo {
+      height: var(--cs-topbar-h);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--cs-border);
+      gap: 10px;
+    }
+
+    .sidebar-logo .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--cs-primary), var(--cs-cyan));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .sidebar-logo span {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .sidebar-logo .badge {
+      font-size: 10px;
+      background: var(--cs-primary-glow);
+      color: var(--cs-primary-light);
+      padding: 2px 8px;
+      border-radius: var(--cs-radius-full);
+      border: 1px solid rgba(99,102,241,0.2);
+      font-weight: 600;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+    }
+
+    .nav-section {
+      margin-bottom: 24px;
+    }
+
+    .nav-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--cs-text-muted);
+      padding: 0 8px;
+      margin-bottom: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--cs-radius-sm);
+      color: var(--cs-text-sec);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: var(--cs-surface);
+      color: var(--cs-text);
+    }
+
+    .nav-item.active {
+      background: var(--cs-primary-glow);
+      color: var(--cs-primary-light);
+    }
+
+    .nav-item .icon {
+      width: 18px;
+      text-align: center;
+      font-size: 15px;
+      opacity: 0.8;
+    }
+
+    .nav-item.active .icon { opacity: 1; }
+
+    .nav-item .count {
+      margin-left: auto;
+      font-size: 11px;
+      background: var(--cs-surface);
+      padding: 1px 7px;
+      border-radius: var(--cs-radius-full);
+      color: var(--cs-text-muted);
+      font-weight: 600;
+    }
+
+    .nav-item.active .count {
+      background: rgba(99,102,241,0.2);
+      color: var(--cs-primary-light);
+    }
+
+    .sidebar-footer {
+      padding: 16px 12px;
+      border-top: 1px solid var(--cs-border);
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--cs-radius-sm);
+    }
+
+    .user-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #a78bfa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .user-info { flex: 1; }
+    .user-name { font-size: 13px; font-weight: 600; }
+    .user-role { font-size: 11px; color: var(--cs-text-muted); }
+
+    /* ── Main Content ─────────────────────────────────────── */
+    .main {
+      margin-left: var(--cs-sidebar-w);
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: var(--cs-topbar-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--cs-border);
+      background: var(--cs-bg-alt);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .topbar-breadcrumb {
+      font-size: 13px;
+      color: var(--cs-text-muted);
+    }
+
+    .topbar-breadcrumb span { color: var(--cs-text-sec); }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: var(--cs-radius-sm);
+      border: 1px solid var(--cs-border);
+      background: transparent;
+      color: var(--cs-text-sec);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .topbar-btn:hover {
+      background: var(--cs-surface);
+      border-color: var(--cs-border-light);
+      color: var(--cs-text);
+    }
+
+    .topbar-btn.primary {
+      background: var(--cs-primary);
+      border-color: var(--cs-primary);
+      color: #fff;
+    }
+
+    .topbar-btn.primary:hover {
+      background: var(--cs-primary-light);
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: var(--cs-radius-sm);
+      border: 1px solid var(--cs-border);
+      background: var(--cs-surface);
+      color: var(--cs-text-muted);
+      font-size: 13px;
+      min-width: 220px;
+    }
+
+    .search-box kbd {
+      margin-left: auto;
+      font-size: 11px;
+      background: var(--cs-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--cs-border);
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--cs-text-muted);
+    }
+
+    /* ── Content Area ─────────────────────────────────────── */
+    .content {
+      padding: 28px 32px;
+      max-width: 1400px;
+    }
+
+    /* ── AI Insight Banner ────────────────────────────────── */
+    .ai-banner {
+      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(34,211,238,0.06));
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: var(--cs-radius);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .ai-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--cs-primary), var(--cs-cyan));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      animation: ai-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes ai-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.3); }
+      50% { box-shadow: 0 0 20px 4px rgba(99,102,241,0.15); }
+    }
+
+    .ai-text { flex: 1; }
+    .ai-text strong { color: var(--cs-primary-light); }
+    .ai-text p { font-size: 13.5px; color: var(--cs-text-sec); line-height: 1.5; }
+    .ai-dismiss {
+      color: var(--cs-text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+    }
+
+    /* ── Stats Row ────────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--cs-surface);
+      border: 1px solid var(--cs-border);
+      border-radius: var(--cs-radius);
+      padding: 20px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:hover {
+      border-color: var(--cs-border-light);
+      transform: translateY(-2px);
+      box-shadow: var(--cs-shadow);
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .stat-card.red::after { background: linear-gradient(90deg, var(--cs-red), transparent); }
+    .stat-card.orange::after { background: linear-gradient(90deg, var(--cs-orange), transparent); }
+    .stat-card.green::after { background: linear-gradient(90deg, var(--cs-green), transparent); }
+    .stat-card.purple::after { background: linear-gradient(90deg, var(--cs-purple), transparent); }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .stat-label {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--cs-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .stat-card.red .stat-icon { background: var(--cs-red-bg); }
+    .stat-card.orange .stat-icon { background: var(--cs-orange-bg); }
+    .stat-card.green .stat-icon { background: var(--cs-green-bg); }
+    .stat-card.purple .stat-icon { background: rgba(167,139,250,0.1); }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-card.red .stat-value { color: var(--cs-red); }
+    .stat-card.orange .stat-value { color: var(--cs-orange); }
+    .stat-card.green .stat-value { color: var(--cs-green); }
+    .stat-card.purple .stat-value { color: var(--cs-purple); }
+
+    .stat-change {
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stat-change.up { color: var(--cs-red); }
+    .stat-change.down { color: var(--cs-green); }
+
+    /* ── Main Grid ────────────────────────────────────────── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 20px;
+    }
+
+    /* ── Card通用 ──────────────────────────────────────────── */
+    .card {
+      background: var(--cs-surface);
+      border: 1px solid var(--cs-border);
+      border-radius: var(--cs-radius);
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--cs-border);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .card-action-btn {
+      padding: 4px 10px;
+      border-radius: var(--cs-radius-sm);
+      border: 1px solid var(--cs-border);
+      background: transparent;
+      color: var(--cs-text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .card-action-btn:hover,
+    .card-action-btn.active {
+      background: var(--cs-primary-glow);
+      border-color: rgba(99,102,241,0.3);
+      color: var(--cs-primary-light);
+    }
+
+    /* ── Issues List ──────────────────────────────────────── */
+    .issues-list { padding: 4px 0; }
+
+    .issue-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--cs-border);
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+
+    .issue-item:last-child { border-bottom: none; }
+    .issue-item:hover { background: var(--cs-surface-hover); }
+
+    .issue-severity {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .issue-severity.critical { background: var(--cs-red); box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+    .issue-severity.warning { background: var(--cs-orange); box-shadow: 0 0 8px rgba(245,158,11,0.3); }
+    .issue-severity.info { background: var(--cs-cyan); box-shadow: 0 0 8px rgba(34,211,238,0.3); }
+    .issue-severity.resolved { background: var(--cs-green); }
+
+    .issue-body { flex: 1; min-width: 0; }
+
+    .issue-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .issue-title .tag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: var(--cs-radius-full);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .tag.critical { background: var(--cs-red-bg); color: var(--cs-red); }
+    .tag.warning { background: var(--cs-orange-bg); color: var(--cs-orange); }
+    .tag.info { background: var(--cs-cyan-glow); color: var(--cs-cyan); }
+    .tag.resolved { background: var(--cs-green-bg); color: var(--cs-green); }
+
+    .issue-meta {
+      font-size: 12px;
+      color: var(--cs-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .issue-meta code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      background: var(--cs-bg);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--cs-text-sec);
+    }
+
+    .issue-time {
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* ── Performance Chart (CSS-only) ─────────────────────── */
+    .perf-chart {
+      padding: 20px;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 160px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--cs-border);
+    }
+
+    .chart-bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .chart-bar {
+      width: 100%;
+      max-width: 28px;
+      border-radius: 4px 4px 0 0;
+      transition: all 0.3s ease;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .chart-bar:hover {
+      opacity: 0.8;
+      transform: scaleY(1.05);
+      transform-origin: bottom;
+    }
+
+    .chart-bar.primary { background: linear-gradient(180deg, var(--cs-primary), rgba(99,102,241,0.4)); }
+    .chart-bar.secondary { background: linear-gradient(180deg, var(--cs-cyan), rgba(34,211,238,0.3)); }
+
+    .chart-labels {
+      display: flex;
+      gap: 4px;
+      padding-top: 10px;
+    }
+
+    .chart-label {
+      flex: 1;
+      text-align: center;
+      font-size: 10px;
+      color: var(--cs-text-muted);
+      font-weight: 500;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--cs-text-sec);
+    }
+
+    .legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 2px;
+    }
+
+    .legend-dot.primary { background: var(--cs-primary); }
+    .legend-dot.secondary { background: var(--cs-cyan); }
+
+    /* ── Code Diff ────────────────────────────────────────── */
+    .code-diff {
+      padding: 0;
+    }
+
+    .diff-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background: var(--cs-surface-alt);
+      border-bottom: 1px solid var(--cs-border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--cs-text-sec);
+    }
+
+    .diff-header .file-path {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .diff-header .file-icon {
+      color: var(--cs-cyan);
+    }
+
+    .diff-stats {
+      display: flex;
+      gap: 10px;
+    }
+
+    .diff-stats .added { color: var(--cs-green); }
+    .diff-stats .removed { color: var(--cs-red); }
+
+    .diff-body {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .diff-line {
+      display: flex;
+      padding: 0 20px;
+      min-height: 26px;
+    }
+
+    .diff-line-num {
+      width: 45px;
+      text-align: right;
+      padding-right: 12px;
+      color: var(--cs-text-muted);
+      user-select: none;
+      flex-shrink: 0;
+      font-size: 11.5px;
+    }
+
+    .diff-line-prefix {
+      width: 16px;
+      flex-shrink: 0;
+      user-select: none;
+      font-size: 12px;
+    }
+
+    .diff-line-code {
+      flex: 1;
+      white-space: pre;
+    }
+
+    .diff-line.added {
+      background: rgba(16,185,129,0.06);
+    }
+
+    .diff-line.added .diff-line-num { color: var(--cs-green); }
+    .diff-line.added .diff-line-prefix { color: var(--cs-green); }
+
+    .diff-line.removed {
+      background: rgba(239,68,68,0.06);
+    }
+
+    .diff-line.removed .diff-line-num { color: var(--cs-red); }
+    .diff-line.removed .diff-line-prefix { color: var(--cs-red); }
+
+    .diff-line.highlight {
+      background: rgba(99,102,241,0.06);
+      border-left: 2px solid var(--cs-primary);
+    }
+
+    .code-keyword { color: var(--cs-purple); }
+    .code-string { color: var(--cs-green); }
+    .code-comment { color: var(--cs-text-muted); font-style: italic; }
+    .code-func { color: var(--cs-cyan); }
+    .code-type { color: var(--cs-orange); }
+    .code-const { color: #f472b6; }
+
+    /* ── Activity Feed ────────────────────────────────────── */
+    .activity-feed { padding: 16px 20px; }
+
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--cs-border);
+    }
+
+    .activity-item:last-child { border-bottom: none; }
+
+    .activity-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .activity-dot.deploy { background: var(--cs-green); }
+    .activity-dot.error { background: var(--cs-red); }
+    .activity-dot.alert { background: var(--cs-orange); }
+    .activity-dot.info { background: var(--cs-cyan); }
+
+    .activity-text {
+      font-size: 13px;
+      color: var(--cs-text-sec);
+      line-height: 1.5;
+    }
+
+    .activity-text strong { color: var(--cs-text); font-weight: 600; }
+    .activity-text code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      background: var(--cs-bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: var(--cs-cyan);
+    }
+
+    .activity-time {
+      font-size: 11px;
+      color: var(--cs-text-muted);
+      margin-top: 3px;
+    }
+
+    /* ── Services Status ──────────────────────────────────── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 16px 20px;
+    }
+
+    .service-card {
+      background: var(--cs-surface-alt);
+      border: 1px solid var(--cs-border);
+      border-radius: var(--cs-radius-sm);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s;
+    }
+
+    .service-card:hover {
+      border-color: var(--cs-border-light);
+    }
+
+    .service-status {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .service-status.online {
+      background: var(--cs-green);
+    }
+
+    .service-status.online::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 2px solid var(--cs-green);
+      opacity: 0;
+      animation: status-ping 2s ease-in-out infinite;
+    }
+
+    @keyframes status-ping {
+      0% { opacity: 0.6; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.8); }
+    }
+
+    .service-status.degraded {
+      background: var(--cs-orange);
+    }
+
+    .service-status.down {
+      background: var(--cs-red);
+      animation: status-pulse-error 1.5s ease-in-out infinite;
+    }
+
+    @keyframes status-pulse-error {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+      50% { box-shadow: 0 0 10px 3px rgba(239,68,68,0.2); }
+    }
+
+    .service-info { flex: 1; min-width: 0; }
+    .service-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .service-latency { font-size: 11px; color: var(--cs-text-muted); }
+    .service-uptime {
+      font-size: 11px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .service-uptime.good { color: var(--cs-green); }
+    .service-uptime.warn { color: var(--cs-orange); }
+
+    /* ── Sparkline (CSS-only mini chart) ──────────────────── */
+    .sparkline {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 24px;
+    }
+
+    .spark-bar {
+      width: 3px;
+      border-radius: 1px;
+      background: var(--cs-primary);
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+
+    .spark-bar:hover { opacity: 1; }
+
+    /* ── Scrollbar ────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: var(--cs-border-light);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--cs-text-muted); }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 1200px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .main { margin-left: 0; }
+      .stats-row { grid-template-columns: 1fr; }
+      .content { padding: 16px; }
+      .services-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Animations ───────────────────────────────────────── */
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stat-card, .card, .ai-banner {
+      animation: fade-in-up 0.4s ease both;
+    }
+
+    .stat-card:nth-child(2) { animation-delay: 0.05s; }
+    .stat-card:nth-child(3) { animation-delay: 0.1s; }
+    .stat-card:nth-child(4) { animation-delay: 0.15s; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════ Sidebar ═══════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">CS</div>
+      <span>CodeScope</span>
+      <span class="badge">AI</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Overview</div>
+        <a class="nav-item active" href="#">
+          <span class="icon">📊</span> Dashboard
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">🔴</span> Errors
+          <span class="count">23</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">⚠️</span> Warnings
+          <span class="count">47</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">📈</span> Performance
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Code</div>
+        <a class="nav-item" href="#">
+          <span class="icon">🔍</span> Code Review
+          <span class="count">8</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">🤖</span> AI Suggestions
+          <span class="count">12</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">📝</span> Diffs
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">🧪</span> Tests
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Infra</div>
+        <a class="nav-item" href="#">
+          <span class="icon">🖥️</span> Services
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">🚀</span> Deployments
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">📦</span> Dependencies
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Settings</div>
+        <a class="nav-item" href="#">
+          <span class="icon">⚙️</span> Configuration
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">🔔</span> Alerts
+        </a>
+        <a class="nav-item" href="#">
+          <span class="icon">👥</span> Team
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar">JC</div>
+        <div class="user-info">
+          <div class="user-name">James Chen</div>
+          <div class="user-role">Engineering Lead</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════ Main Content ═══════ -->
+  <main class="main">
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Dashboard</div>
+        <div class="topbar-breadcrumb">prod / <span>web-api</span> / overview</div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          🔍 Search issues, files, commits...
+          <kbd>⌘K</kbd>
+        </div>
+        <button class="topbar-btn">🔔 3</button>
+        <button class="topbar-btn primary">+ New Alert Rule</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- AI Insight Banner -->
+      <div class="ai-banner">
+        <div class="ai-icon">🤖</div>
+        <div class="ai-text">
+          <p><strong>AI Insight:</strong> Detected a recurring <code>TypeError</code> in <code>src/api/auth.ts:142</code> — appears 47 times in the last 6 hours, primarily affecting EU users. The root cause is a null-check missing on the <code>session.token</code> property after the latest deployment. <strong>Suggested fix:</strong> Add optional chaining <code>session?.token</code> or guard clause before line 142.</p>
+        </div>
+        <div class="ai-dismiss">✕</div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card red">
+          <div class="stat-header">
+            <span class="stat-label">Critical Errors</span>
+            <div class="stat-icon">🔴</div>
+          </div>
+          <div class="stat-value">23</div>
+          <div class="stat-change up">↑ 12% from yesterday</div>
+        </div>
+
+        <div class="stat-card orange">
+          <div class="stat-header">
+            <span class="stat-label">Error Rate</span>
+            <div class="stat-icon">📉</div>
+          </div>
+          <div class="stat-value">0.34%</div>
+          <div class="stat-change down">↓ 8% from last hour</div>
+        </div>
+
+        <div class="stat-card green">
+          <div class="stat-header">
+            <span class="stat-label">Uptime</span>
+            <div class="stat-icon">✅</div>
+          </div>
+          <div class="stat-value">99.97%</div>
+          <div class="stat-change down">↑ 0.02% this week</div>
+        </div>
+
+        <div class="stat-card purple">
+          <div class="stat-header">
+            <span class="stat-label">AI Fixes Suggested</span>
+            <div class="stat-icon">🤖</div>
+          </div>
+          <div class="stat-value">12</div>
+          <div class="stat-change down">3 auto-resolved</div>
+        </div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="main-grid">
+        <!-- Left Column -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Recent Issues -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔴 Recent Issues <span style="color: var(--cs-text-muted); font-weight: 400;">(23)</span></div>
+              <div class="card-actions">
+                <button class="card-action-btn active">All</button>
+                <button class="card-action-btn">Critical</button>
+                <button class="card-action-btn">Warnings</button>
+              </div>
+            </div>
+            <div class="issues-list">
+              <div class="issue-item">
+                <div class="issue-severity critical"></div>
+                <div class="issue-body">
+                  <div class="issue-title">
+                    TypeError: Cannot read property 'token' of null
+                    <span class="tag critical">Critical</span>
+                  </div>
+                  <div class="issue-meta">
+                    <code>src/api/auth.ts:142</code>
+                    <span>47 occurrences</span>
+                    <span>347 users affected</span>
+                    <span class="issue-time">2 min ago</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="issue-item">
+                <div class="issue-severity critical"></div>
+                <div class="issue-body">
+                  <div class="issue-title">
+                    Memory leak in WebSocket connection handler
+                    <span class="tag critical">Critical</span>
+                  </div>
+                  <div class="issue-meta">
+                    <code>src/ws/handler.ts:89</code>
+                    <span>12 occurrences</span>
+                    <span>89 users affected</span>
+                    <span class="issue-time">18 min ago</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="issue-item">
+                <div class="issue-severity warning"></div>
+                <div class="issue-body">
+                  <div class="issue-title">
+                    Slow query detected: SELECT * FROM users
+                    <span class="tag warning">Warning</span>
+                  </div>
+                  <div class="issue-meta">
+                    <code>src/db/queries.ts:203</code>
+                    <span>Avg 2.3s response</span>
+                    <span class="issue-time">1 hr ago</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="issue-item">
+                <div class="issue-severity info"></div>
+                <div class="issue-body">
+                  <div class="issue-title">
+                    Deprecated API endpoint /v1/legacy-sync
+                    <span class="tag info">Info</span>
+                  </div>
+                  <div class="issue-meta">
+                    <code>src/routes/v1.ts:45</code>
+                    <span>Remove by Jul 1</span>
+                    <span class="issue-time">3 hrs ago</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="issue-item">
+                <div class="issue-severity resolved"></div>
+                <div class="issue-body">
+                  <div class="issue-title">
+                    CORS header mismatch on /api/upload
+                    <span class="tag resolved">Resolved</span>
+                  </div>
+                  <div class="issue-meta">
+                    <code>src/middleware/cors.ts:18</code>
+                    <span>Fixed in commit <code>a3f8c21</code></span>
+                    <span class="issue-time">5 hrs ago</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Code Diff Preview -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📝 Suggested Fix <span style="color: var(--cs-cyan); font-size: 12px; font-weight: 500;">AI Generated</span></div>
+              <div class="card-actions">
+                <button class="card-action-btn">Apply</button>
+                <button class="card-action-btn">Dismiss</button>
+              </div>
+            </div>
+            <div class="diff-body">
+              <div class="diff-header">
+                <div class="file-path">
+                  <span class="file-icon">📄</span>
+                  src/api/auth.ts
+                </div>
+                <div class="diff-stats">
+                  <span class="added">+3</span>
+                  <span class="removed">-1</span>
+                </div>
+              </div>
+              <div class="diff-line">
+                <span class="diff-line-num">139</span>
+                <span class="diff-line-prefix"></span>
+                <span class="diff-line-code">  <span class="code-keyword">async</span> <span class="code-func">validateSession</span>(req: <span class="code-type">Request</span>) {</span>
+              </div>
+              <div class="diff-line">
+                <span class="diff-line-num">140</span>
+                <span class="diff-line-prefix"></span>
+                <span class="diff-line-code">    <span class="code-keyword">const</span> session = <span class="code-keyword">await</span> <span class="code-func">getSession</span>(req);</span>
+              </div>
+              <div class="diff-line">
+                <span class="diff-line-num">141</span>
+                <span class="diff-line-prefix"></span>
+                <span class="diff-line-code">    <span class="code-comment">// Validate token exists and is not expired</span></span>
+              </div>
+              <div class="diff-line removed">
+                <span class="diff-line-num">142</span>
+                <span class="diff-line-prefix">-</span>
+                <span class="diff-line-code">    <span class="code-keyword">if</span> (!session.token) <span class="code-keyword">throw new</span> <span class="code-type">AuthError</span>(<span class="code-string">'No token'</span>);</span>
+              </div>
+              <div class="diff-line added">
+                <span class="diff-line-num">142</span>
+                <span class="diff-line-prefix">+</span>
+                <span class="diff-line-code">    <span class="code-keyword">if</span> (!session?.token) <span class="code-keyword">throw new</span> <span class="code-type">AuthError</span>(<span class="code-string">'No token'</span>);</span>
+              </div>
+              <div class="diff-line added">
+                <span class="diff-line-num">143</span>
+                <span class="diff-line-prefix">+</span>
+                <span class="diff-line-code">    <span class="code-keyword">if</span> (<span class="code-keyword">typeof</span> session.token !== <span class="code-string">'string'</span>) <span class="code-keyword">throw new</span> <span class="code-type">AuthError</span>(<span class="code-string">'Invalid token'</span>);</span>
+              </div>
+              <div class="diff-line added">
+                <span class="diff-line-num">144</span>
+                <span class="diff-line-prefix">+</span>
+                <span class="diff-line-code">    <span class="code-keyword">if</span> (<span class="code-func">isExpired</span>(session.token)) <span class="code-keyword">throw new</span> <span class="code-type">AuthError</span>(<span class="code-string">'Token expired'</span>);</span>
+              </div>
+              <div class="diff-line">
+                <span class="diff-line-num">145</span>
+                <span class="diff-line-prefix"></span>
+                <span class="diff-line-code">    <span class="code-keyword">return</span> <span class="code-func">verifyToken</span>(session.token);</span>
+              </div>
+              <div class="diff-line">
+                <span class="diff-line-num">146</span>
+                <span class="diff-line-prefix"></span>
+                <span class="diff-line-code">  }</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Performance Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📈 Performance (7d)</div>
+              <div class="card-actions">
+                <button class="card-action-btn active">7D</button>
+                <button class="card-action-btn">30D</button>
+              </div>
+            </div>
+            <div class="perf-chart">
+              <div class="chart-bars">
+                <div class="chart-bar-group">
+                  <div class="chart-bar primary" style="height: 60%;"></div>
+                  <div class="chart-bar secondary" style="height: 30%;"></div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar primary" style="height: 45%;"></div>
+                  <div class="chart-bar secondary" style="height: 25%;"></div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar primary" style="height: 75%;"></div>
+                  <div class="chart-bar secondary" style="height: 35%;"></div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar primary" style="height: 55%;"></div>
+                  <div class="chart-bar secondary" style="height: 28%;"></div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar primary" style="height: 90%;"></div>
+                  <div class="chart-bar secondary" style="height: 45%;"></div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar primary" style="height: 70%;"></div>
+                  <div class="chart-bar secondary" style="height: 38%;"></div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar primary" style="height: 82%;"></div>
+                  <div class="chart-bar secondary" style="height: 42%;"></div>
+                </div>
+              </div>
+              <div class="chart-labels">
+                <span class="chart-label">Mon</span>
+                <span class="chart-label">Tue</span>
+                <span class="chart-label">Wed</span>
+                <span class="chart-label">Thu</span>
+                <span class="chart-label">Fri</span>
+                <span class="chart-label">Sat</span>
+                <span class="chart-label">Sun</span>
+              </div>
+              <div class="chart-legend">
+                <div class="legend-item">
+                  <div class="legend-dot primary"></div>
+                  Requests
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot secondary"></div>
+                  Errors
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Services Status -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🖥️ Services</div>
+              <span style="font-size: 12px; color: var(--cs-green); font-weight: 500;">● All operational</span>
+            </div>
+            <div class="services-grid">
+              <div class="service-card">
+                <div class="service-status online"></div>
+                <div class="service-info">
+                  <div class="service-name">API Gateway</div>
+                  <div class="service-latency">12ms avg</div>
+                </div>
+                <div class="service-uptime good">99.99%</div>
+              </div>
+              <div class="service-card">
+                <div class="service-status online"></div>
+                <div class="service-info">
+                  <div class="service-name">Auth Service</div>
+                  <div class="service-latency">8ms avg</div>
+                </div>
+                <div class="service-uptime good">99.98%</div>
+              </div>
+              <div class="service-card">
+                <div class="service-status online"></div>
+                <div class="service-info">
+                  <div class="service-name">PostgreSQL</div>
+                  <div class="service-latency">3ms avg</div>
+                </div>
+                <div class="service-uptime good">100%</div>
+              </div>
+              <div class="service-card">
+                <div class="service-status degraded"></div>
+                <div class="service-info">
+                  <div class="service-name">Redis Cache</div>
+                  <div class="service-latency">45ms avg</div>
+                </div>
+                <div class="service-uptime warn">99.87%</div>
+              </div>
+              <div class="service-card">
+                <div class="service-status online"></div>
+                <div class="service-info">
+                  <div class="service-name">Worker Queue</div>
+                  <div class="service-latency">18ms avg</div>
+                </div>
+                <div class="service-uptime good">99.95%</div>
+              </div>
+              <div class="service-card">
+                <div class="service-status online"></div>
+                <div class="service-info">
+                  <div class="service-name">CDN Edge</div>
+                  <div class="service-latency">2ms avg</div>
+                </div>
+                <div class="service-uptime good">100%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity Feed -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">⚡ Live Activity</div>
+              <span style="font-size: 11px; color: var(--cs-green); display: flex; align-items: center; gap: 4px;">
+                <span style="width: 6px; height: 6px; background: var(--cs-green); border-radius: 50%; animation: status-ping 2s infinite;"></span>
+                Live
+              </span>
+            </div>
+            <div class="activity-feed">
+              <div class="activity-item">
+                <div class="activity-dot error"></div>
+                <div>
+                  <div class="activity-text"><strong>New error spike</strong> detected in <code>auth.ts:142</code> — 12 occurrences in last 5 min</div>
+                  <div class="activity-time">Just now</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot deploy"></div>
+                <div>
+                  <div class="activity-text"><strong>Deploy v2.14.3</strong> completed on <code>prod-web-api</code> — 0 errors during rollout</div>
+                  <div class="activity-time">12 minutes ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot alert"></div>
+                <div>
+                  <div class="activity-text"><strong>Redis latency</strong> increased to 45ms — above threshold (20ms)</div>
+                  <div class="activity-time">28 minutes ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot info"></div>
+                <div>
+                  <div class="activity-text"><strong>AI suggestion</strong> generated for CORS header fix — ready to review</div>
+                  <div class="activity-time">1 hour ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot deploy"></div>
+                <div>
+                  <div class="activity-text"><strong>Deploy v2.14.2</strong> rolled back — triggered by error rate threshold</div>
+                  <div class="activity-time">2 hours ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

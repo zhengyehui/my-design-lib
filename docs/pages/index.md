@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 82 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 83 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -784,6 +784,15 @@ const pages = [
     rating: 9.4,
     description: '极简 Brutalist 设计事务所，灵感来自 Tikhon.io 收据美学，等宽字体排版 + 编号项目列表 + 角标记装饰 + 点状网格背景 + 分栏哲学 + 滚动渐入',
   },
+  {
+    id: 'code-monitor',
+    title: 'CodeScope AI 代码监控仪表盘',
+    category: 'app',
+    tags: ['仪表盘', '开发者工具', '暗色主题', 'AI'],
+    colors: ['#0a0b0f', '#6366f1', '#22d3ee'],
+    rating: 9.5,
+    description: 'AI 驱动的代码监控仪表盘，深色科技主题 + 侧边栏导航 + 错误追踪 + 代码 Diff 预览 + 性能图表 + 服务状态 + 实时活动流',
+  },
 ]
 
 const categories = [
@@ -841,12 +850,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 82 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 83 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="82 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="83 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -855,7 +864,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 82 个完整页面</span>
+      <span>📦 83 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
