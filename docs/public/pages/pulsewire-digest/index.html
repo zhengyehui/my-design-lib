@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PulseWire — 科技与设计前沿</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: var(--leading-normal);
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ── CSS Variables (page-specific) ────────────── */
+:root {
+  --accent-red: #e63946;
+  --accent-navy: #1d3557;
+  --accent-blue: #457b9d;
+  --accent-light: #f1faee;
+  --sidebar-width: 72px;
+  --font-display: 'Oswald', 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+}
+
+/* ── Fixed Left Sidebar ──────────────────────── */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--accent-navy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) 0;
+  z-index: var(--z-sticky);
+}
+.sidebar__logo {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #fff;
+  transform: rotate(180deg);
+}
+.sidebar__nav { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+.sidebar__link {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.6);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: all var(--duration-fast) var(--ease-default);
+  font-family: var(--font-display);
+}
+.sidebar__link:hover, .sidebar__link--active {
+  background: var(--accent-red);
+  color: #fff;
+}
+.sidebar__bottom {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
+}
+.sidebar__toggle {
+  width: 36px; height: 20px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+}
+.sidebar__toggle::after {
+  content: '';
+  position: absolute;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  top: 2px; left: 2px;
+  transition: transform var(--duration-fast) var(--ease-default);
+}
+.sidebar__toggle.active::after {
+  transform: translateX(16px);
+  background: var(--accent-red);
+}
+
+/* ── Main Content ─────────────────────────────── */
+.main {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+}
+
+/* ── Top Bar ──────────────────────────────────── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-8);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  z-index: var(--z-dropdown);
+}
+.topbar__date { font-weight: 500; }
+.topbar__categories { display: flex; gap: var(--space-5); }
+.topbar__cat { cursor: pointer; transition: color var(--duration-fast); }
+.topbar__cat:hover { color: var(--accent-red); }
+.topbar__actions { display: flex; gap: var(--space-4); align-items: center; }
+.topbar__search {
+  width: 200px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  background: var(--color-bg-subtle);
+  outline: none;
+}
+.topbar__search:focus { border-color: var(--accent-navy); }
+
+/* ── Hero Section ─────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 0;
+  overflow: hidden;
+  background: var(--accent-navy);
+  color: #fff;
+}
+.hero__main {
+  position: relative;
+  padding: var(--space-12) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(135deg, #0d1b2a 0%, #1d3557 50%, #264653 100%);
+  overflow: hidden;
+}
+.hero__main::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -30%;
+  width: 80%; height: 200%;
+  background: radial-gradient(circle, rgba(230,57,70,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero__main::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: -10%;
+  width: 50%; height: 50%;
+  background: radial-gradient(circle, rgba(69,123,157,0.2) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--accent-red);
+  color: #fff;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  width: fit-content;
+  margin-bottom: var(--space-4);
+}
+.hero__badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+  position: relative;
+  z-index: 1;
+}
+.hero__title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  text-transform: none;
+  color: var(--accent-red);
+  font-size: 0.95em;
+}
+.hero__excerpt {
+  font-size: var(--text-base);
+  color: rgba(255,255,255,0.7);
+  max-width: 520px;
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-6);
+  position: relative;
+  z-index: 1;
+}
+.hero__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.5);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
+}
+.hero__meta span { display: flex; align-items: center; gap: var(--space-1); }
+
+/* Hero sidebar cards */
+.hero__sidebar {
+  display: flex;
+  flex-direction: column;
+}
+.hero__side-card {
+  flex: 1;
+  padding: var(--space-6) var(--space-6);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  cursor: pointer;
+  transition: background var(--duration-fast);
+}
+.hero__side-card:last-child { border-bottom: none; }
+.hero__side-card:hover { background: rgba(255,255,255,0.04); }
+.hero__side-card .tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-3);
+  width: fit-content;
+}
+.tag--tech { background: rgba(69,123,157,0.3); color: #a8dadc; }
+.tag--design { background: rgba(230,57,70,0.3); color: #ffb4a2; }
+.tag--culture { background: rgba(42,157,143,0.3); color: #a8dadc; }
+.hero__side-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: var(--space-2);
+}
+.hero__side-meta {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+}
+
+/* ── Marquee ──────────────────────────────────── */
+.marquee {
+  overflow: hidden;
+  background: var(--accent-red);
+  color: #fff;
+  padding: var(--space-3) 0;
+  white-space: nowrap;
+}
+.marquee__inner {
+  display: inline-flex;
+  animation: marquee-scroll 30s linear infinite;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.marquee__item {
+  padding: 0 var(--space-8);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.marquee__item::before {
+  content: '◆';
+  font-size: 8px;
+  opacity: 0.5;
+}
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── Section Headers ──────────────────────────── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-8) var(--space-8) var(--space-4);
+}
+.section-header__left { display: flex; align-items: center; gap: var(--space-3); }
+.section-header__label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-red);
+}
+.section-header__line {
+  width: 40px; height: 2px;
+  background: var(--accent-red);
+}
+.section-header__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.section-header__more {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--accent-navy);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: color var(--duration-fast);
+}
+.section-header__more:hover { color: var(--accent-red); }
+
+/* ── Article Card Grid ────────────────────────── */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  padding: 0 var(--space-8) var(--space-8);
+}
+.card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: all var(--duration-normal) var(--ease-default);
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+.card__image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  background: var(--color-bg-muted);
+}
+.card__image-placeholder {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: rgba(255,255,255,0.15);
+}
+.card__image-placeholder--1 { background: linear-gradient(135deg, #1d3557, #457b9d); }
+.card__image-placeholder--2 { background: linear-gradient(135deg, #264653, #2a9d8f); }
+.card__image-placeholder--3 { background: linear-gradient(135deg, #e63946, #f4845f); }
+.card__image-placeholder--4 { background: linear-gradient(135deg, #0d1b2a, #1b263b); }
+.card__image-placeholder--5 { background: linear-gradient(135deg, #6d597a, #b56576); }
+.card__image-placeholder--6 { background: linear-gradient(135deg, #355070, #e56b6f); }
+.card__body { padding: var(--space-5); }
+.card__tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-3);
+}
+.card__tag--tech { background: #e8f4f8; color: #264653; }
+.card__tag--design { background: #fde8e8; color: #e63946; }
+.card__tag--culture { background: #e6f5f0; color: #2a9d8f; }
+.card__tag--ai { background: #f0e6ff; color: #7c3aed; }
+.card__tag--product { background: #fff3e0; color: #e65100; }
+.card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
+}
+.card__excerpt {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-3);
+}
+.card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+.card__author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.card__avatar {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--color-bg-muted);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+.card__dot { width: 3px; height: 3px; border-radius: 50%; background: var(--color-text-muted); }
+
+/* ── Featured Row (large card) ────────────────── */
+.featured-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--space-6);
+  padding: 0 var(--space-8) var(--space-8);
+}
+.featured-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-default);
+}
+.featured-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.featured-card__image {
+  height: 100%;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  font-weight: 700;
+  color: rgba(255,255,255,0.12);
+}
+.featured-card__body {
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.featured-card .card__title {
+  font-size: var(--text-2xl);
+}
+.side-stack { display: flex; flex-direction: column; gap: var(--space-6); }
+.side-card {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-default);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.side-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.side-card__number {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  font-weight: 700;
+  color: var(--color-border);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+/* ── Stats Strip ──────────────────────────────── */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--color-border);
+  margin: 0 var(--space-8) var(--space-8);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.stat-item {
+  background: var(--color-surface);
+  padding: var(--space-6) var(--space-5);
+  text-align: center;
+}
+.stat-item__number {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--accent-navy);
+  line-height: 1;
+  margin-bottom: var(--space-1);
+}
+.stat-item__label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Newsletter CTA ───────────────────────────── */
+.newsletter {
+  margin: 0 var(--space-8) var(--space-8);
+  padding: var(--space-10) var(--space-8);
+  background: var(--accent-navy);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.newsletter::before {
+  content: '';
+  position: absolute;
+  top: -30%; right: -10%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(230,57,70,0.2) 0%, transparent 60%);
+  pointer-events: none;
+}
+.newsletter__content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+.newsletter__label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-red);
+  margin-bottom: var(--space-3);
+}
+.newsletter__title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+.newsletter__desc {
+  font-size: var(--text-sm);
+  color: rgba(255,255,255,0.6);
+}
+.newsletter__form {
+  display: flex;
+  gap: var(--space-3);
+  position: relative;
+  z-index: 1;
+}
+.newsletter__input {
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  width: 280px;
+  outline: none;
+  transition: border-color var(--duration-fast);
+}
+.newsletter__input::placeholder { color: rgba(255,255,255,0.4); }
+.newsletter__input:focus { border-color: var(--accent-red); }
+.newsletter__btn {
+  padding: var(--space-3) var(--space-6);
+  background: var(--accent-red);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+.newsletter__btn:hover { background: #c1121f; transform: translateY(-1px); }
+
+/* ── Footer ───────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-10) var(--space-8);
+}
+.footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+.footer__brand-name {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: var(--space-3);
+}
+.footer__brand-desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  max-width: 300px;
+  line-height: var(--leading-relaxed);
+}
+.footer__col-title {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+}
+.footer__links { list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
+.footer__links a {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast);
+}
+.footer__links a:hover { color: var(--accent-red); }
+.footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.footer__social { display: flex; gap: var(--space-4); }
+.footer__social a {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--color-bg-muted);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  transition: all var(--duration-fast);
+}
+.footer__social a:hover { background: var(--accent-red); color: #fff; }
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 1024px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .hero { grid-template-columns: 1fr; }
+  .hero__sidebar { flex-direction: row; }
+  .hero__side-card { border-bottom: none; border-right: 1px solid rgba(255,255,255,0.08); }
+  .hero__side-card:last-child { border-right: none; }
+  .featured-row { grid-template-columns: 1fr; }
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .card-grid { grid-template-columns: 1fr; }
+  .hero__sidebar { flex-direction: column; }
+  .hero__side-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+  .newsletter { flex-direction: column; text-align: center; }
+  .newsletter__form { flex-direction: column; align-items: stretch; }
+  .newsletter__input { width: 100%; }
+  .featured-card { grid-template-columns: 1fr; }
+  .featured-card__image { min-height: 200px; }
+  .topbar__categories { display: none; }
+  .footer__grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Fixed Sidebar ──────────────────────────── -->
+<nav class="sidebar">
+  <div class="sidebar__logo">PulseWire</div>
+  <div class="sidebar__nav">
+    <a href="#" class="sidebar__link sidebar__link--active">PW</a>
+    <a href="#latest" class="sidebar__link">L</a>
+    <a href="#trending" class="sidebar__link">T</a>
+    <a href="#deep" class="sidebar__link">D</a>
+  </div>
+  <div class="sidebar__bottom">
+    <button class="sidebar__toggle active" aria-label="Toggle theme"></button>
+  </div>
+</nav>
+
+<!-- ── Main Content ───────────────────────────── -->
+<div class="main">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar__date">2026年6月26日 · 星期五</div>
+    <div class="topbar__categories">
+      <span class="topbar__cat">科技</span>
+      <span class="topbar__cat">设计</span>
+      <span class="topbar__cat">文化</span>
+      <span class="topbar__cat">产品</span>
+      <span class="topbar__cat">AI</span>
+    </div>
+    <div class="topbar__actions">
+      <input type="text" class="topbar__search" placeholder="搜索文章...">
+      <span style="cursor:pointer; font-weight:600;">订阅</span>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__main">
+      <span class="hero__badge">头条</span>
+      <h1 class="hero__title">
+        当 AI 开始<em>设计</em>界面：<br>
+        人机协作的下一个十年
+      </h1>
+      <p class="hero__excerpt">
+        从 Figma 插件到完全自主的 UI 生成器，人工智能正在重新定义设计师的角色。
+        我们深入探索这场变革的核心技术与人文思考。
+      </p>
+      <div class="hero__meta">
+        <span>陈思远</span>
+        <span style="opacity:0.3">|</span>
+        <span>12 分钟阅读</span>
+        <span style="opacity:0.3">|</span>
+        <span>2026.06.26</span>
+      </div>
+    </div>
+    <div class="hero__sidebar">
+      <div class="hero__side-card">
+        <span class="tag tag--tech">科技</span>
+        <div class="hero__side-title">Apple Vision Pro 2 发布在即：空间计算的第三年</div>
+        <div class="hero__side-meta">林嘉明 · 8 分钟</div>
+      </div>
+      <div class="hero__side-card">
+        <span class="tag tag--design">设计</span>
+        <div class="hero__side-title">极简主义已死？2026 设计趋势的回归运动</div>
+        <div class="hero__side-meta">张薇薇 · 6 分钟</div>
+      </div>
+      <div class="hero__side-card">
+        <span class="tag tag--culture">文化</span>
+        <div class="hero__side-title">东京街头：新世代的赛博朋克美学</div>
+        <div class="hero__side-meta">田中美咲 · 10 分钟</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="marquee__inner">
+      <span class="marquee__item">AI 设计工具爆发增长</span>
+      <span class="marquee__item">Figma 收购新闻确认</span>
+      <span class="marquee__item">WebGPU 正式上线</span>
+      <span class="marquee__item">iOS 20 设计规范泄露</span>
+      <span class="marquee__item">碳中和数据中心突破</span>
+      <span class="marquee__item">脑机接口临床试验启动</span>
+      <span class="marquee__item">量子计算商用里程碑</span>
+      <span class="marquee__item">全球 AI 安全峰会召开</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee__item">AI 设计工具爆发增长</span>
+      <span class="marquee__item">Figma 收购新闻确认</span>
+      <span class="marquee__item">WebGPU 正式上线</span>
+      <span class="marquee__item">iOS 20 设计规范泄露</span>
+      <span class="marquee__item">碳中和数据中心突破</span>
+      <span class="marquee__item">脑机接口临床试验启动</span>
+      <span class="marquee__item">量子计算商用里程碑</span>
+      <span class="marquee__item">全球 AI 安全峰会召开</span>
+    </div>
+  </div>
+
+  <!-- Latest Articles -->
+  <div id="latest" class="section-header">
+    <div class="section-header__left">
+      <span class="section-header__label">最新</span>
+      <span class="section-header__line"></span>
+      <h2 class="section-header__title">今日精选</h2>
+    </div>
+    <a href="#" class="section-header__more">查看全部 →</a>
+  </div>
+
+  <div class="card-grid">
+    <!-- Card 1 -->
+    <article class="card">
+      <div class="card__image-placeholder card__image-placeholder--1">
+        <span>01</span>
+      </div>
+      <div class="card__body">
+        <span class="card__tag card__tag--tech">科技</span>
+        <h3 class="card__title">Rust 正在吞噬 JavaScript 的领地</h3>
+        <p class="card__excerpt">从 Deno 到 Turbopack，Rust 编写的前端工具链正在改变开发者的工作方式。我们测试了五款最新的 Rust 构建工具。</p>
+        <div class="card__meta">
+          <div class="card__author">
+            <div class="card__avatar">王</div>
+            <span>王启明</span>
+          </div>
+          <span class="card__dot"></span>
+          <span>7 分钟</span>
+        </div>
+      </div>
+    </article>
+    <!-- Card 2 -->
+    <article class="card">
+      <div class="card__image-placeholder card__image-placeholder--2">
+        <span>02</span>
+      </div>
+      <div class="card__body">
+        <span class="card__tag card__tag--design">设计</span>
+        <h3 class="card__title">色彩心理学在 SaaS 界面中的应用</h3>
+        <p class="card__excerpt">为什么 Slack 用紫色，Notion 用黑色？深度解析 20 款顶级 SaaS 产品的配色策略与用户心理映射。</p>
+        <div class="card__meta">
+          <div class="card__author">
+            <div class="card__avatar">赵</div>
+            <span>赵晨曦</span>
+          </div>
+          <span class="card__dot"></span>
+          <span>9 分钟</span>
+        </div>
+      </div>
+    </article>
+    <!-- Card 3 -->
+    <article class="card">
+      <div class="card__image-placeholder card__image-placeholder--3">
+        <span>03</span>
+      </div>
+      <div class="card__body">
+        <span class="card__tag card__tag--ai">AI</span>
+        <h3 class="card__title">GPT-5 多模态能力：设计师的瑞士军刀</h3>
+        <p class="card__excerpt">从草图到代码，从文案到原型。我们用 GPT-5 完成了一个完整的产品设计流程，结果令人惊喜。</p>
+        <div class="card__meta">
+          <div class="card__author">
+            <div class="card__avatar">李</div>
+            <span>李安然</span>
+          </div>
+          <span class="card__dot"></span>
+          <span>11 分钟</span>
+        </div>
+      </div>
+    </article>
+    <!-- Card 4 -->
+    <article class="card">
+      <div class="card__image-placeholder card__image-placeholder--4">
+        <span>04</span>
+      </div>
+      <div class="card__body">
+        <span class="card__tag card__tag--culture">文化</span>
+        <h3 class="card__title">像素艺术的复兴：从怀旧到前沿</h3>
+        <p class="card__excerpt">独立游戏、NFT 收藏品和社交媒体滤镜正在推动像素美学的回归。这不是倒退，而是进化的另一种形态。</p>
+        <div class="card__meta">
+          <div class="card__author">
+            <div class="card__avatar">周</div>
+            <span>周子墨</span>
+          </div>
+          <span class="card__dot"></span>
+          <span>8 分钟</span>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- Featured Row -->
+  <div id="trending" class="section-header">
+    <div class="section-header__left">
+      <span class="section-header__label">深度</span>
+      <span class="section-header__line"></span>
+      <h2 class="section-header__title">深度报道</h2>
+    </div>
+  </div>
+
+  <div class="featured-row">
+    <article class="featured-card">
+      <div class="featured-card__image card__image-placeholder--5">
+        <span>∞</span>
+      </div>
+      <div class="featured-card__body">
+        <span class="card__tag card__tag--product">产品</span>
+        <h3 class="card__title">Figma 的十年：从浏览器绘图工具到设计操作系统</h3>
+        <p class="card__excerpt">回顾 Figma 从 2012 年的创业想法到今天全球最大的设计协作平台的发展历程，以及它对整个设计行业的深远影响。</p>
+        <div class="card__meta" style="margin-top: var(--space-3);">
+          <span>25 分钟深度长文</span>
+        </div>
+      </div>
+    </article>
+    <div class="side-stack">
+      <div class="side-card">
+        <span class="side-card__number">05</span>
+        <span class="card__tag card__tag--tech">科技</span>
+        <h3 class="card__title" style="font-size: var(--text-lg); margin-top: var(--space-2);">量子加密通信：安全的下一个前沿</h3>
+      </div>
+      <div class="side-card">
+        <span class="side-card__number">06</span>
+        <span class="card__tag card__tag--design">设计</span>
+        <h3 class="card__title" style="font-size: var(--text-lg); margin-top: var(--space-2);">字体即品牌：可变字体的设计革命</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-item__number">2.4M</div>
+      <div class="stat-item__label">月活读者</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-item__number">860+</div>
+      <div class="stat-item__label">深度文章</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-item__number">120+</div>
+      <div class="stat-item__label">签约作者</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-item__number">45K</div>
+      <div class="stat-item__label">订阅者</div>
+    </div>
+  </div>
+
+  <!-- Newsletter -->
+  <div class="newsletter">
+    <div class="newsletter__content">
+      <div class="newsletter__label">订阅周报</div>
+      <h3 class="newsletter__title">每周精选，不错过任何前沿动态</h3>
+      <p class="newsletter__desc">每周五发送，包含本周最热门的科技、设计与文化文章。</p>
+    </div>
+    <form class="newsletter__form" onsubmit="return false;">
+      <input type="email" class="newsletter__input" placeholder="your@email.com">
+      <button class="newsletter__btn">立即订阅</button>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand-name">PulseWire</div>
+        <p class="footer__brand-desc">科技与设计前沿媒体。我们相信好的设计源于对技术的深刻理解，好的技术需要好的设计来传递价值。</p>
+      </div>
+      <div>
+        <div class="footer__col-title">分类</div>
+        <ul class="footer__links">
+          <li><a href="#">科技</a></li>
+          <li><a href="#">设计</a></li>
+          <li><a href="#">文化</a></li>
+          <li><a href="#">产品</a></li>
+          <li><a href="#">AI</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">关于</div>
+        <ul class="footer__links">
+          <li><a href="#">关于我们</a></li>
+          <li><a href="#">编辑团队</a></li>
+          <li><a href="#">投稿指南</a></li>
+          <li><a href="#">合作伙伴</a></li>
+          <li><a href="#">联系我们</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">更多</div>
+        <ul class="footer__links">
+          <li><a href="#">RSS 订阅</a></li>
+          <li><a href="#">播客频道</a></li>
+          <li><a href="#">设计师名录</a></li>
+          <li><a href="#">开源项目</a></li>
+          <li><a href="#">工作机会</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 PulseWire. All rights reserved.</span>
+      <div class="footer__social">
+        <a href="#" title="Twitter">𝕏</a>
+        <a href="#" title="GitHub">GH</a>
+        <a href="#" title="Discord">DC</a>
+        <a href="#" title="RSS">RS</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+// Theme toggle
+const toggle = document.querySelector('.sidebar__toggle');
+if (toggle) {
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('active');
+    const isDark = toggle.classList.contains('active');
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : '');
+  });
+}
+
+// Category filter (visual only)
+document.querySelectorAll('.topbar__cat').forEach(cat => {
+  cat.addEventListener('click', () => {
+    cat.style.color = cat.style.color ? '' : 'var(--accent-red)';
+  });
+});
+</script>
+
+</body>
+</html>
