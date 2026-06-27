@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 84 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 85 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -802,6 +802,15 @@ const pages = [
     rating: 9.3,
     description: '现代数字新闻杂志，固定侧栏导航 + 深色 Hero + 跑马灯新闻条 + 双栏卡片网格 + 深度报道特色行 + Newsletter 订阅',
   },
+  {
+    id: 'terrain-outdoor',
+    title: 'Terrain 户外探险装备商城',
+    category: 'ecommerce',
+    tags: ['户外', '电商', '探险装备', '自然配色', 'Marquee'],
+    colors: ['#1a1a18', '#5B7C4F', '#E8DCC8'],
+    rating: 9.5,
+    description: '高端户外装备电商，灵感来自 Balmoral Running，大地色系 + 等高线 SVG 背景 + 山脉剪影 Hero + 产品网格 + 品牌故事 + Marquee 滚动',
+  },
 ]
 
 const categories = [
@@ -859,7 +868,7 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 84 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 85 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
@@ -873,7 +882,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 84 个完整页面</span>
+      <span>📦 85 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

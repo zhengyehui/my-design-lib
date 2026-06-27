@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terrain — Premium Outdoor & Adventure Gear</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       Terrain — Premium Outdoor & Adventure Gear E-commerce
+       Earthy palette, topographic contour lines, nature-inspired
+    ═══════════════════════════════════════════════════════════ */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --t-earth: #1a1a18;
+      --t-earth-light: #2a2a26;
+      --t-sage: #5B7C4F;
+      --t-sage-light: #7A9E6C;
+      --t-sage-dark: #3D5A33;
+      --t-sand: #E8DCC8;
+      --t-sand-light: #F5F0E8;
+      --t-sand-warm: #D4C4A8;
+      --t-stone: #8B7D6B;
+      --t-clay: #C4784A;
+      --t-slate: #4A4A46;
+      --t-cream: #FAF8F3;
+      --t-fog: #B8B0A2;
+      --serif: 'Space Grotesk', -apple-system, sans-serif;
+      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--t-cream);
+      color: var(--t-earth);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Topographic SVG Pattern (background decoration) ── */
+    .topo-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Cpath d='M0 300 Q200 250 400 300 Q600 350 800 300' fill='none' stroke='%235B7C4F' stroke-width='1'/%3E%3Cpath d='M0 280 Q200 230 400 280 Q600 330 800 280' fill='none' stroke='%235B7C4F' stroke-width='0.8'/%3E%3Cpath d='M0 320 Q200 270 400 320 Q600 370 800 320' fill='none' stroke='%235B7C4F' stroke-width='0.8'/%3E%3Cpath d='M0 260 Q200 210 400 260 Q600 310 800 260' fill='none' stroke='%235B7C4F' stroke-width='0.6'/%3E%3Cpath d='M0 340 Q200 290 400 340 Q600 390 800 340' fill='none' stroke='%235B7C4F' stroke-width='0.6'/%3E%3Cpath d='M0 240 Q200 190 400 240 Q600 290 800 240' fill='none' stroke='%235B7C4F' stroke-width='0.5'/%3E%3Cpath d='M0 360 Q200 310 400 360 Q600 410 800 360' fill='none' stroke='%235B7C4F' stroke-width='0.5'/%3E%3Cpath d='M0 220 Q200 170 400 220 Q600 270 800 220' fill='none' stroke='%235B7C4F' stroke-width='0.4'/%3E%3Cpath d='M0 380 Q200 330 400 380 Q600 430 800 380' fill='none' stroke='%235B7C4F' stroke-width='0.4'/%3E%3Cpath d='M0 200 Q200 150 400 200 Q600 250 800 200' fill='none' stroke='%235B7C4F' stroke-width='0.3'/%3E%3Cpath d='M0 400 Q200 350 400 400 Q600 450 800 400' fill='none' stroke='%235B7C4F' stroke-width='0.3'/%3E%3C/svg%3E");
+      background-size: 800px 600px;
+    }
+
+    /* ── Announcement Bar ── */
+    .announcement {
+      background: var(--t-earth);
+      color: var(--t-sand);
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+    .announcement span { color: var(--t-sage-light); font-weight: 600; }
+
+    /* ── Navigation ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 243, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(90, 90, 80, 0.08);
+    }
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--t-earth);
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo svg {
+      width: 24px;
+      height: 24px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--t-slate);
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--t-sage-dark); }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--t-earth);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .nav-icon:hover { color: var(--t-sage); }
+    .cart-badge {
+      position: relative;
+    }
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      background: var(--t-clay);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(160deg, var(--t-earth) 0%, #2a2e22 40%, #1e2818 100%);
+      overflow: hidden;
+    }
+    .hero-mountains {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      pointer-events: none;
+    }
+    .hero-mountains svg { width: 100%; height: 100%; }
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(91, 124, 79, 0.15) 0%, transparent 70%);
+      top: 10%;
+      right: 10%;
+      animation: heroGlow 8s ease-in-out infinite;
+    }
+    @keyframes heroGlow {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+      50% { transform: translate(-30px, 20px) scale(1.1); opacity: 1; }
+    }
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(232, 220, 200, 0.3);
+      border-radius: 50%;
+      animation: float linear infinite;
+    }
+    .particle:nth-child(1) { left: 10%; top: 20%; animation-duration: 12s; animation-delay: 0s; }
+    .particle:nth-child(2) { left: 25%; top: 60%; animation-duration: 15s; animation-delay: 2s; width: 2px; height: 2px; }
+    .particle:nth-child(3) { left: 50%; top: 30%; animation-duration: 10s; animation-delay: 4s; }
+    .particle:nth-child(4) { left: 70%; top: 70%; animation-duration: 14s; animation-delay: 1s; width: 4px; height: 4px; opacity: 0.5; }
+    .particle:nth-child(5) { left: 85%; top: 40%; animation-duration: 11s; animation-delay: 3s; width: 2px; height: 2px; }
+    .particle:nth-child(6) { left: 40%; top: 80%; animation-duration: 13s; animation-delay: 5s; }
+    .particle:nth-child(7) { left: 60%; top: 15%; animation-duration: 9s; animation-delay: 2s; width: 2px; height: 2px; }
+    .particle:nth-child(8) { left: 15%; top: 45%; animation-duration: 16s; animation-delay: 0s; }
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      width: 100%;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(91, 124, 79, 0.2);
+      border: 1px solid rgba(91, 124, 79, 0.3);
+      border-radius: 100px;
+      color: var(--t-sage-light);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .hero-tag svg { width: 14px; height: 14px; }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 700;
+      color: var(--t-sand-light);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      max-width: 700px;
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--t-sage-light);
+    }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--t-fog);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      background: var(--t-sage);
+      color: white;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: var(--t-sage-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(91, 124, 79, 0.3);
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      background: transparent;
+      color: var(--t-sand);
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid rgba(232, 220, 200, 0.25);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      background: rgba(232, 220, 200, 0.08);
+      border-color: rgba(232, 220, 200, 0.4);
+    }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      background: var(--t-earth);
+      border-bottom: 1px solid rgba(91, 124, 79, 0.15);
+    }
+    .stats-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .stat-item {
+      padding: 32px 24px;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--t-sage-light);
+      letter-spacing: -1px;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--t-fog);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ── Section Common ── */
+    .section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 100px 40px;
+    }
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--t-sage);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--t-earth);
+      letter-spacing: -1px;
+    }
+    .section-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--t-sage-dark);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+      white-space: nowrap;
+    }
+    .section-link:hover { gap: 10px; }
+
+    /* ── Category Pills ── */
+    .categories {
+      position: relative;
+      padding: 60px 0;
+      overflow: hidden;
+    }
+    .categories .section {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .cat-card {
+      position: relative;
+      height: 280px;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cat-card:hover { transform: scale(1.02); }
+    .cat-card-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cat-card:hover .cat-card-bg { transform: scale(1.08); }
+    .cat-card:nth-child(1) .cat-card-bg {
+      background: linear-gradient(135deg, #3D5A33 0%, #5B7C4F 100%);
+    }
+    .cat-card:nth-child(2) .cat-card-bg {
+      background: linear-gradient(135deg, #4A4A46 0%, #6B6B65 100%);
+    }
+    .cat-card:nth-child(3) .cat-card-bg {
+      background: linear-gradient(135deg, #C4784A 0%, #D4956A 100%);
+    }
+    .cat-card:nth-child(4) .cat-card-bg {
+      background: linear-gradient(135deg, #1a1a18 0%, #3D5A33 100%);
+    }
+    .cat-card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 28px;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+      color: white;
+    }
+    .cat-card-content h3 {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .cat-card-content p {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+    .cat-icon {
+      position: absolute;
+      top: 24px;
+      left: 28px;
+      font-size: 36px;
+      opacity: 0.3;
+    }
+
+    /* ── Topographic Divider ── */
+    .topo-divider {
+      width: 100%;
+      height: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .topo-divider svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Product Grid ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .product-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+    .product-img {
+      position: relative;
+      height: 320px;
+      overflow: hidden;
+    }
+    .product-img-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .product-card:hover .product-img-inner { transform: scale(1.05); }
+    .product-card:nth-child(1) .product-img { background: linear-gradient(135deg, #E8DCC8 0%, #D4C4A8 100%); }
+    .product-card:nth-child(2) .product-img { background: linear-gradient(135deg, #dce8d4 0%, #c4d4b8 100%); }
+    .product-card:nth-child(3) .product-img { background: linear-gradient(135deg, #d4d8e8 0%, #b8c0d4 100%); }
+    .product-card:nth-child(4) .product-img { background: linear-gradient(135deg, #e8ddd4 0%, #d4c8b8 100%); }
+    .product-card:nth-child(5) .product-img { background: linear-gradient(135deg, #d4e8e0 0%, #b8d4c8 100%); }
+    .product-card:nth-child(6) .product-img { background: linear-gradient(135deg, #e8e4d4 0%, #d4d0b8 100%); }
+    .product-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      padding: 4px 12px;
+      background: var(--t-earth);
+      color: var(--t-sand);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 100px;
+    }
+    .product-badge.new { background: var(--t-sage); color: white; }
+    .product-badge.sale { background: var(--t-clay); color: white; }
+    .product-wishlist {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    .product-card:hover .product-wishlist {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .product-wishlist:hover { background: white; transform: scale(1.1) !important; }
+    .product-wishlist svg { width: 16px; height: 16px; color: var(--t-earth); }
+    .product-info {
+      padding: 24px;
+    }
+    .product-category {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--t-sage);
+      margin-bottom: 8px;
+    }
+    .product-name {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--t-earth);
+      margin-bottom: 8px;
+    }
+    .product-desc {
+      font-size: 13px;
+      color: var(--t-stone);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .product-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .product-price {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--t-earth);
+    }
+    .product-price .old {
+      font-size: 14px;
+      color: var(--t-fog);
+      text-decoration: line-through;
+      font-weight: 400;
+      margin-left: 8px;
+    }
+    .product-add {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--t-earth);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .product-add:hover {
+      background: var(--t-sage);
+      transform: scale(1.1);
+    }
+    .product-add svg { width: 16px; height: 16px; }
+
+    /* ── Featured Banner ── */
+    .featured-banner {
+      position: relative;
+      background: var(--t-earth);
+      border-radius: 24px;
+      overflow: hidden;
+      margin: 0 40px;
+    }
+    .featured-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+    }
+    .featured-content {
+      padding: 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .featured-tag {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--t-sage-light);
+      margin-bottom: 20px;
+    }
+    .featured-content h2 {
+      font-family: var(--serif);
+      font-size: 44px;
+      font-weight: 700;
+      color: var(--t-sand-light);
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+    .featured-content p {
+      font-size: 16px;
+      color: var(--t-fog);
+      line-height: 1.7;
+      max-width: 400px;
+      margin-bottom: 32px;
+    }
+    .featured-visual {
+      position: relative;
+      background: linear-gradient(135deg, #2a2e22 0%, #3D5A33 50%, #5B7C4F 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .featured-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.1;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Ccircle cx='200' cy='200' r='150' fill='none' stroke='white' stroke-width='0.5'/%3E%3Ccircle cx='200' cy='200' r='120' fill='none' stroke='white' stroke-width='0.5'/%3E%3Ccircle cx='200' cy='200' r='90' fill='none' stroke='white' stroke-width='0.5'/%3E%3Ccircle cx='200' cy='200' r='60' fill='none' stroke='white' stroke-width='0.5'/%3E%3C/svg%3E");
+      background-size: 400px 400px;
+    }
+    .featured-product-icon {
+      font-size: 120px;
+      opacity: 0.8;
+      animation: featuredFloat 4s ease-in-out infinite;
+    }
+    @keyframes featuredFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* ── Brand Story ── */
+    .story-section {
+      background: var(--t-sand-light);
+      position: relative;
+      overflow: hidden;
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .story-visual {
+      position: relative;
+      height: 500px;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .story-img {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--t-earth) 0%, #2a2e22 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      position: relative;
+    }
+    .story-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.08;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='500'%3E%3Cpath d='M0 250 Q150 200 300 250 Q450 300 600 250' fill='none' stroke='%23E8DCC8' stroke-width='1'/%3E%3Cpath d='M0 230 Q150 180 300 230 Q450 280 600 230' fill='none' stroke='%23E8DCC8' stroke-width='0.8'/%3E%3Cpath d='M0 270 Q150 220 300 270 Q450 320 600 270' fill='none' stroke='%23E8DCC8' stroke-width='0.8'/%3E%3Cpath d='M0 210 Q150 160 300 210 Q450 260 600 210' fill='none' stroke='%23E8DCC8' stroke-width='0.6'/%3E%3Cpath d='M0 290 Q150 240 300 290 Q450 340 600 290' fill='none' stroke='%23E8DCC8' stroke-width='0.6'/%3E%3C/svg%3E");
+    }
+    .story-badge {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .story-badge-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--t-sage);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .story-badge-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t-earth);
+    }
+    .story-badge-text span {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--t-stone);
+    }
+    .story-content .section-label { margin-bottom: 12px; }
+    .story-content h2 {
+      font-family: var(--serif);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--t-earth);
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+    .story-content p {
+      font-size: 16px;
+      color: var(--t-stone);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .story-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .story-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: white;
+      border-radius: 12px;
+    }
+    .story-feature-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(91, 124, 79, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+    .story-feature h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t-earth);
+      margin-bottom: 2px;
+    }
+    .story-feature p {
+      font-size: 12px;
+      color: var(--t-stone);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* ── Marquee ── */
+    .marquee-section {
+      padding: 40px 0;
+      background: var(--t-sand-light);
+      overflow: hidden;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .marquee-track {
+      display: flex;
+      gap: 60px;
+      animation: marquee 25s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      font-family: var(--serif);
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--t-earth);
+      white-space: nowrap;
+      opacity: 0.12;
+      letter-spacing: -1px;
+    }
+    .marquee-item .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--t-sage);
+      border-radius: 50%;
+      margin: 0 30px;
+      vertical-align: middle;
+      opacity: 0.4;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── Testimonials ── */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: all 0.3s;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.06);
+    }
+    .testimonial-stars {
+      color: var(--t-clay);
+      font-size: 14px;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .testimonial-text {
+      font-size: 15px;
+      color: var(--t-slate);
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 600;
+      color: white;
+    }
+    .testimonial-card:nth-child(1) .testimonial-avatar { background: var(--t-sage); }
+    .testimonial-card:nth-child(2) .testimonial-avatar { background: var(--t-clay); }
+    .testimonial-card:nth-child(3) .testimonial-avatar { background: var(--t-slate); }
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t-earth);
+    }
+    .testimonial-role {
+      font-size: 12px;
+      color: var(--t-stone);
+    }
+
+    /* ── Newsletter ── */
+    .newsletter {
+      background: var(--t-earth);
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      margin: 0 40px;
+    }
+    .newsletter-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+    .newsletter::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Cpath d='M0 200 Q150 150 300 200 Q450 250 600 200' fill='none' stroke='%23E8DCC8' stroke-width='1'/%3E%3Cpath d='M0 180 Q150 130 300 180 Q450 230 600 180' fill='none' stroke='%23E8DCC8' stroke-width='0.8'/%3E%3Cpath d='M0 220 Q150 170 300 220 Q450 270 600 220' fill='none' stroke='%23E8DCC8' stroke-width='0.8'/%3E%3C/svg%3E");
+    }
+    .newsletter h2 {
+      font-family: var(--serif);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--t-sand-light);
+      margin-bottom: 8px;
+    }
+    .newsletter p {
+      font-size: 15px;
+      color: var(--t-fog);
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+    }
+    .newsletter-input {
+      padding: 16px 24px;
+      width: 320px;
+      border-radius: 8px;
+      border: 1px solid rgba(232, 220, 200, 0.15);
+      background: rgba(255,255,255,0.06);
+      color: var(--t-sand);
+      font-size: 15px;
+      font-family: var(--sans);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .newsletter-input::placeholder { color: var(--t-stone); }
+    .newsletter-input:focus { border-color: var(--t-sage); }
+
+    /* ── Footer ── */
+    .footer {
+      background: var(--t-earth);
+      color: var(--t-fog);
+      padding: 80px 40px 40px;
+    }
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+    .footer-brand .nav-logo {
+      color: var(--t-sand);
+      margin-bottom: 16px;
+    }
+    .footer-brand p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--t-stone);
+      max-width: 280px;
+    }
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--t-sand);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 12px; }
+    .footer-col a {
+      font-size: 14px;
+      color: var(--t-stone);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--t-sage-light); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--t-slate);
+    }
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+    .footer-social a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--t-fog);
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    .footer-social a:hover { background: var(--t-sage); color: white; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-inner { grid-template-columns: 1fr; }
+      .featured-visual { min-height: 300px; }
+      .story-grid { grid-template-columns: 1fr; gap: 40px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .products-grid { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .newsletter-inner { flex-direction: column; gap: 24px; text-align: center; }
+      .newsletter-form { flex-direction: column; width: 100%; }
+      .newsletter-input { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement">
+    Free shipping on orders over <span>$150</span> — Summer collection now available
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 22h20L12 2z"/>
+          <path d="M12 10v6"/>
+        </svg>
+        TERRAIN
+      </a>
+      <ul class="nav-links">
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Men</a></li>
+        <li><a href="#">Women</a></li>
+        <li><a href="#">Gear</a></li>
+        <li><a href="#">Collections</a></li>
+      </ul>
+      <div class="nav-actions">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <div class="cart-badge">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="cart-count">3</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="topo-pattern"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-particles">
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+      <div class="particle"></div><div class="particle"></div>
+    </div>
+    <div class="hero-mountains">
+      <svg viewBox="0 0 1440 400" preserveAspectRatio="none">
+        <path d="M0 400 L0 300 Q180 220 360 280 Q540 340 720 260 Q900 180 1080 240 Q1260 300 1440 200 L1440 400 Z" fill="rgba(91,124,79,0.08)"/>
+        <path d="M0 400 L0 340 Q240 280 480 320 Q720 360 960 300 Q1200 240 1440 280 L1440 400 Z" fill="rgba(91,124,79,0.05)"/>
+        <path d="M0 400 L0 360 Q360 330 720 350 Q1080 370 1440 340 L1440 400 Z" fill="rgba(91,124,79,0.03)"/>
+      </svg>
+    </div>
+    <div class="hero-content">
+      <div class="hero-tag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 22h20L12 2z"/></svg>
+        Summer 2026 Collection
+      </div>
+      <h1>Engineered for the <em>Wild</em></h1>
+      <p class="hero-sub">Premium outdoor gear built for those who chase horizons. Technical fabrics, timeless design, zero compromise.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">
+          Shop Collection
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#" class="btn-outline">Our Story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-number">12K+</div>
+        <div class="stat-label">Adventurers</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">98%</div>
+        <div class="stat-label">Satisfaction</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">47</div>
+        <div class="stat-label">Countries</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Recycled Materials</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <section class="categories">
+    <div class="section">
+      <div class="section-header">
+        <div>
+          <div class="section-label">Shop by Category</div>
+          <h2 class="section-title">Find Your Gear</h2>
+        </div>
+        <a href="#" class="section-link">View all categories →</a>
+      </div>
+      <div class="cat-grid">
+        <div class="cat-card">
+          <div class="cat-card-bg"></div>
+          <div class="cat-icon">🏔️</div>
+          <div class="cat-card-content">
+            <h3>Outerwear</h3>
+            <p>42 products</p>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-card-bg"></div>
+          <div class="cat-icon">🎒</div>
+          <div class="cat-card-content">
+            <h3>Packs & Bags</h3>
+            <p>28 products</p>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-card-bg"></div>
+          <div class="cat-icon">🥾</div>
+          <div class="cat-card-content">
+            <h3>Footwear</h3>
+            <p>35 products</p>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-card-bg"></div>
+          <div class="cat-icon">⛺</div>
+          <div class="cat-card-content">
+            <h3>Camp & Shelter</h3>
+            <p>19 products</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Topographic Divider -->
+  <div class="topo-divider">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0 40 Q180 15 360 40 Q540 65 720 40 Q900 15 1080 40 Q1260 65 1440 40" fill="none" stroke="rgba(91,124,79,0.12)" stroke-width="1.5"/>
+      <path d="M0 40 Q180 25 360 40 Q540 55 720 40 Q900 25 1080 40 Q1260 55 1440 40" fill="none" stroke="rgba(91,124,79,0.08)" stroke-width="1"/>
+      <path d="M0 40 Q180 35 360 40 Q540 45 720 40 Q900 35 1080 40 Q1260 45 1440 40" fill="none" stroke="rgba(91,124,79,0.05)" stroke-width="0.8"/>
+    </svg>
+  </div>
+
+  <!-- Featured Products -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-label">New Arrivals</div>
+        <h2 class="section-title">Editor's Picks</h2>
+      </div>
+      <a href="#" class="section-link">Shop all new arrivals →</a>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img">
+          <div class="product-img-inner">🧥</div>
+          <span class="product-badge new">New</span>
+          <button class="product-wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Outerwear</div>
+          <div class="product-name">Alpine Shell Jacket</div>
+          <div class="product-desc">3-layer GORE-TEX, fully seam-sealed, helmet-compatible hood</div>
+          <div class="product-bottom">
+            <div class="product-price">$389</div>
+            <button class="product-add">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <div class="product-img-inner">🎒</div>
+          <button class="product-wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Packs</div>
+          <div class="product-name">Summit 45L Pack</div>
+          <div class="product-desc">Ultralight ripstop, adjustable torso, rain cover included</div>
+          <div class="product-bottom">
+            <div class="product-price">$245</div>
+            <button class="product-add">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <div class="product-img-inner">🥾</div>
+          <span class="product-badge sale">-20%</span>
+          <button class="product-wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Footwear</div>
+          <div class="product-name">Trailrunner GTX</div>
+          <div class="product-desc">Vibram Megagrip sole, waterproof, responsive cushioning</div>
+          <div class="product-bottom">
+            <div class="product-price">$179 <span class="old">$224</span></div>
+            <button class="product-add">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <div class="product-img-inner">🧢</div>
+          <span class="product-badge new">New</span>
+          <button class="product-wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Accessories</div>
+          <div class="product-name">Trail Cap</div>
+          <div class="product-desc">UPF 50+, moisture-wicking, adjustable back closure</div>
+          <div class="product-bottom">
+            <div class="product-price">$38</div>
+            <button class="product-add">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <div class="product-img-inner">🩳</div>
+          <button class="product-wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Bottoms</div>
+          <div class="product-name">Ripstop Cargo Shorts</div>
+          <div class="product-desc">4-way stretch, DWR finish, zippered thigh pockets</div>
+          <div class="product-bottom">
+            <div class="product-price">$89</div>
+            <button class="product-add">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <div class="product-img-inner">⛺</div>
+          <span class="product-badge new">New</span>
+          <button class="product-wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Camp</div>
+          <div class="product-name">Ultralight 2P Tent</div>
+          <div class="product-desc">1.2kg total, DAC Featherlite poles, full mesh inner</div>
+          <div class="product-bottom">
+            <div class="product-price">$429</div>
+            <button class="product-add">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Banner -->
+  <div class="featured-banner">
+    <div class="featured-inner">
+      <div class="featured-content">
+        <div class="featured-tag">Limited Edition</div>
+        <h2>The Ridgeline Collection</h2>
+        <p>Inspired by the world's most demanding trails. Each piece is field-tested at 4,000m+ and built to outlast the journey.</p>
+        <a href="#" class="btn-primary">
+          Explore Collection
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="featured-visual">
+        <div class="featured-product-icon">🏔️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand Story -->
+  <section class="story-section">
+    <div class="section">
+      <div class="story-grid">
+        <div class="story-visual">
+          <div class="story-img">🌍</div>
+          <div class="story-badge">
+            <div class="story-badge-icon">♻️</div>
+            <div class="story-badge-text">
+              B Corp Certified
+              <span>Since 2022</span>
+            </div>
+          </div>
+        </div>
+        <div class="story-content">
+          <div class="section-label">Our Story</div>
+          <h2>Born in the Mountains, Built for the Trail</h2>
+          <p>Terrain was founded in 2019 by a group of alpine guides who were tired of gear that couldn't keep up. Every product we make is designed in our Chamonix studio and tested on the world's toughest terrain.</p>
+          <p>We believe the best outdoor gear should be invisible — so you can focus on what matters: the summit, the trail, the moment.</p>
+          <div class="story-features">
+            <div class="story-feature">
+              <div class="story-feature-icon">🌿</div>
+              <div>
+                <h4>100% Recycled</h4>
+                <p>All fabrics from post-consumer waste</p>
+              </div>
+            </div>
+            <div class="story-feature">
+              <div class="story-feature-icon">🔧</div>
+              <div>
+                <h4>Lifetime Repair</h4>
+                <p>Free repairs for life on all products</p>
+              </div>
+            </div>
+            <div class="story-feature">
+              <div class="story-feature-icon">🏔️</div>
+              <div>
+                <h4>Field Tested</h4>
+                <p>Every product tested at 4,000m+</p>
+              </div>
+            </div>
+            <div class="story-feature">
+              <div class="story-feature-icon">📦</div>
+              <div>
+                <h4>Carbon Neutral</h4>
+                <p>Net-zero shipping since 2023</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <span class="marquee-item">ALPINE SHELL <span class="dot"></span> SUMMIT PACK <span class="dot"></span> TRAILRUNNER <span class="dot"></span> RIDGELINE <span class="dot"></span> ULTRALIGHT <span class="dot"></span> EXPEDITION <span class="dot"></span></span>
+      <span class="marquee-item">ALPINE SHELL <span class="dot"></span> SUMMIT PACK <span class="dot"></span> TRAILRUNNER <span class="dot"></span> RIDGELINE <span class="dot"></span> ULTRALIGHT <span class="dot"></span> EXPEDITION <span class="dot"></span></span>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Reviews</div>
+        <h2 class="section-title">Trail-Tested Reviews</h2>
+      </div>
+      <a href="#" class="section-link">Read all reviews →</a>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"Wore the Alpine Shell through 3 days of non-stop rain on the Tour du Mont Blanc. Bone dry the entire time. Best jacket I've ever owned."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">M</div>
+          <div>
+            <div class="testimonial-name">Marcus Chen</div>
+            <div class="testimonial-role">Alpine Guide, Chamonix</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"The Summit 45L is the perfect balance of capacity and weight. Used it for a 5-day trek in Patagonia — it carried everything I needed without feeling bulky."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">S</div>
+          <div>
+            <div class="testimonial-name">Sarah Lindström</div>
+            <div class="testimonial-role">Thru-hiker, 12,000km+</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"Finally, a brand that cares about the planet as much as performance. The recycled materials don't compromise quality — if anything, they're better."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">A</div>
+          <div>
+            <div class="testimonial-name">Akiko Tanaka</div>
+            <div class="testimonial-role">Mountain Photographer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <div class="newsletter">
+    <div class="newsletter-inner">
+      <div>
+        <h2>Join the Expedition</h2>
+        <p>Get early access to new drops, trail reports, and 15% off your first order.</p>
+      </div>
+      <form class="newsletter-form" onsubmit="return false">
+        <input type="email" class="newsletter-input" placeholder="your@email.com">
+        <button class="btn-primary" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <path d="M12 2L2 22h20L12 2z"/>
+              <path d="M12 10v6"/>
+            </svg>
+            TERRAIN
+          </a>
+          <p>Premium outdoor gear for those who chase horizons. Designed in Chamonix, tested on the world's toughest trails.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Outerwear</a></li>
+            <li><a href="#">Footwear</a></li>
+            <li><a href="#">Packs & Bags</a></li>
+            <li><a href="#">Accessories</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Stores</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Warranty</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Terrain. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#">📷</a>
+          <a href="#">🐦</a>
+          <a href="#">📺</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
