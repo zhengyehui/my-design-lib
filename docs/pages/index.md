@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 85 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 86 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -811,6 +811,15 @@ const pages = [
     rating: 9.5,
     description: '高端户外装备电商，灵感来自 Balmoral Running，大地色系 + 等高线 SVG 背景 + 山脉剪影 Hero + 产品网格 + 品牌故事 + Marquee 滚动',
   },
+  {
+    id: 'music-festival',
+    title: 'ECLAT 音乐节',
+    category: 'creative',
+    tags: ['音乐节', '活动', '暗色主题', 'CSS动画', '粒子效果'],
+    colors: ['#06060c', '#ff2d78', '#00d4ff'],
+    rating: 9.5,
+    description: '沉浸式音乐节落地页，霓虹渐变 Hero + CSS 浮动光球 + 阵容网格 + 时间线日程 + 门票三栏 + Bento 体验区',
+  },
 ]
 
 const categories = [
@@ -868,12 +877,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 85 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 86 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="84 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="86 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -882,7 +891,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 85 个完整页面</span>
+      <span>📦 86 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
