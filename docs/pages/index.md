@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 86 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 87 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -820,6 +820,15 @@ const pages = [
     rating: 9.5,
     description: '沉浸式音乐节落地页，霓虹渐变 Hero + CSS 浮动光球 + 阵容网格 + 时间线日程 + 门票三栏 + Bento 体验区',
   },
+  {
+    id: 'chat-app',
+    title: 'NexusChat 团队通讯',
+    category: 'app',
+    tags: ['聊天', '即时通讯', '暗色主题', '团队协作', 'Discord风格'],
+    colors: ['#0a0a12', '#6366f1', '#818cf8'],
+    rating: 9.5,
+    description: '四栏团队通讯应用，灵感来自 Discord/Slack，服务器栏 + 频道列表 + 消息流 + 成员面板 + 代码块 + 表情反应',
+  },
 ]
 
 const categories = [
@@ -891,7 +900,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 86 个完整页面</span>
+      <span>📦 87 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusChat — 实时团队协作通讯</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --chat-bg: #0a0a12;
+      --sidebar-bg: #0d0d18;
+      --sidebar-hover: rgba(99, 102, 241, 0.08);
+      --sidebar-active: rgba(99, 102, 241, 0.15);
+      --chat-area-bg: #0f0f1a;
+      --msg-own: #6366f1;
+      --msg-own-text: #ffffff;
+      --msg-other: #1a1a28;
+      --msg-other-text: #e2e8f0;
+      --input-bg: #14142a;
+      --input-border: #252540;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --accent-glow: rgba(99, 102, 241, 0.25);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #1e1e30;
+      --border-light: #2a2a40;
+      --online: #10b981;
+      --busy: #f59e0b;
+      --offline: #64748b;
+      --dnd: #ef4444;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--chat-bg);
+      color: var(--text-primary);
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Layout ===== */
+    .app {
+      display: grid;
+      grid-template-columns: 72px 260px 1fr 280px;
+      height: 100vh;
+    }
+
+    /* ===== Server Sidebar (Leftmost) ===== */
+    .server-bar {
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 8px;
+    }
+    .server-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: white;
+      cursor: pointer;
+      transition: border-radius var(--duration-fast) var(--ease-default),
+                  background var(--duration-fast) var(--ease-default);
+      position: relative;
+    }
+    .server-icon:hover, .server-icon.active {
+      border-radius: 12px;
+    }
+    .server-icon.active::before {
+      content: '';
+      position: absolute;
+      left: -12px;
+      width: 4px;
+      height: 36px;
+      background: var(--text-primary);
+      border-radius: 0 4px 4px 0;
+    }
+    .server-icon.accent-2 { background: linear-gradient(135deg, #ec4899, #f43f5e); }
+    .server-icon.accent-3 { background: linear-gradient(135deg, #10b981, #06b6d4); }
+    .server-icon.accent-4 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+    .server-divider {
+      width: 32px;
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      margin: 4px 0;
+    }
+    .server-icon.add {
+      background: var(--chat-area-bg);
+      border: 1px dashed var(--border-light);
+      color: var(--success);
+      font-size: 24px;
+      font-weight: 300;
+    }
+    .server-icon.add:hover {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+
+    /* ===== Channel Sidebar ===== */
+    .channels {
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .channel-header {
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .team-name {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .team-name svg { opacity: 0.5; }
+    .channel-search {
+      margin-top: 10px;
+      position: relative;
+    }
+    .channel-search input {
+      width: 100%;
+      padding: 7px 10px 7px 32px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 13px;
+      outline: none;
+      transition: border-color var(--duration-fast);
+    }
+    .channel-search input:focus {
+      border-color: var(--accent);
+    }
+    .channel-search input::placeholder { color: var(--text-muted); }
+    .channel-search svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    .channel-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+    .channel-list::-webkit-scrollbar { width: 4px; }
+    .channel-list::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
+    .channel-group-label {
+      padding: 16px 16px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .channel-group-label .add-btn {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all var(--duration-fast);
+    }
+    .channel-group-label .add-btn:hover {
+      background: var(--sidebar-hover);
+      color: var(--text-primary);
+    }
+    .channel-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 16px;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 14px;
+      transition: all var(--duration-fast);
+      border-radius: 0;
+      margin: 0 8px;
+      border-radius: var(--radius-sm);
+    }
+    .channel-item:hover {
+      background: var(--sidebar-hover);
+      color: var(--text-primary);
+    }
+    .channel-item.active {
+      background: var(--sidebar-active);
+      color: var(--text-primary);
+    }
+    .channel-item .hash {
+      font-size: 16px;
+      font-weight: 500;
+      opacity: 0.5;
+      width: 20px;
+      text-align: center;
+    }
+    .channel-item.active .hash { opacity: 1; color: var(--accent-light); }
+    .channel-item .name { flex: 1; }
+    .channel-item .badge {
+      background: var(--danger);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: var(--radius-full);
+      min-width: 18px;
+      text-align: center;
+    }
+    .channel-item.unread .name {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* DM section */
+    .dm-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 16px;
+      gap: 10px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 14px;
+      transition: all var(--duration-fast);
+      margin: 0 8px;
+      border-radius: var(--radius-sm);
+    }
+    .dm-item:hover { background: var(--sidebar-hover); color: var(--text-primary); }
+    .dm-item.active { background: var(--sidebar-active); color: var(--text-primary); }
+    .dm-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .dm-avatar .avatar-img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+    }
+    .dm-avatar .status-dot {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--sidebar-bg);
+    }
+    .status-online { background: var(--online); }
+    .status-busy { background: var(--busy); }
+    .status-offline { background: var(--offline); }
+    .status-dnd { background: var(--dnd); }
+
+    /* User Panel */
+    .user-panel {
+      padding: 10px 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.15);
+    }
+    .user-panel .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      position: relative;
+    }
+    .user-panel .user-avatar .status-dot {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2.5px solid var(--sidebar-bg);
+      background: var(--online);
+    }
+    .user-info { flex: 1; min-width: 0; }
+    .user-info .user-name { font-size: 13px; font-weight: 600; }
+    .user-info .user-status { font-size: 11px; color: var(--text-muted); }
+    .user-panel .controls { display: flex; gap: 4px; }
+    .user-panel .controls button {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--duration-fast);
+    }
+    .user-panel .controls button:hover {
+      background: var(--sidebar-hover);
+      color: var(--text-primary);
+    }
+
+    /* ===== Chat Area ===== */
+    .chat-area {
+      display: flex;
+      flex-direction: column;
+      background: var(--chat-area-bg);
+    }
+    .chat-header {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 15, 26, 0.8);
+      backdrop-filter: blur(12px);
+    }
+    .chat-header .channel-info { flex: 1; }
+    .chat-header .channel-title {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chat-header .channel-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .chat-header .actions { display: flex; gap: 4px; }
+    .chat-header .actions button {
+      width: 34px;
+      height: 34px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--duration-fast);
+    }
+    .chat-header .actions button:hover {
+      background: var(--sidebar-hover);
+      color: var(--text-primary);
+    }
+    .chat-header .actions button.active-btn {
+      color: var(--accent);
+      background: var(--sidebar-active);
+    }
+    .header-search {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: border-color var(--duration-fast);
+    }
+    .header-search:hover { border-color: var(--border-light); }
+    .header-search kbd {
+      font-family: inherit;
+      font-size: 11px;
+      padding: 1px 5px;
+      background: var(--border);
+      border-radius: 3px;
+      color: var(--text-muted);
+    }
+
+    /* Messages */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .messages::-webkit-scrollbar { width: 6px; }
+    .messages::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    .msg-group {
+      display: flex;
+      gap: 12px;
+      padding: 6px 0;
+    }
+    .msg-group:hover { background: rgba(255,255,255,0.01); border-radius: var(--radius-sm); }
+    .msg-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: white;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .msg-content { flex: 1; min-width: 0; }
+    .msg-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+    .msg-author {
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .msg-author:hover { text-decoration: underline; }
+    .msg-author.purple { color: #a78bfa; }
+    .msg-author.blue { color: #60a5fa; }
+    .msg-author.green { color: #34d399; }
+    .msg-author.pink { color: #f472b6; }
+    .msg-author.orange { color: #fb923c; }
+    .msg-author.teal { color: #2dd4bf; }
+    .msg-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .msg-role {
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .role-admin { background: rgba(99, 102, 241, 0.2); color: #a78bfa; }
+    .role-mod { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .role-bot { background: rgba(99, 102, 241, 0.3); color: #818cf8; }
+    .msg-text {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+    .msg-text code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: rgba(99, 102, 241, 0.15);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: var(--accent-light);
+    }
+    .msg-text a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+    .msg-text a:hover { text-decoration: underline; }
+
+    /* Reactions */
+    .msg-reactions {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .reaction {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: var(--sidebar-active);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all var(--duration-fast);
+    }
+    .reaction:hover {
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.2);
+    }
+    .reaction.active {
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.2);
+    }
+    .reaction .count {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .reaction.active .count { color: var(--accent-light); }
+
+    /* Code Block */
+    .code-block {
+      margin-top: 8px;
+      background: #0d0d18;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid var(--border);
+    }
+    .code-lang {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .code-copy {
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      font-family: inherit;
+      transition: color var(--duration-fast);
+    }
+    .code-copy:hover { color: var(--text-primary); }
+    .code-body {
+      padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      color: #e2e8f0;
+    }
+    .code-body .kw { color: #c084fc; }
+    .code-body .fn { color: #60a5fa; }
+    .code-body .str { color: #34d399; }
+    .code-body .cm { color: #64748b; }
+    .code-body .num { color: #fb923c; }
+    .code-body .op { color: #94a3b8; }
+
+    /* File attachment */
+    .msg-attachment {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: border-color var(--duration-fast);
+      max-width: 400px;
+    }
+    .msg-attachment:hover { border-color: var(--accent); }
+    .attachment-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .attachment-icon.pdf { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+    .attachment-icon.img { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .attachment-icon.zip { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+    .attachment-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent-light);
+    }
+    .attachment-size {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Image in message */
+    .msg-image {
+      margin-top: 8px;
+      max-width: 420px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .msg-image .img-placeholder {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #1a1a30 0%, #252545 50%, #1a1a30 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      position: relative;
+    }
+    .msg-image .img-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(99,102,241,0.03) 10px,
+        rgba(99,102,241,0.03) 20px
+      );
+    }
+
+    /* Typing indicator */
+    .typing-indicator {
+      padding: 4px 20px 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+    }
+    .typing-dots {
+      display: flex;
+      gap: 3px;
+    }
+    .typing-dots span {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      animation: typing 1.4s infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-3px); }
+    }
+
+    /* Message Input */
+    .chat-input {
+      padding: 0 20px 16px;
+    }
+    .input-wrapper {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      transition: border-color var(--duration-fast);
+    }
+    .input-wrapper:focus-within {
+      border-color: var(--accent);
+    }
+    .input-actions {
+      display: flex;
+      gap: 2px;
+      padding-bottom: 2px;
+    }
+    .input-actions button {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--duration-fast);
+    }
+    .input-actions button:hover {
+      background: var(--sidebar-hover);
+      color: var(--text-primary);
+    }
+    .input-field {
+      flex: 1;
+      min-height: 22px;
+      max-height: 120px;
+      outline: none;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      line-height: 1.5;
+      resize: none;
+      border: none;
+      background: transparent;
+    }
+    .input-field::placeholder { color: var(--text-muted); }
+    .send-btn {
+      width: 34px;
+      height: 34px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--duration-fast);
+      flex-shrink: 0;
+    }
+    .send-btn:hover { background: #4f46e5; }
+    .input-hint {
+      padding: 4px 0 0;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 12px;
+    }
+    .input-hint kbd {
+      font-family: inherit;
+      font-size: 10px;
+      padding: 0 3px;
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    /* ===== Members Panel ===== */
+    .members-panel {
+      background: var(--sidebar-bg);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 16px 12px;
+    }
+    .members-panel::-webkit-scrollbar { width: 4px; }
+    .members-panel::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
+    .member-group-label {
+      padding: 12px 8px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .member-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background var(--duration-fast);
+    }
+    .member-item:hover { background: var(--sidebar-hover); }
+    .member-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .member-avatar .status-dot {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--sidebar-bg);
+    }
+    .member-info { flex: 1; min-width: 0; }
+    .member-name {
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .member-role {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .member-item.offline .member-avatar { opacity: 0.4; }
+    .member-item.offline .member-name { color: var(--text-muted); }
+
+    /* ===== Date Divider ===== */
+    .date-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+    }
+    .date-divider::before, .date-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .date-divider span {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* ===== System Message ===== */
+    .system-msg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0 4px 52px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .system-msg .sys-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      flex-shrink: 0;
+      margin-left: -32px;
+    }
+
+    /* ===== Unread Banner ===== */
+    .unread-banner {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      text-align: center;
+      padding: 6px;
+      background: var(--danger);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ===== Welcome Message ===== */
+    .welcome-msg {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+    .welcome-msg .welcome-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin: 0 auto 12px;
+    }
+    .welcome-msg h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .welcome-msg p {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ===== Pinned Message Bar ===== */
+    .pinned-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 20px;
+      background: rgba(99, 102, 241, 0.08);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .pinned-bar svg { color: var(--accent); flex-shrink: 0; }
+    .pinned-bar .pinned-text { flex: 1; }
+    .pinned-bar .pinned-author { font-weight: 600; color: var(--accent-light); }
+    .pinned-bar .pinned-dismiss {
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: color var(--duration-fast);
+    }
+    .pinned-bar .pinned-dismiss:hover { color: var(--text-primary); }
+
+    /* ===== Mention Highlight ===== */
+    .mention {
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--accent-light);
+      padding: 0 3px;
+      border-radius: 3px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .mention:hover { background: rgba(99, 102, 241, 0.35); }
+
+    /* ===== Thread Reply ===== */
+    .thread-preview {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: rgba(99, 102, 241, 0.06);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--duration-fast);
+      font-size: 12px;
+    }
+    .thread-preview:hover {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: var(--accent);
+    }
+    .thread-avatars {
+      display: flex;
+    }
+    .thread-avatars .t-av {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 600;
+      color: white;
+      margin-left: -6px;
+      border: 2px solid var(--chat-area-bg);
+    }
+    .thread-avatars .t-av:first-child { margin-left: 0; }
+    .thread-count { color: var(--accent-light); font-weight: 600; }
+    .thread-time { color: var(--text-muted); }
+
+    /* ===== Notification Pulse ===== */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(99,102,241,0); }
+      100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+    }
+    .server-icon.active {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Server Bar -->
+  <nav class="server-bar">
+    <div class="server-icon active" title="NexusChat">N</div>
+    <div class="server-icon accent-2" title="Design Team">D</div>
+    <div class="server-icon accent-3" title="Open Source">O</div>
+    <div class="server-icon accent-4" title="Gaming">G</div>
+    <div class="server-divider"></div>
+    <div class="server-icon add" title="Add a Server">+</div>
+  </nav>
+
+  <!-- Channels Sidebar -->
+  <aside class="channels">
+    <div class="channel-header">
+      <div class="team-name">
+        NexusChat
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="channel-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="搜索频道或成员...">
+      </div>
+    </div>
+
+    <div class="channel-list">
+      <div class="channel-group-label">
+        频道
+        <span class="add-btn">+</span>
+      </div>
+      <div class="channel-item active">
+        <span class="hash">#</span>
+        <span class="name">general</span>
+      </div>
+      <div class="channel-item unread">
+        <span class="hash">#</span>
+        <span class="name">design-review</span>
+        <span class="badge">5</span>
+      </div>
+      <div class="channel-item">
+        <span class="hash">#</span>
+        <span class="name">engineering</span>
+      </div>
+      <div class="channel-item unread">
+        <span class="hash">#</span>
+        <span class="name">random</span>
+        <span class="badge">12</span>
+      </div>
+      <div class="channel-item">
+        <span class="hash">#</span>
+        <span class="name">announcements</span>
+      </div>
+      <div class="channel-item">
+        <span class="hash">#</span>
+        <span class="name">product-launch</span>
+      </div>
+      <div class="channel-item">
+        <span class="hash">🔒</span>
+        <span class="name">admin-only</span>
+      </div>
+      <div class="channel-item">
+        <span class="hash">🔊</span>
+        <span class="name">Voice Lounge</span>
+      </div>
+
+      <div class="channel-group-label">
+        私信
+        <span class="add-btn">+</span>
+      </div>
+      <div class="dm-item active">
+        <div class="dm-avatar">
+          <div class="avatar-img" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">E</div>
+          <span class="status-dot status-online"></span>
+        </div>
+        <span>Elena Chen</span>
+      </div>
+      <div class="dm-item">
+        <div class="dm-avatar">
+          <div class="avatar-img" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">M</div>
+          <span class="status-dot status-busy"></span>
+        </div>
+        <span>Marco Rivera</span>
+      </div>
+      <div class="dm-item">
+        <div class="dm-avatar">
+          <div class="avatar-img" style="background:linear-gradient(135deg,#10b981,#06b6d4)">S</div>
+          <span class="status-dot status-online"></span>
+        </div>
+        <span>Sarah Kim</span>
+      </div>
+      <div class="dm-item">
+        <div class="dm-avatar">
+          <div class="avatar-img" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">A</div>
+          <span class="status-dot status-offline"></span>
+        </div>
+        <span>Alex Novak</span>
+      </div>
+      <div class="dm-item">
+        <div class="dm-avatar">
+          <div class="avatar-img" style="background:linear-gradient(135deg,#06b6d4,#3b82f6)">J</div>
+          <span class="status-dot status-dnd"></span>
+        </div>
+        <span>Jun Tanaka</span>
+      </div>
+    </div>
+
+    <div class="user-panel">
+      <div class="user-avatar">
+        L
+        <span class="status-dot"></span>
+      </div>
+      <div class="user-info">
+        <div class="user-name">Lena Park</div>
+        <div class="user-status">在线</div>
+      </div>
+      <div class="controls">
+        <button title="静音">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+        <button title="耳机">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        </button>
+        <button title="设置">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Chat Area -->
+  <main class="chat-area">
+    <div class="chat-header">
+      <div class="channel-info">
+        <div class="channel-title">
+          <span style="color:var(--text-muted)">#</span> general
+        </div>
+        <div class="channel-desc">团队日常沟通 · 设计与开发协作</div>
+      </div>
+      <div class="actions">
+        <button title="线程" class="active-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <button title="通知">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+        <button title="成员列表" class="active-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </button>
+        <div class="header-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          搜索
+          <kbd>⌘K</kbd>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pinned Message -->
+    <div class="pinned-bar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24z"/></svg>
+      <span class="pinned-text"><span class="pinned-author">@Sarah Kim</span> — v2.4 发布计划已更新到 Notion，请大家检查自己的任务截止日期</span>
+      <span class="pinned-dismiss">✕</span>
+    </div>
+
+    <div class="messages">
+      <div class="welcome-msg">
+        <div class="welcome-icon">#</div>
+        <h2>欢迎来到 #general</h2>
+        <p>这是团队的起始频道，用于日常沟通和协作。所有成员都可以在这里自由发言。</p>
+      </div>
+
+      <div class="date-divider"><span>2026年6月29日 星期日</span></div>
+
+      <!-- System message -->
+      <div class="system-msg">
+        <span class="sys-icon" style="background:rgba(16,185,129,0.15);color:#10b981">👋</span>
+        <span><strong>Jun Tanaka</strong> 加入了频道</span>
+      </div>
+
+      <!-- Message 1 -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">E</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author purple">Elena Chen</span>
+            <span class="msg-role role-admin">Admin</span>
+            <span class="msg-time">上午 9:12</span>
+          </div>
+          <div class="msg-text">早安各位 ☀️ 今天有几个重要的更新要同步给大家：</div>
+          <div class="msg-reactions">
+            <span class="reaction active">☀️ <span class="count">4</span></span>
+            <span class="reaction">👋 <span class="count">6</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 2 -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">E</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author purple">Elena Chen</span>
+            <span class="msg-role role-admin">Admin</span>
+            <span class="msg-time">上午 9:13</span>
+          </div>
+          <div class="msg-text">1️⃣ 设计系统 v3.2 已发布，新增了 <code>DataTable</code> 和 <code>DateRangePicker</code> 两个组件<br>2️⃣ API 文档已更新到最新版本<br>3️⃣ 本周五的 All-Hands 改到下午 3 点</div>
+          <div class="msg-reactions">
+            <span class="reaction active">🚀 <span class="count">8</span></span>
+            <span class="reaction">👍 <span class="count">5</span></span>
+            <span class="reaction">❤️ <span class="count">3</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 3 - Code Block -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#34d399,#06b6d4)">S</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author green">Sarah Kim</span>
+            <span class="msg-role role-mod">Moderator</span>
+            <span class="msg-time">上午 9:18</span>
+          </div>
+          <div class="msg-text">新组件的 API 设计已经完成了，这里有一个快速预览：</div>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">TypeScript</span>
+              <button class="code-copy">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                复制
+              </button>
+            </div>
+            <div class="code-body"><span class="kw">import</span> { DataTable } <span class="kw">from</span> <span class="str">'@nexus/ui'</span>;
+
+<span class="kw">const</span> <span class="fn">columns</span> <span class="op">=</span> [
+  { <span class="fn">key</span>: <span class="str">'name'</span>, <span class="fn">label</span>: <span class="str">'用户名称'</span>, <span class="fn">sortable</span>: <span class="num">true</span> },
+  { <span class="fn">key</span>: <span class="str">'email'</span>, <span class="fn">label</span>: <span class="str">'邮箱'</span> },
+  { <span class="fn">key</span>: <span class="str">'role'</span>, <span class="fn">label</span>: <span class="str">'角色'</span>, <span class="fn">filterable</span>: <span class="num">true</span> },
+];
+
+<span class="kw">export default</span> <span class="kw">function</span> <span class="fn">UserTable</span>() {
+  <span class="kw">return</span> (
+    <span class="op">&lt;</span><span class="fn">DataTable</span>
+      <span class="fn">columns</span><span class="op">=</span>{<span class="fn">columns</span>}
+      <span class="fn">dataSource</span><span class="op">=</span>{<span class="fn">users</span>}
+      <span class="fn">pagination</span><span class="op">=</span>{{ <span class="fn">pageSize</span>: <span class="num">20</span> }}
+      <span class="fn">searchable</span>
+    <span class="op">/&gt;</span>
+  );
+}</div>
+          </div>
+          <div class="msg-reactions">
+            <span class="reaction">🔥 <span class="count">7</span></span>
+            <span class="reaction">💯 <span class="count">4</span></span>
+          </div>
+          <div class="thread-preview">
+            <div class="thread-avatars">
+              <div class="t-av" style="background:#6366f1">E</div>
+              <div class="t-av" style="background:#f472b6">M</div>
+              <div class="t-av" style="background:#f59e0b">A</div>
+            </div>
+            <span class="thread-count">3 条回复</span>
+            <span class="thread-time">最后回复 上午 9:34</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 4 - File -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#f472b6,#f43f5e)">M</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author pink">Marco Rivera</span>
+            <span class="msg-time">上午 9:25</span>
+          </div>
+          <div class="msg-text">这是更新后的产品原型，包含了新的导航结构和暗色模式适配 👇</div>
+          <div class="msg-attachment">
+            <div class="attachment-icon pdf">📄</div>
+            <div>
+              <div class="attachment-name">v3.2-prototype-redesign.pdf</div>
+              <div class="attachment-size">4.2 MB · PDF</div>
+            </div>
+          </div>
+          <div class="msg-attachment" style="margin-left: 0;">
+            <div class="attachment-icon img">🖼️</div>
+            <div>
+              <div class="attachment-name">dashboard-preview.png</div>
+              <div class="attachment-size">1.8 MB · PNG</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 5 -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#fb923c,#ef4444)">A</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author orange">Alex Novak</span>
+            <span class="msg-time">上午 9:32</span>
+          </div>
+          <div class="msg-text">看完原型了，导航改版的方向很棒！不过有个建议：暗色模式下 <span class="mention">@Elena Chen</span> 的侧边栏对比度可以再提高一点，目前在 WCAG 标准下只有 3.8:1</div>
+          <div class="msg-reactions">
+            <span class="reaction">👀 <span class="count">3</span></span>
+            <span class="reaction active">✅ <span class="count">2</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 6 -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">E</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author purple">Elena Chen</span>
+            <span class="msg-role role-admin">Admin</span>
+            <span class="msg-time">上午 9:35</span>
+          </div>
+          <div class="msg-text">好的，我马上调一下 👍 顺便 <span class="mention">@everyone</span> 记得填写本周的 OKR 进度更新，deadline 是明天下午 6 点</div>
+        </div>
+      </div>
+
+      <!-- Message 7 - Image placeholder -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#34d399,#06b6d4)">S</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author green">Sarah Kim</span>
+            <span class="msg-role role-mod">Moderator</span>
+            <span class="msg-time">上午 9:41</span>
+          </div>
+          <div class="msg-text">组件库的 Storybook 预览已部署 👇</div>
+          <div class="msg-image">
+            <div class="img-placeholder">
+              <span style="position:relative;z-index:1">📊 Storybook 预览截图</span>
+            </div>
+          </div>
+          <div class="msg-reactions">
+            <span class="reaction">🎉 <span class="count">11</span></span>
+            <span class="reaction">🚀 <span class="count">6</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 8 -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#2dd4bf,#3b82f6)">J</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author teal">Jun Tanaka</span>
+            <span class="msg-role role-bot">Bot</span>
+            <span class="msg-time">上午 9:45</span>
+          </div>
+          <div class="msg-text">
+            🤖 <strong>CI/CD 状态报告</strong><br><br>
+            ✅ <code>nexus-ui@3.2.0</code> — 构建成功<br>
+            ✅ 单元测试通过 (247/247)<br>
+            ✅ E2E 测试通过 (38/38)<br>
+            ✅ 包大小: 42.3kb (gzipped)<br>
+            ✅ 已发布到 npm registry
+          </div>
+          <div class="msg-reactions">
+            <span class="reaction">🤖 <span class="count">2</span></span>
+            <span class="reaction">🎉 <span class="count">9</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 9 -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#fb923c,#ef4444)">A</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author orange">Alex Novak</span>
+            <span class="msg-time">上午 9:48</span>
+          </div>
+          <div class="msg-text">完美！所有测试都绿了 🟢 我这边开始集成到前端项目中</div>
+          <div class="msg-reactions">
+            <span class="reaction">💪 <span class="count">5</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 10 -->
+      <div class="msg-group">
+        <div class="msg-avatar" style="background:linear-gradient(135deg,#f472b6,#f43f5e)">M</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author pink">Marco Rivera</span>
+            <span class="msg-time">上午 9:52</span>
+          </div>
+          <div class="msg-text">顺便问一下，新组件的文档站是不是也要同步更新？我看到 <code>DataTable</code> 的 props 文档还是旧的</div>
+          <div class="thread-preview">
+            <div class="thread-avatars">
+              <div class="t-av" style="background:#34d399">S</div>
+              <div class="t-av" style="background:#fb923c">A</div>
+            </div>
+            <span class="thread-count">2 条回复</span>
+            <span class="thread-time">最后回复 上午 9:58</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div class="typing-indicator">
+      <div class="typing-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <span><strong>Elena Chen</strong> 正在输入...</span>
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input">
+      <div class="input-wrapper">
+        <div class="input-actions">
+          <button title="添加附件">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          </button>
+        </div>
+        <textarea class="input-field" placeholder="发送消息到 #general" rows="1"></textarea>
+        <div class="input-actions">
+          <button title="GIF">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/></svg>
+          </button>
+          <button title="表情">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          </button>
+        </div>
+        <button class="send-btn" title="发送">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <div class="input-hint">
+        <span><kbd>Enter</kbd> 发送</span>
+        <span><kbd>Shift + Enter</kbd> 换行</span>
+        <span><kbd>/</kbd> 命令</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Members Panel -->
+  <aside class="members-panel">
+    <div class="member-group-label">在线 — 5</div>
+
+    <div class="member-item">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+        E
+        <span class="status-dot status-online"></span>
+      </div>
+      <div class="member-info">
+        <div class="member-name" style="color:#a78bfa">Elena Chen</div>
+        <div class="member-role">产品负责人</div>
+      </div>
+    </div>
+
+    <div class="member-item">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#34d399,#06b6d4)">
+        S
+        <span class="status-dot status-online"></span>
+      </div>
+      <div class="member-info">
+        <div class="member-name" style="color:#34d399">Sarah Kim</div>
+        <div class="member-role">前端工程师</div>
+      </div>
+    </div>
+
+    <div class="member-item">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#f472b6,#f43f5e)">
+        M
+        <span class="status-dot status-busy"></span>
+      </div>
+      <div class="member-info">
+        <div class="member-name" style="color:#f472b6">Marco Rivera</div>
+        <div class="member-role">UI 设计师</div>
+      </div>
+    </div>
+
+    <div class="member-item">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#fb923c,#ef4444)">
+        A
+        <span class="status-dot status-offline"></span>
+      </div>
+      <div class="member-info">
+        <div class="member-name">Alex Novak</div>
+        <div class="member-role">全栈工程师</div>
+      </div>
+    </div>
+
+    <div class="member-item">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+        L
+        <span class="status-dot status-online"></span>
+      </div>
+      <div class="member-info">
+        <div class="member-name" style="color:#a78bfa">Lena Park</div>
+        <div class="member-role">技术总监</div>
+      </div>
+    </div>
+
+    <div class="member-group-label">离线 — 3</div>
+
+    <div class="member-item offline">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#2dd4bf,#3b82f6)">
+        J
+        <span class="status-dot status-dnd"></span>
+      </div>
+      <div class="member-info">
+        <div class="member-name">Jun Tanaka</div>
+        <div class="member-role">DevOps 工程师</div>
+      </div>
+    </div>
+
+    <div class="member-item offline">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+        R
+        <span class="status-dot status-offline"></span>
+      </div>
+      <div class="member-info">
+        <div class="member-name">Ryan Torres</div>
+        <div class="member-role">后端工程师</div>
+      </div>
+    </div>
+
+    <div class="member-item offline">
+      <div class="member-avatar" style="background:linear-gradient(135deg,#a78bfa,#ec4899)">
+        Y
+        <span class="status-dot status-offline"></span>
+      </div>
+      <div class="member-info">
+        <div class="member-name">Yuki Sato</div>
+        <div class="member-role">QA 工程师</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+// Auto-resize textarea
+const textarea = document.querySelector('.input-field');
+textarea.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+
+// Channel click
+document.querySelectorAll('.channel-item').forEach(ch => {
+  ch.addEventListener('click', () => {
+    document.querySelector('.channel-item.active')?.classList.remove('active');
+    ch.classList.add('active');
+    ch.classList.remove('unread');
+    const badge = ch.querySelector('.badge');
+    if (badge) badge.remove();
+  });
+});
+
+// Reaction toggle
+document.querySelectorAll('.reaction').forEach(r => {
+  r.addEventListener('click', () => {
+    r.classList.toggle('active');
+    const count = r.querySelector('.count');
+    let n = parseInt(count.textContent);
+    count.textContent = r.classList.contains('active') ? n + 1 : n - 1;
+  });
+});
+
+// Send button glow
+const sendBtn = document.querySelector('.send-btn');
+textarea.addEventListener('focus', () => sendBtn.style.boxShadow = '0 0 12px rgba(99,102,241,0.4)');
+textarea.addEventListener('blur', () => sendBtn.style.boxShadow = 'none');
+</script>
+
+</body>
+</html>
