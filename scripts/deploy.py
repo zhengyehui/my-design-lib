@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-import os, sys, time
-
+import sys, os, time
 sys.path.insert(0, '/Users/weta/Library/Python/3.9/lib/python/site-packages')
 import paramiko
 

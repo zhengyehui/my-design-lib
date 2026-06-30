@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luum Workspace — 共享办公空间</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  :root {
+    --gold: #D4A843;
+    --gold-light: #F0D78C;
+    --gold-dark: #B8912E;
+    --cream: #FAF6EE;
+    --charcoal: #1A1A1A;
+    --warm-gray: #6B6560;
+    --light-gray: #F5F3EF;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--charcoal);
+    background: var(--white);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  .nav.scrolled {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+  }
+  .nav-logo {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--charcoal);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--warm-gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--charcoal); }
+  .nav-cta {
+    background: var(--charcoal);
+    color: var(--white) !important;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: #333 !important; }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cream);
+    border: 1px solid var(--gold-light);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gold-dark);
+    margin-bottom: 24px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.5); }
+  }
+  .hero h1 {
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+  }
+  .hero h1 .highlight {
+    color: var(--gold);
+    position: relative;
+    display: inline-block;
+  }
+  .hero h1 .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: var(--gold-light);
+    opacity: 0.4;
+    z-index: -1;
+    border-radius: 4px;
+  }
+  .hero-desc {
+    font-size: 18px;
+    color: var(--warm-gray);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .btn-primary {
+    background: var(--charcoal);
+    color: var(--white);
+    padding: 16px 36px;
+    border-radius: 100px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .btn-secondary {
+    color: var(--charcoal);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .btn-secondary:hover { color: var(--gold-dark); }
+  .btn-secondary svg {
+    transition: transform 0.2s;
+  }
+  .btn-secondary:hover svg { transform: translateX(4px); }
+
+  /* Hero illustration - CSS geometric art */
+  .hero-visual {
+    position: relative;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-shape {
+    position: absolute;
+    border-radius: var(--radius-xl);
+  }
+  .shape-1 {
+    width: 320px;
+    height: 400px;
+    background: var(--cream);
+    border: 2px solid var(--gold-light);
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+  }
+  .shape-2 {
+    width: 280px;
+    height: 340px;
+    background: var(--gold);
+    opacity: 0.12;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-40%) rotate(2deg);
+  }
+  .shape-3 {
+    width: 200px;
+    height: 260px;
+    background: var(--charcoal);
+    top: 80px;
+    left: 50%;
+    transform: translateX(-30%) rotate(-1deg);
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px;
+    color: var(--white);
+  }
+  .shape-3-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.6;
+    margin-bottom: 16px;
+  }
+  .shape-3-number {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .shape-3-label {
+    font-size: 14px;
+    opacity: 0.7;
+  }
+  .shape-4 {
+    width: 120px;
+    height: 120px;
+    background: var(--gold);
+    border-radius: 50%;
+    bottom: 40px;
+    left: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+  }
+  .shape-5 {
+    width: 80px;
+    height: 80px;
+    border: 3px solid var(--gold);
+    border-radius: 50%;
+    top: 30px;
+    right: 10%;
+    animation: rotate-slow 20s linear infinite;
+  }
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== STATS BAR ===== */
+  .stats {
+    background: var(--charcoal);
+    padding: 48px;
+  }
+  .stats-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 500;
+  }
+
+  /* ===== SPACES SECTION ===== */
+  .spaces {
+    padding: 120px 48px;
+    background: var(--cream);
+  }
+  .section-header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 64px;
+  }
+  .section-tag {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--gold-dark);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-desc {
+    font-size: 17px;
+    color: var(--warm-gray);
+    line-height: 1.7;
+  }
+  .spaces-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .space-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  .space-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  }
+  .space-card-img {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+  }
+  .space-card-img-bg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+  }
+  .space-card:nth-child(1) .space-card-img-bg { background: linear-gradient(135deg, #F5E6C8 0%, #E8D5A8 100%); }
+  .space-card:nth-child(2) .space-card-img-bg { background: linear-gradient(135deg, #D4E4D1 0%, #B8D4B2 100%); }
+  .space-card:nth-child(3) .space-card-img-bg { background: linear-gradient(135deg, #D1DDE8 0%, #B2C4D4 100%); }
+  .space-card-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--white);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-dark);
+  }
+  .space-card-body {
+    padding: 28px;
+  }
+  .space-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  .space-card-desc {
+    font-size: 14px;
+    color: var(--warm-gray);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .space-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #f0ebe3;
+  }
+  .space-price {
+    font-size: 14px;
+    color: var(--warm-gray);
+  }
+  .space-price strong {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--charcoal);
+  }
+  .space-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold-dark);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: gap 0.2s;
+  }
+  .space-link:hover { gap: 8px; }
+
+  /* ===== AMENITIES ===== */
+  .amenities {
+    padding: 120px 48px;
+    background: var(--white);
+  }
+  .amenities-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+  .amenity-item {
+    text-align: center;
+    padding: 40px 24px;
+    border-radius: var(--radius-lg);
+    transition: background 0.3s;
+  }
+  .amenity-item:hover { background: var(--cream); }
+  .amenity-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    background: var(--cream);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .amenity-item:hover .amenity-icon {
+    background: var(--gold-light);
+    transform: scale(1.05);
+  }
+  .amenity-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .amenity-desc {
+    font-size: 13px;
+    color: var(--warm-gray);
+    line-height: 1.5;
+  }
+
+  /* ===== COMMUNITY ===== */
+  .community {
+    padding: 120px 48px;
+    background: var(--charcoal);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  .community::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(212,168,67,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .community .section-tag { color: var(--gold-light); }
+  .community .section-desc { color: rgba(255,255,255,0.6); }
+  .community-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .event-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .event-card:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(212,168,67,0.3);
+  }
+  .event-date {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .event-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .event-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+  }
+  .event-tag {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(212,168,67,0.15);
+    color: var(--gold-light);
+  }
+
+  /* ===== TESTIMONIALS ===== */
+  .testimonials {
+    padding: 120px 48px;
+    background: var(--cream);
+  }
+  .testimonial-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .testimonial-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+    position: relative;
+  }
+  .testimonial-card::before {
+    content: '"';
+    font-size: 72px;
+    font-weight: 800;
+    color: var(--gold-light);
+    line-height: 1;
+    position: absolute;
+    top: 20px;
+    left: 32px;
+    opacity: 0.6;
+  }
+  .testimonial-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--charcoal);
+    margin-bottom: 24px;
+    padding-top: 32px;
+  }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .testimonial-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .testimonial-card:nth-child(1) .testimonial-avatar { background: var(--gold); }
+  .testimonial-card:nth-child(2) .testimonial-avatar { background: var(--charcoal); }
+  .testimonial-card:nth-child(3) .testimonial-avatar { background: #6B8F71; }
+  .testimonial-card:nth-child(4) .testimonial-avatar { background: #8B6F5E; }
+  .testimonial-name {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .testimonial-role {
+    font-size: 12px;
+    color: var(--warm-gray);
+  }
+
+  /* ===== CTA ===== */
+  .cta {
+    padding: 120px 48px;
+    background: var(--white);
+    text-align: center;
+  }
+  .cta-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .cta h2 {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .cta h2 .highlight { color: var(--gold); }
+  .cta p {
+    font-size: 18px;
+    color: var(--warm-gray);
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: var(--charcoal);
+    color: rgba(255,255,255,0.5);
+    padding: 64px 48px 32px;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-brand {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+  .footer-brand span { color: var(--gold); }
+  .footer-tagline {
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 280px;
+  }
+  .footer-col-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 20px;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    padding: 4px 0;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--gold-light); }
+  .footer-bottom {
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+
+  /* ===== SCROLL ANIMATIONS ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .spaces-grid { grid-template-columns: repeat(2, 1fr); }
+    .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .spaces, .amenities, .community, .testimonials, .cta { padding: 80px 24px; }
+    .spaces-grid { grid-template-columns: 1fr; }
+    .amenities-grid { grid-template-columns: 1fr; }
+    .community-grid { grid-template-columns: 1fr; }
+    .testimonial-grid { grid-template-columns: 1fr; }
+    .footer { padding: 48px 24px 24px; }
+    .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">Luum<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#spaces">空间</a></li>
+    <li><a href="#amenities">设施</a></li>
+    <li><a href="#community">社区</a></li>
+    <li><a href="#testimonials">评价</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">预约参观</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">现在开放 · 3 个城市</div>
+      <h1>在这里，<br><span class="highlight">灵感</span>自由生长</h1>
+      <p class="hero-desc">Luum Workspace 为独立创作者和成长型团队打造的共享办公空间。温暖的木质、充足的自然光、精心设计的社区——让每一天的工作都充满期待。</p>
+      <div class="hero-actions">
+        <a href="#spaces" class="btn-primary">
+          探索空间
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#community" class="btn-secondary">
+          了解社区
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-shape shape-1"></div>
+      <div class="hero-shape shape-2"></div>
+      <div class="hero-shape shape-3">
+        <div class="shape-3-title">今日活跃</div>
+        <div class="shape-3-number">247</div>
+        <div class="shape-3-label">位创作者在线</div>
+      </div>
+      <div class="hero-shape shape-4">☀️</div>
+      <div class="hero-shape shape-5"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-inner">
+    <div class="fade-in">
+      <div class="stat-number">1,200+</div>
+      <div class="stat-label">活跃会员</div>
+    </div>
+    <div class="fade-in">
+      <div class="stat-number">3</div>
+      <div class="stat-label">城市空间</div>
+    </div>
+    <div class="fade-in">
+      <div class="stat-number">98%</div>
+      <div class="stat-label">续费率</div>
+    </div>
+    <div class="fade-in">
+      <div class="stat-number">150+</div>
+      <div class="stat-label">月度活动</div>
+    </div>
+  </div>
+</section>
+
+<!-- SPACES -->
+<section class="spaces" id="spaces">
+  <div class="section-header fade-in">
+    <div class="section-tag">我们的空间</div>
+    <h2 class="section-title">找到属于你的角落</h2>
+    <p class="section-desc">从安静的专注区到开放的协作空间，每种工作模式都有匹配的环境。</p>
+  </div>
+  <div class="spaces-grid">
+    <div class="space-card fade-in">
+      <div class="space-card-img">
+        <div class="space-card-img-bg">🪑</div>
+        <div class="space-card-badge">最受欢迎</div>
+      </div>
+      <div class="space-card-body">
+        <h3 class="space-card-title">Hot Desk 灵活工位</h3>
+        <p class="space-card-desc">随时到来，随心落座。共享开放区域，享受咖啡和高速 WiFi，适合自由职业者和远程工作者。</p>
+        <div class="space-card-meta">
+          <div class="space-price">¥<strong>1,280</strong>/月</div>
+          <a href="#" class="space-link">了解详情 →</a>
+        </div>
+      </div>
+    </div>
+    <div class="space-card fade-in">
+      <div class="space-card-img">
+        <div class="space-card-img-bg">🏢</div>
+        <div class="space-card-badge">团队首选</div>
+      </div>
+      <div class="space-card-body">
+        <h3 class="space-card-title">Dedicated Desk 专属工位</h3>
+        <p class="space-card-desc">固定工位 + 个人储物柜，兼顾隐私与社区氛围。2-8 人团队的完美起点。</p>
+        <div class="space-card-meta">
+          <div class="space-price">¥<strong>2,580</strong>/月起</div>
+          <a href="#" class="space-link">了解详情 →</a>
+        </div>
+      </div>
+    </div>
+    <div class="space-card fade-in">
+      <div class="space-card-img">
+        <div class="space-card-img-bg">🏠</div>
+        <div class="space-card-badge">私密空间</div>
+      </div>
+      <div class="space-card-body">
+        <h3 class="space-card-title">Private Office 独立办公室</h3>
+        <p class="space-card-desc">带门的独立空间，品牌定制装修，专属会议室配额。为 8-30 人团队打造。</p>
+        <div class="space-card-meta">
+          <div class="space-price">¥<strong>8,800</strong>/月起</div>
+          <a href="#" class="space-link">了解详情 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<section class="amenities" id="amenities">
+  <div class="section-header fade-in">
+    <div class="section-tag">配套设施</div>
+    <h2 class="section-title">不只是办公桌</h2>
+    <p class="section-desc">从手冲咖啡到冥想室，我们重新定义了「工作环境」的含义。</p>
+  </div>
+  <div class="amenities-grid">
+    <div class="amenity-item fade-in">
+      <div class="amenity-icon">☕</div>
+      <h3 class="amenity-title">精品咖啡吧</h3>
+      <p class="amenity-desc">每日现磨单品咖啡、手冲和冷萃，会员无限畅饮。</p>
+    </div>
+    <div class="amenity-item fade-in">
+      <div class="amenity-icon">📶</div>
+      <h3 class="amenity-title">千兆网络</h3>
+      <p class="amenity-desc">双线路冗余，上行 500Mbps，视频会议零卡顿。</p>
+    </div>
+    <div class="amenity-item fade-in">
+      <div class="amenity-icon">🎙️</div>
+      <h3 class="amenity-title">录音/直播室</h3>
+      <p class="amenity-desc">专业声学处理，播客录制和直播推流一站搞定。</p>
+    </div>
+    <div class="amenity-item fade-in">
+      <div class="amenity-icon">🧘</div>
+      <h3 class="amenity-title">冥想休息室</h3>
+      <p class="amenity-desc">午间 20 分钟冥想课，每周三瑜伽，身心健康两不误。</p>
+    </div>
+    <div class="amenity-item fade-in">
+      <div class="amenity-icon">🖨️</div>
+      <h3 class="amenity-title">打印/扫描中心</h3>
+      <p class="amenity-desc">大幅面打印、高速扫描、装订服务，按需使用。</p>
+    </div>
+    <div class="amenity-item fade-in">
+      <div class="amenity-icon">📦</div>
+      <h3 class="amenity-title">快递收发站</h3>
+      <p class="amenity-desc">代收快递，冷藏柜存放生鲜，再也不怕错过包裹。</p>
+    </div>
+    <div class="amenity-item fade-in">
+      <div class="amenity-icon">🅿️</div>
+      <h3 class="amenity-title">地下停车场</h3>
+      <p class="amenity-desc">会员专属车位，电动车充电桩覆盖，通勤无忧。</p>
+    </div>
+    <div class="amenity-item fade-in">
+      <div class="amenity-icon">🌙</div>
+      <h3 class="amenity-title">24/7 全天候</h3>
+      <p class="amenity-desc">门禁系统 + 监控，深夜赶稿也有安全感。</p>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="community" id="community">
+  <div class="section-header fade-in">
+    <div class="section-tag">社区活动</div>
+    <h2 class="section-title" style="color:#fff">连接 · 碰撞 · 成长</h2>
+    <p class="section-desc">每月 150+ 场活动，从技术分享到投资人午餐会，让社交自然发生。</p>
+  </div>
+  <div class="community-grid">
+    <div class="event-card fade-in">
+      <div class="event-date">7月12日 周六</div>
+      <h3 class="event-title">独立开发者 Show & Tell</h3>
+      <p class="event-desc">5 位创作者分享本月产品进展，现场 Demo + 自由讨论。</p>
+      <span class="event-tag">技术</span>
+    </div>
+    <div class="event-card fade-in">
+      <div class="event-date">7月18日 周五</div>
+      <h3 class="event-title">投资人午餐会</h3>
+      <p class="event-desc">邀请 3 位早期基金合伙人共进午餐，1v1 交流项目。</p>
+      <span class="event-tag">创投</span>
+    </div>
+    <div class="event-card fade-in">
+      <div class="event-date">7月25日 周五</div>
+      <h3 class="event-title">品牌设计工作坊</h3>
+      <p class="event-desc">从零构建品牌视觉系统，设计师带练，适合创业者。</p>
+      <span class="event-tag">设计</span>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-header fade-in">
+    <div class="section-tag">会员故事</div>
+    <h2 class="section-title">他们选择了 Luum</h2>
+  </div>
+  <div class="testimonial-grid">
+    <div class="testimonial-card fade-in">
+      <p class="testimonial-text">搬来 Luum 三个月，团队效率提升了 40%。不是因为环境多高级，而是每天和一群认真做事的人在一起，那种氛围会传染。</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">L</div>
+        <div>
+          <div class="testimonial-name">林嘉伟</div>
+          <div class="testimonial-role">FlowSync 创始人</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-in">
+      <p class="testimonial-text">作为一个播客主播，录音室简直是救命稻草。以前在家录总被邻居装修声干扰，现在录出来音质完全不一样。</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">S</div>
+        <div>
+          <div class="testimonial-name">苏小曼</div>
+          <div class="testimonial-role">「深夜电台」主播</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-in">
+      <p class="testimonial-text">我们 5 人设计团队从联合办公搬到了 Luum 的独立办公室。装修风格我们自己定的，现在每次有客户来访都很有面子。</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">C</div>
+        <div>
+          <div class="testimonial-name">陈思远</div>
+          <div class="testimonial-role">Pixel Lab 设计总监</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-in">
+      <p class="testimonial-text">投资人午餐会上认识了我现在天使轮的 lead investor。这种事在 Luum 很常见——好的连接总是在咖啡区发生的。</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">W</div>
+        <div>
+          <div class="testimonial-name">王子墨</div>
+          <div class="testimonial-role">NexaPay CEO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="cta-inner fade-in">
+    <h2>准备好加入<br><span class="highlight">Luum</span> 了吗？</h2>
+    <p>预约一次免费的参观体验，喝杯咖啡，感受一下这里的氛围。没有推销，只有真诚的介绍。</p>
+    <div class="cta-actions">
+      <a href="#" class="btn-primary">
+        预约免费参观
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="btn-secondary">
+        下载价格手册
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">Luum<span>.</span></div>
+        <p class="footer-tagline">为独立创作者和成长型团队打造的共享办公空间。让每一天的工作都充满期待。</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">空间</div>
+        <a href="#">灵活工位</a>
+        <a href="#">专属工位</a>
+        <a href="#">独立办公室</a>
+        <a href="#">会议室</a>
+        <a href="#">活动场地</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">城市</div>
+        <a href="#">北京 · 望京</a>
+        <a href="#">上海 · 漕河泾</a>
+        <a href="#">深圳 · 南山</a>
+        <a href="#">即将开幕</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">关于</div>
+        <a href="#">品牌故事</a>
+        <a href="#">加入我们</a>
+        <a href="#">媒体报道</a>
+        <a href="#">联系合作</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Luum Workspace. All rights reserved.</span>
+      <span>Made with ☀️ in Beijing</span>
+    </div>
+  </div>
+</footer>
+
+<!-- SCROLL ANIMATIONS -->
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
