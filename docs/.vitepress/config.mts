@@ -241,7 +241,8 @@ export default defineConfig({
             { text: 'WeroPay 支付平台', link: '/pages/fintech-payment-landing' },
             { text: 'Luminary 活动策划', link: '/pages/event-studio' },
             { text: 'Meridian Capital 投资机构', link: '/pages/vc-investment-landing' },
-            { text: 'Sprout AI 可爱机器人伙伴', link: '/pages/sprout-ai' }
+            { text: 'Sprout AI 可爱机器人伙伴', link: '/pages/sprout-ai' },
+            { text: 'Pulse Board 任务管理', link: '/pages/pulse-board' }
           ]
         },
         {
@@ -335,7 +336,8 @@ export default defineConfig({
             { text: 'CaseFlow 客户故事集', link: '/pages/customer-stories' },
             { text: 'TasteNote 美食食谱', link: '/pages/recipe-blog' },
             { text: 'DesignMint 设计资源目录', link: '/pages/design-resources' },
-            { text: 'PulseWire 数字新闻杂志', link: '/pages/pulsewire-digest' }
+            { text: 'PulseWire 数字新闻杂志', link: '/pages/pulsewire-digest' },
+            { text: 'ShipLog 开发者更新日志', link: '/pages/ship-log' }
           ]
         },
         {

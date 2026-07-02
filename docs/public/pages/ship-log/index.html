@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShipLog — What's New</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: var(--leading-relaxed);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img { max-width: 100%; display: block; }
+
+    /* ── Local Vars ────────────────────────────────────────── */
+    :root {
+      --sl-accent: #6366f1;
+      --sl-accent-light: #818cf8;
+      --sl-accent-dark: #4f46e5;
+      --sl-accent-ghost: rgba(99, 102, 241, 0.08);
+      --sl-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+      --sl-gradient-warm: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      --sl-gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --sl-tag-feature: #10b981;
+      --sl-tag-feature-bg: #ecfdf5;
+      --sl-tag-improvement: #3b82f6;
+      --sl-tag-improvement-bg: #eff6ff;
+      --sl-tag-fix: #f59e0b;
+      --sl-tag-fix-bg: #fffbeb;
+      --sl-tag-breaking: #ef4444;
+      --sl-tag-breaking-bg: #fef2f2;
+      --sl-nav-height: 64px;
+      --sl-container: 1080px;
+      --sl-container-narrow: 720px;
+    }
+
+    /* ── Container ─────────────────────────────────────────── */
+    .container {
+      max-width: var(--sl-container);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    .container--narrow {
+      max-width: var(--sl-container-narrow);
+    }
+
+    /* ════════════════════════════════════════════════════════
+       NAV
+       ════════════════════════════════════════════════════════ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+      height: var(--sl-nav-height);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-weight: var(--weight-bold);
+      font-size: var(--text-lg);
+      letter-spacing: -0.02em;
+    }
+
+    .nav__logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--sl-gradient);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      list-style: none;
+    }
+
+    .nav__link {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      color: var(--color-text-secondary);
+      transition: color var(--duration-fast) var(--ease-default);
+    }
+
+    .nav__link:hover {
+      color: var(--color-text);
+    }
+
+    .nav__link svg {
+      width: 16px;
+      height: 16px;
+      vertical-align: -2px;
+      margin-right: 4px;
+      opacity: 0.6;
+    }
+
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      border: none;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-default);
+      border-radius: var(--radius-md);
+      padding: var(--space-2) var(--space-4);
+      line-height: 1.4;
+    }
+
+    .btn--primary {
+      background: var(--sl-accent);
+      color: white;
+      box-shadow: 0 1px 2px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn--primary:hover {
+      background: var(--sl-accent-dark);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn--ghost:hover {
+      color: var(--color-text);
+      border-color: var(--color-border-hover);
+      background: var(--color-bg-subtle);
+    }
+
+    .btn--lg {
+      padding: var(--space-3) var(--space-6);
+      font-size: var(--text-base);
+      border-radius: var(--radius-md);
+    }
+
+    /* Mobile nav toggle */
+    .nav__mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-2);
+      color: var(--color-text);
+    }
+
+    .nav__mobile-toggle svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       HERO
+       ════════════════════════════════════════════════════════ */
+    .hero {
+      padding: var(--space-20) 0 var(--space-12);
+      text-align: center;
+    }
+
+    .hero__title {
+      font-size: var(--text-6xl);
+      font-weight: var(--weight-bold);
+      letter-spacing: -0.03em;
+      line-height: var(--leading-tight);
+      margin-bottom: var(--space-4);
+      background: linear-gradient(135deg, #0f172a 0%, #6366f1 50%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero__subtitle {
+      font-size: var(--text-xl);
+      color: var(--color-text-secondary);
+      max-width: 500px;
+      margin: 0 auto var(--space-10);
+      line-height: var(--leading-relaxed);
+    }
+
+    .hero__filters {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      font-family: var(--font-sans);
+      color: var(--color-text-secondary);
+      background: var(--color-bg-subtle);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-default);
+      user-select: none;
+    }
+
+    .filter-pill:hover {
+      color: var(--color-text);
+      border-color: var(--color-border-hover);
+      background: var(--color-bg-muted);
+    }
+
+    .filter-pill.active {
+      color: white;
+      background: var(--sl-accent);
+      border-color: var(--sl-accent);
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+    }
+
+    .filter-pill__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .filter-pill__dot--feature   { background: var(--sl-tag-feature); }
+    .filter-pill__dot--improve   { background: var(--sl-tag-improvement); }
+    .filter-pill__dot--fix       { background: var(--sl-tag-fix); }
+    .filter-pill__dot--breaking  { background: var(--sl-tag-breaking); }
+
+    /* ════════════════════════════════════════════════════════
+       FEATURED RELEASE
+       ════════════════════════════════════════════════════════ */
+    .featured {
+      padding: var(--space-8) 0 var(--space-16);
+    }
+
+    .featured__card {
+      position: relative;
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      transition: transform var(--duration-normal) var(--ease-default),
+                  box-shadow var(--duration-normal) var(--ease-default);
+    }
+
+    .featured__card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    /* Gradient border effect */
+    .featured__card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-xl);
+      padding: 2px;
+      background: var(--sl-gradient);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .featured__hero-image {
+      width: 100%;
+      height: 320px;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #4338ca 60%, #6366f1 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured__hero-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+    }
+
+    .featured__hero-label {
+      position: absolute;
+      bottom: var(--space-6);
+      left: var(--space-6);
+      color: white;
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-sm);
+      z-index: 1;
+    }
+
+    .featured__body {
+      padding: var(--space-8) var(--space-10);
+    }
+
+    .featured__meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      background: var(--sl-accent-ghost);
+      color: var(--sl-accent);
+    }
+
+    .version-badge--lg {
+      font-size: var(--text-base);
+      padding: var(--space-2) var(--space-4);
+    }
+
+    .release-date {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      font-weight: var(--weight-medium);
+    }
+
+    .featured__title {
+      font-size: var(--text-3xl);
+      font-weight: var(--weight-bold);
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-4);
+      line-height: var(--leading-tight);
+    }
+
+    .featured__desc {
+      font-size: var(--text-lg);
+      color: var(--color-text-secondary);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-6);
+    }
+
+    .featured__tags {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    /* ── Tag / Badge ─────────────────────────────────────── */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag--feature {
+      background: var(--sl-tag-feature-bg);
+      color: var(--sl-tag-feature);
+    }
+
+    .tag--improvement {
+      background: var(--sl-tag-improvement-bg);
+      color: var(--sl-tag-improvement);
+    }
+
+    .tag--fix {
+      background: var(--sl-tag-fix-bg);
+      color: var(--sl-tag-fix);
+    }
+
+    .tag--breaking {
+      background: var(--sl-tag-breaking-bg);
+      color: var(--sl-tag-breaking);
+    }
+
+    /* ════════════════════════════════════════════════════════
+       TIMELINE
+       ════════════════════════════════════════════════════════ */
+    .timeline {
+      padding: var(--space-8) 0 var(--space-20);
+    }
+
+    .timeline__heading {
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-bold);
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-12);
+      text-align: center;
+    }
+
+    .timeline__list {
+      position: relative;
+      padding-left: 40px;
+    }
+
+    /* Vertical line */
+    .timeline__list::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--sl-accent) 0%, var(--color-border) 40%, var(--color-border) 100%);
+      border-radius: 2px;
+    }
+
+    .timeline__item {
+      position: relative;
+      padding-bottom: var(--space-12);
+    }
+
+    .timeline__item:last-child {
+      padding-bottom: 0;
+    }
+
+    /* Dot on the line */
+    .timeline__item::after {
+      content: '';
+      position: absolute;
+      left: -37px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--color-surface);
+      border: 3px solid var(--sl-accent);
+      z-index: 1;
+      transition: background var(--duration-fast) var(--ease-default);
+    }
+
+    .timeline__item:hover::after {
+      background: var(--sl-accent);
+      box-shadow: 0 0 0 4px var(--sl-accent-ghost);
+    }
+
+    /* Alternate dot colors for variety */
+    .timeline__item:nth-child(2)::after { border-color: var(--color-info); }
+    .timeline__item:nth-child(3)::after { border-color: var(--color-success); }
+    .timeline__item:nth-child(4)::after { border-color: var(--color-warning); }
+    .timeline__item:nth-child(5)::after { border-color: var(--color-danger); }
+    .timeline__item:nth-child(6)::after { border-color: var(--color-secondary); }
+
+    .timeline__item:nth-child(2):hover::after { background: var(--color-info); box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
+    .timeline__item:nth-child(3):hover::after { background: var(--color-success); box-shadow: 0 0 0 4px rgba(16,185,129,0.15); }
+    .timeline__item:nth-child(4):hover::after { background: var(--color-warning); box-shadow: 0 0 0 4px rgba(245,158,11,0.15); }
+    .timeline__item:nth-child(5):hover::after { background: var(--color-danger); box-shadow: 0 0 0 4px rgba(239,68,68,0.15); }
+    .timeline__item:nth-child(6):hover::after { background: var(--color-secondary); box-shadow: 0 0 0 4px rgba(6,182,212,0.15); }
+
+    .timeline__card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6) var(--space-8);
+      transition: all var(--duration-normal) var(--ease-default);
+    }
+
+    .timeline__card:hover {
+      border-color: var(--color-border-hover);
+      box-shadow: var(--shadow-md);
+      transform: translateX(4px);
+    }
+
+    .timeline__card-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    .timeline__card-title {
+      font-size: var(--text-xl);
+      font-weight: var(--weight-bold);
+      letter-spacing: -0.01em;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .timeline__card-date {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      font-weight: var(--weight-medium);
+      white-space: nowrap;
+    }
+
+    .timeline__card-tags {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-4);
+    }
+
+    .timeline__card-desc {
+      color: var(--color-text-secondary);
+      font-size: var(--text-base);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-5);
+    }
+
+    /* Code block */
+    .code-block {
+      background: #0f172a;
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+      overflow-x: auto;
+      margin-bottom: var(--space-5);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    .code-block::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: var(--space-2);
+      right: var(--space-3);
+      font-size: var(--text-xs);
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .code-block code {
+      color: #e2e8f0;
+    }
+
+    .code-block .code-keyword { color: #c084fc; }
+    .code-block .code-string  { color: #86efac; }
+    .code-block .code-fn      { color: #93c5fd; }
+    .code-block .code-comment { color: #64748b; font-style: italic; }
+    .code-block .code-prop    { color: #fbbf24; }
+    .code-block .code-punct   { color: #94a3b8; }
+    .code-block .code-type    { color: #67e8f9; }
+    .code-block .code-deleted { color: #fca5a5; text-decoration: line-through; opacity: 0.7; }
+    .code-block .code-added   { color: #86efac; }
+
+    /* Image placeholder */
+    .image-placeholder {
+      width: 100%;
+      height: 200px;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-placeholder--1 {
+      background: linear-gradient(135deg, #1e1b4b, #312e81, #4338ca);
+    }
+
+    .image-placeholder--2 {
+      background: linear-gradient(135deg, #0c4a6e, #0369a1, #0ea5e9);
+    }
+
+    .image-placeholder--3 {
+      background: linear-gradient(135deg, #14532d, #166534, #22c55e);
+    }
+
+    .image-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(255,255,255,0.05) 0%, transparent 40%);
+    }
+
+    /* ════════════════════════════════════════════════════════
+       SUBSCRIBE SECTION
+       ════════════════════════════════════════════════════════ */
+    .subscribe {
+      background: var(--sl-gradient-dark);
+      padding: var(--space-20) 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .subscribe::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .subscribe__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .subscribe__title {
+      font-size: var(--text-3xl);
+      font-weight: var(--weight-bold);
+      color: white;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-3);
+    }
+
+    .subscribe__subtitle {
+      font-size: var(--text-lg);
+      color: #94a3b8;
+      margin-bottom: var(--space-8);
+    }
+
+    .subscribe__form {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      max-width: 480px;
+      margin: 0 auto var(--space-6);
+    }
+
+    .subscribe__input {
+      flex: 1;
+      font-family: var(--font-sans);
+      font-size: var(--text-base);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: white;
+      outline: none;
+      transition: all var(--duration-fast) var(--ease-default);
+    }
+
+    .subscribe__input::placeholder {
+      color: #64748b;
+    }
+
+    .subscribe__input:focus {
+      border-color: var(--sl-accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .subscribe__btn {
+      white-space: nowrap;
+    }
+
+    .subscribe__rss {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: #64748b;
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      transition: color var(--duration-fast) var(--ease-default);
+    }
+
+    .subscribe__rss:hover {
+      color: #94a3b8;
+    }
+
+    .subscribe__rss svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════════════════ */
+    .footer {
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-10) 0;
+    }
+
+    .footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+
+    .footer__copy {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+    }
+
+    .footer__links {
+      display: flex;
+      gap: var(--space-6);
+      list-style: none;
+    }
+
+    .footer__link {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      font-weight: var(--weight-medium);
+      transition: color var(--duration-fast) var(--ease-default);
+    }
+
+    .footer__link:hover {
+      color: var(--color-text);
+    }
+
+    /* ════════════════════════════════════════════════════════
+       ANIMATIONS
+       ════════════════════════════════════════════════════════ */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      opacity: 0;
+      animation: fadeInUp 0.6s var(--ease-out) forwards;
+    }
+
+    .animate-in:nth-child(1) { animation-delay: 0.1s; }
+    .animate-in:nth-child(2) { animation-delay: 0.2s; }
+    .animate-in:nth-child(3) { animation-delay: 0.3s; }
+    .animate-in:nth-child(4) { animation-delay: 0.4s; }
+    .animate-in:nth-child(5) { animation-delay: 0.5s; }
+    .animate-in:nth-child(6) { animation-delay: 0.6s; }
+
+    /* ════════════════════════════════════════════════════════
+       RESPONSIVE
+       ════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .nav__links {
+        display: none;
+      }
+
+      .nav__mobile-toggle {
+        display: flex;
+      }
+
+      .nav__mobile-menu {
+        display: none;
+        position: fixed;
+        top: var(--sl-nav-height);
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--space-4) var(--space-6);
+        z-index: var(--z-sticky);
+      }
+
+      .nav__mobile-menu.open {
+        display: block;
+      }
+
+      .nav__mobile-menu a {
+        display: block;
+        padding: var(--space-3) 0;
+        font-size: var(--text-base);
+        font-weight: var(--weight-medium);
+        color: var(--color-text-secondary);
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .nav__mobile-menu a:last-child {
+        border-bottom: none;
+      }
+
+      .hero {
+        padding: var(--space-12) 0 var(--space-8);
+      }
+
+      .hero__title {
+        font-size: var(--text-4xl);
+      }
+
+      .hero__subtitle {
+        font-size: var(--text-base);
+      }
+
+      .hero__filters {
+        gap: var(--space-1);
+      }
+
+      .filter-pill {
+        padding: var(--space-1) var(--space-3);
+        font-size: var(--text-xs);
+      }
+
+      .featured__body {
+        padding: var(--space-6);
+      }
+
+      .featured__title {
+        font-size: var(--text-2xl);
+      }
+
+      .featured__desc {
+        font-size: var(--text-base);
+      }
+
+      .featured__hero-image {
+        height: 200px;
+      }
+
+      .timeline__list {
+        padding-left: 28px;
+      }
+
+      .timeline__list::before {
+        left: 5px;
+      }
+
+      .timeline__item::after {
+        left: -27px;
+        width: 10px;
+        height: 10px;
+      }
+
+      .timeline__card {
+        padding: var(--space-5);
+      }
+
+      .timeline__card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-1);
+      }
+
+      .timeline__card-title {
+        font-size: var(--text-lg);
+      }
+
+      .subscribe__form {
+        flex-direction: column;
+      }
+
+      .subscribe__input,
+      .subscribe__btn {
+        width: 100%;
+      }
+
+      .footer__inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer__links {
+        gap: var(--space-4);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 var(--space-4);
+      }
+
+      .hero__title {
+        font-size: var(--text-3xl);
+      }
+
+      .featured__body {
+        padding: var(--space-4);
+      }
+
+      .code-block {
+        font-size: var(--text-xs);
+        padding: var(--space-3);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════ NAV ═══════ -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="/" class="nav__logo">
+        <span class="nav__logo-icon">S</span>
+        ShipLog
+      </a>
+
+      <ul class="nav__links">
+        <li><a href="#changelog" class="nav__link">Changelog</a></li>
+        <li>
+          <a href="/feed.xml" class="nav__link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+            RSS
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com" class="nav__link" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav__actions">
+        <a href="#subscribe" class="btn btn--primary">Subscribe</a>
+        <button class="nav__mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="nav__mobile-menu" id="mobileMenu">
+      <a href="#changelog">Changelog</a>
+      <a href="/feed.xml">RSS Feed</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+      <a href="#subscribe">Subscribe</a>
+    </div>
+  </nav>
+
+  <!-- ═══════ HERO ═══════ -->
+  <section class="hero" id="changelog">
+    <div class="container">
+      <h1 class="hero__title">What's New</h1>
+      <p class="hero__subtitle">Latest updates, improvements, and fixes shipped to My&nbsp;Design&nbsp;Lib.</p>
+
+      <div class="hero__filters">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="feature">
+          <span class="filter-pill__dot filter-pill__dot--feature"></span>
+          Features
+        </button>
+        <button class="filter-pill" data-filter="improvement">
+          <span class="filter-pill__dot filter-pill__dot--improve"></span>
+          Improvements
+        </button>
+        <button class="filter-pill" data-filter="fix">
+          <span class="filter-pill__dot filter-pill__dot--fix"></span>
+          Bug Fixes
+        </button>
+        <button class="filter-pill" data-filter="breaking">
+          <span class="filter-pill__dot filter-pill__dot--breaking"></span>
+          Breaking Changes
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FEATURED RELEASE ═══════ -->
+  <section class="featured">
+    <div class="container container--narrow">
+      <article class="featured__card">
+        <div class="featured__hero-image">
+          <span class="featured__hero-label">v3.2.0 — Latest</span>
+        </div>
+        <div class="featured__body">
+          <div class="featured__meta">
+            <span class="version-badge version-badge--lg">v3.2.0</span>
+            <span class="release-date">June 28, 2026</span>
+          </div>
+          <h2 class="featured__title">Design Tokens &amp; CSS Variable Theming</h2>
+          <p class="featured__desc">
+            This release introduces a complete design token system with CSS custom properties, enabling seamless theming across all components. Includes dark mode support, a new color palette, and improved typography scale. We've also added 12 new utility components and significantly improved tree-shaking for smaller bundle sizes.
+          </p>
+          <div class="featured__tags">
+            <span class="tag tag--feature">Feature</span>
+            <span class="tag tag--improvement">Improvement</span>
+            <span class="tag tag--breaking">Breaking Change</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═══════ TIMELINE ═══════ -->
+  <section class="timeline">
+    <div class="container container--narrow">
+      <h2 class="timeline__heading">Previous Releases</h2>
+
+      <div class="timeline__list">
+
+        <!-- v3.1.0 -->
+        <article class="timeline__item animate-in" data-tags="feature,improvement">
+          <div class="timeline__card">
+            <div class="timeline__card-header">
+              <span class="version-badge">v3.1.0</span>
+              <span class="timeline__card-title">Animated Transitions Library</span>
+              <span class="timeline__card-date">May 15, 2026</span>
+            </div>
+            <div class="timeline__card-tags">
+              <span class="tag tag--feature">Feature</span>
+              <span class="tag tag--improvement">Improvement</span>
+            </div>
+            <p class="timeline__card-desc">
+              Introducing a comprehensive animation system with 24 pre-built transition presets. Spring physics, stagger animations, and reduced-motion support are all included out of the box. The new <code>useTransition</code> hook makes it dead simple to add motion to any component.
+            </p>
+            <div class="code-block" data-lang="javascript">
+              <code><span class="code-keyword">import</span> { <span class="code-fn">useTransition</span>, <span class="code-fn">spring</span> } <span class="code-keyword">from</span> <span class="code-string">'@my-design-lib/motion'</span>;
+
+<span class="code-keyword">const</span> <span class="code-fn">MyComponent</span> <span class="code-punct">=</span> () <span class="code-keyword">=></span> {
+  <span class="code-keyword">const</span> [<span class="code-prop">style</span>] <span class="code-punct">=</span> <span class="code-fn">useTransition</span>({
+    <span class="code-prop">from</span>: { <span class="code-prop">opacity</span>: <span class="code-type">0</span>, <span class="code-prop">y</span>: <span class="code-type">20</span> },
+    <span class="code-prop">to</span>:   { <span class="code-prop">opacity</span>: <span class="code-type">1</span>, <span class="code-prop">y</span>: <span class="code-type">0</span> },
+    <span class="code-prop">config</span>: <span class="code-fn">spring</span>({ <span class="code-prop">stiffness</span>: <span class="code-type">300</span>, <span class="code-prop">damping</span>: <span class="code-type">24</span> })
+  });
+};</code>
+            </div>
+            <div class="image-placeholder image-placeholder--1"></div>
+          </div>
+        </article>
+
+        <!-- v3.0.0 -->
+        <article class="timeline__item animate-in" data-tags="feature,breaking">
+          <div class="timeline__card">
+            <div class="timeline__card-header">
+              <span class="version-badge">v3.0.0</span>
+              <span class="timeline__card-title">v3 — Complete Rewrite</span>
+              <span class="timeline__card-date">March 22, 2026</span>
+            </div>
+            <div class="timeline__card-tags">
+              <span class="tag tag--feature">Feature</span>
+              <span class="tag tag--breaking">Breaking Change</span>
+            </div>
+            <p class="timeline__card-desc">
+              The biggest release yet. We've completely rewritten the component architecture with a focus on composability, accessibility, and developer experience. The new slot-based API replaces the render-prop pattern, and all components now ship with full ARIA support.
+            </p>
+            <div class="code-block" data-lang="diff">
+              <code><span class="code-comment">// Migrating from v2 to v3</span>
+<span class="code-deleted">- &lt;Dialog renderContent={({ close }) => &lt;div&gt;...&lt;/div&gt;} /></span>
+<span class="code-added">+ &lt;Dialog&gt;</span>
+<span class="code-added">+   &lt;Dialog.Content&gt;</span>
+<span class="code-added">+     &lt;Dialog.Close /&gt;</span>
+<span class="code-added">+   &lt;/Dialog.Content&gt;</span>
+<span class="code-added">+ &lt;/Dialog&gt;</span></code>
+            </div>
+          </div>
+        </article>
+
+        <!-- v2.8.0 -->
+        <article class="timeline__item animate-in" data-tags="feature">
+          <div class="timeline__card">
+            <div class="timeline__card-header">
+              <span class="version-badge">v2.8.0</span>
+              <span class="timeline__card-title">Data Table Component</span>
+              <span class="timeline__card-date">January 10, 2026</span>
+            </div>
+            <div class="timeline__card-tags">
+              <span class="tag tag--feature">Feature</span>
+            </div>
+            <p class="timeline__card-desc">
+              A fully featured data table with sorting, filtering, pagination, row selection, and virtual scrolling for large datasets. Supports both client-side and server-side data modes with a unified API.
+            </p>
+            <div class="image-placeholder image-placeholder--2"></div>
+          </div>
+        </article>
+
+        <!-- v2.7.2 -->
+        <article class="timeline__item animate-in" data-tags="fix">
+          <div class="timeline__card">
+            <div class="timeline__card-header">
+              <span class="version-badge">v2.7.2</span>
+              <span class="timeline__card-title">Hotfix: Modal Focus Trap</span>
+              <span class="timeline__card-date">December 5, 2025</span>
+            </div>
+            <div class="timeline__card-tags">
+              <span class="tag tag--fix">Bug Fix</span>
+            </div>
+            <p class="timeline__card-desc">
+              Fixed an issue where the focus trap in modal dialogs would break when nested modals were used. Also resolved a rare race condition where clicking outside a modal during its enter animation could cause it to close and immediately reopen.
+            </p>
+          </div>
+        </article>
+
+        <!-- v2.7.0 -->
+        <article class="timeline__item animate-in" data-tags="improvement,fix">
+          <div class="timeline__card">
+            <div class="timeline__card-header">
+              <span class="version-badge">v2.7.0</span>
+              <span class="timeline__card-title">Accessibility Audit &amp; Fixes</span>
+              <span class="timeline__card-date">November 18, 2025</span>
+            </div>
+            <div class="timeline__card-tags">
+              <span class="tag tag--improvement">Improvement</span>
+              <span class="tag tag--fix">Bug Fix</span>
+            </div>
+            <p class="timeline__card-desc">
+              We conducted a full WCAG 2.1 AA audit across all components. This release includes 47 accessibility improvements including better keyboard navigation, improved screen reader announcements, proper ARIA attributes, and fixes for color contrast ratios in our dark theme variants.
+            </p>
+            <div class="image-placeholder image-placeholder--3"></div>
+          </div>
+        </article>
+
+        <!-- v2.6.0 -->
+        <article class="timeline__item animate-in" data-tags="feature,improvement">
+          <div class="timeline__card">
+            <div class="timeline__card-header">
+              <span class="version-badge">v2.6.0</span>
+              <span class="timeline__card-title">Form Builder &amp; Validation</span>
+              <span class="timeline__card-date">October 2, 2025</span>
+            </div>
+            <div class="timeline__card-tags">
+              <span class="tag tag--feature">Feature</span>
+              <span class="tag tag--improvement">Improvement</span>
+            </div>
+            <p class="timeline__card-desc">
+              New declarative form components with built-in validation, field-level error messages, and multi-step wizard support. The <code>useForm</code> hook integrates with Zod schemas for type-safe validation with zero boilerplate.
+            </p>
+            <div class="code-block" data-lang="typescript">
+              <code><span class="code-keyword">import</span> { <span class="code-fn">Form</span>, <span class="code-fn">useForm</span> } <span class="code-keyword">from</span> <span class="code-string">'@my-design-lib/form'</span>;
+<span class="code-keyword">import</span> { <span class="code-prop">z</span> } <span class="code-keyword">from</span> <span class="code-string">'zod'</span>;
+
+<span class="code-keyword">const</span> <span class="code-prop">schema</span> <span class="code-punct">=</span> <span class="code-prop">z</span>.<span class="code-fn">object</span>({
+  <span class="code-prop">email</span>: <span class="code-prop">z</span>.<span class="code-fn">string</span>().<span class="code-fn">email</span>(),
+  <span class="code-prop">name</span>:  <span class="code-prop">z</span>.<span class="code-fn">string</span>().<span class="code-fn">min</span>(<span class="code-type">2</span>),
+});
+
+<span class="code-keyword">const</span> <span class="code-fn">form</span> <span class="code-punct">=</span> <span class="code-fn">useForm</span>({ <span class="code-prop">schema</span>, <span class="code-prop">onSubmit</span>: handleSave });</code>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ SUBSCRIBE ═══════ -->
+  <section class="subscribe" id="subscribe">
+    <div class="container subscribe__content">
+      <h2 class="subscribe__title">Stay in the loop</h2>
+      <p class="subscribe__subtitle">Get notified when we ship new features, improvements, and fixes.</p>
+      <form class="subscribe__form" onsubmit="return false;">
+        <input type="email" class="subscribe__input" placeholder="you@example.com" required>
+        <button type="submit" class="btn btn--primary btn--lg subscribe__btn">Subscribe to updates</button>
+      </form>
+      <a href="/feed.xml" class="subscribe__rss">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        Or subscribe via RSS
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">&copy; 2026 My Design Lib. All rights reserved.</p>
+      <ul class="footer__links">
+        <li><a href="/" class="footer__link">Home</a></li>
+        <li><a href="/docs" class="footer__link">Documentation</a></li>
+        <li><a href="https://github.com" class="footer__link" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="/feed.xml" class="footer__link">RSS</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ═══════ MINIMAL JS ═══════ -->
+  <script>
+    // Mobile menu toggle
+    const toggle = document.getElementById('mobileToggle');
+    const menu = document.getElementById('mobileMenu');
+    toggle.addEventListener('click', () => {
+      menu.classList.toggle('open');
+    });
+
+    // Filter pills
+    const pills = document.querySelectorAll('.filter-pill');
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+      });
+    });
+
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.animate-in').forEach(el => {
+      el.style.animationPlayState = 'paused';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>

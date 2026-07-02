@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Board — Ship faster with clarity</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       DESIGN TOKENS (local overrides / fallbacks)
+       ============================================ */
+    :root {
+      --color-bg: var(--color-background, #0a0a0f);
+      --color-bg-elevated: var(--color-surface, #12121a);
+      --color-bg-card: var(--color-surface, #16161f);
+      --color-border: var(--color-border, rgba(255, 255, 255, 0.08));
+      --color-border-hover: rgba(255, 255, 255, 0.15);
+      --color-text: var(--color-text, #e2e2e8);
+      --color-text-secondary: var(--color-text-secondary, #8b8b9e);
+      --color-text-tertiary: #5b5b6e;
+      --color-primary: var(--color-primary, #6366f1);
+      --color-primary-hover: #818cf8;
+      --color-accent: var(--color-accent, #06b6d4);
+      --color-accent-hover: #22d3ee;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img { max-width: 100%; display: block; }
+
+    /* ============================================
+       KEYFRAME ANIMATIONS
+       ============================================ */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.15); }
+      50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.3); }
+    }
+
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    @keyframes orbit {
+      from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+      to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+    }
+
+    /* ============================================
+       UTILITY
+       ============================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: var(--color-text-secondary);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--color-border);
+    }
+
+    /* ============================================
+       NAVIGATION
+       ============================================ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 24px;
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--color-border);
+      transition: var(--transition);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.125rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-logo-icon::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.2));
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      transition: color var(--transition);
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--color-primary);
+      transition: width var(--transition);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-sans);
+    }
+
+    .nav-cta:hover {
+      background: var(--color-primary-hover);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .nav-mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--color-text);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* ============================================
+       HERO
+       ============================================ */
+    .hero {
+      position: relative;
+      padding: 180px 24px 100px;
+      text-align: center;
+      overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(ellipse, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.05) 40%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: linear-gradient(to top, var(--color-bg), transparent);
+      pointer-events: none;
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .hero-orb-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--color-primary);
+      top: 10%;
+      right: -10%;
+      opacity: 0.08;
+    }
+
+    .hero-orb-2 {
+      width: 300px;
+      height: 300px;
+      background: var(--color-accent);
+      bottom: 20%;
+      left: -5%;
+      opacity: 0.06;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black, transparent);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black, transparent);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      animation: fade-in-up 0.8s ease-out;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--color-accent);
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      animation: pulse-glow 2s infinite;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #fff 0%, #e2e2e8 50%, var(--color-text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      max-width: 580px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      color: #fff;
+      background: linear-gradient(135deg, var(--color-primary), #4f46e5);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-primary:hover::before { opacity: 1; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Board Mockup */
+    .hero-board {
+      position: relative;
+      z-index: 2;
+      margin-top: 60px;
+      max-width: 1000px;
+      width: 100%;
+      animation: fade-in-up 1s ease-out 0.3s both;
+    }
+
+    .board-frame {
+      background: var(--color-bg-elevated);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.1),
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+      animation: pulse-glow 4s infinite;
+      overflow: hidden;
+    }
+
+    .board-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .board-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .board-window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .board-window-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .board-window-dots span:nth-child(1) { background: #ef4444; }
+    .board-window-dots span:nth-child(2) { background: #f59e0b; }
+    .board-window-dots span:nth-child(3) { background: #10b981; }
+
+    .board-topbar-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+
+    .board-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .board-column {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .board-column-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .board-column-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+
+    .board-column-count {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-tertiary);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .board-column-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .board-column:nth-child(1) .board-column-dot { background: var(--color-text-tertiary); }
+    .board-column:nth-child(2) .board-column-dot { background: var(--color-warning); }
+    .board-column:nth-child(3) .board-column-dot { background: var(--color-success); }
+
+    .task-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      margin-bottom: 8px;
+      transition: all var(--transition);
+      cursor: default;
+    }
+
+    .task-card:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .task-card-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .task-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .task-label {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .label-feature { background: rgba(99, 102, 241, 0.15); color: var(--color-primary); }
+    .label-bug { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+    .label-improvement { background: rgba(6, 182, 212, 0.15); color: var(--color-accent); }
+    .label-design { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+    .label-infrastructure { background: rgba(245, 158, 11, 0.15); color: var(--color-warning); }
+    .label-docs { background: rgba(16, 185, 129, 0.15); color: var(--color-success); }
+
+    .task-id {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* ============================================
+       LOGO CLOUD
+       ============================================ */
+    .logo-cloud {
+      padding: 80px 24px;
+      text-align: center;
+    }
+
+    .logo-cloud-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 40px;
+    }
+
+    .logo-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .logo-item {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-text-tertiary);
+      letter-spacing: -0.02em;
+      opacity: 0.5;
+      transition: all var(--transition);
+      cursor: default;
+      user-select: none;
+    }
+
+    .logo-item:hover {
+      opacity: 0.9;
+      color: var(--color-text-secondary);
+    }
+
+    /* ============================================
+       FEATURES
+       ============================================ */
+    .features {
+      padding: 100px 24px;
+      position: relative;
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .features-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .feature-card:hover {
+      border-color: rgba(99, 102, 241, 0.2);
+      background: rgba(99, 102, 241, 0.03);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+    }
+
+    .feature-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-card-desc {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.65;
+    }
+
+    /* ============================================
+       BENTO GRID
+       ============================================ */
+    .bento {
+      padding: 100px 24px;
+      position: relative;
+    }
+
+    .bento-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .bento-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 16px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .bento-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      overflow: hidden;
+      position: relative;
+      transition: all var(--transition);
+    }
+
+    .bento-card:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .bento-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .bento-card-desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      margin-bottom: 20px;
+    }
+
+    /* Inbox view spans 2 cols */
+    .bento-inbox {
+      grid-column: span 2;
+      grid-row: span 2;
+      min-height: 380px;
+    }
+
+    .inbox-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .inbox-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition);
+      font-size: 13px;
+    }
+
+    .inbox-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--color-border);
+    }
+
+    .inbox-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .inbox-item-title {
+      flex: 1;
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .inbox-item-time {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      font-family: var(--font-mono);
+    }
+
+    /* Board mini view */
+    .bento-board {
+      grid-column: span 2;
+    }
+
+    .mini-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .mini-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .mini-card {
+      height: 28px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--color-border);
+    }
+
+    .mini-card:nth-child(odd) { width: 100%; }
+    .mini-card:nth-child(even) { width: 80%; }
+
+    /* Timeline view */
+    .bento-timeline {
+      grid-column: span 2;
+    }
+
+    .timeline-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .timeline-label {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      width: 60px;
+      text-align: right;
+      font-family: var(--font-mono);
+    }
+
+    .timeline-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .timeline-bar {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+
+    /* Stats card */
+    .bento-stats {
+      grid-column: span 2;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius-sm);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+
+    /* ============================================
+       TESTIMONIALS
+       ============================================ */
+    .testimonials {
+      padding: 100px 24px;
+      position: relative;
+    }
+
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .testimonials-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 16px;
+      color: #f59e0b;
+      font-size: 14px;
+    }
+
+    .testimonial-quote {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--color-text);
+      margin-bottom: 24px;
+      font-style: italic;
+      opacity: 0.9;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .testimonial-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .testimonial-role {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+    }
+
+    /* ============================================
+       CTA SECTION
+       ============================================ */
+    .cta-section {
+      padding: 100px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(99, 102, 241, 0.1), transparent);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 64px 40px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .cta-title {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .cta-subtitle {
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .cta-form {
+      display: flex;
+      gap: 10px;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .cta-input {
+      flex: 1;
+      padding: 14px 18px;
+      font-size: 14px;
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: all var(--transition);
+    }
+
+    .cta-input::placeholder {
+      color: var(--color-text-tertiary);
+    }
+
+    .cta-input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .cta-submit {
+      padding: 14px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      color: #fff;
+      background: linear-gradient(135deg, var(--color-primary), #4f46e5);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .cta-submit:hover {
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer {
+      padding: 80px 24px 40px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      margin-bottom: 60px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+
+    .footer-brand-desc {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .footer-col-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      list-style: none;
+    }
+
+    .footer-col-links a {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      transition: color var(--transition);
+    }
+
+    .footer-col-links a:hover {
+      color: var(--color-text);
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--color-text-tertiary);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-social a {
+      color: var(--color-text-tertiary);
+      transition: color var(--transition);
+      font-size: 14px;
+    }
+
+    .footer-social a:hover {
+      color: var(--color-text);
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bento-inbox { grid-column: span 2; grid-row: span 1; min-height: 280px; }
+      .bento-board { grid-column: span 2; }
+      .bento-timeline { grid-column: span 2; }
+      .bento-stats { grid-column: span 2; }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-mobile-toggle { display: block; }
+
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 15, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 24px;
+        gap: 20px;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .hero {
+        padding: 140px 20px 80px;
+        min-height: auto;
+      }
+
+      .board-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bento-inbox,
+      .bento-board,
+      .bento-timeline,
+      .bento-stats {
+        grid-column: span 1;
+      }
+
+      .cta-form {
+        flex-direction: column;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .logo-grid {
+        gap: 28px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .hero-actions .btn-primary,
+      .hero-actions .btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">P</div>
+        <span>Pulse Board</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#docs">Docs</a></li>
+        <li><a href="#changelog">Changelog</a></li>
+      </ul>
+      <button class="nav-cta" onclick="window.location.href='#'">Get Started →</button>
+      <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-grid-bg"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Now in public beta — v0.9
+      </div>
+      <h1 class="hero-title">Ship faster <span>with clarity</span></h1>
+      <p class="hero-subtitle">The task management platform built for modern engineering teams. Track, prioritize, and ship — without the chaos.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="window.location.href='#'">
+          Get Started
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn-secondary" onclick="window.location.href='#'">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polygon points="6,3 13,8 6,13" fill="currentColor"/></svg>
+          View Demo
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-board">
+      <div class="board-frame">
+        <div class="board-topbar">
+          <div class="board-topbar-left">
+            <div class="board-window-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="board-topbar-title">Sprint 24 — Pulse Board</span>
+          </div>
+        </div>
+        <div class="board-columns">
+          <!-- Backlog -->
+          <div class="board-column">
+            <div class="board-column-header">
+              <div class="board-column-title">
+                <span class="board-column-dot"></span>
+                Backlog
+              </div>
+              <span class="board-column-count">4</span>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Migrate auth service to edge runtime</div>
+              <div class="task-card-meta">
+                <span class="task-label label-infrastructure">Infra</span>
+                <span class="task-id">PB-142</span>
+              </div>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Add keyboard shortcut overlay</div>
+              <div class="task-card-meta">
+                <span class="task-label label-feature">Feature</span>
+                <span class="task-id">PB-156</span>
+              </div>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Update API rate limit docs</div>
+              <div class="task-card-meta">
+                <span class="task-label label-docs">Docs</span>
+                <span class="task-id">PB-161</span>
+              </div>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Redesign settings panel</div>
+              <div class="task-card-meta">
+                <span class="task-label label-design">Design</span>
+                <span class="task-id">PB-167</span>
+              </div>
+            </div>
+          </div>
+          <!-- In Progress -->
+          <div class="board-column">
+            <div class="board-column-header">
+              <div class="board-column-title">
+                <span class="board-column-dot"></span>
+                In Progress
+              </div>
+              <span class="board-column-count">3</span>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Implement real-time cursor sync</div>
+              <div class="task-card-meta">
+                <span class="task-label label-feature">Feature</span>
+                <span class="task-id">PB-138</span>
+              </div>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Fix pagination on /api/issues</div>
+              <div class="task-card-meta">
+                <span class="task-label label-bug">Bug</span>
+                <span class="task-id">PB-151</span>
+              </div>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Optimize dashboard query perf</div>
+              <div class="task-card-meta">
+                <span class="task-label label-improvement">Improvement</span>
+                <span class="task-id">PB-159</span>
+              </div>
+            </div>
+          </div>
+          <!-- Done -->
+          <div class="board-column">
+            <div class="board-column-header">
+              <div class="board-column-title">
+                <span class="board-column-dot"></span>
+                Done
+              </div>
+              <span class="board-column-count">3</span>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Ship webhook notification system</div>
+              <div class="task-card-meta">
+                <span class="task-label label-feature">Feature</span>
+                <span class="task-id">PB-129</span>
+              </div>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Add GitHub PR link detection</div>
+              <div class="task-card-meta">
+                <span class="task-label label-improvement">Improvement</span>
+                <span class="task-id">PB-134</span>
+              </div>
+            </div>
+            <div class="task-card">
+              <div class="task-card-title">Write onboarding email flow</div>
+              <div class="task-card-meta">
+                <span class="task-label label-docs">Docs</span>
+                <span class="task-id">PB-140</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LOGO CLOUD ========== -->
+  <section class="logo-cloud">
+    <p class="logo-cloud-label">Trusted by teams at</p>
+    <div class="logo-grid">
+      <span class="logo-item">Vercel</span>
+      <span class="logo-item">Stripe</span>
+      <span class="logo-item">Linear</span>
+      <span class="logo-item">Notion</span>
+      <span class="logo-item">Figma</span>
+      <span class="logo-item">GitHub</span>
+    </div>
+  </section>
+
+  <!-- ========== FEATURES ========== -->
+  <section class="features" id="features">
+    <div class="features-header">
+      <p class="section-label">Features</p>
+      <h2 class="section-title">Everything you need to ship</h2>
+      <p class="section-subtitle">Built from the ground up for speed, collaboration, and developer experience.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⌨️</div>
+        <h3 class="feature-card-title">Keyboard shortcuts</h3>
+        <p class="feature-card-desc">Navigate, create, and manage tasks without ever touching your mouse. Built for power users who value speed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-card-title">Real-time sync</h3>
+        <p class="feature-card-desc">See changes instantly across your entire team. No refresh, no delay — just live collaboration as it should be.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔀</div>
+        <h3 class="feature-card-title">Git integration</h3>
+        <p class="feature-card-desc">Link pull requests, auto-close issues on merge, and see deployment status right on your task cards.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3 class="feature-card-title">Automations</h3>
+        <p class="feature-card-desc">Set up custom workflows that trigger on status changes, assignments, or due dates. No code required.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3 class="feature-card-title">Analytics</h3>
+        <p class="feature-card-desc">Track cycle time, throughput, and bottlenecks with built-in dashboards. Make data-driven decisions effortlessly.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔌</div>
+        <h3 class="feature-card-title">API-first</h3>
+        <p class="feature-card-desc">A RESTful and GraphQL API that lets you build custom integrations, scripts, and workflows on top of Pulse Board.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BENTO GRID ========== -->
+  <section class="bento" id="docs">
+    <div class="bento-header">
+      <p class="section-label">Product</p>
+      <h2 class="section-title">Designed for every workflow</h2>
+      <p class="section-subtitle">Switch between views that match how your team works. One project, many perspectives.</p>
+    </div>
+    <div class="bento-grid">
+      <!-- Inbox View - Large -->
+      <div class="bento-card bento-inbox">
+        <h3 class="bento-card-title">📬 Inbox</h3>
+        <p class="bento-card-desc">Stay on top of what matters with a unified activity feed.</p>
+        <div class="inbox-items">
+          <div class="inbox-item">
+            <span class="inbox-dot" style="background: var(--color-primary);"></span>
+            <span class="inbox-item-title">Sarah assigned you to "API Gateway refactor"</span>
+            <span class="inbox-item-time">2m</span>
+          </div>
+          <div class="inbox-item">
+            <span class="inbox-dot" style="background: var(--color-success);"></span>
+            <span class="inbox-item-title">PR #247 merged into main</span>
+            <span class="inbox-item-time">14m</span>
+          </div>
+          <div class="inbox-item">
+            <span class="inbox-dot" style="background: var(--color-warning);"></span>
+            <span class="inbox-item-title">Comment on "Database migration plan"</span>
+            <span class="inbox-item-time">1h</span>
+          </div>
+          <div class="inbox-item">
+            <span class="inbox-dot" style="background: var(--color-accent);"></span>
+            <span class="inbox-item-title">New issue created: "Rate limiter edge case"</span>
+            <span class="inbox-item-time">2h</span>
+          </div>
+          <div class="inbox-item">
+            <span class="inbox-dot" style="background: var(--color-primary);"></span>
+            <span class="inbox-item-title">Sprint velocity report is ready</span>
+            <span class="inbox-item-time">3h</span>
+          </div>
+          <div class="inbox-item">
+            <span class="inbox-dot" style="background: var(--color-success);"></span>
+            <span class="inbox-item-title">Deployment v2.4.1 succeeded</span>
+            <span class="inbox-item-time">5h</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Board View -->
+      <div class="bento-card bento-board">
+        <h3 class="bento-card-title">📋 Board</h3>
+        <p class="bento-card-desc">Kanban-style drag-and-drop task management.</p>
+        <div class="mini-board">
+          <div class="mini-col">
+            <div class="mini-card"></div>
+            <div class="mini-card"></div>
+            <div class="mini-card"></div>
+          </div>
+          <div class="mini-col">
+            <div class="mini-card" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.2);"></div>
+            <div class="mini-card" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.2);"></div>
+          </div>
+          <div class="mini-col">
+            <div class="mini-card" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.2);"></div>
+            <div class="mini-card" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.2);"></div>
+            <div class="mini-card" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.2);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="bento-card bento-stats">
+        <h3 class="bento-card-title">📈 Analytics</h3>
+        <p class="bento-card-desc">Measure what matters with real-time metrics.</p>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value">94%</div>
+            <div class="stat-label">Sprint completion</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">2.4d</div>
+            <div class="stat-label">Avg cycle time</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">127</div>
+            <div class="stat-label">Issues closed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline View -->
+      <div class="bento-card bento-timeline">
+        <h3 class="bento-card-title">📅 Timeline</h3>
+        <p class="bento-card-desc">Visualize project schedules and dependencies.</p>
+        <div class="timeline-bars">
+          <div class="timeline-row">
+            <span class="timeline-label">Design</span>
+            <div class="timeline-track">
+              <div class="timeline-bar" style="left: 5%; width: 35%; background: linear-gradient(90deg, #a855f7, #6366f1);"></div>
+            </div>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-label">Frontend</span>
+            <div class="timeline-track">
+              <div class="timeline-bar" style="left: 20%; width: 50%; background: linear-gradient(90deg, var(--color-primary), var(--color-accent));"></div>
+            </div>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-label">Backend</span>
+            <div class="timeline-track">
+              <div class="timeline-bar" style="left: 15%; width: 45%; background: linear-gradient(90deg, var(--color-accent), #10b981);"></div>
+            </div>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-label">QA</span>
+            <div class="timeline-track">
+              <div class="timeline-bar" style="left: 55%; width: 30%; background: linear-gradient(90deg, #f59e0b, #ef4444);"></div>
+            </div>
+          </div>
+          <div class="timeline-row">
+            <span class="timeline-label">Deploy</span>
+            <div class="timeline-track">
+              <div class="timeline-bar" style="left: 80%; width: 15%; background: linear-gradient(90deg, #10b981, #06b6d4);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TESTIMONIALS ========== -->
+  <section class="testimonials" id="changelog">
+    <div class="testimonials-header">
+      <p class="section-label">Testimonials</p>
+      <h2 class="section-title">Loved by engineering teams</h2>
+      <p class="section-subtitle">See why thousands of developers choose Pulse Board to manage their work.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"Pulse Board replaced three tools for us. The keyboard-first approach means our team moves at the speed of thought. We shipped 40% faster last quarter."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: linear-gradient(135deg, #6366f1, #a855f7);">MK</div>
+          <div class="testimonial-info">
+            <span class="testimonial-name">Marcus Kim</span>
+            <span class="testimonial-role">VP of Engineering, Vercel</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"The Git integration is game-changing. PRs auto-link to tasks, deploys show on cards, and our PM finally stopped asking for status updates."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: linear-gradient(135deg, #06b6d4, #10b981);">AL</div>
+          <div class="testimonial-info">
+            <span class="testimonial-name">Anya Larsson</span>
+            <span class="testimonial-role">CTO, Lattice AI</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"We migrated from Jira in a weekend. The API is clean, the docs are excellent, and the real-time sync makes it feel like Google Docs for project management."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">DR</div>
+          <div class="testimonial-info">
+            <span class="testimonial-name">David Reyes</span>
+            <span class="testimonial-role">Lead Developer, Stripe</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="cta-section" id="pricing">
+    <div class="cta-inner">
+      <h2 class="cta-title">Ready to ship faster?</h2>
+      <p class="cta-subtitle">Join thousands of teams already using Pulse Board. Free for teams up to 10 — no credit card required.</p>
+      <form class="cta-form" onsubmit="event.preventDefault()">
+        <input type="email" class="cta-input" placeholder="Enter your work email" required>
+        <button type="submit" class="cta-submit">Get Started Free</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <div class="nav-logo-icon">P</div>
+          <span>Pulse Board</span>
+        </div>
+        <p class="footer-brand-desc">The task management platform built for modern engineering teams. Track, prioritize, and ship.</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Product</h4>
+        <ul class="footer-col-links">
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Integrations</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Roadmap</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Resources</h4>
+        <ul class="footer-col-links">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Guides</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Community</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Company</h4>
+        <ul class="footer-col-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Legal</h4>
+        <ul class="footer-col-links">
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Security</a></li>
+          <li><a href="#">GDPR</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Pulse Board, Inc. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="#">Twitter</a>
+        <a href="#">GitHub</a>
+        <a href="#">Discord</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== MINIMAL JS ========== -->
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // Close mobile nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // Navbar background on scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        nav.style.background = 'rgba(10, 10, 15, 0.95)';
+      } else {
+        nav.style.background = 'rgba(10, 10, 15, 0.8)';
+      }
+    });
+  </script>
+</body>
+</html>

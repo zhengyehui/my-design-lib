@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 89 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 91 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -847,6 +847,24 @@ const pages = [
     rating: 9.4,
     description: '奢华宠物家具品牌电商，灵感来自 ROOOF，Playfair Display 衬线字体 + 暖色大地调 + 横向滚动画廊 + 产品色板选择器 + 使命宣言',
   },
+  {
+    id: 'pulse-board',
+    title: 'Pulse Board 任务管理平台',
+    category: 'landing',
+    tags: ['SaaS', '任务管理', '暗色主题', 'Linear风格', 'Bento Grid'],
+    colors: ['#0a0a0f', '#6366f1', '#06b6d4'],
+    rating: 9.5,
+    description: '暗色系任务管理 SaaS 落地页，灵感来自 Linear.app，毛玻璃导航 + CSS 任务板 Mockup + Bento Grid 产品展示 + 径向渐变光晕 + 品牌信任条',
+  },
+  {
+    id: 'ship-log',
+    title: 'ShipLog 开发者更新日志',
+    category: 'content',
+    tags: ['更新日志', '开发者', '时间线', '版本发布', '代码高亮'],
+    colors: ['#ffffff', '#6366f1', '#0f172a'],
+    rating: 9.4,
+    description: '开发者风格产品更新日志，灵感来自 Linear/Vercel Changelog，垂直时间线 + 渐变边框特色卡片 + 代码块语法高亮 + 标签筛选 + 滚动入场动画',
+  },
 ]
 
 const categories = [
@@ -904,12 +922,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 89 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 91 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="89 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="91 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -918,7 +936,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 89 个完整页面</span>
+      <span>📦 91 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
