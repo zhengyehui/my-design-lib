@@ -260,7 +260,8 @@ export default defineConfig({
             { text: 'DevForge 开发者作品集', link: '/pages/dev-portfolio' },
             { text: 'Lena Voss 电影人作品集', link: '/pages/freelance-portfolio' },
             { text: 'MONO&CO 品牌设计工作室', link: '/pages/atelier-brand' },
-            { text: 'INDEX Studio 极简主义事务所', link: '/pages/brutalist-agency' }
+            { text: 'INDEX Studio 极简主义事务所', link: '/pages/brutalist-agency' },
+            { text: 'Forma Studio 动态设计工作室', link: '/pages/forma-studio' }
           ]
         },
         {

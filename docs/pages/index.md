@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 91 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 92 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -865,6 +865,15 @@ const pages = [
     rating: 9.4,
     description: '开发者风格产品更新日志，灵感来自 Linear/Vercel Changelog，垂直时间线 + 渐变边框特色卡片 + 代码块语法高亮 + 标签筛选 + 滚动入场动画',
   },
+  {
+    id: 'forma-studio',
+    title: 'Forma Studio 动态设计工作室',
+    category: 'portfolio',
+    tags: ['动态设计', '3D可视化', '暗色主题', '品牌动态', 'Marquee'],
+    colors: ['#08080d', '#00e5ff', '#c9a96e'],
+    rating: 9.5,
+    description: '暗色电影感动态设计工作室，灵感来自 Ordinary Folk/Ragged Edge，超大 FORMA 渐变字体 Hero + CSS 网格渐变背景 + 脉冲光环 Showreel + 作品网格辉光效果 + Bento 服务网格含 3D 旋转立方体 + 客户 Marquee 滚动',
+  },
 ]
 
 const categories = [
@@ -922,12 +931,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 91 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 92 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="91 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="92 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -936,7 +945,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 91 个完整页面</span>
+      <span>📦 92 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
