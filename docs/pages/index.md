@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 92 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 94 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -874,6 +874,24 @@ const pages = [
     rating: 9.5,
     description: '暗色电影感动态设计工作室，灵感来自 Ordinary Folk/Ragged Edge，超大 FORMA 渐变字体 Hero + CSS 网格渐变背景 + 脉冲光环 Showreel + 作品网格辉光效果 + Bento 服务网格含 3D 旋转立方体 + 客户 Marquee 滚动',
   },
+  {
+    id: 'parfum-noir',
+    title: 'NOIR Parfum 奢华香水电商',
+    category: 'ecommerce',
+    tags: ['电商', '香水', '奢华', '暗色主题', '衬线字体'],
+    colors: ['#08080d', '#c9a96e', '#faf8f5'],
+    rating: 9.5,
+    description: '暗色系奢华香水品牌电商，Playfair Display 衬线字体 + CSS 香水瓶造型 + 浮动金色粒子动画 + 调香故事 + CSS 植物插画成分展示',
+  },
+  {
+    id: 'ecosystem-connect',
+    title: 'NexusConnect 集成生态中心',
+    category: 'landing',
+    tags: ['SaaS', '集成', '生态', '开发者平台', '落地页'],
+    colors: ['#0f172a', '#6366f1', '#ffffff'],
+    rating: 9.4,
+    description: 'SaaS 集成生态落地页，动态连接线背景 + CSS 几何图标集成卡片网格 + 药丸分类筛选 + 语法高亮 API 代码展示 + 使用步骤引导',
+  },
 ]
 
 const categories = [
@@ -931,12 +949,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 92 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 94 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="92 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="94 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -945,7 +963,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 92 个完整页面</span>
+      <span>📦 94 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

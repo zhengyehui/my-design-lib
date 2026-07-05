@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOIR Parfum — L'Art du Parfum</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ─────────────────────────────────────────────
+       NOIR PARFUM — Design Tokens Override & Theme
+       ───────────────────────────────────────────── */
+    :root {
+      --np-bg:         #08080d;
+      --np-bg-card:    #0e0e16;
+      --np-bg-elevated:#14141e;
+      --np-gold:       #c9a96e;
+      --np-gold-light: #e0c88a;
+      --np-gold-dim:   #8a7344;
+      --np-cream:      #faf8f5;
+      --np-cream-dim:  #b8b4ae;
+      --np-text:       #e8e6e1;
+      --np-text-muted: #6e6c67;
+      --np-border:     rgba(201,169,110,0.12);
+      --np-glow:       rgba(201,169,110,0.25);
+
+      --font-display: 'Playfair Display', 'Georgia', serif;
+      --font-body:    'Inter', var(--font-sans, system-ui, sans-serif);
+
+      /* Map to project tokens where possible */
+      --space-1:  var(--space-1, 0.25rem);
+      --space-2:  var(--space-2, 0.5rem);
+      --space-3:  var(--space-3, 0.75rem);
+      --space-4:  var(--space-4, 1rem);
+      --space-6:  var(--space-6, 1.5rem);
+      --space-8:  var(--space-8, 2rem);
+      --space-10: var(--space-10, 2.5rem);
+      --space-12: var(--space-12, 3rem);
+      --space-16: var(--space-16, 4rem);
+      --space-20: var(--space-20, 5rem);
+      --space-24: var(--space-24, 6rem);
+
+      --radius-sm: var(--radius-sm, 4px);
+      --radius-md: var(--radius-md, 8px);
+      --radius-lg: var(--radius-lg, 12px);
+      --radius-xl: var(--radius-xl, 20px);
+    }
+
+    /* ─────────────────────────────────────────────
+       RESET & BASE
+       ───────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--np-bg);
+      color: var(--np-text);
+      line-height: 1.7;
+      font-size: 15px;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--np-gold);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover { color: var(--np-gold-light); }
+
+    img { max-width: 100%; display: block; }
+
+    ::selection {
+      background: var(--np-gold);
+      color: var(--np-bg);
+    }
+
+    /* ─────────────────────────────────────────────
+       UTILITY & ANIMATION KEYFRAMES
+       ───────────────────────────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      33%      { transform: translateY(-12px) rotate(1deg); }
+      66%      { transform: translateY(6px) rotate(-1deg); }
+    }
+
+    @keyframes particleDrift {
+      0%   { transform: translate(0, 0) scale(1); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(201,169,110,0.15); }
+      50%      { box-shadow: 0 0 40px rgba(201,169,110,0.3); }
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50%      { transform: scale(1.05); opacity: 0.8; }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-60px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(60px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes expandLine {
+      from { width: 0; }
+      to   { width: 80px; }
+    }
+
+    @keyframes bottleShine {
+      0%   { left: -50%; }
+      100% { left: 150%; }
+    }
+
+    /* Intersection Observer reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─────────────────────────────────────────────
+       NAVIGATION
+       ───────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: var(--space-6) var(--space-10);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease, padding 0.4s ease;
+      font-family: var(--font-display);
+    }
+    .nav.scrolled {
+      background: rgba(8,8,13,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: var(--space-4) var(--space-10);
+      border-bottom: 1px solid var(--np-border);
+    }
+
+    .nav__logo {
+      font-size: 1.4rem;
+      letter-spacing: 0.35em;
+      color: var(--np-cream);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .nav__logo span {
+      color: var(--np-gold);
+    }
+
+    .nav__links {
+      display: flex;
+      gap: var(--space-10);
+      list-style: none;
+    }
+    .nav__links a {
+      color: var(--np-cream-dim);
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-family: var(--font-display);
+      position: relative;
+      padding-bottom: 4px;
+    }
+    .nav__links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--np-gold);
+      transition: width 0.4s ease;
+    }
+    .nav__links a:hover {
+      color: var(--np-cream);
+    }
+    .nav__links a:hover::after {
+      width: 100%;
+    }
+
+    .nav__cta {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: var(--space-2) var(--space-6);
+      border: 1px solid var(--np-gold-dim);
+      color: var(--np-gold);
+      transition: all 0.4s ease;
+    }
+    .nav__cta:hover {
+      background: var(--np-gold);
+      color: var(--np-bg);
+    }
+
+    /* ─────────────────────────────────────────────
+       HERO SECTION
+       ───────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,169,110,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 30% 70%, rgba(140,100,50,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 50% at 80% 30%, rgba(201,169,110,0.04) 0%, transparent 50%),
+        linear-gradient(180deg, #08080d 0%, #0c0b14 40%, #0a0a12 100%);
+    }
+
+    /* Dramatic light beam overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      width: 2px;
+      height: 160%;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(201,169,110,0.06) 30%,
+        rgba(201,169,110,0.15) 50%,
+        rgba(201,169,110,0.06) 70%,
+        transparent 100%
+      );
+      transform: translateX(-50%) rotate(8deg);
+      filter: blur(40px);
+      animation: breathe 8s ease-in-out infinite;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: linear-gradient(to top, var(--np-bg) 0%, transparent 100%);
+      z-index: 2;
+    }
+
+    /* Golden particles container */
+    .hero__particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: var(--size, 3px);
+      height: var(--size, 3px);
+      background: radial-gradient(circle, var(--np-gold) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: particleDrift var(--duration, 8s) var(--delay, 0s) ease-in-out infinite;
+      --dx: 60px;
+      --dy: -120px;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 3;
+      max-width: 800px;
+      padding: 0 var(--space-8);
+    }
+
+    .hero__eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--np-gold);
+      margin-bottom: var(--space-8);
+      animation: fadeInUp 1s 0.2s both;
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--np-cream);
+      margin-bottom: var(--space-6);
+      animation: fadeInUp 1s 0.4s both;
+    }
+    .hero__title em {
+      font-style: italic;
+      color: var(--np-gold);
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--np-cream-dim);
+      margin-bottom: var(--space-10);
+      animation: fadeInUp 1s 0.6s both;
+    }
+
+    .hero__cta {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--np-gold);
+      border: 1px solid var(--np-gold-dim);
+      padding: var(--space-4) var(--space-12);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: fadeInUp 1s 0.8s both;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero__cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(201,169,110,0.1), transparent);
+      transition: left 0.6s ease;
+    }
+    .hero__cta:hover {
+      background: var(--np-gold);
+      color: var(--np-bg);
+      border-color: var(--np-gold);
+      box-shadow: 0 0 40px rgba(201,169,110,0.3);
+    }
+    .hero__cta:hover::before {
+      left: 100%;
+    }
+
+    .hero__scroll {
+      position: absolute;
+      bottom: var(--space-10);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3);
+      animation: fadeIn 1s 1.2s both;
+    }
+    .hero__scroll span {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--np-text-muted);
+      writing-mode: vertical-rl;
+    }
+    .hero__scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--np-gold), transparent);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION COMMON
+       ───────────────────────────────────────────── */
+    .section {
+      padding: var(--space-24) var(--space-10);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section__label {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--np-gold);
+      margin-bottom: var(--space-4);
+    }
+
+    .section__title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 400;
+      color: var(--np-cream);
+      line-height: 1.15;
+      margin-bottom: var(--space-6);
+    }
+    .section__title em {
+      font-style: italic;
+      color: var(--np-gold);
+    }
+
+    .section__divider {
+      width: 60px;
+      height: 1px;
+      background: var(--np-gold);
+      margin-bottom: var(--space-8);
+    }
+
+    .section__subtitle {
+      font-size: 0.95rem;
+      color: var(--np-cream-dim);
+      max-width: 500px;
+      line-height: 1.8;
+    }
+
+    /* ─────────────────────────────────────────────
+       MARQUEE BANNER
+       ───────────────────────────────────────────── */
+    .marquee {
+      overflow: hidden;
+      padding: var(--space-6) 0;
+      border-top: 1px solid var(--np-border);
+      border-bottom: 1px solid var(--np-border);
+      background: var(--np-bg-card);
+    }
+    .marquee__track {
+      display: flex;
+      gap: var(--space-16);
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee__item {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--np-text-muted);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+    }
+    .marquee__item::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--np-gold);
+      border-radius: 50%;
+    }
+
+    /* ─────────────────────────────────────────────
+       FRAGRANCE COLLECTION GRID
+       ───────────────────────────────────────────── */
+    .collection {
+      padding: var(--space-24) var(--space-10);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .collection__header {
+      text-align: center;
+      margin-bottom: var(--space-16);
+    }
+
+    .collection__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+    }
+
+    .fragrance-card {
+      position: relative;
+      background: var(--np-bg-card);
+      border: 1px solid var(--np-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-10) var(--space-8) var(--space-8);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+    .fragrance-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(201,169,110,0.06), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .fragrance-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(201,169,110,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(201,169,110,0.08);
+    }
+    .fragrance-card:hover::before {
+      opacity: 1;
+    }
+
+    /* CSS-only perfume bottle */
+    .bottle {
+      position: relative;
+      width: 80px;
+      height: 160px;
+      margin: 0 auto var(--space-8);
+      transition: transform 0.5s ease;
+    }
+    .fragrance-card:hover .bottle {
+      transform: translateY(-6px);
+    }
+
+    .bottle__cap {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 20px;
+      background: linear-gradient(135deg, var(--np-gold-light), var(--np-gold-dim));
+      border-radius: 3px 3px 0 0;
+    }
+    .bottle__neck {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 20px;
+      background: linear-gradient(180deg, rgba(201,169,110,0.3), rgba(201,169,110,0.15));
+      border: 1px solid rgba(201,169,110,0.2);
+    }
+    .bottle__body {
+      position: absolute;
+      top: 38px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 110px;
+      border-radius: 4px 4px 8px 8px;
+      border: 1px solid rgba(201,169,110,0.2);
+      overflow: hidden;
+    }
+    .bottle__body--noir {
+      background: linear-gradient(180deg, #1a1a24 0%, #0d0d14 60%, #080810 100%);
+    }
+    .bottle__body--oud {
+      background: linear-gradient(180deg, #2a1a10 0%, #1a0f08 60%, #100a05 100%);
+    }
+    .bottle__body--fleur {
+      background: linear-gradient(180deg, #1a1020 0%, #140c1a 60%, #0c0810 100%);
+    }
+
+    .bottle__liquid {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70%;
+      border-radius: 0 0 7px 7px;
+    }
+    .bottle__liquid--noir {
+      background: linear-gradient(180deg, rgba(201,169,110,0.15), rgba(201,169,110,0.05));
+    }
+    .bottle__liquid--oud {
+      background: linear-gradient(180deg, rgba(180,100,40,0.2), rgba(140,70,20,0.08));
+    }
+    .bottle__liquid--fleur {
+      background: linear-gradient(180deg, rgba(160,80,140,0.15), rgba(120,60,120,0.05));
+    }
+
+    .bottle__shine {
+      position: absolute;
+      top: 0;
+      left: -50%;
+      width: 30%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform: skewX(-15deg);
+      animation: bottleShine 4s ease-in-out infinite;
+    }
+
+    .bottle__label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 24px;
+      border: 1px solid rgba(201,169,110,0.25);
+      border-radius: 2px;
+    }
+
+    .fragrance-card__name {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--np-cream);
+      margin-bottom: var(--space-2);
+      font-weight: 500;
+    }
+    .fragrance-card__family {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--np-gold);
+      margin-bottom: var(--space-4);
+    }
+    .fragrance-card__notes {
+      font-size: 0.85rem;
+      color: var(--np-cream-dim);
+      line-height: 1.7;
+      margin-bottom: var(--space-6);
+    }
+    .fragrance-card__price {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--np-cream);
+    }
+    .fragrance-card__price small {
+      font-size: 0.7rem;
+      color: var(--np-text-muted);
+      font-family: var(--font-body);
+    }
+
+    /* ─────────────────────────────────────────────
+       SCENT STORY (Split Layout)
+       ───────────────────────────────────────────── */
+    .scent-story {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 90vh;
+      position: relative;
+    }
+
+    .scent-story__art {
+      position: relative;
+      background: var(--np-bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Concentric circles art */
+    .art-circles {
+      position: relative;
+      width: 400px;
+      height: 400px;
+    }
+    .art-circles__ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid;
+      animation: breathe 6s ease-in-out infinite;
+    }
+    .art-circles__ring:nth-child(1) {
+      width: 100%;
+      height: 100%;
+      border-color: rgba(201,169,110,0.15);
+      animation-delay: 0s;
+    }
+    .art-circles__ring:nth-child(2) {
+      width: 80%;
+      height: 80%;
+      border-color: rgba(201,169,110,0.2);
+      animation-delay: 0.5s;
+    }
+    .art-circles__ring:nth-child(3) {
+      width: 60%;
+      height: 60%;
+      border-color: rgba(201,169,110,0.3);
+      animation-delay: 1s;
+    }
+    .art-circles__ring:nth-child(4) {
+      width: 40%;
+      height: 40%;
+      border-color: rgba(201,169,110,0.4);
+      animation-delay: 1.5s;
+    }
+    .art-circles__ring:nth-child(5) {
+      width: 20%;
+      height: 20%;
+      border-color: rgba(201,169,110,0.5);
+      animation-delay: 2s;
+    }
+
+    .art-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      animation: float 10s ease-in-out infinite;
+    }
+    .art-orb--1 {
+      width: 200px;
+      height: 200px;
+      top: 20%;
+      left: 30%;
+      background: radial-gradient(circle, rgba(201,169,110,0.2), transparent);
+    }
+    .art-orb--2 {
+      width: 150px;
+      height: 150px;
+      bottom: 20%;
+      right: 20%;
+      background: radial-gradient(circle, rgba(140,80,60,0.15), transparent);
+      animation-delay: -3s;
+    }
+    .art-orb--3 {
+      width: 100px;
+      height: 100px;
+      top: 60%;
+      left: 15%;
+      background: radial-gradient(circle, rgba(160,100,160,0.12), transparent);
+      animation-delay: -6s;
+    }
+
+    .scent-story__text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--space-16) var(--space-16) var(--space-16) var(--space-12);
+    }
+
+    .scent-story__text p {
+      font-size: 1rem;
+      color: var(--np-cream-dim);
+      line-height: 2;
+      margin-bottom: var(--space-6);
+    }
+    .scent-story__text p:first-of-type::first-letter {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      float: left;
+      line-height: 1;
+      margin-right: var(--space-3);
+      margin-top: 0.1em;
+      color: var(--np-gold);
+    }
+
+    .scent-story__quote {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-style: italic;
+      color: var(--np-cream);
+      border-left: 2px solid var(--np-gold);
+      padding-left: var(--space-6);
+      margin: var(--space-8) 0;
+      line-height: 1.6;
+    }
+
+    /* ─────────────────────────────────────────────
+       INGREDIENT SHOWCASE
+       ───────────────────────────────────────────── */
+    .ingredients {
+      padding: var(--space-24) 0;
+      overflow: hidden;
+    }
+
+    .ingredients__header {
+      text-align: center;
+      padding: 0 var(--space-10);
+      margin-bottom: var(--space-12);
+    }
+
+    .ingredients__scroll {
+      display: flex;
+      gap: var(--space-8);
+      padding: 0 var(--space-10) var(--space-8);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .ingredients__scroll::-webkit-scrollbar { display: none; }
+
+    .ingredient-card {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+      background: var(--np-bg-card);
+      border: 1px solid var(--np-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+    .ingredient-card:hover {
+      border-color: rgba(201,169,110,0.25);
+      transform: translateY(-4px);
+    }
+
+    /* CSS botanical illustrations */
+    .botanical {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto var(--space-6);
+    }
+    .botanical__shape {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Rose illustration */
+    .botanical--rose .botanical__petal {
+      width: 30px;
+      height: 40px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+    .botanical--rose .petal-1 { transform: translate(-50%, -70%) rotate(0deg); background: rgba(180,60,80,0.3); }
+    .botanical--rose .petal-2 { transform: translate(-50%, -70%) rotate(72deg); background: rgba(180,60,80,0.25); }
+    .botanical--rose .petal-3 { transform: translate(-50%, -70%) rotate(144deg); background: rgba(180,60,80,0.2); }
+    .botanical--rose .petal-4 { transform: translate(-50%, -70%) rotate(216deg); background: rgba(180,60,80,0.25); }
+    .botanical--rose .petal-5 { transform: translate(-50%, -70%) rotate(288deg); background: rgba(180,60,80,0.3); }
+    .botanical--rose .botanical__center {
+      width: 16px;
+      height: 16px;
+      background: var(--np-gold);
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    /* Oud wood illustration */
+    .botanical--oud .botanical__bark {
+      width: 8px;
+      border-radius: 4px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background: linear-gradient(180deg, rgba(160,100,50,0.4), rgba(120,70,30,0.2));
+    }
+    .botanical--oud .bark-1 { height: 80px; transform: translate(-50%, -50%); }
+    .botanical--oud .bark-2 { height: 60px; transform: translate(-10px, -40%) rotate(20deg); }
+    .botanical--oud .bark-3 { height: 50px; transform: translate(8px, -30%) rotate(-15deg); }
+    .botanical--oud .botanical__ring {
+      width: 50px;
+      height: 50px;
+      border: 1px solid rgba(160,100,50,0.2);
+      border-radius: 50%;
+    }
+
+    /* Jasmine illustration */
+    .botanical--jasmine .botanical__star {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,220,0.15);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+    .botanical--jasmine .botanical__dot {
+      width: 8px;
+      height: 8px;
+      background: var(--np-gold);
+      border-radius: 50%;
+    }
+
+    /* Vetiver illustration */
+    .botanical--vetiver .botanical__root {
+      width: 2px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background: linear-gradient(180deg, rgba(100,140,80,0.3), rgba(80,120,60,0.1));
+      border-radius: 1px;
+    }
+    .botanical--vetiver .root-1 { height: 70px; transform: translate(-50%, -30%); }
+    .botanical--vetiver .root-2 { height: 55px; transform: translate(-12px, -25%) rotate(12deg); }
+    .botanical--vetiver .root-3 { height: 60px; transform: translate(10px, -28%) rotate(-10deg); }
+    .botanical--vetiver .root-4 { height: 45px; transform: translate(-20px, -20%) rotate(25deg); }
+    .botanical--vetiver .root-5 { height: 50px; transform: translate(18px, -22%) rotate(-22deg); }
+    .botanical--vetiver .botanical__leaf {
+      width: 30px;
+      height: 8px;
+      background: rgba(100,140,80,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -100%) rotate(-20deg);
+    }
+
+    /* Bergamot illustration */
+    .botanical--bergamot .botanical__citrus {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(220,180,60,0.25), rgba(200,160,40,0.1));
+      border: 1px solid rgba(220,180,60,0.15);
+    }
+    .botanical--bergamot .botanical__segment {
+      width: 2px;
+      height: 24px;
+      background: rgba(220,180,60,0.15);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+    }
+
+    .ingredient-card__name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--np-cream);
+      margin-bottom: var(--space-2);
+    }
+    .ingredient-card__origin {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--np-gold);
+      margin-bottom: var(--space-3);
+    }
+    .ingredient-card__desc {
+      font-size: 0.85rem;
+      color: var(--np-cream-dim);
+      line-height: 1.7;
+    }
+
+    /* ─────────────────────────────────────────────
+       TESTIMONIALS
+       ───────────────────────────────────────────── */
+    .testimonials {
+      padding: var(--space-24) var(--space-10);
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .testimonials__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-8);
+      margin-top: var(--space-12);
+    }
+
+    .testimonial {
+      background: var(--np-bg-card);
+      border: 1px solid var(--np-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-10) var(--space-8);
+      text-align: left;
+      position: relative;
+      transition: border-color 0.4s ease;
+    }
+    .testimonial:hover {
+      border-color: rgba(201,169,110,0.2);
+    }
+
+    .testimonial__mark {
+      font-family: var(--font-display);
+      font-size: 6rem;
+      line-height: 1;
+      color: rgba(201,169,110,0.15);
+      position: absolute;
+      top: var(--space-4);
+      left: var(--space-6);
+    }
+
+    .testimonial__text {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--np-cream);
+      line-height: 1.7;
+      margin-bottom: var(--space-6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial__author {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--np-cream);
+      margin-bottom: var(--space-1);
+    }
+    .testimonial__role {
+      font-size: 0.7rem;
+      color: var(--np-gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────────
+       NEWSLETTER CTA
+       ───────────────────────────────────────────── */
+    .newsletter {
+      position: relative;
+      padding: var(--space-24) var(--space-10);
+      text-align: center;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 50%, rgba(201,169,110,0.06), transparent),
+        var(--np-bg-elevated);
+      border-top: 1px solid var(--np-border);
+      border-bottom: 1px solid var(--np-border);
+    }
+
+    .newsletter__title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      color: var(--np-cream);
+      margin-bottom: var(--space-4);
+    }
+    .newsletter__title em {
+      font-style: italic;
+      color: var(--np-gold);
+    }
+
+    .newsletter__desc {
+      font-size: 0.95rem;
+      color: var(--np-cream-dim);
+      max-width: 480px;
+      margin: 0 auto var(--space-10);
+      line-height: 1.8;
+    }
+
+    .newsletter__form {
+      display: flex;
+      max-width: 500px;
+      margin: 0 auto;
+      gap: 0;
+    }
+
+    .newsletter__input {
+      flex: 1;
+      background: var(--np-bg);
+      border: 1px solid var(--np-border);
+      border-right: none;
+      padding: var(--space-4) var(--space-6);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--np-cream);
+      outline: none;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      transition: border-color 0.3s ease;
+    }
+    .newsletter__input::placeholder {
+      color: var(--np-text-muted);
+    }
+    .newsletter__input:focus {
+      border-color: var(--np-gold-dim);
+    }
+
+    .newsletter__btn {
+      background: var(--np-gold);
+      color: var(--np-bg);
+      border: 1px solid var(--np-gold);
+      padding: var(--space-4) var(--space-8);
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      transition: all 0.3s ease;
+    }
+    .newsletter__btn:hover {
+      background: var(--np-gold-light);
+      border-color: var(--np-gold-light);
+    }
+
+    .newsletter__note {
+      font-size: 0.7rem;
+      color: var(--np-text-muted);
+      margin-top: var(--space-4);
+    }
+
+    /* ─────────────────────────────────────────────
+       PHILOSOPHY SECTION
+       ───────────────────────────────────────────── */
+    .philosophy {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-1px);
+      background: var(--np-border);
+      border-top: 1px solid var(--np-border);
+      border-bottom: 1px solid var(--np-border);
+    }
+
+    .philosophy__item {
+      background: var(--np-bg);
+      padding: var(--space-16) var(--space-10);
+      text-align: center;
+      transition: background 0.4s ease;
+    }
+    .philosophy__item:hover {
+      background: var(--np-bg-card);
+    }
+
+    .philosophy__icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto var(--space-6);
+      position: relative;
+    }
+
+    /* CSS icons */
+    .icon-diamond {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--np-gold);
+      transform: rotate(45deg);
+      margin: 9px auto;
+      transition: transform 0.4s ease;
+    }
+    .philosophy__item:hover .icon-diamond {
+      transform: rotate(225deg);
+    }
+
+    .icon-circle {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--np-gold);
+      border-radius: 50%;
+      margin: 8px auto;
+      position: relative;
+    }
+    .icon-circle::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background: var(--np-gold);
+      border-radius: 50%;
+    }
+
+    .icon-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .icon-lines span {
+      height: 1px;
+      background: var(--np-gold);
+    }
+    .icon-lines span:nth-child(1) { width: 20px; }
+    .icon-lines span:nth-child(2) { width: 30px; }
+    .icon-lines span:nth-child(3) { width: 20px; }
+
+    .philosophy__title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--np-cream);
+      margin-bottom: var(--space-3);
+    }
+
+    .philosophy__desc {
+      font-size: 0.85rem;
+      color: var(--np-cream-dim);
+      line-height: 1.8;
+    }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+       ───────────────────────────────────────────── */
+    .footer {
+      padding: var(--space-16) var(--space-10) var(--space-8);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-12);
+      margin-bottom: var(--space-12);
+    }
+
+    .footer__brand-name {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      letter-spacing: 0.3em;
+      color: var(--np-cream);
+      text-transform: uppercase;
+      margin-bottom: var(--space-4);
+    }
+
+    .footer__brand-desc {
+      font-size: 0.85rem;
+      color: var(--np-cream-dim);
+      line-height: 1.8;
+      max-width: 300px;
+    }
+
+    .footer__heading {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--np-cream);
+      margin-bottom: var(--space-6);
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .footer__links a {
+      font-size: 0.85rem;
+      color: var(--np-cream-dim);
+      transition: color 0.3s ease;
+    }
+    .footer__links a:hover {
+      color: var(--np-gold);
+    }
+
+    .footer__bottom {
+      border-top: 1px solid var(--np-border);
+      padding-top: var(--space-8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer__copy {
+      font-size: 0.75rem;
+      color: var(--np-text-muted);
+    }
+
+    .footer__social {
+      display: flex;
+      gap: var(--space-6);
+    }
+    .footer__social a {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--np-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--np-cream-dim);
+      font-size: 0.7rem;
+      transition: all 0.3s ease;
+    }
+    .footer__social a:hover {
+      border-color: var(--np-gold);
+      color: var(--np-gold);
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+       ───────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .collection__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .scent-story {
+        grid-template-columns: 1fr;
+      }
+      .scent-story__art {
+        min-height: 50vh;
+      }
+      .scent-story__text {
+        padding: var(--space-12) var(--space-10);
+      }
+      .testimonials__grid {
+        grid-template-columns: 1fr;
+      }
+      .footer__top {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-8);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav__links { display: none; }
+      .collection__grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .philosophy { grid-template-columns: 1fr; }
+      .newsletter__form { flex-direction: column; }
+      .newsletter__input { border-right: 1px solid var(--np-border); border-radius: var(--radius-sm); }
+      .newsletter__btn { border-radius: var(--radius-sm); }
+      .footer__top { grid-template-columns: 1fr; }
+      .footer__bottom { flex-direction: column; gap: var(--space-4); }
+      .section { padding: var(--space-16) var(--space-6); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       NAVIGATION
+       ═══════════════════════════════════════════ -->
+  <nav class="nav" id="mainNav">
+    <div class="nav__logo">NOIR <span>Parfum</span></div>
+    <ul class="nav__links">
+      <li><a href="#collection">Collection</a></li>
+      <li><a href="#story">Notre Histoire</a></li>
+      <li><a href="#ingredients">Ingrédients</a></li>
+      <li><a href="#testimonials">Témoignages</a></li>
+    </ul>
+    <a href="#newsletter" class="nav__cta">Découvrir</a>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION
+       ═══════════════════════════════════════════ -->
+  <section class="hero">
+    <!-- Floating golden particles -->
+    <div class="hero__particles" aria-hidden="true">
+      <div class="particle" style="top:15%; left:20%; --size:3px; --duration:7s; --delay:0s; --dx:80px; --dy:-100px;"></div>
+      <div class="particle" style="top:25%; left:70%; --size:2px; --duration:9s; --delay:1s; --dx:-60px; --dy:-130px;"></div>
+      <div class="particle" style="top:40%; left:40%; --size:4px; --duration:8s; --delay:2s; --dx:50px; --dy:-90px;"></div>
+      <div class="particle" style="top:60%; left:80%; --size:2px; --duration:10s; --delay:0.5s; --dx:-70px; --dy:-110px;"></div>
+      <div class="particle" style="top:70%; left:15%; --size:3px; --duration:7s; --delay:3s; --dx:90px; --dy:-80px;"></div>
+      <div class="particle" style="top:30%; left:55%; --size:2px; --duration:11s; --delay:1.5s; --dx:-40px; --dy:-150px;"></div>
+      <div class="particle" style="top:50%; left:30%; --size:3px; --duration:9s; --delay:4s; --dx:60px; --dy:-100px;"></div>
+      <div class="particle" style="top:80%; left:60%; --size:2px; --duration:8s; --delay:2.5s; --dx:-50px; --dy:-120px;"></div>
+      <div class="particle" style="top:20%; left:85%; --size:4px; --duration:10s; --delay:0.8s; --dx:-80px; --dy:-90px;"></div>
+      <div class="particle" style="top:55%; left:50%; --size:2px; --duration:7s; --delay:3.5s; --dx:70px; --dy:-110px;"></div>
+      <div class="particle" style="top:35%; left:10%; --size:3px; --duration:12s; --delay:1.2s; --dx:60px; --dy:-140px;"></div>
+      <div class="particle" style="top:75%; left:45%; --size:2px; --duration:9s; --delay:2.8s; --dx:-55px; --dy:-85px;"></div>
+      <div class="particle" style="top:45%; left:75%; --size:3px; --duration:8s; --delay:4.2s; --dx:45px; --dy:-95px;"></div>
+      <div class="particle" style="top:65%; left:25%; --size:4px; --duration:11s; --delay:0.3s; --dx:-65px; --dy:-125px;"></div>
+      <div class="particle" style="top:10%; left:50%; --size:2px; --duration:10s; --delay:1.8s; --dx:85px; --dy:-75px;"></div>
+    </div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">Maison de Parfum · Paris · Est. MMXII</p>
+      <h1 class="hero__title">L'Art du <em>Parfum</em></h1>
+      <p class="hero__subtitle">Where shadow meets sensuality — crafted for those who wear their mystery.</p>
+      <a href="#collection" class="hero__cta">Explore the Collection</a>
+    </div>
+
+    <div class="hero__scroll">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       MARQUEE BANNER
+       ═══════════════════════════════════════════ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span class="marquee__item">Haute Parfumerie</span>
+      <span class="marquee__item">Artisanal Craftsmanship</span>
+      <span class="marquee__item">Rare Ingredients</span>
+      <span class="marquee__item">French Heritage</span>
+      <span class="marquee__item">Noir Collection</span>
+      <span class="marquee__item">Sustainable Luxury</span>
+      <span class="marquee__item">Bespoke Blending</span>
+      <span class="marquee__item">Since 2012</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee__item">Haute Parfumerie</span>
+      <span class="marquee__item">Artisanal Craftsmanship</span>
+      <span class="marquee__item">Rare Ingredients</span>
+      <span class="marquee__item">French Heritage</span>
+      <span class="marquee__item">Noir Collection</span>
+      <span class="marquee__item">Sustainable Luxury</span>
+      <span class="marquee__item">Bespoke Blending</span>
+      <span class="marquee__item">Since 2012</span>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       FRAGRANCE COLLECTION
+       ═══════════════════════════════════════════ -->
+  <section class="collection" id="collection">
+    <div class="collection__header reveal">
+      <p class="section__label">La Collection</p>
+      <h2 class="section__title">Our <em>Signatures</em></h2>
+      <div class="section__divider" style="margin: 0 auto var(--space-6);"></div>
+      <p class="section__subtitle" style="margin: 0 auto;">Three expressions of darkness — each a world unto itself, designed to be remembered.</p>
+    </div>
+
+    <div class="collection__grid">
+      <!-- Card 1: Noir Absolu -->
+      <div class="fragrance-card reveal" style="transition-delay: 0.1s;">
+        <div class="bottle">
+          <div class="bottle__cap"></div>
+          <div class="bottle__neck"></div>
+          <div class="bottle__body bottle__body--noir">
+            <div class="bottle__liquid bottle__liquid--noir"></div>
+            <div class="bottle__shine"></div>
+            <div class="bottle__label"></div>
+          </div>
+        </div>
+        <h3 class="fragrance-card__name">Noir Absolu</h3>
+        <p class="fragrance-card__family">Oriental Woody</p>
+        <p class="fragrance-card__notes">Black oud, smoky vetiver, dark amber, and a whisper of midnight jasmine. An intoxicating darkness that reveals itself slowly.</p>
+        <p class="fragrance-card__price">$285 <small>/ 50ml EDP</small></p>
+      </div>
+
+      <!-- Card 2: Oud Sacrée -->
+      <div class="fragrance-card reveal" style="transition-delay: 0.25s;">
+        <div class="bottle">
+          <div class="bottle__cap"></div>
+          <div class="bottle__neck"></div>
+          <div class="bottle__body bottle__body--oud">
+            <div class="bottle__liquid bottle__liquid--oud"></div>
+            <div class="bottle__shine"></div>
+            <div class="bottle__label"></div>
+          </div>
+        </div>
+        <h3 class="fragrance-card__name">Oud Sacrée</h3>
+        <p class="fragrance-card__family">Leather Oud</p>
+        <p class="fragrance-card__notes">Sacred Cambodian oud, worn leather, saffron threads, and benzoin resin. A journey into ancient temples at dusk.</p>
+        <p class="fragrance-card__price">$340 <small>/ 50ml EDP</small></p>
+      </div>
+
+      <!-- Card 3: Fleur de Minuit -->
+      <div class="fragrance-card reveal" style="transition-delay: 0.4s;">
+        <div class="bottle">
+          <div class="bottle__cap"></div>
+          <div class="bottle__neck"></div>
+          <div class="bottle__body bottle__body--fleur">
+            <div class="bottle__liquid bottle__liquid--fleur"></div>
+            <div class="bottle__shine"></div>
+            <div class="bottle__label"></div>
+          </div>
+        </div>
+        <h3 class="fragrance-card__name">Fleur de Minuit</h3>
+        <p class="fragrance-card__family">Floral Oriental</p>
+        <p class="fragrance-card__notes">Night-blooming tuberose, black orchid, vanilla bourbon, and powdered iris. Blooms only in the hours between dusk and dawn.</p>
+        <p class="fragrance-card__price">$310 <small>/ 50ml EDP</small></p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SCENT STORY (Split Layout)
+       ═══════════════════════════════════════════ -->
+  <section class="scent-story" id="story">
+    <div class="scent-story__art">
+      <!-- Abstract concentric circles -->
+      <div class="art-circles">
+        <div class="art-circles__ring"></div>
+        <div class="art-circles__ring"></div>
+        <div class="art-circles__ring"></div>
+        <div class="art-circles__ring"></div>
+        <div class="art-circles__ring"></div>
+      </div>
+      <!-- Floating gradient orbs -->
+      <div class="art-orb art-orb--1"></div>
+      <div class="art-orb art-orb--2"></div>
+      <div class="art-orb art-orb--3"></div>
+    </div>
+
+    <div class="scent-story__text reveal">
+      <p class="section__label">Notre Histoire</p>
+      <h2 class="section__title">The Art of <em>Darkness</em></h2>
+      <div class="section__divider"></div>
+
+      <p>Every NOIR Parfum creation begins in the amber-lit ateliers of Grasse, where master perfumers compose in whispers. We source only ingredients that have been touched by time — oud resin aged for decades, iris pallida harvested after three years of patient cultivation, and jasmine picked by hand in the fleeting hours before dawn.</p>
+
+      <blockquote class="scent-story__quote">
+        "A great perfume is not worn — it is inhabited. It becomes the space between you and the world."
+      </blockquote>
+
+      <p>Our philosophy is one of restraint and revelation. Each fragrance is built around a single precious ingredient, then elaborated with layers that unfold over hours. The result is not merely a scent, but an atmosphere — a private world of shadow and light that exists only on skin.</p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       INGREDIENT SHOWCASE
+       ═══════════════════════════════════════════ -->
+  <section class="ingredients" id="ingredients">
+    <div class="ingredients__header reveal">
+      <p class="section__label">Les Ingrédients</p>
+      <h2 class="section__title">Precious <em>Materials</em></h2>
+      <div class="section__divider" style="margin: 0 auto var(--space-6);"></div>
+      <p class="section__subtitle" style="margin: 0 auto;">Sourced from the world's most revered terroirs — each ingredient tells its own story.</p>
+    </div>
+
+    <div class="ingredients__scroll">
+      <!-- Rose de Mai -->
+      <div class="ingredient-card reveal">
+        <div class="botanical botanical--rose">
+          <div class="botanical__petal petal-1"></div>
+          <div class="botanical__petal petal-2"></div>
+          <div class="botanical__petal petal-3"></div>
+          <div class="botanical__petal petal-4"></div>
+          <div class="botanical__petal petal-5"></div>
+          <div class="botanical__center botanical__shape"></div>
+        </div>
+        <h4 class="ingredient-card__name">Rose de Mai</h4>
+        <p class="ingredient-card__origin">Grasse, France</p>
+        <p class="ingredient-card__desc">Hand-picked at dawn in the fields of Grasse. 5,000 blooms yield a single gram of absolute — honeyed, velvety, eternal.</p>
+      </div>
+
+      <!-- Oud d'Assam -->
+      <div class="ingredient-card reveal">
+        <div class="botanical botanical--oud">
+          <div class="botanical__bark bark-1"></div>
+          <div class="botanical__bark bark-2"></div>
+          <div class="botanical__bark bark-3"></div>
+          <div class="botanical__ring botanical__shape"></div>
+        </div>
+        <h4 class="ingredient-card__name">Oud d'Assam</h4>
+        <p class="ingredient-card__origin">Assam, India</p>
+        <p class="ingredient-card__desc">Wild agarwood aged for over twenty years. Smoky, animalic, sacred — the most prized material in perfumery.</p>
+      </div>
+
+      <!-- Jasmine de Nuit -->
+      <div class="ingredient-card reveal">
+        <div class="botanical botanical--jasmine">
+          <div class="botanical__star botanical__shape"></div>
+          <div class="botanical__dot botanical__shape"></div>
+        </div>
+        <h4 class="ingredient-card__name">Jasmine de Nuit</h4>
+        <p class="ingredient-card__origin">Grasse, France</p>
+        <p class="ingredient-card__desc">Night-harvested jasmine sambac. Its narcotic sweetness deepens after midnight — indolic, luminous, unforgettable.</p>
+      </div>
+
+      <!-- Vetiver Bourbon -->
+      <div class="ingredient-card reveal">
+        <div class="botanical botanical--vetiver">
+          <div class="botanical__root root-1"></div>
+          <div class="botanical__root root-2"></div>
+          <div class="botanical__root root-3"></div>
+          <div class="botanical__root root-4"></div>
+          <div class="botanical__root root-5"></div>
+          <div class="botanical__leaf botanical__shape"></div>
+        </div>
+        <h4 class="ingredient-card__name">Vetiver Bourbon</h4>
+        <p class="ingredient-card__origin">Réunion Island</p>
+        <p class="ingredient-card__desc">Volcanic vetiver from Réunion. Earthy, smoky, with a cool mineral edge that grounds every composition.</p>
+      </div>
+
+      <!-- Bergamotte de Calabre -->
+      <div class="ingredient-card reveal">
+        <div class="botanical botanical--bergamot">
+          <div class="botanical__citrus botanical__shape"></div>
+          <div class="botanical__segment" style="transform: translate(-50%, -100%) rotate(0deg);"></div>
+          <div class="botanical__segment" style="transform: translate(-50%, -100%) rotate(60deg);"></div>
+          <div class="botanical__segment" style="transform: translate(-50%, -100%) rotate(120deg);"></div>
+          <div class="botanical__segment" style="transform: translate(-50%, -100%) rotate(180deg);"></div>
+          <div class="botanical__segment" style="transform: translate(-50%, -100%) rotate(240deg);"></div>
+          <div class="botanical__segment" style="transform: translate(-50%, -100%) rotate(300deg);"></div>
+        </div>
+        <h4 class="ingredient-card__name">Bergamotte de Calabre</h4>
+        <p class="ingredient-card__origin">Calabria, Italy</p>
+        <p class="ingredient-card__desc">Cold-pressed from the rind of sun-ripened bergamot. Sparkling, bitter, with an aristocratic green elegance.</p>
+      </div>
+
+      <!-- Ambre Gris -->
+      <div class="ingredient-card reveal">
+        <div class="botanical" style="display:flex; align-items:center; justify-content:center;">
+          <div style="width:50px; height:50px; border-radius:40% 60% 50% 50% / 50% 40% 60% 50%; background: radial-gradient(circle at 35% 35%, rgba(201,169,110,0.3), rgba(180,140,80,0.1)); border: 1px solid rgba(201,169,110,0.15);"></div>
+        </div>
+        <h4 class="ingredient-card__name">Ambre Gris</h4>
+        <p class="ingredient-card__origin">Atlantic Ocean</p>
+        <p class="ingredient-card__desc">A rare oceanic treasure — saline, musky, warm. Adds an iridescent quality that makes every scent shimmer.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       PHILOSOPHY PILLARS
+       ═══════════════════════════════════════════ -->
+  <div class="philosophy">
+    <div class="philosophy__item reveal">
+      <div class="philosophy__icon">
+        <div class="icon-diamond"></div>
+      </div>
+      <h4 class="philosophy__title">Artisanal Craft</h4>
+      <p class="philosophy__desc">Each fragrance is composed by hand, tested over 18 months, and refined through 200 iterations before release.</p>
+    </div>
+    <div class="philosophy__item reveal" style="transition-delay: 0.15s;">
+      <div class="philosophy__icon">
+        <div class="icon-circle"></div>
+      </div>
+      <h4 class="philosophy__title">Rare Origins</h4>
+      <p class="philosophy__desc">We source from six continents. Every ingredient is traceable, ethically harvested, and selected for its singular character.</p>
+    </div>
+    <div class="philosophy__item reveal" style="transition-delay: 0.3s;">
+      <div class="philosophy__icon">
+        <div class="icon-lines">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <h4 class="philosophy__title">Timeless Design</h4>
+      <p class="philosophy__desc">Our bottles are objects of beauty — hand-blown glass, weighted caps, and labels letterpress-printed on cotton rag paper.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       TESTIMONIALS
+       ═══════════════════════════════════════════ -->
+  <section class="testimonials" id="testimonials">
+    <div class="reveal">
+      <p class="section__label">Témoignages</p>
+      <h2 class="section__title">In Their <em>Words</em></h2>
+      <div class="section__divider" style="margin: 0 auto;"></div>
+    </div>
+
+    <div class="testimonials__grid">
+      <div class="testimonial reveal">
+        <span class="testimonial__mark">"</span>
+        <p class="testimonial__text">Noir Absolu stopped a stranger in a café. She asked what I was wearing, and I told her it was a secret. That's the power of this house — it makes you mysterious.</p>
+        <p class="testimonial__author">Isabelle Marchand</p>
+        <p class="testimonial__role">Creative Director, Paris</p>
+      </div>
+
+      <div class="testimonial reveal" style="transition-delay: 0.15s;">
+        <span class="testimonial__mark">"</span>
+        <p class="testimonial__text">I've worn Oud Sacrée to every important meeting this year. It's become part of my armor — dark, commanding, and utterly unforgettable. People remember me by my scent.</p>
+        <p class="testimonial__author">Alexander Voss</p>
+        <p class="testimonial__role">Architect, Berlin</p>
+      </div>
+
+      <div class="testimonial reveal" style="transition-delay: 0.3s;">
+        <span class="testimonial__mark">"</span>
+        <p class="testimonial__text">Fleur de Minuit is the most beautiful tuberose I've ever encountered. It blooms on my skin like a night garden — dark petals, moonlit, intoxicating. I cannot stop reaching for it.</p>
+        <p class="testimonial__author">Chloé Desjardins</p>
+        <p class="testimonial__role">Art Curator, Lyon</p>
+      </div>
+
+      <div class="testimonial reveal" style="transition-delay: 0.45s;">
+        <span class="testimonial__mark">"</span>
+        <p class="testimonial__text">The craftsmanship is extraordinary. You can feel the years of thought in every note. NOIR doesn't follow trends — they create worlds. This is perfumery as it should be.</p>
+        <p class="testimonial__author">James Whitfield</p>
+        <p class="testimonial__role">Fragrance Journalist, London</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       NEWSLETTER CTA
+       ═══════════════════════════════════════════ -->
+  <section class="newsletter" id="newsletter">
+    <div class="reveal">
+      <p class="section__label">Le Cercle Noir</p>
+      <h2 class="newsletter__title">Join the <em>Inner Circle</em></h2>
+      <p class="newsletter__desc">Receive private invitations to new releases, behind-the-scenes atelier stories, and exclusive compositions available only to members.</p>
+
+      <form class="newsletter__form" onsubmit="return false;">
+        <input type="email" class="newsletter__input" placeholder="Your email address" aria-label="Email address">
+        <button type="submit" class="newsletter__btn">Subscribe</button>
+      </form>
+      <p class="newsletter__note">No spam. Unsubscribe anytime. Your privacy is sacred to us.</p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer__top">
+      <div>
+        <div class="footer__brand-name">NOIR Parfum</div>
+        <p class="footer__brand-desc">Maison de Haute Parfumerie founded in Paris, 2012. Crafting olfactory art for those who dwell in elegance and shadow.</p>
+      </div>
+      <div>
+        <h5 class="footer__heading">La Maison</h5>
+        <ul class="footer__links">
+          <li><a href="#story">Our Story</a></li>
+          <li><a href="#ingredients">Ingredients</a></li>
+          <li><a href="#">Atelier Visits</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="footer__heading">Collection</h5>
+        <ul class="footer__links">
+          <li><a href="#collection">Noir Absolu</a></li>
+          <li><a href="#collection">Oud Sacrée</a></li>
+          <li><a href="#collection">Fleur de Minuit</a></li>
+          <li><a href="#">Discovery Set</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="footer__heading">Client Care</h5>
+        <ul class="footer__links">
+          <li><a href="#">Shipping & Returns</a></li>
+          <li><a href="#">Bespoke Service</a></li>
+          <li><a href="#">Gift Wrapping</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">&copy; 2024 NOIR Parfum. All rights reserved. Made with devotion in Grasse &amp; Paris.</p>
+      <div class="footer__social">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Pinterest">PI</a>
+        <a href="#" aria-label="Twitter">TW</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════
+       MINIMAL JAVASCRIPT
+       ═══════════════════════════════════════════ -->
+  <script>
+    // ─── Navbar scroll effect ───
+    const nav = document.getElementById('mainNav');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > 80) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+      lastScroll = currentScroll;
+    }, { passive: true });
+
+    // ─── Intersection Observer for reveal animations ───
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // ─── Smooth scroll for anchor links ───
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
