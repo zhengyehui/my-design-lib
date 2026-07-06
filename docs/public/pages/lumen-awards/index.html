@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMEN Awards — Digital Design Excellence</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --lumen-bg: #050508;
+    --lumen-surface: #0a0a10;
+    --lumen-border: rgba(255,255,255,0.06);
+    --lumen-gold: #c9a96e;
+    --lumen-gold-light: #e8d5a8;
+    --lumen-accent: #6366f1;
+    --lumen-accent-light: #818cf8;
+    --lumen-pink: #ec4899;
+    --lumen-cyan: #06b6d4;
+    --lumen-text: #f8fafc;
+    --lumen-text-muted: #94a3b8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--lumen-bg);
+    color: var(--lumen-text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── Noise texture overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Ambient glow orbs ── */
+  .ambient-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    animation: glowFloat 12s ease-in-out infinite;
+  }
+  .ambient-glow.orb1 { width: 500px; height: 500px; background: rgba(99,102,241,0.08); top: -100px; left: -100px; }
+  .ambient-glow.orb2 { width: 400px; height: 400px; background: rgba(236,72,153,0.06); bottom: -100px; right: -100px; animation-delay: -4s; }
+  .ambient-glow.orb3 { width: 300px; height: 300px; background: rgba(201,169,110,0.05); top: 50%; left: 50%; animation-delay: -8s; }
+
+  @keyframes glowFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.05); }
+    66% { transform: translate(-20px, 15px) scale(0.95); }
+  }
+
+  /* ── Navigation ── */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(5,5,8,0.7);
+    border-bottom: 1px solid var(--lumen-border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--lumen-gold);
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--lumen-text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--lumen-gold); }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    z-index: 2;
+  }
+  .hero-edition {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lumen-gold);
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    background: rgba(201,169,110,0.05);
+  }
+  .hero-edition .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lumen-gold);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--lumen-gold-light) 0%, var(--lumen-gold) 40%, var(--lumen-accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--lumen-text-muted);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+  .hero-date {
+    font-size: 0.85rem;
+    color: var(--lumen-text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, var(--lumen-gold), #b8956a);
+    color: #0a0a0a;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s;
+    box-shadow: 0 0 40px rgba(201,169,110,0.2);
+  }
+  .hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(201,169,110,0.35);
+  }
+
+  /* ── Trophy SVG ── */
+  .trophy-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+  }
+  .trophy-glow {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,169,110,0.2), transparent 70%);
+    animation: trophyGlow 3s ease-in-out infinite;
+  }
+  @keyframes trophyGlow { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+
+  .trophy-svg {
+    position: relative;
+    z-index: 1;
+    width: 120px;
+    height: 120px;
+  }
+
+  /* ── Stats Bar ── */
+  .stats-bar {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--lumen-border);
+    border-top: 1px solid var(--lumen-border);
+    border-bottom: 1px solid var(--lumen-border);
+  }
+  .stat-item {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    background: var(--lumen-surface);
+  }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--lumen-gold);
+    margin-bottom: 0.25rem;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--lumen-text-muted);
+  }
+
+  /* ── Section common ── */
+  section { position: relative; z-index: 2; padding: 6rem 2rem; }
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .section-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lumen-gold);
+    margin-bottom: 1rem;
+    padding: 0.35rem 1rem;
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: 100px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .section-desc {
+    color: var(--lumen-text-muted);
+    max-width: 560px;
+    margin: 0 auto;
+    font-size: 0.95rem;
+  }
+
+  /* ── Categories Grid ── */
+  .categories-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .cat-card {
+    position: relative;
+    padding: 2rem;
+    background: var(--lumen-surface);
+    border: 1px solid var(--lumen-border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.4s;
+    cursor: default;
+  }
+  .cat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--lumen-gold), var(--lumen-accent), var(--lumen-pink));
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .cat-card:hover { border-color: rgba(201,169,110,0.2); transform: translateY(-4px); }
+  .cat-card:hover::before { opacity: 1; }
+  .cat-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: rgba(201,169,110,0.08);
+    border-radius: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .cat-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+  .cat-desc {
+    font-size: 0.85rem;
+    color: var(--lumen-text-muted);
+    line-height: 1.6;
+  }
+  .cat-nominees {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--lumen-gold);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ── Winners Showcase ── */
+  .winners-section {
+    background: linear-gradient(180deg, transparent, rgba(201,169,110,0.02), transparent);
+  }
+  .winners-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  .winner-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--lumen-surface);
+    border: 1px solid var(--lumen-border);
+    transition: all 0.4s;
+  }
+  .winner-card:hover { transform: translateY(-6px); border-color: rgba(201,169,110,0.25); }
+  .winner-thumb {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+  .winner-thumb-bg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .winner-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.3rem 0.75rem;
+    background: var(--lumen-gold);
+    color: #0a0a0a;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 3px;
+  }
+  .winner-info { padding: 1.5rem; }
+  .winner-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lumen-accent-light);
+    margin-bottom: 0.5rem;
+  }
+  .winner-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .winner-by {
+    font-size: 0.8rem;
+    color: var(--lumen-text-muted);
+  }
+  .winner-by a {
+    color: var(--lumen-gold);
+    text-decoration: none;
+  }
+  .winner-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    background: rgba(201,169,110,0.08);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--lumen-gold);
+  }
+
+  /* ── Marquee ── */
+  .marquee-section {
+    padding: 3rem 0;
+    overflow: hidden;
+    border-top: 1px solid var(--lumen-border);
+    border-bottom: 1px solid var(--lumen-border);
+  }
+  .marquee-track {
+    display: flex;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 2.5rem;
+    white-space: nowrap;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.08);
+    letter-spacing: 0.05em;
+  }
+  .marquee-item .sep {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lumen-gold);
+    opacity: 0.3;
+  }
+
+  /* ── Timeline ── */
+  .timeline {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 2.5rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--lumen-gold), transparent);
+  }
+  .timeline-item {
+    position: relative;
+    padding: 1.5rem 0 2.5rem;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.75rem;
+    top: 1.75rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--lumen-gold);
+    background: var(--lumen-bg);
+  }
+  .timeline-date {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lumen-gold);
+    margin-bottom: 0.35rem;
+  }
+  .timeline-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.35rem;
+  }
+  .timeline-desc {
+    font-size: 0.85rem;
+    color: var(--lumen-text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── Sponsors CTA ── */
+  .cta-section {
+    text-align: center;
+    padding: 8rem 2rem;
+    position: relative;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(201,169,110,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  .cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+  .cta-desc {
+    color: var(--lumen-text-muted);
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+    font-size: 1rem;
+  }
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, var(--lumen-gold), #b8956a);
+    color: #0a0a0a;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s;
+    box-shadow: 0 0 40px rgba(201,169,110,0.15);
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(201,169,110,0.3); }
+
+  /* ── Footer ── */
+  .footer {
+    position: relative;
+    z-index: 2;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--lumen-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--lumen-text-muted);
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lumen-gold);
+  }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { color: var(--lumen-text-muted); text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--lumen-gold); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+    .categories-grid { grid-template-columns: 1fr; }
+    .winners-grid { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ambient Glow -->
+<div class="ambient-glow orb1"></div>
+<div class="ambient-glow orb2"></div>
+<div class="ambient-glow orb3"></div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">LUMEN</div>
+  <ul class="nav-links">
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#winners">Winners</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#submit">Submit</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="trophy-container">
+    <div class="trophy-glow"></div>
+    <svg class="trophy-svg" viewBox="0 0 120 120" fill="none">
+      <path d="M40 25h40v10c0 15-8 28-20 32-12-4-20-17-20-32V25z" fill="url(#gold)" stroke="#c9a96e" stroke-width="1.5"/>
+      <path d="M35 30H25c0 12 5 20 15 22" stroke="#c9a96e" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <path d="M85 30h10c0 12-5 20-15 22" stroke="#c9a96e" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <rect x="55" y="67" width="10" height="18" rx="2" fill="url(#gold)"/>
+      <rect x="40" y="85" width="40" height="8" rx="3" fill="url(#gold)"/>
+      <circle cx="60" cy="42" r="8" fill="none" stroke="#0a0a0a" stroke-width="1.5" opacity="0.3"/>
+      <text x="60" y="46" text-anchor="middle" font-size="10" font-weight="bold" fill="#0a0a0a" opacity="0.4">★</text>
+      <defs>
+        <linearGradient id="gold" x1="40" y1="25" x2="80" y2="90">
+          <stop offset="0%" stop-color="#e8d5a8"/>
+          <stop offset="50%" stop-color="#c9a96e"/>
+          <stop offset="100%" stop-color="#b8956a"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <div class="hero-edition">
+    <span class="dot"></span>
+    7th Edition — 2026
+  </div>
+  <h1>LUMEN<br>Awards</h1>
+  <p class="hero-sub">Celebrating the pinnacle of digital design excellence. Honouring creators who push the boundaries of visual storytelling on the web.</p>
+  <p class="hero-date">Ceremony — November 14, 2026 · Berlin</p>
+  <a href="#submit" class="hero-cta">Submit Your Work →</a>
+</header>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number">2,847</div>
+    <div class="stat-label">Entries</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">64</div>
+    <div class="stat-label">Countries</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">12</div>
+    <div class="stat-label">Categories</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">48</div>
+    <div class="stat-label">Jury Members</div>
+  </div>
+</div>
+
+<!-- Categories -->
+<section id="categories">
+  <div class="section-header">
+    <div class="section-tag">Award Categories</div>
+    <h2 class="section-title">Twelve Paths to Brilliance</h2>
+    <p class="section-desc">Each category recognises a distinct facet of digital craft, from visual design to technical innovation.</p>
+  </div>
+  <div class="categories-grid">
+    <div class="cat-card">
+      <div class="cat-icon">🏆</div>
+      <div class="cat-name">Design of the Year</div>
+      <div class="cat-desc">The overall best digital experience — a project that excels in every dimension.</div>
+      <div class="cat-nominees">312 entries</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">🎨</div>
+      <div class="cat-name">Best Visual Design</div>
+      <div class="cat-desc">Exceptional aesthetics, colour, typography, and visual harmony in digital form.</div>
+      <div class="cat-nominees">487 entries</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">⚡</div>
+      <div class="cat-name">Best UX</div>
+      <div class="cat-desc">Intuitive, delightful user experiences that make complex tasks feel effortless.</div>
+      <div class="cat-nominees">356 entries</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">🎬</div>
+      <div class="cat-name">Best Motion Design</div>
+      <div class="cat-desc">Animation, transitions, and micro-interactions that elevate the experience.</div>
+      <div class="cat-nominees">198 entries</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">💡</div>
+      <div class="cat-name">Innovation</div>
+      <div class="cat-desc">Pioneering use of technology — WebGL, AI, creative coding, or new paradigms.</div>
+      <div class="cat-nominees">145 entries</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">📱</div>
+      <div class="cat-name">Mobile Excellence</div>
+      <div class="cat-desc">Outstanding mobile-first experiences that set new standards for small screens.</div>
+      <div class="cat-nominees">273 entries</div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Design of the Year <span class="sep"></span></span>
+    <span class="marquee-item">Best Visual Design <span class="sep"></span></span>
+    <span class="marquee-item">Best UX <span class="sep"></span></span>
+    <span class="marquee-item">Motion Design <span class="sep"></span></span>
+    <span class="marquee-item">Innovation <span class="sep"></span></span>
+    <span class="marquee-item">Mobile Excellence <span class="sep"></span></span>
+    <span class="marquee-item">Ecommerce <span class="sep"></span></span>
+    <span class="marquee-item">Portfolio <span class="sep"></span></span>
+    <span class="marquee-item">Experimental <span class="sep"></span></span>
+    <span class="marquee-item">Accessibility <span class="sep"></span></span>
+    <span class="marquee-item">Design of the Year <span class="sep"></span></span>
+    <span class="marquee-item">Best Visual Design <span class="sep"></span></span>
+    <span class="marquee-item">Best UX <span class="sep"></span></span>
+    <span class="marquee-item">Motion Design <span class="sep"></span></span>
+    <span class="marquee-item">Innovation <span class="sep"></span></span>
+    <span class="marquee-item">Mobile Excellence <span class="sep"></span></span>
+    <span class="marquee-item">Ecommerce <span class="sep"></span></span>
+    <span class="marquee-item">Portfolio <span class="sep"></span></span>
+    <span class="marquee-item">Experimental <span class="sep"></span></span>
+    <span class="marquee-item">Accessibility <span class="sep"></span></span>
+  </div>
+</div>
+
+<!-- Winners -->
+<section id="winners" class="winners-section">
+  <div class="section-header">
+    <div class="section-tag">2025 Winners</div>
+    <h2 class="section-title">Last Year's Finest</h2>
+    <p class="section-desc">A glimpse at the projects that set the standard in digital design excellence.</p>
+  </div>
+  <div class="winners-grid">
+    <div class="winner-card">
+      <div class="winner-thumb">
+        <div class="winner-thumb-bg" style="background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);">
+          <svg width="80" height="60" viewBox="0 0 80 60"><rect x="5" y="5" width="70" height="50" rx="6" fill="none" stroke="rgba(201,169,110,0.4)" stroke-width="1.5"/><circle cx="25" cy="25" r="8" fill="rgba(201,169,110,0.15)" stroke="rgba(201,169,110,0.3)" stroke-width="1"/><line x1="15" y1="42" x2="65" y2="42" stroke="rgba(201,169,110,0.15)" stroke-width="4" stroke-linecap="round"/><line x1="15" y1="35" x2="45" y2="35" stroke="rgba(201,169,110,0.1)" stroke-width="3" stroke-linecap="round"/></svg>
+        </div>
+        <div class="winner-badge">🏆 SOTY</div>
+      </div>
+      <div class="winner-info">
+        <div class="winner-category">Design of the Year</div>
+        <div class="winner-title">Lusion 2.0</div>
+        <div class="winner-by">by <a href="#">Lusion Studio</a></div>
+        <div class="winner-score">★ 9.67</div>
+      </div>
+    </div>
+    <div class="winner-card">
+      <div class="winner-thumb">
+        <div class="winner-thumb-bg" style="background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #2d1b69);">
+          <svg width="80" height="60" viewBox="0 0 80 60"><rect x="10" y="10" width="25" height="40" rx="3" fill="rgba(99,102,241,0.15)" stroke="rgba(99,102,241,0.3)" stroke-width="1"/><rect x="40" y="15" width="30" height="12" rx="2" fill="rgba(99,102,241,0.1)"/><rect x="40" y="32" width="30" height="12" rx="2" fill="rgba(236,72,153,0.1)"/><circle cx="22" cy="30" r="6" fill="rgba(201,169,110,0.2)"/></svg>
+        </div>
+        <div class="winner-badge">Best UX</div>
+      </div>
+      <div class="winner-info">
+        <div class="winner-category">Best UX</div>
+        <div class="winner-title">Linear App</div>
+        <div class="winner-by">by <a href="#">Linear Team</a></div>
+        <div class="winner-score">★ 9.54</div>
+      </div>
+    </div>
+    <div class="winner-card">
+      <div class="winner-thumb">
+        <div class="winner-thumb-bg" style="background: linear-gradient(135deg, #1a0a2e, #2d1b69, #4c1d95);">
+          <svg width="80" height="60" viewBox="0 0 80 60"><circle cx="40" cy="30" r="18" fill="none" stroke="rgba(236,72,153,0.3)" stroke-width="1.5"/><circle cx="40" cy="30" r="10" fill="rgba(236,72,153,0.1)"/><line x1="40" y1="12" x2="40" y2="8" stroke="rgba(236,72,153,0.4)" stroke-width="2" stroke-linecap="round"/><line x1="40" y1="52" x2="40" y2="48" stroke="rgba(236,72,153,0.4)" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="30" x2="18" y2="30" stroke="rgba(236,72,153,0.4)" stroke-width="2" stroke-linecap="round"/><line x1="58" y1="30" x2="62" y2="30" stroke="rgba(236,72,153,0.4)" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="winner-badge">Motion</div>
+      </div>
+      <div class="winner-info">
+        <div class="winner-category">Best Motion Design</div>
+        <div class="winner-title">Ordinary Folk</div>
+        <div class="winner-by">by <a href="#">Ordinary Folk Studio</a></div>
+        <div class="winner-score">★ 9.48</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section id="timeline">
+  <div class="section-header">
+    <div class="section-tag">Key Dates</div>
+    <h2 class="section-title">2026 Timeline</h2>
+    <p class="section-desc">Mark your calendar. Every milestone on the road to the ceremony.</p>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">July 1 — August 31</div>
+      <div class="timeline-title">Early Bird Submissions</div>
+      <div class="timeline-desc">Submit your work at a reduced fee. The earlier you enter, the more exposure your project receives during the jury review period.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">September 1 — October 15</div>
+      <div class="timeline-title">Regular Submissions</div>
+      <div class="timeline-desc">Standard submission window. All categories remain open. Projects are reviewed on a rolling basis by our international jury.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">October 20</div>
+      <div class="timeline-title">Nominees Announced</div>
+      <div class="timeline-desc">The top 5 projects in each category are revealed. Nominees receive a digital badge and feature in the annual showcase.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">November 1 — 10</div>
+      <div class="timeline-title">Public Voting</div>
+      <div class="timeline-desc">The community weighs in. Public votes account for 20% of the final score in each category.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">November 14</div>
+      <div class="timeline-title">Award Ceremony — Berlin</div>
+      <div class="timeline-desc">A night to remember. Live-streamed globally from the Kulturbrauerei in Berlin. Winners announced on stage.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="submit" class="cta-section">
+  <h2 class="cta-title">Ready to Shine?</h2>
+  <p class="cta-desc">Submit your best work and join the ranks of the world's most celebrated digital creators.</p>
+  <a href="#" class="cta-btn">Submit Now →</a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">LUMEN Awards</div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="#">Jury</a>
+    <a href="#">Past Winners</a>
+    <a href="#">Contact</a>
+  </div>
+  <div>© 2026 LUMEN Awards. All rights reserved.</div>
+</footer>
+
+</body>
+</html>

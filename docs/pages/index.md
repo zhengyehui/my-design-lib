@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 94 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 95 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -892,6 +892,15 @@ const pages = [
     rating: 9.4,
     description: 'SaaS 集成生态落地页，动态连接线背景 + CSS 几何图标集成卡片网格 + 药丸分类筛选 + 语法高亮 API 代码展示 + 使用步骤引导',
   },
+  {
+    id: 'lumen-awards',
+    title: 'LUMEN Awards 数字设计大奖',
+    category: 'creative',
+    tags: ['设计大奖', '暗色主题', '金色配色', '典礼'],
+    colors: ['#050508', '#c9a96e', '#6366f1'],
+    rating: 9.5,
+    description: '数字设计奖项典礼落地页，Playfair Display 衬线字体 + 金色奢华配色 + SVG 奖杯造型 + 分类网格 + Marquee 滚动 + 获奖者展示 + 时间线',
+  },
 ]
 
 const categories = [
@@ -954,7 +963,7 @@ function getScoreColor(score) {
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="94 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="95 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -963,7 +972,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 94 个完整页面</span>
+      <span>📦 95 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
