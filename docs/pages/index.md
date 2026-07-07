@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 95 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 96 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -901,6 +901,15 @@ const pages = [
     rating: 9.5,
     description: '数字设计奖项典礼落地页，Playfair Display 衬线字体 + 金色奢华配色 + SVG 奖杯造型 + 分类网格 + Marquee 滚动 + 获奖者展示 + 时间线',
   },
+  {
+    id: 'crm-dashboard',
+    title: 'Pipeline CRM 客户关系管理',
+    category: 'app',
+    tags: ['CRM', '销售管理', '暗色主题', '仪表盘', '商机管道'],
+    colors: ['#0b0e17', '#6366f1', '#10b981'],
+    rating: 9.3,
+    description: 'CRM 销售管理仪表盘，三栏布局 + 四阶段商机管道 Kanban + 统计卡片 + 活动动态 + 重点客户 + CSS 柱状营收图表 + 待办任务表',
+  },
 ]
 
 const categories = [
@@ -958,12 +967,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 94 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 96 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="95 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="96 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -972,7 +981,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 95 个完整页面</span>
+      <span>📦 96 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

@@ -34,8 +34,8 @@ pageDetail:
     text: NimbusDrive 云存储
     link: /pages/cloud-storage-app.html
   next:
-    text: Nexus 数据仪表盘
-    link: /pages/dashboard-dark.html
+    text: Pipeline CRM 客户管理
+    link: /pages/crm-dashboard.html
 ---
 
 <PageDetail />
