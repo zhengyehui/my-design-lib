@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lex & Partners — Navigating Complexity. Delivering Clarity.</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-sans, 'Inter'), 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--color-text, #0f172a);
+    background: var(--color-bg, #ffffff);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    line-height: 1.25;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+
+  /* ── Design Tokens (local) ── */
+  :root {
+    --navy: #0f172a;
+    --gold: #d4a853;
+    --gold-light: #e8c97a;
+    --gold-dark: #b8923e;
+    --white: #ffffff;
+    --off-white: #f9fafb;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --max-w: 1200px;
+    --radius: var(--radius-md, 8px);
+    --radius-lg: var(--radius-lg, 12px);
+    --shadow-sm: var(--shadow-sm, 0 1px 2px rgba(0,0,0,.05));
+    --shadow-md: var(--shadow-md, 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05));
+    --shadow-lg: var(--shadow-lg, 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.04));
+    --transition: 0.25s ease;
+  }
+
+  .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+  /* ── Gold Divider ── */
+  .gold-rule {
+    width: 80px; height: 2px; background: var(--gold); border: none; margin: 0 auto 20px;
+  }
+
+  /* ── Section Headings ── */
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    color: var(--navy);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .section-subtitle {
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto 48px;
+  }
+
+  /* ══════════════════════════════════════
+     NAVIGATION
+     ══════════════════════════════════════ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    transition: box-shadow var(--transition);
+  }
+  .nav.scrolled { box-shadow: var(--shadow-md); }
+  .nav-inner {
+    max-width: var(--max-w); margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 72px;
+  }
+  .nav-logo {
+    font-family: Georgia, serif;
+    font-size: 1.35rem;
+    color: var(--navy);
+    letter-spacing: 0.02em;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.9rem; font-weight: 500; color: var(--gray-600);
+    transition: color var(--transition);
+    letter-spacing: 0.01em;
+  }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-cta {
+    background: var(--gold) !important;
+    color: var(--white) !important;
+    padding: 10px 24px;
+    border-radius: var(--radius);
+    font-weight: 600 !important;
+    transition: background var(--transition);
+  }
+  .nav-cta:hover { background: var(--gold-dark) !important; }
+  .nav-toggle { display: none; background: none; border: none; cursor: pointer; }
+  .nav-toggle span {
+    display: block; width: 24px; height: 2px;
+    background: var(--navy); margin: 5px 0;
+    transition: var(--transition);
+  }
+
+  /* ══════════════════════════════════════
+     HERO
+     ══════════════════════════════════════ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--navy);
+    overflow: hidden;
+    padding-top: 72px;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(212,168,83,.04) 80px, rgba(212,168,83,.04) 81px),
+      repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(212,168,83,.04) 80px, rgba(212,168,83,.04) 81px),
+      repeating-linear-gradient(45deg, transparent, transparent 120px, rgba(212,168,83,.025) 120px, rgba(212,168,83,.025) 121px);
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative; z-index: 1;
+    text-align: center;
+    max-width: 820px;
+    padding: 60px 24px;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+    color: var(--white);
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--gold);
+  }
+  .hero p {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,.7);
+    max-width: 620px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+  }
+  .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px;
+    border-radius: var(--radius);
+    font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; border: none;
+    transition: all var(--transition);
+    font-family: inherit;
+  }
+  .btn-gold { background: var(--gold); color: var(--white); }
+  .btn-gold:hover { background: var(--gold-dark); }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,.35);
+  }
+  .btn-outline:hover { border-color: var(--white); }
+
+  /* ══════════════════════════════════════
+     PRACTICE AREAS
+     ══════════════════════════════════════ */
+  .practices {
+    padding: 100px 0;
+    background: var(--white);
+  }
+  .practices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .practice-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    transition: all var(--transition);
+  }
+  .practice-card:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .practice-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--navy), #1e293b);
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--gold);
+  }
+  .practice-card h3 {
+    font-size: 1.2rem;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .practice-card p {
+    color: var(--gray-500);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* ══════════════════════════════════════
+     STATISTICS BAR
+     ══════════════════════════════════════ */
+  .stats {
+    background: var(--navy);
+    padding: 60px 0;
+    position: relative;
+  }
+  .stats::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .stats::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+  }
+  .stat-number {
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    color: var(--gold);
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    color: rgba(255,255,255,.6);
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* ══════════════════════════════════════
+     ATTORNEY SPOTLIGHT
+     ══════════════════════════════════════ */
+  .attorneys {
+    padding: 100px 0;
+    background: var(--gray-50);
+  }
+  .attorneys-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+  }
+  .attorney-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px;
+    text-align: center;
+    transition: box-shadow var(--transition);
+  }
+  .attorney-card:hover { box-shadow: var(--shadow-md); }
+  .attorney-avatar {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    border: 3px solid var(--gray-100);
+  }
+  .avatar-1 { background: linear-gradient(135deg, #1e293b, #334155, #d4a853); }
+  .avatar-2 { background: linear-gradient(135deg, #0f172a, #475569, #b8923e); }
+  .avatar-3 { background: linear-gradient(135deg, #334155, #1e293b, #e8c97a); }
+  .attorney-card h3 {
+    font-size: 1.25rem;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .attorney-title {
+    color: var(--gold-dark);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .attorney-specialty {
+    color: var(--gray-400);
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+  }
+  .attorney-bio {
+    color: var(--gray-500);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* ══════════════════════════════════════
+     TESTIMONIALS
+     ══════════════════════════════════════ */
+  .testimonials {
+    padding: 100px 0;
+    background: var(--white);
+  }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 28px;
+  }
+  .testimonial-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    position: relative;
+  }
+  .testimonial-card::before {
+    content: '\201C';
+    font-family: Georgia, serif;
+    font-size: 4rem;
+    color: var(--gold);
+    line-height: 1;
+    position: absolute;
+    top: 20px; left: 28px;
+    opacity: 0.4;
+  }
+  .testimonial-card blockquote {
+    font-size: 1rem;
+    color: var(--gray-600);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+  }
+  .testimonial-author strong {
+    display: block;
+    color: var(--navy);
+    font-size: 0.95rem;
+  }
+  .testimonial-author span {
+    color: var(--gray-400);
+    font-size: 0.85rem;
+  }
+
+  /* ══════════════════════════════════════
+     INSIGHTS
+     ══════════════════════════════════════ */
+  .insights {
+    padding: 100px 0;
+    background: var(--gray-50);
+  }
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 28px;
+  }
+  .insight-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    transition: all var(--transition);
+  }
+  .insight-card:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-md);
+  }
+  .insight-meta {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px;
+    font-size: 0.82rem;
+    color: var(--gray-400);
+  }
+  .insight-tag {
+    background: var(--navy);
+    color: var(--white);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .insight-card h3 {
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .insight-card p {
+    color: var(--gray-500);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* ══════════════════════════════════════
+     CTA SECTION
+     ══════════════════════════════════════ */
+  .cta-section {
+    padding: 100px 0;
+    background: var(--navy);
+    text-align: center;
+    position: relative;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(212,168,83,.03) 60px, rgba(212,168,83,.03) 61px);
+    pointer-events: none;
+  }
+  .cta-section h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    color: var(--white);
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .cta-section p {
+    color: rgba(255,255,255,.65);
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .cta-phone {
+    font-family: Georgia, serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .cta-form-hint {
+    color: rgba(255,255,255,.45);
+    font-size: 0.85rem;
+    margin-top: 20px;
+    position: relative;
+  }
+
+  /* ══════════════════════════════════════
+     FOOTER
+     ══════════════════════════════════════ */
+  .footer {
+    background: #070d1a;
+    padding: 72px 0 0;
+    color: rgba(255,255,255,.5);
+    font-size: 0.9rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .footer-brand h3 {
+    font-family: Georgia, serif;
+    font-size: 1.3rem;
+    color: var(--white);
+    margin-bottom: 14px;
+  }
+  .footer-brand h3 span { color: var(--gold); }
+  .footer-brand p { line-height: 1.7; }
+  .footer h4 {
+    font-family: inherit;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,.8);
+    margin-bottom: 20px;
+  }
+  .footer ul { list-style: none; }
+  .footer li { margin-bottom: 10px; }
+  .footer a { transition: color var(--transition); }
+  .footer a:hover { color: var(--gold); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 24px 0;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,.3);
+  }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE
+     ══════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: absolute; top: 72px; left: 0; right: 0;
+      background: var(--white);
+      padding: 24px;
+      border-bottom: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-lg);
+      gap: 16px;
+    }
+    .nav-toggle { display: block; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .practices-grid { grid-template-columns: 1fr; }
+    .attorneys-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .insights-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-buttons { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Lex <span>&amp;</span> Partners</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#practices">Practice Areas</a></li>
+      <li><a href="#attorneys">Our Team</a></li>
+      <li><a href="#insights">Insights</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="nav-cta">Free Consultation</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Navigating Complexity.<br><em>Delivering Clarity.</em></h1>
+    <p>For over three decades, Lex &amp; Partners has provided distinguished legal counsel to businesses, institutions, and individuals facing their most consequential challenges. Our commitment to excellence is unwavering.</p>
+    <div class="hero-buttons">
+      <a href="#contact" class="btn btn-gold">Schedule a Consultation</a>
+      <a href="#practices" class="btn btn-outline">Our Practice Areas</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRACTICE AREAS ═══ -->
+<section class="practices" id="practices">
+  <div class="container">
+    <hr class="gold-rule">
+    <h2 class="section-title">Practice Areas</h2>
+    <p class="section-subtitle">Comprehensive legal expertise across the disciplines that matter most to our clients.</p>
+    <div class="practices-grid">
+
+      <div class="practice-card">
+        <div class="practice-icon">§</div>
+        <h3>Corporate Law</h3>
+        <p>Mergers, acquisitions, corporate governance, and securities. We guide companies through complex transactions with precision and foresight.</p>
+      </div>
+
+      <div class="practice-card">
+        <div class="practice-icon">✦</div>
+        <h3>Intellectual Property</h3>
+        <p>Patent prosecution, trademark protection, trade secrets, and IP litigation safeguarding your most valuable intangible assets.</p>
+      </div>
+
+      <div class="practice-card">
+        <div class="practice-icon">⬣</div>
+        <h3>Real Estate</h3>
+        <p>Commercial acquisitions, development, financing, and leasing. From landmark properties to complex portfolio transactions.</p>
+      </div>
+
+      <div class="practice-card">
+        <div class="practice-icon">⚖</div>
+        <h3>Litigation</h3>
+        <p>High-stakes commercial disputes, class actions, and appellate advocacy. Our trial attorneys are prepared to fight — and win.</p>
+      </div>
+
+      <div class="practice-card">
+        <div class="practice-icon">◈</div>
+        <h3>Employment</h3>
+        <p>Workplace compliance, executive agreements, discrimination defense, and labor relations for employers of every scale.</p>
+      </div>
+
+      <div class="practice-card">
+        <div class="practice-icon">⊕</div>
+        <h3>International Trade</h3>
+        <p>Cross-border transactions, sanctions compliance, customs law, and international arbitration across global markets.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATISTICS ═══ -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-number">30+</div>
+        <div class="stat-label">Years of Excellence</div>
+      </div>
+      <div>
+        <div class="stat-number">150+</div>
+        <div class="stat-label">Attorneys</div>
+      </div>
+      <div>
+        <div class="stat-number">$2.8B+</div>
+        <div class="stat-label">Recovered for Clients</div>
+      </div>
+      <div>
+        <div class="stat-number">98%</div>
+        <div class="stat-label">Success Rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ATTORNEYS ═══ -->
+<section class="attorneys" id="attorneys">
+  <div class="container">
+    <hr class="gold-rule">
+    <h2 class="section-title">Our Partners</h2>
+    <p class="section-subtitle">Leaders in their fields, trusted by clients worldwide.</p>
+    <div class="attorneys-grid">
+
+      <div class="attorney-card">
+        <div class="attorney-avatar avatar-1"></div>
+        <h3>Victoria R. Ashworth</h3>
+        <div class="attorney-title">Managing Partner</div>
+        <div class="attorney-specialty">Corporate Law &amp; M&A</div>
+        <p class="attorney-bio">Harvard Law, former DOJ. Three decades leading billion-dollar mergers and corporate restructurings for Fortune 500 clients.</p>
+      </div>
+
+      <div class="attorney-card">
+        <div class="attorney-avatar avatar-2"></div>
+        <h3>James T. Harrington</h3>
+        <div class="attorney-title">Senior Partner</div>
+        <div class="attorney-specialty">Complex Litigation</div>
+        <p class="attorney-bio">Yale Law, former federal clerk. Renowned trial advocate with landmark victories in securities fraud and antitrust cases.</p>
+      </div>
+
+      <div class="attorney-card">
+        <div class="attorney-avatar avatar-3"></div>
+        <h3>Sophia Chen Nakamura</h3>
+        <div class="attorney-title">Partner</div>
+        <div class="attorney-specialty">International Trade &amp; IP</div>
+        <p class="attorney-bio">Stanford Law, multilingual. Advises multinational corporations on cross-border disputes and intellectual property strategy.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="testimonials">
+  <div class="container">
+    <hr class="gold-rule">
+    <h2 class="section-title">Client Perspectives</h2>
+    <p class="section-subtitle">The trust of our clients is our most valued credential.</p>
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card">
+        <blockquote>Lex &amp; Partners navigated our $4.2 billion acquisition with extraordinary skill. Their strategic counsel was invaluable at every stage — they anticipated issues before they arose and delivered results beyond our expectations.</blockquote>
+        <div class="testimonial-author">
+          <strong>Robert Caldwell</strong>
+          <span>CEO, Meridian Capital Holdings</span>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <blockquote>When our company faced a bet-the-company litigation, Lex &amp; Partners assembled a formidable team. Their courtroom performance was masterful, and the outcome preserved our business entirely.</blockquote>
+        <div class="testimonial-author">
+          <strong>Dr. Elena Vasquez</strong>
+          <span>General Counsel, NovaTech Industries</span>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <blockquote>For over a decade, Lex &amp; Partners has been our trusted advisor across three continents. Their international trade expertise and cultural fluency are unmatched in the market.</blockquote>
+        <div class="testimonial-author">
+          <strong>David Okonkwo</strong>
+          <span>Chairman, Atlas Global Logistics</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INSIGHTS ═══ -->
+<section class="insights" id="insights">
+  <div class="container">
+    <hr class="gold-rule">
+    <h2 class="section-title">Recent Insights</h2>
+    <p class="section-subtitle">Analysis and commentary from our attorneys on the legal issues shaping business today.</p>
+    <div class="insights-grid">
+
+      <article class="insight-card">
+        <div class="insight-meta">
+          <span class="insight-tag">Corporate</span>
+          <span>June 12, 2026</span>
+        </div>
+        <h3>SEC Finalizes New Disclosure Rules: What Public Companies Need to Know</h3>
+        <p>A comprehensive analysis of the SEC's latest regulatory framework and its implications for corporate governance and reporting obligations.</p>
+      </article>
+
+      <article class="insight-card">
+        <div class="insight-meta">
+          <span class="insight-tag">Litigation</span>
+          <span>May 28, 2026</span>
+        </div>
+        <h3>The Evolving Landscape of Class Action Certification Standards</h3>
+        <p>Recent appellate decisions are reshaping the threshold for class certification. We examine the trends and strategic considerations for corporate defendants.</p>
+      </article>
+
+      <article class="insight-card">
+        <div class="insight-meta">
+          <span class="insight-tag">Trade</span>
+          <span>April 30, 2026</span>
+        </div>
+        <h3>Navigating the New Sanctions Regime: Cross-Border Compliance in 2026</h3>
+        <p>With expanding sanctions frameworks across multiple jurisdictions, multinational businesses face an increasingly complex compliance landscape.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta-section" id="contact">
+  <div class="container" style="position:relative;">
+    <hr class="gold-rule">
+    <h2>Ready to Discuss Your Case?</h2>
+    <p>Our attorneys are prepared to evaluate your situation and provide clear, actionable guidance.</p>
+    <a href="tel:+12125551200" class="cta-phone">+1 (212) 555-1200</a>
+    <a href="#" class="btn btn-gold" style="margin-bottom:8px;">Request a Confidential Consultation</a>
+    <p class="cta-form-hint">Or submit the contact form below and we will respond within one business day.</p>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <h3>Lex <span>&amp;</span> Partners</h3>
+        <p>A distinguished law firm providing premier legal counsel to businesses, institutions, and individuals since 1993. Offices in New York, London, and Singapore.</p>
+      </div>
+
+      <div>
+        <h4>Practice Areas</h4>
+        <ul>
+          <li><a href="#">Corporate Law</a></li>
+          <li><a href="#">Intellectual Property</a></li>
+          <li><a href="#">Real Estate</a></li>
+          <li><a href="#">Litigation</a></li>
+          <li><a href="#">Employment</a></li>
+          <li><a href="#">International Trade</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Offices</h4>
+        <ul>
+          <li><a href="#">New York</a><br><span style="font-size:.82rem;">450 Park Avenue, 32nd Floor</span></li>
+          <li><a href="#">London</a><br><span style="font-size:.82rem;">One Bishopsgate Plaza</span></li>
+          <li><a href="#">Singapore</a><br><span style="font-size:.82rem;">Marina Bay Financial Centre</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Firm</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Pro Bono</a></li>
+          <li><a href="#">Newsroom</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 Lex &amp; Partners LLP. All rights reserved.</span>
+      <span>
+        <a href="#" style="margin-right:16px;">Privacy Policy</a>
+        <a href="#" style="margin-right:16px;">Terms of Use</a>
+        <a href="#">Attorney Advertising</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ MINIMAL JS ═══ -->
+<script>
+  // Sticky nav shadow
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Mobile menu toggle
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('#navLinks a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
