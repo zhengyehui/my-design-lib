@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 98 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 99 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -928,6 +928,15 @@ const pages = [
     rating: 9.2,
     description: '现代律师事务所官网，深海军蓝 + 金色强调 + 衬线字体 + 几何纹理背景 + 执业领域网格 + 合伙人风采 + 三城市办公室',
   },
+  {
+    id: 'h-scroll-portfolio',
+    title: 'Kinetic Visions 水平滚动作品集',
+    category: 'portfolio',
+    tags: ['水平滚动', '作品集', '沉浸式', 'CGI', 'Motion'],
+    colors: ['#08080c', '#ff4d00', '#00e5ff'],
+    rating: 9.5,
+    description: 'CGI 与动效设计工作室作品集，受 Cinética Studio 启发，水平滚动 7 屏全幅体验 + 浮动光球动画 + Syne 粗体字 + Marquee 无限滚动',
+  },
 ]
 
 const categories = [
@@ -985,12 +994,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 98 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 99 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="98 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="99 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -999,7 +1008,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 98 个完整页面</span>
+      <span>📦 99 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

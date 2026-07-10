@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinetic Visions — Motion & CGI Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --accent:#ff4d00;
+  --accent2:#00e5ff;
+  --dark:#08080c;
+  --dark2:#111118;
+  --dark3:#1a1a24;
+  --text-main:#f0f0f5;
+  --text-dim:#8888a0;
+}
+html{
+  scroll-behavior:smooth;
+  background:var(--dark);
+  color:var(--text-main);
+  font-family:'Space Grotesk',var(--font-sans);
+  overflow-x:hidden;
+}
+body{background:var(--dark);min-height:100vh}
+
+/* ── Horizontal Scroll Container ── */
+.h-scroll-wrapper{
+  display:flex;
+  width:fit-content;
+  min-height:100vh;
+}
+.h-section{
+  width:100vw;
+  min-height:100vh;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+
+/* ── Progress Bar ── */
+.progress-bar{
+  position:fixed;
+  top:0;left:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  z-index:1000;
+  transition:width .3s ease;
+}
+
+/* ── Navigation ── */
+.nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:100;
+  padding:1.5rem 3rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  mix-blend-mode:difference;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:1.2rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:#fff;
+}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{
+  color:#fff;
+  text-decoration:none;
+  font-size:.85rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  opacity:.7;
+  transition:opacity .3s;
+}
+.nav-links a:hover{opacity:1}
+
+/* ── Section Counter ── */
+.section-counter{
+  position:fixed;
+  bottom:2rem;
+  right:3rem;
+  z-index:100;
+  font-family:'Syne',sans-serif;
+  font-size:.85rem;
+  letter-spacing:.1em;
+  color:var(--text-dim);
+  mix-blend-mode:difference;
+}
+.section-counter .current{color:#fff;font-weight:700;font-size:1.4rem}
+
+/* ── Scroll Hint ── */
+.scroll-hint{
+  position:fixed;
+  bottom:2rem;
+  left:3rem;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  font-size:.75rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  mix-blend-mode:difference;
+  animation:hintPulse 2s ease-in-out infinite;
+}
+.scroll-hint .line{
+  width:40px;height:1px;
+  background:var(--text-dim);
+}
+@keyframes hintPulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* ══════════════════════════════════
+   SECTION 1: HERO
+   ══════════════════════════════════ */
+.hero{
+  background:var(--dark);
+  padding:0 6vw;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:4rem;
+}
+.hero-content{flex:1;max-width:700px}
+.hero-eyebrow{
+  font-size:.8rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:1.5rem;
+  display:flex;
+  align-items:center;
+  gap:.8rem;
+}
+.hero-eyebrow::before{
+  content:'';
+  width:30px;height:1px;
+  background:var(--accent);
+}
+.hero h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(3rem,6vw,5.5rem);
+  font-weight:800;
+  line-height:1.05;
+  margin-bottom:1.5rem;
+  letter-spacing:-.02em;
+}
+.hero h1 .stroke{
+  -webkit-text-stroke:1.5px var(--text-main);
+  color:transparent;
+}
+.hero h1 .accent{color:var(--accent)}
+.hero-desc{
+  font-size:1.1rem;
+  line-height:1.7;
+  color:var(--text-dim);
+  max-width:480px;
+  margin-bottom:2.5rem;
+}
+.hero-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:.8rem;
+  padding:.9rem 2rem;
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:.9rem;
+  letter-spacing:.05em;
+  border-radius:var(--radius-full);
+  transition:all .3s var(--ease-out);
+}
+.hero-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(255,77,0,.35);
+}
+.hero-cta svg{transition:transform .3s}
+.hero-cta:hover svg{transform:translateX(4px)}
+
+/* Hero Visual — Abstract Shape */
+.hero-visual{
+  flex:0 0 420px;
+  height:420px;
+  position:relative;
+}
+.hero-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(60px);
+  opacity:.6;
+  animation:orbFloat 8s ease-in-out infinite;
+}
+.hero-orb.orb1{
+  width:300px;height:300px;
+  background:radial-gradient(circle,var(--accent),transparent 70%);
+  top:10%;left:15%;
+}
+.hero-orb.orb2{
+  width:250px;height:250px;
+  background:radial-gradient(circle,var(--accent2),transparent 70%);
+  top:35%;left:40%;
+  animation-delay:-3s;
+}
+.hero-orb.orb3{
+  width:180px;height:180px;
+  background:radial-gradient(circle,#8b5cf6,transparent 70%);
+  top:55%;left:10%;
+  animation-delay:-5s;
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(15px,-20px) scale(1.05)}
+  66%{transform:translate(-10px,15px) scale(.95)}
+}
+.hero-ring{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:280px;height:280px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:50%;
+  animation:ringRotate 20s linear infinite;
+}
+.hero-ring::after{
+  content:'';
+  position:absolute;
+  top:-4px;left:50%;
+  width:8px;height:8px;
+  background:var(--accent);
+  border-radius:50%;
+  box-shadow:0 0 12px var(--accent);
+}
+@keyframes ringRotate{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* ══════════════════════════════════
+   SECTION 2: WORK SHOWCASE
+   ══════════════════════════════════ */
+.work-showcase{
+  padding:0 4vw;
+  display:flex;
+  align-items:center;
+  gap:3rem;
+}
+.work-card{
+  flex:0 0 380px;
+  height:520px;
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  position:relative;
+  cursor:pointer;
+  transition:transform .5s var(--ease-out);
+}
+.work-card:hover{transform:scale(1.03)}
+.work-card-bg{
+  position:absolute;inset:0;
+  transition:transform .6s var(--ease-out);
+}
+.work-card:hover .work-card-bg{transform:scale(1.08)}
+.work-card:nth-child(1) .work-card-bg{
+  background:linear-gradient(135deg,#1a0a2e,#16213e,#0a3d62);
+}
+.work-card:nth-child(2) .work-card-bg{
+  background:linear-gradient(135deg,#2d1b00,#4a1942,#1a0a2e);
+}
+.work-card:nth-child(3) .work-card-bg{
+  background:linear-gradient(135deg,#0a2e1a,#1a3a2a,#0d4a3a);
+}
+.work-card:nth-child(4) .work-card-bg{
+  background:linear-gradient(135deg,#2e0a0a,#3a1a0a,#4a2e0a);
+}
+.work-card-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 60%);
+  z-index:2;
+}
+.work-card-number{
+  position:absolute;
+  top:1.5rem;left:1.5rem;
+  font-family:'Syne',sans-serif;
+  font-size:.75rem;
+  letter-spacing:.15em;
+  color:rgba(255,255,255,.4);
+  z-index:3;
+}
+.work-card-info{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:2rem;
+  z-index:3;
+}
+.work-card-tag{
+  display:inline-block;
+  padding:.3rem .8rem;
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(10px);
+  border-radius:var(--radius-full);
+  font-size:.7rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:.8rem;
+}
+.work-card-title{
+  font-family:'Syne',sans-serif;
+  font-size:1.5rem;
+  font-weight:700;
+  margin-bottom:.4rem;
+  line-height:1.2;
+}
+.work-card-subtitle{
+  font-size:.85rem;
+  color:var(--text-dim);
+}
+
+/* Floating geometric shapes in work section */
+.work-geo{
+  position:absolute;
+  border:1px solid rgba(255,255,255,.06);
+  z-index:1;
+}
+.work-geo.geo1{
+  width:120px;height:120px;
+  border-radius:50%;
+  top:10%;right:5%;
+  animation:geoSpin 15s linear infinite;
+}
+.work-geo.geo2{
+  width:80px;height:80px;
+  transform:rotate(45deg);
+  bottom:15%;right:12%;
+  animation:geoSpin 12s linear infinite reverse;
+}
+@keyframes geoSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* ══════════════════════════════════
+   SECTION 3: CAPABILITIES
+   ══════════════════════════════════ */
+.capabilities{
+  padding:0 6vw;
+  display:flex;
+  align-items:center;
+  gap:6rem;
+}
+.cap-left{flex:1}
+.cap-left h2{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2rem,4vw,3.5rem);
+  font-weight:800;
+  line-height:1.1;
+  margin-bottom:1.5rem;
+}
+.cap-left h2 .accent{color:var(--accent)}
+.cap-left p{
+  font-size:1.05rem;
+  color:var(--text-dim);
+  line-height:1.7;
+  max-width:420px;
+}
+.cap-right{
+  flex:0 0 500px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.5rem;
+}
+.cap-item{
+  padding:2rem;
+  background:var(--dark2);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:var(--radius-lg);
+  transition:all .4s var(--ease-out);
+  position:relative;
+  overflow:hidden;
+}
+.cap-item::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .4s var(--ease-out);
+}
+.cap-item:hover::before{transform:scaleX(1)}
+.cap-item:hover{
+  border-color:rgba(255,77,0,.2);
+  transform:translateY(-4px);
+}
+.cap-icon{
+  width:40px;height:40px;
+  background:rgba(255,77,0,.1);
+  border-radius:var(--radius-md);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1rem;
+  font-size:1.2rem;
+}
+.cap-item h3{
+  font-size:1rem;
+  font-weight:600;
+  margin-bottom:.4rem;
+}
+.cap-item p{
+  font-size:.8rem;
+  color:var(--text-dim);
+  line-height:1.5;
+}
+
+/* ══════════════════════════════════
+   SECTION 4: PROCESS
+   ══════════════════════════════════ */
+.process{
+  padding:0 6vw;
+  display:flex;
+  align-items:center;
+  gap:6rem;
+}
+.process-header{
+  flex:0 0 300px;
+}
+.process-header h2{
+  font-family:'Syne',sans-serif;
+  font-size:2.5rem;
+  font-weight:800;
+  line-height:1.1;
+  margin-bottom:1rem;
+}
+.process-header p{
+  color:var(--text-dim);
+  font-size:.95rem;
+  line-height:1.6;
+}
+.process-steps{
+  flex:1;
+  display:flex;
+  gap:2rem;
+}
+.process-step{
+  flex:1;
+  padding:2.5rem 2rem;
+  background:var(--dark2);
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:var(--radius-lg);
+  position:relative;
+  transition:all .4s var(--ease-out);
+}
+.process-step:hover{
+  border-color:rgba(255,77,0,.15);
+  transform:translateY(-6px);
+}
+.step-num{
+  font-family:'Syne',sans-serif;
+  font-size:3rem;
+  font-weight:800;
+  -webkit-text-stroke:1px rgba(255,255,255,.1);
+  color:transparent;
+  position:absolute;
+  top:1rem;right:1.5rem;
+}
+.step-icon{
+  width:48px;height:48px;
+  background:linear-gradient(135deg,rgba(255,77,0,.15),rgba(0,229,255,.1));
+  border-radius:var(--radius-md);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+  margin-bottom:1.5rem;
+}
+.process-step h3{
+  font-size:1.1rem;
+  font-weight:600;
+  margin-bottom:.6rem;
+}
+.process-step p{
+  font-size:.85rem;
+  color:var(--text-dim);
+  line-height:1.6;
+}
+
+/* ══════════════════════════════════
+   SECTION 5: STATS
+   ══════════════════════════════════ */
+.stats-section{
+  padding:0 6vw;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4rem;
+}
+.stat-item{
+  text-align:center;
+  padding:2rem;
+}
+.stat-number{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.5rem,5vw,4rem);
+  font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1;
+  margin-bottom:.5rem;
+}
+.stat-label{
+  font-size:.85rem;
+  color:var(--text-dim);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.stat-divider{
+  width:1px;height:80px;
+  background:rgba(255,255,255,.08);
+}
+
+/* ══════════════════════════════════
+   SECTION 6: TESTIMONIALS
+   ══════════════════════════════════ */
+.testimonials{
+  padding:0 6vw;
+  display:flex;
+  align-items:center;
+  gap:5rem;
+}
+.test-left{flex:1}
+.test-left h2{
+  font-family:'Syne',sans-serif;
+  font-size:2.5rem;
+  font-weight:800;
+  margin-bottom:2rem;
+}
+.testimonial-card{
+  padding:2.5rem;
+  background:var(--dark2);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:var(--radius-lg);
+  position:relative;
+}
+.testimonial-card::before{
+  content:'\201C';
+  font-family:'Syne',sans-serif;
+  font-size:6rem;
+  color:var(--accent);
+  opacity:.15;
+  position:absolute;
+  top:-.5rem;left:1rem;
+  line-height:1;
+}
+.testimonial-text{
+  font-size:1.15rem;
+  line-height:1.8;
+  color:var(--text-main);
+  margin-bottom:1.5rem;
+  font-style:italic;
+}
+.testimonial-author{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+.testimonial-avatar{
+  width:48px;height:48px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;
+  font-size:1rem;
+}
+.testimonial-name{font-weight:600;font-size:.95rem}
+.testimonial-role{font-size:.8rem;color:var(--text-dim)}
+
+.test-right{
+  flex:0 0 380px;
+  display:flex;
+  flex-direction:column;
+  gap:1.5rem;
+}
+.test-mini{
+  padding:1.5rem;
+  background:var(--dark3);
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:var(--radius-md);
+}
+.test-mini-text{
+  font-size:.9rem;
+  color:var(--text-dim);
+  line-height:1.6;
+  margin-bottom:.8rem;
+}
+.test-mini-author{
+  font-size:.8rem;
+  font-weight:600;
+  color:var(--accent);
+}
+
+/* ══════════════════════════════════
+   SECTION 7: CONTACT / CTA
+   ══════════════════════════════════ */
+.contact{
+  padding:0 6vw;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  flex-direction:column;
+}
+.contact h2{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  font-weight:800;
+  line-height:1.1;
+  margin-bottom:1.5rem;
+}
+.contact h2 .stroke{
+  -webkit-text-stroke:1.5px var(--text-main);
+  color:transparent;
+}
+.contact-desc{
+  font-size:1.1rem;
+  color:var(--text-dim);
+  max-width:500px;
+  margin-bottom:2.5rem;
+  line-height:1.7;
+}
+.contact-btns{
+  display:flex;
+  gap:1rem;
+  margin-bottom:3rem;
+}
+.btn-primary{
+  padding:1rem 2.5rem;
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  border-radius:var(--radius-full);
+  transition:all .3s var(--ease-out);
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(255,77,0,.35);
+}
+.btn-outline{
+  padding:1rem 2.5rem;
+  border:1px solid rgba(255,255,255,.15);
+  color:var(--text-main);
+  text-decoration:none;
+  font-weight:500;
+  border-radius:var(--radius-full);
+  transition:all .3s var(--ease-out);
+}
+.btn-outline:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+.contact-socials{
+  display:flex;
+  gap:1.5rem;
+}
+.contact-socials a{
+  color:var(--text-dim);
+  text-decoration:none;
+  font-size:.85rem;
+  letter-spacing:.05em;
+  transition:color .3s;
+}
+.contact-socials a:hover{color:var(--accent)}
+
+/* Footer */
+.footer{
+  padding:3rem 6vw 1.5rem;
+  border-top:1px solid rgba(255,255,255,.05);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:1rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+}
+.footer-copy{font-size:.75rem;color:var(--text-dim)}
+
+/* ── Marquee ── */
+.marquee-band{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  overflow:hidden;
+  background:rgba(255,255,255,.02);
+  border-top:1px solid rgba(255,255,255,.04);
+  padding:.8rem 0;
+}
+.marquee-track{
+  display:flex;
+  width:fit-content;
+  animation:marqueeScroll 30s linear infinite;
+}
+.marquee-content{
+  display:flex;
+  align-items:center;
+  gap:3rem;
+  padding:0 1.5rem;
+  white-space:nowrap;
+  font-size:.8rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+}
+.marquee-dot{
+  width:4px;height:4px;
+  background:var(--accent);
+  border-radius:50%;
+}
+@keyframes marqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── Noise overlay ── */
+.noise{
+  position:fixed;inset:0;
+  z-index:9999;
+  pointer-events:none;
+  opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;
+  background-size:128px;
+}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .hero{flex-direction:column;padding:6rem 1.5rem 3rem;gap:2rem}
+  .hero-visual{flex:none;width:260px;height:260px}
+  .hero-orb.orb1{width:180px;height:180px}
+  .hero-orb.orb2{width:150px;height:150px}
+  .hero-orb.orb3{width:100px;height:100px}
+  .hero-ring{width:180px;height:180px}
+  .work-showcase{flex-direction:column;padding:2rem 1.5rem;gap:1.5rem}
+  .work-card{flex:none;width:100%;height:380px}
+  .capabilities{flex-direction:column;padding:3rem 1.5rem;gap:2rem}
+  .cap-right{flex:none;width:100%}
+  .process{flex-direction:column;padding:3rem 1.5rem;gap:2rem}
+  .process-header{flex:none}
+  .process-steps{flex-direction:column}
+  .stats-section{flex-wrap:wrap;padding:3rem 1.5rem;gap:1.5rem}
+  .stat-divider{display:none}
+  .testimonials{flex-direction:column;padding:3rem 1.5rem;gap:2rem}
+  .test-right{flex:none;width:100%}
+  .contact{padding:3rem 1.5rem}
+  .contact-btns{flex-direction:column}
+  .section-counter,.scroll-hint{display:none}
+  .footer{flex-direction:column;gap:.5rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">Kinetic Visions</div>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- Section Counter -->
+<div class="section-counter">
+  <span class="current" id="currentSection">01</span> / 07
+</div>
+
+<!-- Scroll Hint -->
+<div class="scroll-hint">
+  <span class="line"></span>
+  Scroll
+</div>
+
+<!-- Horizontal Scroll Container -->
+<div class="h-scroll-wrapper" id="hScrollWrapper">
+
+  <!-- 1: HERO -->
+  <section class="h-section hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">CGI · Motion · Interactive</div>
+      <h1>
+        We turn <span class="accent">bold ideas</span><br>
+        into <span class="stroke">digital realities</span>
+      </h1>
+      <p class="hero-desc">
+        Kinetic Visions is a creative studio specializing in CGI, motion design, and interactive digital experiences. We craft immersive visuals that captivate and inspire.
+      </p>
+      <a href="#contact" class="hero-cta">
+        Start a Project
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-orb orb1"></div>
+      <div class="hero-orb orb2"></div>
+      <div class="hero-orb orb3"></div>
+      <div class="hero-ring"></div>
+    </div>
+    <div class="marquee-band">
+      <div class="marquee-track">
+        <div class="marquee-content">
+          <span>CGI</span><span class="marquee-dot"></span>
+          <span>Motion Design</span><span class="marquee-dot"></span>
+          <span>3D Visualization</span><span class="marquee-dot"></span>
+          <span>Interactive</span><span class="marquee-dot"></span>
+          <span>XR Experiences</span><span class="marquee-dot"></span>
+          <span>Brand Identity</span><span class="marquee-dot"></span>
+          <span>Art Direction</span><span class="marquee-dot"></span>
+          <span>Real-time</span><span class="marquee-dot"></span>
+        </div>
+        <div class="marquee-content">
+          <span>CGI</span><span class="marquee-dot"></span>
+          <span>Motion Design</span><span class="marquee-dot"></span>
+          <span>3D Visualization</span><span class="marquee-dot"></span>
+          <span>Interactive</span><span class="marquee-dot"></span>
+          <span>XR Experiences</span><span class="marquee-dot"></span>
+          <span>Brand Identity</span><span class="marquee-dot"></span>
+          <span>Art Direction</span><span class="marquee-dot"></span>
+          <span>Real-time</span><span class="marquee-dot"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2: WORK SHOWCASE -->
+  <section class="h-section work-showcase" id="work">
+    <div class="work-geo geo1"></div>
+    <div class="work-geo geo2"></div>
+    <div class="work-card">
+      <div class="work-card-bg"></div>
+      <div class="work-card-overlay"></div>
+      <span class="work-card-number">01</span>
+      <div class="work-card-info">
+        <span class="work-card-tag">CGI Film</span>
+        <h3 class="work-card-title">Nebula Genesis</h3>
+        <p class="work-card-subtitle">Immersive CGI short for Aether Labs</p>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-card-bg"></div>
+      <div class="work-card-overlay"></div>
+      <span class="work-card-number">02</span>
+      <div class="work-card-info">
+        <span class="work-card-tag">Interactive</span>
+        <h3 class="work-card-title">Synth Wave</h3>
+        <p class="work-card-subtitle">Real-time generative audio visualizer</p>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-card-bg"></div>
+      <div class="work-card-overlay"></div>
+      <span class="work-card-number">03</span>
+      <div class="work-card-info">
+        <span class="work-card-tag">XR Experience</span>
+        <h3 class="work-card-title">Terraform</h3>
+        <p class="work-card-subtitle">Mixed reality landscape installation</p>
+      </div>
+    </div>
+    <div class="work-card">
+      <div class="work-card-bg"></div>
+      <div class="work-card-overlay"></div>
+      <span class="work-card-number">04</span>
+      <div class="work-card-info">
+        <span class="work-card-tag">Brand Film</span>
+        <h3 class="work-card-title">Carbon Shift</h3>
+        <p class="work-card-subtitle">Brand identity motion system for NovaTech</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3: CAPABILITIES -->
+  <section class="h-section capabilities" id="about">
+    <div class="cap-left">
+      <h2>What we <span class="accent">do best</span></h2>
+      <p>We blend cutting-edge technology with artistic vision to deliver experiences that transcend the ordinary. Every project is a journey into the possible.</p>
+    </div>
+    <div class="cap-right">
+      <div class="cap-item">
+        <div class="cap-icon">🎬</div>
+        <h3>CGI & VFX</h3>
+        <p>Photorealistic renders and visual effects for film, advertising, and digital campaigns.</p>
+      </div>
+      <div class="cap-item">
+        <div class="cap-icon">✨</div>
+        <h3>Motion Design</h3>
+        <p>Dynamic animations and motion systems that bring brands and stories to life.</p>
+      </div>
+      <div class="cap-item">
+        <div class="cap-icon">🌐</div>
+        <h3>Interactive Web</h3>
+        <p>Immersive web experiences with WebGL, Three.js, and real-time rendering.</p>
+      </div>
+      <div class="cap-item">
+        <div class="cap-icon">🥽</div>
+        <h3>XR Experiences</h3>
+        <p>Augmented and virtual reality installations for events, galleries, and brands.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4: PROCESS -->
+  <section class="h-section process" id="process">
+    <div class="process-header">
+      <h2>Our Process</h2>
+      <p>A structured creative journey from concept to delivery, ensuring every detail exceeds expectations.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <span class="step-num">01</span>
+        <div class="step-icon">💡</div>
+        <h3>Discovery</h3>
+        <p>Deep dive into your vision, goals, and audience. We define the creative direction together.</p>
+      </div>
+      <div class="process-step">
+        <span class="step-num">02</span>
+        <div class="step-icon">✏️</div>
+        <h3>Concept</h3>
+        <p>Storyboarding, styleframes, and prototyping. We visualize the final experience before building.</p>
+      </div>
+      <div class="process-step">
+        <span class="step-num">03</span>
+        <div class="step-icon">⚙️</div>
+        <h3>Production</h3>
+        <p>3D modeling, animation, development. Iterative refinement with regular check-ins.</p>
+      </div>
+      <div class="process-step">
+        <span class="step-num">04</span>
+        <div class="step-icon">🚀</div>
+        <h3>Delivery</h3>
+        <p>Final polish, optimization, and launch. Post-launch support to ensure lasting impact.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5: STATS -->
+  <section class="h-section stats-section">
+    <div class="stat-item">
+      <div class="stat-number">150+</div>
+      <div class="stat-label">Projects Delivered</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number">40+</div>
+      <div class="stat-label">Global Clients</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number">12</div>
+      <div class="stat-label">Industry Awards</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number">8</div>
+      <div class="stat-label">Years of Craft</div>
+    </div>
+  </section>
+
+  <!-- 6: TESTIMONIALS -->
+  <section class="h-section testimonials">
+    <div class="test-left">
+      <h2>Client Voices</h2>
+      <div class="testimonial-card">
+        <p class="testimonial-text">
+          "Kinetic Visions transformed our product launch into an unforgettable experience. Their CGI work is simply on another level — every frame is a masterpiece."
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SL</div>
+          <div>
+            <div class="testimonial-name">Sarah Lindström</div>
+            <div class="testimonial-role">Creative Director, Aether Labs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="test-right">
+      <div class="test-mini">
+        <p class="test-mini-text">"The interactive web experience they built increased our engagement by 340%. Truly exceptional work."</p>
+        <div class="test-mini-author">— Marcus Chen, NovaTech</div>
+      </div>
+      <div class="test-mini">
+        <p class="test-mini-text">"Their motion design work for our rebrand was pivotal. Clean, bold, and unforgettable."</p>
+        <div class="test-mini-author">— Elise Moreau, Lumière Paris</div>
+      </div>
+      <div class="test-mini">
+        <p class="test-mini-text">"Working with KV feels like collaborating with the future. They push boundaries every time."</p>
+        <div class="test-mini-author">— James Wright, Flux Studios</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7: CONTACT CTA -->
+  <section class="h-section contact" id="contact">
+    <h2>Let's create<br>something <span class="stroke">extraordinary</span></h2>
+    <p class="contact-desc">
+      Ready to push the boundaries of digital experience? We'd love to hear about your next project.
+    </p>
+    <div class="contact-btns">
+      <a href="mailto:hello@kineticvisions.studio" class="btn-primary">Get in Touch</a>
+      <a href="#work" class="btn-outline">View Work</a>
+    </div>
+    <div class="contact-socials">
+      <a href="#">Instagram</a>
+      <a href="#">Behance</a>
+      <a href="#">Dribbble</a>
+      <a href="#">LinkedIn</a>
+    </div>
+    <div class="footer" style="border:none;padding-top:3rem;width:100%">
+      <div class="footer-logo">Kinetic Visions</div>
+      <div class="footer-copy">© 2026 Kinetic Visions Studio. All rights reserved.</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  const wrapper = document.getElementById('hScrollWrapper');
+  const sections = wrapper.querySelectorAll('.h-section');
+  const progressBar = document.getElementById('progressBar');
+  const currentSectionEl = document.getElementById('currentSection');
+  const totalWidth = () => wrapper.scrollWidth - window.innerWidth;
+
+  // Convert vertical scroll to horizontal
+  document.body.style.height = wrapper.scrollWidth + 'px';
+  wrapper.style.position = 'fixed';
+  wrapper.style.top = '0';
+  wrapper.style.left = '0';
+
+  function onScroll(){
+    const scrollY = window.scrollY;
+    const maxScroll = totalWidth();
+    const progress = Math.min(scrollY / maxScroll, 1);
+
+    wrapper.style.transform = `translateX(${-scrollY}px)`;
+    progressBar.style.width = (progress * 100) + '%';
+
+    // Update section counter
+    const sectionWidth = window.innerWidth;
+    const current = Math.floor(scrollY / sectionWidth) + 1;
+    currentSectionEl.textContent = String(Math.min(current, sections.length)).padStart(2, '0');
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e){
+    const sectionWidth = window.innerWidth;
+    if(e.key === 'ArrowRight'){
+      window.scrollBy({top: sectionWidth, behavior:'smooth'});
+    } else if(e.key === 'ArrowLeft'){
+      window.scrollBy({top: -sectionWidth, behavior:'smooth'});
+    }
+  });
+})();
+</script>
+</body>
+</html>
