@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfraDocs — The Knowledge Infrastructure for Modern Teams</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ─────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --id-bg: #fefdfb;
+  --id-bg-warm: #faf8f5;
+  --id-bg-card: #f9f6f3;
+  --id-text: #0e1111;
+  --id-text-secondary: #485450;
+  --id-text-tertiary: #969e9b;
+  --id-border: rgba(14, 17, 17, 0.07);
+  --id-accent: #6366f1;
+  --id-accent-light: #818cf8;
+  --id-cream: #f5f0eb;
+  --id-warm-orange: #ef6333;
+  --id-teal: #00a8e0;
+  --id-radius: 12px;
+  --id-radius-sm: 4px;
+  --id-max-w: 1200px;
+  --id-section-gap: 100px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  background: var(--id-bg);
+  color: var(--id-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+.container {
+  max-width: var(--id-max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Sticky Navigation ────────────────────────────── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(254, 253, 251, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--id-border);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+.nav-logo-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--id-accent);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--id-text-secondary);
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--id-text); }
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: var(--id-radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--id-text-secondary);
+}
+
+.btn-ghost:hover { color: var(--id-text); }
+
+.btn-primary {
+  background: var(--id-text);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1a1a2e;
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--id-text);
+  border: 1px solid var(--id-border);
+}
+
+.btn-outline:hover {
+  border-color: var(--id-border);
+  background: var(--id-bg-warm);
+}
+
+/* ── Hero Section ─────────────────────────────────── */
+.hero {
+  padding: 80px 0 60px;
+  text-align: center;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: var(--id-bg-card);
+  border: 1px solid var(--id-border);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--id-text-secondary);
+  margin-bottom: 32px;
+}
+
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-success, #10b981);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.3); }
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--id-text);
+  max-width: 720px;
+  margin: 0 auto 24px;
+}
+
+.hero-sub {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--id-text-secondary);
+  max-width: 540px;
+  margin: 0 auto 36px;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hero-actions .btn-primary {
+  padding: 10px 24px;
+  font-size: 15px;
+  border-radius: 6px;
+}
+
+.hero-actions .btn-outline {
+  padding: 10px 24px;
+  font-size: 15px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Product Preview ──────────────────────────────── */
+.hero-preview {
+  margin-top: 60px;
+  position: relative;
+}
+
+.preview-window {
+  background: var(--id-bg-warm);
+  border: 1px solid var(--id-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
+}
+
+.preview-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--id-bg-card);
+  border-bottom: 1px solid var(--id-border);
+}
+
+.preview-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e5e5e5;
+}
+
+.preview-dot:nth-child(1) { background: #ff5f57; }
+.preview-dot:nth-child(2) { background: #febc2e; }
+.preview-dot:nth-child(3) { background: #28c840; }
+
+.preview-content {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 320px;
+}
+
+.preview-sidebar {
+  padding: 16px;
+  border-right: 1px solid var(--id-border);
+  background: var(--id-bg-card);
+}
+
+.preview-sidebar-item {
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--id-text-tertiary);
+  border-radius: 4px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.preview-sidebar-item.active {
+  background: var(--id-accent);
+  color: white;
+  font-weight: 500;
+}
+
+.preview-sidebar-item .icon { font-size: 10px; opacity: 0.6; }
+
+.preview-main {
+  padding: 20px 24px;
+}
+
+.preview-main h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.preview-code {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  padding: 16px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  overflow: hidden;
+}
+
+.preview-code .keyword { color: #cba6f7; }
+.preview-code .string { color: #a6e3a1; }
+.preview-code .comment { color: #6c7086; }
+.preview-code .func { color: #89b4fa; }
+
+/* ── Social Proof / Logo Bar ──────────────────────── */
+.logos-section {
+  padding: 48px 0;
+  border-top: 1px solid var(--id-border);
+  border-bottom: 1px solid var(--id-border);
+}
+
+.logos-label {
+  text-align: center;
+  font-size: 14px;
+  color: var(--id-text-tertiary);
+  margin-bottom: 28px;
+}
+
+.logos-label strong {
+  color: var(--id-text);
+  font-weight: 600;
+}
+
+.logos-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  opacity: 0.5;
+}
+
+.logo-item {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--id-text);
+}
+
+/* ── Animated Counters ────────────────────────────── */
+.counters-section {
+  padding: 60px 0;
+}
+
+.counters-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.counter-card {
+  text-align: center;
+  padding: 32px 16px;
+  background: var(--id-bg-card);
+  border: 1px solid var(--id-border);
+  border-radius: var(--id-radius);
+}
+
+.counter-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--id-text);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.counter-label {
+  font-size: 14px;
+  color: var(--id-text-secondary);
+}
+
+/* ── Section Headers ──────────────────────────────── */
+.section-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 48px;
+}
+
+.section-header h2 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+
+.section-header p {
+  font-size: 16px;
+  color: var(--id-text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Features Bento Grid ──────────────────────────── */
+.features-section {
+  padding: var(--id-section-gap) 0;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.bento-card {
+  background: var(--id-bg-card);
+  border: 1px solid var(--id-border);
+  border-radius: var(--id-radius);
+  padding: 32px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-card:hover {
+  border-color: rgba(99, 102, 241, 0.2);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.06);
+  transform: translateY(-2px);
+}
+
+.bento-card.span-2 { grid-column: span 2; }
+
+.bento-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 20px;
+  background: var(--id-accent);
+  color: white;
+}
+
+.bento-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.bento-card p {
+  font-size: 14px;
+  color: var(--id-text-secondary);
+  line-height: 1.6;
+}
+
+.bento-visual {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--id-bg-warm);
+  border-radius: 8px;
+  border: 1px solid var(--id-border);
+}
+
+/* AI Input mock */
+.ai-input-mock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: white;
+  border: 1px solid var(--id-border);
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.ai-input-mock .sparkle {
+  color: var(--id-accent);
+  font-size: 16px;
+}
+
+.ai-input-mock span {
+  font-size: 13px;
+  color: var(--id-text-tertiary);
+}
+
+/* ── Scale Stats ──────────────────────────────────── */
+.scale-section {
+  padding: var(--id-section-gap) 0;
+  background: var(--id-bg-warm);
+  border-top: 1px solid var(--id-border);
+  border-bottom: 1px solid var(--id-border);
+}
+
+.scale-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  text-align: center;
+}
+
+.scale-item {}
+
+.scale-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.scale-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--id-text);
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.scale-label {
+  font-size: 15px;
+  color: var(--id-text-secondary);
+}
+
+/* ── Testimonials ─────────────────────────────────── */
+.testimonials-section {
+  padding: var(--id-section-gap) 0;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.testimonial-card {
+  background: var(--id-bg-card);
+  border: 1px solid var(--id-border);
+  border-radius: var(--id-radius);
+  padding: 28px;
+  transition: all 0.2s;
+}
+
+.testimonial-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+}
+
+.testimonial-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.testimonial-role {
+  font-size: 12px;
+  color: var(--id-text-tertiary);
+}
+
+.testimonial-quote {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--id-text-secondary);
+}
+
+.testimonial-quote::before { content: '"'; }
+.testimonial-quote::after { content: '"'; }
+
+/* ── Integrations ─────────────────────────────────── */
+.integrations-section {
+  padding: var(--id-section-gap) 0;
+  background: var(--id-bg-warm);
+  border-top: 1px solid var(--id-border);
+  border-bottom: 1px solid var(--id-border);
+}
+
+.integrations-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.integration-card {
+  background: white;
+  border: 1px solid var(--id-border);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.integration-card:hover {
+  border-color: var(--id-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99,102,241,0.08);
+}
+
+.integration-icon {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.integration-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--id-text-secondary);
+}
+
+/* ── CTA Section ──────────────────────────────────── */
+.cta-section {
+  padding: var(--id-section-gap) 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 400;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.cta-section p {
+  font-size: 16px;
+  color: var(--id-text-secondary);
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+}
+
+.cta-actions .btn-primary {
+  padding: 12px 28px;
+  font-size: 15px;
+  border-radius: 6px;
+}
+
+.cta-actions .btn-outline {
+  padding: 12px 28px;
+  font-size: 15px;
+  border-radius: 6px;
+}
+
+/* ── Footer ───────────────────────────────────────── */
+.footer {
+  padding: 48px 0 32px;
+  border-top: 1px solid var(--id-border);
+  background: var(--id-bg-warm);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.footer-brand p {
+  font-size: 13px;
+  color: var(--id-text-tertiary);
+  margin-top: 12px;
+  line-height: 1.6;
+  max-width: 240px;
+}
+
+.footer-col h4 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--id-text-tertiary);
+  margin-bottom: 16px;
+}
+
+.footer-col ul { list-style: none; }
+
+.footer-col li {
+  margin-bottom: 8px;
+}
+
+.footer-col a {
+  font-size: 13px;
+  color: var(--id-text-secondary);
+  transition: color 0.2s;
+}
+
+.footer-col a:hover { color: var(--id-text); }
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 24px;
+  border-top: 1px solid var(--id-border);
+}
+
+.footer-bottom p {
+  font-size: 12px;
+  color: var(--id-text-tertiary);
+}
+
+.footer-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--id-text-tertiary);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-success, #10b981);
+}
+
+/* ── Marquee ──────────────────────────────────────── */
+.marquee-bar {
+  padding: 16px 0;
+  overflow: hidden;
+  border-top: 1px solid var(--id-border);
+  border-bottom: 1px solid var(--id-border);
+  background: var(--id-bg-card);
+}
+
+.marquee-track {
+  display: flex;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+
+.marquee-item {
+  flex-shrink: 0;
+  padding: 0 32px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--id-text-tertiary);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.marquee-item .sep {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--id-border);
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .preview-content { grid-template-columns: 1fr; }
+  .preview-sidebar { display: none; }
+  .counters-grid { grid-template-columns: repeat(2, 1fr); }
+  .bento-grid { grid-template-columns: 1fr; }
+  .bento-card.span-2 { grid-column: span 1; }
+  .scale-grid { grid-template-columns: 1fr; gap: 40px; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .integrations-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: span 2; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">I</div>
+      InfraDocs
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Product</a></li>
+      <li><a href="#">Solutions</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn btn-ghost">Sign in</button>
+      <button class="btn btn-primary">Get started free</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Now with Agent-native support
+    </div>
+    <h1>The knowledge infrastructure your team builds on</h1>
+    <p class="hero-sub">
+      One platform to document, search, and share everything your team and AI agents need. Ship docs 10x faster.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-primary">Get started free</button>
+      <button class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Sign up with Google
+      </button>
+    </div>
+
+    <!-- Product Preview -->
+    <div class="hero-preview">
+      <div class="preview-window">
+        <div class="preview-titlebar">
+          <span class="preview-dot"></span>
+          <span class="preview-dot"></span>
+          <span class="preview-dot"></span>
+        </div>
+        <div class="preview-content">
+          <div class="preview-sidebar">
+            <div class="preview-sidebar-item active"><span class="icon">📖</span> Getting Started</div>
+            <div class="preview-sidebar-item"><span class="icon">⚡</span> Quick Start</div>
+            <div class="preview-sidebar-item"><span class="icon">🔑</span> Authentication</div>
+            <div class="preview-sidebar-item"><span class="icon">📡</span> API Reference</div>
+            <div class="preview-sidebar-item"><span class="icon">🔧</span> Configuration</div>
+            <div class="preview-sidebar-item"><span class="icon">🚀</span> Deployment</div>
+            <div class="preview-sidebar-item"><span class="icon">📊</span> Analytics</div>
+            <div class="preview-sidebar-item"><span class="icon">🤝</span> Webhooks</div>
+          </div>
+          <div class="preview-main">
+            <h3>Getting Started</h3>
+            <div class="preview-code">
+              <span class="comment">// Install the InfraDocs SDK</span><br>
+              <span class="keyword">npm</span> install @infradocs/sdk<br><br>
+              <span class="comment">// Initialize with your API key</span><br>
+              <span class="keyword">import</span> { <span class="func">InfraDocs</span> } <span class="keyword">from</span> <span class="string">'@infradocs/sdk'</span><br><br>
+              <span class="keyword">const</span> docs = <span class="keyword">new</span> <span class="func">InfraDocs</span>({<br>
+              &nbsp;&nbsp;apiKey: <span class="string">'id_sk_live_...'</span>,<br>
+              &nbsp;&nbsp;project: <span class="string">'my-app'</span><br>
+              })
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Logo Bar -->
+<section class="logos-section">
+  <div class="container">
+    <p class="logos-label">Trusted by <strong>20,000+</strong> of the world's most ambitious teams</p>
+    <div class="logos-row">
+      <span class="logo-item">Anthropic</span>
+      <span class="logo-item">Coinbase</span>
+      <span class="logo-item">Vercel</span>
+      <span class="logo-item">Stripe</span>
+      <span class="logo-item">Linear</span>
+      <span class="logo-item">Notion</span>
+      <span class="logo-item">Figma</span>
+    </div>
+  </div>
+</section>
+
+<!-- Counters -->
+<section class="counters-section">
+  <div class="container">
+    <div class="counters-grid">
+      <div class="counter-card">
+        <div class="counter-number">300M+</div>
+        <div class="counter-label">Pages served this year</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-number">2B+</div>
+        <div class="counter-label">Agent requests processed</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-number">99.99%</div>
+        <div class="counter-label">Uptime across all services</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-number">50ms</div>
+        <div class="counter-label">Average global response time</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span class="marquee-item">API Documentation <span class="sep"></span></span>
+    <span class="marquee-item">Developer Guides <span class="sep"></span></span>
+    <span class="marquee-item">Knowledge Base <span class="sep"></span></span>
+    <span class="marquee-item">Changelog <span class="sep"></span></span>
+    <span class="marquee-item">SDK Reference <span class="sep"></span></span>
+    <span class="marquee-item">Interactive API Explorer <span class="sep"></span></span>
+    <span class="marquee-item">Versioning <span class="sep"></span></span>
+    <span class="marquee-item">Multi-language Support <span class="sep"></span></span>
+    <span class="marquee-item">API Documentation <span class="sep"></span></span>
+    <span class="marquee-item">Developer Guides <span class="sep"></span></span>
+    <span class="marquee-item">Knowledge Base <span class="sep"></span></span>
+    <span class="marquee-item">Changelog <span class="sep"></span></span>
+    <span class="marquee-item">SDK Reference <span class="sep"></span></span>
+    <span class="marquee-item">Interactive API Explorer <span class="sep"></span></span>
+    <span class="marquee-item">Versioning <span class="sep"></span></span>
+    <span class="marquee-item">Multi-language Support <span class="sep"></span></span>
+  </div>
+</div>
+
+<!-- Features Bento Grid -->
+<section class="features-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>One platform for your entire knowledge stack</h2>
+      <p>From API docs to internal wikis, InfraDocs handles it all with a single, unified platform.</p>
+    </div>
+
+    <div class="bento-grid">
+      <div class="bento-card span-2">
+        <div class="bento-icon">🤖</div>
+        <h3>Agent-native platform</h3>
+        <p>Built from the ground up for AI agents. Structured content that agents can read, search, and act on — not just humans.</p>
+        <div class="ai-input-mock">
+          <span class="sparkle">✦</span>
+          <span>Ask AI: "How do I authenticate with the API?"</span>
+        </div>
+      </div>
+
+      <div class="bento-card">
+        <div class="bento-icon">🔄</div>
+        <h3>Self-updating knowledge</h3>
+        <p>Connect your codebase and docs auto-update when APIs change. Never ship outdated documentation again.</p>
+      </div>
+
+      <div class="bento-card">
+        <div class="bento-icon">🔒</div>
+        <h3>Granular access control</h3>
+        <p>Control who sees what — public docs, internal wikis, or team-specific sections. SSO and RBAC included.</p>
+      </div>
+
+      <div class="bento-card span-2">
+        <div class="bento-icon">🔗</div>
+        <h3>Connect your existing tools</h3>
+        <p>Import from Notion, GitBook, Confluence, or Markdown. Integrate with GitHub, Slack, Linear, and 50+ tools.</p>
+        <div class="bento-visual">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="padding: 4px 10px; background: var(--id-bg-card); border: 1px solid var(--id-border); border-radius: 6px; font-size: 11px; font-weight: 500;">GitHub</span>
+            <span style="padding: 4px 10px; background: var(--id-bg-card); border: 1px solid var(--id-border); border-radius: 6px; font-size: 11px; font-weight: 500;">Slack</span>
+            <span style="padding: 4px 10px; background: var(--id-bg-card); border: 1px solid var(--id-border); border-radius: 6px; font-size: 11px; font-weight: 500;">Linear</span>
+            <span style="padding: 4px 10px; background: var(--id-bg-card); border: 1px solid var(--id-border); border-radius: 6px; font-size: 11px; font-weight: 500;">Notion</span>
+            <span style="padding: 4px 10px; background: var(--id-bg-card); border: 1px solid var(--id-border); border-radius: 6px; font-size: 11px; font-weight: 500;">Figma</span>
+            <span style="padding: 4px 10px; background: var(--id-bg-card); border: 1px solid var(--id-border); border-radius: 6px; font-size: 11px; font-weight: 500;">+ 50 more</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bento-card">
+        <div class="bento-icon">👥</div>
+        <h3>Team collaboration</h3>
+        <p>Real-time editing, comments, and review workflows. Keep your team aligned on the latest documentation.</p>
+      </div>
+
+      <div class="bento-card">
+        <div class="bento-icon">🎨</div>
+        <h3>Beautiful by default</h3>
+        <p>Auto-generated navigation, search, and theming. Customize everything or ship with gorgeous defaults.</p>
+      </div>
+
+      <div class="bento-card">
+        <div class="bento-icon">📊</div>
+        <h3>Analytics & insights</h3>
+        <p>See what pages users visit, where they get stuck, and which docs drive the most engagement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scale Stats -->
+<section class="scale-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Built to scale with the agent web</h2>
+      <p>Enterprise-grade infrastructure that grows with your team and your AI agents.</p>
+    </div>
+    <div class="scale-grid">
+      <div class="scale-item">
+        <div class="scale-icon">🌐</div>
+        <div class="scale-number">300M+</div>
+        <div class="scale-label">Visitors in the past year</div>
+      </div>
+      <div class="scale-item">
+        <div class="scale-icon">🤖</div>
+        <div class="scale-number">2B+</div>
+        <div class="scale-label">Agents served in the past year</div>
+      </div>
+      <div class="scale-item">
+        <div class="scale-icon">🛡️</div>
+        <div class="scale-number">99.99%</div>
+        <div class="scale-label">Uptime across all services</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Trusted by teams building for agents</h2>
+      <p>See why thousands of companies choose InfraDocs for their knowledge infrastructure.</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar" style="background: #6366f1;">AK</div>
+          <div>
+            <div class="testimonial-name">Alex Kim</div>
+            <div class="testimonial-role">CTO at Anthropic</div>
+          </div>
+        </div>
+        <p class="testimonial-quote">InfraDocs transformed how our agents interact with documentation. The structured content API is a game-changer for AI-native workflows.</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar" style="background: #10b981;">SR</div>
+          <div>
+            <div class="testimonial-name">Sarah Rodriguez</div>
+            <div class="testimonial-role">VP Engineering at Vercel</div>
+          </div>
+        </div>
+        <p class="testimonial-quote">We migrated our entire developer docs to InfraDocs in a weekend. The search is incredible — our developers find answers 3x faster now.</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar" style="background: #f59e0b;">MC</div>
+          <div>
+            <div class="testimonial-name">Marcus Chen</div>
+            <div class="testimonial-role">Head of Product at Linear</div>
+          </div>
+        </div>
+        <p class="testimonial-quote">The auto-updating docs feature alone saved us 20 hours per week. Our API docs are always in sync with the actual codebase.</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar" style="background: #ec4899;">JP</div>
+          <div>
+            <div class="testimonial-name">Julia Park</div>
+            <div class="testimonial-role">Developer Advocate at Stripe</div>
+          </div>
+        </div>
+        <p class="testimonial-quote">The interactive API explorer is exactly what we needed. Developers can test endpoints right in the docs without leaving the page.</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar" style="background: #06b6d4;">TW</div>
+          <div>
+            <div class="testimonial-name">Tom Wilson</div>
+            <div class="testimonial-role">CTO at Coinbase</div>
+          </div>
+        </div>
+        <p class="testimonial-quote">Security and compliance were our top priorities. InfraDocs delivered with SOC 2, SSO, and granular access controls out of the box.</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar" style="background: #8b5cf6;">LN</div>
+          <div>
+            <div class="testimonial-name">Lisa Nguyen</div>
+            <div class="testimonial-role">Engineering Lead at Notion</div>
+          </div>
+        </div>
+        <p class="testimonial-quote">Our internal knowledge base went from a mess of Google Docs to a beautifully organized, searchable system. Everyone loves it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2>The knowledge platform built for agents</h2>
+    <p>Start building better documentation today. Free for teams of any size.</p>
+    <div class="cta-actions">
+      <button class="btn btn-primary">Get started free</button>
+      <button class="btn btn-outline">Talk to sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="nav-logo-icon">I</div>
+          InfraDocs
+        </div>
+        <p>The knowledge infrastructure your team and AI agents build on. Document, search, and share everything.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Roadmap</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Guides</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Partners</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Security</a></li>
+          <li><a href="#">GDPR</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 InfraDocs. All rights reserved.</p>
+      <div class="footer-status">
+        <span class="status-dot"></span>
+        All systems operational
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -893,6 +893,15 @@ const pages = [
     description: 'SaaS 集成生态落地页，动态连接线背景 + CSS 几何图标集成卡片网格 + 药丸分类筛选 + 语法高亮 API 代码展示 + 使用步骤引导',
   },
   {
+    id: 'infradocs-platform',
+    title: 'InfraDocs 知识基础设施平台',
+    category: 'landing',
+    tags: ['SaaS', '开发者平台', '知识库', 'API文档', '暖色调'],
+    colors: ['#fefdfb', '#6366f1', '#0e1111'],
+    rating: 9.4,
+    description: '开发者知识基础设施 SaaS 落地页，灵感来自 Mintlify，DM Serif Display 衬线标题 + 暖色奶油底 + 产品预览窗口 + Bento Grid 特性 + 动画计数器 + Marquee 滚动',
+  },
+  {
     id: 'lumen-awards',
     title: 'LUMEN Awards 数字设计大奖',
     category: 'creative',
