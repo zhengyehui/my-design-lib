@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZenMind — 冥想正念应用</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Segoe UI', sans-serif; color: #1a1a2e; background: #faf8f5; overflow-x: hidden; }
+
+/* ── Color Palette: Zen ── */
+:root {
+  --zen-bg: #faf8f5;
+  --zen-deep: #1a1a2e;
+  --zen-purple: #7c6cad;
+  --zen-lavender: #b8a9c9;
+  --zen-sage: #8fbc8f;
+  --zen-mist: #d4c5e2;
+  --zen-gold: #c9a96e;
+  --zen-cloud: #f0ebe3;
+  --zen-text: #2d2d3f;
+  --zen-muted: #8a8a9a;
+}
+
+/* ── Nav ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+  background: rgba(250, 248, 245, 0.9); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.nav-logo { font-size: 1.3rem; font-weight: 700; color: var(--zen-purple); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+.nav-logo svg { width: 28px; height: 28px; }
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--zen-muted); font-size: 0.9rem; transition: color 0.2s; }
+.nav-links a:hover { color: var(--zen-purple); }
+.btn-nav { background: var(--zen-purple) !important; color: #fff !important; padding: 0.5rem 1.2rem; border-radius: 100px; font-weight: 600; font-size: 0.85rem; }
+
+/* ── Hero ── */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 8rem 2rem 4rem;
+  background: linear-gradient(180deg, #f0ebe3 0%, #faf8f5 40%, #e8e0f0 100%);
+  position: relative; overflow: hidden;
+}
+
+/* Floating orbs */
+.hero::before {
+  content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 108, 173, 0.12), transparent 70%);
+  top: -100px; right: -100px; animation: float-orb 20s ease-in-out infinite;
+}
+.hero::after {
+  content: ''; position: absolute; width: 350px; height: 350px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(143, 188, 143, 0.1), transparent 70%);
+  bottom: -50px; left: -50px; animation: float-orb 25s ease-in-out infinite reverse;
+}
+@keyframes float-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -20px) scale(1.05); }
+  50% { transform: translate(-20px, 30px) scale(0.95); }
+  75% { transform: translate(20px, 10px) scale(1.02); }
+}
+
+.hero-content { max-width: 700px; position: relative; z-index: 1; }
+
+/* Breathing circle */
+.breathing-circle-wrap {
+  margin: 0 auto 3rem; width: 200px; height: 200px; position: relative;
+}
+.breathing-circle {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, var(--zen-mist), var(--zen-purple));
+  animation: breathe 6s ease-in-out infinite;
+  box-shadow: 0 0 60px rgba(124, 108, 173, 0.3), 0 0 120px rgba(124, 108, 173, 0.1);
+  display: flex; align-items: center; justify-content: center;
+}
+.breathing-circle span {
+  color: #fff; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.1em;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  animation: breathe-text 6s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(0.85); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+@keyframes breathe-text {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.breathing-ring {
+  position: absolute; inset: -15px; border-radius: 50%;
+  border: 1px solid rgba(124, 108, 173, 0.2);
+  animation: breathe-ring 6s ease-in-out infinite;
+}
+@keyframes breathe-ring {
+  0%, 100% { transform: scale(0.9); opacity: 0.3; }
+  50% { transform: scale(1.1); opacity: 0.6; }
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem); font-weight: 700; line-height: 1.2;
+  margin-bottom: 1.2rem; color: var(--zen-deep); letter-spacing: -0.02em;
+}
+.hero h1 em { font-style: normal; color: var(--zen-purple); }
+.hero p {
+  font-size: 1.1rem; color: var(--zen-muted); max-width: 500px;
+  margin: 0 auto 2.5rem; line-height: 1.8;
+}
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--zen-purple); color: #fff; padding: 0.9rem 2.2rem; border-radius: 100px;
+  font-size: 1rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(124,108,173,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,108,173,0.4); }
+.btn-secondary {
+  background: transparent; color: var(--zen-purple); padding: 0.9rem 2.2rem; border-radius: 100px;
+  font-size: 1rem; font-weight: 600; text-decoration: none; border: 1.5px solid var(--zen-lavender);
+  transition: all 0.2s; cursor: pointer;
+}
+.btn-secondary:hover { background: var(--zen-purple); color: #fff; border-color: var(--zen-purple); }
+
+/* ── Stats Bar ── */
+.stats-bar {
+  display: flex; justify-content: center; gap: 3rem; padding: 2rem 2rem;
+  background: #fff; border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.stat-item { text-align: center; }
+.stat-value { font-size: 1.8rem; font-weight: 700; color: var(--zen-purple); }
+.stat-label { font-size: 0.8rem; color: var(--zen-muted); margin-top: 0.2rem; }
+
+/* ── Section common ── */
+.section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+.section-label {
+  font-size: 0.8rem; font-weight: 600; color: var(--zen-purple); text-transform: uppercase;
+  letter-spacing: 0.15em; margin-bottom: 0.8rem;
+}
+.section-title {
+  font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--zen-deep);
+  margin-bottom: 1rem; letter-spacing: -0.02em;
+}
+.section-desc { color: var(--zen-muted); font-size: 1rem; line-height: 1.7; max-width: 550px; margin-bottom: 3rem; }
+
+/* ── Session Cards ── */
+.sessions-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem;
+}
+.session-card {
+  background: #fff; border-radius: 20px; padding: 2rem; border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden;
+}
+.session-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
+.session-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--zen-purple), var(--zen-sage));
+  opacity: 0; transition: opacity 0.3s;
+}
+.session-card:hover::before { opacity: 1; }
+.session-icon {
+  width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 1.2rem;
+}
+.session-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--zen-deep); margin-bottom: 0.5rem; }
+.session-card p { font-size: 0.85rem; color: var(--zen-muted); line-height: 1.6; margin-bottom: 1rem; }
+.session-meta { display: flex; justify-content: space-between; align-items: center; }
+.session-duration {
+  font-size: 0.8rem; color: var(--zen-purple); font-weight: 600;
+  background: rgba(124,108,173,0.08); padding: 0.3rem 0.8rem; border-radius: 100px;
+}
+.session-level { font-size: 0.75rem; color: var(--zen-muted); }
+
+/* ── App Preview ── */
+.app-preview-section {
+  background: linear-gradient(180deg, var(--zen-cloud) 0%, var(--zen-bg) 100%);
+  padding: 5rem 2rem;
+}
+.app-preview {
+  max-width: 1100px; margin: 0 auto; display: grid;
+  grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+}
+.app-preview-text { }
+.phone-mockup {
+  width: 280px; height: 560px; margin: 0 auto; background: var(--zen-deep);
+  border-radius: 36px; padding: 12px; box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  position: relative;
+}
+.phone-screen {
+  width: 100%; height: 100%; background: linear-gradient(180deg, #1a1a2e 0%, #2d1f4e 100%);
+  border-radius: 26px; overflow: hidden; position: relative;
+}
+.phone-notch {
+  width: 120px; height: 28px; background: var(--zen-deep); border-radius: 0 0 16px 16px;
+  margin: 0 auto; position: relative; z-index: 2;
+}
+.phone-content { padding: 1.5rem 1.2rem; }
+.phone-greeting { color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-bottom: 0.3rem; }
+.phone-title { color: #fff; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+.phone-breathing {
+  width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1.5rem;
+  background: radial-gradient(circle at 40% 40%, var(--zen-mist), var(--zen-purple));
+  animation: breathe 6s ease-in-out infinite;
+  box-shadow: 0 0 40px rgba(124, 108, 173, 0.4);
+}
+.phone-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.5rem;
+}
+.phone-stat {
+  background: rgba(255,255,255,0.08); border-radius: 12px; padding: 0.8rem;
+  text-align: center;
+}
+.phone-stat-val { color: #fff; font-size: 1.1rem; font-weight: 700; }
+.phone-stat-lbl { color: rgba(255,255,255,0.5); font-size: 0.65rem; margin-top: 0.2rem; }
+.phone-sessions { display: flex; flex-direction: column; gap: 0.6rem; }
+.phone-session {
+  background: rgba(255,255,255,0.06); border-radius: 12px; padding: 0.7rem 1rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.phone-session-icon { font-size: 1.2rem; }
+.phone-session-info { flex: 1; }
+.phone-session-name { color: #fff; font-size: 0.8rem; font-weight: 600; }
+.phone-session-dur { color: rgba(255,255,255,0.4); font-size: 0.65rem; }
+
+/* ── Features Bento ── */
+.features-bento {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;
+}
+.feature-card {
+  background: #fff; border-radius: 20px; padding: 2rem; border: 1px solid rgba(0,0,0,0.04);
+  transition: all 0.3s;
+}
+.feature-card:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,0.06); }
+.feature-card.span-2 { grid-column: span 2; }
+.feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+.feature-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--zen-deep); margin-bottom: 0.5rem; }
+.feature-card p { font-size: 0.85rem; color: var(--zen-muted); line-height: 1.6; }
+
+/* ── Daily Streak ── */
+.streak-section {
+  background: var(--zen-deep); padding: 5rem 2rem; color: #fff;
+}
+.streak-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+.streak-inner .section-label { color: var(--zen-lavender); }
+.streak-inner .section-title { color: #fff; }
+.streak-inner .section-desc { color: rgba(255,255,255,0.5); margin: 0 auto 3rem; }
+.streak-grid {
+  display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2rem;
+}
+.streak-day {
+  width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 600; transition: all 0.2s;
+}
+.streak-day.active { background: var(--zen-purple); color: #fff; }
+.streak-day.today { background: var(--zen-gold); color: var(--zen-deep); }
+.streak-day.empty { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+.streak-count { font-size: 3rem; font-weight: 800; color: var(--zen-gold); margin-bottom: 0.5rem; }
+.streak-label { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+
+/* ── Ambient Sounds ── */
+.sounds-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem;
+}
+.sound-card {
+  background: #fff; border-radius: 16px; padding: 1.5rem; text-align: center;
+  border: 1px solid rgba(0,0,0,0.04); transition: all 0.3s; cursor: pointer;
+}
+.sound-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.06); border-color: var(--zen-purple); }
+.sound-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+.sound-name { font-size: 0.9rem; font-weight: 600; color: var(--zen-deep); }
+.sound-wave {
+  display: flex; justify-content: center; gap: 3px; margin-top: 0.8rem; height: 20px; align-items: flex-end;
+}
+.sound-wave span {
+  width: 3px; background: var(--zen-purple); border-radius: 2px;
+  animation: wave 1.2s ease-in-out infinite;
+}
+.sound-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+.sound-wave span:nth-child(2) { height: 14px; animation-delay: 0.15s; }
+.sound-wave span:nth-child(3) { height: 6px; animation-delay: 0.3s; }
+.sound-wave span:nth-child(4) { height: 16px; animation-delay: 0.45s; }
+.sound-wave span:nth-child(5) { height: 10px; animation-delay: 0.6s; }
+@keyframes wave {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.4); }
+}
+
+/* ── CTA ── */
+.cta-section {
+  text-align: center; padding: 5rem 2rem;
+  background: linear-gradient(180deg, var(--zen-bg) 0%, var(--zen-cloud) 100%);
+}
+.cta-title { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--zen-deep); margin-bottom: 1rem; }
+.cta-desc { color: var(--zen-muted); font-size: 1rem; margin-bottom: 2rem; }
+
+/* ── Footer ── */
+.footer {
+  text-align: center; padding: 2rem; border-top: 1px solid rgba(0,0,0,0.05);
+  color: var(--zen-muted); font-size: 0.8rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .nav-links a:not(.btn-nav) { display: none; }
+  .stats-bar { gap: 1.5rem; }
+  .stat-value { font-size: 1.4rem; }
+  .app-preview { grid-template-columns: 1fr; }
+  .features-bento { grid-template-columns: 1fr; }
+  .feature-card.span-2 { grid-column: span 1; }
+  .phone-mockup { width: 240px; height: 480px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="#7c6cad" stroke-width="2"/><circle cx="14" cy="14" r="5" fill="#7c6cad" opacity="0.6"/><circle cx="14" cy="14" r="2" fill="#7c6cad"/></svg>
+    ZenMind
+  </a>
+  <div class="nav-links">
+    <a href="#sessions">冥想课程</a>
+    <a href="#features">功能特色</a>
+    <a href="#sounds">环境音效</a>
+    <a href="#" class="btn-nav">免费下载</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="breathing-circle-wrap">
+      <div class="breathing-ring"></div>
+      <div class="breathing-circle"><span>吸 气</span></div>
+    </div>
+    <h1>在呼吸间，找到<em>内心的平静</em></h1>
+    <p>ZenMind 引导你进入深度冥想状态，用科学的方法与古老的智慧，帮你缓解焦虑、提升专注、改善睡眠。</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">开始冥想之旅</a>
+      <a href="#" class="btn-secondary">了解更多</a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-value">2M+</div>
+    <div class="stat-label">全球用户</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">500+</div>
+    <div class="stat-label">冥想课程</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">4.9</div>
+    <div class="stat-label">App Store 评分</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">30min</div>
+    <div class="stat-label">平均每日练习</div>
+  </div>
+</div>
+
+<!-- Sessions -->
+<section class="section" id="sessions">
+  <div class="section-label">课程库</div>
+  <h2 class="section-title">为每个时刻，准备了专属冥想</h2>
+  <p class="section-desc">从清晨唤醒到深夜安眠，从焦虑缓解到专注提升，找到适合你的冥想练习。</p>
+  <div class="sessions-grid">
+    <div class="session-card">
+      <div class="session-icon" style="background: rgba(124,108,173,0.1);">🌅</div>
+      <h3>晨间唤醒</h3>
+      <p>以正念呼吸开始新的一天，唤醒身体与意识，设定积极的意图。</p>
+      <div class="session-meta">
+        <span class="session-duration">10 分钟</span>
+        <span class="session-level">初学者</span>
+      </div>
+    </div>
+    <div class="session-card">
+      <div class="session-icon" style="background: rgba(143,188,143,0.15);">🧘</div>
+      <h3>深度专注</h3>
+      <p>通过引导式冥想进入心流状态，提升工作与学习时的注意力。</p>
+      <div class="session-meta">
+        <span class="session-duration">15 分钟</span>
+        <span class="session-level">中级</span>
+      </div>
+    </div>
+    <div class="session-card">
+      <div class="session-icon" style="background: rgba(201,169,110,0.15);">😌</div>
+      <h3>焦虑舒缓</h3>
+      <p>身体扫描与呼吸练习，释放紧张情绪，找回内心的安宁。</p>
+      <div class="session-meta">
+        <span class="session-duration">20 分钟</span>
+        <span class="session-level">所有级别</span>
+      </div>
+    </div>
+    <div class="session-card">
+      <div class="session-icon" style="background: rgba(184,169,201,0.2);">🌙</div>
+      <h3>助眠冥想</h3>
+      <p>渐进式放松与想象练习，帮助你放下一天的疲惫，安然入睡。</p>
+      <div class="session-meta">
+        <span class="session-duration">25 分钟</span>
+        <span class="session-level">初学者</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- App Preview -->
+<section class="app-preview-section">
+  <div class="app-preview">
+    <div class="app-preview-text">
+      <div class="section-label">产品体验</div>
+      <h2 class="section-title">随身携带的冥想教练</h2>
+      <p class="section-desc">简洁优雅的界面设计，让你专注于呼吸与内心。智能推荐系统根据你的情绪状态，为你匹配最合适的冥想练习。</p>
+      <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(124,108,173,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">🎯</div>
+          <div><strong style="color: var(--zen-deep);">智能推荐</strong><br><span style="font-size: 0.85rem; color: var(--zen-muted);">基于心情与时间自动匹配课程</span></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(143,188,143,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">📊</div>
+          <div><strong style="color: var(--zen-deep);">进度追踪</strong><br><span style="font-size: 0.85rem; color: var(--zen-muted);">可视化你的冥想旅程与成长</span></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(201,169,110,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">🔔</div>
+          <div><strong style="color: var(--zen-deep);">温柔提醒</strong><br><span style="font-size: 0.85rem; color: var(--zen-muted);">自定义冥想时间与频率提醒</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-mockup">
+      <div class="phone-screen">
+        <div class="phone-notch"></div>
+        <div class="phone-content">
+          <div class="phone-greeting">晚上好，Weta 👋</div>
+          <div class="phone-title">准备冥想了吗？</div>
+          <div class="phone-breathing"></div>
+          <div class="phone-stats">
+            <div class="phone-stat">
+              <div class="phone-stat-val">7</div>
+              <div class="phone-stat-lbl">连续天数</div>
+            </div>
+            <div class="phone-stat">
+              <div class="phone-stat-val">3.5h</div>
+              <div class="phone-stat-lbl">本周时长</div>
+            </div>
+          </div>
+          <div class="phone-sessions">
+            <div class="phone-session">
+              <div class="phone-session-icon">🌅</div>
+              <div class="phone-session-info">
+                <div class="phone-session-name">晨间唤醒</div>
+                <div class="phone-session-dur">10 分钟 · 推荐</div>
+              </div>
+            </div>
+            <div class="phone-session">
+              <div class="phone-session-icon">🌙</div>
+              <div class="phone-session-info">
+                <div class="phone-session-name">助眠冥想</div>
+                <div class="phone-session-dur">25 分钟 · 晚间</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="section-label">功能特色</div>
+  <h2 class="section-title">科学冥想，全方位呵护</h2>
+  <p class="section-desc">融合正念科学与现代技术，让冥想变得简单、有效、可持续。</p>
+  <div class="features-bento">
+    <div class="feature-card span-2">
+      <div class="feature-icon">🧠</div>
+      <h3>AI 情绪感知</h3>
+      <p>通过语音分析与交互问答，AI 感知你当前的情绪状态，智能推荐最适合的冥想练习。从焦虑舒缓到能量提升，总有一款适合你。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⏱️</div>
+      <h3>灵活计时器</h3>
+      <p>自由设定冥想时长，支持 1-120 分钟。铃声提醒开始与结束，中间可设间隔钟声。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <h3>成长轨迹</h3>
+      <p>记录每次冥想的时长、类型与心情变化。可视化图表展示你的正念成长之路。</p>
+    </div>
+    <div class="feature-card span-2">
+      <div class="feature-icon">👥</div>
+      <h3>社区共修</h3>
+      <p>与全球冥想者一起练习。加入主题共修房间，分享心得，互相鼓励。每周精选社区故事，感受正念的力量。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Daily Streak -->
+<section class="streak-section">
+  <div class="streak-inner">
+    <div class="section-label">习惯养成</div>
+    <h2 class="section-title">每日正念，从不间断</h2>
+    <p class="section-desc">连续冥想打卡，解锁成就徽章。21天养成习惯，100天改变人生。</p>
+    <div class="streak-grid">
+      <div class="streak-day active">一</div>
+      <div class="streak-day active">二</div>
+      <div class="streak-day active">三</div>
+      <div class="streak-day active">四</div>
+      <div class="streak-day active">五</div>
+      <div class="streak-day active">六</div>
+      <div class="streak-day today">日</div>
+      <div class="streak-day active">一</div>
+      <div class="streak-day active">二</div>
+      <div class="streak-day active">三</div>
+      <div class="streak-day active">四</div>
+      <div class="streak-day active">五</div>
+      <div class="streak-day active">六</div>
+      <div class="streak-day empty">日</div>
+      <div class="streak-day empty">一</div>
+      <div class="streak-day empty">二</div>
+      <div class="streak-day empty">三</div>
+      <div class="streak-day empty">四</div>
+      <div class="streak-day empty">五</div>
+      <div class="streak-day empty">六</div>
+      <div class="streak-day empty">日</div>
+    </div>
+    <div class="streak-count">13</div>
+    <div class="streak-label">天连续冥想 · 距离下一个成就还差 8 天</div>
+  </div>
+</section>
+
+<!-- Ambient Sounds -->
+<section class="section" id="sounds">
+  <div class="section-label">环境音效</div>
+  <h2 class="section-title">沉浸式声音场景</h2>
+  <p class="section-desc">精选自然音效与白噪音，营造专属冥想空间。支持混合自定义。</p>
+  <div class="sounds-grid">
+    <div class="sound-card">
+      <div class="sound-icon">🌧️</div>
+      <div class="sound-name">雨声</div>
+      <div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div class="sound-card">
+      <div class="sound-icon">🌊</div>
+      <div class="sound-name">海浪</div>
+      <div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div class="sound-card">
+      <div class="sound-icon">🔥</div>
+      <div class="sound-name">篝火</div>
+      <div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div class="sound-card">
+      <div class="sound-icon">🐦</div>
+      <div class="sound-name">鸟鸣</div>
+      <div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div class="sound-card">
+      <div class="sound-icon">🍃</div>
+      <div class="sound-name">风声</div>
+      <div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div class="sound-card">
+      <div class="sound-icon">🔔</div>
+      <div class="sound-name">颂钵</div>
+      <div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="cta-title">今天，就开始你的冥想之旅</h2>
+  <p class="cta-desc">下载 ZenMind，每天只需 10 分钟，遇见更平静的自己。</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">免费开始</a>
+    <a href="#" class="btn-secondary">查看定价</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2026 ZenMind — 让正念成为生活的一部分</p>
+</footer>
+
+</body>
+</html>

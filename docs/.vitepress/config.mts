@@ -284,7 +284,8 @@ export default defineConfig({
             { text: 'Pulse SaaS 引导向导', link: '/pages/saas-onboarding' },
             { text: 'CodeScope AI 代码监控', link: '/pages/code-monitor' },
             { text: 'NexusChat 团队通讯', link: '/pages/chat-app' },
-            { text: 'Pipeline CRM 客户管理', link: '/pages/crm-dashboard' }
+            { text: 'Pipeline CRM 客户管理', link: '/pages/crm-dashboard' },
+            { text: 'ZenMind 冥想正念应用', link: '/pages/meditation-app' }
           ]
         },
         {

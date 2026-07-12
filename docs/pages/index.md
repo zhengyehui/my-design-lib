@@ -946,6 +946,15 @@ const pages = [
     rating: 9.5,
     description: 'CGI 与动效设计工作室作品集，受 Cinética Studio 启发，水平滚动 7 屏全幅体验 + 浮动光球动画 + Syne 粗体字 + Marquee 无限滚动',
   },
+  {
+    id: 'meditation-app',
+    title: 'ZenMind 冥想正念应用',
+    category: 'app',
+    tags: ['冥想', '正念', '健康', '呼吸动画', '手机模型'],
+    colors: ['#faf8f5', '#7c6cad', '#8fbc8f'],
+    rating: 9.4,
+    description: '冥想正念应用落地页，CSS 呼吸圆环动画 + 手机模型 App 预览 + 环境音效卡片 + 连续打卡日历 + 功能 Bento 网格',
+  },
 ]
 
 const categories = [
