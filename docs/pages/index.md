@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 99 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 102 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -955,6 +955,24 @@ const pages = [
     rating: 9.4,
     description: '冥想正念应用落地页，CSS 呼吸圆环动画 + 手机模型 App 预览 + 环境音效卡片 + 连续打卡日历 + 功能 Bento 网格',
   },
+  {
+    id: 'feastflow-delivery',
+    title: 'FeastFlow 精选美食配送',
+    category: 'industry',
+    tags: ['美食配送', '外卖平台', '暗色主题', '暖橙色', '配送追踪'],
+    colors: ['#0a0a0f', '#f59e0b', '#ef4444'],
+    rating: 9.3,
+    description: '现代美食配送平台，暗色底 + 暖橙强调 + 浮动粒子背景 + 搜索筛选 + 餐厅网格 + 特惠横滑 + 配送追踪进度条',
+  },
+  {
+    id: 'streamvault',
+    title: 'StreamVault 沉浸式流媒体',
+    category: 'content',
+    tags: ['流媒体', '视频平台', '暗色主题', '订阅定价', '环境光'],
+    colors: ['#08080d', '#8b5cf6', '#ec4899'],
+    rating: 9.4,
+    description: '沉浸式流媒体平台，环境光球动画 + Hero 电影详情 + 内容横滑 + 分类网格 + 三栏订阅定价方案',
+  },
 ]
 
 const categories = [
@@ -1026,7 +1044,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 100 个完整页面</span>
+      <span>📦 102 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

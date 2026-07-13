@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StreamVault — 沉浸式流媒体平台</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ─────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: #08080d;
+  color: #f1f5f9;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── Navigation ───────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-sticky);
+  padding: 1rem 2rem;
+  background: rgba(8, 8, 13, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-size: 1.4rem; font-weight: 800; color: #fff;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.nav-logo .icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.nav-center { display: flex; gap: 2rem; align-items: center; }
+.nav-center a {
+  color: #94a3b8; text-decoration: none; font-size: 0.9rem;
+  transition: color 0.2s; font-weight: 500;
+}
+.nav-center a:hover, .nav-center a.active { color: #fff; }
+.nav-right { display: flex; align-items: center; gap: 1rem; }
+.nav-search {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; color: #94a3b8; font-size: 0.9rem;
+}
+.nav-search:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.nav-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700; color: #fff; cursor: pointer;
+}
+
+/* ── Hero ─────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex; align-items: flex-end;
+  padding: 0 3rem 4rem;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #1a0a2e 0%, #0d0d1a 40%, #0a0a1a 100%);
+}
+.hero-bg::before {
+  content: '';
+  position: absolute; top: 10%; right: 10%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%);
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+.hero-bg::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 200px;
+  background: linear-gradient(transparent, #08080d);
+}
+@keyframes heroGlow {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.2) translate(-30px, 20px); }
+}
+.hero-content {
+  position: relative; z-index: 1;
+  max-width: 600px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 1rem; border-radius: var(--radius-full);
+  background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3);
+  color: #a78bfa; font-size: 0.8rem; font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800; line-height: 1.15;
+  margin-bottom: 1rem; color: #fff;
+}
+.hero-desc {
+  font-size: 1rem; color: #94a3b8;
+  margin-bottom: 1.5rem; line-height: 1.7;
+}
+.hero-meta {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 2rem; flex-wrap: wrap;
+}
+.hero-tag {
+  padding: 0.3rem 0.8rem; border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.06); font-size: 0.8rem; color: #94a3b8;
+}
+.hero-rating { color: #f59e0b; font-weight: 600; font-size: 0.9rem; }
+.hero-year { color: #64748b; font-size: 0.85rem; }
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-play {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.8rem 2rem; border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: #fff; border: none; font-weight: 600; font-size: 0.95rem;
+  cursor: pointer; transition: all 0.3s;
+  box-shadow: 0 8px 30px rgba(139,92,246,0.3);
+}
+.btn-play:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(139,92,246,0.4);
+}
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.8rem 1.5rem; border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+  color: #fff; font-weight: 500; font-size: 0.9rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.12); }
+
+/* ── Section Titles ───────────────────────────────────── */
+.section { padding: 3rem 2rem; max-width: 1400px; margin: 0 auto; }
+.section-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.5rem;
+}
+.section-title { font-size: 1.4rem; font-weight: 700; color: #fff; }
+.section-link {
+  color: #a78bfa; text-decoration: none; font-size: 0.85rem; font-weight: 500;
+  transition: color 0.2s;
+}
+.section-link:hover { color: #c4b5fd; }
+
+/* ── Content Carousel ─────────────────────────────────── */
+.carousel {
+  display: flex; gap: 1rem;
+  overflow-x: auto; padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none; scrollbar-width: none;
+}
+.carousel::-webkit-scrollbar { display: none; }
+
+/* ── Content Cards ────────────────────────────────────── */
+.content-card {
+  min-width: 200px; flex-shrink: 0;
+  scroll-snap-align: start;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.content-card:hover { transform: scale(1.05); }
+.card-poster {
+  width: 200px; height: 280px;
+  border-radius: var(--radius-md);
+  overflow: hidden; position: relative;
+  margin-bottom: 0.8rem;
+}
+.poster-img {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4rem;
+  position: relative;
+}
+.poster-img::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(transparent 60%, rgba(8,8,13,0.9));
+}
+.poster-overlay {
+  position: absolute; inset: 0;
+  background: rgba(139,92,246,0.15);
+  opacity: 0; transition: opacity 0.3s;
+  display: flex; align-items: center; justify-content: center;
+}
+.content-card:hover .poster-overlay { opacity: 1; }
+.poster-play {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,0.9); color: #8b5cf6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; transform: scale(0.8);
+  transition: transform 0.3s;
+}
+.content-card:hover .poster-play { transform: scale(1); }
+.card-quality {
+  position: absolute; top: 8px; left: 8px;
+  padding: 0.2rem 0.5rem; border-radius: 4px;
+  background: rgba(139,92,246,0.8); font-size: 0.65rem; font-weight: 700;
+  color: #fff;
+}
+.card-title { font-size: 0.9rem; font-weight: 600; color: #fff; margin-bottom: 0.2rem; }
+.card-sub { font-size: 0.75rem; color: #64748b; }
+
+/* ── Wide Cards (Continue Watching) ───────────────────── */
+.wide-card {
+  min-width: 340px; flex-shrink: 0;
+  scroll-snap-align: start;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.wide-card:hover { transform: scale(1.03); }
+.wide-poster {
+  width: 340px; height: 190px;
+  border-radius: var(--radius-md);
+  overflow: hidden; position: relative;
+  margin-bottom: 0.6rem;
+}
+.wide-img {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+}
+.wide-progress {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 4px; background: rgba(255,255,255,0.1);
+}
+.wide-progress-bar {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+}
+.wide-overlay {
+  position: absolute; inset: 0;
+  background: rgba(139,92,246,0.1);
+  opacity: 0; transition: opacity 0.3s;
+  display: flex; align-items: center; justify-content: center;
+}
+.wide-card:hover .wide-overlay { opacity: 1; }
+.wide-title { font-size: 0.9rem; font-weight: 600; color: #fff; }
+.wide-sub { font-size: 0.75rem; color: #64748b; }
+
+/* ── Genre Grid ───────────────────────────────────────── */
+.genre-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+.genre-card {
+  padding: 1.5rem 1rem;
+  border-radius: var(--radius-md);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.genre-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: 0.1; transition: opacity 0.3s;
+}
+.genre-card:hover::before { opacity: 0.2; }
+.genre-card:hover { transform: translateY(-3px); }
+.genre-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+.genre-name { font-size: 0.85rem; font-weight: 600; color: #fff; }
+
+/* ── Stats ────────────────────────────────────────────── */
+.stats-section {
+  background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(236,72,153,0.05));
+  border: 1px solid rgba(139,92,246,0.12);
+  border-radius: var(--radius-xl);
+  padding: 3rem;
+  max-width: 1200px; margin: 2rem auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+.stat { text-align: center; }
+.stat-num {
+  font-size: 2.5rem; font-weight: 800;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label { font-size: 0.85rem; color: #64748b; margin-top: 0.3rem; }
+
+/* ── Plans ────────────────────────────────────────────── */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px; margin: 0 auto;
+}
+.plan {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: all 0.3s;
+  position: relative;
+}
+.plan:hover {
+  transform: translateY(-4px);
+  border-color: rgba(139,92,246,0.3);
+}
+.plan.featured {
+  border-color: rgba(139,92,246,0.4);
+  background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(236,72,153,0.05));
+}
+.plan-badge {
+  position: absolute; top: -12px; right: 20px;
+  padding: 0.3rem 1rem; border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  font-size: 0.75rem; font-weight: 600; color: #fff;
+}
+.plan-name { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 0.5rem; }
+.plan-price {
+  font-size: 2.5rem; font-weight: 800; color: #fff;
+  margin-bottom: 0.3rem;
+}
+.plan-price span { font-size: 1rem; font-weight: 400; color: #64748b; }
+.plan-desc { font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem; }
+.plan-features { list-style: none; margin-bottom: 2rem; }
+.plan-features li {
+  padding: 0.4rem 0; font-size: 0.85rem; color: #94a3b8;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.plan-features li::before { content: '✓'; color: #8b5cf6; font-weight: 700; }
+.plan-btn {
+  width: 100%; padding: 0.8rem; border-radius: var(--radius-full);
+  font-weight: 600; font-size: 0.9rem; cursor: pointer;
+  transition: all 0.2s;
+}
+.plan-btn.primary {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: #fff; border: none;
+}
+.plan-btn.primary:hover { box-shadow: 0 8px 25px rgba(139,92,246,0.3); }
+.plan-btn.secondary {
+  background: none; border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+}
+.plan-btn.secondary:hover { border-color: rgba(139,92,246,0.4); }
+
+/* ── Footer ───────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 3rem 2rem; margin-top: 4rem;
+  max-width: 1200px; margin-left: auto; margin-right: auto;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 3rem; margin-bottom: 2rem;
+}
+.footer-brand h3 {
+  font-size: 1.3rem; font-weight: 800; color: #fff;
+  margin-bottom: 0.8rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.footer-brand p { font-size: 0.85rem; color: #64748b; line-height: 1.7; }
+.footer-col h4 {
+  font-size: 0.85rem; font-weight: 600; color: #fff;
+  margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.footer-col a {
+  display: block; color: #64748b; text-decoration: none;
+  font-size: 0.85rem; padding: 0.3rem 0; transition: color 0.2s;
+}
+.footer-col a:hover { color: #a78bfa; }
+.footer-bottom {
+  text-align: center; padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.8rem; color: #475569;
+}
+
+/* ── Ambient Glow ─────────────────────────────────────── */
+.ambient {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+}
+.ambient-orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); opacity: 0.15;
+  animation: orbFloat 20s ease-in-out infinite alternate;
+}
+@keyframes orbFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -20px) scale(1.1); }
+  100% { transform: translate(-20px, 30px) scale(0.9); }
+}
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-center { display: none; }
+  .hero { padding: 0 1.5rem 3rem; min-height: 80vh; }
+  .stats-section { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .plans-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient Glow -->
+<div class="ambient">
+  <div class="ambient-orb" style="width:400px;height:400px;background:#8b5cf6;top:10%;left:20%;animation-delay:-5s;"></div>
+  <div class="ambient-orb" style="width:300px;height:300px;background:#ec4899;top:60%;right:10%;animation-delay:-10s;"></div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="icon">▶</div>
+    StreamVault
+  </div>
+  <div class="nav-center">
+    <a href="#" class="active">首页</a>
+    <a href="#">电影</a>
+    <a href="#">剧集</a>
+    <a href="#">综艺</a>
+    <a href="#">动漫</a>
+    <a href="#">纪录片</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-search">🔍</div>
+    <div class="nav-avatar">SV</div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 独家首播</div>
+    <h1>星际迷航：<br>新纪元</h1>
+    <p class="hero-desc">
+      2157 年，人类首次接触外星文明后的第三百年。一支精英探险队踏上未知星域，
+      揭开宇宙最深处的秘密。当古老的预言与现代科技碰撞，一个关于文明、信仰与
+      选择的史诗故事就此展开。
+    </p>
+    <div class="hero-meta">
+      <span class="hero-rating">★ 9.4</span>
+      <span class="hero-year">2026</span>
+      <span class="hero-tag">科幻</span>
+      <span class="hero-tag">冒险</span>
+      <span class="hero-tag">剧情</span>
+      <span class="hero-tag">4K HDR</span>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-play">▶ 立即播放</button>
+      <button class="btn-secondary">＋ 加入片单</button>
+      <button class="btn-secondary">ℹ️ 详情</button>
+    </div>
+  </div>
+</section>
+
+<!-- Continue Watching -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-title">🎬 继续观看</div>
+    <a href="#" class="section-link">查看全部 →</a>
+  </div>
+  <div class="carousel">
+    <div class="wide-card">
+      <div class="wide-poster">
+        <div class="wide-img" style="background: linear-gradient(135deg, #1a0a2e, #2d1b69);">🌌</div>
+        <div class="wide-progress"><div class="wide-progress-bar" style="width:65%;"></div></div>
+        <div class="wide-overlay"><div class="poster-play">▶</div></div>
+      </div>
+      <div class="wide-title">暗黑物质 S3</div>
+      <div class="wide-sub">第 7 集 · 已观看 65%</div>
+    </div>
+    <div class="wide-card">
+      <div class="wide-poster">
+        <div class="wide-img" style="background: linear-gradient(135deg, #0a1a2e, #1b3d69);">🏙️</div>
+        <div class="wide-progress"><div class="wide-progress-bar" style="width:30%;"></div></div>
+        <div class="wide-overlay"><div class="poster-play">▶</div></div>
+      </div>
+      <div class="wide-title">赛博朋克往事</div>
+      <div class="wide-sub">第 3 集 · 已观看 30%</div>
+    </div>
+    <div class="wide-card">
+      <div class="wide-poster">
+        <div class="wide-img" style="background: linear-gradient(135deg, #2e0a0a, #691b1b);">🔥</div>
+        <div class="wide-progress"><div class="wide-progress-bar" style="width:88%;"></div></div>
+        <div class="wide-overlay"><div class="poster-play">▶</div></div>
+      </div>
+      <div class="wide-title">烈火英雄</div>
+      <div class="wide-sub">已观看 88%</div>
+    </div>
+    <div class="wide-card">
+      <div class="wide-poster">
+        <div class="wide-img" style="background: linear-gradient(135deg, #0a2e0a, #1b691b);">🌿</div>
+        <div class="wide-progress"><div class="wide-progress-bar" style="width:45%;"></div></div>
+        <div class="wide-overlay"><div class="poster-play">▶</div></div>
+      </div>
+      <div class="wide-title">蓝色星球 III</div>
+      <div class="wide-sub">第 5 集 · 已观看 45%</div>
+    </div>
+  </div>
+</section>
+
+<!-- Trending -->
+<section class="section" style="padding-top: 0;">
+  <div class="section-header">
+    <div class="section-title">🔥 热门推荐</div>
+    <a href="#" class="section-link">查看全部 →</a>
+  </div>
+  <div class="carousel">
+    <div class="content-card">
+      <div class="card-poster">
+        <div class="poster-img" style="background: linear-gradient(135deg, #1a0a2e, #3d1569);">
+          <span class="card-quality">4K</span>
+          🚀
+          <div class="poster-overlay"><div class="poster-play">▶</div></div>
+        </div>
+      </div>
+      <div class="card-title">星际迷航：新纪元</div>
+      <div class="card-sub">科幻 · 冒险 · ★ 9.4</div>
+    </div>
+    <div class="content-card">
+      <div class="card-poster">
+        <div class="poster-img" style="background: linear-gradient(135deg, #0a1a2e, #1b3d69);">
+          <span class="card-quality">HDR</span>
+          🏰
+          <div class="poster-overlay"><div class="poster-play">▶</div></div>
+        </div>
+      </div>
+      <div class="card-title">王者之路</div>
+      <div class="card-sub">历史 · 战争 · ★ 9.1</div>
+    </div>
+    <div class="content-card">
+      <div class="card-poster">
+        <div class="poster-img" style="background: linear-gradient(135deg, #2e0a1a, #691b3d);">
+          <span class="card-quality">4K</span>
+          🎭
+          <div class="poster-overlay"><div class="poster-play">▶</div></div>
+        </div>
+      </div>
+      <div class="card-title">双面人生</div>
+      <div class="card-sub">悬疑 · 犯罪 · ★ 8.9</div>
+    </div>
+    <div class="content-card">
+      <div class="card-poster">
+        <div class="poster-img" style="background: linear-gradient(135deg, #0a2e1a, #1b693d);">
+          🌊
+          <div class="poster-overlay"><div class="poster-play">▶</div></div>
+        </div>
+      </div>
+      <div class="card-title">深海奇航</div>
+      <div class="card-sub">冒险 · 动画 · ★ 8.7</div>
+    </div>
+    <div class="content-card">
+      <div class="card-poster">
+        <div class="poster-img" style="background: linear-gradient(135deg, #2e2e0a, #69691b);">
+          🎹
+          <div class="poster-overlay"><div class="poster-play">▶</div></div>
+        </div>
+      </div>
+      <div class="card-title">钢琴家的最后乐章</div>
+      <div class="card-sub">剧情 · 音乐 · ★ 9.2</div>
+    </div>
+    <div class="content-card">
+      <div class="card-poster">
+        <div class="poster-img" style="background: linear-gradient(135deg, #0a0a2e, #1b1b69);">
+          <span class="card-quality">NEW</span>
+          🤖
+          <div class="poster-overlay"><div class="poster-play">▶</div></div>
+        </div>
+      </div>
+      <div class="card-title">觉醒：AI 纪元</div>
+      <div class="card-sub">科幻 · 惊悚 · ★ 8.8</div>
+    </div>
+  </div>
+</section>
+
+<!-- Browse by Genre -->
+<section class="section" style="padding-top: 0;">
+  <div class="section-header">
+    <div class="section-title">🎭 浏览分类</div>
+  </div>
+  <div class="genre-grid">
+    <div class="genre-card" style="background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.03)); border: 1px solid rgba(239,68,68,0.15);">
+      <div class="genre-icon">💥</div>
+      <div class="genre-name">动作</div>
+    </div>
+    <div class="genre-card" style="background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(139,92,246,0.03)); border: 1px solid rgba(139,92,246,0.15);">
+      <div class="genre-icon">😂</div>
+      <div class="genre-name">喜剧</div>
+    </div>
+    <div class="genre-card" style="background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(59,130,246,0.03)); border: 1px solid rgba(59,130,246,0.15);">
+      <div class="genre-icon">💙</div>
+      <div class="genre-name">爱情</div>
+    </div>
+    <div class="genre-card" style="background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.03)); border: 1px solid rgba(16,185,129,0.15);">
+      <div class="genre-icon">👻</div>
+      <div class="genre-name">恐怖</div>
+    </div>
+    <div class="genre-card" style="background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.03)); border: 1px solid rgba(245,158,11,0.15);">
+      <div class="genre-icon">🔬</div>
+      <div class="genre-name">科幻</div>
+    </div>
+    <div class="genre-card" style="background: linear-gradient(135deg, rgba(236,72,153,0.1), rgba(236,72,153,0.03)); border: 1px solid rgba(236,72,153,0.15);">
+      <div class="genre-icon">📚</div>
+      <div class="genre-name">纪录片</div>
+    </div>
+    <div class="genre-card" style="background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(6,182,212,0.03)); border: 1px solid rgba(6,182,212,0.15);">
+      <div class="genre-icon">🎬</div>
+      <div class="genre-name">动漫</div>
+    </div>
+    <div class="genre-card" style="background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(168,85,247,0.03)); border: 1px solid rgba(168,85,247,0.15);">
+      <div class="genre-icon">🎤</div>
+      <div class="genre-name">综艺</div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-section">
+  <div class="stat">
+    <div class="stat-num">50,000+</div>
+    <div class="stat-label">高清影视内容</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">4K HDR</div>
+    <div class="stat-label">超高清画质</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">200+</div>
+    <div class="stat-label">国家与地区</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">1.2亿</div>
+    <div class="stat-label">全球用户</div>
+  </div>
+</div>
+
+<!-- Pricing -->
+<section class="section">
+  <div class="section-header" style="justify-content: center; text-align: center;">
+    <div>
+      <div class="section-title">选择你的观影方案</div>
+      <div style="color: #64748b; font-size: 0.9rem; margin-top: 0.3rem;">随时取消，无隐藏费用</div>
+    </div>
+  </div>
+
+  <div class="plans-grid">
+    <div class="plan">
+      <div class="plan-name">基础版</div>
+      <div class="plan-price">¥25<span>/月</span></div>
+      <div class="plan-desc">适合个人轻度观影</div>
+      <ul class="plan-features">
+        <li>1080p 高清画质</li>
+        <li>1 台设备同时观看</li>
+        <li>无限量观看</li>
+        <li>手机 / 平板 / 电脑</li>
+      </ul>
+      <button class="plan-btn secondary">开始免费试用</button>
+    </div>
+
+    <div class="plan featured">
+      <div class="plan-badge">最受欢迎</div>
+      <div class="plan-name">标准版</div>
+      <div class="plan-price">¥45<span>/月</span></div>
+      <div class="plan-desc">适合家庭观影需求</div>
+      <ul class="plan-features">
+        <li>4K HDR 超高清</li>
+        <li>2 台设备同时观看</li>
+        <li>离线下载</li>
+        <li>杜比全景声</li>
+        <li>所有设备支持</li>
+      </ul>
+      <button class="plan-btn primary">开始免费试用</button>
+    </div>
+
+    <div class="plan">
+      <div class="plan-name">尊享版</div>
+      <div class="plan-price">¥68<span>/月</span></div>
+      <div class="plan-desc">极致观影体验</div>
+      <ul class="plan-features">
+        <li>4K HDR + IMAX 增强</li>
+        <li>4 台设备同时观看</li>
+        <li>离线下载 + 空间音频</li>
+        <li>抢先看独家内容</li>
+        <li>家庭成员管理</li>
+      </ul>
+      <button class="plan-btn secondary">开始免费试用</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3><span style="display:inline-flex;width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#8b5cf6,#ec4899);align-items:center;justify-content:center;font-size:0.7rem;">▶</span> StreamVault</h3>
+      <p>全球领先的沉浸式流媒体平台，汇集海量高清影视内容。4K HDR 画质，杜比全景声，为你打造影院级观影体验。</p>
+    </div>
+    <div class="footer-col">
+      <h4>内容</h4>
+      <a href="#">电影</a>
+      <a href="#">电视剧</a>
+      <a href="#">纪录片</a>
+      <a href="#">动漫</a>
+    </div>
+    <div class="footer-col">
+      <h4>支持</h4>
+      <a href="#">帮助中心</a>
+      <a href="#">账户管理</a>
+      <a href="#">设备支持</a>
+      <a href="#">联系客服</a>
+    </div>
+    <div class="footer-col">
+      <h4>关于</h4>
+      <a href="#">关于我们</a>
+      <a href="#">招聘信息</a>
+      <a href="#">投资者关系</a>
+      <a href="#">隐私政策</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 StreamVault. All rights reserved. | 沉浸观影，尽在 StreamVault
+  </div>
+</footer>
+
+</body>
+</html>

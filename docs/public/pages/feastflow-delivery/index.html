@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FeastFlow — 精选美食配送平台</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ─────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: #0a0a0f;
+  color: #f1f5f9;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── Navigation ───────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-sticky);
+  padding: 1rem 2rem;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-size: 1.4rem; font-weight: 800; color: #fff;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.nav-logo .dot { width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; }
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+.nav-links a:hover { color: #fff; }
+.nav-cta {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: #fff; border: none; padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-full); font-weight: 600; font-size: 0.85rem;
+  cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(245,158,11,0.3); }
+
+/* ── Hero ─────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, rgba(239,68,68,0.08) 40%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 1rem; border-radius: var(--radius-full);
+  background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2);
+  color: #f59e0b; font-size: 0.8rem; font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+.hero-badge::before { content: '🔥'; }
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800; line-height: 1.1;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #fff 30%, #f59e0b 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  font-size: 1.15rem; color: #94a3b8;
+  max-width: 550px; margin-bottom: 2.5rem;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-full);
+  padding: 0.5rem; max-width: 560px; width: 100%;
+  margin-bottom: 2rem;
+  transition: border-color 0.3s;
+}
+.search-bar:focus-within { border-color: rgba(245,158,11,0.4); }
+.search-bar .icon { padding: 0 1rem; color: #64748b; font-size: 1.1rem; }
+.search-bar input {
+  flex: 1; background: none; border: none; outline: none;
+  color: #fff; font-size: 0.95rem; padding: 0.6rem 0;
+}
+.search-bar input::placeholder { color: #475569; }
+.search-bar button {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: #fff; border: none; padding: 0.7rem 1.8rem;
+  border-radius: var(--radius-full); font-weight: 600; font-size: 0.9rem;
+  cursor: pointer; transition: transform 0.2s;
+}
+.search-bar button:hover { transform: scale(1.03); }
+
+/* Category Pills */
+.category-pills {
+  display: flex; gap: 0.6rem; flex-wrap: wrap;
+  justify-content: center; margin-bottom: 1rem;
+}
+.pill {
+  padding: 0.5rem 1.2rem; border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  color: #94a3b8; font-size: 0.85rem; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem;
+}
+.pill:hover, .pill.active {
+  background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.3);
+  color: #f59e0b;
+}
+.pill .emoji { font-size: 1.1rem; }
+
+/* ── Stats Bar ────────────────────────────────────────── */
+.stats-bar {
+  display: flex; justify-content: center; gap: 3rem;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.stat { text-align: center; }
+.stat-num {
+  font-size: 2.2rem; font-weight: 800;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label { font-size: 0.85rem; color: #64748b; margin-top: 0.3rem; }
+
+/* ── Section Titles ───────────────────────────────────── */
+.section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+.section-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 2rem;
+}
+.section-title {
+  font-size: 1.8rem; font-weight: 700; color: #fff;
+}
+.section-sub { font-size: 0.9rem; color: #64748b; margin-top: 0.3rem; }
+.section-link {
+  color: #f59e0b; text-decoration: none; font-size: 0.9rem; font-weight: 500;
+  transition: color 0.2s;
+}
+.section-link:hover { color: #fbbf24; }
+
+/* ── Restaurant Cards ─────────────────────────────────── */
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.restaurant-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+.restaurant-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(245,158,11,0.3);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+.card-img {
+  height: 180px;
+  background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(239,68,68,0.15));
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4rem;
+  overflow: hidden;
+}
+.card-img::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(transparent, rgba(10,10,15,0.8));
+}
+.card-badge {
+  position: absolute; top: 12px; left: 12px;
+  background: rgba(10,10,15,0.7); backdrop-filter: blur(10px);
+  padding: 0.3rem 0.8rem; border-radius: var(--radius-full);
+  font-size: 0.75rem; color: #f59e0b; font-weight: 600;
+  z-index: 1;
+}
+.card-time {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(10,10,15,0.7); backdrop-filter: blur(10px);
+  padding: 0.3rem 0.8rem; border-radius: var(--radius-full);
+  font-size: 0.75rem; color: #94a3b8;
+  z-index: 1;
+}
+.card-body { padding: 1.2rem; }
+.card-name { font-size: 1.05rem; font-weight: 600; color: #fff; margin-bottom: 0.3rem; }
+.card-meta {
+  display: flex; align-items: center; gap: 0.8rem;
+  font-size: 0.8rem; color: #64748b;
+}
+.card-rating { color: #f59e0b; font-weight: 600; }
+.card-tags {
+  display: flex; gap: 0.4rem; margin-top: 0.8rem; flex-wrap: wrap;
+}
+.card-tag {
+  padding: 0.2rem 0.6rem; border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.05); font-size: 0.7rem; color: #94a3b8;
+}
+
+/* ── Featured Dishes ──────────────────────────────────── */
+.dishes-scroll {
+  display: flex; gap: 1.2rem;
+  overflow-x: auto; padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none; scrollbar-width: none;
+}
+.dishes-scroll::-webkit-scrollbar { display: none; }
+.dish-card {
+  min-width: 220px; flex-shrink: 0;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem;
+  scroll-snap-align: start;
+  transition: transform 0.3s, border-color 0.3s;
+  cursor: pointer;
+}
+.dish-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245,158,11,0.3);
+}
+.dish-emoji { font-size: 3rem; margin-bottom: 0.8rem; }
+.dish-name { font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 0.3rem; }
+.dish-restaurant { font-size: 0.8rem; color: #64748b; margin-bottom: 0.5rem; }
+.dish-price {
+  font-size: 1.1rem; font-weight: 700; color: #f59e0b;
+}
+.dish-price .old {
+  font-size: 0.8rem; color: #475569; text-decoration: line-through;
+  margin-left: 0.4rem; font-weight: 400;
+}
+
+/* ── How It Works ─────────────────────────────────────── */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+}
+.step {
+  text-align: center; padding: 2rem 1.5rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  transition: transform 0.3s, border-color 0.3s;
+}
+.step:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245,158,11,0.2);
+}
+.step-icon {
+  width: 64px; height: 64px; margin: 0 auto 1.2rem;
+  background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(239,68,68,0.1));
+  border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+}
+.step-num {
+  font-size: 0.7rem; font-weight: 700; color: #f59e0b;
+  margin-bottom: 0.5rem; letter-spacing: 0.1em;
+}
+.step h3 { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 0.5rem; }
+.step p { font-size: 0.85rem; color: #64748b; line-height: 1.6; }
+
+/* ── Delivery Tracker ─────────────────────────────────── */
+.tracker-section {
+  background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(239,68,68,0.05));
+  border: 1px solid rgba(245,158,11,0.15);
+  border-radius: var(--radius-xl);
+  padding: 3rem;
+  max-width: 800px; margin: 0 auto;
+}
+.tracker-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 2rem;
+}
+.tracker-title { font-size: 1.3rem; font-weight: 700; color: #fff; }
+.tracker-status {
+  display: flex; align-items: center; gap: 0.5rem;
+  color: #10b981; font-size: 0.85rem; font-weight: 600;
+}
+.tracker-status::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: #10b981; animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.tracker-steps {
+  display: flex; justify-content: space-between; position: relative;
+  margin-bottom: 2rem;
+}
+.tracker-steps::before {
+  content: ''; position: absolute; top: 20px; left: 40px; right: 40px;
+  height: 3px; background: rgba(255,255,255,0.1);
+}
+.tracker-steps::after {
+  content: ''; position: absolute; top: 20px; left: 40px;
+  width: 65%; height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #10b981);
+  border-radius: 2px;
+}
+.tracker-step {
+  display: flex; flex-direction: column; align-items: center;
+  position: relative; z-index: 1;
+}
+.tracker-dot {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; margin-bottom: 0.6rem;
+}
+.tracker-dot.done {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: #fff;
+}
+.tracker-dot.active {
+  background: rgba(16,185,129,0.2); border: 2px solid #10b981;
+  color: #10b981;
+}
+.tracker-dot.pending {
+  background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1);
+  color: #475569;
+}
+.tracker-label { font-size: 0.75rem; color: #94a3b8; text-align: center; }
+.tracker-info {
+  display: flex; justify-content: space-between;
+  padding: 1.2rem; background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-md);
+}
+.tracker-detail { text-align: center; }
+.tracker-detail-label { font-size: 0.75rem; color: #64748b; margin-bottom: 0.2rem; }
+.tracker-detail-value { font-size: 0.95rem; font-weight: 600; color: #fff; }
+
+/* ── Promo Banner ─────────────────────────────────────── */
+.promo {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  border-radius: var(--radius-xl);
+  padding: 3rem;
+  max-width: 1200px; margin: 0 auto 5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem;
+}
+.promo-text h2 {
+  font-size: 2rem; font-weight: 800; color: #fff;
+  margin-bottom: 0.5rem;
+}
+.promo-text p { color: rgba(255,255,255,0.85); font-size: 1rem; }
+.promo-code {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+  padding: 0.8rem 1.5rem; border-radius: var(--radius-md);
+  font-family: var(--font-mono); font-size: 1.2rem; font-weight: 700;
+  color: #fff; margin-top: 1rem; cursor: pointer;
+  transition: background 0.2s;
+}
+.promo-code:hover { background: rgba(255,255,255,0.3); }
+.promo-emoji { font-size: 5rem; }
+
+/* ── Footer ───────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 3rem 2rem;
+  max-width: 1200px; margin: 0 auto;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 3rem; margin-bottom: 2rem;
+}
+.footer-brand h3 {
+  font-size: 1.3rem; font-weight: 800; color: #fff;
+  margin-bottom: 0.8rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.footer-brand p { font-size: 0.85rem; color: #64748b; line-height: 1.7; }
+.footer-col h4 {
+  font-size: 0.85rem; font-weight: 600; color: #fff;
+  margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.footer-col a {
+  display: block; color: #64748b; text-decoration: none;
+  font-size: 0.85rem; padding: 0.3rem 0;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: #f59e0b; }
+.footer-bottom {
+  text-align: center; padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.8rem; color: #475569;
+}
+
+/* ── Floating Particles ───────────────────────────────── */
+.particles {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.particle {
+  position: absolute; border-radius: 50%;
+  background: rgba(245,158,11,0.15);
+  animation: float linear infinite;
+}
+@keyframes float {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+}
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .stats-bar { flex-wrap: wrap; gap: 1.5rem; }
+  .stat { min-width: 120px; }
+  .tracker-steps { flex-wrap: wrap; gap: 1rem; justify-content: center; }
+  .tracker-steps::before, .tracker-steps::after { display: none; }
+  .promo { flex-direction: column; text-align: center; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">
+    <span class="dot"></span>
+    FeastFlow
+  </div>
+  <div class="nav-links">
+    <a href="#">餐厅</a>
+    <a href="#">菜系</a>
+    <a href="#">优惠</a>
+    <a href="#">配送追踪</a>
+  </div>
+  <button class="nav-cta">下载 App</button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">新用户首单立减 ¥20</div>
+  <h1>美食触手可及<br>配送分秒必争</h1>
+  <p>汇聚 2000+ 精选餐厅，30 分钟极速送达。从早餐到夜宵，满足你每一刻的味蕾渴望。</p>
+
+  <div class="search-bar">
+    <span class="icon">📍</span>
+    <input type="text" placeholder="输入你的地址，发现附近美食...">
+    <button>搜索</button>
+  </div>
+
+  <div class="category-pills">
+    <div class="pill active"><span class="emoji">🔥</span> 推荐</div>
+    <div class="pill"><span class="emoji">🍜</span> 中餐</div>
+    <div class="pill"><span class="emoji">🍣</span> 日料</div>
+    <div class="pill"><span class="emoji">🍕</span> 西餐</div>
+    <div class="pill"><span class="emoji">🧋</span> 饮品</div>
+    <div class="pill"><span class="emoji">🍰</span> 甜品</div>
+    <div class="pill"><span class="emoji">🥗</span> 轻食</div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">2,400+</div>
+    <div class="stat-label">精选餐厅</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">150万+</div>
+    <div class="stat-label">满意用户</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">28分钟</div>
+    <div class="stat-label">平均送达</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">4.9</div>
+    <div class="stat-label">用户评分</div>
+  </div>
+</div>
+
+<!-- Popular Restaurants -->
+<section class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">🔥 人气餐厅</div>
+      <div class="section-sub">本周最受欢迎的精选好店</div>
+    </div>
+    <a href="#" class="section-link">查看全部 →</a>
+  </div>
+
+  <div class="restaurant-grid">
+    <div class="restaurant-card">
+      <div class="card-img" style="background: linear-gradient(135deg, #1a0a00, #3d1500);">
+        <span class="card-badge">TOP 1</span>
+        <span class="card-time">⏱ 25min</span>
+        🥘
+      </div>
+      <div class="card-body">
+        <div class="card-name">川味坊 · 正宗川菜</div>
+        <div class="card-meta">
+          <span class="card-rating">★ 4.9</span>
+          <span>月售 3.2k</span>
+          <span>¥25 起送</span>
+        </div>
+        <div class="card-tags">
+          <span class="card-tag">川菜</span>
+          <span class="card-tag">麻辣</span>
+          <span class="card-tag">人气爆款</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="restaurant-card">
+      <div class="card-img" style="background: linear-gradient(135deg, #0a1a0a, #1a3d15);">
+        <span class="card-badge">TOP 2</span>
+        <span class="card-time">⏱ 20min</span>
+        🍣
+      </div>
+      <div class="card-body">
+        <div class="card-name">鮨 · 初心日料</div>
+        <div class="card-meta">
+          <span class="card-rating">★ 4.8</span>
+          <span>月售 2.8k</span>
+          <span>¥38 起送</span>
+        </div>
+        <div class="card-tags">
+          <span class="card-tag">日料</span>
+          <span class="card-tag">刺身</span>
+          <span class="card-tag">精致</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="restaurant-card">
+      <div class="card-img" style="background: linear-gradient(135deg, #1a0a1a, #3d1530);">
+        <span class="card-badge">TOP 3</span>
+        <span class="card-time">⏱ 30min</span>
+        🍕
+      </div>
+      <div class="card-body">
+        <div class="card-name">Bella Napoli 意式餐厅</div>
+        <div class="card-meta">
+          <span class="card-rating">★ 4.7</span>
+          <span>月售 1.9k</span>
+          <span>¥45 起送</span>
+        </div>
+        <div class="card-tags">
+          <span class="card-tag">意大利</span>
+          <span class="card-tag">披萨</span>
+          <span class="card-tag">手工</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="restaurant-card">
+      <div class="card-img" style="background: linear-gradient(135deg, #0a0a1a, #15153d);">
+        <span class="card-time">⏱ 15min</span>
+        🧋
+      </div>
+      <div class="card-body">
+        <div class="card-name">茶颜观色 · 新中式茶饮</div>
+        <div class="card-meta">
+          <span class="card-rating">★ 4.9</span>
+          <span>月售 5.1k</span>
+          <span>¥15 起送</span>
+        </div>
+        <div class="card-tags">
+          <span class="card-tag">茶饮</span>
+          <span class="card-tag">奶茶</span>
+          <span class="card-tag">爆款</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Dishes -->
+<section class="section" style="padding-top: 0;">
+  <div class="section-header">
+    <div>
+      <div class="section-title">⭐ 今日特惠</div>
+      <div class="section-sub">限时折扣，错过不再</div>
+    </div>
+    <a href="#" class="section-link">更多优惠 →</a>
+  </div>
+
+  <div class="dishes-scroll">
+    <div class="dish-card">
+      <div class="dish-emoji">🍛</div>
+      <div class="dish-name">黑椒牛柳饭</div>
+      <div class="dish-restaurant">川味坊 · 正宗川菜</div>
+      <div class="dish-price">¥28 <span class="old">¥42</span></div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-emoji">🍜</div>
+      <div class="dish-name">豚骨拉面</div>
+      <div class="dish-restaurant">一风堂拉面</div>
+      <div class="dish-price">¥35 <span class="old">¥48</span></div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-emoji">🥗</div>
+      <div class="dish-name">凯撒沙拉</div>
+      <div class="dish-restaurant">Green Bowl 轻食</div>
+      <div class="dish-price">¥22 <span class="old">¥32</span></div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-emoji">🧁</div>
+      <div class="dish-name">伯爵红茶蛋糕</div>
+      <div class="dish-restaurant">Maison Douce</div>
+      <div class="dish-price">¥18 <span class="old">¥28</span></div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-emoji">🌮</div>
+      <div class="dish-name">墨西哥鸡肉卷</div>
+      <div class="dish-restaurant">Taco Bell</div>
+      <div class="dish-price">¥25 <span class="old">¥38</span></div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-emoji">🍲</div>
+      <div class="dish-name">番茄鱼锅</div>
+      <div class="dish-restaurant">鱼你在一起</div>
+      <div class="dish-price">¥38 <span class="old">¥55</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="section" style="padding-top: 2rem;">
+  <div class="section-header" style="justify-content: center; text-align: center;">
+    <div>
+      <div class="section-title">三步开吃</div>
+      <div class="section-sub">简单操作，美食即达</div>
+    </div>
+  </div>
+
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-icon">📍</div>
+      <div class="step-num">STEP 01</div>
+      <h3>选择地址</h3>
+      <p>输入你的配送地址，我们自动推荐附近最优质的餐厅</p>
+    </div>
+    <div class="step">
+      <div class="step-icon">🛒</div>
+      <div class="step-num">STEP 02</div>
+      <h3>挑选美食</h3>
+      <p>浏览菜单，添加心仪菜品，一键下单支付</p>
+    </div>
+    <div class="step">
+      <div class="step-icon">🚀</div>
+      <div class="step-num">STEP 03</div>
+      <h3>坐等送达</h3>
+      <p>实时追踪配送进度，平均 28 分钟送达你的手中</p>
+    </div>
+  </div>
+</section>
+
+<!-- Delivery Tracker -->
+<section class="section" style="padding-top: 2rem;">
+  <div class="tracker-section">
+    <div class="tracker-header">
+      <div class="tracker-title">📦 订单追踪</div>
+      <div class="tracker-status">配送中</div>
+    </div>
+
+    <div class="tracker-steps">
+      <div class="tracker-step">
+        <div class="tracker-dot done">✓</div>
+        <div class="tracker-label">已接单</div>
+      </div>
+      <div class="tracker-step">
+        <div class="tracker-dot done">✓</div>
+        <div class="tracker-label">备餐中</div>
+      </div>
+      <div class="tracker-step">
+        <div class="tracker-dot active">🛵</div>
+        <div class="tracker-label">配送中</div>
+      </div>
+      <div class="tracker-step">
+        <div class="tracker-dot pending">🏠</div>
+        <div class="tracker-label">已送达</div>
+      </div>
+    </div>
+
+    <div class="tracker-info">
+      <div class="tracker-detail">
+        <div class="tracker-detail-label">预计送达</div>
+        <div class="tracker-detail-value">12:35</div>
+      </div>
+      <div class="tracker-detail">
+        <div class="tracker-detail-label">骑手</div>
+        <div class="tracker-detail-value">李师傅</div>
+      </div>
+      <div class="tracker-detail">
+        <div class="tracker-detail-label">剩余距离</div>
+        <div class="tracker-detail-value">1.2 km</div>
+      </div>
+      <div class="tracker-detail">
+        <div class="tracker-detail-label">订单号</div>
+        <div class="tracker-detail-value">#FF20260713</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Promo -->
+<section class="section">
+  <div class="promo">
+    <div class="promo-text">
+      <h2>🎉 邀请好友，各得 ¥30</h2>
+      <p>分享你的专属邀请码，好友首单后双方各得 ¥30 优惠券</p>
+      <div class="promo-code">
+        FEAST2026
+        <span style="font-size: 0.8rem; font-weight: 400; opacity: 0.8;">点击复制</span>
+      </div>
+    </div>
+    <div class="promo-emoji">🎁</div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3><span class="dot" style="width:8px;height:8px;border-radius:50%;background:#f59e0b;display:inline-block;"></span> FeastFlow</h3>
+      <p>精选美食配送平台，连接你与城市最优质的餐厅。新鲜食材，匠心烹饪，极速送达。</p>
+    </div>
+    <div class="footer-col">
+      <h4>产品</h4>
+      <a href="#">商家入驻</a>
+      <a href="#">骑手招募</a>
+      <a href="#">企业订餐</a>
+      <a href="#">礼品卡</a>
+    </div>
+    <div class="footer-col">
+      <h4>支持</h4>
+      <a href="#">帮助中心</a>
+      <a href="#">食品安全</a>
+      <a href="#">配送范围</a>
+      <a href="#">联系客服</a>
+    </div>
+    <div class="footer-col">
+      <h4>关于</h4>
+      <a href="#">关于我们</a>
+      <a href="#">加入团队</a>
+      <a href="#">新闻中心</a>
+      <a href="#">隐私政策</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 FeastFlow. All rights reserved. | 精选美食，触手可及
+  </div>
+</footer>
+
+<script>
+// Generate floating particles
+const container = document.getElementById('particles');
+for (let i = 0; i < 15; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 6 + 2;
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+  p.style.animationDelay = (Math.random() * 10) + 's';
+  container.appendChild(p);
+}
+
+// Pill click
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

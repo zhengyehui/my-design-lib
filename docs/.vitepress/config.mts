@@ -346,7 +346,8 @@ export default defineConfig({
             { text: 'DesignMint 设计资源目录', link: '/pages/design-resources' },
             { text: 'PulseWire 数字新闻杂志', link: '/pages/pulsewire-digest' },
             { text: 'ShipLog 开发者更新日志', link: '/pages/ship-log' },
-            { text: 'PodWave 播客网络', link: '/pages/podcast-hub' }
+            { text: 'PodWave 播客网络', link: '/pages/podcast-hub' },
+            { text: 'StreamVault 沉浸式流媒体', link: '/pages/streamvault' }
           ]
         },
         {
@@ -366,7 +367,8 @@ export default defineConfig({
             { text: 'Aurelio Resort 奢华酒店', link: '/pages/luxury-hotel' },
             { text: 'Cosmos Express 太空旅行', link: '/pages/space-tourism' },
             { text: 'Luum Workspace 共享办公', link: '/pages/coworking-space' },
-            { text: 'Lex & Partners 现代律所', link: '/pages/lex-partners' }
+            { text: 'Lex & Partners 现代律所', link: '/pages/lex-partners' },
+            { text: 'FeastFlow 精选美食配送', link: '/pages/feastflow-delivery' }
           ]
         }
       ]
