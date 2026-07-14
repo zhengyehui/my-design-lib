@@ -33,8 +33,8 @@ pageDetail:
     text: Forma Studio
     link: /pages/forma-studio
   next:
-    text: 创意作品集
-    link: /pages/portfolio
+    text: Displace OS 桌面风格
+    link: /pages/displace-os
 ---
 
 <PageDetail />

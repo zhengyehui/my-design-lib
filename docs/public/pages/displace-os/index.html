@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DISPLACE OS — Creative Portfolio</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ========== CSS Variables & Reset ========== */
+    :root {
+      --font-sans: -apple-system, system-ui, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --accent: #f26522;
+      --accent-glow: rgba(242, 101, 34, 0.35);
+      --bg-deep: #121212;
+      --bg-warm: #2d1c18;
+      --surface: rgba(255, 255, 255, 0.06);
+      --surface-hover: rgba(255, 255, 255, 0.10);
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --text-primary: #f5f0ed;
+      --text-secondary: rgba(245, 240, 237, 0.6);
+      --text-tertiary: rgba(245, 240, 237, 0.35);
+      --menubar-height: 32px;
+      --sidebar-width: 280px;
+      --dock-height: 72px;
+      --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
+      --shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-dock: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: linear-gradient(135deg, var(--bg-deep) 0%, #1a1412 30%, var(--bg-warm) 70%, #3d261e 100%);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(242, 101, 34, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -10%;
+      left: 10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(180, 80, 40, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ========== Menu Bar ========== */
+    .menubar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--menubar-height);
+      background: rgba(18, 18, 18, 0.82);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 1000;
+      font-size: 13px;
+      user-select: none;
+    }
+
+    .menubar-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .menubar-logo {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 2.5px;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .menubar-logo::before {
+      content: '◆';
+      margin-right: 6px;
+      font-size: 10px;
+    }
+
+    .menubar-menu-item {
+      color: var(--text-secondary);
+      font-size: 13px;
+      cursor: default;
+      padding: 2px 8px;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .menubar-menu-item:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-primary);
+    }
+
+    .menubar-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: 0.3px;
+    }
+
+    .menubar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .menubar-icon {
+      cursor: default;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+      font-size: 14px;
+    }
+
+    .menubar-icon:hover {
+      opacity: 1;
+    }
+
+    .menubar-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+      vertical-align: middle;
+    }
+
+    .menubar-time {
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+      min-width: 140px;
+      text-align: right;
+    }
+
+    /* ========== Layout ========== */
+    .desktop-shell {
+      display: flex;
+      height: calc(100vh - var(--menubar-height));
+      margin-top: var(--menubar-height);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ========== Sidebar ========== */
+    .sidebar {
+      width: var(--sidebar-width);
+      min-width: var(--sidebar-width);
+      padding: 20px 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+    }
+
+    /* Glass Widget Card */
+    .widget {
+      background: var(--glass);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      animation: slideUp 0.6s ease-out backwards;
+    }
+
+    .widget:nth-child(1) { animation-delay: 0.1s; }
+    .widget:nth-child(2) { animation-delay: 0.2s; }
+    .widget:nth-child(3) { animation-delay: 0.3s; }
+    .widget:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .widget-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .widget-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-tertiary);
+    }
+
+    .widget-badge {
+      font-size: 10px;
+      background: rgba(242, 101, 34, 0.15);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    /* Clock Widget */
+    .clock-widget-time {
+      font-size: 42px;
+      font-weight: 200;
+      letter-spacing: -1px;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+
+    .clock-widget-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+
+    .clock-widget-seconds {
+      display: inline-block;
+      font-size: 18px;
+      color: var(--accent);
+      vertical-align: super;
+      margin-left: 2px;
+      font-weight: 400;
+    }
+
+    /* Stats Widget */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 12px 4px;
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .stat-number .stat-accent {
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 6px;
+    }
+
+    /* Journal Widget */
+    .journal-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .journal-entry {
+      padding: 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: var(--radius-sm);
+      border-left: 2px solid var(--accent);
+      transition: background 0.2s;
+    }
+
+    .journal-entry:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .journal-date {
+      font-size: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .journal-text {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* User Widget */
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #e04a10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .user-role {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+
+    .user-status {
+      width: 8px;
+      height: 8px;
+      background: #34c759;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(52, 199, 89, 0.5);
+    }
+
+    /* ========== Main Desktop ========== */
+    .main-desktop {
+      flex: 1;
+      padding: 24px 28px;
+      padding-bottom: calc(var(--dock-height) + 24px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+
+    .main-desktop::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .main-desktop::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+    }
+
+    .desktop-header {
+      margin-bottom: 28px;
+      animation: slideUp 0.5s ease-out 0.2s backwards;
+    }
+
+    .desktop-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+    }
+
+    .desktop-header h1 span {
+      color: var(--accent);
+    }
+
+    .desktop-header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+
+    /* Project Grid */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .project-card {
+      background: var(--glass);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  box-shadow 0.3s ease,
+                  border-color 0.3s ease;
+      animation: slideUp 0.5s ease-out backwards;
+    }
+
+    .project-card:nth-child(1) { animation-delay: 0.15s; }
+    .project-card:nth-child(2) { animation-delay: 0.20s; }
+    .project-card:nth-child(3) { animation-delay: 0.25s; }
+    .project-card:nth-child(4) { animation-delay: 0.30s; }
+    .project-card:nth-child(5) { animation-delay: 0.35s; }
+    .project-card:nth-child(6) { animation-delay: 0.40s; }
+    .project-card:nth-child(7) { animation-delay: 0.45s; }
+    .project-card:nth-child(8) { animation-delay: 0.50s; }
+    .project-card:nth-child(9) { animation-delay: 0.55s; }
+    .project-card:nth-child(10) { animation-delay: 0.60s; }
+    .project-card:nth-child(11) { animation-delay: 0.65s; }
+    .project-card:nth-child(12) { animation-delay: 0.70s; }
+
+    .project-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(242, 101, 34, 0.25);
+    }
+
+    .project-thumb {
+      height: 140px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-thumb::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: linear-gradient(to top, rgba(18,18,18,0.6), transparent);
+    }
+
+    /* Unique gradients for each project */
+    .project-thumb.grad-1 { background: linear-gradient(135deg, #f26522, #ff8a50, #ffb74d); }
+    .project-thumb.grad-2 { background: linear-gradient(135deg, #5c2d91, #8e44ad, #c39bd3); }
+    .project-thumb.grad-3 { background: linear-gradient(135deg, #1a5276, #2e86c1, #85c1e9); }
+    .project-thumb.grad-4 { background: linear-gradient(135deg, #1e8449, #27ae60, #82e0aa); }
+    .project-thumb.grad-5 { background: linear-gradient(135deg, #922b21, #e74c3c, #f1948a); }
+    .project-thumb.grad-6 { background: linear-gradient(135deg, #7d6608, #f1c40f, #f9e79f); }
+    .project-thumb.grad-7 { background: linear-gradient(135deg, #0e6655, #1abc9c, #a3e4d7); }
+    .project-thumb.grad-8 { background: linear-gradient(135deg, #2c3e50, #5d6d7e, #aab7b8); }
+    .project-thumb.grad-9 { background: linear-gradient(135deg, #6c3483, #a569bd, #d2b4de); }
+    .project-thumb.grad-10 { background: linear-gradient(135deg, #b9770e, #f39c12, #fad7a0); }
+    .project-thumb.grad-11 { background: linear-gradient(135deg, #1b2631, #34495e, #7f8c8d); }
+    .project-thumb.grad-12 { background: linear-gradient(135deg, #78281f, #c0392b, #e6b0aa); }
+
+    /* Abstract shapes inside thumbnails */
+    .project-thumb .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+    }
+
+    .project-thumb .shape-1 {
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.3);
+      top: -20px;
+      right: -10px;
+    }
+
+    .project-thumb .shape-2 {
+      width: 50px;
+      height: 50px;
+      background: rgba(0,0,0,0.2);
+      bottom: 10px;
+      left: 15px;
+    }
+
+    .project-thumb .shape-3 {
+      width: 30px;
+      height: 30px;
+      background: rgba(255,255,255,0.2);
+      top: 30px;
+      left: 50%;
+    }
+
+    .project-thumb .file-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 36px;
+      z-index: 2;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+    }
+
+    .project-meta {
+      padding: 14px 16px;
+    }
+
+    .project-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .project-details {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .project-year {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+
+    .project-type {
+      font-size: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 600;
+    }
+
+    /* ========== Bottom Dock ========== */
+    .dock-wrapper {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+    }
+
+    .dock {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      box-shadow: var(--shadow-dock);
+    }
+
+    .dock-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    .dock-item:hover {
+      transform: translateY(-8px) scale(1.15);
+    }
+
+    .dock-item:hover .dock-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    .dock-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dock-icon::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .dock-icon.Orange { background: linear-gradient(135deg, #f26522, #e04a10); }
+    .dock-icon.Blue { background: linear-gradient(135deg, #2196f3, #1565c0); }
+    .dock-icon.Green { background: linear-gradient(135deg, #4caf50, #2e7d32); }
+    .dock-icon.Purple { background: linear-gradient(135deg, #9c27b0, #6a1b9a); }
+    .dock-icon.Pink { background: linear-gradient(135deg, #e91e63, #ad1457); }
+    .dock-icon.Grey { background: linear-gradient(135deg, #607d8b, #37474f); }
+
+    .dock-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .dock-separator {
+      width: 1px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 0 6px;
+      align-self: center;
+    }
+
+    .dock-tooltip {
+      position: absolute;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      background: rgba(30, 30, 30, 0.9);
+      backdrop-filter: blur(10px);
+      color: var(--text-primary);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: all 0.2s ease;
+      pointer-events: none;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ========== Selection highlight on project cards ========== */
+    .project-card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), var(--shadow-hover);
+    }
+
+    .project-card.selected .project-name {
+      color: var(--accent);
+    }
+
+    /* ========== Responsive ========== */
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 220px;
+        min-width: 220px;
+        padding: 16px 12px;
+      }
+      .project-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main-desktop { padding: 16px; }
+    }
+
+    /* ========== Scrollbar styling ========== */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== MENU BAR ========== -->
+  <header class="menubar">
+    <div class="menubar-left">
+      <span class="menubar-logo">Displace</span>
+      <span class="menubar-menu-item">Finder</span>
+      <span class="menubar-menu-item">Portfolio</span>
+      <span class="menubar-menu-item">Journal</span>
+      <span class="menubar-menu-item">About</span>
+    </div>
+    <div class="menubar-center" id="menubarClock">Tue Jul 14 10:10 AM</div>
+    <div class="menubar-right">
+      <span class="menubar-icon" title="Wi-Fi">
+        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      </span>
+      <span class="menubar-icon" title="Bluetooth">
+        <svg viewBox="0 0 24 24"><path d="M17.71 7.71L12 2h-1v7.59L6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 11 14.41V22h1l5.71-5.71-4.3-4.29 4.3-4.29zM13 5.83l1.88 1.88L13 9.59V5.83zm1.88 10.46L13 18.17v-3.76l1.88 1.88z"/></svg>
+      </span>
+      <span class="menubar-icon" title="Battery">
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM15 18H9V6h6v12z"/><rect x="9" y="6" width="6" height="12" opacity="0.3"/><rect x="9" y="6" width="4.5" height="12"/></svg>
+      </span>
+      <span class="menubar-icon" title="Spotlight">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      </span>
+      <span class="menubar-time" id="menubarTime">10:10 AM</span>
+    </div>
+  </header>
+
+  <!-- ========== DESKTOP SHELL ========== -->
+  <div class="desktop-shell">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar">
+
+      <!-- User Card -->
+      <div class="widget">
+        <div class="user-card">
+          <div class="user-avatar">D</div>
+          <div class="user-info">
+            <div class="user-name">Displace Studio</div>
+            <div class="user-role">Creative Director</div>
+          </div>
+          <div class="user-status"></div>
+        </div>
+      </div>
+
+      <!-- Clock Widget -->
+      <div class="widget">
+        <div class="widget-header">
+          <span class="widget-title">Local Time</span>
+          <span class="widget-badge">LIVE</span>
+        </div>
+        <div class="clock-widget-time" id="clockTime">10:10<span class="clock-widget-seconds" id="clockSeconds">:00</span></div>
+        <div class="clock-widget-date" id="clockDate">Tuesday, July 14, 2026</div>
+      </div>
+
+      <!-- Stats Widget -->
+      <div class="widget">
+        <div class="widget-header">
+          <span class="widget-title">Portfolio Stats</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">1<span class="stat-accent">2</span></div>
+            <div class="stat-label">Projects</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Awards</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">1<span class="stat-accent">5</span></div>
+            <div class="stat-label">Clients</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Journal Widget -->
+      <div class="widget">
+        <div class="widget-header">
+          <span class="widget-title">Recent Journal</span>
+        </div>
+        <div class="journal-list">
+          <div class="journal-entry">
+            <div class="journal-date">Jul 12, 2026</div>
+            <div class="journal-text">Shipped the new Meridian brand identity. The logotype took 47 iterations to perfect.</div>
+          </div>
+          <div class="journal-entry">
+            <div class="journal-date">Jul 08, 2026</div>
+            <div class="journal-text">Started prototyping the OS-inspired portfolio concept. Glassmorphism everywhere.</div>
+          </div>
+          <div class="journal-entry">
+            <div class="journal-date">Jul 01, 2026</div>
+            <div class="journal-text">Won a Webby for the Solstice interactive experience. Team is ecstatic.</div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ========== MAIN DESKTOP ========== -->
+    <main class="main-desktop">
+      <div class="desktop-header">
+        <h1>Project <span>Files</span></h1>
+        <p>12 items · Last modified today</p>
+      </div>
+
+      <div class="project-grid">
+
+        <!-- Project 1 -->
+        <div class="project-card" data-project="meridian">
+          <div class="project-thumb grad-1">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <span class="file-icon">◈</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Meridian Brand Identity</div>
+            <div class="project-details">
+              <span class="project-year">2026</span>
+              <span class="project-type">Branding</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card">
+          <div class="project-thumb grad-2">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-3"></div>
+            <span class="file-icon">◎</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Solstice Experience</div>
+            <div class="project-details">
+              <span class="project-year">2025</span>
+              <span class="project-type">Interactive</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card">
+          <div class="project-thumb grad-3">
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <span class="file-icon">◉</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Tidal Music Platform</div>
+            <div class="project-details">
+              <span class="project-year">2025</span>
+              <span class="project-type">Product Design</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="project-card">
+          <div class="project-thumb grad-4">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <span class="file-icon">◇</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">EcoVault Dashboard</div>
+            <div class="project-details">
+              <span class="project-year">2025</span>
+              <span class="project-type">UI/UX</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 5 -->
+        <div class="project-card">
+          <div class="project-thumb grad-5">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-3"></div>
+            <span class="file-icon">◆</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Redstone Festival</div>
+            <div class="project-details">
+              <span class="project-year">2024</span>
+              <span class="project-type">Event Design</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 6 -->
+        <div class="project-card">
+          <div class="project-thumb grad-6">
+            <div class="shape shape-2"></div>
+            <div class="shape shape-1"></div>
+            <span class="file-icon">◐</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Aurum Watches</div>
+            <div class="project-details">
+              <span class="project-year">2024</span>
+              <span class="project-type">E-Commerce</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 7 -->
+        <div class="project-card">
+          <div class="project-thumb grad-7">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <span class="file-icon">◉</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Verdant Health App</div>
+            <div class="project-details">
+              <span class="project-year">2024</span>
+              <span class="project-type">Mobile App</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 8 -->
+        <div class="project-card">
+          <div class="project-thumb grad-8">
+            <div class="shape shape-3"></div>
+            <div class="shape shape-2"></div>
+            <span class="file-icon">◎</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Onyx Architecture</div>
+            <div class="project-details">
+              <span class="project-year">2023</span>
+              <span class="project-type">Website</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 9 -->
+        <div class="project-card">
+          <div class="project-thumb grad-9">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-3"></div>
+            <span class="file-icon">◈</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Nebula Type Foundry</div>
+            <div class="project-details">
+              <span class="project-year">2023</span>
+              <span class="project-type">Typography</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 10 -->
+        <div class="project-card">
+          <div class="project-thumb grad-10">
+            <div class="shape shape-2"></div>
+            <div class="shape shape-1"></div>
+            <span class="file-icon">◇</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Canopy Coffee Roasters</div>
+            <div class="project-details">
+              <span class="project-year">2023</span>
+              <span class="project-type">Packaging</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 11 -->
+        <div class="project-card">
+          <div class="project-thumb grad-11">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <span class="file-icon">◐</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Mono Chrome Editorial</div>
+            <div class="project-details">
+              <span class="project-year">2022</span>
+              <span class="project-type">Editorial</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 12 -->
+        <div class="project-card">
+          <div class="project-thumb grad-12">
+            <div class="shape shape-3"></div>
+            <div class="shape shape-1"></div>
+            <span class="file-icon">◆</span>
+          </div>
+          <div class="project-meta">
+            <div class="project-name">Ember Spirits Rebrand</div>
+            <div class="project-details">
+              <span class="project-year">2022</span>
+              <span class="project-type">Branding</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ========== DOCK ========== -->
+  <div class="dock-wrapper">
+    <nav class="dock">
+      <div class="dock-item">
+        <div class="dock-icon Orange">◆</div>
+        <div class="dock-dot"></div>
+        <span class="dock-tooltip">Portfolio</span>
+      </div>
+      <div class="dock-item">
+        <div class="dock-icon Blue">✉</div>
+        <div class="dock-dot"></div>
+        <span class="dock-tooltip">Mail</span>
+      </div>
+      <div class="dock-item">
+        <div class="dock-icon Green">♫</div>
+        <span class="dock-tooltip">Music</span>
+      </div>
+      <div class="dock-item">
+        <div class="dock-icon Purple">◉</div>
+        <span class="dock-tooltip">Camera</span>
+      </div>
+      <div class="dock-item">
+        <div class="dock-icon Pink">✦</div>
+        <span class="dock-tooltip">Design</span>
+      </div>
+
+      <div class="dock-separator"></div>
+
+      <div class="dock-item">
+        <div class="dock-icon Grey">⚙</div>
+        <span class="dock-tooltip">Settings</span>
+      </div>
+      <div class="dock-item">
+        <div class="dock-icon Grey">♻</div>
+        <span class="dock-tooltip">Trash</span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ========== MINIMAL JS ========== -->
+  <script>
+    // Clock updater
+    function updateClock() {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const h12 = hours % 12 || 12;
+      const mm = String(minutes).padStart(2, '0');
+      const ss = String(seconds).padStart(2, '0');
+
+      const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const shortDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const shortMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+      const timeStr = h12 + ':' + mm + ' ' + ampm;
+      const dateStr = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+      const menubarStr = shortDays[now.getDay()] + ' ' + shortMonths[now.getMonth()] + ' ' + now.getDate() + ' ' + h12 + ':' + mm + ' ' + ampm;
+
+      document.getElementById('clockTime').innerHTML = h12 + ':' + mm + '<span class="clock-widget-seconds">:' + ss + '</span>';
+      document.getElementById('clockDate').textContent = dateStr;
+      document.getElementById('menubarClock').textContent = menubarStr;
+      document.getElementById('menubarTime').textContent = timeStr;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Click to select project cards
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.project-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+    });
+  </script>
+</body>
+</html>

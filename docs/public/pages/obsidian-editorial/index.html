@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBSCURA — Editorial Design Studio</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       CSS CUSTOM PROPERTIES & RESET
+       ======================================== */
+    :root {
+      --color-black: #000000;
+      --color-white: #ffffff;
+      --color-gray-100: #f5f5f5;
+      --color-gray-200: #e5e5e5;
+      --color-gray-300: #d4d4d4;
+      --color-gray-400: #a3a3a3;
+      --color-gray-500: #737373;
+      --color-gray-600: #525252;
+      --color-gray-700: #404040;
+      --color-gray-800: #262626;
+      --color-gray-900: #171717;
+      --color-gray-950: #0a0a0a;
+
+      --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2.5rem;
+      --space-xl: 4rem;
+      --space-2xl: 6rem;
+      --space-3xl: 10rem;
+
+      --heading-tracking: -0.02em;
+      --body-leading: 1.65;
+      --transition-base: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      line-height: var(--body-leading);
+      color: var(--color-white);
+      background-color: var(--color-black);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--transition-base);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ========================================
+       TYPOGRAPHY
+       ======================================== */
+    .heading-hero {
+      font-family: var(--font-sans);
+      font-size: clamp(3rem, 8vw, 7.5rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+
+    .heading-section {
+      font-family: var(--font-sans);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: var(--heading-tracking);
+      text-transform: uppercase;
+    }
+
+    .heading-card {
+      font-family: var(--font-sans);
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .body-text {
+      font-size: 1.125rem;
+      font-weight: 300;
+      line-height: var(--body-leading);
+      color: var(--color-gray-400);
+    }
+
+    .body-text--dark {
+      color: var(--color-gray-600);
+    }
+
+    .label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-gray-500);
+    }
+
+    .number {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--color-gray-500);
+      letter-spacing: 0.05em;
+    }
+
+    /* ========================================
+       SCROLL ANIMATIONS
+       ======================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity var(--transition-slow), transform var(--transition-slow);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ========================================
+       LAYOUT UTILITIES
+       ======================================== */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+    }
+
+    .container--narrow {
+      max-width: 1000px;
+    }
+
+    .container--wide {
+      max-width: 1600px;
+    }
+
+    /* ========================================
+       NAVIGATION
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: var(--space-md) var(--space-xl);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      mix-blend-mode: difference;
+    }
+
+    .nav__logo {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-white);
+    }
+
+    .nav__links {
+      display: flex;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+
+    .nav__link {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-white);
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav__link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-white);
+      transition: width var(--transition-base);
+    }
+
+    .nav__link:hover::after {
+      width: 100%;
+    }
+
+    /* ========================================
+       01 — HERO SECTION
+       ======================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: var(--color-black);
+      overflow: hidden;
+    }
+
+    .hero__geometric {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(280px, 40vw, 500px);
+      height: clamp(280px, 40vw, 500px);
+      opacity: 0.08;
+    }
+
+    .hero__geometric::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--color-white);
+      transform: rotate(45deg);
+    }
+
+    .hero__geometric::after {
+      content: '';
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      width: 70%;
+      height: 70%;
+      border: 1px solid var(--color-white);
+      border-radius: 50%;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: var(--space-xl);
+    }
+
+    .hero__label {
+      margin-bottom: var(--space-lg);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--color-gray-500);
+    }
+
+    .hero__title {
+      color: var(--color-white);
+      margin-bottom: var(--space-xl);
+    }
+
+    .hero__title span {
+      display: block;
+    }
+
+    .hero__title span:nth-child(2) {
+      color: var(--color-gray-600);
+    }
+
+    .hero__subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--color-gray-500);
+      letter-spacing: 0.05em;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .hero__scroll {
+      position: absolute;
+      bottom: var(--space-xl);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+      z-index: 2;
+    }
+
+    .hero__scroll-text {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--color-gray-600);
+    }
+
+    .hero__scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--color-gray-600), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ========================================
+       02 — ABOUT SECTION
+       ======================================== */
+    .about {
+      background: var(--color-white);
+      color: var(--color-black);
+      padding: var(--space-3xl) 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .about__grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: var(--space-xl);
+      align-items: start;
+    }
+
+    .about__number {
+      font-family: var(--font-mono);
+      font-size: 11rem;
+      font-weight: 200;
+      line-height: 0.85;
+      color: var(--color-gray-200);
+      user-select: none;
+    }
+
+    .about__content {
+      padding-top: var(--space-lg);
+    }
+
+    .about__label {
+      margin-bottom: var(--space-lg);
+      color: var(--color-gray-400);
+    }
+
+    .about__heading {
+      color: var(--color-black);
+      margin-bottom: var(--space-xl);
+    }
+
+    .about__text {
+      color: var(--color-gray-600);
+      max-width: 560px;
+    }
+
+    .about__text p + p {
+      margin-top: var(--space-md);
+    }
+
+    .about__divider {
+      width: 60px;
+      height: 1px;
+      background: var(--color-gray-300);
+      margin: var(--space-xl) 0;
+    }
+
+    .about__signature {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-gray-500);
+    }
+
+    /* ========================================
+       03 — FEATURED WORK SECTION
+       ======================================== */
+    .work {
+      background: var(--color-black);
+      padding: var(--space-3xl) 0;
+    }
+
+    .work__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .work__label {
+      margin-bottom: var(--space-md);
+    }
+
+    .work__heading {
+      color: var(--color-white);
+    }
+
+    .work__count {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-gray-600);
+      letter-spacing: 0.05em;
+    }
+
+    .work__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      group: true;
+    }
+
+    .project-card__image {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+    }
+
+    .project-card__gradient {
+      width: 100%;
+      height: 100%;
+      transition: transform var(--transition-slow);
+    }
+
+    .project-card:nth-child(1) .project-card__gradient {
+      background: linear-gradient(135deg, #1a1a1a 0%, #333333 40%, #1a1a1a 70%, #444444 100%);
+    }
+
+    .project-card:nth-child(2) .project-card__gradient {
+      background: linear-gradient(225deg, #222222 0%, #444444 30%, #1a1a1a 60%, #333333 100%);
+    }
+
+    .project-card:nth-child(3) .project-card__gradient {
+      background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #3a3a3a 100%);
+    }
+
+    .project-card:hover .project-card__gradient {
+      transform: scale(1.05);
+    }
+
+    .project-card__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--space-lg);
+    }
+
+    .project-card__number {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--color-gray-500);
+      margin-bottom: var(--space-xs);
+      letter-spacing: 0.1em;
+    }
+
+    .project-card__title {
+      color: var(--color-white);
+      margin-bottom: var(--space-xs);
+    }
+
+    .project-card__category {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--color-gray-500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-md);
+    }
+
+    .project-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-white);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity var(--transition-base), transform var(--transition-base);
+    }
+
+    .project-card__link-arrow {
+      display: inline-block;
+      transition: transform var(--transition-base);
+    }
+
+    .project-card:hover .project-card__link {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .project-card:hover .project-card__link-arrow {
+      transform: translateX(4px);
+    }
+
+    /* ========================================
+       04 — SERVICES SECTION
+       ======================================== */
+    .services {
+      background: var(--color-white);
+      color: var(--color-black);
+      padding: var(--space-3xl) 0;
+    }
+
+    .services__header {
+      margin-bottom: var(--space-2xl);
+    }
+
+    .services__label {
+      margin-bottom: var(--space-md);
+      color: var(--color-gray-400);
+    }
+
+    .services__heading {
+      color: var(--color-black);
+    }
+
+    .services__list {
+      list-style: none;
+    }
+
+    .service-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: var(--space-xl);
+      padding: var(--space-lg) 0;
+      border-bottom: 1px solid var(--color-gray-200);
+      cursor: pointer;
+      transition: padding-left var(--transition-base);
+    }
+
+    .service-row:first-child {
+      border-top: 1px solid var(--color-gray-200);
+    }
+
+    .service-row:hover {
+      padding-left: var(--space-md);
+    }
+
+    .service-row__number {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-gray-400);
+      min-width: 40px;
+      letter-spacing: 0.05em;
+    }
+
+    .service-row__title {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: var(--color-black);
+      transition: color var(--transition-base);
+    }
+
+    .service-row:hover .service-row__title {
+      color: var(--color-gray-600);
+    }
+
+    .service-row__arrow {
+      font-size: 1.2rem;
+      color: var(--color-gray-400);
+      transition: transform var(--transition-base), color var(--transition-base);
+    }
+
+    .service-row:hover .service-row__arrow {
+      transform: translateX(8px);
+      color: var(--color-black);
+    }
+
+    .service-row__description {
+      grid-column: 2 / -1;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-base), opacity var(--transition-base);
+      opacity: 0;
+    }
+
+    .service-row__description p {
+      font-size: 0.95rem;
+      color: var(--color-gray-500);
+      line-height: 1.6;
+      max-width: 500px;
+      padding-bottom: var(--space-sm);
+    }
+
+    /* ========================================
+       05 — CONTACT / CTA SECTION
+       ======================================== */
+    .contact {
+      background: var(--color-black);
+      padding: var(--space-3xl) 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact__geometric {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 50%;
+    }
+
+    .contact__geometric::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 80%;
+      height: 80%;
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 50%;
+    }
+
+    .contact__content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .contact__label {
+      margin-bottom: var(--space-xl);
+      color: var(--color-gray-600);
+    }
+
+    .contact__heading {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--color-white);
+      margin-bottom: var(--space-xl);
+    }
+
+    .contact__text {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--color-gray-500);
+      max-width: 480px;
+      margin: 0 auto var(--space-2xl);
+    }
+
+    .contact__email {
+      display: inline-block;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-white);
+      padding: var(--space-md) var(--space-xl);
+      border: 1px solid var(--color-gray-700);
+      transition: background var(--transition-base), border-color var(--transition-base);
+    }
+
+    .contact__email:hover {
+      background: var(--color-white);
+      color: var(--color-black);
+      border-color: var(--color-white);
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .footer {
+      background: var(--color-gray-950);
+      padding: var(--space-2xl) 0 var(--space-lg);
+      border-top: 1px solid var(--color-gray-900);
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .footer__brand-text {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--color-gray-600);
+      line-height: 1.65;
+      max-width: 320px;
+      margin-top: var(--space-md);
+    }
+
+    .footer__logo {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-white);
+    }
+
+    .footer__column-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-gray-400);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .footer__link {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--color-gray-600);
+      transition: color var(--transition-base);
+    }
+
+    .footer__link:hover {
+      color: var(--color-white);
+    }
+
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--color-gray-900);
+    }
+
+    .footer__copyright {
+      font-size: 0.75rem;
+      color: var(--color-gray-700);
+      letter-spacing: 0.05em;
+    }
+
+    .footer__back-top {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-gray-600);
+      cursor: pointer;
+      transition: color var(--transition-base);
+    }
+
+    .footer__back-top:hover {
+      color: var(--color-white);
+    }
+
+    /* ========================================
+       HORIZONTAL RULE ACCENTS
+       ======================================== */
+    .hr-accent {
+      width: 100%;
+      height: 1px;
+      background: var(--color-gray-800);
+      border: none;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 1024px) {
+      .work__grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+      }
+
+      .about__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about__number {
+        font-size: 6rem;
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav__links {
+        display: none;
+      }
+
+      .container {
+        padding: 0 var(--space-lg);
+      }
+
+      .hero__title {
+        font-size: clamp(2.5rem, 10vw, 4rem);
+      }
+
+      .service-row {
+        grid-template-columns: auto 1fr auto;
+        gap: var(--space-md);
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       NAVIGATION
+       ======================================== -->
+  <nav class="nav">
+    <a href="#" class="nav__logo">Obscura</a>
+    <ul class="nav__links">
+      <li><a href="#work" class="nav__link">Work</a></li>
+      <li><a href="#services" class="nav__link">Services</a></li>
+      <li><a href="#contact" class="nav__link">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========================================
+       01 — HERO SECTION
+       ======================================== -->
+  <section class="hero" id="hero">
+    <div class="hero__geometric"></div>
+
+    <div class="hero__content">
+      <p class="hero__label reveal">OBSCURA — Design Studio est. 2019</p>
+      <h1 class="heading-hero hero__title reveal reveal-delay-1">
+        <span>Form.</span>
+        <span>Intention.</span>
+        <span>Presence.</span>
+      </h1>
+      <p class="hero__subtitle reveal reveal-delay-2">
+        Crafting deliberate visual systems that command attention and communicate with absolute clarity.
+      </p>
+    </div>
+
+    <div class="hero__scroll">
+      <span class="hero__scroll-text">Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       02 — ABOUT SECTION
+       ======================================== -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about__grid">
+        <div class="about__number reveal">02</div>
+        <div class="about__content">
+          <p class="label about__label reveal">Studio Philosophy</p>
+          <h2 class="heading-section about__heading reveal reveal-delay-1">
+            We believe in the power of restraint and precision
+          </h2>
+          <div class="about__divider reveal reveal-delay-2"></div>
+          <div class="body-text body-text--dark about__text reveal reveal-delay-2">
+            <p>
+              Obscura is a multidisciplinary design studio rooted in the principles of reduction. We strip away the unnecessary to reveal what matters — the essential structure, the core message, the emotional truth of a brand or experience. Every decision is deliberate. Every element earns its place.
+            </p>
+            <p>
+              Our work lives at the intersection of editorial rigor and visual experimentation. We draw from typography, architecture, and the quiet power of monochromatic palettes to create identities that feel both timeless and immediate. We don't follow trends; we build foundations.
+            </p>
+            <p>
+              Founded in 2019, we have partnered with cultural institutions, independent publishers, architectural firms, and forward-thinking brands who share our conviction that less — when executed with absolute conviction — is invariably more.
+            </p>
+          </div>
+          <div class="about__divider reveal reveal-delay-3"></div>
+          <p class="about__signature reveal reveal-delay-3">— The Obscura Team, Berlin</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       03 — FEATURED WORK SECTION
+       ======================================== -->
+  <section class="work" id="work">
+    <div class="container">
+      <div class="work__header reveal">
+        <div>
+          <p class="label work__label">03 — Selected Projects</p>
+          <h2 class="heading-section work__heading">Featured Work</h2>
+        </div>
+        <span class="work__count">2023 — 2025</span>
+      </div>
+
+      <div class="work__grid">
+        <!-- Project Card 1 -->
+        <article class="project-card reveal reveal-delay-1">
+          <div class="project-card__image">
+            <div class="project-card__gradient"></div>
+            <div class="project-card__overlay">
+              <span class="project-card__number">001</span>
+              <h3 class="heading-card project-card__title">Monolith Identity System</h3>
+              <p class="project-card__category">Brand Identity · Art Direction</p>
+              <a href="#" class="project-card__link">
+                View Project <span class="project-card__link-arrow">→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project Card 2 -->
+        <article class="project-card reveal reveal-delay-2">
+          <div class="project-card__image">
+            <div class="project-card__gradient"></div>
+            <div class="project-card__overlay">
+              <span class="project-card__number">002</span>
+              <h3 class="heading-card project-card__title">Void Magazine — Issue 07</h3>
+              <p class="project-card__category">Editorial Design · Print</p>
+              <a href="#" class="project-card__link">
+                View Project <span class="project-card__link-arrow">→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project Card 3 -->
+        <article class="project-card reveal reveal-delay-3">
+          <div class="project-card__image">
+            <div class="project-card__gradient"></div>
+            <div class="project-card__overlay">
+              <span class="project-card__number">003</span>
+              <h3 class="heading-card project-card__title">Forma Architects Website</h3>
+              <p class="project-card__category">Digital Design · Development</p>
+              <a href="#" class="project-card__link">
+                View Project <span class="project-card__link-arrow">→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       04 — SERVICES SECTION
+       ======================================== -->
+  <section class="services" id="services">
+    <div class="container container--narrow">
+      <div class="services__header reveal">
+        <p class="label services__label">04 — Capabilities</p>
+        <h2 class="heading-section services__heading">What We Do</h2>
+      </div>
+
+      <ul class="services__list">
+        <li class="service-row reveal reveal-delay-1">
+          <span class="service-row__number">01</span>
+          <span class="service-row__title">Foundation</span>
+          <span class="service-row__arrow">→</span>
+          <div class="service-row__description">
+            <p>Research, strategy, and positioning. We define the conceptual bedrock that every visual decision rests upon — understanding your audience, your market, and your unique point of view before a single pixel is placed.</p>
+          </div>
+        </li>
+
+        <li class="service-row reveal reveal-delay-2">
+          <span class="service-row__number">02</span>
+          <span class="service-row__title">Structure</span>
+          <span class="service-row__arrow">→</span>
+          <div class="service-row__description">
+            <p>Typography, grid systems, and information architecture. We build the invisible frameworks that give content its rhythm and hierarchy — ensuring every piece of communication feels considered and coherent.</p>
+          </div>
+        </li>
+
+        <li class="service-row reveal reveal-delay-3">
+          <span class="service-row__number">03</span>
+          <span class="service-row__title">Identity</span>
+          <span class="service-row__arrow">→</span>
+          <div class="service-row__description">
+            <p>Visual identity design, logo systems, and brand guidelines. We create marks and systems that are unmistakable — distilled to their essence and built to endure across every medium and touchpoint.</p>
+          </div>
+        </li>
+
+        <li class="service-row reveal reveal-delay-4">
+          <span class="service-row__number">04</span>
+          <span class="service-row__title">Experience</span>
+          <span class="service-row__arrow">→</span>
+          <div class="service-row__description">
+            <p>Digital product design, editorial design, and environmental graphics. We shape how people interact with your brand — crafting interfaces, publications, and spaces that feel intentional and immersive.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================================
+       05 — CONTACT / CTA SECTION
+       ======================================== -->
+  <section class="contact" id="contact">
+    <div class="contact__geometric"></div>
+    <div class="container contact__content">
+      <p class="label contact__label reveal">05 — Get In Touch</p>
+      <h2 class="contact__heading reveal reveal-delay-1">
+        Let's build<br>your vision
+      </h2>
+      <p class="contact__text reveal reveal-delay-2">
+        We take on a limited number of projects each year to ensure every collaboration receives our full attention and craft. Tell us about your vision.
+      </p>
+      <a href="mailto:hello@obscura.studio" class="contact__email reveal reveal-delay-3">
+        hello@obscura.studio
+      </a>
+    </div>
+  </section>
+
+  <!-- ========================================
+       FOOTER
+       ======================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <span class="footer__logo">Obscura</span>
+          <p class="footer__brand-text">
+            A multidisciplinary design studio practicing deliberate reduction. Based in Berlin, working globally.
+          </p>
+        </div>
+
+        <div class="footer__column">
+          <h4 class="footer__column-title">Navigation</h4>
+          <ul class="footer__links">
+            <li><a href="#work" class="footer__link">Work</a></li>
+            <li><a href="#about" class="footer__link">About</a></li>
+            <li><a href="#services" class="footer__link">Services</a></li>
+            <li><a href="#contact" class="footer__link">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__column">
+          <h4 class="footer__column-title">Connect</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Instagram</a></li>
+            <li><a href="#" class="footer__link">Behance</a></li>
+            <li><a href="#" class="footer__link">LinkedIn</a></li>
+            <li><a href="#" class="footer__link">Dribbble</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__column">
+          <h4 class="footer__column-title">Legal</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Privacy Policy</a></li>
+            <li><a href="#" class="footer__link">Imprint</a></li>
+            <li><a href="#" class="footer__link">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span class="footer__copyright">© 2025 Obscura Studio. All rights reserved.</span>
+        <a href="#hero" class="footer__back-top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================
+       MINIMAL JAVASCRIPT
+       ======================================== -->
+  <script>
+    /* IntersectionObserver for scroll-triggered reveal animations */
+    (function() {
+      'use strict';
+
+      const revealElements = document.querySelectorAll('.reveal');
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.12,
+          rootMargin: '0px 0px -60px 0px'
+        });
+
+        revealElements.forEach(function(el) {
+          observer.observe(el);
+        });
+      } else {
+        /* Fallback: show everything immediately */
+        revealElements.forEach(function(el) {
+          el.classList.add('is-visible');
+        });
+      }
+    })();
+
+    /* Smooth scroll for anchor links (backup for browsers without native support) */
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        var targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        var target = document.querySelector(targetId);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

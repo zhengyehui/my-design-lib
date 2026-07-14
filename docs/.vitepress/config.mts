@@ -264,7 +264,9 @@ export default defineConfig({
             { text: 'MONO&CO 品牌设计工作室', link: '/pages/atelier-brand' },
             { text: 'INDEX Studio 极简主义事务所', link: '/pages/brutalist-agency' },
             { text: 'Forma Studio 动态设计工作室', link: '/pages/forma-studio' },
-            { text: 'Kinetic Visions 水平滚动', link: '/pages/h-scroll-portfolio' }
+            { text: 'Kinetic Visions 水平滚动', link: '/pages/h-scroll-portfolio' },
+            { text: 'Displace OS 桌面风格', link: '/pages/displace-os' },
+            { text: 'Obsidian Editorial 编辑设计', link: '/pages/obsidian-editorial' }
           ]
         },
         {

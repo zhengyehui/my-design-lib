@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 102 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 105 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -947,6 +947,24 @@ const pages = [
     description: 'CGI 与动效设计工作室作品集，受 Cinética Studio 启发，水平滚动 7 屏全幅体验 + 浮动光球动画 + Syne 粗体字 + Marquee 无限滚动',
   },
   {
+    id: 'displace-os',
+    title: 'Displace OS 桌面风格作品集',
+    category: 'portfolio',
+    tags: ['macOS风格', '桌面隐喻', '玻璃拟态', '暖色调'],
+    colors: ['#121212', '#f26522', '#2d1c18'],
+    rating: 9.4,
+    description: 'macOS 桌面隐喻风格创意作品集，受 Displace Agency 启发，菜单栏 + 玻璃拟态小部件 + 项目文件图标网格 + Dock 应用栏',
+  },
+  {
+    id: 'obsidian-editorial',
+    title: 'Obsidian Editorial 编辑设计工作室',
+    category: 'portfolio',
+    tags: ['单色系', '编辑设计', '极简主义', '大字号排版'],
+    colors: ['#000000', '#ffffff', '#333333'],
+    rating: 9.3,
+    description: '单色系编辑设计工作室官网，受 OBSCURA 启发，80px+ 超大标题 + 戏剧性负空间 + 编号服务行 + 明暗交替分区',
+  },
+  {
     id: 'meditation-app',
     title: 'ZenMind 冥想正念应用',
     category: 'app',
@@ -1044,7 +1062,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 102 个完整页面</span>
+      <span>📦 105 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
