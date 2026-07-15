@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TYPE MANIFESTO — Spatial Typography Experiment</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       TYPE MANIFESTO — Spatial Typography Experiment
+       Inspired by Belen Jones + MONOLOG
+       ═══════════════════════════════════════════════════════════ */
+
+    :root {
+      --bg: #0a0a0f;
+      --text: #f5f0eb;
+      --muted: #4a4a5a;
+      --primary: var(--color-primary, #6366f1);
+      --secondary: var(--color-secondary, #06b6d4);
+      --font-display: 'Helvetica Neue', 'Arial Black', system-ui, sans-serif;
+      --font-body: 'Helvetica Neue', Arial, system-ui, sans-serif;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ── Scroll Snap Sections ── */
+    section {
+      scroll-snap-align: start;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Intersection Observer Animation Classes ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+    .reveal-delay-4 { transition-delay: 0.6s; }
+
+    /* ── Floating Animation ── */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
+    @keyframes rotatePrism {
+      0% { transform: perspective(800px) rotateX(25deg) rotateY(-15deg) rotateZ(5deg); }
+      50% { transform: perspective(800px) rotateX(30deg) rotateY(-20deg) rotateZ(0deg); }
+      100% { transform: perspective(800px) rotateX(25deg) rotateY(-15deg) rotateZ(5deg); }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* ══════════════════════════════════════════════
+       HERO SECTION — Oversized 3D Typography
+       ══════════════════════════════════════════════ */
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      perspective: 1200px;
+      position: relative;
+    }
+
+    .hero__grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .hero__glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      perspective: 1000px;
+    }
+
+    .hero__overline {
+      font-size: clamp(11px, 1.2vw, 14px);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    .hero__title-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(140px, 20vw, 320px);
+      font-weight: 900;
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      -webkit-text-stroke: 2px var(--text);
+      color: transparent;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero__title-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-family: var(--font-display);
+      font-size: clamp(140px, 20vw, 320px);
+      font-weight: 900;
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--primary) 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      z-index: 1;
+      opacity: 0.3;
+      animation: gradientShift 8s ease-in-out infinite;
+    }
+
+    /* 3D Prism */
+    .hero__prism {
+      position: absolute;
+      top: 50%;
+      left: 55%;
+      width: 220px;
+      height: 220px;
+      transform: perspective(800px) rotateX(25deg) rotateY(-15deg) rotateZ(5deg);
+      transform-style: preserve-3d;
+      animation: rotatePrism 12s ease-in-out infinite;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .prism__face {
+      position: absolute;
+      border: 2px solid;
+      backface-visibility: visible;
+    }
+
+    .prism__face--front {
+      width: 100%;
+      height: 100%;
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+      transform: translateZ(60px);
+    }
+
+    .prism__face--back {
+      width: 100%;
+      height: 100%;
+      border-color: rgba(99, 102, 241, 0.3);
+      background: rgba(99, 102, 241, 0.03);
+      transform: translateZ(-60px);
+    }
+
+    .prism__face--left {
+      width: 120px;
+      height: 100%;
+      left: -60px;
+      border-color: var(--secondary);
+      background: rgba(6, 182, 212, 0.06);
+      transform: rotateY(-90deg);
+      transform-origin: right center;
+    }
+
+    .prism__face--right {
+      width: 120px;
+      height: 100%;
+      right: -60px;
+      border-color: rgba(6, 182, 212, 0.4);
+      background: rgba(6, 182, 212, 0.04);
+      transform: rotateY(90deg);
+      transform-origin: left center;
+    }
+
+    .prism__face--top {
+      width: 100%;
+      height: 120px;
+      top: -60px;
+      border-color: rgba(245, 240, 235, 0.3);
+      background: rgba(245, 240, 235, 0.03);
+      transform: rotateX(90deg);
+      transform-origin: center bottom;
+    }
+
+    .prism__face--bottom {
+      width: 100%;
+      height: 120px;
+      bottom: -60px;
+      border-color: rgba(245, 240, 235, 0.15);
+      background: rgba(245, 240, 235, 0.02);
+      transform: rotateX(-90deg);
+      transform-origin: center top;
+    }
+
+    .hero__subtitle {
+      font-size: clamp(13px, 1.4vw, 18px);
+      color: var(--muted);
+      margin-top: 3rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    .hero__scroll-hint {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .hero__scroll-hint::after {
+      content: '';
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTION 2 — Asymmetric Quote Layout
+       ══════════════════════════════════════════════ */
+
+    .quote-section {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      min-height: 100vh;
+      align-items: center;
+      padding: 6rem 8vw;
+      gap: 4rem;
+      position: relative;
+    }
+
+    .quote-section::before {
+      content: '"';
+      position: absolute;
+      top: 10%;
+      left: 5%;
+      font-family: var(--font-display);
+      font-size: clamp(300px, 30vw, 500px);
+      font-weight: 900;
+      color: rgba(99, 102, 241, 0.04);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .quote__main {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 6vw, 96px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .quote__main .accent {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .quote__side {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding-left: 2rem;
+      border-left: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .quote__body {
+      font-size: clamp(15px, 1.3vw, 18px);
+      color: rgba(245, 240, 235, 0.6);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .quote__attribution {
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .quote__decoration {
+      position: absolute;
+      bottom: 8%;
+      right: 8%;
+      width: 180px;
+      height: 180px;
+      border: 1px solid rgba(6, 182, 212, 0.15);
+      border-radius: 50%;
+      animation: floatSlow 8s ease-in-out infinite;
+    }
+
+    .quote__decoration::after {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border: 1px solid rgba(99, 102, 241, 0.1);
+      border-radius: 50%;
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTION 3 — Typographic Specimens Bento Grid
+       ══════════════════════════════════════════════ */
+
+    .specimens {
+      min-height: 100vh;
+      padding: 6rem 6vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .specimens__header {
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .specimens__title {
+      font-family: var(--font-display);
+      font-size: clamp(12px, 1.2vw, 14px);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .specimens__count {
+      font-size: 12px;
+      color: var(--primary);
+      letter-spacing: 0.2em;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(4, minmax(120px, 1fr));
+      gap: 12px;
+      max-height: 80vh;
+    }
+
+    .bento-cell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid rgba(245, 240, 235, 0.04);
+      border-radius: 4px;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: default;
+    }
+
+    .bento-cell:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+      z-index: 2;
+      transform: scale(1.02);
+    }
+
+    .bento-cell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), transparent);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    .bento-cell:hover::before {
+      opacity: 1;
+    }
+
+    .bento-text {
+      font-family: var(--font-display);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bento-cell:hover .bento-text {
+      transform: scale(1.05);
+    }
+
+    /* Grid placements */
+    .bento-cell:nth-child(1) { grid-column: 1 / 5; grid-row: 1 / 3; }
+    .bento-cell:nth-child(2) { grid-column: 5 / 9; grid-row: 1 / 2; }
+    .bento-cell:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 3; }
+    .bento-cell:nth-child(4) { grid-column: 5 / 8; grid-row: 2 / 3; }
+    .bento-cell:nth-child(5) { grid-column: 8 / 9; grid-row: 2 / 3; }
+    .bento-cell:nth-child(6) { grid-column: 1 / 4; grid-row: 3 / 4; }
+    .bento-cell:nth-child(7) { grid-column: 4 / 9; grid-row: 3 / 5; }
+    .bento-cell:nth-child(8) { grid-column: 9 / 13; grid-row: 3 / 4; }
+    .bento-cell:nth-child(9) { grid-column: 1 / 4; grid-row: 4 / 5; }
+    .bento-cell:nth-child(10) { grid-column: 9 / 13; grid-row: 4 / 5; }
+
+    /* Specimen Styles */
+    .specimen-xl-outline {
+      font-size: clamp(80px, 10vw, 160px);
+      font-weight: 900;
+      -webkit-text-stroke: 1.5px var(--text);
+      color: transparent;
+      line-height: 0.85;
+    }
+
+    .specimen-xl-fill {
+      font-size: clamp(70px, 9vw, 150px);
+      font-weight: 900;
+      background: linear-gradient(180deg, var(--text) 0%, rgba(245, 240, 235, 0.3) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      line-height: 0.85;
+    }
+
+    .specimen-gradient-fill {
+      font-size: clamp(60px, 8vw, 130px);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      line-height: 0.85;
+    }
+
+    .specimen-light {
+      font-size: clamp(40px, 5vw, 80px);
+      font-weight: 200;
+      color: rgba(245, 240, 235, 0.7);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+    }
+
+    .specimen-mono {
+      font-size: clamp(14px, 1.5vw, 22px);
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.6;
+      text-align: left;
+      padding: 1.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .specimen-outline-sm {
+      font-size: clamp(36px, 4vw, 64px);
+      font-weight: 700;
+      -webkit-text-stroke: 1px var(--primary);
+      color: transparent;
+      line-height: 0.9;
+    }
+
+    .specimen-heavy {
+      font-size: clamp(50px, 7vw, 120px);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 0.8;
+      letter-spacing: -0.05em;
+    }
+
+    .specimen-accent-fill {
+      font-size: clamp(40px, 5vw, 80px);
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 0.9;
+    }
+
+    .specimen-stroke-accent {
+      font-size: clamp(50px, 6vw, 100px);
+      font-weight: 800;
+      -webkit-text-stroke: 2px var(--secondary);
+      color: transparent;
+      line-height: 0.85;
+    }
+
+    .specimen-caption {
+      font-size: clamp(11px, 1vw, 13px);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTION 4 — Manifesto with Perspective
+       ══════════════════════════════════════════════ */
+
+    .manifesto {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1500px;
+      position: relative;
+      padding: 4rem 8vw;
+    }
+
+    .manifesto__bg-text {
+      position: absolute;
+      font-family: var(--font-display);
+      font-size: clamp(200px, 25vw, 400px);
+      font-weight: 900;
+      color: rgba(99, 102, 241, 0.03);
+      white-space: nowrap;
+      pointer-events: none;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-5deg);
+    }
+
+    .manifesto__container {
+      transform-style: preserve-3d;
+      transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 900px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .manifesto__container:hover {
+      transform: perspective(1200px) rotateY(0deg) rotateX(0deg);
+    }
+
+    .manifesto__line {
+      font-family: var(--font-display);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.15em;
+      transform-origin: left center;
+    }
+
+    .manifesto__line:nth-child(1) {
+      font-size: clamp(40px, 6vw, 88px);
+      color: var(--text);
+      transform: translateZ(40px);
+    }
+
+    .manifesto__line:nth-child(2) {
+      font-size: clamp(48px, 7vw, 100px);
+      -webkit-text-stroke: 1.5px var(--text);
+      color: transparent;
+      transform: translateZ(20px);
+    }
+
+    .manifesto__line:nth-child(3) {
+      font-size: clamp(56px, 8vw, 116px);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      transform: translateZ(0px);
+    }
+
+    .manifesto__line:nth-child(4) {
+      font-size: clamp(36px, 5vw, 72px);
+      color: rgba(245, 240, 235, 0.3);
+      transform: translateZ(-30px);
+    }
+
+    .manifesto__line:nth-child(5) {
+      font-size: clamp(44px, 6.5vw, 92px);
+      color: var(--text);
+      transform: translateZ(-60px);
+    }
+
+    .manifesto__divider {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), transparent);
+      margin: 3rem 0;
+    }
+
+    .manifesto__footnote {
+      font-size: clamp(13px, 1.2vw, 16px);
+      color: rgba(245, 240, 235, 0.4);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 500px;
+    }
+
+    /* ══════════════════════════════════════════════
+       MARQUEE DIVIDER
+       ══════════════════════════════════════════════ */
+
+    .marquee-divider {
+      padding: 3rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid rgba(245, 240, 235, 0.04);
+      border-bottom: 1px solid rgba(245, 240, 235, 0.04);
+    }
+
+    .marquee__track {
+      display: inline-flex;
+      animation: marquee 20s linear infinite;
+    }
+
+    .marquee__item {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 900;
+      padding: 0 2rem;
+      -webkit-text-stroke: 1px var(--muted);
+      color: transparent;
+      flex-shrink: 0;
+    }
+
+    .marquee__item.filled {
+      color: var(--text);
+      -webkit-text-stroke: 0;
+    }
+
+    .marquee__dot {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 1.5rem;
+      color: var(--primary);
+      font-size: clamp(48px, 6vw, 80px);
+    }
+
+    /* ══════════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════════ */
+
+    .footer {
+      min-height: auto;
+      padding: 6rem 8vw 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+
+    .footer__statement {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 64px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      max-width: 700px;
+    }
+
+    .footer__statement .accent {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(245, 240, 235, 0.06);
+    }
+
+    .footer__links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .footer__link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 400;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .footer__link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--primary);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .footer__link:hover {
+      color: var(--text);
+    }
+
+    .footer__link:hover::after {
+      width: 100%;
+    }
+
+    .footer__copy {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .footer__tagline {
+      font-family: var(--font-display);
+      font-size: clamp(80px, 12vw, 200px);
+      font-weight: 900;
+      -webkit-text-stroke: 1px rgba(245, 240, 235, 0.06);
+      color: transparent;
+      line-height: 0.85;
+      text-align: center;
+      margin-top: 2rem;
+      padding-bottom: 4rem;
+      pointer-events: none;
+    }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+       ══════════════════════════════════════════════ */
+
+    @media (max-width: 768px) {
+      html {
+        scroll-snap-type: none;
+      }
+
+      .quote-section {
+        grid-template-columns: 1fr;
+        padding: 4rem 6vw;
+      }
+
+      .quote__side {
+        padding-left: 0;
+        border-left: none;
+        border-top: 1px solid rgba(99, 102, 241, 0.2);
+        padding-top: 2rem;
+      }
+
+      .bento-grid {
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: auto;
+      }
+
+      .bento-cell:nth-child(1) { grid-column: 1 / 4; grid-row: auto; min-height: 160px; }
+      .bento-cell:nth-child(2) { grid-column: 4 / 7; grid-row: auto; min-height: 160px; }
+      .bento-cell:nth-child(3) { grid-column: 1 / 7; grid-row: auto; min-height: 140px; }
+      .bento-cell:nth-child(4) { grid-column: 1 / 4; grid-row: auto; min-height: 120px; }
+      .bento-cell:nth-child(5) { grid-column: 4 / 7; grid-row: auto; min-height: 120px; }
+      .bento-cell:nth-child(6) { grid-column: 1 / 7; grid-row: auto; min-height: 100px; }
+      .bento-cell:nth-child(7) { grid-column: 1 / 7; grid-row: auto; min-height: 160px; }
+      .bento-cell:nth-child(8) { grid-column: 1 / 4; grid-row: auto; min-height: 120px; }
+      .bento-cell:nth-child(9) { grid-column: 4 / 7; grid-row: auto; min-height: 120px; }
+      .bento-cell:nth-child(10) { grid-column: 1 / 7; grid-row: auto; min-height: 100px; }
+
+      .manifesto__container {
+        transform: perspective(1200px) rotateY(-2deg) rotateX(1deg);
+      }
+
+      .hero__prism {
+        width: 140px;
+        height: 140px;
+        left: 60%;
+      }
+
+      .footer__links {
+        gap: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       HERO — Oversized 3D Type
+       ══════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero__grid"></div>
+    <div class="hero__glow"></div>
+
+    <div class="hero__content">
+      <p class="hero__overline reveal">Spatial Typography Experiment / 2025</p>
+      <div class="hero__title-wrapper reveal reveal-delay-1">
+        <span class="hero__title" aria-hidden="true">TYPE</span>
+        <span class="hero__title-fill" aria-hidden="true">TYPE</span>
+
+        <!-- 3D Prism -->
+        <div class="hero__prism">
+          <div class="prism__face prism__face--front"></div>
+          <div class="prism__face prism__face--back"></div>
+          <div class="prism__face prism__face--left"></div>
+          <div class="prism__face prism__face--right"></div>
+          <div class="prism__face prism__face--top"></div>
+          <div class="prism__face prism__face--bottom"></div>
+        </div>
+      </div>
+      <p class="hero__subtitle reveal reveal-delay-2">A manifesto on the space between letters</p>
+    </div>
+
+    <div class="hero__scroll-hint">
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 2 — Asymmetric Quote
+       ══════════════════════════════════════════ -->
+  <section class="quote-section">
+    <div class="quote__main reveal">
+      DESIGN IS NOT WHAT IT <em class="accent">LOOKS LIKE.</em><br>
+      DESIGN IS <em class="accent">HOW IT WORKS.</em>
+    </div>
+    <div class="quote__side">
+      <p class="quote__body reveal reveal-delay-1">
+        Typography is the voice of design. It whispers, shouts, sings, and silences.
+        Every curve of a letterform carries intention. Every kerning pair is a conversation
+        between characters — a negotiation of space that determines how meaning lands.
+      </p>
+      <p class="quote__body reveal reveal-delay-2">
+        The space between letters is not empty. It is full of tension, rhythm, and breath.
+        To design type is to choreograph silence.
+      </p>
+      <span class="quote__attribution reveal reveal-delay-3">— The Manifesto, 2025</span>
+    </div>
+    <div class="quote__decoration" aria-hidden="true"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       MARQUEE DIVIDER
+       ══════════════════════════════════════════ -->
+  <div class="marquee-divider" aria-hidden="true">
+    <div class="marquee__track">
+      <span class="marquee__item filled">TYPE</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item">SPACE</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item filled">FORM</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item">RHYTHM</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item filled">WEIGHT</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item">BREATH</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item filled">TYPE</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item">SPACE</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item filled">FORM</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item">RHYTHM</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item filled">WEIGHT</span>
+      <span class="marquee__dot">◆</span>
+      <span class="marquee__item">BREATH</span>
+      <span class="marquee__dot">◆</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 3 — Bento Grid Specimens
+       ══════════════════════════════════════════ -->
+  <section class="specimens">
+    <div class="specimens__header reveal">
+      <span class="specimens__title">Typographic Specimens</span>
+      <span class="specimens__count">001 — 010</span>
+    </div>
+
+    <div class="bento-grid">
+      <!-- Cell 1: Large outlined -->
+      <div class="bento-cell reveal">
+        <span class="bento-text specimen-xl-outline">Aa</span>
+      </div>
+      <!-- Cell 2: Filled gradient -->
+      <div class="bento-cell reveal reveal-delay-1">
+        <span class="bento-text specimen-gradient-fill">Bb</span>
+      </div>
+      <!-- Cell 3: Heavy fill -->
+      <div class="bento-cell reveal reveal-delay-2">
+        <span class="bento-text specimen-heavy">Cc</span>
+      </div>
+      <!-- Cell 4: Light weight -->
+      <div class="bento-cell reveal reveal-delay-1">
+        <span class="bento-text specimen-light">Dd</span>
+      </div>
+      <!-- Cell 5: Caption -->
+      <div class="bento-cell reveal reveal-delay-2">
+        <span class="bento-text specimen-caption">48pt /<br>Black</span>
+      </div>
+      <!-- Cell 6: Small outline accent -->
+      <div class="bento-cell reveal">
+        <span class="bento-text specimen-outline-sm">Ee</span>
+      </div>
+      <!-- Cell 7: Large filled -->
+      <div class="bento-cell reveal reveal-delay-1">
+        <span class="bento-text specimen-xl-fill">Ff</span>
+      </div>
+      <!-- Cell 8: Accent fill -->
+      <div class="bento-cell reveal reveal-delay-2">
+        <span class="bento-text specimen-accent-fill">Gg</span>
+      </div>
+      <!-- Cell 9: Mono text -->
+      <div class="bento-cell reveal reveal-delay-3">
+        <span class="bento-text specimen-mono">The quick brown fox jumps over the lazy dog. 0123456789</span>
+      </div>
+      <!-- Cell 10: Stroke accent -->
+      <div class="bento-cell reveal reveal-delay-4">
+        <span class="bento-text specimen-stroke-accent">Hh</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 4 — Perspective Manifesto
+       ══════════════════════════════════════════ -->
+  <section class="manifesto">
+    <div class="manifesto__bg-text" aria-hidden="true">MANIFESTO</div>
+
+    <div class="manifesto__container">
+      <div class="manifesto__line reveal">LETTERS ARE</div>
+      <div class="manifesto__line reveal reveal-delay-1">ARCHITECTURE</div>
+      <div class="manifesto__line reveal reveal-delay-2">IN MOTION</div>
+      <div class="manifesto__line reveal reveal-delay-3">BUILT FROM</div>
+      <div class="manifesto__line reveal reveal-delay-4">SPACE & SILENCE</div>
+
+      <div class="manifesto__divider reveal"></div>
+
+      <p class="manifesto__footnote reveal">
+        Every glyph is a monument to human expression. We do not merely set type — we compose 
+        the invisible architecture that carries thought from mind to eye. Typography is the 
+        bridge between sound and symbol, between intention and perception.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer__statement reveal">
+      The future of design is <span class="accent">spatial</span>, 
+      <span class="accent">dimensional</span>, and 
+      <span class="accent">alive</span>.
+    </div>
+
+    <div class="footer__bottom">
+      <ul class="footer__links">
+        <li><a href="#" class="footer__link">Twitter</a></li>
+        <li><a href="#" class="footer__link">Instagram</a></li>
+        <li><a href="#" class="footer__link">GitHub</a></li>
+        <li><a href="#" class="footer__link">Dribbble</a></li>
+      </ul>
+      <span class="footer__copy">© 2025 TYPE MANIFESTO</span>
+    </div>
+
+    <div class="footer__tagline" aria-hidden="true">
+      MAKE IT<br>BOLD
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════
+       MINIMAL JS — Scroll-triggered reveals
+       ══════════════════════════════════════════ -->
+  <script>
+    (function() {
+      'use strict';
+
+      // IntersectionObserver for scroll-triggered reveal animations
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      document.querySelectorAll('.reveal').forEach(function(el) {
+        observer.observe(el);
+      });
+
+      // Parallax-ish effect on manifesto section on mouse move
+      var manifestoContainer = document.querySelector('.manifesto__container');
+      if (manifestoContainer) {
+        document.querySelector('.manifesto').addEventListener('mousemove', function(e) {
+          var rect = this.getBoundingClientRect();
+          var x = (e.clientX - rect.left) / rect.width - 0.5;
+          var y = (e.clientY - rect.top) / rect.height - 0.5;
+          var rotateY = x * -8;
+          var rotateX = y * 4;
+          manifestoContainer.style.transform =
+            'perspective(1200px) rotateY(' + rotateY + 'deg) rotateX(' + rotateX + 'deg)';
+        });
+
+        document.querySelector('.manifesto').addEventListener('mouseleave', function() {
+          manifestoContainer.style.transform =
+            'perspective(1200px) rotateY(-5deg) rotateX(2deg)';
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
