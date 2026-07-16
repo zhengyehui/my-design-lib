@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 106 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 107 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1000,6 +1000,15 @@ const pages = [
     rating: 9.4,
     description: '沉浸式流媒体平台，环境光球动画 + Hero 电影详情 + 内容横滑 + 分类网格 + 三栏订阅定价方案',
   },
+  {
+    id: 'plant-shop',
+    title: 'Greenhouse 室内植物商店',
+    category: 'ecommerce',
+    tags: ['植物', '电商', '北欧风', '自然', '生活方式'],
+    colors: ['#1a3a2a', '#4a7c59', '#faf8f0'],
+    rating: 9.4,
+    description: '北欧风室内植物电商，CSS 植物插画 + 暖奶油底 + 森林绿配色 + 产品网格 + 护理指南 + 月度订阅盒子',
+  },
 ]
 
 const categories = [
@@ -1057,12 +1066,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 106 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 107 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="106 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="107 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1071,7 +1080,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 106 个完整页面</span>
+      <span>📦 107 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
