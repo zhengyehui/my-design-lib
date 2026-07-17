@@ -244,7 +244,8 @@ export default defineConfig({
             { text: 'Sprout AI 可爱机器人伙伴', link: '/pages/sprout-ai' },
             { text: 'Pulse Board 任务管理', link: '/pages/pulse-board' },
             { text: 'NexusConnect 集成生态', link: '/pages/ecosystem-connect' },
-            { text: 'InfraDocs 知识基础设施', link: '/pages/infradocs-platform' }
+            { text: 'InfraDocs 知识基础设施', link: '/pages/infradocs-platform' },
+            { text: 'Nominal AI 财务自动化', link: '/pages/nominal-ai' }
           ]
         },
         {
@@ -330,7 +331,8 @@ export default defineConfig({
             { text: 'FRAME 黑色电影数字体验', link: '/pages/cinema-noir' },
             { text: 'ECLAT 音乐节', link: '/pages/music-festival' },
             { text: 'LUMEN Awards 数字设计大奖', link: '/pages/lumen-awards' },
-            { text: 'TYPE 排版宣言', link: '/pages/typo-manifesto' }
+            { text: 'TYPE 排版宣言', link: '/pages/typo-manifesto' },
+            { text: 'ReelCraft AI 视频创作', link: '/pages/reelcraft-ai' }
           ]
         },
         {

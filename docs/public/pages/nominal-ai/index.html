@@ -1,0 +1,2844 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nominal AI — 智能财务结算平台</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       CSS Custom Properties & Reset
+       ======================================== */
+    :root {
+      --color-primary: #6366f1;
+      --color-primary-light: #818cf8;
+      --color-primary-dark: #4f46e5;
+      --color-sage: #4a7c59;
+      --color-sage-light: #e8f0e8;
+      --color-sage-bg: #f0f5f0;
+      --color-charcoal: #1a1a2e;
+      --color-charcoal-light: #2a2a40;
+      --color-gold: #c9a96e;
+      --color-gold-light: #e8d5a8;
+      --color-white: #ffffff;
+      --color-off-white: #fafafa;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+      --color-success: #22c55e;
+      --color-warning: #f59e0b;
+      --color-info: #3b82f6;
+      --color-pastel-blue: #dbeafe;
+      --color-pastel-green: #dcfce7;
+      --color-pastel-purple: #ede9fe;
+      --color-pastel-yellow: #fef9c3;
+      --color-pastel-pink: #fce7f3;
+      --color-pastel-orange: #ffedd5;
+      --font-serif: 'DM Serif Display', 'Noto Serif SC', Georgia, serif;
+      --font-sans: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+      --transition-fast: 150ms ease;
+      --transition-normal: 250ms ease;
+      --transition-slow: 400ms ease;
+    }
+
+    /* ========================================
+       Reset & Base Styles
+       ======================================== */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-gray-800);
+      line-height: 1.6;
+      background-color: var(--color-white);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color var(--transition-fast);
+    }
+
+    /* ========================================
+       Typography
+       ======================================== */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-serif);
+      line-height: 1.2;
+      font-weight: 400;
+    }
+
+    h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+    h2 { font-size: clamp(1.875rem, 3.5vw, 3rem); }
+    h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* ========================================
+       Layout Utilities
+       ======================================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-padding {
+      padding: 100px 0;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 16px;
+      font-family: var(--font-sans);
+    }
+
+    .section-label::before {
+      content: '';
+      width: 24px;
+      height: 2px;
+      background: var(--color-primary);
+      border-radius: 1px;
+    }
+
+    .section-title {
+      margin-bottom: 20px;
+      color: var(--color-gray-900);
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: var(--color-gray-500);
+      max-width: 600px;
+      margin: 0 auto 48px;
+      font-family: var(--font-sans);
+      line-height: 1.7;
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      transition: all var(--transition-normal);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--color-gray-900);
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--color-primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+      font-family: var(--font-sans);
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-gray-600);
+      transition: color var(--transition-fast);
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-gray-900);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--color-primary);
+      transition: width var(--transition-normal);
+      border-radius: 1px;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 24px;
+      background: var(--color-gray-900);
+      color: var(--color-white) !important;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+      font-family: var(--font-sans);
+    }
+
+    .nav-cta:hover {
+      background: var(--color-primary);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-cta::after {
+      display: none !important;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      position: relative;
+      padding: 160px 0 100px;
+      background: var(--color-white);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(74, 124, 89, 0.05) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px 6px 8px;
+      background: var(--color-sage-light);
+      border: 1px solid rgba(74, 124, 89, 0.2);
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-sage);
+      margin-bottom: 28px;
+      font-family: var(--font-sans);
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--color-sage);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.75rem, 5.5vw, 4.25rem);
+      color: var(--color-gray-900);
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .hero h1 .accent {
+      color: var(--color-primary);
+      position: relative;
+    }
+
+    .hero h1 .accent::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: rgba(99, 102, 241, 0.15);
+      border-radius: 4px;
+      z-index: -1;
+    }
+
+    .hero-description {
+      font-size: 1.1875rem;
+      color: var(--color-gray-500);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.75;
+      font-family: var(--font-sans);
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: var(--radius-full);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: var(--color-white);
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-secondary {
+      background: var(--color-white);
+      color: var(--color-gray-700);
+      border: 1px solid var(--color-gray-200);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--color-gray-300);
+      background: var(--color-gray-50);
+      transform: translateY(-2px);
+    }
+
+    .btn-gold {
+      background: var(--color-gold);
+      color: var(--color-white);
+      box-shadow: 0 4px 14px rgba(201, 169, 110, 0.4);
+    }
+
+    .btn-gold:hover {
+      background: #b8985d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 169, 110, 0.5);
+    }
+
+    /* Floating Status Badges */
+    .floating-badges {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .floating-badge {
+      position: absolute;
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      box-shadow: var(--shadow-md);
+      white-space: nowrap;
+    }
+
+    .floating-badge.badge-1 {
+      top: 15%;
+      left: 8%;
+      background: var(--color-pastel-green);
+      color: var(--color-sage);
+      animation: floatBadge1 6s ease-in-out infinite;
+    }
+
+    .floating-badge.badge-2 {
+      top: 25%;
+      right: 6%;
+      background: var(--color-pastel-blue);
+      color: #2563eb;
+      animation: floatBadge2 7s ease-in-out infinite 1s;
+    }
+
+    .floating-badge.badge-3 {
+      top: 40%;
+      left: 3%;
+      background: var(--color-pastel-yellow);
+      color: #b45309;
+      animation: floatBadge3 5.5s ease-in-out infinite 0.5s;
+    }
+
+    .floating-badge.badge-4 {
+      top: 10%;
+      right: 12%;
+      background: var(--color-pastel-purple);
+      color: #7c3aed;
+      animation: floatBadge1 8s ease-in-out infinite 2s;
+    }
+
+    .floating-badge.badge-5 {
+      top: 35%;
+      right: 3%;
+      background: var(--color-pastel-pink);
+      color: #db2777;
+      animation: floatBadge2 6.5s ease-in-out infinite 1.5s;
+    }
+
+    .floating-badge.badge-6 {
+      top: 8%;
+      left: 20%;
+      background: var(--color-pastel-orange);
+      color: #ea580c;
+      animation: floatBadge3 7.5s ease-in-out infinite 0.8s;
+    }
+
+    @keyframes floatBadge1 {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-18px); }
+    }
+
+    @keyframes floatBadge2 {
+      0%, 100% { transform: translateY(0px) rotate(-1deg); }
+      50% { transform: translateY(-14px) rotate(1deg); }
+    }
+
+    @keyframes floatBadge3 {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      33% { transform: translateY(-10px) translateX(5px); }
+      66% { transform: translateY(-16px) translateX(-3px); }
+    }
+
+    /* Product Mockup */
+    .hero-mockup {
+      position: relative;
+      z-index: 2;
+      max-width: 960px;
+      margin: 0 auto;
+      perspective: 1000px;
+    }
+
+    .mockup-browser {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-2xl), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .mockup-browser-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 20px;
+      background: var(--color-gray-50);
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .mockup-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .mockup-dot.red { background: #ef4444; }
+    .mockup-dot.yellow { background: #f59e0b; }
+    .mockup-dot.green { background: #22c55e; }
+
+    .mockup-url-bar {
+      flex: 1;
+      max-width: 320px;
+      margin-left: 16px;
+      padding: 6px 16px;
+      background: var(--color-white);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      color: var(--color-gray-400);
+      font-family: var(--font-sans);
+    }
+
+    .mockup-content {
+      display: flex;
+      min-height: 380px;
+    }
+
+    /* Sidebar */
+    .mockup-sidebar {
+      width: 200px;
+      background: var(--color-charcoal);
+      color: var(--color-white);
+      padding: 20px 0;
+      flex-shrink: 0;
+    }
+
+    .mockup-sidebar-logo {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 12px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mockup-sidebar-logo-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--color-primary);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+
+    .mockup-sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      font-size: 0.8125rem;
+      color: rgba(255, 255, 255, 0.5);
+      cursor: default;
+    }
+
+    .mockup-sidebar-item.active {
+      color: var(--color-white);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .mockup-sidebar-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      opacity: 0.6;
+    }
+
+    .mockup-sidebar-item.active .mockup-sidebar-icon {
+      opacity: 1;
+    }
+
+    /* Main Content */
+    .mockup-main {
+      flex: 1;
+      padding: 24px;
+      background: var(--color-gray-50);
+    }
+
+    .mockup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .mockup-header h4 {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-gray-900);
+    }
+
+    .mockup-header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mockup-header-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+    }
+
+    .mockup-header-btn.primary {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .mockup-header-btn.secondary {
+      background: var(--color-white);
+      color: var(--color-gray-600);
+      border: 1px solid var(--color-gray-200);
+    }
+
+    /* Stats Cards */
+    .mockup-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .mockup-stat-card {
+      background: var(--color-white);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      border: 1px solid var(--color-gray-100);
+    }
+
+    .mockup-stat-label {
+      font-size: 0.6875rem;
+      color: var(--color-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-sans);
+      margin-bottom: 4px;
+    }
+
+    .mockup-stat-value {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--color-gray-900);
+    }
+
+    .mockup-stat-change {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      margin-top: 2px;
+    }
+
+    .mockup-stat-change.up {
+      color: var(--color-success);
+    }
+
+    .mockup-stat-change.down {
+      color: #ef4444;
+    }
+
+    /* Data Table */
+    .mockup-table {
+      background: var(--color-white);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-gray-100);
+      overflow: hidden;
+    }
+
+    .mockup-table-header {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--color-gray-50);
+      border-bottom: 1px solid var(--color-gray-100);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--color-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-sans);
+    }
+
+    .mockup-table-row {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--color-gray-50);
+      font-size: 0.8125rem;
+      font-family: var(--font-sans);
+      align-items: center;
+    }
+
+    .mockup-table-row:last-child {
+      border-bottom: none;
+    }
+
+    .mockup-table-name {
+      font-weight: 600;
+      color: var(--color-gray-800);
+    }
+
+    .mockup-table-dept {
+      color: var(--color-gray-500);
+    }
+
+    .mockup-table-amount {
+      font-weight: 600;
+      color: var(--color-gray-900);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mockup-table-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.6875rem;
+      font-weight: 600;
+    }
+
+    .mockup-table-status.status-completed {
+      background: var(--color-pastel-green);
+      color: var(--color-sage);
+    }
+
+    .mockup-table-status.status-pending {
+      background: var(--color-pastel-yellow);
+      color: #b45309;
+    }
+
+    .mockup-table-status.status-processing {
+      background: var(--color-pastel-blue);
+      color: #2563eb;
+    }
+
+    .mockup-table-date {
+      color: var(--color-gray-400);
+      font-size: 0.75rem;
+    }
+
+    /* ========================================
+       Trust Bar
+       ======================================== */
+    .trust-bar {
+      padding: 48px 0;
+      background: var(--color-white);
+      border-top: 1px solid var(--color-gray-100);
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .trust-bar-label {
+      text-align: center;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-gray-400);
+      margin-bottom: 28px;
+      font-family: var(--font-sans);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .trust-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .trust-logo {
+      width: 120px;
+      height: 32px;
+      background: var(--color-gray-200);
+      border-radius: var(--radius-sm);
+      opacity: 0.5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-gray-400);
+      font-family: var(--font-sans);
+      transition: opacity var(--transition-fast);
+    }
+
+    .trust-logo:hover {
+      opacity: 0.8;
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      padding: 100px 0;
+      background: var(--color-sage-bg);
+      position: relative;
+    }
+
+    .features::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(74, 124, 89, 0.2), transparent);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .feature-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      border: 1px solid rgba(74, 124, 89, 0.12);
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--color-primary);
+      transform: scaleX(0);
+      transition: transform var(--transition-normal);
+      transform-origin: left;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-size: 1.5rem;
+    }
+
+    .feature-icon.icon-close {
+      background: var(--color-pastel-purple);
+      color: #7c3aed;
+    }
+
+    .feature-icon.icon-consolidate {
+      background: var(--color-pastel-blue);
+      color: #2563eb;
+    }
+
+    .feature-icon.icon-intercompany {
+      background: var(--color-pastel-green);
+      color: var(--color-sage);
+    }
+
+    .feature-card h3 {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      color: var(--color-gray-900);
+    }
+
+    .feature-card p {
+      color: var(--color-gray-500);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .feature-list {
+      list-style: none;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 0.875rem;
+      color: var(--color-gray-600);
+      font-family: var(--font-sans);
+    }
+
+    .feature-list li::before {
+      content: '✓';
+      width: 20px;
+      height: 20px;
+      background: var(--color-pastel-green);
+      color: var(--color-sage);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ========================================
+       How It Works Section
+       ======================================== */
+    .how-it-works {
+      padding: 100px 0;
+      background: var(--color-white);
+    }
+
+    .steps-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 60px;
+      position: relative;
+    }
+
+    .steps-container::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-gold));
+      z-index: 0;
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 0 16px;
+    }
+
+    .step-number {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--color-white);
+      border: 3px solid var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+
+    .step-number span {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      color: var(--color-primary);
+    }
+
+    .step-number::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .step h3 {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 1.0625rem;
+      margin-bottom: 10px;
+      color: var(--color-gray-900);
+    }
+
+    .step p {
+      font-size: 0.875rem;
+      color: var(--color-gray-500);
+      line-height: 1.65;
+    }
+
+    /* ========================================
+       Stats Section
+       ======================================== */
+    .stats {
+      padding: 80px 0;
+      background: var(--color-sage-bg);
+      position: relative;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+    }
+
+    .stat-item {
+      text-align: center;
+      position: relative;
+    }
+
+    .stat-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 10%;
+      right: 0;
+      height: 80%;
+      width: 1px;
+      background: rgba(74, 124, 89, 0.15);
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      color: var(--color-primary);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-suffix {
+      font-family: var(--font-sans);
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--color-primary-light);
+    }
+
+    .stat-label {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-gray-700);
+      margin-bottom: 6px;
+    }
+
+    .stat-description {
+      font-size: 0.875rem;
+      color: var(--color-gray-400);
+    }
+
+    /* ========================================
+       Tabs / Features Detail Section
+       ======================================== */
+    .features-detail {
+      padding: 100px 0;
+      background: var(--color-charcoal);
+      color: var(--color-white);
+    }
+
+    .features-detail .section-label {
+      color: var(--color-gold);
+    }
+
+    .features-detail .section-label::before {
+      background: var(--color-gold);
+    }
+
+    .features-detail .section-title {
+      color: var(--color-white);
+    }
+
+    .features-detail .section-subtitle {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .tabs-container {
+      margin-top: 48px;
+    }
+
+    .tabs-header {
+      display: flex;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-lg);
+      padding: 6px;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 24px;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .tab-btn.active {
+      background: var(--color-primary);
+      color: var(--color-white);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .tab-text h3 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      margin-bottom: 16px;
+      color: var(--color-white);
+    }
+
+    .tab-text p {
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 28px;
+      line-height: 1.8;
+    }
+
+    .tab-features-list {
+      list-style: none;
+    }
+
+    .tab-features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      font-size: 0.9375rem;
+      color: rgba(255, 255, 255, 0.75);
+      font-family: var(--font-sans);
+    }
+
+    .tab-features-list li .check-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--color-primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tab-visual {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      position: relative;
+    }
+
+    .tab-visual-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .tab-visual-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tab-visual-card-title {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: var(--font-sans);
+    }
+
+    .tab-visual-card-badge {
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+    }
+
+    .tab-visual-card-badge.badge-active {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+    }
+
+    .tab-visual-card-badge.badge-review {
+      background: rgba(251, 191, 36, 0.15);
+      color: #fbbf24;
+    }
+
+    .tab-visual-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .tab-visual-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+    }
+
+    .tab-visual-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 0.8125rem;
+      font-family: var(--font-sans);
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ========================================
+       Testimonials Section
+       ======================================== */
+    .testimonials {
+      padding: 100px 0;
+      background: var(--color-white);
+      position: relative;
+    }
+
+    .testimonials-track {
+      display: flex;
+      gap: 24px;
+      margin-top: 48px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      padding-bottom: 16px;
+    }
+
+    .testimonials-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .testimonial-card {
+      flex: 0 0 380px;
+      scroll-snap-align: start;
+      background: var(--color-white);
+      border: 1px solid var(--color-gray-100);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      transition: all var(--transition-normal);
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-star {
+      width: 18px;
+      height: 18px;
+      color: var(--color-gold);
+    }
+
+    .testimonial-quote {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--color-gray-700);
+      margin-bottom: 28px;
+      font-family: var(--font-sans);
+      position: relative;
+    }
+
+    .testimonial-quote::before {
+      content: '"';
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      color: var(--color-primary);
+      opacity: 0.2;
+      position: absolute;
+      top: -20px;
+      left: -5px;
+      line-height: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .testimonial-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+      font-weight: 700;
+      font-family: var(--font-sans);
+      color: var(--color-white);
+    }
+
+    .testimonial-avatar.avatar-1 { background: var(--color-primary); }
+    .testimonial-avatar.avatar-2 { background: var(--color-sage); }
+    .testimonial-avatar.avatar-3 { background: var(--color-gold); }
+
+    .testimonial-name {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      color: var(--color-gray-900);
+      font-family: var(--font-sans);
+    }
+
+    .testimonial-role {
+      font-size: 0.8125rem;
+      color: var(--color-gray-400);
+      font-family: var(--font-sans);
+    }
+
+    /* ========================================
+       Pricing Preview
+       ======================================== */
+    .pricing-preview {
+      padding: 100px 0;
+      background: var(--color-sage-bg);
+    }
+
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .pricing-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      position: relative;
+      transition: all var(--transition-normal);
+    }
+
+    .pricing-card.popular {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-lg), 0 0 0 1px var(--color-primary);
+      transform: scale(1.04);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .pricing-card.popular:hover {
+      transform: scale(1.04) translateY(-4px);
+    }
+
+    .pricing-popular-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 20px;
+      background: var(--color-primary);
+      color: var(--color-white);
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      font-family: var(--font-sans);
+      white-space: nowrap;
+    }
+
+    .pricing-plan-name {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: var(--color-gray-900);
+      margin-bottom: 8px;
+    }
+
+    .pricing-plan-desc {
+      font-size: 0.875rem;
+      color: var(--color-gray-400);
+      margin-bottom: 24px;
+      font-family: var(--font-sans);
+    }
+
+    .pricing-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .pricing-currency {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--color-gray-500);
+      font-family: var(--font-sans);
+    }
+
+    .pricing-amount {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      color: var(--color-gray-900);
+      line-height: 1;
+    }
+
+    .pricing-period {
+      font-size: 0.875rem;
+      color: var(--color-gray-400);
+      font-family: var(--font-sans);
+    }
+
+    .pricing-unit {
+      font-size: 0.8125rem;
+      color: var(--color-gray-400);
+      margin-bottom: 28px;
+      font-family: var(--font-sans);
+    }
+
+    .pricing-divider {
+      height: 1px;
+      background: var(--color-gray-100);
+      margin: 24px 0;
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 0.875rem;
+      color: var(--color-gray-600);
+      font-family: var(--font-sans);
+    }
+
+    .pricing-features li .pricing-check {
+      color: var(--color-sage);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .pricing-cta {
+      width: 100%;
+      text-align: center;
+    }
+
+    .pricing-cta .btn {
+      width: 100%;
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta-section {
+      padding: 100px 0;
+      background: var(--color-charcoal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -25%;
+      width: 150%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-content h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--color-white);
+      margin-bottom: 20px;
+    }
+
+    .cta-content p {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 1.125rem;
+      margin-bottom: 40px;
+      line-height: 1.75;
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .cta-note {
+      margin-top: 24px;
+      font-size: 0.8125rem;
+      color: rgba(255, 255, 255, 0.35);
+      font-family: var(--font-sans);
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      padding: 60px 0 32px;
+      background: #0f0f1e;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand p {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      margin-top: 16px;
+      max-width: 280px;
+    }
+
+    .footer-brand .nav-logo {
+      color: var(--color-white);
+    }
+
+    .footer-column h4 {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-white);
+      margin-bottom: 20px;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: 12px;
+    }
+
+    .footer-column a {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.45);
+      transition: color var(--transition-fast);
+      font-family: var(--font-sans);
+    }
+
+    .footer-column a:hover {
+      color: var(--color-white);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.8125rem;
+      font-family: var(--font-sans);
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-bottom-links a {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .footer-bottom-links a:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* ========================================
+       Scroll Animations (Minimal JS)
+       ======================================== */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+    @media (max-width: 1024px) {
+      .features-grid,
+      .pricing-cards {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+
+      .steps-container::before {
+        display: none;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .stat-item:not(:last-child)::after {
+        display: none;
+      }
+
+      .tab-content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .mockup-sidebar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 130px 0 80px;
+      }
+
+      .hero h1 {
+        font-size: 2.25rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .floating-badge {
+        display: none;
+      }
+
+      .steps-container {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs-header {
+        flex-direction: column;
+      }
+
+      .testimonials-track {
+        flex-direction: column;
+      }
+
+      .testimonial-card {
+        flex: 0 0 auto;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      .cta-actions .btn {
+        width: 100%;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .mockup-table-header,
+      .mockup-table-row {
+        grid-template-columns: 2fr 1fr 1fr;
+      }
+
+      .mockup-table-header > *:nth-child(2),
+      .mockup-table-row > *:nth-child(2),
+      .mockup-table-header > *:nth-child(5),
+      .mockup-table-row > *:nth-child(5) {
+        display: none;
+      }
+
+      .mockup-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing-card.popular {
+        transform: scale(1);
+      }
+
+      .pricing-card.popular:hover {
+        transform: translateY(-4px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       Navigation
+       ======================================== -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">N</div>
+        <span>Nominal AI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">功能</a></li>
+        <li><a href="#how-it-works">工作原理</a></li>
+        <li><a href="#solutions">解决方案</a></li>
+        <li><a href="#pricing">定价</a></li>
+        <li><a href="#testimonials">客户评价</a></li>
+        <li><a href="#cta" class="nav-cta">预约演示 →</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ========================================
+       Hero Section
+       ======================================== -->
+  <section class="hero">
+    <!-- Floating Status Badges -->
+    <div class="floating-badges">
+      <div class="floating-badge badge-1">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#4ade80;margin-right:6px;"></span>
+        已完成
+      </div>
+      <div class="floating-badge badge-2">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#60a5fa;margin-right:6px;"></span>
+        对账中
+      </div>
+      <div class="floating-badge badge-3">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#fbbf24;margin-right:6px;"></span>
+        待审批
+      </div>
+      <div class="floating-badge badge-4">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#a78bfa;margin-right:6px;"></span>
+        自动分录
+      </div>
+      <div class="floating-badge badge-5">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f472b6;margin-right:6px;"></span>
+        合并中
+      </div>
+      <div class="floating-badge badge-6">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#fb923c;margin-right:6px;"></span>
+        已归档
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          AI 驱动的财务自动化平台
+        </div>
+
+        <h1>
+          用 <span class="accent">AI 代理</span>运行您的<br>整个财务结算
+        </h1>
+
+        <p class="hero-description">
+          告别繁琐的手工对账和月末加班。Nominal AI 自动执行结账、合并报表和关联交易处理，
+          让财务团队专注于战略决策而非重复劳动。
+        </p>
+
+        <div class="hero-actions">
+          <a href="#cta" class="btn btn-primary">预约演示 →</a>
+          <a href="#how-it-works" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-right:4px;">
+              <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+              <polygon points="6.5,5 11,8 6.5,11" fill="currentColor"/>
+            </svg>
+            观看演示
+          </a>
+        </div>
+      </div>
+
+      <!-- Product Mockup -->
+      <div class="hero-mockup">
+        <div class="mockup-browser">
+          <div class="mockup-browser-bar">
+            <span class="mockup-dot red"></span>
+            <span class="mockup-dot yellow"></span>
+            <span class="mockup-dot green"></span>
+            <div class="mockup-url-bar">app.nominal-ai.com/dashboard</div>
+          </div>
+          <div class="mockup-content">
+            <!-- Sidebar -->
+            <div class="mockup-sidebar">
+              <div class="mockup-sidebar-logo">
+                <div class="mockup-sidebar-logo-icon">N</div>
+                Nominal AI
+              </div>
+              <div class="mockup-sidebar-item active">
+                <svg class="mockup-sidebar-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <rect x="1" y="1" width="7" height="7" rx="2" fill="rgba(255,255,255,0.8)"/>
+                  <rect x="10" y="1" width="7" height="7" rx="2" fill="rgba(255,255,255,0.4)"/>
+                  <rect x="1" y="10" width="7" height="7" rx="2" fill="rgba(255,255,255,0.4)"/>
+                  <rect x="10" y="10" width="7" height="7" rx="2" fill="rgba(255,255,255,0.4)"/>
+                </svg>
+                概览
+              </div>
+              <div class="mockup-sidebar-item">
+                <svg class="mockup-sidebar-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <rect x="1" y="3" width="16" height="12" rx="2" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                  <line x1="1" y1="7" x2="17" y2="7" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                </svg>
+                结账管理
+              </div>
+              <div class="mockup-sidebar-item">
+                <svg class="mockup-sidebar-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M3 9L7 5L11 8L15 3" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                  <rect x="1" y="1" width="16" height="16" rx="2" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+                </svg>
+                合并报表
+              </div>
+              <div class="mockup-sidebar-item">
+                <svg class="mockup-sidebar-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle cx="6" cy="9" r="3" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                  <circle cx="12" cy="9" r="3" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                </svg>
+                关联交易
+              </div>
+              <div class="mockup-sidebar-item">
+                <svg class="mockup-sidebar-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                  <path d="M9 5V9L12 11" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                审计日志
+              </div>
+              <div class="mockup-sidebar-item">
+                <svg class="mockup-sidebar-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle cx="9" cy="5" r="3" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                  <path d="M3 16C3 12.686 5.686 10 9 10C12.314 10 15 12.686 15 16" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                </svg>
+                设置
+              </div>
+            </div>
+
+            <!-- Main Dashboard Content -->
+            <div class="mockup-main">
+              <div class="mockup-header">
+                <h4>2026年6月 — 月度结算概览</h4>
+                <div class="mockup-header-actions">
+                  <span class="mockup-header-btn secondary">导出</span>
+                  <span class="mockup-header-btn primary">开始结算</span>
+                </div>
+              </div>
+
+              <!-- Stats -->
+              <div class="mockup-stats">
+                <div class="mockup-stat-card">
+                  <div class="mockup-stat-label">本月交易</div>
+                  <div class="mockup-stat-value">12,847</div>
+                  <div class="mockup-stat-change up">↑ 12.5% 较上月</div>
+                </div>
+                <div class="mockup-stat-card">
+                  <div class="mockup-stat-label">已完成对账</div>
+                  <div class="mockup-stat-value">98.3%</div>
+                  <div class="mockup-stat-change up">↑ 2.1% 较上月</div>
+                </div>
+                <div class="mockup-stat-card">
+                  <div class="mockup-stat-label">待处理项</div>
+                  <div class="mockup-stat-value">23</div>
+                  <div class="mockup-stat-change down">↓ 45% 较上月</div>
+                </div>
+              </div>
+
+              <!-- Data Table -->
+              <div class="mockup-table">
+                <div class="mockup-table-header">
+                  <span>科目名称</span>
+                  <span>所属部门</span>
+                  <span>金额 (万元)</span>
+                  <span>状态</span>
+                  <span>更新日期</span>
+                </div>
+                <div class="mockup-table-row">
+                  <span class="mockup-table-name">应收账款 — 华东区</span>
+                  <span class="mockup-table-dept">销售部</span>
+                  <span class="mockup-table-amount">¥ 2,847.50</span>
+                  <span class="mockup-table-status status-completed">● 已完成</span>
+                  <span class="mockup-table-date">06-15</span>
+                </div>
+                <div class="mockup-table-row">
+                  <span class="mockup-table-name">应付账款 — 供应商A</span>
+                  <span class="mockup-table-dept">采购部</span>
+                  <span class="mockup-table-amount">¥ 1,235.00</span>
+                  <span class="mockup-table-status status-processing">● 对账中</span>
+                  <span class="mockup-table-date">06-14</span>
+                </div>
+                <div class="mockup-table-row">
+                  <span class="mockup-table-name">主营业务收入</span>
+                  <span class="mockup-table-dept">财务部</span>
+                  <span class="mockup-table-amount">¥ 8,912.30</span>
+                  <span class="mockup-table-status status-completed">● 已完成</span>
+                  <span class="mockup-table-date">06-13</span>
+                </div>
+                <div class="mockup-table-row">
+                  <span class="mockup-table-name">关联交易 — 子公司B</span>
+                  <span class="mockup-table-dept">集团财务</span>
+                  <span class="mockup-table-amount">¥ 456.80</span>
+                  <span class="mockup-table-status status-pending">● 待审批</span>
+                  <span class="mockup-table-date">06-12</span>
+                </div>
+                <div class="mockup-table-row">
+                  <span class="mockup-table-name">管理费用 — 差旅</span>
+                  <span class="mockup-table-dept">行政部</span>
+                  <span class="mockup-table-amount">¥ 89.20</span>
+                  <span class="mockup-table-status status-completed">● 已完成</span>
+                  <span class="mockup-table-date">06-11</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Trust Bar
+       ======================================== -->
+  <section class="trust-bar">
+    <div class="container">
+      <p class="trust-bar-label">受到中国领先企业财务团队的信赖</p>
+      <div class="trust-logos">
+        <div class="trust-logo">华兴资本</div>
+        <div class="trust-logo">腾讯云</div>
+        <div class="trust-logo">阿里健康</div>
+        <div class="trust-logo">小米集团</div>
+        <div class="trust-logo">蔚来汽车</div>
+        <div class="trust-logo">商汤科技</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Features Section
+       ======================================== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="text-center">
+        <span class="section-label">核心功能</span>
+        <h2 class="section-title">三位一体的智能财务引擎</h2>
+        <p class="section-subtitle">
+          结账加速、财务合并、关联交易——覆盖企业财务结算全流程的 AI 解决方案
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1: 结账加速 -->
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon icon-close">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M4 14C4 8.477 8.477 4 14 4C19.523 4 24 8.477 24 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M14 4V14L20 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 20H24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>结账加速</h3>
+          <p>
+            AI 代理自动执行月度结账流程，从分录生成到科目核对，
+            将结账时间从数天缩短至数小时。
+          </p>
+          <ul class="feature-list">
+            <li>自动分录生成与过账</li>
+            <li>智能科目余额核对</li>
+            <li>异常交易自动标记</li>
+            <li>一键生成结账报告</li>
+          </ul>
+        </div>
+
+        <!-- Feature 2: 财务合并 -->
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon icon-consolidate">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+              <rect x="15" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+              <rect x="9" y="15" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity="0.15"/>
+            </svg>
+          </div>
+          <h3>财务合并</h3>
+          <p>
+            自动处理多实体、多币种的财务数据合并，
+            支持复杂集团架构下的报表编制与调整。
+          </p>
+          <ul class="feature-list">
+            <li>多实体自动合并</li>
+            <li>币种换算与汇率管理</li>
+            <li>抵消分录自动生成</li>
+            <li>合并工作底稿实时追踪</li>
+          </ul>
+        </div>
+
+        <!-- Feature 3: 关联交易 -->
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon icon-intercompany">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <circle cx="8" cy="14" r="5" stroke="currentColor" stroke-width="2"/>
+              <circle cx="20" cy="14" r="5" stroke="currentColor" stroke-width="2"/>
+              <path d="M13 14H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 11L16 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 17L16 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>关联交易</h3>
+          <p>
+            智能匹配和核对集团内部关联交易，
+            自动识别差异并生成调整建议。
+          </p>
+          <ul class="feature-list">
+            <li>跨实体交易自动匹配</li>
+            <li>差异分析与原因追溯</li>
+            <li>抵消方案智能推荐</li>
+            <li>合规报告自动生成</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       How It Works Section
+       ======================================== -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="text-center">
+        <span class="section-label">工作原理</span>
+        <h2 class="section-title">四步实现财务自动化</h2>
+        <p class="section-subtitle">
+          从数据接入到智能输出，Nominal AI 让复杂的财务流程变得简单
+        </p>
+      </div>
+
+      <div class="steps-container">
+        <div class="step animate-on-scroll">
+          <div class="step-number">
+            <span>01</span>
+          </div>
+          <h3>数据接入</h3>
+          <p>无缝连接 ERP、银行、税务等 50+ 系统，自动采集和整合财务数据。</p>
+        </div>
+
+        <div class="step animate-on-scroll">
+          <div class="step-number">
+            <span>02</span>
+          </div>
+          <h3>AI 分析</h3>
+          <p>AI 代理自动识别交易模式、检测异常并执行智能分类与核对。</p>
+        </div>
+
+        <div class="step animate-on-scroll">
+          <div class="step-number">
+            <span>03</span>
+          </div>
+          <h3>自动执行</h3>
+          <p>根据预设规则和 AI 判断，自动完成分录、对账、合并等操作。</p>
+        </div>
+
+        <div class="step animate-on-scroll">
+          <div class="step-number">
+            <span>04</span>
+          </div>
+          <h3>审阅确认</h3>
+          <p>财务团队聚焦审阅 AI 输出结果，一键确认即可完成结算周期。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Stats Section
+       ======================================== -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item animate-on-scroll">
+          <div class="stat-number">3<span class="stat-suffix">x</span></div>
+          <div class="stat-label">运营效率提升</div>
+          <div class="stat-description">平均缩短结账周期 67%</div>
+        </div>
+
+        <div class="stat-item animate-on-scroll">
+          <div class="stat-number">98<span class="stat-suffix">%</span></div>
+          <div class="stat-label">自动化准确率</div>
+          <div class="stat-description">AI 驱动的对账与分录准确度</div>
+        </div>
+
+        <div class="stat-item animate-on-scroll">
+          <div class="stat-number">50<span class="stat-suffix">+</span></div>
+          <div class="stat-label">集成系统支持</div>
+          <div class="stat-description">覆盖主流 ERP、银行及税务平台</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Features Detail (Tabs) Section
+       ======================================== -->
+  <section class="features-detail" id="solutions">
+    <div class="container">
+      <div class="text-center">
+        <span class="section-label">深度功能</span>
+        <h2 class="section-title">每一个环节，都有 AI 加持</h2>
+        <p class="section-subtitle">
+          深入了解 Nominal AI 如何重塑财务运营的每个关键步骤
+        </p>
+      </div>
+
+      <div class="tabs-container">
+        <div class="tabs-header">
+          <button class="tab-btn active" data-tab="tab-1">智能结账</button>
+          <button class="tab-btn" data-tab="tab-2">自动合并</button>
+          <button class="tab-btn" data-tab="tab-3">实时监控</button>
+        </div>
+
+        <!-- Tab 1 -->
+        <div class="tab-panel active" id="tab-1">
+          <div class="tab-content-grid">
+            <div class="tab-text">
+              <h3>AI 驱动的智能结账</h3>
+              <p>
+                告别月末结账的焦虑与加班。Nominal AI 的智能结账引擎自动执行
+                复杂的会计操作，让您的团队从繁琐的重复劳动中解放出来。
+              </p>
+              <ul class="tab-features-list">
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>自动识别并处理 100+ 种常见交易类型</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>基于历史数据学习企业特定的会计政策</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>实时异常检测与差异分析</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>完整的审计追踪与变更记录</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>支持中国会计准则与 IFRS 双标准</span>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-visual">
+              <div class="tab-visual-card">
+                <div class="tab-visual-card-header">
+                  <span class="tab-visual-card-title">2026年6月结账进度</span>
+                  <span class="tab-visual-card-badge badge-active">进行中</span>
+                </div>
+                <div class="tab-visual-bar">
+                  <div class="tab-visual-bar-fill" style="width: 78%;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:8px;">
+                  <span style="font-size:0.75rem;color:rgba(255,255,255,0.4);font-family:var(--font-sans);">78% 完成</span>
+                  <span style="font-size:0.75rem;color:rgba(255,255,255,0.4);font-family:var(--font-sans);">预计 2h 后完成</span>
+                </div>
+              </div>
+
+              <div class="tab-visual-card">
+                <div class="tab-visual-card-header">
+                  <span class="tab-visual-card-title">AI 执行摘要</span>
+                  <span class="tab-visual-card-badge badge-active">已处理</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>自动分录生成</span>
+                  <span style="color:#4ade80;">✓ 847 笔</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>科目余额核对</span>
+                  <span style="color:#4ade80;">✓ 156 项</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>异常标记处理</span>
+                  <span style="color:#fbbf24;">⏳ 3 项待审</span>
+                </div>
+              </div>
+
+              <div class="tab-visual-card">
+                <div class="tab-visual-card-header">
+                  <span class="tab-visual-card-title">风险评估</span>
+                  <span class="tab-visual-card-badge badge-review">低风险</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>未匹配交易</span>
+                  <span>0.2%</span>
+                </div>
+                <div class="tab-visual-bar" style="margin-top:4px;">
+                  <div class="tab-visual-bar-fill" style="width: 99.8%; background: linear-gradient(90deg, #22c55e, #4ade80);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2 -->
+        <div class="tab-panel" id="tab-2">
+          <div class="tab-content-grid">
+            <div class="tab-text">
+              <h3>无缝的集团财务合并</h3>
+              <p>
+                处理复杂集团架构下的财务合并从未如此轻松。Nominal AI 自动处理
+                多实体、多币种、多准则的合并需求。
+              </p>
+              <ul class="tab-features-list">
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>支持任意深度的集团架构树</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>自动币种换算与汇率差异处理</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>智能抵消分录与调整建议</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>合并工作底稿实时状态追踪</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>一键生成合规合并报表</span>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-visual">
+              <div class="tab-visual-card">
+                <div class="tab-visual-card-header">
+                  <span class="tab-visual-card-title">合并架构</span>
+                  <span class="tab-visual-card-badge badge-active">6 实体</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>母公司 — 北京总部</span>
+                  <span style="color:#4ade80;">✓</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>├ 子公司A — 上海</span>
+                  <span style="color:#4ade80;">✓</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>├ 子公司B — 深圳</span>
+                  <span style="color:#fbbf24;">⏳</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>├ 子公司C — 香港</span>
+                  <span style="color:#4ade80;">✓</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>└ 子公司D — 新加坡</span>
+                  <span style="color:#4ade80;">✓</span>
+                </div>
+              </div>
+
+              <div class="tab-visual-card">
+                <div class="tab-visual-card-header">
+                  <span class="tab-visual-card-title">币种处理</span>
+                  <span class="tab-visual-card-badge badge-active">已更新</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>CNY 人民币</span>
+                  <span>基准货币</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>HKD 港币</span>
+                  <span>0.9215</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>SGD 新加坡元</span>
+                  <span>5.3420</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3 -->
+        <div class="tab-panel" id="tab-3">
+          <div class="tab-content-grid">
+            <div class="tab-text">
+              <h3>全流程实时监控</h3>
+              <p>
+                从数据接入到最终报告，每一步都在您的掌控之中。
+                实时仪表盘让财务运营透明可见。
+              </p>
+              <ul class="tab-features-list">
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>实时结算进度追踪仪表盘</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>异常与风险的即时告警通知</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>AI 决策过程的透明化展示</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>多维度数据分析与趋势预测</span>
+                </li>
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>支持自定义 KPI 看板</span>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-visual">
+              <div class="tab-visual-card">
+                <div class="tab-visual-card-header">
+                  <span class="tab-visual-card-title">系统健康度</span>
+                  <span class="tab-visual-card-badge badge-active">正常</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>数据源连接</span>
+                  <span style="color:#4ade80;">● 全部在线</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>API 响应时间</span>
+                  <span>45ms</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>今日处理量</span>
+                  <span>12,847 笔</span>
+                </div>
+              </div>
+
+              <div class="tab-visual-card">
+                <div class="tab-visual-card-header">
+                  <span class="tab-visual-card-title">AI 代理状态</span>
+                  <span class="tab-visual-card-badge badge-active">运行中</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>结账代理</span>
+                  <span style="color:#4ade80;">● 活跃</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>对账代理</span>
+                  <span style="color:#4ade80;">● 活跃</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>合并代理</span>
+                  <span style="color:#fbbf24;">● 待触发</span>
+                </div>
+                <div class="tab-visual-row">
+                  <span>监控代理</span>
+                  <span style="color:#4ade80;">● 活跃</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Testimonials Section
+       ======================================== -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <div class="text-center">
+        <span class="section-label">客户评价</span>
+        <h2 class="section-title">财务团队的真实反馈</h2>
+        <p class="section-subtitle">
+          来自中国领先企业财务负责人的声音
+        </p>
+      </div>
+
+      <div class="testimonials-track">
+        <!-- Testimonial 1 -->
+        <div class="testimonial-card animate-on-scroll">
+          <div class="testimonial-stars">
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="testimonial-quote">
+            Nominal AI 彻底改变了我们的月度结账流程。以前需要 7 个工作日，现在 2 天就能完成。
+            AI 自动生成的分录准确率让我们非常惊喜，审计师也对我们的数据质量赞赏有加。
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar avatar-1">张</div>
+            <div>
+              <div class="testimonial-name">张明华</div>
+              <div class="testimonial-role">华兴资本 · 财务总监</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="testimonial-card animate-on-scroll">
+          <div class="testimonial-stars">
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="testimonial-quote">
+            我们有 8 家子公司分布在不同国家，以前合并报表是团队最头疼的工作。
+            Nominal AI 的自动合并功能让这一切变得简单，而且支持多币种处理和自动抵消，
+            大大减少了人为错误。
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar avatar-2">李</div>
+            <div>
+              <div class="testimonial-name">李婉清</div>
+              <div class="testimonial-role">蔚来汽车 · 集团财务副总裁</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="testimonial-card animate-on-scroll">
+          <div class="testimonial-stars">
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="testimonial-star" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="testimonial-quote">
+            关联交易核对一直是我们最耗时的工作，涉及 20 多家关联方。
+            Nominal AI 不仅自动匹配了 95% 的交易，还能智能推荐抵消方案。
+            我们终于可以把时间花在更有价值的分析工作上了。
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar avatar-3">王</div>
+            <div>
+              <div class="testimonial-name">王建国</div>
+              <div class="testimonial-role">商汤科技 · 首席财务官</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Pricing Preview Section
+       ======================================== -->
+  <section class="pricing-preview" id="pricing">
+    <div class="container">
+      <div class="text-center">
+        <span class="section-label">灵活定价</span>
+        <h2 class="section-title">为不同规模企业量身定制</h2>
+        <p class="section-subtitle">
+          从成长型企业到大型集团，找到最适合您的方案
+        </p>
+      </div>
+
+      <div class="pricing-cards">
+        <!-- Starter Plan -->
+        <div class="pricing-card animate-on-scroll">
+          <div class="pricing-plan-name">成长版</div>
+          <div class="pricing-plan-desc">适合快速成长的中型企业</div>
+          <div class="pricing-price">
+            <span class="pricing-currency">¥</span>
+            <span class="pricing-amount">8,800</span>
+          </div>
+          <div class="pricing-period">/月</div>
+          <div class="pricing-unit">按年付享 8 折优惠</div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li><span class="pricing-check">✓</span> 最多 3 个实体</li>
+            <li><span class="pricing-check">✓</span> AI 智能结账</li>
+            <li><span class="pricing-check">✓</span> 基础对账功能</li>
+            <li><span class="pricing-check">✓</span> 5 个系统集成</li>
+            <li><span class="pricing-check">✓</span> 邮件支持</li>
+          </ul>
+          <div class="pricing-cta">
+            <a href="#cta" class="btn btn-secondary">开始试用</a>
+          </div>
+        </div>
+
+        <!-- Professional Plan -->
+        <div class="pricing-card popular animate-on-scroll">
+          <div class="pricing-popular-badge">最受欢迎</div>
+          <div class="pricing-plan-name">专业版</div>
+          <div class="pricing-plan-desc">适合多实体集团企业</div>
+          <div class="pricing-price">
+            <span class="pricing-currency">¥</span>
+            <span class="pricing-amount">28,800</span>
+          </div>
+          <div class="pricing-period">/月</div>
+          <div class="pricing-unit">按年付享 8 折优惠</div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li><span class="pricing-check">✓</span> 最多 15 个实体</li>
+            <li><span class="pricing-check">✓</span> 全功能 AI 结账</li>
+            <li><span class="pricing-check">✓</span> 自动合并报表</li>
+            <li><span class="pricing-check">✓</span> 关联交易处理</li>
+            <li><span class="pricing-check">✓</span> 无限系统集成</li>
+            <li><span class="pricing-check">✓</span> 专属客户经理</li>
+          </ul>
+          <div class="pricing-cta">
+            <a href="#cta" class="btn btn-primary">预约演示</a>
+          </div>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="pricing-card animate-on-scroll">
+          <div class="pricing-plan-name">企业版</div>
+          <div class="pricing-plan-desc">大型集团的定制方案</div>
+          <div class="pricing-price">
+            <span class="pricing-amount" style="font-size:2rem;">定制报价</span>
+          </div>
+          <div class="pricing-period">&nbsp;</div>
+          <div class="pricing-unit">根据您的具体需求</div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li><span class="pricing-check">✓</span> 无限实体数量</li>
+            <li><span class="pricing-check">✓</span> 专业版全部功能</li>
+            <li><span class="pricing-check">✓</span> 私有化部署选项</li>
+            <li><span class="pricing-check">✓</span> 定制化开发</li>
+            <li><span class="pricing-check">✓</span> 7×24 优先支持</li>
+            <li><span class="pricing-check">✓</span> 现场实施培训</li>
+          </ul>
+          <div class="pricing-cta">
+            <a href="#cta" class="btn btn-secondary">联系销售</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       CTA Section
+       ======================================== -->
+  <section class="cta-section" id="cta">
+    <div class="container">
+      <div class="cta-content">
+        <span class="section-label" style="color:var(--color-gold);justify-content:center;">
+          <span style="display:inline-block;width:24px;height:2px;background:var(--color-gold);border-radius:1px;"></span>
+          开始使用
+        </span>
+        <h2>从手工操作到<br>智能运营</h2>
+        <p>
+          加入数百家中国领先企业的行列，让 AI 彻底改变您的财务运营方式。
+          预约一次 30 分钟的演示，了解 Nominal AI 如何为您的团队赋能。
+        </p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-gold">预约演示 →</a>
+          <a href="#" class="btn" style="background:rgba(255,255,255,0.08);color:var(--color-white);border:1px solid rgba(255,255,255,0.15);">
+            下载白皮书
+          </a>
+        </div>
+        <p class="cta-note">无需信用卡 · 14 天免费试用 · 随时取消</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Footer
+       ======================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">
+            <div class="nav-logo-icon">N</div>
+            <span>Nominal AI</span>
+          </a>
+          <p>
+            用 AI 代理重新定义企业财务结算。更快、更准、更智能的财务自动化平台。
+          </p>
+        </div>
+
+        <div class="footer-column">
+          <h4>产品</h4>
+          <ul>
+            <li><a href="#">智能结账</a></li>
+            <li><a href="#">财务合并</a></li>
+            <li><a href="#">关联交易</a></li>
+            <li><a href="#">实时监控</a></li>
+            <li><a href="#">集成中心</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>资源</h4>
+          <ul>
+            <li><a href="#">帮助中心</a></li>
+            <li><a href="#">API 文档</a></li>
+            <li><a href="#">产品博客</a></li>
+            <li><a href="#">案例研究</a></li>
+            <li><a href="#">白皮书</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>公司</h4>
+          <ul>
+            <li><a href="#">关于我们</a></li>
+            <li><a href="#">加入团队</a></li>
+            <li><a href="#">新闻动态</a></li>
+            <li><a href="#">合作伙伴</a></li>
+            <li><a href="#">联系我们</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>法律</h4>
+          <ul>
+            <li><a href="#">隐私政策</a></li>
+            <li><a href="#">服务条款</a></li>
+            <li><a href="#">安全合规</a></li>
+            <li><a href="#">数据保护</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Nominal AI. 保留所有权利。</span>
+        <div class="footer-bottom-links">
+          <a href="#">隐私政策</a>
+          <a href="#">服务条款</a>
+          <a href="#">Cookie 设置</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================
+       Minimal JavaScript for Tab Switching & Scroll Animations
+       ======================================== -->
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tabId = this.getAttribute('data-tab');
+
+        // Remove active class from all buttons and panels
+        document.querySelectorAll('.tab-btn').forEach(function(b) {
+          b.classList.remove('active');
+        });
+        document.querySelectorAll('.tab-panel').forEach(function(p) {
+          p.classList.remove('active');
+        });
+
+        // Add active class to clicked button and corresponding panel
+        this.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Scroll animation observer
+    var observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(function(el) {
+      observer.observe(el);
+    });
+
+    // Navbar background on scroll
+    var nav = document.querySelector('.nav');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 20) {
+        nav.style.background = 'rgba(255, 255, 255, 0.95)';
+        nav.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.08)';
+      } else {
+        nav.style.background = 'rgba(255, 255, 255, 0.85)';
+        nav.style.boxShadow = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>
