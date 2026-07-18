@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Motors — At The Speed Of Lightness</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --carbon: #0a0a0a;
+      --carbon-light: #141414;
+      --carbon-card: #1a1a1a;
+      --carbon-border: #2a2a2a;
+      --steel: #888c8f;
+      --chrome: #c0c4c8;
+      --ivory: #f5f0e8;
+      --accent: #8b0000;
+      --accent-glow: rgba(139, 0, 0, 0.3);
+      --text-primary: #f5f5f5;
+      --text-secondary: #999;
+      --text-muted: #555;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--carbon);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── Preloader ── */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      background: var(--carbon);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: preloaderFade 0.6s 2.2s forwards;
+    }
+    .preloader-logo {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      opacity: 0;
+      animation: logoReveal 1s 0.5s forwards;
+    }
+    .preloader-line {
+      position: absolute;
+      bottom: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      animation: lineExpand 1.2s 0.8s forwards;
+    }
+    @keyframes logoReveal { to { opacity: 1; } }
+    @keyframes lineExpand { to { width: 120px; } }
+    @keyframes preloaderFade { to { opacity: 0; pointer-events: none; } }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.9), transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .nav-logo {
+      font-weight: 900;
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-cta {
+      padding: 0.6rem 1.8rem;
+      border: 1px solid var(--accent);
+      color: var(--text-primary) !important;
+      font-size: 0.75rem !important;
+      letter-spacing: 0.2em !important;
+      transition: all 0.3s !important;
+    }
+    .nav-cta:hover {
+      background: var(--accent) !important;
+      color: #fff !important;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 6rem;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(10,10,10,0.7) 0%, transparent 60%),
+        linear-gradient(to top, var(--carbon) 0%, transparent 40%),
+        linear-gradient(180deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #533483 100%);
+    }
+    .hero-car-silhouette {
+      position: absolute;
+      right: 5%;
+      bottom: 15%;
+      width: 55%;
+      max-width: 800px;
+      height: 300px;
+      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #333 100%);
+      clip-path: polygon(5% 100%, 0% 70%, 8% 45%, 25% 20%, 45% 10%, 60% 8%, 78% 15%, 92% 35%, 100% 55%, 100% 100%);
+      opacity: 0.6;
+      filter: blur(0.5px);
+    }
+    .hero-car-silhouette::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.5;
+    }
+    .hero-light-trail {
+      position: absolute;
+      right: 15%;
+      bottom: 30%;
+      width: 200px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0.7;
+      animation: trailPulse 3s ease-in-out infinite;
+    }
+    .hero-light-trail:nth-child(2) {
+      right: 20%;
+      bottom: 28%;
+      width: 150px;
+      animation-delay: 1s;
+    }
+    @keyframes trailPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 0.75em;
+      color: var(--chrome);
+      display: block;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 480px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-primary:hover {
+      background: #a00000;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px var(--accent-glow);
+    }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 0;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .btn-ghost:hover { color: var(--text-primary); }
+    .btn-ghost svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      transition: transform 0.3s;
+    }
+    .btn-ghost:hover svg { transform: translateX(4px); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      animation: scrollBounce 2s ease-in-out infinite;
+    }
+    .hero-scroll::after {
+      content: '';
+      width: 1px;
+      height: 30px;
+      background: linear-gradient(to bottom, var(--text-muted), transparent);
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── Marquee ── */
+    .marquee {
+      overflow: hidden;
+      padding: 2rem 0;
+      border-top: 1px solid var(--carbon-border);
+      border-bottom: 1px solid var(--carbon-border);
+      background: var(--carbon-light);
+    }
+    .marquee-track {
+      display: flex;
+      animation: marqueeScroll 20s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item {
+      flex-shrink: 0;
+      padding: 0 3rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--carbon-border);
+    }
+    .marquee-item span { color: var(--accent); opacity: 0.5; }
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── Stats Bar ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .stat {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-right: 1px solid var(--carbon-border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-number {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .stat-number span {
+      font-size: 0.5em;
+      color: var(--accent);
+      vertical-align: super;
+    }
+    .stat-label {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── Philosophy Sections ── */
+    .philosophy {
+      padding: 8rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .philosophy.reverse { direction: rtl; }
+    .philosophy.reverse > * { direction: ltr; }
+    .philosophy-num {
+      font-size: 8rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--carbon-card);
+      letter-spacing: -0.05em;
+      margin-bottom: 1rem;
+    }
+    .philosophy-num span { color: var(--accent); opacity: 0.3; }
+    .philosophy h2 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+    .philosophy p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.9;
+      max-width: 480px;
+    }
+    .philosophy-visual {
+      position: relative;
+      height: 500px;
+      background: var(--carbon-light);
+      border: 1px solid var(--carbon-border);
+      overflow: hidden;
+    }
+    .philosophy-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--carbon-card), var(--carbon-light));
+    }
+    .visual-detail {
+      position: absolute;
+      inset: 2rem;
+      border: 1px solid var(--carbon-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .visual-detail-inner {
+      width: 60%;
+      height: 60%;
+      border: 1px solid rgba(139, 0, 0, 0.2);
+      position: relative;
+    }
+    .visual-detail-inner::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      right: -1px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    /* ── Featured Model ── */
+    .featured {
+      padding: 8rem 3rem;
+      background: var(--carbon-light);
+      border-top: 1px solid var(--carbon-border);
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .featured-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .featured-header h2 {
+      font-weight: 900;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+    .featured-header p {
+      margin-top: 1rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 1px;
+      max-width: 1400px;
+      margin: 0 auto;
+      background: var(--carbon-border);
+    }
+    .featured-card {
+      background: var(--carbon);
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .featured-card:hover { background: var(--carbon-card); }
+    .featured-card-main {
+      padding: 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 400px;
+    }
+    .featured-card-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .featured-card h3 {
+      font-weight: 800;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .featured-card .price {
+      font-size: 1.2rem;
+      color: var(--chrome);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+    .featured-card .price strong {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .featured-card .specs {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .spec-item {
+      text-align: center;
+    }
+    .spec-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .spec-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.25rem;
+    }
+    .featured-card-sm {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 200px;
+    }
+    .featured-card-sm h4 {
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .featured-card-sm p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .card-visual {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 40%, var(--carbon-card));
+      opacity: 0.5;
+    }
+    .card-visual::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-15deg);
+      width: 200px;
+      height: 100px;
+      border: 1px solid var(--carbon-border);
+      border-radius: 50%;
+    }
+
+    /* ── Features Row ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--carbon-border);
+      border-bottom: 1px solid var(--carbon-border);
+    }
+    .feature {
+      padding: 4rem 3rem;
+      background: var(--carbon);
+      transition: background 0.3s;
+    }
+    .feature:hover { background: var(--carbon-light); }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--carbon-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+    .feature h3 {
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+    .feature p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ── CTA ── */
+    .cta {
+      padding: 8rem 3rem;
+      text-align: center;
+      position: relative;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+      opacity: 0.3;
+    }
+    .cta h2 {
+      font-weight: 900;
+      font-size: clamp(2rem, 5vw, 4rem);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .cta p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      position: relative;
+      margin-bottom: 2.5rem;
+    }
+    .cta .btn-primary { position: relative; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 4rem 3rem 2rem;
+      border-top: 1px solid var(--carbon-border);
+      background: var(--carbon-light);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 4rem;
+    }
+    .footer-brand h3 {
+      font-weight: 900;
+      font-size: 1.2rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .footer-brand h3 span { color: var(--accent); }
+    .footer-brand p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 300px;
+    }
+    .footer-col h4 {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .footer-col a {
+      display: block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 0.3rem 0;
+      transition: color 0.3s;
+    }
+    .footer-col a:hover { color: var(--text-primary); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--carbon-border);
+    }
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+    }
+    .footer-social a {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--carbon-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.75rem;
+      transition: all 0.3s;
+    }
+    .footer-social a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .philosophy { grid-template-columns: 1fr; gap: 3rem; }
+      .philosophy.reverse { direction: ltr; }
+      .featured-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 0 1.5rem 4rem; }
+      .hero h1 { font-size: 2.5rem; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat { padding: 2rem 1.5rem; }
+      .features { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .philosophy { padding: 4rem 1.5rem; }
+      .philosophy-visual { height: 300px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader">
+    <div class="preloader-logo">Apex</div>
+    <div class="preloader-line"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-logo">Apex <span>Motors</span></div>
+    <ul class="nav-links">
+      <li><a href="#">Models</a></li>
+      <li><a href="#">Heritage</a></li>
+      <li><a href="#">Technology</a></li>
+      <li><a href="#">Ownership</a></li>
+      <li><a href="#" class="nav-cta">Reserve</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-car-silhouette"></div>
+    <div class="hero-light-trail"></div>
+    <div class="hero-light-trail"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Introducing the Apex Spectra — 2026</p>
+      <h1>Be Moved<em>At The Speed Of Lightness</em></h1>
+      <p class="hero-desc">Handcrafted in our Coventry atelier. Where aerospace engineering meets the art of driving. Every curve, every surface, every moment — designed to make you feel alive.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Configure Yours</a>
+        <a href="#" class="btn-ghost">
+          Explore the range
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <div class="marquee-item">Driving Like It Used To Feel <span>✦</span></div>
+      <div class="marquee-item">An Escape From The Mediocre <span>✦</span></div>
+      <div class="marquee-item">Born In Coventry <span>✦</span></div>
+      <div class="marquee-item">Refined By Obsession <span>✦</span></div>
+      <div class="marquee-item">Driving Like It Used To Feel <span>✦</span></div>
+      <div class="marquee-item">An Escape From The Mediocre <span>✦</span></div>
+      <div class="marquee-item">Born In Coventry <span>✦</span></div>
+      <div class="marquee-item">Refined By Obsession <span>✦</span></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-number">5.2<span>s</span></div>
+      <div class="stat-label">0 — 100 km/h</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">620<span>hp</span></div>
+      <div class="stat-label">Twin-Turbo V8</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">312<span>km/h</span></div>
+      <div class="stat-label">Top Speed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">1,245<span>kg</span></div>
+      <div class="stat-label">Kerb Weight</div>
+    </div>
+  </section>
+
+  <!-- Philosophy .01 -->
+  <section class="philosophy">
+    <div>
+      <div class="philosophy-num">.<span>01</span></div>
+      <h2>Precision Without Compromise</h2>
+      <p>Every Apex begins as a single billet of aerospace-grade aluminium. Over 400 hours of hand-finishing transform raw metal into a body that moves through air like thought through silence. We don't follow trends — we set the standard others measure against.</p>
+    </div>
+    <div class="philosophy-visual">
+      <div class="visual-detail">
+        <div class="visual-detail-inner"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy .02 -->
+  <section class="philosophy reverse">
+    <div>
+      <div class="philosophy-num">.<span>02</span></div>
+      <h2>The Art of Restraint</h2>
+      <p>Inside, you won't find screens competing for your attention. Instead: hand-stitched Bridge of Weir leather, milled aluminium controls, and a driving position that makes you feel like you're wearing the car rather than sitting in it. Technology that serves, never distracts.</p>
+    </div>
+    <div class="philosophy-visual">
+      <div class="visual-detail">
+        <div class="visual-detail-inner"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Models -->
+  <section class="featured">
+    <div class="featured-header">
+      <h2>The Line-Up</h2>
+      <p>Three expressions of one philosophy. Choose your weapon.</p>
+    </div>
+    <div class="featured-grid">
+      <div class="featured-card featured-card-main">
+        <div class="card-visual"></div>
+        <div class="featured-card-tag">Grand Tourer</div>
+        <h3>Spectra GT</h3>
+        <div class="price">From <strong>£125,000</strong></div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-value">V8</div>
+            <div class="spec-label">Engine</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-value">620</div>
+            <div class="spec-label">Horsepower</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-value">AWD</div>
+            <div class="spec-label">Drivetrain</div>
+          </div>
+        </div>
+        <a href="#" class="btn-primary" style="align-self: flex-start;">Configure</a>
+      </div>
+      <div class="featured-card featured-card-sm">
+        <div>
+          <div class="featured-card-tag">Roadster</div>
+          <h4>Spectra Spyder</h4>
+          <p>Open-air exhilaration. The purest expression of driving pleasure, distilled to its essence.</p>
+        </div>
+        <div class="price" style="margin-top:1rem;">From <strong>£145,000</strong></div>
+      </div>
+      <div class="featured-card featured-card-sm">
+        <div>
+          <div class="featured-card-tag">Track Weapon</div>
+          <h4>Spectra R</h4>
+          <p>Stripped, lightened, and sharpened. Built for those who measure life in lap times.</p>
+        </div>
+        <div class="price" style="margin-top:1rem;">From <strong>£189,000</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="feature">
+      <div class="feature-icon">◆</div>
+      <h3>Aerospace Chassis</h3>
+      <p>Carbon-fibre monocoque construction derived from Formula 1. 40% stiffer than conventional designs, yet remarkably light.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">◇</div>
+      <h3>Active Aerodynamics</h3>
+      <p>Adaptive front splitter and rear wing adjust in real-time, generating up to 350kg of downforce at speed.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">○</div>
+      <h3>Analogue Soul</h3>
+      <p>Mechanical steering with hydraulic assist. No drive-by-wire. The road speaks to your hands, unfiltered.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Begin Your Configuration</h3>
+    <p>Every Apex is built to order. No two are alike.</p>
+    <a href="#" class="btn-primary">Start Configurator</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>Apex <span>Motors</span></h3>
+        <p>Handcrafted in Coventry since 2019. We build cars for people who still believe driving is an art, not a chore.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Models</h4>
+        <a href="#">Spectra GT</a>
+        <a href="#">Spectra Spyder</a>
+        <a href="#">Spectra R</a>
+        <a href="#">Pre-Owned</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">Heritage</a>
+        <a href="#">Atelier</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <h4>Experience</h4>
+        <a href="#">Book a Drive</a>
+        <a href="#">Visit the Atelier</a>
+        <a href="#">Events</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Apex Motors Ltd. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="#">IG</a>
+        <a href="#">YT</a>
+        <a href="#">LI</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

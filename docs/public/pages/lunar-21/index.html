@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lunar 21 — 21 Hours On The Moon</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --void: #050508;
+      --void-light: #0a0a10;
+      --void-card: #0f0f18;
+      --void-border: #1a1a28;
+      --lunar: #d4cfc4;
+      --lunar-dim: #8a8578;
+      --lunar-faint: #4a4640;
+      --warm-ivory: #fff3ea;
+      --bronze: #b08d57;
+      --bronze-glow: rgba(176, 141, 87, 0.2);
+      --star: #ffe8c0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--void);
+      color: var(--warm-ivory);
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* ── Starfield Canvas ── */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Navigation ── */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      mix-blend-mode: difference;
+    }
+    .top-bar-logo {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--warm-ivory);
+    }
+    .top-bar-nav {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .top-bar-nav a {
+      color: var(--lunar-dim);
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .top-bar-nav a:hover { color: var(--warm-ivory); }
+
+    /* ── Sections ── */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+    .hero-frame {
+      position: absolute;
+      inset: 2rem;
+      border: 1px solid var(--void-border);
+      pointer-events: none;
+    }
+    .hero-frame::before {
+      content: '21°15\'18"N  0°07\'30"E';
+      position: absolute;
+      bottom: -1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--lunar-faint);
+      letter-spacing: 0.15em;
+    }
+    .hero-moon {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #e8e0d0, #c4b898 40%, #8a8070 70%, #5a5548);
+      box-shadow:
+        0 0 60px rgba(212, 207, 196, 0.15),
+        0 0 120px rgba(212, 207, 196, 0.05),
+        inset -20px -10px 40px rgba(0,0,0,0.4);
+      margin-bottom: 3rem;
+      animation: moonFloat 8s ease-in-out infinite;
+    }
+    .hero-moon::before {
+      content: '';
+      position: absolute;
+      top: 25%;
+      left: 30%;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.1);
+      box-shadow:
+        60px 20px 0 15px rgba(0,0,0,0.08),
+        20px 60px 0 8px rgba(0,0,0,0.06),
+        80px 50px 0 5px rgba(0,0,0,0.05);
+    }
+    @keyframes moonFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    .hero h1 {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: clamp(3rem, 8vw, 7rem);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+      color: var(--warm-ivory);
+    }
+    .hero h1 .dim { color: var(--lunar-faint); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--lunar-dim);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 2.5rem;
+      border: 1px solid var(--bronze);
+      color: var(--warm-ivory);
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.4s;
+      position: relative;
+    }
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--bronze);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .hero-cta:hover::before { opacity: 0.15; }
+    .hero-cta span { position: relative; }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .scroll-indicator span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--lunar-faint);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--bronze), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* ── Chapter Divider ── */
+    .chapter {
+      padding: 6rem 3rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .chapter-line {
+      flex: 1;
+      height: 1px;
+      background: var(--void-border);
+    }
+    .chapter-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--lunar-faint);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ── Narrative Sections ── */
+    .narrative {
+      padding: 4rem 3rem 8rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .narrative p {
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      color: var(--lunar);
+      line-height: 2;
+      margin-bottom: 2rem;
+    }
+    .narrative p:first-child::first-letter {
+      font-size: 3.5em;
+      float: left;
+      line-height: 0.8;
+      margin-right: 0.1em;
+      margin-top: 0.1em;
+      color: var(--bronze);
+      font-weight: 700;
+    }
+    .narrative .highlight {
+      color: var(--warm-ivory);
+      font-weight: 600;
+    }
+    .narrative blockquote {
+      border-left: 2px solid var(--bronze);
+      padding-left: 2rem;
+      margin: 3rem 0;
+      font-style: italic;
+      color: var(--lunar-dim);
+      font-size: 1.1rem;
+    }
+
+    /* ── Immersive Gallery ── */
+    .gallery {
+      padding: 4rem 0;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 2px;
+      background: var(--void-border);
+    }
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: var(--void-card);
+    }
+    .gallery-item:first-child {
+      grid-row: span 2;
+      aspect-ratio: auto;
+    }
+    .gallery-visual {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-visual-inner {
+      width: 70%;
+      height: 70%;
+      border-radius: 8px;
+      position: relative;
+    }
+    .gallery-visual-inner.surface {
+      background: linear-gradient(135deg, #3a3530, #2a2520, #1a1510);
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
+    }
+    .gallery-visual-inner.surface::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent);
+    }
+    .gallery-visual-inner.earth {
+      border-radius: 50%;
+      width: 60%;
+      height: auto;
+      aspect-ratio: 1;
+      background: radial-gradient(circle at 40% 40%, #4a90d9, #2d5f8a 40%, #1a3a5c 70%, #0a1a2c);
+      box-shadow: 0 0 40px rgba(74, 144, 217, 0.15);
+    }
+    .gallery-visual-inner.module {
+      background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+      border: 1px solid var(--void-border);
+      clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 100%, 0% 100%, 0% 20%);
+    }
+    .gallery-visual-inner.footprint {
+      background: linear-gradient(135deg, #3a3530, #2a2520);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      opacity: 0.3;
+    }
+    .gallery-caption {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--lunar-faint);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      padding: 6rem 3rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .timeline h2 {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 2rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--void-border);
+    }
+    .timeline-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--bronze);
+      padding-top: 0.25rem;
+    }
+    .timeline-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--warm-ivory);
+    }
+    .timeline-content p {
+      font-size: 0.9rem;
+      color: var(--lunar-dim);
+      line-height: 1.7;
+    }
+
+    /* ── Panorama Section ── */
+    .panorama {
+      height: 60vh;
+      min-height: 400px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0a0a10 0%, #1a1510 30%, #2a2018 50%, #1a1510 70%, #0a0a10 100%);
+    }
+    .panorama-horizon {
+      position: absolute;
+      bottom: 30%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 5%, var(--lunar-faint) 20%, var(--lunar-dim) 50%, var(--lunar-faint) 80%, transparent 95%);
+      opacity: 0.3;
+    }
+    .panorama-mountains {
+      position: absolute;
+      bottom: 30%;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background:
+        linear-gradient(135deg, transparent 20%, #1a1510 20%, #1a1510 25%, transparent 25%),
+        linear-gradient(225deg, transparent 35%, #15120d 35%, #15120d 40%, transparent 40%),
+        linear-gradient(135deg, transparent 50%, #1a1510 50%, #1a1510 55%, transparent 55%),
+        linear-gradient(225deg, transparent 65%, #15120d 65%, #15120d 70%, transparent 70%),
+        linear-gradient(135deg, transparent 75%, #1a1510 75%, #1a1510 80%, transparent 80%);
+      opacity: 0.5;
+    }
+    .panorama-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .panorama-text {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-ivory);
+      text-shadow: 0 0 40px rgba(0,0,0,0.8);
+    }
+    .panorama-sub {
+      font-size: 0.8rem;
+      color: var(--lunar-dim);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    /* ── Data Cards ── */
+    .data-section {
+      padding: 6rem 3rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--void-border);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .data-card {
+      background: var(--void);
+      padding: 3rem;
+      text-align: center;
+    }
+    .data-card-value {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--bronze);
+      margin-bottom: 0.5rem;
+    }
+    .data-card-label {
+      font-size: 0.7rem;
+      color: var(--lunar-faint);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .data-card-desc {
+      font-size: 0.85rem;
+      color: var(--lunar-dim);
+      line-height: 1.6;
+    }
+
+    /* ── Quote Section ── */
+    .quote-section {
+      padding: 8rem 3rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .quote-mark {
+      font-size: 4rem;
+      color: var(--bronze);
+      opacity: 0.4;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .quote-section blockquote {
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      color: var(--warm-ivory);
+      line-height: 1.8;
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+    .quote-attr {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--lunar-faint);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 4rem 3rem 2rem;
+      border-top: 1px solid var(--void-border);
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      color: var(--warm-ivory);
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .footer-links a {
+      color: var(--lunar-faint);
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--warm-ivory); }
+    .footer-copy {
+      font-size: 0.7rem;
+      color: var(--lunar-faint);
+      padding-top: 2rem;
+      border-top: 1px solid var(--void-border);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .top-bar { padding: 1rem 1.5rem; }
+      .top-bar-nav { display: none; }
+      .hero h1 { font-size: 2.5rem; letter-spacing: 0.1em; }
+      .hero-moon { width: 120px; height: 120px; }
+      .gallery { grid-template-columns: 1fr; }
+      .gallery-item:first-child { grid-row: auto; }
+      .data-section { grid-template-columns: 1fr; }
+      .narrative { padding: 2rem 1.5rem 4rem; }
+      .timeline { padding: 4rem 1.5rem; }
+      .quote-section { padding: 4rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Starfield -->
+  <canvas id="starfield"></canvas>
+
+  <!-- Navigation -->
+  <div class="top-bar">
+    <div class="top-bar-logo">Lunar 21</div>
+    <ul class="top-bar-nav">
+      <li><a href="#story">Story</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#data">Data</a></li>
+    </ul>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-frame"></div>
+    <div class="hero-moon"></div>
+    <h1>LUNAR <span class="dim">21</span></h1>
+    <p class="hero-sub">21 Hours On The Moon</p>
+    <a href="#story" class="hero-cta"><span>Begin the journey ↓</span></a>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Chapter 01 -->
+  <div class="chapter">
+    <div class="chapter-line"></div>
+    <span class="chapter-num">Chapter 01 — The Descent</span>
+    <div class="chapter-line"></div>
+  </div>
+
+  <!-- Narrative -->
+  <section class="narrative" id="story">
+    <p>On July 20th, 1969, humanity took its first steps on another world. But between the triumphant "one small step" and the anxious return to orbit, there were 21 hours and 36 minutes of something quieter — something the history books often skip. <span class="highlight">Twenty-one hours of wonder, work, and the most profound solitude any human has ever known.</span></p>
+    <p>The lunar surface is not the barren wasteland early scientists imagined. It is a landscape of impossible beauty — fine-grained regolith that sparkles like crushed diamonds under the unfiltered sun, casting shadows so sharp they seem painted onto the terrain. The horizon, closer than on Earth, curves away with an almost unsettling intimacy.</p>
+    <blockquote>"The Moon is a friend for the lonesome to talk to." — Carl Sandburg</blockquote>
+    <p>For the astronauts of Apollo 11, those 21 hours were a compression of a lifetime of training into a single, overwhelming reality. Every surface touched, every sample collected, every photograph taken — all were firsts. All were irreversible. The weight of 4 billion years of solitude pressed against their visors.</p>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" id="gallery">
+    <div class="gallery-item">
+      <div class="gallery-visual">
+        <div class="gallery-visual-inner surface"></div>
+      </div>
+      <span class="gallery-caption">Sea of Tranquility — 0.68°N 23.43°E</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-visual">
+        <div class="gallery-visual-inner earth"></div>
+      </div>
+      <span class="gallery-caption">Earthrise from the surface</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-visual">
+        <div class="gallery-visual-inner module"></div>
+      </div>
+      <span class="gallery-caption">Eagle — Lunar Module</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-visual">
+        <div class="gallery-visual-inner footprint">👣</div>
+      </div>
+      <span class="gallery-caption">First footprint — preserved for eternity</span>
+    </div>
+  </section>
+
+  <!-- Chapter 02 -->
+  <div class="chapter">
+    <div class="chapter-line"></div>
+    <span class="chapter-num">Chapter 02 — The Silence</span>
+    <div class="chapter-line"></div>
+  </div>
+
+  <!-- Timeline -->
+  <section class="timeline" id="timeline">
+    <h2>Mission Timeline</h2>
+    <div class="timeline-item">
+      <span class="timeline-time">T+102:45</span>
+      <div class="timeline-content">
+        <h3>Powered Descent Initiated</h3>
+        <p>Eagle's descent engine fires. The computer guidance system navigates through a boulder-strewn landing site, with Armstrong manually piloting to safety with just 25 seconds of fuel remaining.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-time">T+109:24</span>
+      <div class="timeline-content">
+        <h3>Contact Light</h3>
+        <p>"Houston, Tranquility Base here. The Eagle has landed." After 384,400 kilometres of travel, the gentlest of touches. The world exhales.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-time">T+109:42</span>
+      <div class="timeline-content">
+        <h3>First EVA Begins</h3>
+        <p>Armstrong descends the ladder. His boot presses into the regolith — and the imprint will remain for millions of years, untouched by wind or water.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-time">T+115:20</span>
+      <div class="timeline-content">
+        <h3>Sample Collection</h3>
+        <p>21.6 kilograms of lunar material gathered — soil, rocks, core tubes. Each sample a letter from 4.5 billion years ago, sealed in vacuum.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-time">T+124:22</span>
+      <div class="timeline-content">
+        <h3>Flag Deployed</h3>
+        <p>The flag is planted. Standing still in the airless environment, it looks frozen in time — a permanent marker of human ambition.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-time">T+130:00</span>
+      <div class="timeline-content">
+        <h3>Rest Period</h3>
+        <p>Inside the cramped lunar module, sleep is attempted. But how do you sleep on the Moon? The window frames a landscape no human has ever dreamed of — because no human needed to.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Panorama -->
+  <section class="panorama">
+    <div class="panorama-horizon"></div>
+    <div class="panorama-mountains"></div>
+    <div class="panorama-overlay">
+      <div class="panorama-text">Magnificent Desolation</div>
+      <p class="panorama-sub">Buzz Aldrin's first words on the lunar surface</p>
+    </div>
+  </section>
+
+  <!-- Data -->
+  <section class="data-section" id="data">
+    <div class="data-card">
+      <div class="data-card-value">384,400</div>
+      <div class="data-card-label">Kilometres from Earth</div>
+      <p class="data-card-desc">The average distance between Earth and Moon. Light travels it in 1.28 seconds.</p>
+    </div>
+    <div class="data-card">
+      <div class="data-card-value">21h 36m</div>
+      <div class="data-card-label">Time on the surface</div>
+      <p class="data-card-desc">Total duration of the Apollo 11 lunar landing. 2.5 hours outside the module.</p>
+    </div>
+    <div class="data-card">
+      <div class="data-card-value">21.6 kg</div>
+      <div class="data-card-label">Samples returned</div>
+      <p class="data-card-desc">Lunar material brought back to Earth. Still being studied by scientists today.</p>
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <section class="quote-section">
+    <div class="quote-mark">"</div>
+    <blockquote>I remember the walk to the crater. It was like walking on powdered charcoal. My boots sank in about an inch with each step. And the silence — there's no sound at all. Not even your own footsteps.</blockquote>
+    <p class="quote-attr">— Neil Armstrong, 1969</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">Lunar 21</div>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Archive</a>
+      <a href="#">Research</a>
+      <a href="#">Credits</a>
+    </div>
+    <p class="footer-copy">An immersive editorial experience. All data sourced from NASA Apollo archives.</p>
+  </footer>
+
+  <script>
+    // Starfield
+    (function() {
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      const STAR_COUNT = 200;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function init() {
+        resize();
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.3,
+            a: Math.random() * 0.8 + 0.2,
+            speed: Math.random() * 0.0005 + 0.0002,
+            phase: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      function draw(time) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+          const alpha = s.a * (0.5 + 0.5 * Math.sin(time * s.speed + s.phase));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 232, 192, ${alpha})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+
+      init();
+      requestAnimationFrame(draw);
+      window.addEventListener('resize', init);
+    })();
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+</body>
+</html>

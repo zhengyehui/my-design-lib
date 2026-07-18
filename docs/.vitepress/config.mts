@@ -332,7 +332,8 @@ export default defineConfig({
             { text: 'ECLAT 音乐节', link: '/pages/music-festival' },
             { text: 'LUMEN Awards 数字设计大奖', link: '/pages/lumen-awards' },
             { text: 'TYPE 排版宣言', link: '/pages/typo-manifesto' },
-            { text: 'ReelCraft AI 视频创作', link: '/pages/reelcraft-ai' }
+            { text: 'ReelCraft AI 视频创作', link: '/pages/reelcraft-ai' },
+            { text: 'Lunar 21 沉浸太空体验', link: '/pages/lunar-21' }
           ]
         },
         {
@@ -374,7 +375,8 @@ export default defineConfig({
             { text: 'Cosmos Express 太空旅行', link: '/pages/space-tourism' },
             { text: 'Luum Workspace 共享办公', link: '/pages/coworking-space' },
             { text: 'Lex & Partners 现代律所', link: '/pages/lex-partners' },
-            { text: 'FeastFlow 精选美食配送', link: '/pages/feastflow-delivery' }
+            { text: 'FeastFlow 精选美食配送', link: '/pages/feastflow-delivery' },
+            { text: 'Apex Motors 奢华超跑', link: '/pages/apex-motors' }
           ]
         }
       ]
