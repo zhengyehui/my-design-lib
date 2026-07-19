@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interfere — Ship Software That Never Breaks</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --editorial-bg: #faf9f7;
+  --editorial-dark: #0a0a0a;
+  --editorial-muted: #6b7280;
+  --editorial-accent: #2563eb;
+  --editorial-accent-light: #dbeafe;
+  --editorial-border: #e5e5e5;
+  --editorial-surface: #ffffff;
+  --editorial-warm: #f5f0eb;
+  --editorial-green: #10b981;
+  --editorial-red: #ef4444;
+  --editorial-amber: #f59e0b;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--editorial-bg);
+  color: var(--editorial-dark);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Navigation ─────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(250, 249, 247, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--editorial-border);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--editorial-dark);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.nav-logo span {
+  color: var(--editorial-accent);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--editorial-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--editorial-dark);
+}
+
+.nav-cta {
+  background: var(--editorial-dark) !important;
+  color: #fff !important;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.nav-cta:hover {
+  opacity: 0.85;
+}
+
+/* ── Hero ───────────────────────────────────────── */
+.hero {
+  padding: 10rem 2rem 4rem;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: var(--editorial-accent-light);
+  color: var(--editorial-accent);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  letter-spacing: 0.02em;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--editorial-accent);
+}
+
+.hero h1 {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--editorial-dark);
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--editorial-accent);
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: var(--editorial-muted);
+  max-width: 560px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+
+.btn-primary {
+  background: var(--editorial-dark);
+  color: #fff;
+  padding: 0.85rem 2rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--editorial-dark);
+  padding: 0.85rem 2rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1.5px solid var(--editorial-border);
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: var(--editorial-dark);
+}
+
+/* ── Product UI Mockup ──────────────────────────── */
+.product-mockup {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #0d1117;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 20px 60px rgba(0,0,0,0.3),
+    0 4px 16px rgba(0,0,0,0.2);
+  text-align: left;
+}
+
+.mockup-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #161b22;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.mockup-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.mockup-dot:nth-child(1) { background: #ff5f57; }
+.mockup-dot:nth-child(2) { background: #febc2e; }
+.mockup-dot:nth-child(3) { background: #28c840; }
+
+.mockup-url {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: #8b949e;
+  font-family: 'SF Mono', 'JetBrains Mono', monospace;
+}
+
+.mockup-body {
+  display: grid;
+  grid-template-columns: 220px 1fr 300px;
+  min-height: 420px;
+}
+
+/* Sidebar */
+.mockup-sidebar {
+  background: #0d1117;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  padding: 1rem 0;
+}
+
+.sidebar-logo {
+  padding: 0 1rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #e6edf3;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-logo-icon {
+  width: 20px;
+  height: 20px;
+  background: var(--editorial-accent);
+  border-radius: 5px;
+}
+
+.sidebar-section {
+  padding: 0.5rem 0;
+}
+
+.sidebar-section-title {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #484f58;
+  padding: 0.25rem 1rem;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.8rem;
+  color: #8b949e;
+  cursor: default;
+  transition: all 0.15s;
+}
+
+.sidebar-item:hover {
+  background: rgba(255,255,255,0.04);
+  color: #e6edf3;
+}
+
+.sidebar-item.active {
+  background: rgba(37, 99, 235, 0.12);
+  color: #58a6ff;
+  border-right: 2px solid #58a6ff;
+}
+
+.sidebar-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  opacity: 0.6;
+}
+
+/* Main Content */
+.mockup-main {
+  padding: 1.25rem;
+  background: #0d1117;
+  overflow: hidden;
+}
+
+.issue-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.issue-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e6edf3;
+}
+
+.issue-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.issue-badge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  font-weight: 600;
+}
+
+.badge-critical {
+  background: rgba(239,68,68,0.15);
+  color: #f87171;
+}
+
+.badge-open {
+  background: rgba(16,185,129,0.15);
+  color: #34d399;
+}
+
+.issue-code-block {
+  background: #161b22;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-family: 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  overflow: hidden;
+}
+
+.code-line {
+  display: flex;
+  gap: 1rem;
+}
+
+.code-line-num {
+  color: #484f58;
+  min-width: 24px;
+  text-align: right;
+  user-select: none;
+}
+
+.code-line-content {
+  white-space: nowrap;
+}
+
+.code-keyword { color: #ff7b72; }
+.code-string { color: #a5d6ff; }
+.code-func { color: #d2a8ff; }
+.code-comment { color: #8b949e; }
+.code-added { color: #3fb950; background: rgba(63,185,80,0.08); margin: -0.15rem -0.5rem; padding: 0.15rem 0.5rem; border-radius: 3px; }
+.code-removed { color: #f85149; background: rgba(248,81,73,0.08); margin: -0.15rem -0.5rem; padding: 0.15rem 0.5rem; border-radius: 3px; text-decoration: line-through; }
+
+.issue-activity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  color: #8b949e;
+}
+
+.activity-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.activity-text strong {
+  color: #e6edf3;
+  font-weight: 600;
+}
+
+/* Right Panel */
+.mockup-panel {
+  background: #161b22;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  padding: 1.25rem;
+}
+
+.panel-section {
+  margin-bottom: 1.25rem;
+}
+
+.panel-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #484f58;
+  margin-bottom: 0.5rem;
+}
+
+.panel-metric {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.metric-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #e6edf3;
+}
+
+.metric-unit {
+  font-size: 0.75rem;
+  color: #8b949e;
+}
+
+.metric-trend {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+}
+
+.trend-up {
+  background: rgba(63,185,80,0.15);
+  color: #3fb950;
+}
+
+.trend-down {
+  background: rgba(248,81,73,0.15);
+  color: #f85149;
+}
+
+.panel-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 60px;
+  margin-top: 0.75rem;
+}
+
+.chart-bar {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  min-width: 4px;
+  transition: height 0.3s ease;
+}
+
+.panel-impact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.impact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #8b949e;
+}
+
+.impact-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* ── Logos Bar ──────────────────────────────────── */
+.logos-section {
+  padding: 4rem 2rem;
+  text-align: center;
+  border-top: 1px solid var(--editorial-border);
+  border-bottom: 1px solid var(--editorial-border);
+}
+
+.logos-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--editorial-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+}
+
+.logos-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.logo-item {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #c4c4c4;
+  letter-spacing: -0.02em;
+}
+
+/* ── Features (Numbered Steps) ──────────────────── */
+.features {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8rem 2rem;
+}
+
+.feature-step {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 8rem;
+}
+
+.feature-step:last-child {
+  margin-bottom: 0;
+}
+
+.feature-step:nth-child(even) {
+  direction: rtl;
+}
+
+.feature-step:nth-child(even) > * {
+  direction: ltr;
+}
+
+.feature-number {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 6rem;
+  font-weight: 300;
+  color: var(--editorial-accent);
+  opacity: 0.3;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.feature-title {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.feature-desc {
+  font-size: 1.05rem;
+  color: var(--editorial-muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--editorial-dark);
+}
+
+.feature-list li::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--editorial-accent-light);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.feature-visual {
+  background: var(--editorial-surface);
+  border-radius: 16px;
+  border: 1px solid var(--editorial-border);
+  padding: 2rem;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Feature Visual Cards */
+.detect-card {
+  width: 100%;
+}
+
+.detect-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.detect-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--editorial-red);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+}
+
+.detect-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--editorial-dark);
+}
+
+.detect-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detect-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid var(--editorial-border);
+}
+
+.detect-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.detect-icon.red { background: rgba(239,68,68,0.1); }
+.detect-icon.amber { background: rgba(245,158,11,0.1); }
+.detect-icon.green { background: rgba(16,185,129,0.1); }
+
+.detect-item-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--editorial-dark);
+}
+
+.detect-item-desc {
+  font-size: 0.7rem;
+  color: var(--editorial-muted);
+}
+
+.understand-visual {
+  width: 100%;
+}
+
+.stack-trace {
+  background: #0d1117;
+  border-radius: 10px;
+  padding: 1.25rem;
+  font-family: 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  line-height: 1.9;
+  color: #8b949e;
+  overflow: hidden;
+}
+
+.stack-trace .highlight {
+  color: #f87171;
+  background: rgba(248,113,113,0.1);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+.stack-trace .filepath {
+  color: #58a6ff;
+}
+
+.stack-trace .linenum {
+  color: #484f58;
+}
+
+.fix-visual {
+  width: 100%;
+}
+
+.fix-diff {
+  background: #0d1117;
+  border-radius: 10px;
+  padding: 1.25rem;
+  font-family: 'SF Mono', 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  line-height: 1.9;
+  overflow: hidden;
+}
+
+.diff-line-add {
+  color: #3fb950;
+  background: rgba(63,185,80,0.06);
+  padding: 0.1rem 0.5rem;
+  margin: 0 -1.25rem;
+  padding-left: 1.75rem;
+  padding-right: 1.25rem;
+  display: block;
+}
+
+.diff-line-remove {
+  color: #f85149;
+  background: rgba(248,81,73,0.06);
+  padding: 0.1rem 0.5rem;
+  margin: 0 -1.25rem;
+  padding-left: 1.75rem;
+  padding-right: 1.25rem;
+  display: block;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.diff-prefix {
+  user-select: none;
+  color: #484f58;
+  margin-right: 0.5rem;
+}
+
+/* ── Comparison Section ─────────────────────────── */
+.comparison {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+}
+
+.comparison-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.comparison-header h2 {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.comparison-header p {
+  font-size: 1.05rem;
+  color: var(--editorial-muted);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--editorial-surface);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--editorial-border);
+}
+
+.comparison-table thead th {
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--editorial-dark);
+  border-bottom: 2px solid var(--editorial-border);
+}
+
+.comparison-table thead th:first-child {
+  color: var(--editorial-muted);
+  font-weight: 500;
+}
+
+.comparison-table thead th.highlight-col {
+  background: var(--editorial-accent);
+  color: #fff;
+  position: relative;
+}
+
+.comparison-table tbody td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--editorial-border);
+  color: var(--editorial-dark);
+}
+
+.comparison-table tbody td:first-child {
+  color: var(--editorial-muted);
+  font-weight: 500;
+}
+
+.comparison-table tbody td.highlight-col {
+  background: rgba(37, 99, 235, 0.03);
+}
+
+.comparison-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.check {
+  color: var(--editorial-green);
+  font-weight: 700;
+}
+
+.cross {
+  color: #d1d5db;
+}
+
+.partial {
+  color: var(--editorial-amber);
+}
+
+/* ── Testimonials ───────────────────────────────── */
+.testimonials {
+  background: var(--editorial-dark);
+  padding: 6rem 2rem;
+  color: #fff;
+}
+
+.testimonials-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonials-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.testimonial-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.testimonial-stars {
+  color: #f59e0b;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+}
+
+.testimonial-text {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.testimonial-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.testimonial-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.testimonial-role {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+}
+
+/* ── CTA ────────────────────────────────────────── */
+.cta {
+  text-align: center;
+  padding: 8rem 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cta h2 {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.cta p {
+  font-size: 1.05rem;
+  color: var(--editorial-muted);
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+
+.cta-form {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 440px;
+  margin: 0 auto 1rem;
+}
+
+.cta-input {
+  flex: 1;
+  padding: 0.85rem 1.25rem;
+  border: 1.5px solid var(--editorial-border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+  background: var(--editorial-surface);
+}
+
+.cta-input:focus {
+  border-color: var(--editorial-accent);
+}
+
+.cta-hint {
+  font-size: 0.8rem;
+  color: var(--editorial-muted);
+}
+
+/* ── Footer ─────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--editorial-border);
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--editorial-dark);
+}
+
+.footer-right {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-right a {
+  font-size: 0.8rem;
+  color: var(--editorial-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-right a:hover {
+  color: var(--editorial-dark);
+}
+
+/* ── Responsive ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero { padding: 8rem 1.5rem 3rem; }
+  .hero-actions { flex-direction: column; align-items: center; }
+  .mockup-body { grid-template-columns: 1fr; }
+  .mockup-sidebar, .mockup-panel { display: none; }
+  .feature-step { grid-template-columns: 1fr; gap: 2rem; }
+  .feature-step:nth-child(even) { direction: ltr; }
+  .feature-number { font-size: 4rem; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .comparison-table { font-size: 0.8rem; }
+  .comparison-table thead th,
+  .comparison-table tbody td { padding: 0.75rem; }
+  .logos-grid { gap: 1.5rem; }
+  .cta-form { flex-direction: column; }
+  .footer { flex-direction: column; gap: 1rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">inter<span>fere</span></a>
+    <ul class="nav-links">
+      <li><a href="#">Product</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#" class="nav-cta">Join Waitlist</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">Now in private beta</div>
+  <h1>Ship software that <em>never breaks</em></h1>
+  <p class="hero-subtitle">Interfere finds, understands, and fixes production issues before your users even notice. Powered by AI that actually understands your codebase.</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">Join the Waitlist</a>
+    <a href="#" class="btn-secondary">Watch Demo</a>
+  </div>
+
+  <!-- Product UI Mockup -->
+  <div class="product-mockup">
+    <div class="mockup-titlebar">
+      <span class="mockup-dot"></span>
+      <span class="mockup-dot"></span>
+      <span class="mockup-dot"></span>
+      <span class="mockup-url">app.interfere.com/issues/INF-2847</span>
+    </div>
+    <div class="mockup-body">
+      <!-- Sidebar -->
+      <div class="mockup-sidebar">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon"></div>
+          interfere
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Overview</div>
+          <div class="sidebar-item active">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Issues
+          </div>
+          <div class="sidebar-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+            Analytics
+          </div>
+          <div class="sidebar-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Monitoring
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Settings</div>
+          <div class="sidebar-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Integrations
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="mockup-main">
+        <div class="issue-header">
+          <span class="issue-title">Unhandled null reference in payment processor</span>
+          <div class="issue-meta">
+            <span class="issue-badge badge-critical">Critical</span>
+            <span class="issue-badge badge-open">Open</span>
+          </div>
+        </div>
+        <div class="issue-code-block">
+          <div class="code-line">
+            <span class="code-line-num">142</span>
+            <span class="code-line-content"><span class="code-keyword">async</span> <span class="code-func">processPayment</span>(userId, amount) {</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line-num">143</span>
+            <span class="code-line-content">  <span class="code-keyword">const</span> user = <span class="code-keyword">await</span> <span class="code-func">getUser</span>(userId);</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line-num">144</span>
+            <span class="code-line-content code-removed"><span class="diff-prefix">-</span>  <span class="code-keyword">const</span> balance = user.wallet.balance;</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line-num">144</span>
+            <span class="code-line-content code-added"><span class="diff-prefix">+</span>  <span class="code-keyword">const</span> balance = user?.wallet?.balance ?? <span class="code-string">0</span>;</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line-num">145</span>
+            <span class="code-line-content">  <span class="code-keyword">if</span> (balance >= amount) {</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line-num">146</span>
+            <span class="code-line-content">    <span class="code-keyword">return</span> <span class="code-func">charge</span>(user, amount);</span>
+          </div>
+          <div class="code-line">
+            <span class="code-line-num">147</span>
+            <span class="code-line-content">  }</span>
+          </div>
+        </div>
+        <div class="issue-activity">
+          <div class="activity-item">
+            <div class="activity-avatar" style="background: #6366f1;">AI</div>
+            <span><strong>Interfere AI</strong> detected this issue 3 min ago — affecting 2,847 users</span>
+          </div>
+          <div class="activity-item">
+            <div class="activity-avatar" style="background: #10b981;">S</div>
+            <span><strong>Sarah K.</strong> was auto-assigned as owner</span>
+          </div>
+          <div class="activity-item">
+            <div class="activity-avatar" style="background: #f59e0b;">AI</div>
+            <span><strong>Interfere AI</strong> generated fix — ready for review</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="mockup-panel">
+        <div class="panel-section">
+          <div class="panel-label">Impact Score</div>
+          <div class="panel-metric">
+            <span class="metric-value">847</span>
+            <span class="metric-unit">users/hr</span>
+            <span class="metric-trend trend-down">↑ 340%</span>
+          </div>
+          <div class="panel-chart">
+            <div class="chart-bar" style="height: 20%; background: rgba(99,102,241,0.3);"></div>
+            <div class="chart-bar" style="height: 25%; background: rgba(99,102,241,0.35);"></div>
+            <div class="chart-bar" style="height: 30%; background: rgba(99,102,241,0.4);"></div>
+            <div class="chart-bar" style="height: 35%; background: rgba(99,102,241,0.45);"></div>
+            <div class="chart-bar" style="height: 45%; background: rgba(99,102,241,0.5);"></div>
+            <div class="chart-bar" style="height: 60%; background: rgba(99,102,241,0.6);"></div>
+            <div class="chart-bar" style="height: 75%; background: rgba(99,102,241,0.7);"></div>
+            <div class="chart-bar" style="height: 90%; background: rgba(99,102,241,0.8);"></div>
+            <div class="chart-bar" style="height: 100%; background: var(--editorial-accent);"></div>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Affected Services</div>
+          <div class="panel-impact-list">
+            <div class="impact-item">
+              <span class="impact-dot" style="background: #ef4444;"></span>
+              payment-service — 100%
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" style="background: #f59e0b;"></span>
+              checkout-flow — 67%
+            </div>
+            <div class="impact-item">
+              <span class="impact-dot" style="background: #10b981;"></span>
+              user-dashboard — 12%
+            </div>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Time to Fix</div>
+          <div class="panel-metric">
+            <span class="metric-value">2.3</span>
+            <span class="metric-unit">min avg</span>
+            <span class="metric-trend trend-up">↓ 94%</span>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Root Cause</div>
+          <div style="font-size: 0.75rem; color: #8b949e; line-height: 1.6;">
+            Null reference in <span style="color: #58a6ff;">paymentProcessor.ts:144</span> — user.wallet undefined when account created via OAuth without wallet initialization.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Logos -->
+<section class="logos-section">
+  <p class="logos-label">Trusted by engineering teams at</p>
+  <div class="logos-grid">
+    <span class="logo-item">Vercel</span>
+    <span class="logo-item">Linear</span>
+    <span class="logo-item">Stripe</span>
+    <span class="logo-item">Notion</span>
+    <span class="logo-item">Figma</span>
+    <span class="logo-item">Raycast</span>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features">
+  <!-- Step 01 -->
+  <div class="feature-step">
+    <div>
+      <div class="feature-number">01</div>
+      <h3 class="feature-title">Find issues before anyone notices</h3>
+      <p class="feature-desc">Interfere monitors your production environment 24/7, catching errors, performance regressions, and anomalies the moment they appear — not when users start complaining.</p>
+      <ul class="feature-list">
+        <li>Real-time error detection across all services</li>
+        <li>Performance regression alerts with context</li>
+        <li>Custom anomaly detection rules</li>
+        <li>Zero-config setup with any stack</li>
+      </ul>
+    </div>
+    <div class="feature-visual">
+      <div class="detect-card">
+        <div class="detect-header">
+          <div class="detect-status"></div>
+          <span class="detect-title">3 issues detected</span>
+        </div>
+        <div class="detect-items">
+          <div class="detect-item">
+            <div class="detect-icon red">🔴</div>
+            <div>
+              <div class="detect-item-title">NullReferenceException</div>
+              <div class="detect-item-desc">payment-service · 2,847 users affected</div>
+            </div>
+          </div>
+          <div class="detect-item">
+            <div class="detect-icon amber">🟡</div>
+            <div>
+              <div class="detect-item-title">P99 latency spike</div>
+              <div class="detect-item-desc">api-gateway · 4.2s avg (baseline: 180ms)</div>
+            </div>
+          </div>
+          <div class="detect-item">
+            <div class="detect-icon green">🟢</div>
+            <div>
+              <div class="detect-item-title">Memory leak pattern</div>
+              <div class="detect-item-desc">worker-pool · Gradual increase over 6h</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 02 -->
+  <div class="feature-step">
+    <div>
+      <div class="feature-number">02</div>
+      <h3 class="feature-title">Understand the <em>why</em>, not just the <em>what</em></h3>
+      <p class="feature-desc">Our AI doesn't just show you a stack trace. It analyzes your codebase, correlates with recent deployments, and explains the root cause in plain English.</p>
+      <ul class="feature-list">
+        <li>AI-powered root cause analysis</li>
+        <li>Deployment correlation and rollback suggestions</li>
+        <li>Impact assessment across services</li>
+        <li>Plain English explanations for any engineer</li>
+      </ul>
+    </div>
+    <div class="feature-visual">
+      <div class="understand-visual">
+        <div class="stack-trace">
+          <div style="color: #8b949e; margin-bottom: 0.5rem;">// Root Cause Analysis</div>
+          <div style="color: #e6edf3; margin-bottom: 0.75rem;">Null reference at <span class="filepath">paymentProcessor.ts:144</span></div>
+          <div style="color: #8b949e; margin-bottom: 0.5rem;">// Trace:</div>
+          <div><span class="filepath">routes/checkout.ts</span><span class="linenum">:67</span></div>
+          <div>  → <span class="filepath">services/payment.ts</span><span class="linenum">:23</span></div>
+          <div>    → <span class="highlight">paymentProcessor.ts:144</span></div>
+          <div style="margin-top: 0.75rem; color: #8b949e;">// Cause:</div>
+          <div style="color: #e6edf3;">OAuth users created without wallet</div>
+          <div style="color: #8b949e;">// Introduced in deploy <span style="color: #58a6ff;">a3f29c1</span> (2h ago)</div>
+          <div style="color: #8b949e;">// Author: <span style="color: #e6edf3;">@sarah-k</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 03 -->
+  <div class="feature-step">
+    <div>
+      <div class="feature-number">03</div>
+      <h3 class="feature-title">Fix it with <em>confidence</em></h3>
+      <p class="feature-desc">Interfere generates production-ready fix suggestions, complete with tests. Review, approve, and deploy — all from the dashboard. Average time to resolution: 2.3 minutes.</p>
+      <ul class="feature-list">
+        <li>AI-generated fix suggestions with tests</li>
+        <li>One-click deployment to staging</li>
+        <li>Automated regression testing</li>
+        <li>Full audit trail for compliance</li>
+      </ul>
+    </div>
+    <div class="feature-visual">
+      <div class="fix-visual">
+        <div class="fix-diff">
+          <div style="color: #8b949e; margin-bottom: 0.5rem; font-size: 0.7rem;">paymentProcessor.ts — Suggested Fix</div>
+          <div><span class="diff-prefix">  </span><span style="color: #8b949e;">async</span> <span style="color: #d2a8ff;">processPayment</span>(userId, amount) {</div>
+          <div><span class="diff-prefix">  </span>  <span style="color: #8b949e;">const</span> user = <span style="color: #8b949e;">await</span> <span style="color: #d2a8ff;">getUser</span>(userId);</div>
+          <div class="diff-line-remove"><span class="diff-prefix">-</span>  <span style="color: #8b949e;">const</span> balance = user.wallet.balance;</div>
+          <div class="diff-line-add"><span class="diff-prefix">+</span>  <span style="color: #8b949e;">const</span> balance = user?.wallet?.balance ?? <span style="color: #a5d6ff;">0</span>;</div>
+          <div><span class="diff-prefix">  </span>  <span style="color: #8b949e;">if</span> (balance >= amount) {</div>
+          <div><span class="diff-prefix">  </span>    <span style="color: #8b949e;">return</span> <span style="color: #d2a8ff;">charge</span>(user, amount);</div>
+          <div><span class="diff-prefix">  </span>  }</div>
+          <div><span class="diff-prefix">  </span>}</div>
+          <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.06);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; color: #3fb950; font-size: 0.75rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              All 12 tests passing — ready to deploy
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison -->
+<section class="comparison">
+  <div class="comparison-header">
+    <h2>How we compare</h2>
+    <p>Interfere replaces your entire observability stack with one intelligent platform.</p>
+  </div>
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th class="highlight-col">Interfere</th>
+        <th>Traditional APM</th>
+        <th>Log Aggregators</th>
+        <th>Error Trackers</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AI Root Cause Analysis</td>
+        <td class="highlight-col"><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="partial">Partial</span></td>
+      </tr>
+      <tr>
+        <td>Auto-generated Fixes</td>
+        <td class="highlight-col"><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="cross">—</span></td>
+      </tr>
+      <tr>
+        <td>Deployment Correlation</td>
+        <td class="highlight-col"><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">—</span></td>
+        <td><span class="partial">Partial</span></td>
+      </tr>
+      <tr>
+        <td>Real-time Monitoring</td>
+        <td class="highlight-col"><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+      </tr>
+      <tr>
+        <td>Setup Time</td>
+        <td class="highlight-col"><span style="color: var(--editorial-green); font-weight: 600;">2 min</span></td>
+        <td>2-4 weeks</td>
+        <td>1-2 weeks</td>
+        <td>1-3 days</td>
+      </tr>
+      <tr>
+        <td>Mean Time to Resolution</td>
+        <td class="highlight-col"><span style="color: var(--editorial-green); font-weight: 600;">2.3 min</span></td>
+        <td>45 min</td>
+        <td>30 min</td>
+        <td>20 min</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <p class="testimonials-label">What engineers are saying</p>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"We went from 45-minute incident response to under 3 minutes. Interfere caught a critical payment bug that would have cost us $200K in revenue."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: #6366f1;">SK</div>
+          <div>
+            <div class="testimonial-name">Sarah Kim</div>
+            <div class="testimonial-role">VP Engineering, Acme Corp</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The AI root cause analysis is genuinely magical. It connected a memory leak to a deploy from 6 hours ago that none of us would have found."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: #10b981;">MR</div>
+          <div>
+            <div class="testimonial-name">Marcus Rivera</div>
+            <div class="testimonial-role">Staff Engineer, Vercel</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"We replaced Datadog, Sentry, and PagerDuty with Interfere. One platform, better results, and our on-call engineers actually sleep through the night now."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background: #f59e0b;">JL</div>
+          <div>
+            <div class="testimonial-name">James Liu</div>
+            <div class="testimonial-role">CTO, Linear</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Stop firefighting.<br>Start shipping.</h2>
+  <p>Join 2,000+ engineering teams on the waitlist. Early access starts Q1 2027.</p>
+  <div class="cta-form">
+    <input type="email" class="cta-input" placeholder="your@email.com">
+    <a href="#" class="btn-primary">Join Waitlist</a>
+  </div>
+  <p class="cta-hint">Free for teams under 10 engineers. No credit card required.</p>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-left">© 2027 Interfere</div>
+  <div class="footer-right">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Twitter</a>
+    <a href="#">GitHub</a>
+  </div>
+</footer>
+
+</body>
+</html>
