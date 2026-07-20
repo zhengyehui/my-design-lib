@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spectrum Design System</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ── Reset & Base ────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      scroll-behavior: smooth;
+      font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+      color: var(--color-text, #1a1a2e);
+      background: var(--color-bg, #ffffff);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ─────────────────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 260px;
+      background: var(--color-bg, #fafbfc);
+      border-right: 1px solid var(--color-border, #e5e7eb);
+      overflow-y: auto;
+      z-index: 100;
+      padding: 0;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .sidebar-header {
+      padding: 24px 24px 20px;
+      border-bottom: 1px solid var(--color-border, #e5e7eb);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-logo {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-md, 8px);
+      background: linear-gradient(135deg, var(--color-primary, #6366f1), var(--color-secondary, #8b5cf6));
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 14px;
+      flex-shrink: 0;
+    }
+    .sidebar-brand {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-text, #1a1a2e);
+      letter-spacing: -0.02em;
+    }
+    .sidebar-version {
+      font-size: 11px;
+      color: var(--color-text-muted, #6b7280);
+      font-weight: 500;
+      background: var(--color-surface, #f3f4f6);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: auto;
+    }
+    .sidebar-nav { padding: 16px 0; }
+    .nav-section { margin-bottom: 8px; }
+    .nav-section-title {
+      padding: 6px 24px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted, #6b7280);
+    }
+    .nav-link {
+      display: block;
+      padding: 6px 24px 6px 28px;
+      font-size: 13.5px;
+      font-weight: 450;
+      color: var(--color-text-secondary, #4b5563);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .nav-link:hover {
+      color: var(--color-primary, #6366f1);
+      background: var(--color-primary-ghost, rgba(99,102,241,0.05));
+      border-left-color: var(--color-primary, #6366f1);
+    }
+    .nav-link.active {
+      color: var(--color-primary, #6366f1);
+      background: var(--color-primary-ghost, rgba(99,102,241,0.06));
+      border-left-color: var(--color-primary, #6366f1);
+      font-weight: 600;
+    }
+
+    /* ── Mobile Toggle ───────────────────────────────────────────── */
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 16px; left: 16px;
+      z-index: 200;
+      width: 40px; height: 40px;
+      border-radius: var(--radius-md, 8px);
+      border: 1px solid var(--color-border, #e5e7eb);
+      background: var(--color-bg, #fff);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .sidebar-toggle span,
+    .sidebar-toggle span::before,
+    .sidebar-toggle span::after {
+      display: block; width: 18px; height: 2px;
+      background: var(--color-text, #1a1a2e);
+      border-radius: 1px;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .sidebar-toggle span::before,
+    .sidebar-toggle span::after {
+      content: ''; position: absolute; left: 0;
+    }
+    .sidebar-toggle span::before { top: -6px; }
+    .sidebar-toggle span::after  { top: 6px; }
+    .sidebar-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 90;
+    }
+
+    /* ── Main Content ────────────────────────────────────────────── */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      min-width: 0;
+    }
+    .content {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 48px 48px 96px;
+    }
+
+    /* ── Hero Section ────────────────────────────────────────────── */
+    .hero {
+      padding: 56px 0 48px;
+      border-bottom: 1px solid var(--color-border, #e5e7eb);
+      margin-bottom: 56px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-primary, #6366f1);
+      background: var(--color-primary-ghost, rgba(99,102,241,0.08));
+      border: 1px solid var(--color-primary-border, rgba(99,102,241,0.2));
+      border-radius: 999px;
+      margin-bottom: 20px;
+      letter-spacing: 0.02em;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-primary, #6366f1);
+    }
+    .hero h1 {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+      color: var(--color-text, #0f172a);
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--color-text, #0f172a) 0%, var(--color-primary, #6366f1) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 18px;
+      color: var(--color-text-muted, #64748b);
+      max-width: 540px;
+      line-height: 1.7;
+    }
+
+    /* ── Section Styles ──────────────────────────────────────────── */
+    .section {
+      margin-bottom: 64px;
+    }
+    .section-anchor {
+      display: block;
+      position: relative;
+      top: -24px;
+      visibility: hidden;
+    }
+    .section h2 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--color-text, #0f172a);
+      margin-bottom: 8px;
+    }
+    .section > p.section-desc {
+      font-size: 15px;
+      color: var(--color-text-muted, #64748b);
+      margin-bottom: 28px;
+      line-height: 1.7;
+      max-width: 600px;
+    }
+
+    /* ── Color Palette ───────────────────────────────────────────── */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+    }
+    .color-swatch {
+      border-radius: var(--radius-md, 10px);
+      overflow: hidden;
+      border: 1px solid var(--color-border, #e5e7eb);
+      background: var(--color-bg, #fff);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .color-swatch:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    .color-swatch-block {
+      height: 80px;
+      width: 100%;
+    }
+    .color-swatch-info {
+      padding: 10px 12px;
+    }
+    .color-swatch-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text, #1a1a2e);
+      margin-bottom: 2px;
+    }
+    .color-swatch-hex {
+      font-size: 12px;
+      font-family: var(--font-mono, 'SF Mono', 'Fira Code', monospace);
+      color: var(--color-text-muted, #6b7280);
+    }
+
+    /* ── Typography ──────────────────────────────────────────────── */
+    .type-specimen {
+      border: 1px solid var(--color-border, #e5e7eb);
+      border-radius: var(--radius-md, 10px);
+      overflow: hidden;
+    }
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--color-border, #e5e7eb);
+      transition: background 0.15s ease;
+    }
+    .type-row:last-child { border-bottom: none; }
+    .type-row:hover { background: var(--color-surface, #f8f9fb); }
+    .type-meta {
+      width: 100px;
+      flex-shrink: 0;
+      font-size: 11px;
+      font-family: var(--font-mono, 'SF Mono', 'Fira Code', monospace);
+      color: var(--color-text-muted, #6b7280);
+      line-height: 1.4;
+    }
+    .type-sample { flex: 1; min-width: 0; }
+    .type-sample.h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+    .type-sample.h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.25; }
+    .type-sample.h3 { font-size: 22px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.3; }
+    .type-sample.h4 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.35; }
+    .type-sample.h5 { font-size: 15px; font-weight: 600; line-height: 1.4; }
+    .type-sample.h6 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.5; color: var(--color-text-muted, #6b7280); }
+    .type-sample.body-lg { font-size: 16px; line-height: 1.7; }
+    .type-sample.body { font-size: 14px; line-height: 1.7; }
+    .type-sample.body-sm { font-size: 13px; line-height: 1.6; color: var(--color-text-secondary, #4b5563); }
+    .type-sample.caption { font-size: 12px; line-height: 1.5; color: var(--color-text-muted, #6b7280); }
+
+    /* ── Component Showcase ──────────────────────────────────────── */
+    .component-card {
+      border: 1px solid var(--color-border, #e5e7eb);
+      border-radius: var(--radius-lg, 12px);
+      overflow: hidden;
+      margin-bottom: 32px;
+      background: var(--color-bg, #fff);
+      transition: box-shadow 0.2s ease;
+    }
+    .component-card:hover {
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .component-card-header {
+      padding: 20px 24px 0;
+    }
+    .component-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-text, #0f172a);
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .component-card-desc {
+      font-size: 14px;
+      color: var(--color-text-muted, #64748b);
+      line-height: 1.6;
+    }
+    .component-preview {
+      padding: 28px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      background: var(--color-surface, #f8f9fb);
+      margin: 16px 16px 0;
+      border-radius: var(--radius-md, 8px);
+      border: 1px solid var(--color-border, #e5e7eb);
+    }
+    .component-preview.card-preview {
+      gap: 20px;
+      align-items: stretch;
+    }
+    .component-preview.input-preview {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    /* ── Live Component Styles ───────────────────────────────────── */
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: var(--radius-md, 8px);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      line-height: 1.3;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--color-primary, #6366f1);
+      color: #fff;
+      border-color: var(--color-primary, #6366f1);
+    }
+    .btn-primary:hover {
+      background: var(--color-primary-hover, #4f46e5);
+      border-color: var(--color-primary-hover, #4f46e5);
+      box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+    }
+    .btn-secondary {
+      background: var(--color-bg, #fff);
+      color: var(--color-text, #1a1a2e);
+      border-color: var(--color-border, #d1d5db);
+    }
+    .btn-secondary:hover {
+      background: var(--color-surface, #f9fafb);
+      border-color: #b0b5bc;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-primary, #6366f1);
+      border-color: transparent;
+    }
+    .btn-ghost:hover {
+      background: var(--color-primary-ghost, rgba(99,102,241,0.06));
+    }
+    .btn-danger {
+      background: var(--color-danger, #ef4444);
+      color: #fff;
+      border-color: var(--color-danger, #ef4444);
+    }
+    .btn-danger:hover {
+      background: var(--color-danger-hover, #dc2626);
+      box-shadow: 0 2px 8px rgba(239,68,68,0.3);
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12.5px;
+    }
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 15px;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 999px;
+      line-height: 1.4;
+    }
+    .badge-dot::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .badge-primary { background: rgba(99,102,241,0.1); color: var(--color-primary, #6366f1); }
+    .badge-success { background: rgba(34,197,94,0.1); color: var(--color-success, #22c55e); }
+    .badge-warning { background: rgba(245,158,11,0.1); color: var(--color-warning, #f59e0b); }
+    .badge-danger  { background: rgba(239,68,68,0.1); color: var(--color-danger, #ef4444); }
+    .badge-neutral { background: var(--color-surface, #f3f4f6); color: var(--color-text-muted, #6b7280); }
+
+    /* Cards */
+    .demo-card {
+      background: var(--color-bg, #fff);
+      border: 1px solid var(--color-border, #e5e7eb);
+      border-radius: var(--radius-lg, 12px);
+      overflow: hidden;
+      max-width: 280px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .demo-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+    .demo-card-img {
+      height: 140px;
+      background: linear-gradient(135deg, var(--color-primary, #6366f1) 0%, var(--color-secondary, #8b5cf6) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 28px;
+    }
+    .demo-card-body { padding: 16px; }
+    .demo-card-title {
+      font-size: 15px;
+      font-weight: 650;
+      margin-bottom: 4px;
+      color: var(--color-text, #0f172a);
+    }
+    .demo-card-text {
+      font-size: 13px;
+      color: var(--color-text-muted, #64748b);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .demo-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Inputs */
+    .form-group { margin-bottom: 16px; width: 100%; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text, #1a1a2e);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 9px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--color-text, #1a1a2e);
+      background: var(--color-bg, #fff);
+      border: 1px solid var(--color-border, #d1d5db);
+      border-radius: var(--radius-md, 8px);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .form-input::placeholder { color: #9ca3af; }
+    .form-input:focus {
+      border-color: var(--color-primary, #6366f1);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    }
+    .form-hint {
+      font-size: 12px;
+      color: var(--color-text-muted, #6b7280);
+      margin-top: 4px;
+    }
+    .form-input-group {
+      display: flex;
+      width: 100%;
+    }
+    .form-input-group .form-input {
+      border-radius: var(--radius-md, 8px) 0 0 var(--radius-md, 8px);
+    }
+    .form-input-group .btn {
+      border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
+      border-left: 0;
+    }
+
+    /* ── Code Blocks ─────────────────────────────────────────────── */
+    .code-block {
+      background: #1e1e2e;
+      border-radius: 0 0 var(--radius-lg, 12px) var(--radius-lg, 12px);
+      margin: 0 16px 16px;
+      overflow-x: auto;
+    }
+    .code-block pre {
+      margin: 0;
+      padding: 18px 20px;
+      font-family: var(--font-mono, 'SF Mono', 'Fira Code', 'Cascadia Code', monospace);
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: #cdd6f4;
+      white-space: pre;
+      tab-size: 2;
+    }
+    .code-block .tag { color: #89b4fa; }
+    .code-block .attr { color: #f9e2af; }
+    .code-block .val { color: #a6e3a1; }
+    .code-block .str { color: #a6e3a1; }
+    .code-block .punct { color: #6c7086; }
+    .code-block .comment { color: #585b70; font-style: italic; }
+    .code-block .keyword { color: #cba6f7; }
+    .code-block .prop { color: #89dceb; }
+    .code-block .fn { color: #f5c2e7; }
+
+    /* ── Spacing Scale ───────────────────────────────────────────── */
+    .spacing-list { display: flex; flex-direction: column; gap: 10px; }
+    .spacing-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .spacing-label {
+      width: 72px;
+      font-size: 13px;
+      font-family: var(--font-mono, 'SF Mono', 'Fira Code', monospace);
+      font-weight: 500;
+      color: var(--color-text, #1a1a2e);
+      flex-shrink: 0;
+    }
+    .spacing-value {
+      width: 48px;
+      font-size: 12px;
+      font-family: var(--font-mono, 'SF Mono', 'Fira Code', monospace);
+      color: var(--color-text-muted, #6b7280);
+      flex-shrink: 0;
+    }
+    .spacing-bar-wrap {
+      flex: 1;
+      height: 28px;
+      background: var(--color-surface, #f3f4f6);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .spacing-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-primary, #6366f1), var(--color-secondary, #8b5cf6));
+      border-radius: 4px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggle { display: flex; }
+      .sidebar-overlay.open { display: block; }
+      .main { margin-left: 0; }
+      .content { padding: 24px 20px 72px; padding-top: 68px; }
+      .hero h1 { font-size: 28px; }
+      .hero p { font-size: 15px; }
+      .color-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+      .type-row { flex-direction: column; gap: 4px; }
+      .type-meta { width: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile Toggle -->
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">
+    <span></span>
+  </button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">S</div>
+      <span class="sidebar-brand">Spectrum</span>
+      <span class="sidebar-version">v2.4</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Getting Started</div>
+        <a href="#overview" class="nav-link active">Overview</a>
+        <a href="#installation" class="nav-link">Installation</a>
+        <a href="#theming" class="nav-link">Theming</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Foundations</div>
+        <a href="#colors" class="nav-link">Colors</a>
+        <a href="#typography" class="nav-link">Typography</a>
+        <a href="#spacing" class="nav-link">Spacing</a>
+        <a href="#icons" class="nav-link">Icons</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Components</div>
+        <a href="#button" class="nav-link">Button</a>
+        <a href="#input" class="nav-link">Input</a>
+        <a href="#card" class="nav-link">Card</a>
+        <a href="#badge" class="nav-link">Badge</a>
+        <a href="#modal" class="nav-link">Modal</a>
+        <a href="#table" class="nav-link">Table</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Patterns</div>
+        <a href="#forms" class="nav-link">Forms</a>
+        <a href="#navigation" class="nav-link">Navigation</a>
+        <a href="#dashboard" class="nav-link">Dashboard</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="content">
+
+      <!-- Hero -->
+      <section class="hero" id="overview">
+        <div class="hero-badge">v2.4 — Latest Release</div>
+        <h1>Spectrum Design System</h1>
+        <p>Build consistent, accessible interfaces with a unified design language. Tokens, components, and patterns crafted for modern product teams.</p>
+      </section>
+
+      <!-- Colors -->
+      <section class="section" id="colors">
+        <span class="section-anchor"></span>
+        <h2>Color Palette</h2>
+        <p class="section-desc">Core semantic colors used across the system. Each color maps to a CSS custom property for easy theming.</p>
+        <div class="color-grid">
+          <div class="color-swatch">
+            <div class="color-swatch-block" style="background: var(--color-primary, #6366f1);"></div>
+            <div class="color-swatch-info">
+              <div class="color-swatch-name">Primary</div>
+              <div class="color-swatch-hex">#6366f1</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="color-swatch-block" style="background: var(--color-secondary, #8b5cf6);"></div>
+            <div class="color-swatch-info">
+              <div class="color-swatch-name">Secondary</div>
+              <div class="color-swatch-hex">#8b5cf6</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="color-swatch-block" style="background: var(--color-success, #22c55e);"></div>
+            <div class="color-swatch-info">
+              <div class="color-swatch-name">Success</div>
+              <div class="color-swatch-hex">#22c55e</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="color-swatch-block" style="background: var(--color-warning, #f59e0b);"></div>
+            <div class="color-swatch-info">
+              <div class="color-swatch-name">Warning</div>
+              <div class="color-swatch-hex">#f59e0b</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="color-swatch-block" style="background: var(--color-danger, #ef4444);"></div>
+            <div class="color-swatch-info">
+              <div class="color-swatch-name">Danger</div>
+              <div class="color-swatch-hex">#ef4444</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="color-swatch-block" style="background: var(--color-text, #0f172a);"></div>
+            <div class="color-swatch-info">
+              <div class="color-swatch-name">Text</div>
+              <div class="color-swatch-hex">#0f172a</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="color-swatch-block" style="background: var(--color-text-muted, #64748b);"></div>
+            <div class="color-swatch-info">
+              <div class="color-swatch-name">Text Muted</div>
+              <div class="color-swatch-hex">#64748b</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="color-swatch-block" style="background: var(--color-border, #e2e8f0);"></div>
+            <div class="color-swatch-info">
+              <div class="color-swatch-name">Border</div>
+              <div class="color-swatch-hex">#e2e8f0</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Typography -->
+      <section class="section" id="typography">
+        <span class="section-anchor"></span>
+        <h2>Typography</h2>
+        <p class="section-desc">A modular type scale built on Inter for UI text. All sizes use rem units with a consistent ratio.</p>
+        <div class="type-specimen">
+          <div class="type-row">
+            <div class="type-meta">H1 / 32px<br>800 weight</div>
+            <div class="type-sample h1">The quick brown fox</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">H2 / 26px<br>700 weight</div>
+            <div class="type-sample h2">The quick brown fox</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">H3 / 22px<br>650 weight</div>
+            <div class="type-sample h3">The quick brown fox</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">H4 / 18px<br>600 weight</div>
+            <div class="type-sample h4">The quick brown fox</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">H5 / 15px<br>600 weight</div>
+            <div class="type-sample h5">The quick brown fox jumps over the lazy dog</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">H6 / 13px<br>600 caps</div>
+            <div class="type-sample h6">The quick brown fox jumps over</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">Body LG<br>16px</div>
+            <div class="type-sample body-lg">Design systems enable teams to build better products faster by making design reusable.</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">Body<br>14px</div>
+            <div class="type-sample body">Design systems enable teams to build better products faster by making design reusable.</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">Body SM<br>13px</div>
+            <div class="type-sample body-sm">Design systems enable teams to build better products faster by making design reusable.</div>
+          </div>
+          <div class="type-row">
+            <div class="type-meta">Caption<br>12px</div>
+            <div class="type-sample caption">Last updated 3 hours ago · 2 min read</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Component: Button -->
+      <section class="section" id="button">
+        <span class="section-anchor"></span>
+        <h2>Components</h2>
+        <p class="section-desc">Production-ready components with consistent styling, accessible markup, and flexible variants.</p>
+
+        <div class="component-card">
+          <div class="component-card-header">
+            <div class="component-card-title">Button</div>
+            <div class="component-card-desc">Buttons trigger actions and navigate users through flows. They communicate importance through style and size.</div>
+          </div>
+          <div class="component-preview">
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-ghost">Ghost</button>
+            <button class="btn btn-danger">Danger</button>
+            <button class="btn btn-primary btn-sm">Small</button>
+            <button class="btn btn-primary btn-lg">Large</button>
+          </div>
+          <div class="code-block">
+            <pre><span class="comment">&lt;!-- Button variants --&gt;</span>
+<span class="punct">&lt;</span><span class="tag">button</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"btn btn-primary"</span><span class="punct">&gt;</span>Primary<span class="punct">&lt;/</span><span class="tag">button</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">button</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"btn btn-secondary"</span><span class="punct">&gt;</span>Secondary<span class="punct">&lt;/</span><span class="tag">button</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">button</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"btn btn-ghost"</span><span class="punct">&gt;</span>Ghost<span class="punct">&lt;/</span><span class="tag">button</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">button</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"btn btn-danger"</span><span class="punct">&gt;</span>Danger<span class="punct">&lt;/</span><span class="tag">button</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">button</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"btn btn-primary btn-sm"</span><span class="punct">&gt;</span>Small<span class="punct">&lt;/</span><span class="tag">button</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">button</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"btn btn-primary btn-lg"</span><span class="punct">&gt;</span>Large<span class="punct">&lt;/</span><span class="tag">button</span><span class="punct">&gt;</span></pre>
+          </div>
+        </div>
+
+        <!-- Component: Badge -->
+        <div class="component-card" id="badge">
+          <div class="component-card-header">
+            <div class="component-card-title">Badge</div>
+            <div class="component-card-desc">Badges convey status, counts, or labels. Use semantic colors to reinforce meaning.</div>
+          </div>
+          <div class="component-preview">
+            <span class="badge badge-primary badge-dot">Active</span>
+            <span class="badge badge-success badge-dot">Completed</span>
+            <span class="badge badge-warning badge-dot">Pending</span>
+            <span class="badge badge-danger badge-dot">Failed</span>
+            <span class="badge badge-neutral">Draft</span>
+            <span class="badge badge-primary">New</span>
+          </div>
+          <div class="code-block">
+            <pre><span class="comment">&lt;!-- Badge variants --&gt;</span>
+<span class="punct">&lt;</span><span class="tag">span</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"badge badge-primary badge-dot"</span><span class="punct">&gt;</span>Active<span class="punct">&lt;/</span><span class="tag">span</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">span</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"badge badge-success badge-dot"</span><span class="punct">&gt;</span>Completed<span class="punct">&lt;/</span><span class="tag">span</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">span</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"badge badge-warning badge-dot"</span><span class="punct">&gt;</span>Pending<span class="punct">&lt;/</span><span class="tag">span</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">span</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"badge badge-danger badge-dot"</span><span class="punct">&gt;</span>Failed<span class="punct">&lt;/</span><span class="tag">span</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">span</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"badge badge-neutral"</span><span class="punct">&gt;</span>Draft<span class="punct">&lt;/</span><span class="tag">span</span><span class="punct">&gt;</span></pre>
+          </div>
+        </div>
+
+        <!-- Component: Card -->
+        <div class="component-card" id="card">
+          <div class="component-card-header">
+            <div class="component-card-title">Card</div>
+            <div class="component-card-desc">Cards group related content and actions. They provide a flexible container for previews, metadata, and interactions.</div>
+          </div>
+          <div class="component-preview card-preview">
+            <div class="demo-card">
+              <div class="demo-card-img">
+                <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"/>
+                </svg>
+              </div>
+              <div class="demo-card-body">
+                <div class="demo-card-title">Project Alpha</div>
+                <div class="demo-card-text">A modern dashboard for analytics and reporting with real-time data.</div>
+                <div class="demo-card-footer">
+                  <span class="badge badge-success badge-dot">Active</span>
+                  <button class="btn btn-ghost btn-sm">View →</button>
+                </div>
+              </div>
+            </div>
+            <div class="demo-card">
+              <div class="demo-card-img" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5"/>
+                </svg>
+              </div>
+              <div class="demo-card-body">
+                <div class="demo-card-title">Design Tokens</div>
+                <div class="demo-card-text">Color, typography, and spacing tokens for the core system.</div>
+                <div class="demo-card-footer">
+                  <span class="badge badge-warning badge-dot">Beta</span>
+                  <button class="btn btn-ghost btn-sm">View →</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre><span class="comment">&lt;!-- Card component --&gt;</span>
+<span class="punct">&lt;</span><span class="tag">div</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"demo-card"</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;</span><span class="tag">div</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"demo-card-img"</span><span class="punct">&gt;</span>...<span class="punct">&lt;/</span><span class="tag">div</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;</span><span class="tag">div</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"demo-card-body"</span><span class="punct">&gt;</span>
+    <span class="punct">&lt;</span><span class="tag">div</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"demo-card-title"</span><span class="punct">&gt;</span>Project Alpha<span class="punct">&lt;/</span><span class="tag">div</span><span class="punct">&gt;</span>
+    <span class="punct">&lt;</span><span class="tag">div</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"demo-card-text"</span><span class="punct">&gt;</span>Description text...<span class="punct">&lt;/</span><span class="tag">div</span><span class="punct">&gt;</span>
+    <span class="punct">&lt;</span><span class="tag">div</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"demo-card-footer"</span><span class="punct">&gt;</span>...<span class="punct">&lt;/</span><span class="tag">div</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;/</span><span class="tag">div</span><span class="punct">&gt;</span>
+<span class="punct">&lt;/</span><span class="tag">div</span><span class="punct">&gt;</span></pre>
+          </div>
+        </div>
+
+        <!-- Component: Input -->
+        <div class="component-card" id="input">
+          <div class="component-card-header">
+            <div class="component-card-title">Input</div>
+            <div class="component-card-desc">Text inputs collect user data. They support labels, placeholders, hints, and focus states for accessibility.</div>
+          </div>
+          <div class="component-preview input-preview" style="max-width: 400px;">
+            <div class="form-group">
+              <label class="form-label">Email address</label>
+              <input type="email" class="form-input" placeholder="you@example.com">
+              <div class="form-hint">We'll never share your email with anyone.</div>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Subscribe</label>
+              <div class="form-input-group">
+                <input type="email" class="form-input" placeholder="Enter your email">
+                <button class="btn btn-primary">Subscribe</button>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre><span class="comment">&lt;!-- Input with label and hint --&gt;</span>
+<span class="punct">&lt;</span><span class="tag">div</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"form-group"</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;</span><span class="tag">label</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"form-label"</span><span class="punct">&gt;</span>Email address<span class="punct">&lt;/</span><span class="tag">label</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;</span><span class="tag">input</span> <span class="attr">type</span><span class="punct">=</span><span class="val">"email"</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"form-input"</span> <span class="attr">placeholder</span><span class="punct">=</span><span class="val">"you@example.com"</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;</span><span class="tag">div</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"form-hint"</span><span class="punct">&gt;</span>We'll never share your email.<span class="punct">&lt;/</span><span class="tag">div</span><span class="punct">&gt;</span>
+<span class="punct">&lt;/</span><span class="tag">div</span><span class="punct">&gt;</span>
+
+<span class="comment">&lt;!-- Input group with button --&gt;</span>
+<span class="punct">&lt;</span><span class="tag">div</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"form-input-group"</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;</span><span class="tag">input</span> <span class="attr">type</span><span class="punct">=</span><span class="val">"email"</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"form-input"</span> <span class="attr">placeholder</span><span class="punct">=</span><span class="val">"Enter your email"</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;</span><span class="tag">button</span> <span class="attr">class</span><span class="punct">=</span><span class="val">"btn btn-primary"</span><span class="punct">&gt;</span>Subscribe<span class="punct">&lt;/</span><span class="tag">button</span><span class="punct">&gt;</span>
+<span class="punct">&lt;/</span><span class="tag">div</span><span class="punct">&gt;</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Spacing Scale -->
+      <section class="section" id="spacing">
+        <span class="section-anchor"></span>
+        <h2>Spacing Scale</h2>
+        <p class="section-desc">A consistent 4px-based spacing scale. Use these tokens for margins, padding, and layout gaps.</p>
+        <div class="spacing-list">
+          <div class="spacing-row">
+            <div class="spacing-label">--space-1</div>
+            <div class="spacing-value">4px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 4px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-2</div>
+            <div class="spacing-value">8px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 8px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-3</div>
+            <div class="spacing-value">12px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 12px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-4</div>
+            <div class="spacing-value">16px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 20px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-5</div>
+            <div class="spacing-value">20px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 28px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-6</div>
+            <div class="spacing-value">24px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 36px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-8</div>
+            <div class="spacing-value">32px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 52px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-10</div>
+            <div class="spacing-value">40px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 70px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-12</div>
+            <div class="spacing-value">48px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 90px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-16</div>
+            <div class="spacing-value">64px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 124px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-20</div>
+            <div class="spacing-value">80px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 160px;"></div></div>
+          </div>
+          <div class="spacing-row">
+            <div class="spacing-label">--space-24</div>
+            <div class="spacing-value">96px</div>
+            <div class="spacing-bar-wrap"><div class="spacing-bar" style="width: 196px;"></div></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Minimal JS: sidebar toggle for mobile -->
+  <script>
+    (function() {
+      var toggle = document.getElementById('sidebarToggle');
+      var sidebar = document.getElementById('sidebar');
+      var overlay = document.getElementById('sidebarOverlay');
+
+      function close() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+      }
+
+      toggle.addEventListener('click', function() {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+      });
+
+      overlay.addEventListener('click', close);
+
+      // Close sidebar when a nav link is clicked on mobile
+      document.querySelectorAll('.nav-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 768) close();
+          // Update active state
+          document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
+          this.classList.add('active');
+        });
+      });
+
+      // Update active nav link on scroll
+      var sections = document.querySelectorAll('.section, .hero');
+      var navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var id = entry.target.id;
+            navLinks.forEach(function(link) {
+              link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+            });
+          }
+        });
+      }, { rootMargin: '-20% 0px -60% 0px' });
+
+      sections.forEach(function(section) {
+        if (section.id) observer.observe(section);
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -12,7 +12,6 @@ local_dist = os.path.expanduser('~/desktop/project/design-lib/docs/.vitepress/di
 remote_base = '/var/www/design-lib/'
 
 ssh.exec_command(f'mkdir -p {remote_base}')
-time.sleep(0.5)
 
 uploaded = 0
 for root, dirs, files in os.walk(local_dist):
