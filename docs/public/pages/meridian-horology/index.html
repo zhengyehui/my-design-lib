@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian Horology — 瑞士制表工艺</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: #0a0a0a;
+  color: #faf8f5;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* ===== VARIABLES ===== */
+:root {
+  --meridian-black: #0a0a0a;
+  --meridian-dark: #111111;
+  --meridian-gold: #c9a96e;
+  --meridian-gold-light: #d4b87a;
+  --meridian-cream: #faf8f5;
+  --meridian-gray: #888888;
+  --meridian-border: rgba(201, 169, 110, 0.15);
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== NAVIGATION ===== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.5rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--meridian-border);
+  transition: background 0.3s;
+}
+.nav-logo {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--meridian-gold);
+}
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.nav-links a {
+  color: var(--meridian-gray);
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--meridian-gold);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--meridian-cream); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--meridian-gold);
+  border: 1px solid var(--meridian-gold);
+  padding: 0.6rem 1.8rem;
+  transition: all 0.3s;
+}
+.nav-cta:hover {
+  background: var(--meridian-gold);
+  color: var(--meridian-black);
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 4rem 4rem;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201, 169, 110, 0.06) 0%, transparent 70%),
+    radial-gradient(circle at 20% 80%, rgba(201, 169, 110, 0.03) 0%, transparent 50%);
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+}
+.hero-text { max-width: 540px; }
+.hero-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--meridian-gold);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.hero-label::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--meridian-gold);
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: 400;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  color: var(--meridian-cream);
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--meridian-gold);
+}
+.hero-desc {
+  font-size: 1rem;
+  color: var(--meridian-gray);
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  max-width: 420px;
+}
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2.5rem;
+  background: var(--meridian-gold);
+  color: var(--meridian-black);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: var(--meridian-gold-light);
+  transform: translateY(-2px);
+}
+.btn-secondary {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--meridian-gray);
+  border-bottom: 1px solid var(--meridian-border);
+  padding-bottom: 2px;
+  transition: all 0.3s;
+}
+.btn-secondary:hover {
+  color: var(--meridian-gold);
+  border-color: var(--meridian-gold);
+}
+
+/* ===== CSS WATCH FACE ===== */
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.watch-container {
+  position: relative;
+  width: 380px;
+  height: 380px;
+}
+.watch-case {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--meridian-gold);
+  background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 50%, #111111 100%);
+  box-shadow:
+    0 0 0 8px rgba(201, 169, 110, 0.08),
+    0 0 0 12px rgba(201, 169, 110, 0.04),
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    inset 0 0 60px rgba(201, 169, 110, 0.03);
+}
+.watch-dial {
+  position: absolute;
+  inset: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 110, 0.2);
+}
+/* Roman numerals */
+.watch-numeral {
+  position: absolute;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--meridian-gold);
+  font-weight: 400;
+}
+.n12 { top: 25px; left: 50%; transform: translateX(-50%); }
+.n3 { right: 25px; top: 50%; transform: translateY(-50%); }
+.n6 { bottom: 25px; left: 50%; transform: translateX(-50%); }
+.n9 { left: 25px; top: 50%; transform: translateY(-50%); }
+.n1 { top: 50px; right: 60px; }
+.n2 { top: 85px; right: 35px; }
+.n4 { top: 85px; left: 35px; }
+.n5 { top: 50px; left: 60px; }
+.n7 { bottom: 50px; left: 60px; }
+.n8 { bottom: 85px; left: 35px; }
+.n10 { bottom: 85px; right: 35px; }
+.n11 { bottom: 50px; right: 60px; }
+/* Watch hands */
+.watch-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--meridian-gold);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+.watch-hand-hour {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 2.5px;
+  height: 80px;
+  background: var(--meridian-cream);
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(-30deg);
+  border-radius: 1px;
+  z-index: 4;
+}
+.watch-hand-minute {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 1.5px;
+  height: 110px;
+  background: var(--meridian-gold);
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(60deg);
+  border-radius: 1px;
+  z-index: 4;
+}
+.watch-hand-second {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 0.8px;
+  height: 120px;
+  background: #e63946;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(0deg);
+  border-radius: 1px;
+  z-index: 4;
+  animation: secondHand 60s linear infinite;
+}
+@keyframes secondHand {
+  to { transform: translateX(-50%) rotate(360deg); }
+}
+/* Watch crown */
+.watch-crown {
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 28px;
+  background: linear-gradient(to right, var(--meridian-gold), #b8956a);
+  border-radius: 0 4px 4px 0;
+  border: 1px solid rgba(201, 169, 110, 0.3);
+}
+/* Brand text on dial */
+.watch-brand {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-serif);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--meridian-gold);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.watch-subtext {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-sans);
+  font-size: 0.45rem;
+  letter-spacing: 0.15em;
+  color: var(--meridian-gray);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* Tick marks */
+.watch-tick {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 1px;
+  height: 10px;
+  background: rgba(201, 169, 110, 0.4);
+  transform-origin: center 182px;
+}
+.watch-tick.major {
+  width: 1.5px;
+  height: 14px;
+  background: var(--meridian-gold);
+}
+
+/* ===== MARQUEE ===== */
+.marquee-section {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--meridian-border);
+  border-bottom: 1px solid var(--meridian-border);
+  overflow: hidden;
+  background: var(--meridian-dark);
+}
+.marquee-track {
+  display: flex;
+  animation: marquee 30s linear infinite;
+  white-space: nowrap;
+}
+.marquee-item {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--meridian-gray);
+  padding: 0 3rem;
+  flex-shrink: 0;
+}
+.marquee-item .dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background: var(--meridian-gold);
+  border-radius: 50%;
+  margin: 0 1.5rem;
+  vertical-align: middle;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ===== SECTION SHARED ===== */
+.section {
+  padding: 8rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--meridian-gold);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.section-label::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--meridian-gold);
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  color: var(--meridian-cream);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+.section-desc {
+  font-size: 1rem;
+  color: var(--meridian-gray);
+  line-height: 1.8;
+  max-width: 560px;
+}
+
+/* ===== HERITAGE (Dark) ===== */
+.heritage {
+  background: var(--meridian-dark);
+  padding: 8rem 0;
+}
+.heritage-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+.heritage-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.stat-item {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--meridian-border);
+}
+.stat-number {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: var(--meridian-gold);
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--meridian-gray);
+  letter-spacing: 0.05em;
+}
+.heritage-visual {
+  position: relative;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.heritage-frame {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--meridian-border);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0f0f0f 0%, #1a1a1a 100%);
+}
+.heritage-frame::before {
+  content: 'EST. 1887';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  letter-spacing: 0.2em;
+  color: rgba(201, 169, 110, 0.08);
+  white-space: nowrap;
+}
+.heritage-pattern {
+  position: absolute;
+  inset: 30px;
+  border: 1px solid rgba(201, 169, 110, 0.1);
+}
+.heritage-pattern::before {
+  content: '';
+  position: absolute;
+  inset: 20px;
+  border: 1px solid rgba(201, 169, 110, 0.06);
+}
+/* Geneva stripes pattern */
+.geneva-stripes {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 8px,
+    rgba(201, 169, 110, 0.03) 8px,
+    rgba(201, 169, 110, 0.03) 9px
+  );
+}
+
+/* ===== COLLECTION (Products) ===== */
+.collection {
+  background: var(--meridian-black);
+  padding: 8rem 0;
+}
+.collection-header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.collection-filter {
+  display: flex;
+  gap: 1.5rem;
+}
+.filter-btn {
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--meridian-gray);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding-bottom: 4px;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s;
+}
+.filter-btn.active,
+.filter-btn:hover {
+  color: var(--meridian-gold);
+  border-color: var(--meridian-gold);
+}
+.products-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.product-card {
+  background: var(--meridian-dark);
+  border: 1px solid var(--meridian-border);
+  transition: all 0.4s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.product-card:hover {
+  border-color: var(--meridian-gold);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+.product-image {
+  aspect-ratio: 1;
+  background: linear-gradient(145deg, #111111 0%, #1a1a1a 50%, #0f0f0f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.product-image::before {
+  content: '';
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 110, 0.15);
+}
+.product-image::after {
+  content: '';
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 169, 110, 0.08);
+}
+.product-watch-face {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1.5px solid var(--meridian-gold);
+  position: relative;
+  background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%);
+  box-shadow: 0 0 30px rgba(201, 169, 110, 0.08);
+}
+.product-watch-face .mini-numeral {
+  position: absolute;
+  font-family: var(--font-serif);
+  font-size: 0.5rem;
+  color: var(--meridian-gold);
+}
+.product-watch-face .mn12 { top: 6px; left: 50%; transform: translateX(-50%); }
+.product-watch-face .mn3 { right: 6px; top: 50%; transform: translateY(-50%); }
+.product-watch-face .mn6 { bottom: 6px; left: 50%; transform: translateX(-50%); }
+.product-watch-face .mn9 { left: 6px; top: 50%; transform: translateY(-50%); }
+.product-watch-face .mini-hand-h {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 1.5px;
+  height: 28px;
+  background: var(--meridian-cream);
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(-45deg);
+}
+.product-watch-face .mini-hand-m {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 1px;
+  height: 38px;
+  background: var(--meridian-gold);
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(30deg);
+}
+.product-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--meridian-black);
+  background: var(--meridian-gold);
+  padding: 0.3rem 0.8rem;
+}
+.product-info {
+  padding: 1.5rem;
+}
+.product-collection {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--meridian-gold);
+  margin-bottom: 0.5rem;
+}
+.product-name {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--meridian-cream);
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+}
+.product-specs {
+  font-size: 0.75rem;
+  color: var(--meridian-gray);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--meridian-border);
+}
+.product-price {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--meridian-cream);
+}
+.product-btn {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--meridian-gold);
+  border: 1px solid var(--meridian-gold);
+  padding: 0.5rem 1.2rem;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.product-btn:hover {
+  background: var(--meridian-gold);
+  color: var(--meridian-black);
+}
+
+/* ===== CRAFTSMANSHIP ===== */
+.craftsmanship {
+  background: var(--meridian-dark);
+  padding: 8rem 0;
+}
+.craft-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+}
+.craft-item {
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--meridian-border);
+  background: rgba(10, 10, 10, 0.5);
+  transition: all 0.3s;
+  text-align: center;
+}
+.craft-item:hover {
+  border-color: var(--meridian-gold);
+  background: rgba(201, 169, 110, 0.03);
+}
+.craft-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.5rem;
+  border: 1px solid var(--meridian-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.craft-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--meridian-gold);
+  fill: none;
+  stroke-width: 1.5;
+}
+.craft-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--meridian-cream);
+  margin-bottom: 0.8rem;
+}
+.craft-desc {
+  font-size: 0.8rem;
+  color: var(--meridian-gray);
+  line-height: 1.7;
+}
+
+/* ===== EDITORIAL QUOTE ===== */
+.quote-section {
+  padding: 10rem 4rem;
+  text-align: center;
+  position: relative;
+  background: var(--meridian-black);
+}
+.quote-section::before {
+  content: '"';
+  position: absolute;
+  top: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-serif);
+  font-size: 8rem;
+  color: rgba(201, 169, 110, 0.1);
+  line-height: 1;
+}
+.quote-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--meridian-cream);
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+.quote-author {
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--meridian-gold);
+}
+
+/* ===== FEATURES STRIP ===== */
+.features-strip {
+  background: var(--meridian-dark);
+  border-top: 1px solid var(--meridian-border);
+  border-bottom: 1px solid var(--meridian-border);
+}
+.features-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.feature-item {
+  padding: 3rem 2rem;
+  text-align: center;
+  border-right: 1px solid var(--meridian-border);
+}
+.feature-item:last-child { border-right: none; }
+.feature-number {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--meridian-gold);
+  margin-bottom: 0.5rem;
+}
+.feature-text {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--meridian-gray);
+}
+
+/* ===== NEWSLETTER ===== */
+.newsletter {
+  padding: 8rem 4rem;
+  text-align: center;
+  background: var(--meridian-black);
+}
+.newsletter-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.newsletter-form {
+  display: flex;
+  gap: 0;
+  margin-top: 2.5rem;
+}
+.newsletter-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  background: var(--meridian-dark);
+  border: 1px solid var(--meridian-border);
+  border-right: none;
+  color: var(--meridian-cream);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.newsletter-input:focus {
+  border-color: var(--meridian-gold);
+}
+.newsletter-input::placeholder {
+  color: #555;
+}
+.newsletter-submit {
+  padding: 1rem 2rem;
+  background: var(--meridian-gold);
+  color: var(--meridian-black);
+  border: 1px solid var(--meridian-gold);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.newsletter-submit:hover {
+  background: var(--meridian-gold-light);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--meridian-dark);
+  border-top: 1px solid var(--meridian-border);
+  padding: 4rem;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 4rem;
+}
+.footer-brand .footer-logo {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  letter-spacing: 0.15em;
+  color: var(--meridian-gold);
+  margin-bottom: 1rem;
+}
+.footer-brand p {
+  font-size: 0.85rem;
+  color: var(--meridian-gray);
+  line-height: 1.7;
+  max-width: 280px;
+}
+.footer-col h4 {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--meridian-cream);
+  margin-bottom: 1.5rem;
+}
+.footer-col ul {
+  list-style: none;
+}
+.footer-col li {
+  margin-bottom: 0.8rem;
+}
+.footer-col a {
+  font-size: 0.85rem;
+  color: var(--meridian-gray);
+  transition: color 0.3s;
+}
+.footer-col a:hover { color: var(--meridian-gold); }
+.footer-bottom {
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--meridian-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #555;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .hero-content { grid-template-columns: 1fr; gap: 3rem; }
+  .hero-visual { order: -1; }
+  .watch-container { width: 280px; height: 280px; }
+  .heritage-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .craft-grid { grid-template-columns: repeat(2, 1fr); }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .feature-item:nth-child(2) { border-right: none; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 6rem 1.5rem 3rem; }
+  .section { padding: 5rem 1.5rem; }
+  .heritage { padding: 5rem 0; }
+  .heritage-inner { padding: 0 1.5rem; }
+  .collection { padding: 5rem 0; }
+  .collection-header { padding: 0 1.5rem 2rem; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  .products-grid { padding: 0 1.5rem; grid-template-columns: 1fr; }
+  .craftsmanship { padding: 5rem 0; }
+  .craft-grid { padding: 0 1.5rem; grid-template-columns: 1fr; }
+  .quote-section { padding: 6rem 1.5rem; }
+  .features-grid { grid-template-columns: 1fr; }
+  .feature-item { border-right: none; border-bottom: 1px solid var(--meridian-border); }
+  .feature-item:last-child { border-bottom: none; }
+  .newsletter { padding: 5rem 1.5rem; }
+  .newsletter-form { flex-direction: column; }
+  .newsletter-input { border-right: 1px solid var(--meridian-border); }
+  .footer { padding: 3rem 1.5rem; }
+  .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav">
+  <div class="nav-logo">MERIDIAN</div>
+  <ul class="nav-links">
+    <li><a href="#collection">Collection</a></li>
+    <li><a href="#heritage">Heritage</a></li>
+    <li><a href="#craftsmanship">Craftsmanship</a></li>
+    <li><a href="#journal">Journal</a></li>
+  </ul>
+  <a href="#collection" class="nav-cta">Explore</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-label">Swiss Made Since 1887</div>
+      <h1 class="hero-title">The Art of <em>Precision</em> Timekeeping</h1>
+      <p class="hero-desc">Each Meridian timepiece represents generations of Swiss horological mastery — where mechanical precision meets enduring elegance.</p>
+      <div class="hero-actions">
+        <a href="#collection" class="btn-primary">View Collection →</a>
+        <a href="#heritage" class="btn-secondary">Our Heritage</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="watch-container">
+        <div class="watch-case">
+          <div class="watch-crown"></div>
+        </div>
+        <div class="watch-dial">
+          <!-- Tick marks -->
+          <div class="watch-tick major" style="transform-origin: center 172px;"></div>
+          <div class="watch-tick" style="transform-origin: center 172px; transform: rotate(30deg);"></div>
+          <div class="watch-tick major" style="transform-origin: center 172px; transform: rotate(60deg);"></div>
+          <div class="watch-tick" style="transform-origin: center 172px; transform: rotate(90deg);"></div>
+          <div class="watch-tick major" style="transform-origin: center 172px; transform: rotate(120deg);"></div>
+          <div class="watch-tick" style="transform-origin: center 172px; transform: rotate(150deg);"></div>
+          <div class="watch-tick major" style="transform-origin: center 172px; transform: rotate(180deg);"></div>
+          <div class="watch-tick" style="transform-origin: center 172px; transform: rotate(210deg);"></div>
+          <div class="watch-tick major" style="transform-origin: center 172px; transform: rotate(240deg);"></div>
+          <div class="watch-tick" style="transform-origin: center 172px; transform: rotate(270deg);"></div>
+          <div class="watch-tick major" style="transform-origin: center 172px; transform: rotate(300deg);"></div>
+          <div class="watch-tick" style="transform-origin: center 172px; transform: rotate(330deg);"></div>
+          <!-- Roman numerals -->
+          <span class="watch-numeral n12">XII</span>
+          <span class="watch-numeral n1">I</span>
+          <span class="watch-numeral n2">II</span>
+          <span class="watch-numeral n3">III</span>
+          <span class="watch-numeral n4">IV</span>
+          <span class="watch-numeral n5">V</span>
+          <span class="watch-numeral n6">VI</span>
+          <span class="watch-numeral n7">VII</span>
+          <span class="watch-numeral n8">VIII</span>
+          <span class="watch-numeral n9">IX</span>
+          <span class="watch-numeral n10">X</span>
+          <span class="watch-numeral n11">XI</span>
+          <!-- Brand -->
+          <span class="watch-brand">Meridian</span>
+          <span class="watch-subtext">Swiss Made</span>
+          <!-- Hands -->
+          <div class="watch-hand-hour"></div>
+          <div class="watch-hand-minute"></div>
+          <div class="watch-hand-second"></div>
+          <div class="watch-center"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Swiss Made <span class="dot"></span> Automatic Movement <span class="dot"></span> Sapphire Crystal <span class="dot"></span> 100m Water Resistant <span class="dot"></span> Hand-Finished <span class="dot"></span> COSC Certified</span>
+    <span class="marquee-item">Swiss Made <span class="dot"></span> Automatic Movement <span class="dot"></span> Sapphire Crystal <span class="dot"></span> 100m Water Resistant <span class="dot"></span> Hand-Finished <span class="dot"></span> COSC Certified</span>
+  </div>
+</div>
+
+<!-- ===== HERITAGE ===== -->
+<section class="heritage" id="heritage">
+  <div class="heritage-inner">
+    <div class="heritage-text">
+      <div class="section-label">Our Heritage</div>
+      <h2 class="section-title">A Legacy of <br>Swiss Excellence</h2>
+      <p class="section-desc">Founded in the heart of the Jura mountains, Meridian has spent over a century perfecting the art of mechanical timekeeping. Every movement is assembled by hand, every case polished to perfection.</p>
+      <div class="heritage-stats">
+        <div class="stat-item">
+          <div class="stat-number">137</div>
+          <div class="stat-label">Years of Craft</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">312</div>
+          <div class="stat-label">Components per Movement</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Master Watchmakers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Weeks per Timepiece</div>
+        </div>
+      </div>
+    </div>
+    <div class="heritage-visual">
+      <div class="heritage-frame">
+        <div class="geneva-stripes"></div>
+        <div class="heritage-pattern"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COLLECTION ===== -->
+<section class="collection" id="collection">
+  <div class="collection-header">
+    <div>
+      <div class="section-label">The Collection</div>
+      <h2 class="section-title">Exceptional Timepieces</h2>
+    </div>
+    <div class="collection-filter">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Classic</button>
+      <button class="filter-btn">Sport</button>
+      <button class="filter-btn">Complication</button>
+    </div>
+  </div>
+  <div class="products-grid">
+    <!-- Product 1 -->
+    <div class="product-card">
+      <div class="product-image">
+        <div class="product-watch-face">
+          <span class="mini-numeral mn12">XII</span>
+          <span class="mini-numeral mn3">III</span>
+          <span class="mini-numeral mn6">VI</span>
+          <span class="mini-numeral mn9">IX</span>
+          <div class="mini-hand-h"></div>
+          <div class="mini-hand-m"></div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-collection">Classique</div>
+        <div class="product-name">Patrimoine Automatique</div>
+        <div class="product-specs">40mm · Rose Gold · Swiss Auto · 65h Reserve</div>
+        <div class="product-footer">
+          <div class="product-price">¥ 128,000</div>
+          <button class="product-btn">Details</button>
+        </div>
+      </div>
+    </div>
+    <!-- Product 2 -->
+    <div class="product-card">
+      <div class="product-image">
+        <div class="product-watch-face">
+          <span class="mini-numeral mn12">XII</span>
+          <span class="mini-numeral mn3">III</span>
+          <span class="mini-numeral mn6">VI</span>
+          <span class="mini-numeral mn9">IX</span>
+          <div class="mini-hand-h" style="transform: translateX(-50%) rotate(20deg);"></div>
+          <div class="mini-hand-m" style="transform: translateX(-50%) rotate(-60deg);"></div>
+        </div>
+        <div class="product-badge">New</div>
+      </div>
+      <div class="product-info">
+        <div class="product-collection">Sport</div>
+        <div class="product-name">Nautique Chronographe</div>
+        <div class="product-specs">42mm · Steel · Chronograph · 200m WR</div>
+        <div class="product-footer">
+          <div class="product-price">¥ 86,000</div>
+          <button class="product-btn">Details</button>
+        </div>
+      </div>
+    </div>
+    <!-- Product 3 -->
+    <div class="product-card">
+      <div class="product-image">
+        <div class="product-watch-face">
+          <span class="mini-numeral mn12">XII</span>
+          <span class="mini-numeral mn3">III</span>
+          <span class="mini-numeral mn6">VI</span>
+          <span class="mini-numeral mn9">IX</span>
+          <div class="mini-hand-h" style="transform: translateX(-50%) rotate(90deg);"></div>
+          <div class="mini-hand-m" style="transform: translateX(-50%) rotate(120deg);"></div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-collection">Complication</div>
+        <div class="product-name">Perpétuel Calendrier</div>
+        <div class="product-specs">39mm · White Gold · Perpetual Calendar · Moon Phase</div>
+        <div class="product-footer">
+          <div class="product-price">¥ 368,000</div>
+          <button class="product-btn">Details</button>
+        </div>
+      </div>
+    </div>
+    <!-- Product 4 -->
+    <div class="product-card">
+      <div class="product-image">
+        <div class="product-watch-face">
+          <span class="mini-numeral mn12">XII</span>
+          <span class="mini-numeral mn3">III</span>
+          <span class="mini-numeral mn6">VI</span>
+          <span class="mini-numeral mn9">IX</span>
+          <div class="mini-hand-h" style="transform: translateX(-50%) rotate(-90deg);"></div>
+          <div class="mini-hand-m" style="transform: translateX(-50%) rotate(180deg);"></div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-collection">Classique</div>
+        <div class="product-name">Ultra-Mince</div>
+        <div class="product-specs">38mm · Platinum · Manual Wind · 7.2mm Thin</div>
+        <div class="product-footer">
+          <div class="product-price">¥ 198,000</div>
+          <button class="product-btn">Details</button>
+        </div>
+      </div>
+    </div>
+    <!-- Product 5 -->
+    <div class="product-card">
+      <div class="product-image">
+        <div class="product-watch-face">
+          <span class="mini-numeral mn12">XII</span>
+          <span class="mini-numeral mn3">III</span>
+          <span class="mini-numeral mn6">VI</span>
+          <span class="mini-numeral mn9">IX</span>
+          <div class="mini-hand-h" style="transform: translateX(-50%) rotate(45deg);"></div>
+          <div class="mini-hand-m" style="transform: translateX(-50%) rotate(-30deg);"></div>
+        </div>
+        <div class="product-badge">Limited</div>
+      </div>
+      <div class="product-info">
+        <div class="product-collection">Sport</div>
+        <div class="product-name">Alpiniste GMT</div>
+        <div class="product-specs">41mm · Titanium · GMT · 300m WR · COSC</div>
+        <div class="product-footer">
+          <div class="product-price">¥ 112,000</div>
+          <button class="product-btn">Details</button>
+        </div>
+      </div>
+    </div>
+    <!-- Product 6 -->
+    <div class="product-card">
+      <div class="product-image">
+        <div class="product-watch-face">
+          <span class="mini-numeral mn12">XII</span>
+          <span class="mini-numeral mn3">III</span>
+          <span class="mini-numeral mn6">VI</span>
+          <span class="mini-numeral mn9">IX</span>
+          <div class="mini-hand-h" style="transform: translateX(-50%) rotate(-120deg);"></div>
+          <div class="mini-hand-m" style="transform: translateX(-50%) rotate(90deg);"></div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-collection">Complication</div>
+        <div class="product-name">Tourbillon Squelette</div>
+        <div class="product-specs">43mm · Rose Gold · Tourbillon · Open-Worked</div>
+        <div class="product-footer">
+          <div class="product-price">¥ 680,000</div>
+          <button class="product-btn">Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== QUOTE ===== -->
+<section class="quote-section">
+  <p class="quote-text">A fine watch does not merely tell time — it tells the story of its maker, the patience of centuries, and the quiet triumph of human precision over chaos.</p>
+  <div class="quote-author">— Henri Meridian, Founder, 1887</div>
+</section>
+
+<!-- ===== CRAFTSMANSHIP ===== -->
+<section class="craftsmanship" id="craftsmanship">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 4rem;">
+    <div class="section-label">Craftsmanship</div>
+    <h2 class="section-title">The Pursuit of Perfection</h2>
+    <p class="section-desc">Every Meridian timepiece passes through 47 quality control checkpoints before earning the right to bear our name.</p>
+  </div>
+  <div class="craft-grid">
+    <div class="craft-item">
+      <div class="craft-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3 class="craft-title">Movement Assembly</h3>
+      <p class="craft-desc">Each caliber is hand-assembled from 312 individual components by a single master watchmaker over 120 hours.</p>
+    </div>
+    <div class="craft-item">
+      <div class="craft-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3 class="craft-title">Case Finishing</h3>
+      <p class="craft-desc">Alternating brushed and polished surfaces create a play of light that transforms with every movement of the wrist.</p>
+    </div>
+    <div class="craft-item">
+      <div class="craft-icon">
+        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <h3 class="craft-title">Guilloché Dial</h3>
+      <p class="craft-desc">Engine-turned dials with intricate patterns created on century-old rose engines, each requiring 40 hours of precision work.</p>
+    </div>
+    <div class="craft-item">
+      <div class="craft-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3 class="craft-title">COSC Certification</h3>
+      <p class="craft-desc">Every movement undergoes 15 days of rigorous testing across 5 positions and 3 temperatures to achieve chronometer status.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES STRIP ===== -->
+<div class="features-strip">
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="feature-number">5</div>
+      <div class="feature-text">Year Warranty</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-number">∞</div>
+      <div class="feature-text">Lifetime Service</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-number">48h</div>
+      <div class="feature-text">Worldwide Delivery</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-number">100%</div>
+      <div class="feature-text">Swiss Made</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NEWSLETTER ===== -->
+<section class="newsletter">
+  <div class="newsletter-inner">
+    <div class="section-label" style="justify-content: center;">Stay Informed</div>
+    <h2 class="section-title">The Meridian Journal</h2>
+    <p class="section-desc" style="margin: 0 auto;">Receive exclusive previews of new collections, behind-the-scenes atelier stories, and invitations to private viewings.</p>
+    <form class="newsletter-form" onsubmit="return false;">
+      <input type="email" class="newsletter-input" placeholder="Your email address">
+      <button class="newsletter-submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">MERIDIAN</div>
+      <p>Swiss haute horlogerie since 1887. Each timepiece is a testament to the enduring pursuit of mechanical perfection.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Collections</h4>
+      <ul>
+        <li><a href="#">Classique</a></li>
+        <li><a href="#">Sport</a></li>
+        <li><a href="#">Complication</a></li>
+        <li><a href="#">Limited Editions</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Maison</h4>
+      <ul>
+        <li><a href="#">Heritage</a></li>
+        <li><a href="#">Craftsmanship</a></li>
+        <li><a href="#">Atelier</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Boutiques</a></li>
+        <li><a href="#">Maintenance</a></li>
+        <li><a href="#">Authentication</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Meridian Horology. All rights reserved.</span>
+    <span>Swiss Made · Jura Mountains</span>
+  </div>
+</footer>
+
+</body>
+</html>

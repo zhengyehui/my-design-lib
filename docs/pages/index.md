@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 112 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 113 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1054,6 +1054,15 @@ const pages = [
     rating: 9.0,
     description: '设计系统文档页面，色彩色板 + 排版样例 + 组件实时预览 + 代码片段 + 间距可视化，Mintlify 风格',
   },
+  {
+    id: 'meridian-horology',
+    title: 'Meridian Horology 瑞士腕表电商',
+    category: 'ecommerce',
+    tags: ['奢华腕表', '电商', '暗色主题', '瑞士制表', '衬线字体'],
+    colors: ['#0a0a0a', '#c9a96e', '#faf8f5'],
+    rating: 9.5,
+    description: '暗色系奢华瑞士腕表电商，Playfair Display 衬线字体 + CSS 纯手绘表盘罗马数字 + 秒针旋转动画 + 品牌传承数据 + 工艺展示四宫格 + Marquee 滚动',
+  },
 ]
 
 const categories = [
@@ -1111,12 +1120,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 112 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 113 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="112 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="113 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1125,7 +1134,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 112 个完整页面</span>
+      <span>📦 113 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
