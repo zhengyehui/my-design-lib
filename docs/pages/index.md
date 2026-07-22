@@ -1063,6 +1063,15 @@ const pages = [
     rating: 9.5,
     description: '暗色系奢华瑞士腕表电商，Playfair Display 衬线字体 + CSS 纯手绘表盘罗马数字 + 秒针旋转动画 + 品牌传承数据 + 工艺展示四宫格 + Marquee 滚动',
   },
+  {
+    id: 'supportflow',
+    title: 'SupportFlow AI 客户支持平台',
+    category: 'landing',
+    tags: ['SaaS', '客户支持', 'AI', '暗色主题', 'Bento Grid'],
+    colors: ['#08080d', '#6366f1', '#06b6d4'],
+    rating: 9.4,
+    description: '暗色科技风 AI 客户支持 SaaS 落地页，毛玻璃导航 + CSS 产品控制台 Mockup + Bento Grid 特性 + 流程步骤 + 客户评价 + 三栏定价',
+  },
 ]
 
 const categories = [

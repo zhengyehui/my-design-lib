@@ -246,7 +246,8 @@ export default defineConfig({
             { text: 'NexusConnect 集成生态', link: '/pages/ecosystem-connect' },
             { text: 'InfraDocs 知识基础设施', link: '/pages/infradocs-platform' },
             { text: 'Interfere 编辑风格 SaaS', link: '/pages/interfere-saas' },
-            { text: 'Nominal AI 财务自动化', link: '/pages/nominal-ai' }
+            { text: 'Nominal AI 财务自动化', link: '/pages/nominal-ai' },
+            { text: 'SupportFlow AI 客户支持', link: '/pages/supportflow' }
           ]
         },
         {
