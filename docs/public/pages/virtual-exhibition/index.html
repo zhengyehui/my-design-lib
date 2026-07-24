@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUMINOUS BOUNDARIES — A Digital Exhibition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ============================================
+       DESIGN TOKENS (fallbacks)
+       ============================================ */
+    :root {
+      --color-bg: #08080d;
+      --color-bg-elevated: #0f0f16;
+      --color-bg-card: #12121a;
+      --color-accent: #c9a96e;
+      --color-accent-light: #ddc494;
+      --color-accent-dark: #a68a52;
+      --color-text: #faf8f5;
+      --color-text-muted: #8a8793;
+      --color-text-dim: #5a5763;
+      --color-border: rgba(201, 169, 110, 0.15);
+      --color-border-strong: rgba(201, 169, 110, 0.35);
+      --color-glow: rgba(201, 169, 110, 0.08);
+      --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: var(--color-accent-light);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ============================================
+       SVG NOISE FILTER (for grain texture)
+       ============================================ */
+    .svg-filters {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    /* ============================================
+       GRAIN TEXTURE OVERLAY
+       ============================================ */
+    .grain-overlay {
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    /* ============================================
+       UTILITY CLASSES
+       ============================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .container--narrow {
+      max-width: 800px;
+    }
+
+    .container--wide {
+      max-width: 1400px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .gold-line {
+      width: 60px;
+      height: 1px;
+      background: var(--color-accent);
+      margin: 1.5rem 0;
+    }
+
+    .gold-line--center {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1rem;
+    }
+
+    /* ============================================
+       SCROLL REVEAL ANIMATIONS
+       ============================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal--delay-1 { transition-delay: 0.1s; }
+    .reveal--delay-2 { transition-delay: 0.2s; }
+    .reveal--delay-3 { transition-delay: 0.3s; }
+    .reveal--delay-4 { transition-delay: 0.4s; }
+    .reveal--delay-5 { transition-delay: 0.5s; }
+
+    /* ============================================
+       NAVIGATION
+       ============================================ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.4s ease, padding 0.4s ease;
+    }
+
+    .nav.is-scrolled {
+      background: rgba(8, 8, 13, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav__logo {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--color-accent);
+      text-transform: uppercase;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav__link {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav__link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-accent);
+      transition: width 0.3s var(--ease-out-expo);
+    }
+
+    .nav__link:hover {
+      color: var(--color-text);
+    }
+
+    .nav__link:hover::after {
+      width: 100%;
+    }
+
+    /* ============================================
+       HERO SECTION
+       ============================================ */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201, 169, 110, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 20% 80%, rgba(100, 60, 150, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 80% 20%, rgba(201, 169, 110, 0.03) 0%, transparent 50%),
+        var(--color-bg);
+      z-index: 0;
+    }
+
+    .hero__grain {
+      position: absolute;
+      inset: 0;
+      opacity: 0.08;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+      z-index: 1;
+    }
+
+    .hero__vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 30%, var(--color-bg) 100%);
+      z-index: 2;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 3;
+      padding: 0 2rem;
+    }
+
+    .hero__overline {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: heroFadeUp 1s var(--ease-out-expo) 0.3s forwards;
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 7.5rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: heroFadeUp 1.2s var(--ease-out-expo) 0.5s forwards;
+    }
+
+    .hero__title span {
+      display: block;
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--color-text-muted);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: heroFadeUp 1s var(--ease-out-expo) 0.8s forwards;
+    }
+
+    .hero__date {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      color: var(--color-text-dim);
+      margin-top: 0.5rem;
+      opacity: 0;
+      animation: heroFadeUp 1s var(--ease-out-expo) 1s forwards;
+    }
+
+    .hero__gold-line {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+      margin: 2rem auto;
+      opacity: 0;
+      animation: heroFadeUp 1s var(--ease-out-expo) 1.1s forwards;
+    }
+
+    .hero__scroll {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      opacity: 0;
+      animation: heroFadeUp 1s var(--ease-out-expo) 1.5s forwards;
+    }
+
+    .hero__scroll-text {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-text-dim);
+    }
+
+    .hero__scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 1px solid var(--color-accent);
+      border-bottom: 1px solid var(--color-accent);
+      transform: rotate(45deg);
+      animation: scrollBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes heroFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(8px); }
+    }
+
+    /* Decorative floating lines */
+    .hero__deco-line {
+      position: absolute;
+      z-index: 2;
+      background: linear-gradient(180deg, transparent, var(--color-border-strong), transparent);
+    }
+
+    .hero__deco-line--1 {
+      left: 10%;
+      top: 20%;
+      width: 1px;
+      height: 200px;
+      opacity: 0.4;
+      animation: decoFloat 6s ease-in-out infinite;
+    }
+
+    .hero__deco-line--2 {
+      right: 12%;
+      top: 30%;
+      width: 1px;
+      height: 150px;
+      opacity: 0.3;
+      animation: decoFloat 8s ease-in-out infinite 1s;
+    }
+
+    .hero__deco-line--3 {
+      left: 25%;
+      bottom: 15%;
+      width: 100px;
+      height: 1px;
+      opacity: 0.2;
+      background: linear-gradient(90deg, transparent, var(--color-border-strong), transparent);
+      animation: decoFloat 7s ease-in-out infinite 0.5s;
+    }
+
+    @keyframes decoFloat {
+      0%, 100% { opacity: 0.2; transform: translateY(0); }
+      50% { opacity: 0.5; transform: translateY(-10px); }
+    }
+
+    /* ============================================
+       EXHIBITION INTRO
+       ============================================ */
+    .intro {
+      padding: 10rem 0 8rem;
+      position: relative;
+    }
+
+    .intro__content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .intro__left {
+      position: sticky;
+      top: 8rem;
+    }
+
+    .intro__heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--color-text);
+      margin-bottom: 1.5rem;
+    }
+
+    .intro__heading em {
+      color: var(--color-accent);
+      font-style: italic;
+    }
+
+    .intro__right p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--color-text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .intro__right p:first-of-type::first-letter {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      float: left;
+      line-height: 0.85;
+      padding-right: 0.6rem;
+      padding-top: 0.1rem;
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+
+    .intro__separator {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--color-accent), transparent);
+      margin-top: 4rem;
+      opacity: 0.3;
+    }
+
+    /* ============================================
+       ARTWORK GALLERY
+       ============================================ */
+    .gallery {
+      padding: 6rem 0 10rem;
+      position: relative;
+    }
+
+    .gallery__header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .gallery__title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .gallery__subtitle {
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Masonry-style grid */
+    .gallery__grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 60px;
+      gap: 1.5rem;
+    }
+
+    .gallery__card {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-card);
+      transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s var(--ease-out-expo), border-color 0.3s ease;
+    }
+
+    .gallery__card:hover {
+      transform: scale(1.02) translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px var(--color-glow);
+      border-color: var(--color-border-strong);
+      z-index: 10;
+    }
+
+    /* Card grid placements */
+    .gallery__card--1 { grid-column: 1 / 6; grid-row: span 6; }
+    .gallery__card--2 { grid-column: 6 / 10; grid-row: span 5; }
+    .gallery__card--3 { grid-column: 10 / 13; grid-row: span 7; }
+    .gallery__card--4 { grid-column: 6 / 9; grid-row: span 6; }
+    .gallery__card--5 { grid-column: 9 / 13; grid-row: span 5; }
+    .gallery__card--6 { grid-column: 1 / 5; grid-row: span 5; }
+    .gallery__card--7 { grid-column: 5 / 9; grid-row: span 7; }
+    .gallery__card--8 { grid-column: 9 / 13; grid-row: span 6; }
+
+    .card__art {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .card__info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem 1.5rem 1.5rem;
+      background: linear-gradient(0deg, rgba(8, 8, 13, 0.95) 0%, rgba(8, 8, 13, 0.6) 60%, transparent 100%);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.4s var(--ease-out-expo), opacity 0.4s ease;
+    }
+
+    .gallery__card:hover .card__info {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .card__number {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--color-accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .card__title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.3rem;
+    }
+
+    .card__meta {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* CSS-only abstract artworks */
+    .art-1 {
+      background:
+        radial-gradient(circle at 30% 40%, rgba(201, 169, 110, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(100, 60, 180, 0.3) 0%, transparent 40%),
+        linear-gradient(135deg, #1a1520 0%, #0d0a12 50%, #151020 100%);
+    }
+
+    .art-1::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 15%;
+      width: 200px;
+      height: 200px;
+      border: 1px solid rgba(201, 169, 110, 0.3);
+      border-radius: 50%;
+      animation: artFloat 8s ease-in-out infinite;
+    }
+
+    .art-1::after {
+      content: '';
+      position: absolute;
+      bottom: 25%;
+      right: 20%;
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, rgba(201, 169, 110, 0.15), rgba(201, 169, 110, 0.02));
+      border-radius: 50%;
+      filter: blur(20px);
+      animation: artFloat 6s ease-in-out infinite reverse;
+    }
+
+    .art-2 {
+      background: linear-gradient(160deg, #0e0b15 0%, #151220 100%);
+      overflow: hidden;
+    }
+
+    .art-2::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60%;
+      height: 60%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      border: 1px solid rgba(201, 169, 110, 0.2);
+      animation: artSpin 20s linear infinite;
+    }
+
+    .art-2::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 40%;
+      height: 40%;
+      transform: translate(-50%, -50%) rotate(22.5deg);
+      border: 1px solid rgba(201, 169, 110, 0.15);
+      animation: artSpin 15s linear infinite reverse;
+    }
+
+    .art-3 {
+      background:
+        conic-gradient(from 0deg at 50% 50%, rgba(201, 169, 110, 0.1), rgba(80, 50, 140, 0.1), rgba(201, 169, 110, 0.05), rgba(201, 169, 110, 0.1)),
+        radial-gradient(circle at 50% 50%, #12101a 0%, #08080d 100%);
+    }
+
+    .art-3::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      height: 80%;
+      transform: translate(-50%, -50%);
+      background: conic-gradient(from 90deg, transparent, rgba(201, 169, 110, 0.1), transparent, rgba(100, 60, 180, 0.08), transparent);
+      border-radius: 50%;
+      filter: blur(30px);
+      animation: artPulse 5s ease-in-out infinite;
+    }
+
+    .art-4 {
+      background: linear-gradient(45deg, #0a0a12 0%, #100e18 100%);
+    }
+
+    .art-4::before {
+      content: '';
+      position: absolute;
+      top: 30%;
+      left: 20%;
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.4), transparent);
+      transform: rotate(-15deg);
+    }
+
+    .art-4::after {
+      content: '';
+      position: absolute;
+      top: 55%;
+      left: 15%;
+      width: 70%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.25), transparent);
+      transform: rotate(10deg);
+    }
+
+    .art-5 {
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(201, 169, 110, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(60, 80, 160, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, #0e0c16 0%, #080810 100%);
+    }
+
+    .art-5::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      right: 10%;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(201, 169, 110, 0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: artFloat 7s ease-in-out infinite;
+    }
+
+    .art-6 {
+      background: #0a0a10;
+    }
+
+    .art-6::before {
+      content: '';
+      position: absolute;
+      inset: 15%;
+      border: 1px solid rgba(201, 169, 110, 0.1);
+      border-radius: 2px;
+    }
+
+    .art-6::after {
+      content: '';
+      position: absolute;
+      inset: 25%;
+      border: 1px solid rgba(201, 169, 110, 0.08);
+      border-radius: 2px;
+      transform: rotate(15deg);
+    }
+
+    .art-7 {
+      background:
+        linear-gradient(135deg, #0c0a14 0%, #14101e 40%, #0a0a12 100%);
+    }
+
+    .art-7::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 180px;
+      height: 180px;
+      transform: translate(-50%, -50%) rotate(45deg);
+      background:
+        linear-gradient(135deg, rgba(201, 169, 110, 0.15), transparent),
+        linear-gradient(225deg, rgba(100, 60, 180, 0.1), transparent);
+      animation: artSpin 25s linear infinite;
+    }
+
+    .art-7::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120px;
+      height: 120px;
+      transform: translate(-50%, -50%) rotate(45deg);
+      border: 1px solid rgba(201, 169, 110, 0.2);
+      animation: artSpin 25s linear infinite;
+    }
+
+    .art-8 {
+      background:
+        radial-gradient(circle at 60% 50%, rgba(201, 169, 110, 0.08) 0%, transparent 60%),
+        linear-gradient(180deg, #0e0c16, #08080d);
+    }
+
+    .art-8::before {
+      content: '';
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 50%;
+      background: linear-gradient(180deg, transparent, rgba(201, 169, 110, 0.3), transparent);
+    }
+
+    .art-8::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 25%;
+      transform: translateY(-50%);
+      width: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.2), transparent);
+    }
+
+    @keyframes artFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes artSpin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes artPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+      50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    }
+
+    /* ============================================
+       ARTWORK MODAL
+       ============================================ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .modal-overlay.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      position: relative;
+      width: 90vw;
+      max-width: 1000px;
+      max-height: 90vh;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      padding: 3rem;
+      background: var(--color-bg-elevated);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      transform: scale(0.95) translateY(20px);
+      transition: transform 0.5s var(--ease-out-expo);
+      overflow-y: auto;
+    }
+
+    .modal-overlay.is-active .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal__close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s ease, background 0.3s ease;
+      z-index: 2;
+    }
+
+    .modal__close:hover {
+      border-color: var(--color-accent);
+      background: var(--color-glow);
+    }
+
+    .modal__close::before,
+    .modal__close::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 1px;
+      background: var(--color-text-muted);
+      transition: background 0.3s ease;
+    }
+
+    .modal__close:hover::before,
+    .modal__close:hover::after {
+      background: var(--color-accent);
+    }
+
+    .modal__close::before { transform: rotate(45deg); }
+    .modal__close::after { transform: rotate(-45deg); }
+
+    .modal__art-container {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+
+    .modal__art {
+      width: 100%;
+      height: 100%;
+    }
+
+    .modal__details {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+
+    .modal__number {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      color: var(--color-accent);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .modal__title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .modal__year {
+      font-size: 0.85rem;
+      color: var(--color-text-dim);
+      margin-bottom: 1.5rem;
+    }
+
+    .modal__gold-line {
+      width: 40px;
+      height: 1px;
+      background: var(--color-accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .modal__medium {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .modal__description {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================
+       ARTIST STATEMENT
+       ============================================ */
+    .statement {
+      padding: 10rem 0;
+      position: relative;
+      background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-elevated) 50%, var(--color-bg) 100%);
+    }
+
+    .statement__inner {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .statement__heading {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 500;
+      font-style: italic;
+      color: var(--color-text);
+      margin-bottom: 3rem;
+      line-height: 1.3;
+    }
+
+    .statement__text {
+      font-size: 1.05rem;
+      line-height: 2;
+      color: var(--color-text-muted);
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .statement__pullquote {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--color-accent);
+      padding: 3rem 0;
+      margin: 3rem 0;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      text-align: center;
+      position: relative;
+    }
+
+    .statement__pullquote::before {
+      content: '"';
+      font-family: var(--font-display);
+      font-size: 5rem;
+      color: var(--color-accent);
+      opacity: 0.2;
+      position: absolute;
+      top: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      line-height: 1;
+    }
+
+    .statement__signature {
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .statement__sig-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.3rem;
+    }
+
+    .statement__sig-role {
+      font-size: 0.8rem;
+      color: var(--color-text-dim);
+      letter-spacing: 0.1em;
+    }
+
+    /* Decorative elements */
+    .statement__deco {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      opacity: 0.15;
+    }
+
+    .statement__deco--1 {
+      top: 10%;
+      left: -5%;
+    }
+
+    .statement__deco--2 {
+      bottom: 10%;
+      right: -8%;
+      width: 200px;
+      height: 200px;
+    }
+
+    /* ============================================
+       EXHIBITION TIMELINE
+       ============================================ */
+    .timeline {
+      padding: 8rem 0;
+      position: relative;
+    }
+
+    .timeline__header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .timeline__title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .timeline__track {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding-left: 60px;
+    }
+
+    .timeline__line {
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--color-border-strong), var(--color-border-strong), transparent);
+    }
+
+    .timeline__item {
+      position: relative;
+      padding-bottom: 4rem;
+      padding-left: 2rem;
+    }
+
+    .timeline__item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline__dot {
+      position: absolute;
+      left: -41px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      background: var(--color-bg);
+      border: 2px solid var(--color-accent);
+      border-radius: 50%;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .timeline__item:hover .timeline__dot {
+      background: var(--color-accent);
+      box-shadow: 0 0 15px rgba(201, 169, 110, 0.4);
+    }
+
+    .timeline__date {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline__event-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline__event-desc {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--color-text-muted);
+    }
+
+    .timeline__item--highlight {
+      padding: 2rem;
+      margin-left: -2rem;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+    }
+
+    .timeline__item--highlight .timeline__dot {
+      left: -41px;
+    }
+
+    /* ============================================
+       VISIT INFO
+       ============================================ */
+    .visit {
+      padding: 8rem 0;
+      background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-elevated) 100%);
+      position: relative;
+    }
+
+    .visit__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .visit__card {
+      padding: 2.5rem;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .visit__card:hover {
+      border-color: var(--color-border-strong);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .visit__card-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      color: var(--color-accent);
+      font-size: 1.1rem;
+    }
+
+    .visit__card-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .visit__card-text {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--color-text-muted);
+    }
+
+    .visit__card-text strong {
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .visit__header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .visit__title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .visit__subtitle {
+      font-size: 1rem;
+      color: var(--color-text-muted);
+    }
+
+    /* CTA Button */
+    .visit__cta-wrap {
+      text-align: center;
+      margin-top: 4rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-bg);
+      background: var(--color-accent);
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease;
+    }
+
+    .btn:hover {
+      background: var(--color-accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(201, 169, 110, 0.25);
+      color: var(--color-bg);
+    }
+
+    .btn--outline {
+      background: transparent;
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .btn--outline:hover {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer {
+      padding: 5rem 0 3rem;
+      border-top: 1px solid var(--color-border);
+      background: var(--color-bg);
+    }
+
+    .footer__inner {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 3rem;
+    }
+
+    .footer__brand {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .footer__brand-desc {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--color-text-muted);
+      max-width: 300px;
+    }
+
+    .footer__col-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer__link {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      transition: color 0.3s ease;
+    }
+
+    .footer__link:hover {
+      color: var(--color-text);
+    }
+
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer__copy {
+      font-size: 0.75rem;
+      color: var(--color-text-dim);
+    }
+
+    .footer__social {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .footer__social-link {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      color: var(--color-text-muted);
+      font-size: 0.75rem;
+      transition: border-color 0.3s ease, color 0.3s ease;
+    }
+
+    .footer__social-link:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    /* ============================================
+       PARALLAX HORIZONTAL RULE
+       ============================================ */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-border-strong), transparent);
+      margin: 0;
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 1024px) {
+      .gallery__grid {
+        grid-template-columns: repeat(6, 1fr);
+        grid-auto-rows: 50px;
+      }
+
+      .gallery__card--1 { grid-column: 1 / 4; grid-row: span 6; }
+      .gallery__card--2 { grid-column: 4 / 7; grid-row: span 5; }
+      .gallery__card--3 { grid-column: 1 / 4; grid-row: span 5; }
+      .gallery__card--4 { grid-column: 4 / 7; grid-row: span 6; }
+      .gallery__card--5 { grid-column: 1 / 4; grid-row: span 5; }
+      .gallery__card--6 { grid-column: 4 / 7; grid-row: span 5; }
+      .gallery__card--7 { grid-column: 1 / 4; grid-row: span 6; }
+      .gallery__card--8 { grid-column: 4 / 7; grid-row: span 5; }
+
+      .modal {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+      }
+
+      .intro__content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .intro__left {
+        position: static;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav__links {
+        display: none;
+      }
+
+      .visit__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer__inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      .gallery__grid {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 50px;
+      }
+
+      .gallery__card--1 { grid-column: 1 / 2; grid-row: span 6; }
+      .gallery__card--2 { grid-column: 2 / 3; grid-row: span 6; }
+      .gallery__card--3 { grid-column: 1 / 2; grid-row: span 6; }
+      .gallery__card--4 { grid-column: 2 / 3; grid-row: span 6; }
+      .gallery__card--5 { grid-column: 1 / 2; grid-row: span 6; }
+      .gallery__card--6 { grid-column: 2 / 3; grid-row: span 6; }
+      .gallery__card--7 { grid-column: 1 / 2; grid-row: span 6; }
+      .gallery__card--8 { grid-column: 2 / 3; grid-row: span 6; }
+
+      .modal {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery__grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: 60px;
+      }
+
+      .gallery__card--1,
+      .gallery__card--2,
+      .gallery__card--3,
+      .gallery__card--4,
+      .gallery__card--5,
+      .gallery__card--6,
+      .gallery__card--7,
+      .gallery__card--8 {
+        grid-column: 1 / -1;
+        grid-row: span 6;
+      }
+
+      .footer__inner {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG Noise Filter -->
+  <svg class="svg-filters">
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" result="noise" />
+      <feColorMatrix type="saturate" values="0" in="noise" result="desaturated" />
+      <feBlend in="SourceGraphic" in2="desaturated" mode="multiply" />
+    </filter>
+  </svg>
+
+  <!-- Grain Overlay -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav__logo">Luminous Boundaries</div>
+    <ul class="nav__links">
+      <li><a href="#exhibition" class="nav__link">Exhibition</a></li>
+      <li><a href="#gallery" class="nav__link">Gallery</a></li>
+      <li><a href="#statement" class="nav__link">Statement</a></li>
+      <li><a href="#timeline" class="nav__link">Timeline</a></li>
+      <li><a href="#visit" class="nav__link">Visit</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============================================
+       HERO SECTION
+       ============================================ -->
+  <section class="hero" id="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__grain" aria-hidden="true"></div>
+    <div class="hero__vignette" aria-hidden="true"></div>
+
+    <!-- Decorative floating lines -->
+    <div class="hero__deco-line hero__deco-line--1" aria-hidden="true"></div>
+    <div class="hero__deco-line hero__deco-line--2" aria-hidden="true"></div>
+    <div class="hero__deco-line hero__deco-line--3" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <p class="hero__overline">A Digital Exhibition — 2026</p>
+      <h1 class="hero__title">
+        <span>LUMINOUS</span>
+        <span>BOUNDARIES</span>
+      </h1>
+      <div class="hero__gold-line"></div>
+      <p class="hero__subtitle">Where Light Meets the Edge of Perception</p>
+      <p class="hero__date">June 15 — September 30, 2026</p>
+    </div>
+
+    <div class="hero__scroll">
+      <span class="hero__scroll-text">Scroll to Explore</span>
+      <div class="hero__scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       EXHIBITION INTRO
+       ============================================ -->
+  <section class="intro" id="exhibition">
+    <div class="container">
+      <div class="intro__content">
+        <div class="intro__left reveal">
+          <p class="section-label">About the Exhibition</p>
+          <h2 class="intro__heading">
+            Eight meditations on the <em>threshold</em> between visibility and shadow
+          </h2>
+          <div class="gold-line"></div>
+        </div>
+        <div class="intro__right">
+          <p class="reveal reveal--delay-1">
+            Luminous Boundaries is a digital exhibition that explores the liminal spaces where light dissolves into darkness, where form emerges from void, and where the boundaries of perception are tested and expanded. Through eight distinct works, the exhibition invites viewers to contemplate the thresholds that define our experience of visual reality.
+          </p>
+          <p class="reveal reveal--delay-2">
+            Each piece in this collection exists at the intersection of geometry and emotion, employing minimal compositions that resonate with the quiet intensity of dawn breaking over an unfamiliar landscape. The works are meditations on presence and absence, on the charged silence that inhabits the space between two objects.
+          </p>
+          <p class="reveal reveal--delay-3">
+            Curated as a digital-first experience, this exhibition embraces the screen as canvas, the browser as gallery, and the scroll as a journey through layers of meaning. The works respond to your presence—hovering, clicking, dwelling—transforming passive viewing into active dialogue.
+          </p>
+        </div>
+      </div>
+      <div class="intro__separator"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       ARTWORK GALLERY
+       ============================================ -->
+  <section class="gallery" id="gallery">
+    <div class="container container--wide">
+      <div class="gallery__header reveal">
+        <p class="section-label">The Works</p>
+        <h2 class="gallery__title">Selected Works</h2>
+        <div class="gold-line gold-line--center"></div>
+        <p class="gallery__subtitle">Eight compositions exploring the boundaries between light and perception</p>
+      </div>
+
+      <div class="gallery__grid">
+
+        <!-- Artwork 1 -->
+        <div class="gallery__card gallery__card--1 reveal" data-artwork="1">
+          <div class="card__art art-1" aria-hidden="true"></div>
+          <div class="card__info">
+            <p class="card__number">01</p>
+            <h3 class="card__title">Emergence</h3>
+            <p class="card__meta">Digital Composition · 2026</p>
+          </div>
+        </div>
+
+        <!-- Artwork 2 -->
+        <div class="gallery__card gallery__card--2 reveal reveal--delay-1" data-artwork="2">
+          <div class="card__art art-2" aria-hidden="true"></div>
+          <div class="card__info">
+            <p class="card__number">02</p>
+            <h3 class="card__title">Cartesian Echo</h3>
+            <p class="card__meta">Geometric Meditation · 2026</p>
+          </div>
+        </div>
+
+        <!-- Artwork 3 -->
+        <div class="gallery__card gallery__card--3 reveal reveal--delay-2" data-artwork="3">
+          <div class="card__art art-3" aria-hidden="true"></div>
+          <div class="card__info">
+            <p class="card__number">03</p>
+            <h3 class="card__title">Convergence Point</h3>
+            <p class="card__meta">Chromatic Study · 2026</p>
+          </div>
+        </div>
+
+        <!-- Artwork 4 -->
+        <div class="gallery__card gallery__card--4 reveal reveal--delay-1" data-artwork="4">
+          <div class="card__art art-4" aria-hidden="true"></div>
+          <div class="card__info">
+            <p class="card__number">04</p>
+            <h3 class="card__title">Horizon Lines</h3>
+            <p class="card__meta">Linear Exploration · 2025</p>
+          </div>
+        </div>
+
+        <!-- Artwork 5 -->
+        <div class="gallery__card gallery__card--5 reveal reveal--delay-2" data-artwork="5">
+          <div class="card__art art-5" aria-hidden="true"></div>
+          <div class="card__info">
+            <p class="card__number">05</p>
+            <h3 class="card__title">Dusk Protocol</h3>
+            <p class="card__meta">Gradient Field · 2026</p>
+          </div>
+        </div>
+
+        <!-- Artwork 6 -->
+        <div class="gallery__card gallery__card--6 reveal reveal--delay-3" data-artwork="6">
+          <div class="card__art art-6" aria-hidden="true"></div>
+          <div class="card__info">
+            <p class="card__number">06</p>
+            <h3 class="card__title">Contained Silence</h3>
+            <p class="card__meta">Spatial Void · 2025</p>
+          </div>
+        </div>
+
+        <!-- Artwork 7 -->
+        <div class="gallery__card gallery__card--7 reveal reveal--delay-4" data-artwork="7">
+          <div class="card__art art-7" aria-hidden="true"></div>
+          <div class="card__info">
+            <p class="card__number">07</p>
+            <h3 class="card__title">Rotational Memory</h3>
+            <p class="card__meta">Kinetic Geometry · 2026</p>
+          </div>
+        </div>
+
+        <!-- Artwork 8 -->
+        <div class="gallery__card gallery__card--8 reveal reveal--delay-5" data-artwork="8">
+          <div class="card__art art-8" aria-hidden="true"></div>
+          <div class="card__info">
+            <p class="card__number">08</p>
+            <h3 class="card__title">The Crossing</h3>
+            <p class="card__meta">Axis Composition · 2026</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       ARTWORK MODAL
+       ============================================ -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal">
+      <button class="modal__close" id="modal-close" aria-label="Close modal"></button>
+      <div class="modal__art-container">
+        <div class="modal__art" id="modal-art"></div>
+      </div>
+      <div class="modal__details">
+        <p class="modal__number" id="modal-number"></p>
+        <h2 class="modal__title" id="modal-title"></h2>
+        <p class="modal__year" id="modal-year"></p>
+        <div class="modal__gold-line"></div>
+        <p class="modal__medium" id="modal-medium"></p>
+        <p class="modal__description" id="modal-description"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       ARTIST STATEMENT
+       ============================================ -->
+  <section class="statement" id="statement">
+    <div class="container container--narrow">
+      <div class="statement__inner">
+        <div class="reveal">
+          <p class="section-label" style="text-align:center;">Artist Statement</p>
+          <h2 class="statement__heading">On the Practice of Seeing at the Edge</h2>
+          <div class="gold-line gold-line--center"></div>
+        </div>
+
+        <div class="reveal reveal--delay-1">
+          <p class="statement__text">
+            My work has always been concerned with what happens at the periphery—of vision, of understanding, of the visible spectrum itself. For the past decade, I have been composing with light as both material and metaphor, seeking the precise moment when illumination becomes revelation and when shadow becomes substance.
+          </p>
+        </div>
+
+        <div class="reveal reveal--delay-2">
+          <p class="statement__text">
+            The pieces in Luminous Boundaries represent a culmination of years spent observing the subtle negotiations between opposing forces. Each composition began as a question: What is the minimum visual information needed to evoke a complete emotional response? How little can a work contain while still radiating meaning?
+          </p>
+        </div>
+
+        <div class="reveal reveal--delay-3">
+          <blockquote class="statement__pullquote">
+            The boundary is not where something ends—it is where something else begins to become possible.
+          </blockquote>
+        </div>
+
+        <div class="reveal reveal--delay-4">
+          <p class="statement__text">
+            Working in the digital realm has afforded me a unique relationship with precision. Every pixel is intentional, every gradient calibrated to evoke the specific quality of light I am pursuing. There is a paradox in using the most precise tools available to create works that address the imprecise nature of human perception. This tension is central to the exhibition.
+          </p>
+        </div>
+
+        <div class="reveal reveal--delay-5">
+          <p class="statement__text">
+            I invite you to spend time with each work. Let your eyes adjust. Notice how your perception shifts as you dwell with a composition—how elements that seemed still begin to pulse, how boundaries that appeared fixed begin to breathe. This is the luminous boundary: not a line, but a living threshold between what we see and what we sense.
+          </p>
+        </div>
+
+        <div class="statement__signature reveal">
+          <div class="gold-line gold-line--center"></div>
+          <p class="statement__sig-name">Elena Vasquez</p>
+          <p class="statement__sig-role">Digital Artist & Light Composer</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative circles -->
+    <div class="statement__deco statement__deco--1" aria-hidden="true"></div>
+    <div class="statement__deco statement__deco--2" aria-hidden="true"></div>
+  </section>
+
+  <!-- ============================================
+       EXHIBITION TIMELINE
+       ============================================ -->
+  <section class="timeline" id="timeline">
+    <div class="container">
+      <div class="timeline__header reveal">
+        <p class="section-label">Journey</p>
+        <h2 class="timeline__title">Exhibition Timeline</h2>
+        <div class="gold-line gold-line--center"></div>
+      </div>
+
+      <div class="timeline__track">
+        <div class="timeline__line" aria-hidden="true"></div>
+
+        <div class="timeline__item reveal">
+          <div class="timeline__dot"></div>
+          <p class="timeline__date">January 2025</p>
+          <h3 class="timeline__event-title">Conceptualization</h3>
+          <p class="timeline__event-desc">
+            Initial sketches and conceptual frameworks established. Research into light behavior and perceptual psychology informs the artistic direction.
+          </p>
+        </div>
+
+        <div class="timeline__item reveal">
+          <div class="timeline__dot"></div>
+          <p class="timeline__date">April 2025</p>
+          <h3 class="timeline__event-title">First Compositions</h3>
+          <p class="timeline__event-desc">
+            The first three works—Emergence, Cartesian Echo, and Horizon Lines—are completed. A visual language begins to crystallize around geometric minimalism and luminous gradients.
+          </p>
+        </div>
+
+        <div class="timeline__item reveal">
+          <div class="timeline__dot"></div>
+          <p class="timeline__date">August 2025</p>
+          <h3 class="timeline__event-title">Studio Residency</h3>
+          <p class="timeline__event-desc">
+            A three-month residency at the Digital Arts Institute allows for deep exploration of CSS blend modes and animation as artistic medium. Contained Silence and Rotational Memory emerge from this period.
+          </p>
+        </div>
+
+        <div class="timeline__item timeline__item--highlight reveal">
+          <div class="timeline__dot"></div>
+          <p class="timeline__date">November 2025</p>
+          <h3 class="timeline__event-title">Curatorial Review</h3>
+          <p class="timeline__event-desc">
+            The exhibition concept is reviewed by an international curatorial panel and selected for the 2026 Digital Museum Initiative. Significant refinement of the viewer experience follows.
+          </p>
+        </div>
+
+        <div class="timeline__item reveal">
+          <div class="timeline__dot"></div>
+          <p class="timeline__date">February 2026</p>
+          <h3 class="timeline__event-title">Final Works Completed</h3>
+          <p class="timeline__event-desc">
+            Convergence Point, Dusk Protocol, and The Crossing complete the collection of eight works. Each piece is finalized with precise animation timings and responsive behaviors.
+          </p>
+        </div>
+
+        <div class="timeline__item reveal">
+          <div class="timeline__dot"></div>
+          <p class="timeline__date">May 2026</p>
+          <h3 class="timeline__event-title">Exhibition Architecture</h3>
+          <p class="timeline__event-desc">
+            The digital gallery space is constructed—navigation, gallery layout, modal interactions, and responsive design are built and tested across devices and browsers.
+          </p>
+        </div>
+
+        <div class="timeline__item timeline__item--highlight reveal">
+          <div class="timeline__dot"></div>
+          <p class="timeline__date">June 15, 2026</p>
+          <h3 class="timeline__event-title">Opening</h3>
+          <p class="timeline__event-desc">
+            Luminous Boundaries opens to the public as a digital-first exhibition experience, accessible worldwide through any modern browser. The exhibition runs through September 30, 2026.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       VISIT INFO
+       ============================================ -->
+  <section class="visit" id="visit">
+    <div class="container">
+      <div class="visit__header reveal">
+        <p class="section-label">Plan Your Visit</p>
+        <h2 class="visit__title">Experience the Exhibition</h2>
+        <div class="gold-line gold-line--center"></div>
+        <p class="visit__subtitle">Everything you need to know about visiting Luminous Boundaries</p>
+      </div>
+
+      <div class="visit__grid">
+        <div class="visit__card reveal">
+          <div class="visit__card-icon">◎</div>
+          <h3 class="visit__card-title">Accessibility</h3>
+          <p class="visit__card-text">
+            Luminous Boundaries is accessible from any device with a modern web browser. For the optimal experience, we recommend viewing on a <strong>large screen</strong> in a <strong>dimly lit room</strong> with <strong>sound on</strong>. The exhibition supports keyboard navigation and screen readers.
+          </p>
+        </div>
+
+        <div class="visit__card reveal reveal--delay-1">
+          <div class="visit__card-icon">◈</div>
+          <h3 class="visit__card-title">Exhibition Hours</h3>
+          <p class="visit__card-text">
+            As a digital exhibition, Luminous Boundaries is open <strong>24 hours a day, 7 days a week</strong>. The exhibition runs from <strong>June 15 through September 30, 2026</strong>. Special guided tours are available every Saturday at 14:00 UTC.
+          </p>
+        </div>
+
+        <div class="visit__card reveal reveal--delay-2">
+          <div class="visit__card-icon">◆</div>
+          <h3 class="visit__card-title">Admission</h3>
+          <p class="visit__card-text">
+            Entry to the exhibition is <strong>free of charge</strong>. If you wish to support the artist and future digital exhibitions, voluntary contributions are warmly welcomed through the support link below.
+          </p>
+        </div>
+      </div>
+
+      <div class="visit__cta-wrap reveal">
+        <button class="btn" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">
+          Enter the Exhibition
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div>
+          <p class="footer__brand">Luminous Boundaries</p>
+          <p class="footer__brand-desc">
+            A digital exhibition exploring the thresholds between light and shadow, form and void, the seen and the sensed. Presented as part of the 2026 Digital Museum Initiative.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer__col-title">Exhibition</h4>
+          <ul class="footer__links">
+            <li><a href="#exhibition" class="footer__link">About</a></li>
+            <li><a href="#gallery" class="footer__link">Gallery</a></li>
+            <li><a href="#statement" class="footer__link">Statement</a></li>
+            <li><a href="#timeline" class="footer__link">Timeline</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">Resources</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Press Kit</a></li>
+            <li><a href="#" class="footer__link">Catalogue</a></li>
+            <li><a href="#" class="footer__link">Artist Bio</a></li>
+            <li><a href="#" class="footer__link">Credits</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">Connect</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Newsletter</a></li>
+            <li><a href="#" class="footer__link">Contact</a></li>
+            <li><a href="#" class="footer__link">Accessibility</a></li>
+            <li><a href="#" class="footer__link">Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">© 2026 Luminous Boundaries. All rights reserved. A Digital Museum Initiative.</p>
+        <div class="footer__social">
+          <a href="#" class="footer__social-link" aria-label="Instagram">IG</a>
+          <a href="#" class="footer__social-link" aria-label="Twitter">TW</a>
+          <a href="#" class="footer__social-link" aria-label="YouTube">YT</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================
+       JAVASCRIPT
+       ============================================ -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ----------------------------
+         Scroll Reveal (IntersectionObserver)
+         ---------------------------- */
+      const revealElements = document.querySelectorAll('.reveal');
+
+      const revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -60px 0px'
+      });
+
+      revealElements.forEach(function (el) {
+        revealObserver.observe(el);
+      });
+
+      /* ----------------------------
+         Nav scroll state
+         ---------------------------- */
+      var nav = document.getElementById('nav');
+      var lastScroll = 0;
+
+      window.addEventListener('scroll', function () {
+        var currentScroll = window.pageYOffset;
+        if (currentScroll > 80) {
+          nav.classList.add('is-scrolled');
+        } else {
+          nav.classList.remove('is-scrolled');
+        }
+        lastScroll = currentScroll;
+      }, { passive: true });
+
+      /* ----------------------------
+         Artwork Modal Data
+         ---------------------------- */
+      var artworkData = {
+        1: {
+          title: 'Emergence',
+          year: '2026',
+          medium: 'Digital Composition — CSS Gradients & Blend Modes',
+          artClass: 'art-1',
+          number: 'Work I',
+          description: 'Emergence captures the first instant of visibility—the moment when light pierces through obscurity and form begins to assert itself against the void. The central sphere, rendered through layered radial gradients, pulses with an inner luminosity that suggests both fragility and inevitability. The composition explores how a single point of light can reorganize an entire visual field, drawing the eye and establishing the coordinates by which we orient ourselves in darkness.'
+        },
+        2: {
+          title: 'Cartesian Echo',
+          year: '2026',
+          medium: 'Geometric Meditation — CSS Rotations & Border Geometry',
+          artClass: 'art-2',
+          number: 'Work II',
+          description: 'Two nested squares rotate at different velocities, creating a perpetual moiré of alignment and misalignment. Cartesian Echo is named for the coordinate system that underlies all digital space, yet the work deliberately undermines the precision of that system through continuous rotation. The piece asks: at what point does structure become pattern, and pattern become rhythm? The viewer discovers that the geometry they thought they understood is always already in motion.'
+        },
+        3: {
+          title: 'Convergence Point',
+          year: '2026',
+          medium: 'Chromatic Study — Conic Gradients & Radial Blur',
+          artClass: 'art-3',
+          number: 'Work III',
+          description: 'Convergence Point employs conic gradients to create a field of color that appears to spiral inward toward an invisible center. The work references both the retina of the eye and the event horizon of a collapsed star—two points where convergence becomes total. Warm gold and cool violet interact at the periphery, creating optical vibrations that seem to generate light from the screen itself. Time spent with this piece reveals an almost hypnotic quality.'
+        },
+        4: {
+          title: 'Horizon Lines',
+          year: '2025',
+          medium: 'Linear Exploration — CSS Gradient Lines & Transforms',
+          artClass: 'art-4',
+          number: 'Work IV',
+          description: 'The horizon line is perhaps the most ancient element of landscape painting—the meeting point of earth and sky, the line that promises perspective and depth. In this work, two luminous lines traverse the dark field at slightly different angles, creating a subtle tension between parallelism and eventual convergence. The piece evokes landscapes without depicting them, suggesting deserts at twilight or calm seas at the edge of night.'
+        },
+        5: {
+          title: 'Dusk Protocol',
+          year: '2026',
+          medium: 'Gradient Field — Radial Gradients & Ambient Animation',
+          artClass: 'art-5',
+          number: 'Work V',
+          description: 'Named for the precise sequence of color changes that the atmosphere undergoes during sunset, Dusk Protocol presents two atmospheric fields—one warm, one cool—positioned at opposite poles of the composition. A floating orb of gold light drifts slowly through the space, its movement suggesting both the passage of time and the search for equilibrium. The work is a study in the temperature of light and the emotional resonance of color.'
+        },
+        6: {
+          title: 'Contained Silence',
+          year: '2025',
+          medium: 'Spatial Void — CSS Borders & Nested Geometry',
+          artClass: 'art-6',
+          number: 'Work VI',
+          description: 'Two concentric rectangles, slightly offset in rotation, frame a central void that becomes the true subject of the work. Contained Silence is the most minimal piece in the exhibition, yet it exerts a gravitational pull that rewards sustained attention. The slight rotation between the two frames creates a dynamic tension—the inner frame appears to be either settling into or departing from alignment with its outer counterpart, and the viewer\'s perception of which direction it moves shifts with prolonged viewing.'
+        },
+        7: {
+          title: 'Rotational Memory',
+          year: '2026',
+          medium: 'Kinetic Geometry — CSS Rotation & Gradient Layers',
+          artClass: 'art-7',
+          number: 'Work VII',
+          description: 'A square form rotates continuously, its surface composed of layered gradients that create an illusion of three-dimensionality. Rotational Memory explores the idea that geometry, when set in motion, acquires a kind of memory—the shape retains its identity even as every aspect of its appearance changes. The work is also a meditation on the relationship between the digital and the physical: in CSS, rotation is a mathematical transformation; in perception, it becomes sculptural.'
+        },
+        8: {
+          title: 'The Crossing',
+          year: '2026',
+          medium: 'Axis Composition — CSS Lines & Radial Fields',
+          artClass: 'art-8',
+          number: 'Work VIII',
+          description: 'The final work in the exhibition, The Crossing presents the simplest possible composition: a vertical line and a horizontal line intersecting within a dark field, accompanied by a subtle radial glow at their meeting point. This crossroads is both geometric fact and metaphorical space—the point where two paths meet, where two axes of experience converge. Placed last in the exhibition, it serves as a quiet conclusion and an invitation to begin again.'
+        }
+      };
+
+      /* ----------------------------
+         Modal Open/Close
+         ---------------------------- */
+      var modalOverlay = document.getElementById('modal-overlay');
+      var modalClose = document.getElementById('modal-close');
+      var modalArt = document.getElementById('modal-art');
+      var modalNumber = document.getElementById('modal-number');
+      var modalTitle = document.getElementById('modal-title');
+      var modalYear = document.getElementById('modal-year');
+      var modalMedium = document.getElementById('modal-medium');
+      var modalDescription = document.getElementById('modal-description');
+
+      var galleryCards = document.querySelectorAll('.gallery__card');
+
+      galleryCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          var id = this.getAttribute('data-artwork');
+          var data = artworkData[id];
+          if (!data) return;
+
+          modalArt.className = 'modal__art ' + data.artClass;
+          modalNumber.textContent = data.number;
+          modalTitle.textContent = data.title;
+          modalYear.textContent = data.year;
+          modalMedium.textContent = data.medium;
+          modalDescription.textContent = data.description;
+
+          modalOverlay.classList.add('is-active');
+          modalOverlay.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        });
+      });
+
+      function closeModal() {
+        modalOverlay.classList.remove('is-active');
+        modalOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      modalClose.addEventListener('click', closeModal);
+
+      modalOverlay.addEventListener('click', function (e) {
+        if (e.target === modalOverlay) {
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('is-active')) {
+          closeModal();
+        }
+      });
+
+      /* ----------------------------
+         Parallax-like hero effect
+         ---------------------------- */
+      var heroContent = document.querySelector('.hero__content');
+
+      window.addEventListener('scroll', function () {
+        var scrolled = window.pageYOffset;
+        if (scrolled < window.innerHeight) {
+          var parallaxVal = scrolled * 0.3;
+          var opacityVal = 1 - (scrolled / window.innerHeight) * 1.2;
+          heroContent.style.transform = 'translateY(' + parallaxVal + 'px)';
+          heroContent.style.opacity = Math.max(opacityVal, 0);
+        }
+      }, { passive: true });
+
+    })();
+  </script>
+
+</body>
+</html>
