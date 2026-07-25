@@ -11,7 +11,6 @@ sftp = ssh.open_sftp()
 local_dist = os.path.expanduser('~/desktop/project/design-lib/docs/.vitepress/dist')
 remote_base = '/var/www/design-lib/'
 
-# Only mkdir -p, no deletion
 ssh.exec_command(f'mkdir -p {remote_base}')
 
 uploaded = 0
