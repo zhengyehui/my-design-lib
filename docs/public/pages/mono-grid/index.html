@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mono Grid — Editorial Portfolio</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ─────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #000000;
+  --surface: #ffffff;
+  --text: #000000;
+  --text-ghost: rgba(0, 0, 0, 0.15);
+  --text-muted: rgba(0, 0, 0, 0.45);
+  --border: rgba(0, 0, 0, 0.08);
+  --row-h: 11vh;
+  --font-primary: 'Helvetica Neue', 'Inter', -apple-system, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', monospace;
+  --transition: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── Custom Cursor (mix-blend-difference) ─────────────── */
+.cursor {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--surface);
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s var(--transition), height 0.3s var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor-label {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #000;
+  opacity: 0;
+  transition: opacity 0.3s var(--transition);
+}
+
+.cursor.active .cursor-label { opacity: 1; }
+.cursor.active { width: 120px; height: 120px; }
+
+/* ── Header ───────────────────────────────────────────── */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  mix-blend-mode: difference;
+}
+
+.brand {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--surface);
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--surface);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.3s var(--transition);
+}
+
+.nav-link:hover { opacity: 1; }
+
+.view-toggle {
+  display: flex;
+  gap: 8px;
+  margin-left: 16px;
+  padding-left: 16px;
+  border-left: 1px solid rgba(255,255,255,0.2);
+}
+
+.view-btn {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--surface);
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.3s var(--transition);
+  padding: 4px 0;
+}
+
+.view-btn.active { opacity: 1; }
+.view-btn:hover { opacity: 0.8; }
+
+/* ── Main Content ─────────────────────────────────────── */
+.main {
+  background: var(--surface);
+  min-height: 100vh;
+  margin-top: 0;
+  position: relative;
+}
+
+/* ── Project List View ────────────────────────────────── */
+.project-list {
+  padding: 100px 0 40px;
+}
+
+.project-row {
+  height: var(--row-h);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--border);
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.4s var(--transition);
+}
+
+.project-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s var(--transition);
+  z-index: 1;
+}
+
+.project-row:hover::before {
+  transform: scaleX(1);
+}
+
+.project-row:hover .project-number,
+.project-row:hover .project-title,
+.project-row:hover .project-category,
+.project-row:hover .project-year {
+  color: var(--surface);
+}
+
+.project-row:hover .project-number { opacity: 0.3; }
+
+.project-number {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  width: 60px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  transition: color 0.4s var(--transition), opacity 0.4s var(--transition);
+}
+
+.project-title {
+  font-size: clamp(18px, 2.5vw, 32px);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  transition: color 0.4s var(--transition);
+}
+
+.project-category {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  width: 160px;
+  text-align: right;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  transition: color 0.4s var(--transition);
+}
+
+.project-year {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  width: 60px;
+  text-align: right;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  transition: color 0.4s var(--transition);
+}
+
+/* ── Grid View ────────────────────────────────────────── */
+.project-grid {
+  display: none;
+  padding: 100px 32px 40px;
+  gap: 16px;
+}
+
+.project-grid.active {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-card {
+  aspect-ratio: 3/4;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+}
+
+.grid-card-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  z-index: 2;
+}
+
+.grid-card-number {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.grid-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--surface);
+}
+
+.grid-card-category {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+
+.grid-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  z-index: 1;
+}
+
+.grid-card .card-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.6s var(--transition);
+}
+
+.grid-card:hover .card-bg { transform: scale(1.05); }
+
+/* ── Footer ───────────────────────────────────────────── */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  mix-blend-mode: difference;
+}
+
+.footer-left {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: var(--surface);
+  opacity: 0.5;
+}
+
+.footer-right {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-link {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--surface);
+  text-decoration: none;
+  opacity: 0.5;
+  transition: opacity 0.3s var(--transition);
+}
+
+.footer-link:hover { opacity: 1; }
+
+/* ── Loading Screen ───────────────────────────────────── */
+.loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  transition: opacity 0.8s var(--transition), visibility 0.8s;
+}
+
+.loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader-brand {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: var(--surface);
+}
+
+.loader-bar {
+  width: 120px;
+  height: 1px;
+  background: rgba(255,255,255,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.loader-bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: var(--surface);
+  animation: loadBar 1.5s var(--transition) forwards;
+}
+
+@keyframes loadBar {
+  to { width: 100%; }
+}
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .header { padding: 16px 20px; }
+  .nav { gap: 12px; }
+  .nav-link { font-size: 9px; }
+  .view-toggle { display: none; }
+  
+  .project-row { padding: 0 20px; }
+  .project-category { display: none; }
+  .project-title { font-size: 16px; letter-spacing: 1px; }
+  
+  .project-grid.active { grid-template-columns: repeat(2, 1fr); }
+  
+  .footer { padding: 12px 20px; }
+  .cursor { display: none; }
+  body { cursor: auto; }
+}
+
+@media (max-width: 480px) {
+  .project-grid.active { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="loader" id="loader">
+  <div class="loader-brand">Mono Grid</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor">
+  <span class="cursor-label">View</span>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <a href="#" class="brand">Mono Grid</a>
+  <nav class="nav">
+    <a href="#" class="nav-link">Work</a>
+    <a href="#" class="nav-link">About</a>
+    <a href="#" class="nav-link">Contact</a>
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="list">List</button>
+      <button class="view-btn" data-view="grid">Grid</button>
+    </div>
+  </nav>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- List View -->
+  <div class="project-list" id="listView">
+    <div class="project-row" data-index="0">
+      <span class="project-number">01</span>
+      <span class="project-title">Serene</span>
+      <span class="project-category">Brand Identity</span>
+      <span class="project-year">2026</span>
+    </div>
+    <div class="project-row" data-index="1">
+      <span class="project-number">02</span>
+      <span class="project-title">Voltera</span>
+      <span class="project-category">Art Direction</span>
+      <span class="project-year">2026</span>
+    </div>
+    <div class="project-row" data-index="2">
+      <span class="project-number">03</span>
+      <span class="project-title">Arc & Line</span>
+      <span class="project-category">Editorial Design</span>
+      <span class="project-year">2025</span>
+    </div>
+    <div class="project-row" data-index="3">
+      <span class="project-number">04</span>
+      <span class="project-title">Nocturne</span>
+      <span class="project-category">Photography</span>
+      <span class="project-year">2025</span>
+    </div>
+    <div class="project-row" data-index="4">
+      <span class="project-number">05</span>
+      <span class="project-title">Forma Collective</span>
+      <span class="project-category">Web Design</span>
+      <span class="project-year">2025</span>
+    </div>
+    <div class="project-row" data-index="5">
+      <span class="project-number">06</span>
+      <span class="project-title">Lumière</span>
+      <span class="project-category">Packaging</span>
+      <span class="project-year">2024</span>
+    </div>
+    <div class="project-row" data-index="6">
+      <span class="project-number">07</span>
+      <span class="project-title">Overture</span>
+      <span class="project-category">Motion Design</span>
+      <span class="project-year">2024</span>
+    </div>
+    <div class="project-row" data-index="7">
+      <span class="project-number">08</span>
+      <span class="project-title">Prism Studio</span>
+      <span class="project-category">Visual Identity</span>
+      <span class="project-year">2024</span>
+    </div>
+  </div>
+
+  <!-- Grid View -->
+  <div class="project-grid" id="gridView">
+    <div class="grid-card" data-index="0">
+      <div class="card-bg" style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d)"></div>
+      <div class="grid-card-inner">
+        <span class="grid-card-number">01</span>
+        <span class="grid-card-title">Serene</span>
+        <span class="grid-card-category">Brand Identity</span>
+      </div>
+    </div>
+    <div class="grid-card" data-index="1">
+      <div class="card-bg" style="background: linear-gradient(135deg, #2a2a2a, #3d3d3d)"></div>
+      <div class="grid-card-inner">
+        <span class="grid-card-number">02</span>
+        <span class="grid-card-title">Voltera</span>
+        <span class="grid-card-category">Art Direction</span>
+      </div>
+    </div>
+    <div class="grid-card" data-index="2">
+      <div class="card-bg" style="background: linear-gradient(135deg, #0d0d0d, #1f1f1f)"></div>
+      <div class="grid-card-inner">
+        <span class="grid-card-number">03</span>
+        <span class="grid-card-title">Arc & Line</span>
+        <span class="grid-card-category">Editorial Design</span>
+      </div>
+    </div>
+    <div class="grid-card" data-index="3">
+      <div class="card-bg" style="background: linear-gradient(135deg, #252525, #383838)"></div>
+      <div class="grid-card-inner">
+        <span class="grid-card-number">04</span>
+        <span class="grid-card-title">Nocturne</span>
+        <span class="grid-card-category">Photography</span>
+      </div>
+    </div>
+    <div class="grid-card" data-index="4">
+      <div class="card-bg" style="background: linear-gradient(135deg, #181818, #2b2b2b)"></div>
+      <div class="grid-card-inner">
+        <span class="grid-card-number">05</span>
+        <span class="grid-card-title">Forma Collective</span>
+        <span class="grid-card-category">Web Design</span>
+      </div>
+    </div>
+    <div class="grid-card" data-index="5">
+      <div class="card-bg" style="background: linear-gradient(135deg, #202020, #333333)"></div>
+      <div class="grid-card-inner">
+        <span class="grid-card-number">06</span>
+        <span class="grid-card-title">Lumière</span>
+        <span class="grid-card-category">Packaging</span>
+      </div>
+    </div>
+    <div class="grid-card" data-index="6">
+      <div class="card-bg" style="background: linear-gradient(135deg, #151515, #282828)"></div>
+      <div class="grid-card-inner">
+        <span class="grid-card-number">07</span>
+        <span class="grid-card-title">Overture</span>
+        <span class="grid-card-category">Motion Design</span>
+      </div>
+    </div>
+    <div class="grid-card" data-index="7">
+      <div class="card-bg" style="background: linear-gradient(135deg, #222222, #353535)"></div>
+      <div class="grid-card-inner">
+        <span class="grid-card-number">08</span>
+        <span class="grid-card-title">Prism Studio</span>
+        <span class="grid-card-category">Visual Identity</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <span class="footer-left">© 2026 Mono Grid</span>
+  <div class="footer-right">
+    <a href="#" class="footer-link">Instagram</a>
+    <a href="#" class="footer-link">Behance</a>
+    <a href="#" class="footer-link">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+// Loader
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1800);
+});
+
+// Custom cursor
+const cursor = document.getElementById('cursor');
+let cursorX = 0, cursorY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  cursorX = e.clientX;
+  cursorY = e.clientY;
+  cursor.style.left = cursorX + 'px';
+  cursor.style.top = cursorY + 'px';
+});
+
+// Cursor hover effect on rows
+document.querySelectorAll('.project-row, .grid-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+});
+
+// View toggle
+document.querySelectorAll('.view-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const view = btn.dataset.view;
+    document.getElementById('listView').style.display = view === 'list' ? 'block' : 'none';
+    document.getElementById('gridView').classList.toggle('active', view === 'grid');
+  });
+});
+
+// Staggered row reveal
+const rows = document.querySelectorAll('.project-row');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+rows.forEach((row, i) => {
+  row.style.opacity = '0';
+  row.style.transform = 'translateY(20px)';
+  row.style.transition = `opacity 0.6s ${i * 0.08}s cubic-bezier(0.4,0,0.2,1), transform 0.6s ${i * 0.08}s cubic-bezier(0.4,0,0.2,1), background 0.4s`;
+  observer.observe(row);
+});
+</script>
+
+</body>
+</html>

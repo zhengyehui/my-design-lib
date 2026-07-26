@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 117 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 119 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1108,6 +1108,15 @@ const pages = [
     rating: 9.3,
     description: '学术期刊索引页，水平滚动列式布局 + Playfair Display 衬线字体 + 单色橄榄绿配色 + CSS 噪点纹理 + 交错淡入动画 + 移动端自适应',
   },
+  {
+    id: 'mono-grid',
+    title: 'Mono Grid 编辑风作品集',
+    category: 'portfolio',
+    tags: ['作品集', '黑白主题', '编辑风', '编号网格', 'mix-blend'],
+    colors: ['#000000', '#FFFFFF', '#666666'],
+    rating: 9.3,
+    description: '黑白单色编辑风作品集，灵感来自 Cathy Dolle，编号项目行列表 + mix-blend-difference 光标 + 列表/网格双视图 + 加载动画',
+  },
 ]
 
 const categories = [
@@ -1165,12 +1174,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 117 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 119 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="117 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="119 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1179,7 +1188,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 117 个完整页面</span>
+      <span>📦 119 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

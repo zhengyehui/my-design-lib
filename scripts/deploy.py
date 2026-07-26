@@ -12,6 +12,7 @@ local_dist = os.path.expanduser('~/desktop/project/design-lib/docs/.vitepress/di
 remote_base = '/var/www/design-lib/'
 
 ssh.exec_command(f'mkdir -p {remote_base}')
+time.sleep(0.5)
 
 uploaded = 0
 for root, dirs, files in os.walk(local_dist):
@@ -20,10 +21,13 @@ for root, dirs, files in os.walk(local_dist):
         rel_path = os.path.relpath(local_path, local_dist)
         remote_path = os.path.join(remote_base, rel_path)
         remote_dir = os.path.dirname(remote_path)
-        ssh.exec_command(f'mkdir -p {remote_dir}')
-        time.sleep(0.03)
-        sftp.put(local_path, remote_path)
-        uploaded += 1
+        try:
+            ssh.exec_command(f'mkdir -p {remote_dir}')
+            time.sleep(0.03)
+            sftp.put(local_path, remote_path)
+            uploaded += 1
+        except Exception as e:
+            print(f'Error uploading {rel_path}: {e}')
 
 sftp.close()
 ssh.close()
