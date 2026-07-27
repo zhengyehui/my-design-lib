@@ -1117,6 +1117,24 @@ const pages = [
     rating: 9.3,
     description: '黑白单色编辑风作品集，灵感来自 Cathy Dolle，编号项目行列表 + mix-blend-difference 光标 + 列表/网格双视图 + 加载动画',
   },
+  {
+    id: 'wabi-ceramics',
+    title: 'Wabi Ceramics 日式陶艺电商',
+    category: 'ecommerce',
+    tags: ['电商', '日式美学', '陶艺', '极简', '侘寂'],
+    colors: ['#FAF7F2', '#8B7355', '#2C2420'],
+    rating: 9.4,
+    description: '日式侘寂美学陶艺电商，DM Serif Display 衬线字体 + CSS-only 陶瓷插画 + 暖色大地调 + 浮动装饰动画 + 产品网格 + 品牌哲学',
+  },
+  {
+    id: 'codelens-review',
+    title: 'CodeLens AI 代码审查平台',
+    category: 'landing',
+    tags: ['SaaS', 'AI', '开发者工具', '暗色主题', '终端美学'],
+    colors: ['#0A0B0F', '#00D4FF', '#6366F1'],
+    rating: 9.5,
+    description: '暗色科技风 AI 代码审查 SaaS 落地页，终端风格 Hero Mockup + 语法高亮 PR Diff + 浮动光球动画 + CSS 几何图标特性网格 + 三栏定价',
+  },
 ]
 
 const categories = [
@@ -1174,12 +1192,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 119 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 121 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="119 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="121 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1188,7 +1206,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 119 个完整页面</span>
+      <span>📦 121 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

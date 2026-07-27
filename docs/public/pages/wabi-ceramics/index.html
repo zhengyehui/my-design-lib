@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WABI Ceramics — The Art of Imperfection</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       WABI CERAMICS — Design Tokens Override
+       ======================================== */
+    :root {
+      --wabi-bg: #FAF7F2;
+      --wabi-text: #2C2420;
+      --wabi-accent: #8B7355;
+      --wabi-secondary: #C4A882;
+      --wabi-muted: #A39585;
+      --wabi-border: #E8DFD4;
+      --wabi-bg-dark: #2C2420;
+      --wabi-cream-light: #F5F0E8;
+      --wabi-sage: #A8B5A0;
+      --wabi-terracotta: #C49A7C;
+      --wabi-clay: #B8977A;
+      --wabi-stone: #D4C8B8;
+
+      --font-heading: 'DM Serif Display', Georgia, serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2.5rem;
+      --space-xl: 4rem;
+      --space-2xl: 6rem;
+      --space-3xl: 8rem;
+
+      --transition-smooth: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+      --transition-fast: 0.25s ease;
+    }
+
+    /* ========================================
+       RESET & BASE
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--wabi-bg);
+      color: var(--wabi-text);
+      line-height: 1.7;
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color var(--transition-fast);
+    }
+
+    img { max-width: 100%; display: block; }
+
+    /* ========================================
+       ANIMATIONS
+       ======================================== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(3deg); }
+    }
+
+    @keyframes floatMedium {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(-2deg); }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.7; }
+    }
+
+    .animate-fade-up {
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .animate-fade {
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .delay-4 { animation-delay: 0.4s; opacity: 0; }
+    .delay-5 { animation-delay: 0.5s; opacity: 0; }
+    .delay-6 { animation-delay: 0.6s; opacity: 0; }
+    .delay-7 { animation-delay: 0.7s; opacity: 0; }
+    .delay-8 { animation-delay: 0.8s; opacity: 0; }
+
+    /* ========================================
+       NAVIGATION
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(250, 247, 242, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--wabi-border);
+      transition: all var(--transition-smooth);
+    }
+
+    .nav__inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .nav__logo {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      letter-spacing: 0.35em;
+      color: var(--wabi-text);
+      font-weight: 400;
+      position: relative;
+    }
+
+    .nav__logo::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--wabi-accent);
+      transform: scaleX(0);
+      transition: transform var(--transition-smooth);
+    }
+
+    .nav__logo:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+
+    .nav__link {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--wabi-muted);
+      position: relative;
+      padding: 4px 0;
+    }
+
+    .nav__link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--wabi-accent);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--transition-smooth);
+    }
+
+    .nav__link:hover {
+      color: var(--wabi-text);
+    }
+
+    .nav__link:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .nav__cart {
+      position: relative;
+      cursor: pointer;
+      padding: 8px;
+      transition: color var(--transition-fast);
+    }
+
+    .nav__cart:hover {
+      color: var(--wabi-accent);
+    }
+
+    .nav__cart svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .nav__cart-count {
+      position: absolute;
+      top: 2px;
+      right: 0;
+      width: 16px;
+      height: 16px;
+      background: var(--wabi-accent);
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 600;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav__mobile-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+    }
+
+    .nav__mobile-toggle span {
+      width: 24px;
+      height: 1.5px;
+      background: var(--wabi-text);
+      transition: all var(--transition-fast);
+    }
+
+    /* ========================================
+       HERO SECTION
+       ======================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 72px;
+    }
+
+    .hero__inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+      align-items: center;
+      width: 100%;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero__badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--wabi-accent);
+      margin-bottom: var(--space-md);
+      padding: 6px 16px;
+      border: 1px solid var(--wabi-secondary);
+      border-radius: 100px;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .hero__heading {
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      color: var(--wabi-text);
+      margin-bottom: var(--space-md);
+      letter-spacing: -0.02em;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.15s;
+      opacity: 0;
+    }
+
+    .hero__heading em {
+      font-style: italic;
+      color: var(--wabi-accent);
+    }
+
+    .hero__subtitle {
+      font-size: 1.05rem;
+      color: var(--wabi-muted);
+      max-width: 440px;
+      margin-bottom: var(--space-lg);
+      line-height: 1.8;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.3s;
+      opacity: 0;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: var(--space-md);
+      align-items: center;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.45s;
+      opacity: 0;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      background: var(--wabi-text);
+      color: var(--wabi-bg);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--wabi-accent);
+      transition: left var(--transition-smooth);
+      z-index: 0;
+    }
+
+    .btn-primary:hover::before {
+      left: 0;
+    }
+
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(44, 36, 32, 0.2);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 32px;
+      background: transparent;
+      color: var(--wabi-text);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--wabi-border);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--wabi-accent);
+      color: var(--wabi-accent);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Visual */
+    .hero__visual {
+      position: relative;
+      height: 70vh;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero__ceramic {
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      position: relative;
+      background:
+        radial-gradient(ellipse at 30% 30%, #D4C8B8 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 60%, #C4A882 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, #B8977A 0%, #A89070 60%, #8B7355 100%);
+      box-shadow:
+        0 20px 60px rgba(139, 115, 85, 0.25),
+        inset 0 -10px 30px rgba(0,0,0,0.1),
+        inset 0 10px 30px rgba(255,255,255,0.15);
+      animation: scaleIn 1s ease forwards;
+      animation-delay: 0.3s;
+      opacity: 0;
+    }
+
+    .hero__ceramic::before {
+      content: '';
+      position: absolute;
+      top: 15%;
+      left: 20%;
+      width: 30%;
+      height: 20%;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: rotate(-15deg);
+    }
+
+    .hero__ceramic::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 85%;
+      height: 85%;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .hero__float-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid var(--wabi-border);
+      opacity: 0.5;
+    }
+
+    .hero__float-circle--1 {
+      width: 200px;
+      height: 200px;
+      top: 5%;
+      right: 5%;
+      animation: floatSlow 8s ease-in-out infinite;
+      border-color: var(--wabi-secondary);
+    }
+
+    .hero__float-circle--2 {
+      width: 120px;
+      height: 120px;
+      bottom: 15%;
+      left: 5%;
+      animation: floatMedium 6s ease-in-out infinite;
+      animation-delay: 1s;
+      background: radial-gradient(circle, rgba(196, 168, 130, 0.1) 0%, transparent 70%);
+    }
+
+    .hero__float-circle--3 {
+      width: 60px;
+      height: 60px;
+      top: 25%;
+      left: 15%;
+      animation: floatSlow 10s ease-in-out infinite;
+      animation-delay: 2s;
+      background: var(--wabi-secondary);
+      opacity: 0.15;
+      border: none;
+    }
+
+    .hero__float-circle--4 {
+      width: 40px;
+      height: 40px;
+      bottom: 25%;
+      right: 20%;
+      animation: floatMedium 7s ease-in-out infinite;
+      animation-delay: 0.5s;
+      background: var(--wabi-terracotta);
+      opacity: 0.12;
+      border: none;
+    }
+
+    .hero__texture-ring {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      border: 1px dashed var(--wabi-border);
+      opacity: 0.3;
+      animation: floatSlow 20s linear infinite;
+    }
+
+    /* ========================================
+       SECTION SHARED STYLES
+       ======================================== */
+    .section {
+      padding: var(--space-3xl) 0;
+    }
+
+    .section__inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+    }
+
+    .section__label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--wabi-accent);
+      margin-bottom: var(--space-sm);
+    }
+
+    .section__heading {
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      color: var(--wabi-text);
+      margin-bottom: var(--space-sm);
+    }
+
+    .section__description {
+      font-size: 1rem;
+      color: var(--wabi-muted);
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    .section__header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .section__header--center {
+      text-align: center;
+    }
+
+    .section__header--center .section__description {
+      margin: 0 auto;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--wabi-secondary);
+      margin: var(--space-md) 0;
+    }
+
+    .divider--center {
+      margin: var(--space-md) auto;
+    }
+
+    /* ========================================
+       FEATURED PRODUCTS GRID
+       ======================================== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .product-card {
+      position: relative;
+      background: var(--wabi-cream-light);
+      overflow: hidden;
+      transition: all var(--transition-smooth);
+      cursor: pointer;
+      group: true;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(44, 36, 32, 0.08);
+    }
+
+    .product-card__image {
+      aspect-ratio: 4 / 5;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card__image--1 {
+      background:
+        radial-gradient(circle at 40% 60%, #C4A882 0%, transparent 45%),
+        radial-gradient(circle at 65% 35%, #D4C8B8 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, #B8977A 0%, #A08868 100%);
+    }
+
+    .product-card__image--2 {
+      background:
+        radial-gradient(circle at 30% 40%, #A8B5A0 0%, transparent 45%),
+        radial-gradient(circle at 70% 65%, #C4C8B8 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, #98A890 0%, #889880 100%);
+    }
+
+    .product-card__image--3 {
+      background:
+        radial-gradient(circle at 55% 45%, #D4C8B8 0%, transparent 50%),
+        radial-gradient(circle at 35% 65%, #C49A7C 0%, transparent 40%),
+        linear-gradient(135deg, #C4B8A8 0%, #B0A090 100%);
+    }
+
+    .product-card__image--4 {
+      background:
+        radial-gradient(circle at 45% 55%, #2C2420 0%, transparent 50%),
+        radial-gradient(circle at 60% 40%, #4A3C30 0%, transparent 45%),
+        linear-gradient(145deg, #3A3028 0%, #2C2420 100%);
+    }
+
+    .product-card__image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.05;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    }
+
+    .product-card__image::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 55%;
+      height: 65%;
+      border-radius: 40% 40% 45% 45%;
+      background: inherit;
+      opacity: 0.6;
+      filter: blur(0);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+
+    /* Ceramic shape overlays */
+    .product-card__shape {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+
+    .product-card__shape--bowl {
+      width: 55%;
+      height: 35%;
+      border-radius: 5% 5% 50% 50%;
+      background: inherit;
+      box-shadow:
+        0 8px 30px rgba(0,0,0,0.12),
+        inset 0 -5px 15px rgba(0,0,0,0.08),
+        inset 0 3px 8px rgba(255,255,255,0.15);
+    }
+
+    .product-card__shape--vase {
+      width: 30%;
+      height: 60%;
+      border-radius: 35% 35% 5% 5%;
+      background: inherit;
+      box-shadow:
+        0 10px 35px rgba(0,0,0,0.12),
+        inset 0 -5px 15px rgba(0,0,0,0.08);
+    }
+
+    .product-card__shape--plate {
+      width: 60%;
+      height: 25%;
+      border-radius: 50%;
+      background: inherit;
+      box-shadow:
+        0 6px 25px rgba(0,0,0,0.1),
+        inset 0 -3px 10px rgba(0,0,0,0.06);
+      transform: translate(-50%, -50%) perspective(200px) rotateX(45deg);
+    }
+
+    .product-card__shape--cup {
+      width: 35%;
+      height: 40%;
+      border-radius: 5% 5% 15% 15%;
+      background: inherit;
+      box-shadow:
+        0 8px 25px rgba(0,0,0,0.1),
+        inset 0 -4px 12px rgba(0,0,0,0.06);
+    }
+
+    .product-card__info {
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-card__name {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      color: var(--wabi-text);
+      margin-bottom: 2px;
+    }
+
+    .product-card__material {
+      font-size: 0.78rem;
+      color: var(--wabi-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .product-card__price {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--wabi-accent);
+      letter-spacing: 0.03em;
+    }
+
+    .product-card__cart-btn {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 14px;
+      background: var(--wabi-text);
+      color: var(--wabi-bg);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      transform: translateY(100%);
+      transition: transform var(--transition-smooth);
+    }
+
+    .product-card:hover .product-card__cart-btn {
+      transform: translateY(0);
+    }
+
+    .product-card:hover .product-card__info {
+      transform: translateY(-14px);
+      transition: transform var(--transition-smooth);
+    }
+
+    /* ========================================
+       PHILOSOPHY SECTION
+       ======================================== */
+    .philosophy {
+      position: relative;
+      background: var(--wabi-text);
+      color: var(--wabi-bg);
+      overflow: hidden;
+    }
+
+    .philosophy__inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: var(--space-3xl) var(--space-xl);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .philosophy__label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--wabi-secondary);
+      margin-bottom: var(--space-md);
+    }
+
+    .philosophy__heading {
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      color: var(--wabi-bg);
+      margin-bottom: var(--space-md);
+      font-style: italic;
+    }
+
+    .philosophy__divider {
+      width: 80px;
+      height: 1px;
+      background: var(--wabi-secondary);
+      margin: var(--space-lg) auto;
+      opacity: 0.5;
+    }
+
+    .philosophy__text {
+      font-size: 1.05rem;
+      line-height: 2;
+      color: var(--wabi-muted);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .philosophy__text p {
+      margin-bottom: var(--space-md);
+    }
+
+    .philosophy__text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Decorative elements */
+    .philosophy__deco {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(196, 168, 130, 0.1);
+    }
+
+    .philosophy__deco--1 {
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      right: -80px;
+    }
+
+    .philosophy__deco--2 {
+      width: 200px;
+      height: 200px;
+      bottom: -60px;
+      left: -50px;
+    }
+
+    .philosophy__deco--3 {
+      width: 150px;
+      height: 150px;
+      top: 30%;
+      left: 10%;
+      background: radial-gradient(circle, rgba(196, 168, 130, 0.03) 0%, transparent 70%);
+    }
+
+    .philosophy__line {
+      position: absolute;
+      width: 1px;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, rgba(196, 168, 130, 0.15), transparent);
+    }
+
+    .philosophy__line--1 {
+      top: 10%;
+      right: 20%;
+    }
+
+    .philosophy__line--2 {
+      bottom: 10%;
+      left: 15%;
+    }
+
+    /* ========================================
+       PRODUCT SHOWCASE ROW
+       ======================================== */
+    .showcase {
+      background: var(--wabi-cream-light);
+    }
+
+    .showcase__scroll {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .showcase-card {
+      background: var(--wabi-bg);
+      transition: all var(--transition-smooth);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .showcase-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px rgba(44, 36, 32, 0.1);
+    }
+
+    .showcase-card__image {
+      aspect-ratio: 3 / 4;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .showcase-card__image--1 {
+      background:
+        radial-gradient(circle at 45% 50%, #D8CEBC 0%, transparent 55%),
+        radial-gradient(circle at 55% 45%, #C4B8A0 0%, transparent 50%),
+        linear-gradient(160deg, #D4C8B8 0%, #BFB3A3 100%);
+    }
+
+    .showcase-card__image--2 {
+      background:
+        radial-gradient(circle at 40% 55%, #B8A080 0%, transparent 50%),
+        radial-gradient(circle at 60% 40%, #C4A882 0%, transparent 45%),
+        linear-gradient(140deg, #C4B098 0%, #A89878 100%);
+    }
+
+    .showcase-card__image--3 {
+      background:
+        radial-gradient(circle at 50% 45%, #E0D8CC 0%, transparent 50%),
+        radial-gradient(circle at 45% 55%, #D4C8B0 0%, transparent 55%),
+        linear-gradient(150deg, #DDD5C5 0%, #C8C0B0 100%);
+    }
+
+    .showcase-card__image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(139, 115, 85, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 80% 20%, rgba(139, 115, 85, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* Ceramic shapes on showcase cards */
+    .showcase-card__ceramic {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+
+    .showcase-card__ceramic--teapot {
+      width: 45%;
+      height: 38%;
+      border-radius: 45% 45% 35% 35%;
+      box-shadow:
+        0 12px 40px rgba(0,0,0,0.1),
+        inset 0 -5px 15px rgba(0,0,0,0.06),
+        inset 0 3px 8px rgba(255,255,255,0.12);
+      position: relative;
+    }
+
+    .showcase-card__ceramic--teapot::before {
+      content: '';
+      position: absolute;
+      right: -18%;
+      top: 15%;
+      width: 20%;
+      height: 50%;
+      border: 3px solid rgba(0,0,0,0.06);
+      border-radius: 50%;
+      border-left: none;
+    }
+
+    .showcase-card__ceramic--teapot::after {
+      content: '';
+      position: absolute;
+      left: -10%;
+      top: 30%;
+      width: 12%;
+      height: 35%;
+      background: inherit;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .showcase-card__ceramic--vase {
+      width: 28%;
+      height: 60%;
+      border-radius: 40% 40% 10% 10%;
+      box-shadow:
+        0 15px 45px rgba(0,0,0,0.12),
+        inset 0 -8px 20px rgba(0,0,0,0.06);
+      position: relative;
+    }
+
+    .showcase-card__ceramic--vase::before {
+      content: '';
+      position: absolute;
+      top: -5%;
+      left: 15%;
+      width: 70%;
+      height: 10%;
+      border-radius: 50%;
+      background: inherit;
+      filter: brightness(1.05);
+    }
+
+    .showcase-card__ceramic--bowl {
+      width: 55%;
+      height: 30%;
+      border-radius: 10% 10% 50% 50%;
+      box-shadow:
+        0 10px 35px rgba(0,0,0,0.1),
+        inset 0 -4px 12px rgba(0,0,0,0.06),
+        inset 0 2px 6px rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .showcase-card__ceramic--bowl::before {
+      content: '';
+      position: absolute;
+      top: 5%;
+      left: 10%;
+      width: 80%;
+      height: 40%;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .showcase-card__info {
+      padding: var(--space-lg);
+    }
+
+    .showcase-card__category {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--wabi-accent);
+      margin-bottom: var(--space-xs);
+    }
+
+    .showcase-card__name {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      color: var(--wabi-text);
+      margin-bottom: var(--space-xs);
+    }
+
+    .showcase-card__description {
+      font-size: 0.88rem;
+      color: var(--wabi-muted);
+      line-height: 1.7;
+      margin-bottom: var(--space-md);
+    }
+
+    .showcase-card__footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--space-sm);
+      border-top: 1px solid var(--wabi-border);
+    }
+
+    .showcase-card__price {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--wabi-text);
+    }
+
+    .showcase-card__btn {
+      padding: 10px 24px;
+      background: transparent;
+      border: 1px solid var(--wabi-text);
+      color: var(--wabi-text);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+
+    .showcase-card__btn:hover {
+      background: var(--wabi-text);
+      color: var(--wabi-bg);
+    }
+
+    /* ========================================
+       NEWSLETTER
+       ======================================== */
+    .newsletter {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter__inner {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .newsletter__icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto var(--space-md);
+      border-radius: 50%;
+      background: var(--wabi-cream-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .newsletter__icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--wabi-accent);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .newsletter__heading {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      margin-bottom: var(--space-sm);
+    }
+
+    .newsletter__text {
+      color: var(--wabi-muted);
+      margin-bottom: var(--space-lg);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .newsletter__form {
+      display: flex;
+      gap: 0;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .newsletter__input {
+      flex: 1;
+      padding: 16px 24px;
+      background: var(--wabi-cream-light);
+      border: 1px solid var(--wabi-border);
+      border-right: none;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--wabi-text);
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+
+    .newsletter__input::placeholder {
+      color: var(--wabi-muted);
+      font-weight: 300;
+    }
+
+    .newsletter__input:focus {
+      border-color: var(--wabi-accent);
+    }
+
+    .newsletter__submit {
+      padding: 16px 32px;
+      background: var(--wabi-text);
+      color: var(--wabi-bg);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--wabi-text);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      white-space: nowrap;
+    }
+
+    .newsletter__submit:hover {
+      background: var(--wabi-accent);
+      border-color: var(--wabi-accent);
+    }
+
+    .newsletter__note {
+      margin-top: var(--space-sm);
+      font-size: 0.75rem;
+      color: var(--wabi-muted);
+      opacity: 0.7;
+    }
+
+    .newsletter__deco {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.04;
+      background: var(--wabi-accent);
+    }
+
+    .newsletter__deco--1 {
+      width: 250px;
+      height: 250px;
+      top: -80px;
+      left: -60px;
+    }
+
+    .newsletter__deco--2 {
+      width: 180px;
+      height: 180px;
+      bottom: -50px;
+      right: -40px;
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .footer {
+      background: var(--wabi-text);
+      color: var(--wabi-bg);
+      padding: var(--space-xl) 0;
+    }
+
+    .footer__inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+    }
+
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-xl);
+      padding-bottom: var(--space-xl);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer__brand-name {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      letter-spacing: 0.25em;
+      margin-bottom: var(--space-md);
+    }
+
+    .footer__brand-text {
+      font-size: 0.88rem;
+      color: var(--wabi-muted);
+      line-height: 1.8;
+      max-width: 300px;
+    }
+
+    .footer__col-title {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--wabi-secondary);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .footer__link {
+      font-size: 0.88rem;
+      color: var(--wabi-muted);
+      transition: color var(--transition-fast);
+    }
+
+    .footer__link:hover {
+      color: var(--wabi-bg);
+    }
+
+    .footer__social {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .footer__social-link {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .footer__social-link:hover {
+      border-color: var(--wabi-secondary);
+      background: rgba(196, 168, 130, 0.1);
+    }
+
+    .footer__social-link svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--wabi-muted);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--space-lg);
+      font-size: 0.78rem;
+      color: var(--wabi-muted);
+      opacity: 0.6;
+    }
+
+    .footer__bottom-links {
+      display: flex;
+      gap: var(--space-md);
+    }
+
+    .footer__bottom-link {
+      font-size: 0.78rem;
+      color: var(--wabi-muted);
+      transition: color var(--transition-fast);
+    }
+
+    .footer__bottom-link:hover {
+      color: var(--wabi-bg);
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 1024px) {
+      .hero__inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero__subtitle {
+        margin: 0 auto var(--space-lg);
+      }
+
+      .hero__actions {
+        justify-content: center;
+      }
+
+      .hero__visual {
+        height: 50vh;
+        min-height: 350px;
+      }
+
+      .hero__ceramic {
+        width: 280px;
+        height: 280px;
+      }
+
+      .products-grid {
+        gap: var(--space-md);
+      }
+
+      .showcase__scroll {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .showcase__scroll > :last-child {
+        grid-column: span 2;
+        max-width: 50%;
+        margin: 0 auto;
+      }
+
+      .footer__top {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-lg);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav__links {
+        display: none;
+      }
+
+      .nav__mobile-toggle {
+        display: flex;
+      }
+
+      .nav__inner {
+        padding: 0 var(--space-md);
+      }
+
+      .section__inner {
+        padding: 0 var(--space-md);
+      }
+
+      .hero {
+        padding-top: 72px;
+      }
+
+      .hero__inner {
+        padding: 0 var(--space-md);
+      }
+
+      .hero__actions {
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+
+      .btn-primary, .btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+      }
+
+      .showcase__scroll {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase__scroll > :last-child {
+        grid-column: span 1;
+        max-width: 100%;
+      }
+
+      .section {
+        padding: var(--space-xl) 0;
+      }
+
+      .philosophy__inner {
+        padding: var(--space-xl) var(--space-md);
+      }
+
+      .newsletter__form {
+        flex-direction: column;
+      }
+
+      .newsletter__input {
+        border-right: 1px solid var(--wabi-border);
+        border-bottom: none;
+      }
+
+      .footer__top {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: var(--space-sm);
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero__ceramic {
+        width: 220px;
+        height: 220px;
+      }
+
+      .product-card__info {
+        padding: var(--space-sm) var(--space-md);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .product-card__cart-btn {
+        position: relative;
+        transform: none;
+        margin-top: var(--space-sm);
+        width: 100%;
+      }
+
+      .product-card:hover .product-card__info {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====== NAVIGATION ====== -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">WABI</a>
+      <ul class="nav__links">
+        <li><a href="#" class="nav__link">Shop</a></li>
+        <li><a href="#" class="nav__link">About</a></li>
+        <li><a href="#" class="nav__link">Collections</a></li>
+        <li><a href="#" class="nav__link">Journal</a></li>
+      </ul>
+      <div class="nav__cart">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="nav__cart-count">2</span>
+      </div>
+      <button class="nav__mobile-toggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ====== HERO ====== -->
+  <section class="hero">
+    <div class="hero__inner">
+      <div class="hero__content">
+        <span class="hero__badge">Handcrafted in Japan</span>
+        <h1 class="hero__heading">The Art of<br><em>Imperfection</em></h1>
+        <p class="hero__subtitle">
+          Each piece tells a story of earth, water, and fire. Wabi ceramics celebrate
+          the beauty found in simplicity and the quiet elegance of handmade craft.
+        </p>
+        <div class="hero__actions">
+          <button class="btn-primary"><span>Explore Collection</span></button>
+          <button class="btn-secondary">Our Story →</button>
+        </div>
+      </div>
+      <div class="hero__visual">
+        <div class="hero__texture-ring"></div>
+        <div class="hero__ceramic"></div>
+        <div class="hero__float-circle hero__float-circle--1"></div>
+        <div class="hero__float-circle hero__float-circle--2"></div>
+        <div class="hero__float-circle hero__float-circle--3"></div>
+        <div class="hero__float-circle hero__float-circle--4"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FEATURED PRODUCTS ====== -->
+  <section class="section">
+    <div class="section__inner">
+      <div class="section__header">
+        <span class="section__label">Featured Pieces</span>
+        <h2 class="section__heading">Curated for You</h2>
+        <div class="divider"></div>
+        <p class="section__description">
+          Thoughtfully selected pieces from our latest collection, each one unique in its form and character.
+        </p>
+      </div>
+
+      <div class="products-grid">
+        <!-- Product 1 -->
+        <div class="product-card">
+          <div class="product-card__image product-card__image--1">
+            <div class="product-card__shape">
+              <div class="product-card__shape--bowl" style="background: linear-gradient(135deg, #C4A882, #B8977A);"></div>
+            </div>
+          </div>
+          <div class="product-card__info">
+            <div>
+              <h3 class="product-card__name">Komorebi Bowl</h3>
+              <span class="product-card__material">Stoneware · Matte finish</span>
+            </div>
+            <span class="product-card__price">¥8,800</span>
+          </div>
+          <button class="product-card__cart-btn">Add to Cart</button>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card">
+          <div class="product-card__image product-card__image--2">
+            <div class="product-card__shape">
+              <div class="product-card__shape--vase" style="background: linear-gradient(160deg, #A8B5A0, #889880);"></div>
+            </div>
+          </div>
+          <div class="product-card__info">
+            <div>
+              <h3 class="product-card__name">Moss Garden Vase</h3>
+              <span class="product-card__material">Porcelain · Celadon glaze</span>
+            </div>
+            <span class="product-card__price">¥14,500</span>
+          </div>
+          <button class="product-card__cart-btn">Add to Cart</button>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card">
+          <div class="product-card__image product-card__image--3">
+            <div class="product-card__shape">
+              <div class="product-card__shape--plate" style="background: linear-gradient(135deg, #D4C8B8, #C4B8A8);"></div>
+            </div>
+          </div>
+          <div class="product-card__info">
+            <div>
+              <h3 class="product-card__name">Tsuki Plate</h3>
+              <span class="product-card__material">Earthenware · Natural</span>
+            </div>
+            <span class="product-card__price">¥6,200</span>
+          </div>
+          <button class="product-card__cart-btn">Add to Cart</button>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card">
+          <div class="product-card__image product-card__image--4">
+            <div class="product-card__shape">
+              <div class="product-card__shape--cup" style="background: linear-gradient(150deg, #4A3C30, #2C2420);"></div>
+            </div>
+          </div>
+          <div class="product-card__info">
+            <div>
+              <h3 class="product-card__name">Yoru Yunomi</h3>
+              <span class="product-card__material">Black stoneware · Iron glaze</span>
+            </div>
+            <span class="product-card__price">¥5,400</span>
+          </div>
+          <button class="product-card__cart-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PHILOSOPHY ====== -->
+  <section class="philosophy">
+    <div class="philosophy__deco philosophy__deco--1"></div>
+    <div class="philosophy__deco philosophy__deco--2"></div>
+    <div class="philosophy__deco philosophy__deco--3"></div>
+    <div class="philosophy__line philosophy__line--1"></div>
+    <div class="philosophy__line philosophy__line--2"></div>
+
+    <div class="philosophy__inner">
+      <span class="philosophy__label">Our Philosophy</span>
+      <h2 class="philosophy__heading">Wabi-Sabi</h2>
+      <div class="philosophy__divider"></div>
+      <div class="philosophy__text">
+        <p>
+          Wabi-sabi is the Japanese art of finding beauty in imperfection and
+          accepting the natural cycle of growth and decay. It is a celebration
+          of the cracks, the asymmetry, and the marks left by time.
+        </p>
+        <p>
+          Every piece in our collection embraces this philosophy. Each ceramic
+          carries the gentle imprint of the potter's hand, the unpredictable
+          dance of glaze in the kiln, and the quiet dignity of natural materials.
+          We do not seek perfection — we seek authenticity.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PRODUCT SHOWCASE ====== -->
+  <section class="section showcase">
+    <div class="section__inner">
+      <div class="section__header">
+        <span class="section__label">Studio Highlights</span>
+        <h2 class="section__heading">Signature Collection</h2>
+        <div class="divider"></div>
+        <p class="section__description">
+          Our most beloved pieces, each one fired with care in our Shigaraki studio.
+        </p>
+      </div>
+
+      <div class="showcase__scroll">
+        <!-- Showcase 1 -->
+        <div class="showcase-card">
+          <div class="showcase-card__image showcase-card__image--1">
+            <div class="showcase-card__ceramic">
+              <div class="showcase-card__ceramic--teapot" style="background: linear-gradient(145deg, #D4C8B8, #BFB3A3);"></div>
+            </div>
+          </div>
+          <div class="showcase-card__info">
+            <span class="showcase-card__category">Teaware</span>
+            <h3 class="showcase-card__name">Kyūsū Teapot</h3>
+            <p class="showcase-card__description">
+              A side-handle teapot inspired by traditional Tokoname craftsmanship. Perfect for brewing delicate green teas.
+            </p>
+            <div class="showcase-card__footer">
+              <span class="showcase-card__price">¥18,500</span>
+              <button class="showcase-card__btn">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase 2 -->
+        <div class="showcase-card">
+          <div class="showcase-card__image showcase-card__image--2">
+            <div class="showcase-card__ceramic">
+              <div class="showcase-card__ceramic--vase" style="background: linear-gradient(140deg, #C4B098, #A89878);"></div>
+            </div>
+          </div>
+          <div class="showcase-card__info">
+            <span class="showcase-card__category">Vessels</span>
+            <h3 class="showcase-card__name">Hana Ire Vase</h3>
+            <p class="showcase-card__description">
+              A sculptural flower vase with an organic, asymmetric form. Designed for ikebana and single-stem arrangements.
+            </p>
+            <div class="showcase-card__footer">
+              <span class="showcase-card__price">¥22,000</span>
+              <button class="showcase-card__btn">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase 3 -->
+        <div class="showcase-card">
+          <div class="showcase-card__image showcase-card__image--3">
+            <div class="showcase-card__ceramic">
+              <div class="showcase-card__ceramic--bowl" style="background: linear-gradient(150deg, #DDD5C5, #C8C0B0);"></div>
+            </div>
+          </div>
+          <div class="showcase-card__info">
+            <span class="showcase-card__category">Dinnerware</span>
+            <h3 class="showcase-card__name">Shiruwan Soup Bowl</h3>
+            <p class="showcase-card__description">
+              A generously proportioned soup bowl with a tactile, crackled glaze. Ideal for miso soup and noodle dishes.
+            </p>
+            <div class="showcase-card__footer">
+              <span class="showcase-card__price">¥9,800</span>
+              <button class="showcase-card__btn">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== NEWSLETTER ====== -->
+  <section class="section newsletter">
+    <div class="newsletter__deco newsletter__deco--1"></div>
+    <div class="newsletter__deco newsletter__deco--2"></div>
+
+    <div class="newsletter__inner">
+      <div class="newsletter__icon">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <h2 class="newsletter__heading">Join Our Studio</h2>
+      <p class="newsletter__text">
+        Receive thoughtful updates on new collections, the stories behind our craft,
+        and invitations to exclusive studio events.
+      </p>
+      <form class="newsletter__form" onsubmit="return false;">
+        <input type="email" class="newsletter__input" placeholder="Your email address" aria-label="Email address">
+        <button type="submit" class="newsletter__submit">Subscribe</button>
+      </form>
+      <p class="newsletter__note">We respect your privacy. Unsubscribe anytime.</p>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <div class="footer__brand-name">WABI</div>
+          <p class="footer__brand-text">
+            Handcrafted ceramics from Shigaraki, Japan.
+            Each piece celebrates the beauty of imperfection
+            and the art of mindful living.
+          </p>
+          <div class="footer__social">
+            <a href="#" class="footer__social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="footer__social-link" aria-label="Pinterest">
+              <svg viewBox="0 0 24 24"><path d="M8 12a4 4 0 1 1 8 0c0 3-2 6-4 8"/><path d="M12 12l-2 8"/></svg>
+            </a>
+            <a href="#" class="footer__social-link" aria-label="Twitter">
+              <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Shop</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">All Products</a></li>
+            <li><a href="#" class="footer__link">Teaware</a></li>
+            <li><a href="#" class="footer__link">Dinnerware</a></li>
+            <li><a href="#" class="footer__link">Vases</a></li>
+            <li><a href="#" class="footer__link">Gift Sets</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">About</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Our Story</a></li>
+            <li><a href="#" class="footer__link">The Studio</a></li>
+            <li><a href="#" class="footer__link">Artisans</a></li>
+            <li><a href="#" class="footer__link">Journal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Help</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Shipping</a></li>
+            <li><a href="#" class="footer__link">Returns</a></li>
+            <li><a href="#" class="footer__link">Care Guide</a></li>
+            <li><a href="#" class="footer__link">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>© 2026 Wabi Ceramics. All rights reserved.</span>
+        <div class="footer__bottom-links">
+          <a href="#" class="footer__bottom-link">Privacy Policy</a>
+          <a href="#" class="footer__bottom-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====== MINIMAL JS — Scroll animations ====== -->
+  <script>
+    // Intersection Observer for fade-in-on-scroll
+    (function() {
+      const style = document.createElement('style');
+      style.textContent = `
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+      `;
+      document.head.appendChild(style);
+
+      const sections = document.querySelectorAll('.section, .philosophy, .newsletter, .footer');
+      sections.forEach(function(el) { el.classList.add('reveal'); });
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.12 });
+
+      sections.forEach(function(el) { observer.observe(el); });
+    })();
+  </script>
+
+</body>
+</html>
