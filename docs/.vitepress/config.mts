@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，121 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，122 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -388,7 +388,8 @@ export default defineConfig({
             { text: 'Lex & Partners 现代律所', link: '/pages/lex-partners' },
             { text: 'FeastFlow 精选美食配送', link: '/pages/feastflow-delivery' },
             { text: 'Apex Motors 奢华超跑', link: '/pages/apex-motors' },
-            { text: 'House of Honey 室内设计', link: '/pages/house-of-honey' }
+            { text: 'House of Honey 室内设计', link: '/pages/house-of-honey' },
+            { text: 'Solace 水疗养生度假村', link: '/pages/solace-spa' }
           ]
         }
       ]

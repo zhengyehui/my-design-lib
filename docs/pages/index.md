@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 119 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 120 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1135,6 +1135,15 @@ const pages = [
     rating: 9.5,
     description: '暗色科技风 AI 代码审查 SaaS 落地页，终端风格 Hero Mockup + 语法高亮 PR Diff + 浮动光球动画 + CSS 几何图标特性网格 + 三栏定价',
   },
+  {
+    id: 'solace-spa',
+    title: 'Solace 水疗养生度假村',
+    category: 'industry',
+    tags: ['水疗', '养生', '有机', '自然', '度假村'],
+    colors: ['#7c9a82', '#faf8f4', '#c9a96e'],
+    rating: 9.4,
+    description: '高端水疗养生度假村落地页，有机 Blob 浮动动画 + 鼠尾草绿配色 + 深色护理卡片网格 + 纯 CSS 渐变体验画廊 + 客户评价',
+  },
 ]
 
 const categories = [
@@ -1206,7 +1215,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 121 个完整页面</span>
+      <span>📦 122 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
