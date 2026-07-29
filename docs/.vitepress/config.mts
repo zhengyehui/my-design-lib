@@ -294,7 +294,8 @@ export default defineConfig({
             { text: 'Pipeline CRM 客户管理', link: '/pages/crm-dashboard' },
             { text: 'ZenMind 冥想正念应用', link: '/pages/meditation-app' },
             { text: 'Ticky 时间追踪仪表盘', link: '/pages/time-tracker' },
-            { text: 'ZenFlow 番茄钟计时器', link: '/pages/focus-timer' }
+            { text: 'ZenFlow 番茄钟计时器', link: '/pages/focus-timer' },
+            { text: 'Meridian 证券交易终端', link: '/pages/trading-terminal' }
           ]
         },
         {

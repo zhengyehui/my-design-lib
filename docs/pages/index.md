@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 120 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 121 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1144,6 +1144,15 @@ const pages = [
     rating: 9.4,
     description: '高端水疗养生度假村落地页，有机 Blob 浮动动画 + 鼠尾草绿配色 + 深色护理卡片网格 + 纯 CSS 渐变体验画廊 + 客户评价',
   },
+  {
+    id: 'trading-terminal',
+    title: 'Meridian 证券交易终端',
+    category: 'app',
+    tags: ['交易终端', '金融数据', '暗色主题', '实时行情', 'K线图'],
+    colors: ['#08080f', '#6366f1', '#22c55e'],
+    rating: 9.4,
+    description: '暗色系证券交易终端，三栏布局 + CSS K线蜡烛图 + 订单簿深度可视化 + 滚动行情ticker + 模拟实时价格跳动 + 涨跌语义色',
+  },
 ]
 
 const categories = [
@@ -1215,7 +1224,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 122 个完整页面</span>
+      <span>📦 123 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
