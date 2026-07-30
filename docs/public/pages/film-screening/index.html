@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumière — Curated Film Screenings</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --lc-black: #08080d;
+    --lc-dark: #111118;
+    --lc-card: #16161e;
+    --lc-gold: #c9a96e;
+    --lc-gold-light: #dcc591;
+    --lc-cream: #f5f0eb;
+    --lc-grey: #6b6b7b;
+    --lc-text: #a0a0b0;
+    --lc-border: #2a2a35;
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--lc-black);
+    color: var(--lc-cream);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ── Film Grain Overlay ────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* ── Navigation ────────────────────────────────────── */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 3rem;
+    background: linear-gradient(180deg, rgba(8,8,13,0.95) 0%, transparent 100%);
+  }
+
+  .nav-logo {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--lc-gold);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lc-text);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--lc-gold); }
+
+  /* ── Hero ──────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 2rem;
+    overflow: hidden;
+  }
+
+  /* Film strip decoration */
+  .hero::before,
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 8px,
+      var(--lc-border) 8px,
+      var(--lc-border) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+    opacity: 0.3;
+  }
+
+  .hero::before { left: 2rem; }
+  .hero::after { right: 2rem; }
+
+  /* Ambient glow */
+  .hero-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  }
+
+  .hero-eyebrow {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--lc-gold);
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-title {
+    font-family: var(--font-sans);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+    color: var(--lc-cream);
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--lc-gold);
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+    color: var(--lc-grey);
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    border: 1px solid var(--lc-gold);
+    color: var(--lc-gold);
+    text-decoration: none;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    transition: all 0.4s;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-cta:hover {
+    background: var(--lc-gold);
+    color: var(--lc-black);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--lc-grey);
+    z-index: 2;
+    animation: float 2s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* ── Now Showing ───────────────────────────────────── */
+  .now-showing {
+    padding: 6rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--lc-border);
+  }
+
+  .section-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--lc-gold);
+    white-space: nowrap;
+  }
+
+  /* Featured Film */
+  .featured-film {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    margin-bottom: 5rem;
+    align-items: center;
+  }
+
+  .film-poster {
+    aspect-ratio: 3/4;
+    background: var(--lc-dark);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--lc-border);
+  }
+
+  .film-poster::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(201,169,110,0.1) 0%, transparent 50%),
+      linear-gradient(225deg, rgba(100,80,200,0.05) 0%, transparent 50%);
+  }
+
+  .film-poster-frame {
+    position: absolute;
+    inset: 2rem;
+    border: 1px solid rgba(201,169,110,0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+  }
+
+  .film-poster-title {
+    font-size: 2.5rem;
+    font-weight: 200;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--lc-cream);
+  }
+
+  .film-poster-director {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lc-gold);
+    margin-top: 0.75rem;
+  }
+
+  .film-poster-year {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 3rem;
+    font-weight: 800;
+    color: rgba(201,169,110,0.08);
+    letter-spacing: -0.05em;
+  }
+
+  .film-details {
+    padding: 1rem 0;
+  }
+
+  .film-tag {
+    display: inline-block;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lc-gold);
+    border: 1px solid var(--lc-gold);
+    padding: 0.3rem 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .film-title {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+
+  .film-meta {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .film-meta-item {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--lc-grey);
+  }
+
+  .film-meta-item strong {
+    color: var(--lc-cream);
+    font-weight: 600;
+  }
+
+  .film-synopsis {
+    font-size: 0.85rem;
+    line-height: 1.9;
+    color: var(--lc-text);
+    margin-bottom: 2rem;
+    max-width: 420px;
+  }
+
+  .film-schedule {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .schedule-chip {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--lc-border);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lc-text);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .schedule-chip:hover {
+    border-color: var(--lc-gold);
+    color: var(--lc-gold);
+  }
+
+  .schedule-chip .chip-day { display: block; color: var(--lc-cream); font-weight: 700; margin-bottom: 0.15rem; }
+
+  /* ── Film Grid ─────────────────────────────────────── */
+  .film-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .film-card {
+    background: var(--lc-dark);
+    border: 1px solid var(--lc-border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s;
+    position: relative;
+  }
+
+  .film-card:hover {
+    border-color: var(--lc-gold);
+    transform: translateY(-4px);
+  }
+
+  .film-card-poster {
+    aspect-ratio: 2/3;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .film-card-poster::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  /* Different poster gradients for variety */
+  .film-card:nth-child(1) .film-card-poster { background: linear-gradient(135deg, #1a1520 0%, #2a1830 50%, #0d0d15 100%); }
+  .film-card:nth-child(2) .film-card-poster { background: linear-gradient(135deg, #151a20 0%, #0d2030 50%, #0d0d15 100%); }
+  .film-card:nth-child(3) .film-card-poster { background: linear-gradient(135deg, #1a1510 0%, #2a2010 50%, #0d0d10 100%); }
+  .film-card:nth-child(4) .film-card-poster { background: linear-gradient(135deg, #101a15 0%, #0d2a1a 50%, #0d100d 100%); }
+
+  .film-card-frame {
+    position: absolute;
+    inset: 1.5rem;
+    border: 1px solid rgba(201,169,110,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 2;
+  }
+
+  .film-card-title {
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--lc-cream);
+    line-height: 1.2;
+  }
+
+  .film-card-director {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lc-gold);
+    margin-top: 0.5rem;
+  }
+
+  .film-card-year {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    font-weight: 800;
+    color: rgba(201,169,110,0.06);
+    z-index: 2;
+  }
+
+  .film-card-info {
+    padding: 1rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .film-card-genre {
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lc-grey);
+  }
+
+  .film-card-rating {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--lc-gold);
+  }
+
+  /* ── Quote Section ─────────────────────────────────── */
+  .quote-section {
+    padding: 6rem 3rem;
+    text-align: center;
+    position: relative;
+    border-top: 1px solid var(--lc-border);
+    border-bottom: 1px solid var(--lc-border);
+  }
+
+  .quote-mark {
+    font-size: 4rem;
+    color: var(--lc-gold);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .quote-text {
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 200;
+    font-style: italic;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    color: var(--lc-cream);
+  }
+
+  .quote-author {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--lc-gold);
+  }
+
+  /* ── Membership / Tickets ──────────────────────────── */
+  .tickets {
+    padding: 6rem 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .ticket-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .ticket-card {
+    background: var(--lc-dark);
+    border: 1px solid var(--lc-border);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .ticket-card:hover { border-color: var(--lc-gold); }
+
+  .ticket-card.featured-ticket {
+    border-color: var(--lc-gold);
+    background: linear-gradient(180deg, rgba(201,169,110,0.05) 0%, var(--lc-dark) 100%);
+  }
+
+  .ticket-badge {
+    position: absolute;
+    top: -0.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    background: var(--lc-gold);
+    color: var(--lc-black);
+  }
+
+  .ticket-name {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--lc-gold);
+    margin-bottom: 1rem;
+  }
+
+  .ticket-price {
+    font-size: 2.5rem;
+    font-weight: 200;
+    color: var(--lc-cream);
+    margin-bottom: 0.5rem;
+  }
+
+  .ticket-period {
+    font-size: 0.6rem;
+    color: var(--lc-grey);
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+  }
+
+  .ticket-features {
+    list-style: none;
+    margin-bottom: 2rem;
+  }
+
+  .ticket-features li {
+    font-size: 0.75rem;
+    color: var(--lc-text);
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(42,42,53,0.5);
+  }
+
+  .ticket-btn {
+    display: block;
+    width: 100%;
+    padding: 0.9rem;
+    border: 1px solid var(--lc-border);
+    background: none;
+    color: var(--lc-cream);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .ticket-btn:hover {
+    border-color: var(--lc-gold);
+    color: var(--lc-gold);
+  }
+
+  .featured-ticket .ticket-btn {
+    background: var(--lc-gold);
+    color: var(--lc-black);
+    border-color: var(--lc-gold);
+  }
+
+  .featured-ticket .ticket-btn:hover {
+    background: var(--lc-gold-light);
+  }
+
+  /* ── Footer ────────────────────────────────────────── */
+  .footer {
+    padding: 3rem;
+    border-top: 1px solid var(--lc-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--lc-gold);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lc-grey);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-links a:hover { color: var(--lc-cream); }
+
+  .footer-copy {
+    font-size: 0.55rem;
+    color: var(--lc-grey);
+  }
+
+  /* ── Responsive ────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .film-grid { grid-template-columns: repeat(2, 1fr); }
+    .featured-film { grid-template-columns: 1fr; }
+    .ticket-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  }
+
+  @media (max-width: 640px) {
+    .nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero::before, .hero::after { display: none; }
+    .hero-title { font-size: 2.8rem; }
+    .now-showing, .tickets, .quote-section { padding: 4rem 1.5rem; }
+    .film-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+    .film-poster { aspect-ratio: 3/4; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">Lumière</a>
+  <ul class="nav-links">
+    <li><a href="#">Programme</a></li>
+    <li><a href="#">Archive</a></li>
+    <li><a href="#">Membership</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Tickets</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow">Season IV — Autumn 2026</div>
+  <h1 class="hero-title">Cinema is<br><em>alive</em></h1>
+  <p class="hero-subtitle">
+    Curated screenings of independent, classic, and avant-garde cinema. 
+    One film. One evening. One shared experience.
+  </p>
+  <a href="#programme" class="hero-cta">View Programme →</a>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- Now Showing -->
+<section class="now-showing" id="programme">
+  <div class="section-header">
+    <div class="section-line"></div>
+    <div class="section-title">Now Showing</div>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- Featured Film -->
+  <div class="featured-film">
+    <div class="film-poster">
+      <div class="film-poster-year">2026</div>
+      <div class="film-poster-frame">
+        <div class="film-poster-title">The<br>Quiet<br>Earth</div>
+        <div class="film-poster-directed">Directed by Sofia Mäkelä</div>
+      </div>
+    </div>
+    <div class="film-details">
+      <div class="film-tag">Opening Night</div>
+      <h2 class="film-title">The Quiet Earth</h2>
+      <div class="film-meta">
+        <div class="film-meta-item"><strong>Director</strong> Sofia Mäkelä</div>
+        <div class="film-meta-item"><strong>Runtime</strong> 127 min</div>
+        <div class="film-meta-item"><strong>Country</strong> Finland</div>
+      </div>
+      <p class="film-synopsis">
+        A meditation on solitude and connection, set against the vast Finnish landscape. When a reclusive astronomer discovers an anomaly in the night sky, she must choose between the silence she has cultivated and the world she has left behind.
+      </p>
+      <div class="film-schedule">
+        <div class="schedule-chip">
+          <span class="chip-day">Fri 12</span>
+          20:00
+        </div>
+        <div class="schedule-chip">
+          <span class="chip-day">Sat 13</span>
+          18:30
+        </div>
+        <div class="schedule-chip">
+          <span class="chip-day">Sun 14</span>
+          21:00
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Film Grid -->
+  <div class="film-grid">
+    <div class="film-card">
+      <div class="film-card-poster">
+        <div class="film-card-year">1985</div>
+        <div class="film-card-frame">
+          <div class="film-card-title">Paris,<br>Texas</div>
+          <div class="film-card-director">Wim Wenders</div>
+        </div>
+      </div>
+      <div class="film-card-info">
+        <span class="film-card-genre">Drama</span>
+        <span class="film-card-rating">★ 9.2</span>
+      </div>
+    </div>
+    <div class="film-card">
+      <div class="film-card-poster">
+        <div class="film-card-year">2024</div>
+        <div class="film-card-frame">
+          <div class="film-card-title">All We<br>Imagine<br>as Light</div>
+          <div class="film-card-director">Payal Kapadia</div>
+        </div>
+      </div>
+      <div class="film-card-info">
+        <span class="film-card-genre">Drama</span>
+        <span class="film-card-rating">★ 8.8</span>
+      </div>
+    </div>
+    <div class="film-card">
+      <div class="film-card-poster">
+        <div class="film-card-year">1963</div>
+        <div class="film-card-frame">
+          <div class="film-card-title">8½</div>
+          <div class="film-card-director">Federico Fellini</div>
+        </div>
+      </div>
+      <div class="film-card-info">
+        <span class="film-card-genre">Comedy</span>
+        <span class="film-card-rating">★ 9.5</span>
+      </div>
+    </div>
+    <div class="film-card">
+      <div class="film-card-poster">
+        <div class="film-card-year">2023</div>
+        <div class="film-card-frame">
+          <div class="film-card-title">The<br>Zone<br>of Interest</div>
+          <div class="film-card-director">Jonathan Glazer</div>
+        </div>
+      </div>
+      <div class="film-card-info">
+        <span class="film-card-genre">Drama</span>
+        <span class="film-card-rating">★ 9.0</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quote -->
+<section class="quote-section">
+  <div class="quote-mark">"</div>
+  <p class="quote-text">
+    Cinema is a mirror that can change the world. Not by showing us what we want to see, but by making us see what we have been avoiding.
+  </p>
+  <div class="quote-author">— Agnès Varda</div>
+</section>
+
+<!-- Tickets -->
+<section class="tickets">
+  <div class="section-header">
+    <div class="section-line"></div>
+    <div class="section-title">Membership</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="ticket-grid">
+    <div class="ticket-card">
+      <div class="ticket-name">Single</div>
+      <div class="ticket-price">€15</div>
+      <div class="ticket-period">per screening</div>
+      <ul class="ticket-features">
+        <li>One screening pass</li>
+        <li>Reserved seating</li>
+        <li>Programme booklet</li>
+        <li>Post-screening discussion</li>
+      </ul>
+      <button class="ticket-btn">Book Now</button>
+    </div>
+    <div class="ticket-card featured-ticket">
+      <div class="ticket-badge">Popular</div>
+      <div class="ticket-name">Season Pass</div>
+      <div class="ticket-price">€89</div>
+      <div class="ticket-period">per season</div>
+      <ul class="ticket-features">
+        <li>All season screenings</li>
+        <li>Priority seating</li>
+        <li>Exclusive Q&A access</li>
+        <li>Director meet & greet</li>
+        <li>Collector poster</li>
+      </ul>
+      <button class="ticket-btn">Get Season Pass</button>
+    </div>
+    <div class="ticket-card">
+      <div class="ticket-name">Patron</div>
+      <div class="ticket-price">€250</div>
+      <div class="ticket-period">per year</div>
+      <ul class="ticket-features">
+        <li>Unlimited screenings</li>
+        <li>VIP lounge access</li>
+        <li>Private screenings</li>
+        <li>Annual gala invitation</li>
+        <li>Name on credits</li>
+      </ul>
+      <button class="ticket-btn">Become Patron</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-brand">Lumière</div>
+  <ul class="footer-links">
+    <li><a href="#">Programme</a></li>
+    <li><a href="#">Archive</a></li>
+    <li><a href="#">Press</a></li>
+    <li><a href="#">Contact</a></li>
+    <li><a href="#">Instagram</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 Lumière Cinema — Berlin</div>
+</footer>
+
+</body>
+</html>

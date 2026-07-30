@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATELIER NOIR — Brutalist Fashion</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  /* ── Reset & Base ──────────────────────────────────── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --an-black: #0a0a0a;
+    --an-white: #f6f6f6;
+    --an-pure-white: #ffffff;
+    --an-grey: #b2b2b2;
+    --an-divider: #e6e6e6;
+    --an-hover: #666666;
+    --an-accent: #c9a96e;
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--an-white);
+    color: var(--an-black);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* ── Navigation ────────────────────────────────────── */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2rem;
+    background: var(--an-white);
+    border-bottom: 1px solid var(--an-divider);
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-brand {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--an-black);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--an-black);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--an-hover); }
+
+  .nav-count {
+    font-size: 0.65rem;
+    color: var(--an-grey);
+    margin-left: 0.25rem;
+  }
+
+  /* ── Hero Section ──────────────────────────────────── */
+  .hero {
+    margin-top: 60px;
+    padding: 6rem 2rem 4rem;
+    display: flex;
+    align-items: center;
+    min-height: 70vh;
+    gap: 4rem;
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-text {
+    flex: 1;
+    max-width: 500px;
+  }
+
+  .hero-subtitle {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--an-grey);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .hero-manifesto {
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--an-hover);
+    margin-bottom: 2.5rem;
+    max-width: 380px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--an-black);
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border: 2px solid var(--an-black);
+    transition: all 0.3s;
+  }
+
+  .hero-cta:hover {
+    background: var(--an-black);
+    color: var(--an-white);
+  }
+
+  .hero-visual {
+    flex: 1.2;
+    position: relative;
+    height: 500px;
+    background: var(--an-divider);
+    overflow: hidden;
+  }
+
+  .hero-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, transparent 40%, rgba(10,10,10,0.03) 40%, rgba(10,10,10,0.03) 41%, transparent 41%),
+      linear-gradient(225deg, transparent 40%, rgba(10,10,10,0.03) 40%, rgba(10,10,10,0.03) 41%, transparent 41%);
+  }
+
+  .hero-visual-text {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: rgba(10,10,10,0.06);
+    text-align: right;
+  }
+
+  .hero-visual-badge {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--an-black);
+    color: var(--an-black);
+  }
+
+  /* ── Marquee ───────────────────────────────────────── */
+  .marquee {
+    overflow: hidden;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--an-divider);
+    border-bottom: 1px solid var(--an-divider);
+    background: var(--an-pure-white);
+  }
+
+  .marquee-track {
+    display: flex;
+    animation: marquee 25s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-item {
+    flex-shrink: 0;
+    padding: 0 2rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--an-grey);
+  }
+
+  .marquee-item::before {
+    content: '◆';
+    margin-right: 2rem;
+    color: var(--an-divider);
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── Collection Grid ───────────────────────────────── */
+  .collection {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .collection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--an-divider);
+  }
+
+  .collection-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--an-grey);
+  }
+
+  .collection-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .collection-count {
+    font-size: 0.65rem;
+    color: var(--an-grey);
+    letter-spacing: 0.1em;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border: 1px solid var(--an-divider);
+  }
+
+  .product-cell {
+    aspect-ratio: 3/4;
+    border-right: 1px solid var(--an-divider);
+    border-bottom: 1px solid var(--an-divider);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .product-cell:nth-child(6n) { border-right: none; }
+  .product-cell:nth-last-child(-n+6) { border-bottom: none; }
+
+  .product-cell:hover { background: var(--an-pure-white); }
+
+  .product-number {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--an-grey);
+    z-index: 2;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+  }
+
+  /* CSS-only product illustrations */
+  .product-shape {
+    width: 60%;
+    height: 70%;
+    position: relative;
+    transition: transform 0.4s ease;
+  }
+
+  .product-cell:hover .product-shape { transform: scale(1.05); }
+
+  .product-shape--coat {
+    background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
+    clip-path: polygon(30% 0%, 70% 0%, 75% 15%, 85% 15%, 85% 100%, 15% 100%, 15% 15%, 25% 15%);
+  }
+
+  .product-shape--dress {
+    background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%);
+    clip-path: polygon(35% 0%, 65% 0%, 70% 10%, 80% 30%, 75% 100%, 25% 100%, 20% 30%, 30% 10%);
+  }
+
+  .product-shape--top {
+    background: linear-gradient(180deg, #333 0%, #222 100%);
+    clip-path: polygon(25% 0%, 75% 0%, 80% 10%, 85% 50%, 70% 55%, 70% 100%, 30% 100%, 30% 55%, 15% 50%, 20% 10%);
+  }
+
+  .product-shape--pants {
+    background: linear-gradient(180deg, #252525 0%, #1a1a1a 100%);
+    clip-path: polygon(20% 0%, 80% 0%, 80% 100%, 55% 100%, 50% 45%, 45% 100%, 20% 100%);
+  }
+
+  .product-shape--bag {
+    background: linear-gradient(180deg, #3a3a3a 0%, #222 100%);
+    clip-path: polygon(15% 30%, 35% 15%, 65% 15%, 85% 30%, 85% 100%, 15% 100%);
+    border-radius: 0 0 4px 4px;
+  }
+
+  .product-shape--shoe {
+    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+    clip-path: polygon(10% 60%, 30% 20%, 60% 15%, 85% 30%, 95% 60%, 95% 75%, 85% 80%, 5% 80%, 5% 70%);
+  }
+
+  .product-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.75rem;
+    background: linear-gradient(transparent, rgba(255,255,255,0.95));
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .product-cell:hover .product-info { transform: translateY(0); }
+
+  .product-name {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--an-black);
+  }
+
+  .product-price {
+    font-size: 0.55rem;
+    color: var(--an-grey);
+    margin-top: 0.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Brand Statement ───────────────────────────────── */
+  .brand-statement {
+    padding: 6rem 2rem;
+    background: var(--an-black);
+    color: var(--an-white);
+    text-align: center;
+  }
+
+  .brand-statement-text {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-statement-text strong {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .brand-values {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .brand-value {
+    text-align: center;
+  }
+
+  .brand-value-num {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--an-accent);
+  }
+
+  .brand-value-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--an-grey);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Featured Product ──────────────────────────────── */
+  .featured {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+  }
+
+  .featured-image {
+    background: var(--an-divider);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-image::after {
+    content: 'SS26';
+    position: absolute;
+    font-size: 10rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: rgba(10,10,10,0.04);
+    text-transform: uppercase;
+  }
+
+  .featured-shape {
+    width: 280px;
+    height: 380px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
+    clip-path: polygon(30% 0%, 70% 0%, 75% 12%, 82% 12%, 82% 100%, 18% 100%, 18% 12%, 25% 12%);
+    position: relative;
+    z-index: 1;
+  }
+
+  .featured-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+    border-left: 1px solid var(--an-divider);
+  }
+
+  .featured-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--an-grey);
+    margin-bottom: 1.5rem;
+  }
+
+  .featured-name {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .featured-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    color: var(--an-hover);
+  }
+
+  .featured-desc {
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--an-hover);
+    max-width: 400px;
+    margin-bottom: 2.5rem;
+  }
+
+  .featured-colors {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .color-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+
+  .color-swatch.active { border-color: var(--an-black); }
+  .color-swatch:hover { border-color: var(--an-grey); }
+
+  .sizes {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .size-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--an-divider);
+    background: none;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .size-btn:hover {
+    border-color: var(--an-black);
+    background: var(--an-black);
+    color: var(--an-white);
+  }
+
+  .add-to-cart {
+    display: block;
+    width: 100%;
+    padding: 1.2rem;
+    background: var(--an-black);
+    color: var(--an-white);
+    border: none;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+
+  .add-to-cart:hover { opacity: 0.85; }
+
+  /* ── Footer ────────────────────────────────────────── */
+  .footer {
+    background: var(--an-black);
+    color: var(--an-white);
+    padding: 3rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--an-grey);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--an-white); }
+
+  .footer-copy {
+    font-size: 0.55rem;
+    color: var(--an-grey);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── Responsive ────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .product-grid { grid-template-columns: repeat(3, 1fr); }
+    .product-cell:nth-child(6n) { border-right: 1px solid var(--an-divider); }
+    .product-cell:nth-child(3n) { border-right: none; }
+    .hero { flex-direction: column; gap: 2rem; padding: 5rem 1.5rem 3rem; }
+    .hero-visual { width: 100%; height: 350px; }
+    .featured { grid-template-columns: 1fr; }
+    .featured-details { padding: 3rem 2rem; }
+  }
+
+  @media (max-width: 640px) {
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .product-cell:nth-child(3n) { border-right: 1px solid var(--an-divider); }
+    .product-cell:nth-child(2n) { border-right: none; }
+    .nav-links { display: none; }
+    .hero-title { font-size: 2.5rem; }
+    .brand-values { gap: 2rem; }
+    .featured-name { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-brand">Atelier Noir</a>
+  <ul class="nav-links">
+    <li><a href="#">All <span class="nav-count">27</span></a></li>
+    <li><a href="#">Collections</a></li>
+    <li><a href="#">Stories</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Cart <span class="nav-count">00</span></a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-subtitle">Collection 01 / 01 — Spring Summer 2026</div>
+    <h1 class="hero-title">Born<br>on the<br>Road</h1>
+    <p class="hero-manifesto">
+      Technical, protective and unapologetically bold. Designed for those who refuse to blend in. Each piece crafted with intention, worn without compromise.
+    </p>
+    <a href="#collection" class="hero-cta">
+      Explore Collection →
+    </a>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-visual-badge">New Season</div>
+    <div class="hero-visual-text">SS<br>26</div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">Free Shipping Over 200 EUR</span>
+    <span class="marquee-item">Sustainable Materials</span>
+    <span class="marquee-item">Made in Europe</span>
+    <span class="marquee-item">14 Day Returns</span>
+    <span class="marquee-item">Technical Fabrics</span>
+    <span class="marquee-item">Limited Editions</span>
+    <span class="marquee-item">Free Shipping Over 200 EUR</span>
+    <span class="marquee-item">Sustainable Materials</span>
+    <span class="marquee-item">Made in Europe</span>
+    <span class="marquee-item">14 Day Returns</span>
+    <span class="marquee-item">Technical Fabrics</span>
+    <span class="marquee-item">Limited Editions</span>
+  </div>
+</div>
+
+<!-- Product Grid -->
+<section class="collection" id="collection">
+  <div class="collection-header">
+    <div>
+      <div class="collection-label">Collection 01 / 01</div>
+      <h2 class="collection-title">Heroines Drop</h2>
+    </div>
+    <div class="collection-count">21 Products</div>
+  </div>
+  <div class="product-grid">
+    <div class="product-cell">
+      <span class="product-number">01</span>
+      <div class="product-image"><div class="product-shape product-shape--coat"></div></div>
+      <div class="product-info"><div class="product-name">Structured Overcoat</div><div class="product-price">420 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">02</span>
+      <div class="product-image"><div class="product-shape product-shape--dress"></div></div>
+      <div class="product-info"><div class="product-name">Asymmetric Dress</div><div class="product-price">280 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">03</span>
+      <div class="product-image"><div class="product-shape product-shape--top"></div></div>
+      <div class="product-info"><div class="product-name">Technical Blouse</div><div class="product-price">165 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">04</span>
+      <div class="product-image"><div class="product-shape product-shape--pants"></div></div>
+      <div class="product-info"><div class="product-name">Wide Leg Trousers</div><div class="product-price">210 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">05</span>
+      <div class="product-image"><div class="product-shape product-shape--bag"></div></div>
+      <div class="product-info"><div class="product-name">Utility Tote</div><div class="product-price">340 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">06</span>
+      <div class="product-image"><div class="product-shape product-shape--shoe"></div></div>
+      <div class="product-info"><div class="product-name">Combat Boot</div><div class="product-price">390 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">07</span>
+      <div class="product-image"><div class="product-shape product-shape--coat"></div></div>
+      <div class="product-info"><div class="product-name">Cropped Jacket</div><div class="product-price">310 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">08</span>
+      <div class="product-image"><div class="product-shape product-shape--dress"></div></div>
+      <div class="product-info"><div class="product-name">Midi Slip Dress</div><div class="product-price">245 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">09</span>
+      <div class="product-image"><div class="product-shape product-shape--top"></div></div>
+      <div class="product-info"><div class="product-name">Ribbed Knit Top</div><div class="product-price">135 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">10</span>
+      <div class="product-image"><div class="product-shape product-shape--pants"></div></div>
+      <div class="product-info"><div class="product-name">Cargo Pant</div><div class="product-price">195 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">11</span>
+      <div class="product-image"><div class="product-shape product-shape--bag"></div></div>
+      <div class="product-info"><div class="product-name">Crossbody Pouch</div><div class="product-price">180 EUR</div></div>
+    </div>
+    <div class="product-cell">
+      <span class="product-number">12</span>
+      <div class="product-image"><div class="product-shape product-shape--shoe"></div></div>
+      <div class="product-info"><div class="product-name">Leather Loafer</div><div class="product-price">320 EUR</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Brand Statement -->
+<section class="brand-statement">
+  <p class="brand-statement-text">
+    We believe in <strong>fewer, better things</strong>. Each piece is designed to last — technically constructed, rigorously tested, and made for the woman who moves through the world on her own terms.
+  </p>
+  <div class="brand-values">
+    <div class="brand-value">
+      <div class="brand-value-num">100%</div>
+      <div class="brand-value-label">European Made</div>
+    </div>
+    <div class="brand-value">
+      <div class="brand-value-num">85%</div>
+      <div class="brand-value-label">Recycled Materials</div>
+    </div>
+    <div class="brand-value">
+      <div class="brand-value-num">0</div>
+      <div class="brand-value-label">Compromises</div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Product -->
+<section class="featured">
+  <div class="featured-image">
+    <div class="featured-shape"></div>
+  </div>
+  <div class="featured-details">
+    <div class="featured-label">Featured — Collection 01</div>
+    <h2 class="featured-name">The Structured<br>Overcoat</h2>
+    <div class="featured-price">420 EUR</div>
+    <p class="featured-desc">
+      Engineered with triple-layer technical fabric. Water-resistant, breathable, and built to endure. The silhouette is sharp, the construction uncompromising.
+    </p>
+    <div class="featured-colors">
+      <div class="color-swatch active" style="background:#1a1a1a"></div>
+      <div class="color-swatch" style="background:#3a3a3a"></div>
+      <div class="color-swatch" style="background:#5c4a3a"></div>
+    </div>
+    <div class="sizes">
+      <button class="size-btn">XS</button>
+      <button class="size-btn">S</button>
+      <button class="size-btn">M</button>
+      <button class="size-btn">L</button>
+      <button class="size-btn">XL</button>
+    </div>
+    <button class="add-to-cart">Add to Cart</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-brand">Atelier Noir</div>
+  <ul class="footer-links">
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Shipping</a></li>
+    <li><a href="#">Returns</a></li>
+    <li><a href="#">Size Guide</a></li>
+    <li><a href="#">Instagram</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 Atelier Noir — Paris, France</div>
+</footer>
+
+</body>
+</html>

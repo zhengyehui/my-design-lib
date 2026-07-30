@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，122 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，125 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -71,7 +71,7 @@ export default defineConfig({
     // Open Graph（社交分享）
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 121 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 125 个完整页面，纯 HTML+CSS，零依赖。' }],
     ['meta', { property: 'og:url', content: 'http://101.37.166.208:11930' }],
     ['meta', { property: 'og:site_name', content: 'My Design Lib' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -79,7 +79,7 @@ export default defineConfig({
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 121 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 125 个完整页面，纯 HTML+CSS，零依赖。' }],
 
     // Schema.org 结构化数据
     ['script', { type: 'application/ld+json' }, JSON.stringify({
@@ -319,7 +319,8 @@ export default defineConfig({
             { text: 'NOIR Parfum 奢华香水', link: '/pages/parfum-noir' },
             { text: 'Greenhouse 室内植物商店', link: '/pages/plant-shop' },
             { text: 'Meridian Horology 瑞士腕表', link: '/pages/meridian-horology' },
-            { text: 'Wabi Ceramics 日式陶艺', link: '/pages/wabi-ceramics' }
+            { text: 'Wabi Ceramics 日式陶艺', link: '/pages/wabi-ceramics' },
+            { text: 'ATELIER NOIR 极简时装', link: '/pages/brutalist-fashion' }
           ]
         },
         {
@@ -343,7 +344,8 @@ export default defineConfig({
             { text: 'TYPE 排版宣言', link: '/pages/typo-manifesto' },
             { text: 'ReelCraft AI 视频创作', link: '/pages/reelcraft-ai' },
             { text: 'Lunar 21 沉浸太空体验', link: '/pages/lunar-21' },
-            { text: 'Luminous Boundaries 虚拟展览', link: '/pages/virtual-exhibition' }
+            { text: 'Luminous Boundaries 虚拟展览', link: '/pages/virtual-exhibition' },
+            { text: 'Lumière 策展电影放映', link: '/pages/film-screening' }
           ]
         },
         {

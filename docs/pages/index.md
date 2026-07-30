@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 121 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 125 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1127,6 +1127,24 @@ const pages = [
     description: '日式侘寂美学陶艺电商，DM Serif Display 衬线字体 + CSS-only 陶瓷插画 + 暖色大地调 + 浮动装饰动画 + 产品网格 + 品牌哲学',
   },
   {
+    id: 'brutalist-fashion',
+    title: 'ATELIER NOIR 极简主义时装',
+    category: 'ecommerce',
+    tags: ['电商', '极简主义', 'Monochrome', 'Brutalist', '时装'],
+    colors: ['#0a0a0a', '#f6f6f6', '#c9a96e'],
+    rating: 9.4,
+    description: '灵感来自 Bécane Paris 的极简主义时装电商，全大写等宽字体 + 严格单色系 + 6列编号产品网格 + CSS 服装剪影 + Marquee 滚动',
+  },
+  {
+    id: 'film-screening',
+    title: 'Lumière 策展电影放映',
+    category: 'creative',
+    tags: ['电影', '策展', '暗色主题', '金色配色', '影院'],
+    colors: ['#08080d', '#c9a96e', '#f5f0eb'],
+    rating: 9.5,
+    description: '策展电影院体验页，Playfair Display 衬线字体 + 胶片齿孔装饰 + 胶片噪点纹理 + CSS 电影海报画廊 + 脉冲光晕动画 + 会员定价',
+  },
+  {
     id: 'codelens-review',
     title: 'CodeLens AI 代码审查平台',
     category: 'landing',
@@ -1224,7 +1242,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 123 个完整页面</span>
+      <span>📦 125 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
