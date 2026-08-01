@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kai Nakamura — Creative Technologist</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #06060c;
+    --bg-card: #0d0d16;
+    --bg-elevated: #14141f;
+    --neon-cyan: #00e5ff;
+    --neon-violet: #8b5cf6;
+    --neon-pink: #ec4899;
+    --neon-green: #22c55e;
+    --text-primary: #f0f0f5;
+    --text-secondary: #8888a0;
+    --border: rgba(255,255,255,0.06);
+    --font-sans: 'Space Grotesk', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── Canvas Background ─────────────────────────── */
+  #particle-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── Navigation ─────────────────────────────────── */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(6,6,12,0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--neon-cyan);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--neon-cyan); }
+
+  /* ── Hero ───────────────────────────────────────── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 4rem;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--neon-cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--neon-cyan);
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+  }
+
+  .hero h1 .gradient-text {
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-violet), var(--neon-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-description {
+    max-width: 600px;
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 0.85rem 2rem;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-violet));
+    color: #000;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,229,255,0.25);
+  }
+
+  .btn-ghost {
+    padding: 0.85rem 2rem;
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--neon-cyan);
+    background: rgba(0,229,255,0.05);
+  }
+
+  /* ── Stats Bar ──────────────────────────────────── */
+  .stats-bar {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 0 3rem;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .stat-item {
+    background: var(--bg-card);
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-number.cyan { color: var(--neon-cyan); }
+  .stat-number.violet { color: var(--neon-violet); }
+  .stat-number.pink { color: var(--neon-pink); }
+  .stat-number.green { color: var(--neon-green); }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── Section Common ─────────────────────────────── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 8rem 3rem;
+  }
+
+  .section-header {
+    margin-bottom: 4rem;
+  }
+
+  .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--neon-cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-eyebrow::before {
+    content: '//';
+    color: var(--text-secondary);
+    opacity: 0.5;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Projects Grid ──────────────────────────────── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0,229,255,0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .project-preview {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-preview .code-block {
+    position: absolute;
+    inset: 0;
+    padding: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+    overflow: hidden;
+  }
+
+  .code-block .keyword { color: var(--neon-violet); }
+  .code-block .string { color: var(--neon-green); }
+  .code-block .func { color: var(--neon-cyan); }
+  .code-block .comment { color: #555; }
+  .code-block .number { color: var(--neon-pink); }
+
+  .project-info {
+    padding: 1.5rem;
+  }
+
+  .project-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .project-year {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .project-type {
+    font-size: 0.7rem;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .project-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .project-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .project-tags span {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    padding: 0.25rem 0.6rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  /* ── Skills Section ─────────────────────────────── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: border-color 0.3s;
+  }
+
+  .skill-card:hover {
+    border-color: rgba(0,229,255,0.15);
+  }
+
+  .skill-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .skill-card:nth-child(1) .skill-icon { background: rgba(0,229,255,0.1); }
+  .skill-card:nth-child(2) .skill-icon { background: rgba(139,92,246,0.1); }
+  .skill-card:nth-child(3) .skill-icon { background: rgba(236,72,153,0.1); }
+  .skill-card:nth-child(4) .skill-icon { background: rgba(34,197,94,0.1); }
+  .skill-card:nth-child(5) .skill-icon { background: rgba(245,158,11,0.1); }
+  .skill-card:nth-child(6) .skill-icon { background: rgba(59,130,246,0.1); }
+
+  .skill-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .skill-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .skill-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .skill-card:nth-child(1) .skill-bar-fill { width: 95%; background: var(--neon-cyan); }
+  .skill-card:nth-child(2) .skill-bar-fill { width: 90%; background: var(--neon-violet); }
+  .skill-card:nth-child(3) .skill-bar-fill { width: 88%; background: var(--neon-pink); }
+  .skill-card:nth-child(4) .skill-bar-fill { width: 85%; background: var(--neon-green); }
+  .skill-card:nth-child(5) .skill-bar-fill { width: 82%; background: #f59e0b; }
+  .skill-card:nth-child(6) .skill-bar-fill { width: 80%; background: #3b82f6; }
+
+  /* ── Experience Timeline ────────────────────────── */
+  .timeline {
+    position: relative;
+    max-width: 800px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--neon-cyan), var(--neon-violet), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--neon-cyan);
+    box-shadow: 0 0 12px var(--neon-cyan);
+  }
+
+  .timeline-date {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--neon-cyan);
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  .timeline-company {
+    font-size: 0.9rem;
+    color: var(--neon-violet);
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ── Contact Section ────────────────────────────── */
+  .contact-section {
+    text-align: center;
+  }
+
+  .contact-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+  }
+
+  .contact-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.3s, transform 0.3s;
+    min-width: 200px;
+  }
+
+  .contact-card:hover {
+    border-color: rgba(0,229,255,0.3);
+    transform: translateY(-3px);
+  }
+
+  .contact-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+
+  .contact-value {
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  /* ── Footer ─────────────────────────────────────── */
+  .footer {
+    position: relative;
+    z-index: 1;
+    padding: 3rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  /* ── Marquee ────────────────────────────────────── */
+  .marquee {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 4rem;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+
+  .marquee-item {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+  }
+
+  .marquee-item .dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--neon-cyan);
+    margin-right: 0.75rem;
+    vertical-align: middle;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── Responsive ─────────────────────────────────── */
+  @media (max-width: 768px) {
+    .nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    section { padding: 5rem 1.5rem; }
+    .stats-bar { margin: 0 1.5rem; grid-template-columns: repeat(2, 1fr); }
+    .projects-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .contact-grid { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">KAI.DEV</div>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-eyebrow">Creative Technologist & Design Engineer</div>
+  <h1>
+    I build things<br>
+    that <span class="gradient-text">feel alive</span>
+  </h1>
+  <p class="hero-description">
+    I'm Kai Nakamura — I sit at the intersection of design and engineering, 
+    crafting interactive experiences that blur the line between art and technology. 
+    Currently based in Tokyo, building for the world.
+  </p>
+  <div class="hero-cta">
+    <a href="#work" class="btn-primary">View Projects</a>
+    <a href="#contact" class="btn-ghost">Get in Touch</a>
+  </div>
+</header>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number cyan">8+</div>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number violet">45+</div>
+    <div class="stat-label">Projects Shipped</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number pink">12</div>
+    <div class="stat-label">Awards Won</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number green">3</div>
+    <div class="stat-label">Open Source Tools</div>
+  </div>
+</div>
+
+<!-- Marquee -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="dot"></span>React</span>
+    <span class="marquee-item"><span class="dot"></span>Three.js</span>
+    <span class="marquee-item"><span class="dot"></span>WebGL</span>
+    <span class="marquee-item"><span class="dot"></span>GSAP</span>
+    <span class="marquee-item"><span class="dot"></span>Figma</span>
+    <span class="marquee-item"><span class="dot"></span>TypeScript</span>
+    <span class="marquee-item"><span class="dot"></span>Canvas API</span>
+    <span class="marquee-item"><span class="dot"></span>Shader GLSL</span>
+    <span class="marquee-item"><span class="dot"></span>Next.js</span>
+    <span class="marquee-item"><span class="dot"></span>Framer Motion</span>
+    <span class="marquee-item"><span class="dot"></span>React</span>
+    <span class="marquee-item"><span class="dot"></span>Three.js</span>
+    <span class="marquee-item"><span class="dot"></span>WebGL</span>
+    <span class="marquee-item"><span class="dot"></span>GSAP</span>
+    <span class="marquee-item"><span class="dot"></span>Figma</span>
+    <span class="marquee-item"><span class="dot"></span>TypeScript</span>
+    <span class="marquee-item"><span class="dot"></span>Canvas API</span>
+    <span class="marquee-item"><span class="dot"></span>Shader GLSL</span>
+    <span class="marquee-item"><span class="dot"></span>Next.js</span>
+    <span class="marquee-item"><span class="dot"></span>Framer Motion</span>
+  </div>
+</div>
+
+<!-- Projects -->
+<section id="work">
+  <div class="section-header">
+    <div class="section-eyebrow">Selected Work</div>
+    <h2 class="section-title">Featured Projects</h2>
+  </div>
+
+  <div class="projects-grid">
+    <a href="#" class="project-card">
+      <div class="project-preview">
+        <div class="code-block">
+          <span class="comment">// Particle system</span><br>
+          <span class="keyword">class</span> <span class="func">ParticleSystem</span> {<br>
+          &nbsp;&nbsp;<span class="func">constructor</span>(canvas) {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.ctx = canvas.<span class="func">getContext</span>(<span class="string">'2d'</span>);<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.particles = [];<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.count = <span class="number">500</span>;<br>
+          &nbsp;&nbsp;}<br><br>
+          &nbsp;&nbsp;<span class="func">animate</span>() {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.particles.<span class="func">forEach</span>(p => {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p.<span class="func">update</span>();<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p.<span class="func">draw</span>(<span class="keyword">this</span>.ctx);<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">
+          <span class="project-year">2026</span>
+          <span class="project-type">Interactive Installation</span>
+        </div>
+        <h3 class="project-title">Aurora — Generative Light</h3>
+        <p class="project-desc">A real-time particle system that responds to ambient sound, creating aurora-like light patterns. Exhibited at TeamLab Borderless.</p>
+        <div class="project-tags">
+          <span>WebGL</span><span>Web Audio API</span><span>Canvas</span><span>GLSL</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-preview">
+        <div class="code-block">
+          <span class="comment">// Morphing geometry</span><br>
+          <span class="keyword">const</span> morph = <span class="keyword">new</span> <span class="func">MorphGeometry</span>({<br>
+          &nbsp;&nbsp;from: <span class="string">'sphere'</span>,<br>
+          &nbsp;&nbsp;to: <span class="string">'torus'</span>,<br>
+          &nbsp;&nbsp;duration: <span class="number">2.5</span>,<br>
+          &nbsp;&nbsp;easing: <span class="string">'easeInOutCubic'</span>,<br>
+          });<br><br>
+          <span class="func">onFrame</span>(() => {<br>
+          &nbsp;&nbsp;renderer.<span class="func">render</span>(morph.mesh);<br>
+          });
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">
+          <span class="project-year">2025</span>
+          <span class="project-type">Brand Experience</span>
+        </div>
+        <h3 class="project-title">Flux — 3D Brand Identity</h3>
+        <p class="project-desc">A morphing 3D identity system for a design studio. Geometric shapes transform fluidly between brand states.</p>
+        <div class="project-tags">
+          <span>Three.js</span><span>React</span><span>GSAP</span><span>Figma</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-preview">
+        <div class="code-block">
+          <span class="comment">// Typography engine</span><br>
+          <span class="keyword">const</span> layout = <span class="keyword">new</span> <span class="func">VariableFont</span>({<br>
+          &nbsp;&nbsp;font: <span class="string">'InterVariable'</span>,<br>
+          &nbsp;&nbsp;axes: {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;wght: [<span class="number">100</span>, <span class="number">900</span>],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;opsz: [<span class="number">8</span>, <span class="number">144</span>],<br>
+          &nbsp;&nbsp;}<br>
+          });<br><br>
+          scroll.<span class="func">observe</span>(<span class="string">'[data-type]'</span>, {<br>
+          &nbsp;&nbsp;onIntersect: layout.<span class="func">animate</span><br>
+          });
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">
+          <span class="project-year">2025</span>
+          <span class="project-type">Editorial Platform</span>
+        </div>
+        <h3 class="project-title">TypeFlow — Dynamic Typography</h3>
+        <p class="project-desc">An editorial platform where variable fonts respond to reading context. Weight and optical size adapt in real-time.</p>
+        <div class="project-tags">
+          <span>Variable Fonts</span><span>Next.js</span><span>Motion</span><span>CSS</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-preview">
+        <div class="code-block">
+          <span class="comment">// Shader pipeline</span><br>
+          <span class="keyword">const</span> shader = <span class="func">createShader</span>(<br>
+          &nbsp;&nbsp;<span class="string">`<br>
+          &nbsp;&nbsp;void main() {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;vec2 uv = gl_FragCoord.xy / u_resolution;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;float d = length(uv - 0.5);<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;gl_FragColor = vec4(<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smoothstep(0.3, 0.5, d) * color,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.0<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;);<br>
+          &nbsp;&nbsp;}`</span><br>
+          );
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">
+          <span class="project-year">2024</span>
+          <span class="project-type">Creative Coding</span>
+        </div>
+        <h3 class="project-title">Prism — Shader Art Tool</h3>
+        <p class="project-desc">A browser-based shader editor for creating generative art. Real-time GLSL preview with sharing capabilities.</p>
+        <div class="project-tags">
+          <span>WebGL</span><span>GLSL</span><span>React</span><span>WASM</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-preview">
+        <div class="code-block">
+          <span class="comment">// Data visualization</span><br>
+          <span class="keyword">const</span> chart = <span class="keyword">new</span> <span class="func">RadialChart</span>({<br>
+          &nbsp;&nbsp;data: dataset.<span class="func">groupBy</span>(<span class="string">'category'</span>),<br>
+          &nbsp;&nbsp;innerRadius: <span class="number">80</span>,<br>
+          &nbsp;&nbsp;outerRadius: <span class="number">200</span>,<br>
+          &nbsp;&nbsp;animate: <span class="keyword">true</span>,<br>
+          });<br><br>
+          chart.<span class="func">onHover</span>(d => {<br>
+          &nbsp;&nbsp;tooltip.<span class="func">show</span>(d.label, d.value);<br>
+          });
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">
+          <span class="project-year">2024</span>
+          <span class="project-type">Data Visualization</span>
+        </div>
+        <h3 class="project-title">Orbit — Climate Dashboard</h3>
+        <p class="project-desc">An interactive data dashboard visualizing global climate patterns. Radial charts and animated globe projections.</p>
+        <div class="project-tags">
+          <span>D3.js</span><span>Canvas</span><span>TopoJSON</span><span>API</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="project-card">
+      <div class="project-preview">
+        <div class="code-block">
+          <span class="comment">// Spatial audio</span><br>
+          <span class="keyword">const</span> audio = <span class="keyword">new</span> <span class="func">SpatialAudio</span>({<br>
+          &nbsp;&nbsp;source: <span class="string">'ambient.wav'</span>,<br>
+          &nbsp;&nbsp;position: [<span class="number">0</span>, <span class="number">0</span>, <span class="number">-5</span>],<br>
+          &nbsp;&nbsp;rolloff: <span class="string">'inverse'</span>,<br>
+          });<br><br>
+          scene.<span class="func">add</span>(audio.mesh);<br>
+          audio.<span class="func">connect</span>(listener);
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">
+          <span class="project-year">2024</span>
+          <span class="project-type">Immersive Experience</span>
+        </div>
+        <h3 class="project-title">Echo — Spatial Soundscape</h3>
+        <p class="project-desc">A WebXR experience combining spatial audio with 3D environments. Users navigate soundscapes through movement.</p>
+        <div class="project-tags">
+          <span>WebXR</span><span>Web Audio</span><span>Three.js</span><span>React</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+  <div class="section-header">
+    <div class="section-eyebrow">Capabilities</div>
+    <h2 class="section-title">Tools & Technologies</h2>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">⚡</div>
+      <h3 class="skill-name">Creative Coding</h3>
+      <p class="skill-desc">Canvas, WebGL, GLSL shaders, generative art algorithms, and particle systems.</p>
+      <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🎨</div>
+      <h3 class="skill-name">UI/UX Design</h3>
+      <p class="skill-desc">Figma, prototyping, design systems, interaction design, and motion choreography.</p>
+      <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">✨</div>
+      <h3 class="skill-name">Motion Design</h3>
+      <p class="skill-desc">GSAP, Framer Motion, CSS animations, scroll-driven effects, and 3D transitions.</p>
+      <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔧</div>
+      <h3 class="skill-name">Frontend Engineering</h3>
+      <p class="skill-desc">React, Next.js, TypeScript, performance optimization, and component architecture.</p>
+      <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🌐</div>
+      <h3 class="skill-name">3D & WebXR</h3>
+      <p class="skill-desc">Three.js, React Three Fiber, spatial computing, and immersive web experiences.</p>
+      <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">📊</div>
+      <h3 class="skill-name">Data Visualization</h3>
+      <p class="skill-desc">D3.js, SVG charts, interactive dashboards, and data-driven storytelling.</p>
+      <div class="skill-bar"><div class="skill-bar-fill"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience -->
+<section id="experience">
+  <div class="section-header">
+    <div class="section-eyebrow">Journey</div>
+    <h2 class="section-title">Experience</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">2024 — Present</div>
+      <div class="timeline-title">Lead Creative Technologist</div>
+      <div class="timeline-company">Studio Phantom, Tokyo</div>
+      <div class="timeline-desc">Leading the interactive technology team, building immersive web experiences for global brands including Sony, Uniqlo, and TeamLab.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">2022 — 2024</div>
+      <div class="timeline-title">Design Engineer</div>
+      <div class="timeline-company">Vercel, San Francisco</div>
+      <div class="timeline-desc">Built interactive product demos and marketing experiences. Contributed to the Next.js documentation site and Vercel dashboard animations.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">2020 — 2022</div>
+      <div class="timeline-title">Creative Developer</div>
+      <div class="timeline-company">Active Theory, Los Angeles</div>
+      <div class="timeline-desc">Created award-winning interactive experiences for Google, Nike, and Spotify. Specialized in WebGL and creative coding.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">2018 — 2020</div>
+      <div class="timeline-title">Frontend Developer</div>
+      <div class="timeline-company">Freelance, Remote</div>
+      <div class="timeline-desc">Built interactive websites and data visualizations for startups and agencies. First Awwwards SOTD in 2019.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="contact-section">
+  <div class="section-header">
+    <div class="section-eyebrow">Let's Connect</div>
+    <h2 class="section-title">Get in Touch</h2>
+  </div>
+
+  <div class="contact-grid">
+    <a href="#" class="contact-card">
+      <div class="contact-icon">📧</div>
+      <div class="contact-label">Email</div>
+      <div class="contact-value">kai@nakamura.dev</div>
+    </a>
+    <a href="#" class="contact-card">
+      <div class="contact-icon">🐦</div>
+      <div class="contact-label">Twitter / X</div>
+      <div class="contact-value">@kainakamura</div>
+    </a>
+    <a href="#" class="contact-card">
+      <div class="contact-icon">💻</div>
+      <div class="contact-label">GitHub</div>
+      <div class="contact-value">kainakamura</div>
+    </a>
+    <a href="#" class="contact-card">
+      <div class="contact-icon">🎨</div>
+      <div class="contact-label">Dribbble</div>
+      <div class="contact-value">kainakamura</div>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2026 Kai Nakamura — Creative Technologist, Tokyo</p>
+</footer>
+
+<script>
+// Particle canvas background
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mouse = { x: 0, y: 0 };
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+document.addEventListener('mousemove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.radius = Math.random() * 1.5 + 0.5;
+    this.opacity = Math.random() * 0.3 + 0.1;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0, 229, 255, ${this.opacity})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) {
+  particles.push(new Particle());
+}
+
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(0, 229, 255, ${0.05 * (1 - dist / 120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
