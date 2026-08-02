@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 128 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 130 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1198,6 +1198,24 @@ const pages = [
     rating: 9.4,
     description: '清洁能源品牌落地页，CSS 太阳轨道动画 + 日光金配色 + 深色统计条 + 服务网格 + 地球浮动动画 + 流程步骤 + 客户评价',
   },
+  {
+    id: 'smart-home-dashboard',
+    title: 'NexaHome 智能家居仪表盘',
+    category: 'app',
+    tags: ['智能家居', 'IoT', '暗色主题', '设备控制', '毛玻璃'],
+    colors: ['#0a0a12', '#6366f1', '#06b6d4'],
+    rating: 9.5,
+    description: '暗色系智能家居 IoT 仪表盘，左侧图标导航 + 设备控制卡片 + 温度调节器 + 摄像头扫描线动画 + 能耗柱状图 + 场景预设',
+  },
+  {
+    id: 'ai-art-studio',
+    title: 'Lumina AI 艺术创作平台',
+    category: 'creative',
+    tags: ['AI', '图像生成', '创意工具', '暗色主题', '渐变'],
+    colors: ['#08080d', '#8b5cf6', '#ec4899'],
+    rating: 9.5,
+    description: '暗色系 AI 图像生成工具落地页，渐变文字 Hero + 提示词输入框脉冲发光 + CSS 生成艺术画廊 + 模型展示 + 三栏定价',
+  },
 ]
 
 const categories = [
@@ -1255,12 +1273,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 128 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 130 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="128 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="130 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1269,7 +1287,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 128 个完整页面</span>
+      <span>📦 130 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
