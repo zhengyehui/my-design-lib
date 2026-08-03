@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 130 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 131 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1216,6 +1216,15 @@ const pages = [
     rating: 9.5,
     description: '暗色系 AI 图像生成工具落地页，渐变文字 Hero + 提示词输入框脉冲发光 + CSS 生成艺术画廊 + 模型展示 + 三栏定价',
   },
+  {
+    id: 'nocode-builder',
+    title: 'BuildFlow 无代码应用构建平台',
+    category: 'landing',
+    tags: ['无代码', 'SaaS', '可视化编辑器', 'AI辅助', '产品落地页'],
+    colors: ['#6366f1', '#06b6d4', '#f8fafc'],
+    rating: 9.5,
+    description: '无代码应用构建平台落地页，CSS-only 产品编辑器 Mockup + 浮动协作光标 + 模板预览卡片 + 集成 Marquee + 三栏定价',
+  },
 ]
 
 const categories = [
@@ -1287,7 +1296,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 130 个完整页面</span>
+      <span>📦 131 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

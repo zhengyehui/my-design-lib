@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildFlow — 无代码应用构建平台</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ── Navigation ──────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-sticky);
+  padding: 0.8rem 2rem;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  transition: all 0.3s var(--ease-default);
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 1.25rem; font-weight: 800; color: var(--color-text);
+}
+.nav-logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 0.9rem; font-weight: 800;
+}
+.nav-links {
+  display: flex; align-items: center; gap: 2rem;
+  list-style: none; font-size: 0.9rem; font-weight: 500;
+}
+.nav-links a { color: var(--color-text-secondary); transition: color 0.2s; }
+.nav-links a:hover { color: var(--color-primary); }
+.nav-cta {
+  padding: 0.55rem 1.4rem; border-radius: var(--radius-full);
+  background: var(--color-primary); color: white !important;
+  font-weight: 600; font-size: 0.85rem;
+  transition: all 0.2s var(--ease-default);
+  box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(99,102,241,0.4); }
+
+/* ── Hero ────────────────────────────────────── */
+.hero {
+  padding: 10rem 2rem 6rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 1rem; border-radius: var(--radius-full);
+  background: var(--color-primary-ghost);
+  color: var(--color-primary); font-size: 0.8rem; font-weight: 600;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(99,102,241,0.15);
+}
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--color-primary);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900; line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  max-width: 800px; margin-left: auto; margin-right: auto;
+}
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 50%, #8b5cf6 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 1.15rem; color: var(--color-text-secondary);
+  max-width: 560px; margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+.hero-actions {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 4rem;
+}
+.btn-primary {
+  padding: 0.85rem 2rem; border-radius: var(--radius-full);
+  background: var(--color-primary); color: white;
+  font-weight: 700; font-size: 1rem; border: none; cursor: pointer;
+  transition: all 0.2s var(--ease-default);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.3);
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
+.btn-secondary {
+  padding: 0.85rem 2rem; border-radius: var(--radius-full);
+  background: transparent; color: var(--color-text);
+  font-weight: 600; font-size: 1rem;
+  border: 1.5px solid var(--color-border);
+  cursor: pointer; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-secondary:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+/* ── App Builder Mockup ──────────────────────── */
+.mockup-container {
+  max-width: 1000px; margin: 0 auto;
+  position: relative;
+}
+.mockup-window {
+  background: #0f0f14;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.05);
+  position: relative;
+}
+.mockup-titlebar {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  background: #1a1a24;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.mockup-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.mockup-dot.red { background: #ff5f57; }
+.mockup-dot.yellow { background: #febc2e; }
+.mockup-dot.green { background: #28c840; }
+.mockup-titlebar-text {
+  flex: 1; text-align: center;
+  font-size: 0.75rem; color: rgba(255,255,255,0.4);
+  font-weight: 500;
+}
+.mockup-body {
+  display: grid;
+  grid-template-columns: 220px 1fr 240px;
+  min-height: 420px;
+}
+/* Left sidebar */
+.mockup-sidebar {
+  background: #13131a;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  padding: 1rem;
+}
+.mockup-sidebar-title {
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.3); margin-bottom: 0.8rem; font-weight: 600;
+}
+.mockup-component {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.5rem 0.7rem; border-radius: 8px;
+  margin-bottom: 0.3rem;
+  font-size: 0.78rem; color: rgba(255,255,255,0.6);
+  transition: all 0.15s; cursor: default;
+}
+.mockup-component:hover { background: rgba(99,102,241,0.1); color: rgba(255,255,255,0.9); }
+.mockup-component.active { background: rgba(99,102,241,0.15); color: #818cf8; }
+.mockup-comp-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; flex-shrink: 0;
+}
+.mockup-comp-icon.purple { background: rgba(99,102,241,0.15); color: #818cf8; }
+.mockup-comp-icon.cyan { background: rgba(6,182,212,0.15); color: #22d3ee; }
+.mockup-comp-icon.green { background: rgba(16,185,129,0.15); color: #34d399; }
+.mockup-comp-icon.orange { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.mockup-comp-icon.pink { background: rgba(236,72,153,0.15); color: #f472b6; }
+
+/* Canvas area */
+.mockup-canvas {
+  background: #0f0f14;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.mockup-canvas::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.mockup-canvas-content {
+  position: relative; z-index: 1;
+}
+/* Mini app preview in canvas */
+.mini-app {
+  background: #1a1a24;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.mini-app-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.6rem 1rem;
+  background: rgba(99,102,241,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.mini-app-logo {
+  width: 20px; height: 20px; border-radius: 4px;
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+}
+.mini-app-nav-links {
+  display: flex; gap: 1rem;
+}
+.mini-app-nav-link {
+  width: 40px; height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.1);
+}
+.mini-app-hero {
+  padding: 2rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(6,182,212,0.05));
+}
+.mini-app-hero-title {
+  height: 12px; width: 60%; margin: 0 auto 0.6rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.15);
+}
+.mini-app-hero-sub {
+  height: 8px; width: 45%; margin: 0 auto 1rem;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.08);
+}
+.mini-app-hero-btn {
+  display: inline-block;
+  height: 24px; width: 80px;
+  border-radius: 12px;
+  background: var(--color-primary);
+}
+.mini-app-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem; padding: 1rem 1.5rem;
+}
+.mini-app-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 8px; padding: 0.8rem;
+}
+.mini-app-card-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+.mini-app-card-icon.c1 { background: rgba(99,102,241,0.2); }
+.mini-app-card-icon.c2 { background: rgba(6,182,212,0.2); }
+.mini-app-card-icon.c3 { background: rgba(16,185,129,0.2); }
+.mini-app-card-line {
+  height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08);
+  margin-bottom: 0.3rem;
+}
+.mini-app-card-line:last-child { width: 60%; }
+
+/* Selection handles on canvas */
+.canvas-selection {
+  position: absolute;
+  border: 2px solid #6366f1;
+  border-radius: 8px;
+  pointer-events: none;
+  animation: selection-pulse 2s ease-in-out infinite;
+}
+.canvas-selection.s1 { top: 60px; left: 30px; right: 30px; height: 180px; }
+.canvas-selection.s2 { top: 260px; left: 30px; width: 30%; height: 100px; }
+@keyframes selection-pulse {
+  0%, 100% { border-color: #6366f1; }
+  50% { border-color: #06b6d4; }
+}
+.canvas-handle {
+  position: absolute; width: 8px; height: 8px;
+  background: white; border: 2px solid #6366f1;
+  border-radius: 2px;
+}
+.canvas-handle.h1 { top: -4px; left: -4px; }
+.canvas-handle.h2 { top: -4px; right: -4px; }
+.canvas-handle.h3 { bottom: -4px; left: -4px; }
+.canvas-handle.h4 { bottom: -4px; right: -4px; }
+
+/* Right panel */
+.mockup-panel {
+  background: #13131a;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  padding: 1rem;
+}
+.mockup-panel-title {
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.3); margin-bottom: 0.8rem; font-weight: 600;
+}
+.mockup-prop-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.mockup-prop-label {
+  font-size: 0.72rem; color: rgba(255,255,255,0.4);
+}
+.mockup-prop-value {
+  font-size: 0.72rem; color: rgba(255,255,255,0.7);
+  padding: 0.2rem 0.5rem; border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+}
+.mockup-color-row {
+  display: flex; gap: 0.4rem; margin-top: 0.5rem;
+}
+.mockup-color-swatch {
+  width: 24px; height: 24px; border-radius: 6px;
+  border: 2px solid transparent;
+}
+.mockup-color-swatch.active { border-color: white; }
+.mockup-layer {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.35rem 0.5rem; border-radius: 6px;
+  font-size: 0.72rem; color: rgba(255,255,255,0.5);
+  margin-bottom: 0.2rem;
+}
+.mockup-layer.active { background: rgba(99,102,241,0.1); color: #818cf8; }
+.mockup-layer-icon {
+  width: 14px; height: 14px; border-radius: 3px;
+  background: rgba(255,255,255,0.08);
+}
+
+/* Floating cursor */
+.floating-cursor {
+  position: absolute;
+  width: 16px; height: 20px;
+  pointer-events: none;
+  z-index: 10;
+  animation: cursor-move 8s ease-in-out infinite;
+}
+.floating-cursor svg { width: 100%; height: 100%; }
+@keyframes cursor-move {
+  0% { top: 30%; left: 40%; }
+  25% { top: 50%; left: 55%; }
+  50% { top: 35%; left: 65%; }
+  75% { top: 55%; left: 45%; }
+  100% { top: 30%; left: 40%; }
+}
+.cursor-label {
+  position: absolute; top: 18px; left: 12px;
+  padding: 0.15rem 0.5rem; border-radius: 4px;
+  font-size: 0.6rem; font-weight: 600; color: white;
+  white-space: nowrap;
+}
+.cursor-label.c1 { background: #6366f1; }
+.cursor-label.c2 { background: #06b6d4; }
+
+/* ── Social Proof Bar ────────────────────────── */
+.social-proof {
+  padding: 3rem 2rem;
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+.social-proof-label {
+  font-size: 0.8rem; color: var(--color-text-muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 1.5rem; font-weight: 600;
+}
+.social-proof-logos {
+  display: flex; align-items: center; justify-content: center;
+  gap: 3rem; flex-wrap: wrap;
+  opacity: 0.4;
+}
+.social-proof-logo {
+  font-size: 1.3rem; font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+/* ── Features ────────────────────────────────── */
+.features {
+  padding: 6rem 2rem;
+  max-width: 1200px; margin: 0 auto;
+}
+.section-label {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--color-primary);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 800; line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.section-desc {
+  font-size: 1.05rem; color: var(--color-text-secondary);
+  max-width: 560px; line-height: 1.7;
+  margin-bottom: 3.5rem;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.feature-card {
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  transition: all 0.3s var(--ease-default);
+  position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  opacity: 0; transition: opacity 0.3s;
+}
+.feature-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 1.2rem;
+}
+.feature-icon.purple { background: rgba(99,102,241,0.1); }
+.feature-icon.cyan { background: rgba(6,182,212,0.1); }
+.feature-icon.green { background: rgba(16,185,129,0.1); }
+.feature-icon.orange { background: rgba(245,158,11,0.1); }
+.feature-icon.pink { background: rgba(236,72,153,0.1); }
+.feature-icon.blue { background: rgba(59,130,246,0.1); }
+.feature-card h3 {
+  font-size: 1.1rem; font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+.feature-card p {
+  font-size: 0.9rem; color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ── How It Works ────────────────────────────── */
+.how-it-works {
+  padding: 6rem 2rem;
+  background: var(--color-bg-subtle);
+}
+.how-it-works-inner {
+  max-width: 1200px; margin: 0 auto;
+  text-align: center;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.step {
+  position: relative;
+  padding: 2.5rem 2rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+.step-number {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white; font-size: 1.2rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+.step h3 {
+  font-size: 1.15rem; font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+.step p {
+  font-size: 0.9rem; color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+.step-connector {
+  display: none;
+}
+
+/* ── Templates Showcase ──────────────────────── */
+.templates {
+  padding: 6rem 2rem;
+  max-width: 1200px; margin: 0 auto;
+}
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+  margin-top: 3rem;
+}
+.template-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  transition: all 0.3s var(--ease-default);
+  cursor: pointer;
+}
+.template-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
+}
+.template-preview {
+  aspect-ratio: 4/3;
+  position: relative;
+  overflow: hidden;
+}
+.template-preview-inner {
+  position: absolute; inset: 0;
+  padding: 1rem;
+  display: flex; flex-direction: column;
+}
+/* Template 1: SaaS Dashboard */
+.tpl-saas { background: linear-gradient(135deg, #0f0f14, #1a1a24); }
+.tpl-saas .tpl-nav {
+  display: flex; gap: 0.4rem; margin-bottom: 0.8rem;
+}
+.tpl-saas .tpl-nav-dot {
+  width: 28px; height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.1);
+}
+.tpl-saas .tpl-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem; margin-bottom: 0.6rem;
+}
+.tpl-saas .tpl-stat {
+  background: rgba(99,102,241,0.1);
+  border-radius: 6px; padding: 0.5rem;
+}
+.tpl-saas .tpl-stat-bar {
+  height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.1);
+  margin-bottom: 0.3rem;
+}
+.tpl-saas .tpl-stat-bar-fill {
+  height: 100%; border-radius: 2px;
+  background: var(--color-primary);
+}
+.tpl-saas .tpl-chart {
+  flex: 1; background: rgba(255,255,255,0.02);
+  border-radius: 6px; position: relative;
+  overflow: hidden;
+}
+.tpl-saas .tpl-chart-line {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 60%;
+  background: linear-gradient(to top, rgba(99,102,241,0.2), transparent);
+  clip-path: polygon(0 80%, 15% 60%, 30% 70%, 45% 40%, 60% 50%, 75% 20%, 90% 35%, 100% 15%, 100% 100%, 0 100%);
+}
+
+/* Template 2: Ecommerce */
+.tpl-ecom { background: linear-gradient(135deg, #faf8f5, #f0ebe4); }
+.tpl-ecom .tpl-ecom-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.8rem;
+}
+.tpl-ecom .tpl-ecom-logo {
+  width: 20px; height: 20px; border-radius: 4px;
+  background: #c9a96e;
+}
+.tpl-ecom .tpl-ecom-cart {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(0,0,0,0.08);
+}
+.tpl-ecom .tpl-ecom-hero {
+  height: 60px; border-radius: 8px;
+  background: linear-gradient(135deg, #c9a96e, #e8d5b0);
+  margin-bottom: 0.6rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.tpl-ecom .tpl-ecom-hero-text {
+  width: 40px; height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.5);
+}
+.tpl-ecom .tpl-ecom-products {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem; flex: 1;
+}
+.tpl-ecom .tpl-ecom-product {
+  background: white; border-radius: 6px;
+  overflow: hidden;
+}
+.tpl-ecom .tpl-ecom-product-img {
+  height: 40px; background: rgba(0,0,0,0.04);
+}
+.tpl-ecom .tpl-ecom-product-info {
+  padding: 0.3rem;
+}
+.tpl-ecom .tpl-ecom-product-line {
+  height: 4px; border-radius: 2px;
+  background: rgba(0,0,0,0.06);
+  margin-bottom: 0.2rem;
+}
+.tpl-ecom .tpl-ecom-product-price {
+  height: 4px; width: 30%; border-radius: 2px;
+  background: #c9a96e;
+}
+
+/* Template 3: Portfolio */
+.tpl-portfolio { background: #0a0a0a; }
+.tpl-portfolio .tpl-portfolio-nav {
+  display: flex; justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.tpl-portfolio .tpl-portfolio-name {
+  width: 50px; height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.2);
+}
+.tpl-portfolio .tpl-portfolio-links {
+  display: flex; gap: 0.5rem;
+}
+.tpl-portfolio .tpl-portfolio-link {
+  width: 25px; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.1);
+}
+.tpl-portfolio .tpl-portfolio-hero {
+  text-align: center; margin-bottom: 1rem;
+}
+.tpl-portfolio .tpl-portfolio-title {
+  height: 10px; width: 70%; margin: 0 auto 0.4rem;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #6366f1, #ec4899);
+}
+.tpl-portfolio .tpl-portfolio-sub {
+  height: 6px; width: 40%; margin: 0 auto;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.1);
+}
+.tpl-portfolio .tpl-portfolio-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem; flex: 1;
+}
+.tpl-portfolio .tpl-portfolio-item {
+  border-radius: 6px; overflow: hidden;
+}
+.tpl-portfolio .tpl-portfolio-item:nth-child(1) { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.tpl-portfolio .tpl-portfolio-item:nth-child(2) { background: linear-gradient(135deg, #ec4899, #f43f5e); }
+.tpl-portfolio .tpl-portfolio-item:nth-child(3) { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.tpl-portfolio .tpl-portfolio-item:nth-child(4) { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+/* Template 4: Blog */
+.tpl-blog { background: #faf9f7; }
+.tpl-blog .tpl-blog-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.tpl-blog .tpl-blog-logo {
+  width: 40px; height: 6px; border-radius: 3px;
+  background: rgba(0,0,0,0.15);
+}
+.tpl-blog .tpl-blog-nav {
+  display: flex; gap: 0.5rem;
+}
+.tpl-blog .tpl-blog-nav-item {
+  width: 25px; height: 4px; border-radius: 2px;
+  background: rgba(0,0,0,0.08);
+}
+.tpl-blog .tpl-blog-featured {
+  display: grid; grid-template-columns: 1.5fr 1fr;
+  gap: 0.5rem; margin-bottom: 0.6rem;
+}
+.tpl-blog .tpl-blog-featured-img {
+  border-radius: 6px; overflow: hidden;
+  height: 70px;
+  background: linear-gradient(135deg, #1a1a1a, #333);
+}
+.tpl-blog .tpl-blog-featured-text {
+  display: flex; flex-direction: column; justify-content: center;
+}
+.tpl-blog .tpl-blog-featured-title {
+  height: 8px; width: 80%; border-radius: 4px;
+  background: rgba(0,0,0,0.12);
+  margin-bottom: 0.4rem;
+}
+.tpl-blog .tpl-blog-featured-desc {
+  height: 4px; width: 60%; border-radius: 2px;
+  background: rgba(0,0,0,0.06);
+}
+.tpl-blog .tpl-blog-list {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem; flex: 1;
+}
+.tpl-blog .tpl-blog-item {
+  background: white; border-radius: 6px; padding: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.tpl-blog .tpl-blog-item-img {
+  height: 30px; border-radius: 4px;
+  background: rgba(0,0,0,0.04);
+  margin-bottom: 0.3rem;
+}
+.tpl-blog .tpl-blog-item-line {
+  height: 4px; border-radius: 2px;
+  background: rgba(0,0,0,0.06);
+  margin-bottom: 0.2rem;
+}
+.tpl-blog .tpl-blog-item-line:last-child { width: 50%; }
+
+.template-info {
+  padding: 1rem 1.2rem;
+  background: var(--color-bg);
+}
+.template-info h4 {
+  font-size: 0.9rem; font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.template-info span {
+  font-size: 0.75rem; color: var(--color-text-muted);
+}
+
+/* ── Integrations Marquee ────────────────────── */
+.integrations {
+  padding: 5rem 2rem;
+  overflow: hidden;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+.integrations-label {
+  text-align: center;
+  font-size: 0.8rem; color: var(--color-text-muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 2rem; font-weight: 600;
+}
+.marquee {
+  display: flex; gap: 2rem;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  white-space: nowrap;
+  font-size: 0.85rem; font-weight: 600;
+  color: var(--color-text-secondary);
+}
+.marquee-icon {
+  width: 20px; height: 20px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem;
+}
+
+/* ── Pricing ─────────────────────────────────── */
+.pricing {
+  padding: 6rem 2rem;
+  max-width: 1200px; margin: 0 auto;
+  text-align: center;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+  max-width: 960px; margin-left: auto; margin-right: auto;
+}
+.pricing-card {
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  text-align: left;
+  transition: all 0.3s var(--ease-default);
+  position: relative;
+}
+.pricing-card.popular {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary), var(--shadow-lg);
+}
+.pricing-card.popular::before {
+  content: '最受欢迎';
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  padding: 0.25rem 1rem; border-radius: var(--radius-full);
+  background: var(--color-primary); color: white;
+  font-size: 0.75rem; font-weight: 600;
+}
+.pricing-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+.pricing-plan {
+  font-size: 0.85rem; font-weight: 600;
+  color: var(--color-primary); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 0.5rem;
+}
+.pricing-price {
+  font-size: 2.5rem; font-weight: 900;
+  margin-bottom: 0.3rem;
+}
+.pricing-price span {
+  font-size: 1rem; font-weight: 500;
+  color: var(--color-text-muted);
+}
+.pricing-desc {
+  font-size: 0.85rem; color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.pricing-features {
+  list-style: none; margin-bottom: 2rem;
+}
+.pricing-features li {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.4rem 0;
+  font-size: 0.9rem; color: var(--color-text-secondary);
+}
+.pricing-features li::before {
+  content: '✓';
+  color: var(--color-success); font-weight: 700;
+  font-size: 0.8rem;
+}
+.pricing-btn {
+  display: block; width: 100%;
+  padding: 0.75rem; border-radius: var(--radius-full);
+  font-weight: 600; font-size: 0.9rem;
+  text-align: center; cursor: pointer;
+  transition: all 0.2s; border: none;
+}
+.pricing-btn.primary {
+  background: var(--color-primary); color: white;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+}
+.pricing-btn.primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.4); }
+.pricing-btn.secondary {
+  background: transparent; color: var(--color-text);
+  border: 1.5px solid var(--color-border);
+}
+.pricing-btn.secondary:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+/* ── Testimonials ────────────────────────────── */
+.testimonials {
+  padding: 6rem 2rem;
+  background: var(--color-bg-subtle);
+}
+.testimonials-inner {
+  max-width: 1200px; margin: 0 auto;
+  text-align: center;
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.testimonial-card {
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  text-align: left;
+}
+.testimonial-stars {
+  color: #f59e0b;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+}
+.testimonial-text {
+  font-size: 0.95rem; line-height: 1.7;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.testimonial-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.85rem; color: white;
+}
+.testimonial-avatar.a1 { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.testimonial-avatar.a2 { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.testimonial-avatar.a3 { background: linear-gradient(135deg, #10b981, #059669); }
+.testimonial-name {
+  font-size: 0.9rem; font-weight: 700;
+}
+.testimonial-role {
+  font-size: 0.8rem; color: var(--color-text-muted);
+}
+
+/* ── CTA ─────────────────────────────────────── */
+.cta {
+  padding: 6rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(99,102,241,0.05), rgba(6,182,212,0.03));
+}
+.cta-inner {
+  position: relative; z-index: 1;
+  max-width: 640px; margin: 0 auto;
+}
+.cta h2 {
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 800; line-height: 1.15;
+  margin-bottom: 1rem;
+}
+.cta p {
+  font-size: 1.05rem; color: var(--color-text-secondary);
+  margin-bottom: 2rem; line-height: 1.7;
+}
+.cta-actions {
+  display: flex; gap: 1rem; justify-content: center;
+  flex-wrap: wrap;
+}
+.cta-note {
+  margin-top: 1rem;
+  font-size: 0.8rem; color: var(--color-text-muted);
+}
+
+/* ── Footer ──────────────────────────────────── */
+.footer {
+  padding: 4rem 2rem 2rem;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand h3 {
+  font-size: 1.2rem; font-weight: 800;
+  margin-bottom: 0.8rem;
+}
+.footer-brand p {
+  font-size: 0.85rem; color: var(--color-text-secondary);
+  line-height: 1.6; max-width: 280px;
+}
+.footer-col h4 {
+  font-size: 0.8rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 0.5rem; }
+.footer-col a {
+  font-size: 0.9rem; color: var(--color-text-secondary);
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--color-primary); }
+.footer-bottom {
+  max-width: 1200px; margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.8rem; color: var(--color-text-muted);
+}
+.footer-bottom-links {
+  display: flex; gap: 1.5rem;
+}
+.footer-bottom-links a { color: var(--color-text-muted); }
+.footer-bottom-links a:hover { color: var(--color-primary); }
+
+/* ── Responsive ──────────────────────────────── */
+@media (max-width: 1024px) {
+  .mockup-body { grid-template-columns: 1fr; }
+  .mockup-sidebar, .mockup-panel { display: none; }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .templates-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero { padding: 8rem 1.5rem 4rem; }
+  .features-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .templates-grid { grid-template-columns: 1fr 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+@media (max-width: 480px) {
+  .templates-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">B</div>
+      BuildFlow
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">功能</a></li>
+      <li><a href="#templates">模板</a></li>
+      <li><a href="#pricing">定价</a></li>
+      <li><a href="#">文档</a></li>
+      <li><a href="#" class="nav-cta">免费开始</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    v2.0 全新发布 — 支持 AI 辅助构建
+  </div>
+  <h1>
+    无需代码<br>
+    <span class="gradient-text">构建专业级应用</span>
+  </h1>
+  <p class="hero-sub">
+    拖拽式可视化编辑器，内置 200+ 组件和模板。<br>
+    从原型到上线，只需数分钟而非数周。
+  </p>
+  <div class="hero-actions">
+    <button class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      免费开始构建
+    </button>
+    <button class="btn-secondary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      观看演示
+    </button>
+  </div>
+
+  <!-- App Builder Mockup -->
+  <div class="mockup-container">
+    <div class="mockup-window">
+      <div class="mockup-titlebar">
+        <div class="mockup-dot red"></div>
+        <div class="mockup-dot yellow"></div>
+        <div class="mockup-dot green"></div>
+        <span class="mockup-titlebar-text">BuildFlow — 我的应用.flow</span>
+      </div>
+      <div class="mockup-body">
+        <!-- Left Sidebar: Components -->
+        <div class="mockup-sidebar">
+          <div class="mockup-sidebar-title">组件库</div>
+          <div class="mockup-component active">
+            <div class="mockup-comp-icon purple">▢</div>
+            容器
+          </div>
+          <div class="mockup-component">
+            <div class="mockup-comp-icon cyan">T</div>
+            文本
+          </div>
+          <div class="mockup-component">
+            <div class="mockup-comp-icon green">◻</div>
+            按钮
+          </div>
+          <div class="mockup-component">
+            <div class="mockup-comp-icon orange">▦</div>
+            表单
+          </div>
+          <div class="mockup-component">
+            <div class="mockup-comp-icon pink">⊞</div>
+            数据表格
+          </div>
+          <div class="mockup-component">
+            <div class="mockup-comp-icon purple">◈</div>
+            图表
+          </div>
+          <div class="mockup-component">
+            <div class="mockup-comp-icon cyan">☰</div>
+            导航栏
+          </div>
+          <div class="mockup-component">
+            <div class="mockup-comp-icon green">▣</div>
+            卡片
+          </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="mockup-canvas">
+          <div class="mockup-canvas-content">
+            <div class="mini-app">
+              <div class="mini-app-nav">
+                <div class="mini-app-logo"></div>
+                <div class="mini-app-nav-links">
+                  <div class="mini-app-nav-link"></div>
+                  <div class="mini-app-nav-link"></div>
+                  <div class="mini-app-nav-link"></div>
+                </div>
+              </div>
+              <div class="mini-app-hero">
+                <div class="mini-app-hero-title"></div>
+                <div class="mini-app-hero-sub"></div>
+                <div class="mini-app-hero-btn"></div>
+              </div>
+              <div class="mini-app-cards">
+                <div class="mini-app-card">
+                  <div class="mini-app-card-icon c1"></div>
+                  <div class="mini-app-card-line"></div>
+                  <div class="mini-app-card-line"></div>
+                  <div class="mini-app-card-line"></div>
+                </div>
+                <div class="mini-app-card">
+                  <div class="mini-app-card-icon c2"></div>
+                  <div class="mini-app-card-line"></div>
+                  <div class="mini-app-card-line"></div>
+                  <div class="mini-app-card-line"></div>
+                </div>
+                <div class="mini-app-card">
+                  <div class="mini-app-card-icon c3"></div>
+                  <div class="mini-app-card-line"></div>
+                  <div class="mini-app-card-line"></div>
+                  <div class="mini-app-card-line"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Selection handles -->
+          <div class="canvas-selection s1">
+            <div class="canvas-handle h1"></div>
+            <div class="canvas-handle h2"></div>
+            <div class="canvas-handle h3"></div>
+            <div class="canvas-handle h4"></div>
+          </div>
+          <!-- Floating cursors -->
+          <div class="floating-cursor">
+            <svg viewBox="0 0 16 20" fill="none">
+              <path d="M0 0L16 12L8 12L12 20L8 18L4 12L0 12V0Z" fill="#6366f1"/>
+            </svg>
+            <span class="cursor-label c1">Sarah</span>
+          </div>
+        </div>
+
+        <!-- Right Panel: Properties -->
+        <div class="mockup-panel">
+          <div class="mockup-panel-title">属性</div>
+          <div class="mockup-prop-row">
+            <span class="mockup-prop-label">宽度</span>
+            <span class="mockup-prop-value">100%</span>
+          </div>
+          <div class="mockup-prop-row">
+            <span class="mockup-prop-label">内边距</span>
+            <span class="mockup-prop-value">24px</span>
+          </div>
+          <div class="mockup-prop-row">
+            <span class="mockup-prop-label">圆角</span>
+            <span class="mockup-prop-value">12px</span>
+          </div>
+          <div class="mockup-prop-row">
+            <span class="mockup-prop-label">背景</span>
+            <span class="mockup-prop-value">#1a1a24</span>
+          </div>
+          <div style="margin-top: 1rem;">
+            <div class="mockup-panel-title">颜色</div>
+            <div class="mockup-color-row">
+              <div class="mockup-color-swatch active" style="background: #6366f1;"></div>
+              <div class="mockup-color-swatch" style="background: #06b6d4;"></div>
+              <div class="mockup-color-swatch" style="background: #10b981;"></div>
+              <div class="mockup-color-swatch" style="background: #f59e0b;"></div>
+              <div class="mockup-color-swatch" style="background: #ec4899;"></div>
+            </div>
+          </div>
+          <div style="margin-top: 1rem;">
+            <div class="mockup-panel-title">图层</div>
+            <div class="mockup-layer active">
+              <div class="mockup-layer-icon"></div>
+              Hero Section
+            </div>
+            <div class="mockup-layer">
+              <div class="mockup-layer-icon"></div>
+              Navigation
+            </div>
+            <div class="mockup-layer">
+              <div class="mockup-layer-icon"></div>
+              Card Grid
+            </div>
+            <div class="mockup-layer">
+              <div class="mockup-layer-icon"></div>
+              Footer
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Social Proof -->
+<section class="social-proof">
+  <div class="social-proof-label">深受 10,000+ 团队信赖</div>
+  <div class="social-proof-logos">
+    <span class="social-proof-logo">Stripe</span>
+    <span class="social-proof-logo">Vercel</span>
+    <span class="social-proof-logo">Linear</span>
+    <span class="social-proof-logo">Notion</span>
+    <span class="social-proof-logo">Figma</span>
+    <span class="social-proof-logo">Raycast</span>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    核心功能
+  </div>
+  <h2 class="section-title">为什么选择 BuildFlow？</h2>
+  <p class="section-desc">
+    强大的可视化编辑器，配合 AI 辅助，让每个人都能构建专业级应用。
+  </p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon purple">🎨</div>
+      <h3>可视化拖拽编辑</h3>
+      <p>所见即所得的编辑体验，拖拽组件即可搭建页面。支持响应式预览，实时同步多端效果。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon cyan">🤖</div>
+      <h3>AI 智能助手</h3>
+      <p>描述你的需求，AI 自动生成页面布局和组件配置。支持自然语言修改样式和逻辑。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon green">⚡</div>
+      <h3>一键部署上线</h3>
+      <p>内置 CI/CD 流水线，点击即可部署到全球 CDN。自动生成 SSL 证书，自定义域名绑定。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon orange">🔌</div>
+      <h3>丰富的集成生态</h3>
+      <p>无缝对接 100+ 第三方服务：支付、认证、数据库、邮件、分析，开箱即用。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon pink">👥</div>
+      <h3>多人实时协作</h3>
+      <p>像 Figma 一样多人同时编辑，实时看到队友的光标和修改。支持评论和版本历史。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon blue">📊</div>
+      <h3>内置数据引擎</h3>
+      <p>可视化构建数据模型和 API，无需后端代码。支持实时数据库、文件存储和用户认证。</p>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+  <div class="how-it-works-inner">
+    <div class="section-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      工作流程
+    </div>
+    <h2 class="section-title">三步，从想法到上线</h2>
+    <p class="section-desc" style="margin-left: auto; margin-right: auto;">
+      不需要编程基础，不需要设计经验。<br>
+      BuildFlow 让每个人都能创造。
+    </p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>选择模板或从零开始</h3>
+        <p>从 200+ 精心设计的模板中挑选，或使用 AI 根据你的描述自动生成初始布局。</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>可视化编辑与定制</h3>
+        <p>拖拽组件、调整样式、绑定数据。实时预览效果，所见即所得。</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>一键发布到线上</h3>
+        <p>连接自定义域名，自动部署到全球 CDN。支持 A/B 测试和分析追踪。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Templates -->
+<section class="templates" id="templates">
+  <div class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 3v18"/></svg>
+    模板库
+  </div>
+  <h2 class="section-title">从模板开始，快速构建</h2>
+  <p class="section-desc">
+    覆盖 SaaS、电商、作品集、博客等主流场景，<br>
+    每个模板都经过精心设计和性能优化。
+  </p>
+  <div class="templates-grid">
+    <div class="template-card">
+      <div class="template-preview">
+        <div class="template-preview-inner tpl-saas">
+          <div class="tpl-nav">
+            <div class="tpl-nav-dot"></div>
+            <div class="tpl-nav-dot"></div>
+            <div class="tpl-nav-dot"></div>
+          </div>
+          <div class="tpl-stats">
+            <div class="tpl-stat">
+              <div class="tpl-stat-bar"><div class="tpl-stat-bar-fill" style="width:70%"></div></div>
+              <div class="tpl-stat-bar"><div class="tpl-stat-bar-fill" style="width:45%"></div></div>
+            </div>
+            <div class="tpl-stat">
+              <div class="tpl-stat-bar"><div class="tpl-stat-bar-fill" style="width:85%"></div></div>
+              <div class="tpl-stat-bar"><div class="tpl-stat-bar-fill" style="width:60%"></div></div>
+            </div>
+            <div class="tpl-stat">
+              <div class="tpl-stat-bar"><div class="tpl-stat-bar-fill" style="width:55%"></div></div>
+              <div class="tpl-stat-bar"><div class="tpl-stat-bar-fill" style="width:90%"></div></div>
+            </div>
+          </div>
+          <div class="tpl-chart"><div class="tpl-chart-line"></div></div>
+        </div>
+      </div>
+      <div class="template-info">
+        <h4>SaaS 仪表盘</h4>
+        <span>数据驱动的管理后台</span>
+      </div>
+    </div>
+    <div class="template-card">
+      <div class="template-preview">
+        <div class="template-preview-inner tpl-ecom">
+          <div class="tpl-ecom-header">
+            <div class="tpl-ecom-logo"></div>
+            <div class="tpl-ecom-cart"></div>
+          </div>
+          <div class="tpl-ecom-hero"><div class="tpl-ecom-hero-text"></div></div>
+          <div class="tpl-ecom-products">
+            <div class="tpl-ecom-product">
+              <div class="tpl-ecom-product-img"></div>
+              <div class="tpl-ecom-product-info">
+                <div class="tpl-ecom-product-line"></div>
+                <div class="tpl-ecom-product-price"></div>
+              </div>
+            </div>
+            <div class="tpl-ecom-product">
+              <div class="tpl-ecom-product-img"></div>
+              <div class="tpl-ecom-product-info">
+                <div class="tpl-ecom-product-line"></div>
+                <div class="tpl-ecom-product-price"></div>
+              </div>
+            </div>
+            <div class="tpl-ecom-product">
+              <div class="tpl-ecom-product-img"></div>
+              <div class="tpl-ecom-product-info">
+                <div class="tpl-ecom-product-line"></div>
+                <div class="tpl-ecom-product-price"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="template-info">
+        <h4>精品电商</h4>
+        <span>高转化率产品展示</span>
+      </div>
+    </div>
+    <div class="template-card">
+      <div class="template-preview">
+        <div class="template-preview-inner tpl-portfolio">
+          <div class="tpl-portfolio-nav">
+            <div class="tpl-portfolio-name"></div>
+            <div class="tpl-portfolio-links">
+              <div class="tpl-portfolio-link"></div>
+              <div class="tpl-portfolio-link"></div>
+              <div class="tpl-portfolio-link"></div>
+            </div>
+          </div>
+          <div class="tpl-portfolio-hero">
+            <div class="tpl-portfolio-title"></div>
+            <div class="tpl-portfolio-sub"></div>
+          </div>
+          <div class="tpl-portfolio-grid">
+            <div class="tpl-portfolio-item"></div>
+            <div class="tpl-portfolio-item"></div>
+            <div class="tpl-portfolio-item"></div>
+            <div class="tpl-portfolio-item"></div>
+          </div>
+        </div>
+      </div>
+      <div class="template-info">
+        <h4>创意作品集</h4>
+        <span>设计师与创作者必备</span>
+      </div>
+    </div>
+    <div class="template-card">
+      <div class="template-preview">
+        <div class="template-preview-inner tpl-blog">
+          <div class="tpl-blog-header">
+            <div class="tpl-blog-logo"></div>
+            <div class="tpl-blog-nav">
+              <div class="tpl-blog-nav-item"></div>
+              <div class="tpl-blog-nav-item"></div>
+              <div class="tpl-blog-nav-item"></div>
+            </div>
+          </div>
+          <div class="tpl-blog-featured">
+            <div class="tpl-blog-featured-img"></div>
+            <div class="tpl-blog-featured-text">
+              <div class="tpl-blog-featured-title"></div>
+              <div class="tpl-blog-featured-desc"></div>
+            </div>
+          </div>
+          <div class="tpl-blog-list">
+            <div class="tpl-blog-item">
+              <div class="tpl-blog-item-img"></div>
+              <div class="tpl-blog-item-line"></div>
+              <div class="tpl-blog-item-line"></div>
+            </div>
+            <div class="tpl-blog-item">
+              <div class="tpl-blog-item-img"></div>
+              <div class="tpl-blog-item-line"></div>
+              <div class="tpl-blog-item-line"></div>
+            </div>
+            <div class="tpl-blog-item">
+              <div class="tpl-blog-item-img"></div>
+              <div class="tpl-blog-item-line"></div>
+              <div class="tpl-blog-item-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="template-info">
+        <h4>内容博客</h4>
+        <span>优雅的阅读体验</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Integrations Marquee -->
+<section class="integrations">
+  <div class="integrations-label">无缝集成你喜爱的工具</div>
+  <div style="overflow: hidden;">
+    <div class="marquee">
+      <div class="marquee-item"><div class="marquee-icon" style="background:#635bff;color:white;">S</div> Stripe</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#000;color:white;">V</div> Vercel</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#5E6AD2;color:white;">L</div> Linear</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#000;color:white;">N</div> Notion</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#1DA1F2;color:white;">T</div> Twitter</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#25D366;color:white;">W</div> WhatsApp</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#FF6B6B;color:white;">M</div> Mailchimp</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#FF9900;color:white;">A</div> AWS</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#4285F4;color:white;">G</div> Google</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#0A66C2;color:white;">L</div> LinkedIn</div>
+      <!-- Duplicate for seamless loop -->
+      <div class="marquee-item"><div class="marquee-icon" style="background:#635bff;color:white;">S</div> Stripe</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#000;color:white;">V</div> Vercel</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#5E6AD2;color:white;">L</div> Linear</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#000;color:white;">N</div> Notion</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#1DA1F2;color:white;">T</div> Twitter</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#25D366;color:white;">W</div> WhatsApp</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#FF6B6B;color:white;">M</div> Mailchimp</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#FF9900;color:white;">A</div> AWS</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#4285F4;color:white;">G</div> Google</div>
+      <div class="marquee-item"><div class="marquee-icon" style="background:#0A66C2;color:white;">L</div> LinkedIn</div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="section-label">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    定价方案
+  </div>
+  <h2 class="section-title">简单透明的定价</h2>
+  <p class="section-desc" style="margin-left: auto; margin-right: auto;">
+    从免费开始，按需升级。所有方案均含核心功能。
+  </p>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-plan">Free</div>
+      <div class="pricing-price">$0 <span>/ 月</span></div>
+      <p class="pricing-desc">适合个人项目和原型验证</p>
+      <ul class="pricing-features">
+        <li>3 个项目</li>
+        <li>100+ 基础组件</li>
+        <li>社区模板</li>
+        <li>BuildFlow 子域名</li>
+        <li>基础分析</li>
+      </ul>
+      <button class="pricing-btn secondary">免费开始</button>
+    </div>
+    <div class="pricing-card popular">
+      <div class="pricing-plan">Pro</div>
+      <div class="pricing-price">$29 <span>/ 月</span></div>
+      <p class="pricing-desc">适合专业开发者和小团队</p>
+      <ul class="pricing-features">
+        <li>无限项目</li>
+        <li>200+ 高级组件</li>
+        <li>全部模板</li>
+        <li>自定义域名</li>
+        <li>AI 辅助构建</li>
+        <li>多人协作</li>
+        <li>优先支持</li>
+      </ul>
+      <button class="pricing-btn primary">开始 14 天试用</button>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-plan">Enterprise</div>
+      <div class="pricing-price">定制</div>
+      <p class="pricing-desc">适合大型团队和企业级需求</p>
+      <ul class="pricing-features">
+        <li>Pro 全部功能</li>
+        <li>私有化部署</li>
+        <li>SSO 单点登录</li>
+        <li>专属客户经理</li>
+        <li>SLA 保障</li>
+        <li>自定义集成</li>
+      </ul>
+      <button class="pricing-btn secondary">联系销售</button>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      用户评价
+    </div>
+    <h2 class="section-title">听听用户怎么说</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">
+          "BuildFlow 让我们的产品上线时间从 3 个月缩短到 2 周。AI 辅助功能特别好用，描述需求就能自动生成页面。"
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar a1">L</div>
+          <div>
+            <div class="testimonial-name">李明</div>
+            <div class="testimonial-role">创始人 @ TechStart</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">
+          "作为设计师，我最喜欢它的实时协作功能。和开发团队一起编辑，效率提升了 5 倍。模板质量也很高。"
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar a2">S</div>
+          <div>
+            <div class="testimonial-name">Sarah Chen</div>
+            <div class="testimonial-role">设计总监 @ CreativeLab</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">
+          "终于找到一个不需要写代码就能构建复杂应用的工具。数据引擎和 API 集成非常强大，完全满足业务需求。"
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar a3">W</div>
+          <div>
+            <div class="testimonial-name">王小红</div>
+            <div class="testimonial-role">产品经理 @ DataFlow</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <h2>准备好开始构建了吗？</h2>
+    <p>加入 10,000+ 团队，用 BuildFlow 将想法变为现实。<br>免费开始，无需信用卡。</p>
+    <div class="cta-actions">
+      <button class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        免费开始构建
+      </button>
+      <button class="btn-secondary">预约演示</button>
+    </div>
+    <p class="cta-note">✓ 免费计划永久可用 &nbsp; ✓ 无需信用卡 &nbsp; ✓ 5 分钟上手</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>BuildFlow</h3>
+      <p>让每个人都能构建专业级应用的无代码平台。从原型到上线，只需数分钟。</p>
+    </div>
+    <div class="footer-col">
+      <h4>产品</h4>
+      <ul>
+        <li><a href="#">功能</a></li>
+        <li><a href="#">模板</a></li>
+        <li><a href="#">定价</a></li>
+        <li><a href="#">更新日志</a></li>
+        <li><a href="#">路线图</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>资源</h4>
+      <ul>
+        <li><a href="#">文档</a></li>
+        <li><a href="#">教程</a></li>
+        <li><a href="#">博客</a></li>
+        <li><a href="#">社区</a></li>
+        <li><a href="#">API</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>公司</h4>
+      <ul>
+        <li><a href="#">关于我们</a></li>
+        <li><a href="#">招聘</a></li>
+        <li><a href="#">联系我们</a></li>
+        <li><a href="#">隐私政策</a></li>
+        <li><a href="#">服务条款</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 BuildFlow. All rights reserved.</span>
+    <div class="footer-bottom-links">
+      <a href="#">Twitter</a>
+      <a href="#">GitHub</a>
+      <a href="#">Discord</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
