@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Léa Moreau — Illustrator Lookbook</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Reset & Tokens ─── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Local palette — falls back to tokens where available */
+      --bg:          var(--color-background, #FDF6EC);
+      --bg-alt:      var(--color-surface,    #F7EFE2);
+      --text:        var(--color-text,       #2B2B2B);
+      --text-muted:  var(--color-text-muted, #7A7267);
+      --accent:      var(--color-primary,    #C2703E);
+      --accent-dark: #A85C2E;
+      --cream:       #FAF3E6;
+      --charcoal:    #1E1E1E;
+      --serif:       'Playfair Display', Georgia, 'Times New Roman', serif;
+      --sans:        'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── Fade-in on scroll (pure CSS with animation-timeline where supported) ─── */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes drawLine {
+      from { width: 0; }
+      to   { width: 80px; }
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-12px); }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      animation: fadeSlideUp 0.8s ease-out forwards;
+    }
+
+    .animate-on-scroll:nth-child(1) { animation-delay: 0.05s; }
+    .animate-on-scroll:nth-child(2) { animation-delay: 0.15s; }
+    .animate-on-scroll:nth-child(3) { animation-delay: 0.25s; }
+    .animate-on-scroll:nth-child(4) { animation-delay: 0.35s; }
+    .animate-on-scroll:nth-child(5) { animation-delay: 0.45s; }
+    .animate-on-scroll:nth-child(6) { animation-delay: 0.55s; }
+    .animate-on-scroll:nth-child(7) { animation-delay: 0.65s; }
+    .animate-on-scroll:nth-child(8) { animation-delay: 0.75s; }
+
+    /* ─── Navigation ─── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: rgba(253, 246, 236, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: box-shadow 0.3s ease;
+    }
+    .nav.scrolled { box-shadow: 0 1px 20px rgba(0,0,0,0.06); }
+
+    .nav__logo {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .nav__logo span { color: var(--accent); }
+
+    .nav__links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav__links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      position: relative;
+      transition: color 0.25s ease;
+    }
+    .nav__links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    .nav__links a:hover { color: var(--accent); }
+    .nav__links a:hover::after { width: 100%; }
+
+    /* ─── Hero ─── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 6rem;
+      overflow: hidden;
+    }
+
+    /* Subtle decorative shapes */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -10%; right: -5%;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(194,112,62,0.08) 0%, transparent 70%);
+      animation: floatSlow 8s ease-in-out infinite;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -8%; left: -8%;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(194,112,62,0.06) 0%, transparent 70%);
+      animation: floatSlow 10s ease-in-out infinite 2s;
+    }
+
+    .hero__eyebrow {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      animation: fadeIn 1s ease-out 0.2s both;
+    }
+
+    .hero__name {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+      animation: fadeSlideUp 1s ease-out 0.4s both;
+    }
+
+    .hero__tagline {
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin-bottom: 3rem;
+      animation: fadeSlideUp 1s ease-out 0.6s both;
+    }
+
+    .hero__line {
+      width: 80px; height: 2px;
+      background: var(--accent);
+      margin-bottom: 3rem;
+      animation: drawLine 1s ease-out 0.8s both;
+    }
+
+    .hero__scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      animation: fadeIn 1s ease-out 1.2s both;
+    }
+    .hero__scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: floatSlow 2s ease-in-out infinite;
+    }
+
+    /* ─── Section headings ─── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .section-header__label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .section-header__title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--charcoal);
+    }
+
+    /* ─── Selected Works (Masonry Grid) ─── */
+    .works {
+      padding: 6rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .works__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .work-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+                  box-shadow 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .work-card:hover {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.12);
+    }
+
+    /* Varied sizes */
+    .work-card--wide   { grid-column: span 2; }
+    .work-card--tall   { grid-row: span 2; }
+    .work-card--large  { grid-column: span 2; grid-row: span 2; }
+
+    /* Placeholder art using CSS gradients & patterns */
+    .work-card__art {
+      width: 100%; height: 100%;
+      min-height: 300px;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .work-card--tall .work-card__art,
+    .work-card--large .work-card__art { min-height: 100%; }
+
+    .work-card:hover .work-card__art { transform: scale(1.05); }
+
+    /* Gradient placeholders — each unique */
+    .work-card:nth-child(1) .work-card__art {
+      background:
+        repeating-conic-gradient(rgba(194,112,62,0.12) 0% 25%, transparent 0% 50%) 0 0 / 60px 60px,
+        linear-gradient(135deg, #E8C9A0 0%, #C2703E 50%, #8B4A2A 100%);
+      min-height: 380px;
+    }
+    .work-card:nth-child(2) .work-card__art {
+      background:
+        radial-gradient(circle at 30% 40%, rgba(255,255,255,0.3) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(194,112,62,0.4) 0%, transparent 40%),
+        linear-gradient(160deg, #2B2B2B 0%, #5A4A3A 100%);
+    }
+    .work-card:nth-child(3) .work-card__art {
+      background:
+        linear-gradient(45deg, transparent 40%, rgba(253,246,236,0.2) 40%, rgba(253,246,236,0.2) 60%, transparent 60%),
+        linear-gradient(-45deg, transparent 40%, rgba(194,112,62,0.15) 40%, rgba(194,112,62,0.15) 60%, transparent 60%),
+        linear-gradient(135deg, #D4956A 0%, #E8B88A 50%, #C2703E 100%);
+    }
+    .work-card:nth-child(4) .work-card__art {
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(194,112,62,0.08) 20px, rgba(194,112,62,0.08) 21px),
+        repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(194,112,62,0.08) 20px, rgba(194,112,62,0.08) 21px),
+        radial-gradient(ellipse at 50% 50%, #F7EFE2, #D4B896);
+    }
+    .work-card:nth-child(5) .work-card__art {
+      background:
+        radial-gradient(circle at 20% 80%, rgba(194,112,62,0.5) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(43,43,43,0.3) 0%, transparent 40%),
+        linear-gradient(180deg, #3A2A1A 0%, #6B4A30 50%, #C2703E 100%);
+    }
+    .work-card:nth-child(6) .work-card__art {
+      background:
+        conic-gradient(from 45deg at 50% 50%, #FDF6EC, #E8C9A0, #C2703E, #8B4A2A, #FDF6EC);
+    }
+    .work-card:nth-child(7) .work-card__art {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.4) 0%, transparent 60%),
+        linear-gradient(180deg, #F7EFE2 0%, #D4956A 40%, #A85C2E 100%);
+    }
+    .work-card:nth-child(8) .work-card__art {
+      background:
+        repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 15px, rgba(194,112,62,0.1) 15px, rgba(194,112,62,0.1) 16px),
+        linear-gradient(135deg, #2B2B2B 0%, #C2703E 100%);
+    }
+
+    /* Hover overlay */
+    .work-card__overlay {
+      position: absolute; inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(30, 30, 30, 0.75);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      padding: 2rem;
+      text-align: center;
+    }
+    .work-card:hover .work-card__overlay { opacity: 1; }
+
+    .work-card__title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #FDF6EC;
+      margin-bottom: 0.4rem;
+      transform: translateY(10px);
+      transition: transform 0.4s ease 0.05s;
+    }
+    .work-card:hover .work-card__title { transform: translateY(0); }
+
+    .work-card__category {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      transform: translateY(10px);
+      transition: transform 0.4s ease 0.1s;
+    }
+    .work-card:hover .work-card__category { transform: translateY(0); }
+
+    /* ─── About ─── */
+    .about {
+      padding: 8rem 3rem;
+      background: var(--charcoal);
+      color: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .about::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(194,112,62,0.15) 0%, transparent 70%);
+    }
+
+    .about__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about__image {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 40% 35%, rgba(253,246,236,0.2) 0%, transparent 50%),
+        linear-gradient(160deg, #5A4A3A 0%, #C2703E 60%, #8B4A2A 100%);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    }
+
+    .about__content { max-width: 520px; }
+    .about__label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .about__title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      color: var(--cream);
+    }
+    .about__text {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: rgba(253,246,236,0.7);
+      margin-bottom: 1.25rem;
+    }
+    .about__stats {
+      display: flex; gap: 3rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(253,246,236,0.1);
+    }
+    .about__stat-num {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .about__stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(253,246,236,0.5);
+      margin-top: 0.25rem;
+    }
+
+    /* ─── Contact ─── */
+    .contact {
+      padding: 8rem 3rem;
+      text-align: center;
+      position: relative;
+    }
+    .contact__title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--charcoal);
+      margin-bottom: 1.5rem;
+    }
+    .contact__title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .contact__text {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.8;
+    }
+    .contact__btn {
+      display: inline-flex;
+      align-items: center; gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      background: var(--accent);
+      color: #FDF6EC;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .contact__btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(194,112,62,0.3);
+    }
+    .contact__btn svg {
+      width: 18px; height: 18px;
+      transition: transform 0.3s ease;
+    }
+    .contact__btn:hover svg { transform: translateX(3px); }
+
+    /* ─── Footer ─── */
+    .footer {
+      padding: 3rem;
+      background: var(--charcoal);
+      color: rgba(253,246,236,0.5);
+    }
+    .footer__inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer__copy {
+      font-size: 0.8rem;
+    }
+    .footer__socials {
+      display: flex; gap: 2rem;
+      list-style: none;
+    }
+    .footer__socials a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(253,246,236,0.5);
+      transition: color 0.25s ease;
+    }
+    .footer__socials a:hover { color: var(--accent); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1024px) {
+      .works__grid { grid-template-columns: repeat(2, 1fr); }
+      .work-card--large { grid-column: span 2; grid-row: span 1; }
+      .work-card--large .work-card__art { min-height: 350px; }
+      .about__inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about__image { max-width: 400px; margin: 0 auto; }
+      .about__content { max-width: 100%; text-align: center; }
+      .about__stats { justify-content: center; }
+    }
+
+    @media (max-width: 640px) {
+      .nav { padding: 1rem 1.5rem; }
+      .nav__links { gap: 1.5rem; }
+      .nav__links a { font-size: 0.75rem; }
+      .hero { padding: 7rem 1.5rem 4rem; min-height: 90vh; }
+      .works { padding: 4rem 1.5rem; }
+      .works__grid { grid-template-columns: 1fr; }
+      .work-card--wide,
+      .work-card--large { grid-column: span 1; }
+      .work-card__art { min-height: 260px; }
+      .about { padding: 5rem 1.5rem; }
+      .about__stats { flex-direction: column; gap: 1.5rem; align-items: center; }
+      .contact { padding: 5rem 1.5rem; }
+      .footer__inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════ Navigation ═══════ -->
+  <nav class="nav" id="nav">
+    <a href="#" class="nav__logo">léa<span>.</span>moreau</a>
+    <ul class="nav__links">
+      <li><a href="#works">Works</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══════ Hero ═══════ -->
+  <section class="hero" id="hero">
+    <p class="hero__eyebrow">Illustrator & Visual Artist</p>
+    <h1 class="hero__name">Léa Moreau</h1>
+    <p class="hero__tagline">Crafting warmth & wonder through hand-drawn worlds and textured palettes.</p>
+    <div class="hero__line"></div>
+    <div class="hero__scroll">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ═══════ Selected Works ═══════ -->
+  <section class="works" id="works">
+    <div class="section-header">
+      <p class="section-header__label">Portfolio</p>
+      <h2 class="section-header__title">Selected Works</h2>
+    </div>
+
+    <div class="works__grid">
+      <!-- Card 1 — Wide -->
+      <article class="work-card work-card--wide animate-on-scroll">
+        <div class="work-card__art"></div>
+        <div class="work-card__overlay">
+          <h3 class="work-card__title">Autumn Reverie</h3>
+          <span class="work-card__category">Editorial Illustration</span>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="work-card animate-on-scroll">
+        <div class="work-card__art"></div>
+        <div class="work-card__overlay">
+          <h3 class="work-card__title">Nocturne Garden</h3>
+          <span class="work-card__category">Book Cover</span>
+        </div>
+      </article>
+
+      <!-- Card 3 — Tall -->
+      <article class="work-card work-card--tall animate-on-scroll">
+        <div class="work-card__art"></div>
+        <div class="work-card__overlay">
+          <h3 class="work-card__title">Terra Firma</h3>
+          <span class="work-card__category">Gallery Series</span>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="work-card animate-on-scroll">
+        <div class="work-card__art"></div>
+        <div class="work-card__overlay">
+          <h3 class="work-card__title">Linen & Light</h3>
+          <span class="work-card__category">Pattern Design</span>
+        </div>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="work-card animate-on-scroll">
+        <div class="work-card__art"></div>
+        <div class="work-card__overlay">
+          <h3 class="work-card__title">Ember Trails</h3>
+          <span class="work-card__category">Brand Identity</span>
+        </div>
+      </article>
+
+      <!-- Card 6 — Large -->
+      <article class="work-card work-card--large animate-on-scroll">
+        <div class="work-card__art"></div>
+        <div class="work-card__overlay">
+          <h3 class="work-card__title">Solstice Bloom</h3>
+          <span class="work-card__category">Packaging Art</span>
+        </div>
+      </article>
+
+      <!-- Card 7 -->
+      <article class="work-card animate-on-scroll">
+        <div class="work-card__art"></div>
+        <div class="work-card__overlay">
+          <h3 class="work-card__title">Morning Silhouette</h3>
+          <span class="work-card__category">Fine Art Print</span>
+        </div>
+      </article>
+
+      <!-- Card 8 -->
+      <article class="work-card animate-on-scroll">
+        <div class="work-card__art"></div>
+        <div class="work-card__overlay">
+          <h3 class="work-card__title">Quiet Geometry</h3>
+          <span class="work-card__category">Textile Design</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═══════ About ═══════ -->
+  <section class="about" id="about">
+    <div class="about__inner">
+      <div class="about__image"></div>
+      <div class="about__content">
+        <p class="about__label">About</p>
+        <h2 class="about__title">Stories told through texture, colour & quiet gesture.</h2>
+        <p class="about__text">
+          Based in Lyon, France, I create illustrations that live at the intersection of warmth and whimsy. My work draws from natural forms, vintage palettes, and the small beauty found in everyday moments.
+        </p>
+        <p class="about__text">
+          With over a decade of experience spanning editorial, packaging, and gallery work, I partner with brands and publishers who value craft, narrative, and a human touch.
+        </p>
+        <div class="about__stats">
+          <div>
+            <div class="about__stat-num">12+</div>
+            <div class="about__stat-label">Years Experience</div>
+          </div>
+          <div>
+            <div class="about__stat-num">140+</div>
+            <div class="about__stat-label">Projects</div>
+          </div>
+          <div>
+            <div class="about__stat-num">30+</div>
+            <div class="about__stat-label">Awards</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ Contact ═══════ -->
+  <section class="contact" id="contact">
+    <div class="section-header">
+      <p class="section-header__label">Get in Touch</p>
+    </div>
+    <h2 class="contact__title">Let's create<br>something <em>beautiful</em></h2>
+    <p class="contact__text">
+      Available for commissions, collaborations, and licensing. I'd love to hear about your project.
+    </p>
+    <a href="mailto:hello@leamoreau.com" class="contact__btn">
+      Start a Conversation
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+      </svg>
+    </a>
+  </section>
+
+  <!-- ═══════ Footer ═══════ -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <p class="footer__copy">&copy; 2026 Léa Moreau. All rights reserved.</p>
+      <ul class="footer__socials">
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Behance</a></li>
+        <li><a href="#">Dribbble</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ═══════ Minimal JS — scroll-triggered animations + nav shadow ═══════ -->
+  <script>
+    // Intersection Observer for fade-in on scroll
+    (function () {
+      const items = document.querySelectorAll('.animate-on-scroll');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function (el) { el.style.opacity = '1'; });
+        return;
+      }
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.style.animationPlayState = 'running';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      items.forEach(function (el) {
+        el.style.animationPlayState = 'paused';
+        observer.observe(el);
+      });
+    })();
+
+    // Nav shadow on scroll
+    (function () {
+      var nav = document.getElementById('nav');
+      window.addEventListener('scroll', function () {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+      }, { passive: true });
+    })();
+  </script>
+
+</body>
+</html>

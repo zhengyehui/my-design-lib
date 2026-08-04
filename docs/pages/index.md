@@ -1225,6 +1225,24 @@ const pages = [
     rating: 9.5,
     description: '无代码应用构建平台落地页，CSS-only 产品编辑器 Mockup + 浮动协作光标 + 模板预览卡片 + 集成 Marquee + 三栏定价',
   },
+  {
+    id: 'illustrator-lookbook',
+    title: 'Léa Moreau 插画师作品集',
+    category: 'portfolio',
+    tags: ['插画', '作品集', '暖色调', 'Masonry', '衬线字体'],
+    colors: ['#FDF6EC', '#C2703E', '#2B2B2B'],
+    rating: 9.4,
+    description: '暖色调插画师作品集，Playfair Display 衬线字体 + Masonry 瀑布流作品网格 + CSS 渐变插画占位 + 滚动入场动画',
+  },
+  {
+    id: 'media-kit',
+    title: 'Meridian Labs 媒体资料包',
+    category: 'content',
+    tags: ['媒体资料包', '品牌资产', '新闻中心', '企业', '专业'],
+    colors: ['#0A1628', '#2563EB', '#ffffff'],
+    rating: 9.3,
+    description: '科技企业媒体资料包，深海军蓝 Hero + Logo 变体展示 + 色彩面板 + 字体样例 + 团队卡片 + 媒体报道网格',
+  },
 ]
 
 const categories = [
@@ -1282,12 +1300,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 130 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 132 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="130 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="132 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1296,7 +1314,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 131 个完整页面</span>
+      <span>📦 133 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
