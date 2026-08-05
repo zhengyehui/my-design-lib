@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebula Canvas — 协作白板 SaaS</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ──────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  background: #08080d;
+  color: #e2e8f0;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── Floating Glow Orbs ────────────────────────── */
+.glow-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+}
+.glow-orb--purple {
+  width: 500px; height: 500px;
+  background: #6366f1;
+  top: -100px; left: -100px;
+  animation: float-orb 12s ease-in-out infinite;
+}
+.glow-orb--cyan {
+  width: 400px; height: 400px;
+  background: #06b6d4;
+  bottom: 10%; right: -80px;
+  animation: float-orb 15s ease-in-out infinite reverse;
+}
+.glow-orb--pink {
+  width: 300px; height: 300px;
+  background: #ec4899;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float-orb 18s ease-in-out infinite 3s;
+}
+@keyframes float-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* ── Navigation ────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(20px);
+  background: rgba(8, 8, 13, 0.7);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+  text-decoration: none;
+}
+.nav-logo svg { width: 28px; height: 28px; }
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: #fff; }
+.nav-cta {
+  padding: 0.5rem 1.25rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-cta:hover {
+  background: #818cf8;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+/* ── Hero Section ──────────────────────────────── */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 1rem;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #818cf8;
+  margin-bottom: 1.5rem;
+  animation: badge-glow 3s ease-in-out infinite;
+}
+@keyframes badge-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+  50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.15); }
+}
+.hero-badge .dot {
+  width: 6px; height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+}
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: #94a3b8;
+  max-width: 600px;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.5);
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: rgba(255,255,255,0.05);
+  color: #e2e8f0;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* ── Hero Canvas Mockup ────────────────────────── */
+.hero-canvas {
+  margin-top: 4rem;
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16/10;
+  background: #0d0d14;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 60px rgba(99, 102, 241, 0.08);
+}
+/* Canvas grid dots */
+.canvas-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+/* Canvas toolbar */
+.canvas-toolbar {
+  position: absolute;
+  top: 12px; left: 12px;
+  display: flex;
+  gap: 4px;
+  background: rgba(15, 15, 20, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+.canvas-toolbar span {
+  width: 32px; height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #64748b;
+  transition: all 0.2s;
+}
+.canvas-toolbar span:first-child {
+  background: rgba(99, 102, 241, 0.2);
+  color: #818cf8;
+}
+/* Floating sticky notes */
+.sticky {
+  position: absolute;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  animation: sticky-float 6s ease-in-out infinite;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.sticky--purple {
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #c7d2fe;
+  top: 20%; left: 10%;
+  animation-delay: 0s;
+}
+.sticky--cyan {
+  background: rgba(6, 182, 212, 0.2);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #a5f3fc;
+  top: 35%; right: 12%;
+  animation-delay: 2s;
+}
+.sticky--pink {
+  background: rgba(236, 72, 153, 0.2);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  color: #fbcfe8;
+  bottom: 25%; left: 20%;
+  animation-delay: 4s;
+}
+.sticky--green {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #a7f3d0;
+  bottom: 20%; right: 25%;
+  animation-delay: 1s;
+}
+@keyframes sticky-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+/* Collaborative cursors */
+.cursor {
+  position: absolute;
+  width: 16px; height: 20px;
+  z-index: 10;
+}
+.cursor::before {
+  content: '';
+  position: absolute;
+  width: 0; height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 10px solid var(--cursor-color);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+.cursor::after {
+  content: attr(data-name);
+  position: absolute;
+  top: 18px; left: 8px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--cursor-color);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.cursor--1 {
+  --cursor-color: #6366f1;
+  top: 40%; left: 30%;
+  animation: cursor-move-1 8s ease-in-out infinite;
+}
+.cursor--2 {
+  --cursor-color: #06b6d4;
+  top: 55%; left: 60%;
+  animation: cursor-move-2 10s ease-in-out infinite;
+}
+.cursor--3 {
+  --cursor-color: #ec4899;
+  top: 30%; left: 70%;
+  animation: cursor-move-3 12s ease-in-out infinite;
+}
+@keyframes cursor-move-1 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(60px, -20px); }
+  50% { transform: translate(30px, 40px); }
+  75% { transform: translate(-20px, 10px); }
+}
+@keyframes cursor-move-2 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-40px, 30px); }
+  50% { transform: translate(20px, -40px); }
+  75% { transform: translate(50px, 20px); }
+}
+@keyframes cursor-move-3 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-30px, -30px); }
+  50% { transform: translate(40px, 20px); }
+  75% { transform: translate(-20px, 40px); }
+}
+/* Canvas connector lines */
+.connector-line {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.4), rgba(6, 182, 212, 0.4));
+  transform-origin: left center;
+  animation: line-pulse 4s ease-in-out infinite;
+}
+.connector-line--1 {
+  top: 28%; left: 22%;
+  width: 120px;
+  transform: rotate(25deg);
+}
+.connector-line--2 {
+  top: 50%; left: 35%;
+  width: 180px;
+  transform: rotate(-10deg);
+  animation-delay: 2s;
+}
+@keyframes line-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* ── Stats Bar ─────────────────────────────────── */
+.stats-bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.stat {
+  text-align: center;
+}
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+/* ── Features Section ──────────────────────────── */
+.features {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #818cf8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.section-subtitle {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  max-width: 550px;
+  margin-bottom: 3.5rem;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.feature-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--card-accent, #6366f1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.feature-card:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.1);
+  transform: translateY(-4px);
+}
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+}
+.feature-card:nth-child(1) { --card-accent: #6366f1; }
+.feature-card:nth-child(1) .feature-icon { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+.feature-card:nth-child(2) { --card-accent: #06b6d4; }
+.feature-card:nth-child(2) .feature-icon { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
+.feature-card:nth-child(3) { --card-accent: #ec4899; }
+.feature-card:nth-child(3) .feature-icon { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+.feature-card:nth-child(4) { --card-accent: #10b981; }
+.feature-card:nth-child(4) .feature-icon { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+.feature-card:nth-child(5) { --card-accent: #f59e0b; }
+.feature-card:nth-child(5) .feature-icon { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+.feature-card:nth-child(6) { --card-accent: #8b5cf6; }
+.feature-card:nth-child(6) .feature-icon { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+.feature-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #f1f5f9;
+}
+.feature-card p {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+/* ── Canvas Showcase Section ───────────────────── */
+.showcase {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 2rem 6rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.showcase-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+.showcase-visual {
+  aspect-ratio: 4/3;
+  background: #0d0d14;
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+/* Mind map visualization */
+.mindmap-node {
+  position: absolute;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.mindmap-node--center {
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 12px 24px;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+  z-index: 2;
+}
+.mindmap-node--1 {
+  top: 20%; left: 15%;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #67e8f9;
+  animation: node-pulse 4s ease-in-out infinite;
+}
+.mindmap-node--2 {
+  top: 15%; right: 15%;
+  background: rgba(236, 72, 153, 0.15);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  color: #f9a8d4;
+  animation: node-pulse 4s ease-in-out infinite 1s;
+}
+.mindmap-node--3 {
+  bottom: 25%; left: 10%;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+  animation: node-pulse 4s ease-in-out infinite 2s;
+}
+.mindmap-node--4 {
+  bottom: 20%; right: 12%;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fcd34d;
+  animation: node-pulse 4s ease-in-out infinite 3s;
+}
+.mindmap-node--5 {
+  top: 60%; left: 8%;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #c4b5fd;
+  animation: node-pulse 4s ease-in-out infinite 0.5s;
+}
+@keyframes node-pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(255,255,255,0); }
+  50% { box-shadow: 0 0 16px rgba(255,255,255,0.08); }
+}
+/* Mind map lines */
+.mindmap-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.3), rgba(99, 102, 241, 0.05));
+  transform-origin: left center;
+}
+.mindmap-line--1 { top: 42%; left: 25%; width: 100px; transform: rotate(-20deg); }
+.mindmap-line--2 { top: 38%; right: 25%; width: 90px; transform: rotate(15deg); }
+.mindmap-line--3 { bottom: 38%; left: 22%; width: 80px; transform: rotate(25deg); }
+.mindmap-line--4 { bottom: 35%; right: 22%; width: 100px; transform: rotate(-15deg); }
+
+.showcase-content h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.showcase-content p {
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+.showcase-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.showcase-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: #cbd5e1;
+}
+.showcase-list li .check {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Integrations Marquee ──────────────────────── */
+.integrations {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  overflow: hidden;
+}
+.integrations-title {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+.marquee-track {
+  display: flex;
+  gap: 3rem;
+  animation: marquee-scroll 30s linear infinite;
+  width: max-content;
+}
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+.marquee-item:hover { color: #94a3b8; }
+.marquee-item .icon {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── Testimonials ──────────────────────────────── */
+.testimonials {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.testimonial-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 2rem;
+}
+.testimonial-stars {
+  color: #fbbf24;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+.testimonial-card blockquote {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.testimonial-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+}
+.testimonial-card:nth-child(1) .testimonial-avatar { background: #6366f1; }
+.testimonial-card:nth-child(2) .testimonial-avatar { background: #06b6d4; }
+.testimonial-card:nth-child(3) .testimonial-avatar { background: #ec4899; }
+.testimonial-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+.testimonial-role {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* ── Pricing ───────────────────────────────────── */
+.pricing {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.pricing-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  transition: all 0.3s;
+  position: relative;
+}
+.pricing-card--popular {
+  background: rgba(99, 102, 241, 0.06);
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
+}
+.pricing-card--popular::before {
+  content: '最受欢迎';
+  position: absolute;
+  top: -12px; left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 16px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 999px;
+}
+.pricing-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.12);
+}
+.pricing-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+.pricing-price {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  letter-spacing: -0.03em;
+}
+.pricing-price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #64748b;
+}
+.pricing-desc {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 1rem 0 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.pricing-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+.pricing-features li {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pricing-features li::before {
+  content: '✓';
+  color: #34d399;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+.pricing-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  border: none;
+}
+.pricing-btn--outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e2e8f0;
+}
+.pricing-btn--outline:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.2);
+}
+.pricing-btn--primary {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+.pricing-btn--primary:hover {
+  box-shadow: 0 6px 28px rgba(99, 102, 241, 0.5);
+}
+
+/* ── CTA Section ───────────────────────────────── */
+.cta {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+.cta-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 24px;
+  padding: 4rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.cta-inner::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 40%, rgba(99, 102, 241, 0.15), transparent 50%),
+              radial-gradient(circle at 70% 60%, rgba(6, 182, 212, 0.1), transparent 50%);
+  animation: cta-glow 8s ease-in-out infinite;
+}
+@keyframes cta-glow {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(5deg); }
+}
+.cta-inner h2 {
+  position: relative;
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.cta-inner p {
+  position: relative;
+  color: #94a3b8;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+}
+.cta-inner .btn-primary {
+  position: relative;
+}
+
+/* ── Footer ────────────────────────────────────── */
+.footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 3rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.footer-brand {
+  font-weight: 700;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+.footer-links a {
+  color: #475569;
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: #94a3b8; }
+
+/* ── Responsive ────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .features-grid { grid-template-columns: 1fr; }
+  .showcase-layout { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .stats-bar { flex-direction: column; gap: 1.5rem; }
+  .footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Glow Orbs -->
+<div class="glow-orb glow-orb--purple"></div>
+<div class="glow-orb glow-orb--cyan"></div>
+<div class="glow-orb glow-orb--pink"></div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill="url(#logo-grad)"/>
+      <path d="M8 14h12M14 8v12M10 10l8 8M18 10l-8 8" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
+      <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+    </svg>
+    Nebula Canvas
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">功能</a></li>
+    <li><a href="#showcase">场景</a></li>
+    <li><a href="#pricing">定价</a></li>
+    <li><a href="#">文档</a></li>
+  </ul>
+  <button class="nav-cta">免费开始</button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    已有 12,000+ 团队在使用
+  </div>
+  <h1>
+    思维，<span class="gradient-text">无限延伸</span><br>
+    协作，触手可及
+  </h1>
+  <p class="hero-subtitle">
+    Nebula Canvas 是下一代可视化协作白板。实时头脑风暴、流程图、思维导图、线框图——所有创意工作，一块画布搞定。
+  </p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      免费试用
+    </a>
+    <a href="#" class="btn-secondary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+      观看演示
+    </a>
+  </div>
+
+  <!-- Canvas Mockup -->
+  <div class="hero-canvas">
+    <div class="canvas-grid"></div>
+    <div class="canvas-toolbar">
+      <span>✦</span>
+      <span>□</span>
+      <span>○</span>
+      <span>→</span>
+      <span>A</span>
+      <span>✎</span>
+      <span>📎</span>
+    </div>
+    <div class="sticky sticky--purple">产品路线图<br>Q3 目标拆解</div>
+    <div class="sticky sticky--cyan">用户调研<br>痛点分析</div>
+    <div class="sticky sticky--pink">设计评审<br>交互方案</div>
+    <div class="sticky sticky--green">技术方案<br>架构决策</div>
+    <div class="connector-line connector-line--1"></div>
+    <div class="connector-line connector-line--2"></div>
+    <div class="cursor cursor--1" data-name="Alice"></div>
+    <div class="cursor cursor--2" data-name="Bob"></div>
+    <div class="cursor cursor--3" data-name="Carol"></div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-value">12K+</div>
+    <div class="stat-label">活跃团队</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">2M+</div>
+    <div class="stat-label">画布创建</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">99.9%</div>
+    <div class="stat-label">实时同步率</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">&lt;50ms</div>
+    <div class="stat-label">协作延迟</div>
+  </div>
+</div>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="section-label">核心能力</div>
+  <h2 class="section-title">为创意团队打造的每一个功能</h2>
+  <p class="section-subtitle">从灵感到落地，Nebula Canvas 覆盖完整创意工作流。</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>实时多人协作</h3>
+      <p>多人同时编辑同一画布，光标、选区、操作实时可见。支持 100+ 人同时在线，延迟低于 50ms。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <h3>AI 智能助手</h3>
+      <p>一键生成思维导图、自动排列元素、智能连线。AI 理解你的意图，加速创意发散。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <h3>无限画布</h3>
+      <p>没有边界限制的自由画布。支持缩放、平移、分组。从便利贴到复杂流程图，一块画布承载所有想法。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔗</div>
+      <h3>深度集成</h3>
+      <p>与 Figma、Jira、Slack、Notion 无缝对接。嵌入第三方内容，打通设计与项目管理工具链。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>丰富模板库</h3>
+      <p>200+ 精选模板：用户旅程图、SWOT 分析、看板、线框图。一键套用，快速启动项目。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>企业级安全</h3>
+      <p>端到端加密、SSO 单点登录、细粒度权限管理。SOC 2 Type II 认证，满足企业合规需求。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Showcase -->
+<section class="showcase" id="showcase">
+  <div class="showcase-layout">
+    <div class="showcase-visual">
+      <div class="canvas-grid"></div>
+      <div class="mindmap-node mindmap-node--center">产品愿景</div>
+      <div class="mindmap-node mindmap-node--1">用户体验</div>
+      <div class="mindmap-node mindmap-node--2">技术架构</div>
+      <div class="mindmap-node mindmap-node--3">商业模式</div>
+      <div class="mindmap-node mindmap-node--4">增长策略</div>
+      <div class="mindmap-node mindmap-node--5">品牌定位</div>
+      <div class="mindmap-line mindmap-line--1"></div>
+      <div class="mindmap-line mindmap-line--2"></div>
+      <div class="mindmap-line mindmap-line--3"></div>
+      <div class="mindmap-line mindmap-line--4"></div>
+    </div>
+    <div class="showcase-content">
+      <div class="section-label">使用场景</div>
+      <h2>从头脑风暴到产品交付</h2>
+      <p>Nebula Canvas 不只是白板，它是团队思维的延伸。无论是产品规划、设计评审还是战略研讨，都能在一块画布上完成。</p>
+      <ul class="showcase-list">
+        <li><span class="check">✓</span> 产品路线图规划与 OKR 拆解</li>
+        <li><span class="check">✓</span> 用户旅程地图与体验优化</li>
+        <li><span class="check">✓</span> 远程设计冲刺与敏捷回顾</li>
+        <li><span class="check">✓</span> 系统架构图与技术方案评审</li>
+        <li><span class="check">✓</span> 营销策略画布与竞品分析</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Integrations Marquee -->
+<div class="integrations">
+  <div class="integrations-title">与你最爱的工具无缝集成</div>
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="icon">🎨</span> Figma</div>
+    <div class="marquee-item"><span class="icon">📋</span> Jira</div>
+    <div class="marquee-item"><span class="icon">💬</span> Slack</div>
+    <div class="marquee-item"><span class="icon">📝</span> Notion</div>
+    <div class="marquee-item"><span class="icon">📊</span> Google Sheets</div>
+    <div class="marquee-item"><span class="icon">🎥</span> Zoom</div>
+    <div class="marquee-item"><span class="icon">📦</span> GitHub</div>
+    <div class="marquee-item"><span class="icon">☁️</span> Google Drive</div>
+    <div class="marquee-item"><span class="icon">🔗</span> Zapier</div>
+    <div class="marquee-item"><span class="icon">📅</span> Calendar</div>
+    <!-- Duplicate for seamless loop -->
+    <div class="marquee-item"><span class="icon">🎨</span> Figma</div>
+    <div class="marquee-item"><span class="icon">📋</span> Jira</div>
+    <div class="marquee-item"><span class="icon">💬</span> Slack</div>
+    <div class="marquee-item"><span class="icon">📝</span> Notion</div>
+    <div class="marquee-item"><span class="icon">📊</span> Google Sheets</div>
+    <div class="marquee-item"><span class="icon">🎥</span> Zoom</div>
+    <div class="marquee-item"><span class="icon">📦</span> GitHub</div>
+    <div class="marquee-item"><span class="icon">☁️</span> Google Drive</div>
+    <div class="marquee-item"><span class="icon">🔗</span> Zapier</div>
+    <div class="marquee-item"><span class="icon">📅</span> Calendar</div>
+  </div>
+</div>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="section-label">用户评价</div>
+  <h2 class="section-title">被全球团队信赖</h2>
+  <p class="section-subtitle">从初创公司到世界 500 强，Nebula Canvas 正在改变团队协作方式。</p>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <blockquote>"我们用 Nebula Canvas 替代了 3 个工具。产品规划、设计评审、Sprint 回顾全在一块画布上完成，效率提升 40%。"</blockquote>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">L</div>
+        <div>
+          <div class="testimonial-name">Lisa Chen</div>
+          <div class="testimonial-role">产品副总裁 · ByteForge</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <blockquote>"实时协作体验太流畅了，感觉就像在同一间办公室。AI 自动生成思维导图的功能让我们的头脑风暴效率翻倍。"</blockquote>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">M</div>
+        <div>
+          <div class="testimonial-name">Marcus Weber</div>
+          <div class="testimonial-role">设计总监 · PixelCraft</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <blockquote>"企业级安全加上无限画布，是我们选择 Nebula Canvas 的关键。SSO 集成和权限管理让 IT 团队非常放心。"</blockquote>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">S</div>
+        <div>
+          <div class="testimonial-name">Sarah Kim</div>
+          <div class="testimonial-role">CTO · DataVault</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="section-label">定价方案</div>
+  <h2 class="section-title">简单透明的定价</h2>
+  <p class="section-subtitle">从个人到企业，总有一款适合你。所有方案均含 14 天免费试用。</p>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-name">Free</div>
+      <div class="pricing-price">$0 <span>/月</span></div>
+      <div class="pricing-desc">适合个人用户和小型团队</div>
+      <ul class="pricing-features">
+        <li>最多 3 块画布</li>
+        <li>最多 5 位协作者</li>
+        <li>基础模板库</li>
+        <li>500MB 存储空间</li>
+        <li>社区支持</li>
+      </ul>
+      <button class="pricing-btn pricing-btn--outline">免费开始</button>
+    </div>
+    <div class="pricing-card pricing-card--popular">
+      <div class="pricing-name">Pro</div>
+      <div class="pricing-price">$12 <span>/人/月</span></div>
+      <div class="pricing-desc">适合成长中的产品团队</div>
+      <ul class="pricing-features">
+        <li>无限画布</li>
+        <li>无限协作者</li>
+        <li>完整模板库 + AI 助手</li>
+        <li>50GB 存储空间</li>
+        <li>优先技术支持</li>
+        <li>高级集成（Figma、Jira）</li>
+      </ul>
+      <button class="pricing-btn pricing-btn--primary">开始试用</button>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-name">Enterprise</div>
+      <div class="pricing-price">定制</div>
+      <div class="pricing-desc">适合大规模企业部署</div>
+      <ul class="pricing-features">
+        <li>所有 Pro 功能</li>
+        <li>SSO 单点登录</li>
+        <li>高级权限管理</li>
+        <li>无限存储空间</li>
+        <li>专属客户经理</li>
+        <li>SLA 保障 + 定制部署</li>
+      </ul>
+      <button class="pricing-btn pricing-btn--outline">联系销售</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <h2>准备好释放团队的创造力了吗？</h2>
+    <p>14 天免费试用，无需信用卡。3 分钟完成设置。</p>
+    <a href="#" class="btn-primary">免费开始使用</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-brand">© 2026 Nebula Canvas</div>
+  <ul class="footer-links">
+    <li><a href="#">隐私政策</a></li>
+    <li><a href="#">服务条款</a></li>
+    <li><a href="#">帮助中心</a></li>
+    <li><a href="#">Twitter</a></li>
+    <li><a href="#">GitHub</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>

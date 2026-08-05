@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 131 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 132 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1243,6 +1243,15 @@ const pages = [
     rating: 9.3,
     description: '科技企业媒体资料包，深海军蓝 Hero + Logo 变体展示 + 色彩面板 + 字体样例 + 团队卡片 + 媒体报道网格',
   },
+  {
+    id: 'nebula-canvas',
+    title: 'Nebula Canvas 协作白板',
+    category: 'app',
+    tags: ['协作白板', 'SaaS', '实时协作', '思维导图', '暗色主题'],
+    colors: ['#08080d', '#6366f1', '#06b6d4'],
+    rating: 9.5,
+    description: '暗色系协作白板 SaaS 落地页，灵感来自 Miro/FigJam，CSS 协作光标动画 + 浮动便利贴 Mockup + 思维导图可视化 + 集成 Marquee + 三栏定价',
+  },
 ]
 
 const categories = [
@@ -1300,12 +1309,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 132 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 134 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="132 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="134 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1314,7 +1323,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 133 个完整页面</span>
+      <span>📦 134 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
