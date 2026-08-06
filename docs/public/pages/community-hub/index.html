@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Hub — DesignLib</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg-subtle);
+      color: var(--color-text);
+      line-height: var(--leading-normal);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Navigation ───────────────────────────────────────── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 var(--space-6);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-lg);
+      font-weight: var(--weight-bold);
+      color: var(--color-text);
+    }
+
+    .navbar-brand .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .navbar-search {
+      flex: 1;
+      max-width: 480px;
+      margin: 0 var(--space-8);
+      position: relative;
+    }
+
+    .navbar-search input {
+      width: 100%;
+      height: 40px;
+      padding: 0 var(--space-4) 0 40px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      background: var(--color-bg-muted);
+      font-size: var(--text-sm);
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      transition: all var(--duration-fast) var(--ease-default);
+      outline: none;
+    }
+
+    .navbar-search input:focus {
+      border-color: var(--color-primary);
+      background: var(--color-bg);
+      box-shadow: 0 0 0 3px var(--color-primary-ghost);
+    }
+
+    .navbar-search input::placeholder { color: var(--color-text-muted); }
+
+    .navbar-search .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-muted);
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .navbar-search .search-shortcut {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+      pointer-events: none;
+    }
+
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .nav-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
+      color: var(--color-text-secondary);
+      transition: all var(--duration-fast) var(--ease-default);
+      font-size: 18px;
+    }
+
+    .nav-btn:hover {
+      background: var(--color-bg-muted);
+      color: var(--color-text);
+    }
+
+    .nav-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      background: var(--color-danger);
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid white;
+    }
+
+    .nav-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin-left: var(--space-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color var(--duration-fast) var(--ease-default);
+    }
+
+    .nav-avatar:hover { border-color: var(--color-primary); }
+
+    /* ── Hero Banner ──────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 30%, #06b6d4 100%);
+      padding: var(--space-10) var(--space-6);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(6,182,212,0.2) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: var(--text-4xl);
+      font-weight: var(--weight-bold);
+      margin-bottom: var(--space-3);
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      font-size: var(--text-lg);
+      opacity: 0.9;
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-value {
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-bold);
+      font-family: var(--font-mono);
+    }
+
+    .hero-stat-label {
+      font-size: var(--text-sm);
+      opacity: 0.8;
+      margin-top: var(--space-1);
+    }
+
+    .hero-stat .online-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #34d399;
+      border-radius: 50%;
+      margin-right: 4px;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* ── Trending Tags ────────────────────────────────────── */
+    .trending-bar {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--space-3) var(--space-6);
+    }
+
+    .trending-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .trending-inner::-webkit-scrollbar { display: none; }
+
+    .trending-label {
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-medium);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      transition: all var(--duration-fast) var(--ease-default);
+      cursor: pointer;
+    }
+
+    .tag-pill:hover { transform: translateY(-1px); }
+
+    .tag-indigo    { background: rgba(99,102,241,0.1);  color: #6366f1; }
+    .tag-cyan      { background: rgba(6,182,212,0.1);   color: #0891b2; }
+    .tag-emerald   { background: rgba(16,185,129,0.1);  color: #059669; }
+    .tag-rose      { background: rgba(244,63,94,0.1);   color: #e11d48; }
+    .tag-amber     { background: rgba(245,158,11,0.1);  color: #d97706; }
+    .tag-violet    { background: rgba(139,92,246,0.1);  color: #7c3aed; }
+    .tag-sky       { background: rgba(14,165,233,0.1);  color: #0284c7; }
+    .tag-orange    { background: rgba(249,115,22,0.1);  color: #ea580c; }
+
+    /* ── Main Layout ──────────────────────────────────────── */
+    .main-layout {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-6);
+      display: grid;
+      grid-template-columns: 240px 1fr 280px;
+      gap: var(--space-6);
+    }
+
+    /* ── Category Sidebar ─────────────────────────────────── */
+    .sidebar-left {
+      position: sticky;
+      top: 88px;
+      align-self: start;
+      max-height: calc(100vh - 112px);
+      overflow-y: auto;
+    }
+
+    .sidebar-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .sidebar-title {
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0 var(--space-3);
+      margin-bottom: var(--space-2);
+    }
+
+    .category-list {
+      list-style: none;
+    }
+
+    .category-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-default);
+      position: relative;
+    }
+
+    .category-item:hover {
+      background: var(--color-bg-muted);
+      color: var(--color-text);
+    }
+
+    .category-item.active {
+      background: var(--color-primary-ghost);
+      color: var(--color-primary);
+      font-weight: var(--weight-medium);
+    }
+
+    .category-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 60%;
+      background: var(--color-primary);
+      border-radius: var(--radius-full);
+    }
+
+    .category-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .category-icon.gen  { background: rgba(99,102,241,0.1);  color: #6366f1; }
+    .category-icon.fb   { background: rgba(6,182,212,0.1);   color: #0891b2; }
+    .category-icon.bug  { background: rgba(239,68,68,0.1);   color: #ef4444; }
+    .category-icon.feat { background: rgba(245,158,11,0.1);  color: #d97706; }
+    .category-icon.show { background: rgba(16,185,129,0.1);  color: #059669; }
+    .category-icon.off  { background: rgba(139,92,246,0.1);  color: #7c3aed; }
+
+    .category-name { flex: 1; }
+
+    .category-count {
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+      background: var(--color-bg-muted);
+      padding: 1px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    /* ── Thread List ──────────────────────────────────────── */
+    .thread-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .thread-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-1);
+    }
+
+    .thread-header h2 {
+      font-size: var(--text-xl);
+      font-weight: var(--weight-bold);
+    }
+
+    .thread-sort {
+      display: flex;
+      gap: var(--space-1);
+    }
+
+    .sort-btn {
+      padding: var(--space-1) var(--space-3);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-medium);
+      color: var(--color-text-muted);
+      border-radius: var(--radius-full);
+      transition: all var(--duration-fast) var(--ease-default);
+    }
+
+    .sort-btn:hover { color: var(--color-text); background: var(--color-bg-muted); }
+    .sort-btn.active { color: var(--color-primary); background: var(--color-primary-ghost); }
+
+    /* Thread Card */
+    .thread-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      transition: all var(--duration-normal) var(--ease-default);
+      cursor: pointer;
+      position: relative;
+      animation: fadeInUp 0.4s var(--ease-out) both;
+    }
+
+    .thread-card:nth-child(2) { animation-delay: 0.05s; }
+    .thread-card:nth-child(3) { animation-delay: 0.1s; }
+    .thread-card:nth-child(4) { animation-delay: 0.15s; }
+    .thread-card:nth-child(5) { animation-delay: 0.2s; }
+    .thread-card:nth-child(6) { animation-delay: 0.25s; }
+    .thread-card:nth-child(7) { animation-delay: 0.3s; }
+    .thread-card:nth-child(8) { animation-delay: 0.35s; }
+    .thread-card:nth-child(9) { animation-delay: 0.4s; }
+    .thread-card:nth-child(10) { animation-delay: 0.45s; }
+    .thread-card:nth-child(11) { animation-delay: 0.5s; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .thread-card:hover {
+      border-color: var(--color-border-hover);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .thread-card.pinned {
+      border-left: 3px solid var(--color-primary);
+      background: linear-gradient(90deg, var(--color-primary-ghost) 0%, var(--color-bg) 8%);
+    }
+
+    .thread-top {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .thread-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      position: relative;
+    }
+
+    .thread-avatar .status-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--color-bg);
+    }
+
+    .status-dot.online  { background: #34d399; }
+    .status-dot.offline { background: #94a3b8; }
+    .status-dot.away    { background: #fbbf24; }
+
+    .thread-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .thread-author {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text);
+    }
+
+    .thread-time {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    .pinned-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: var(--weight-semibold);
+      color: var(--color-primary);
+      background: var(--color-primary-ghost);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+    }
+
+    .thread-title {
+      font-size: var(--text-base);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text);
+      margin-bottom: var(--space-2);
+      line-height: var(--leading-tight);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .thread-card:hover .thread-title { color: var(--color-primary); }
+
+    .thread-preview {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-3);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .thread-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+
+    .thread-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .thread-stats {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .thread-stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    .thread-stat svg { width: 14px; height: 14px; }
+
+    .like-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      transition: all var(--duration-fast) var(--ease-default);
+    }
+
+    .like-btn:hover { color: var(--color-danger); background: rgba(239,68,68,0.08); }
+    .like-btn.liked { color: var(--color-danger); }
+    .like-btn.liked svg { fill: var(--color-danger); }
+
+    .thread-last-reply {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    .thread-last-reply .mini-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    /* ── Right Sidebar ────────────────────────────────────── */
+    .sidebar-right {
+      position: sticky;
+      top: 88px;
+      align-self: start;
+      max-height: calc(100vh - 112px);
+      overflow-y: auto;
+    }
+
+    .widget {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .widget-title {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-bold);
+      color: var(--color-text);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .widget-title svg { width: 16px; height: 16px; color: var(--color-primary); }
+
+    /* Top Contributors */
+    .contributor-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .contributor-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .contributor-rank {
+      width: 20px;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+
+    .contributor-rank.gold   { color: #f59e0b; }
+    .contributor-rank.silver { color: #94a3b8; }
+    .contributor-rank.bronze { color: #b45309; }
+
+    .contributor-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .contributor-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .contributor-name {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text);
+    }
+
+    .contributor-posts {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .contributor-rep {
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      color: var(--color-primary);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+    }
+
+    /* Rules Widget */
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .rules-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+      line-height: var(--leading-relaxed);
+    }
+
+    .rules-list li::before {
+      content: '•';
+      color: var(--color-primary);
+      font-weight: bold;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Quick Links Widget */
+    .quick-links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .quick-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-2);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      transition: all var(--duration-fast) var(--ease-default);
+    }
+
+    .quick-link:hover {
+      background: var(--color-bg-muted);
+      color: var(--color-primary);
+    }
+
+    /* ── Floating New Post Button ─────────────────────────── */
+    .fab {
+      position: fixed;
+      bottom: var(--space-8);
+      right: var(--space-8);
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--color-primary), #818cf8);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: var(--shadow-lg), 0 0 0 0 rgba(99,102,241,0.4);
+      z-index: var(--z-sticky);
+      transition: all var(--duration-normal) var(--ease-spring);
+      animation: fab-pulse 3s infinite;
+    }
+
+    .fab:hover {
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: var(--shadow-xl);
+    }
+
+    @keyframes fab-pulse {
+      0%, 100% { box-shadow: var(--shadow-lg), 0 0 0 0 rgba(99,102,241,0.4); }
+      50%      { box-shadow: var(--shadow-lg), 0 0 0 12px rgba(99,102,241,0); }
+    }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    .site-footer {
+      background: var(--color-bg);
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-10) var(--space-6) var(--space-6);
+      margin-top: var(--space-8);
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+
+    .footer-brand p {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      margin-top: var(--space-2);
+      max-width: 300px;
+      line-height: var(--leading-relaxed);
+    }
+
+    .footer-heading {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text);
+      margin-bottom: var(--space-3);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .footer-links a {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      transition: color var(--duration-fast) var(--ease-default);
+    }
+
+    .footer-links a:hover { color: var(--color-primary); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--color-border);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    .footer-stats {
+      display: flex;
+      gap: var(--space-6);
+      font-family: var(--font-mono);
+    }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .main-layout {
+        grid-template-columns: 200px 1fr;
+      }
+      .sidebar-right { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+        padding: var(--space-4);
+      }
+      .sidebar-left {
+        position: static;
+        max-height: none;
+      }
+      .navbar-search { display: none; }
+      .hero h1 { font-size: var(--text-2xl); }
+      .hero-stats { gap: var(--space-4); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .fab { bottom: var(--space-4); right: var(--space-4); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Navigation ──────────────────────────────────────── -->
+  <nav class="navbar">
+    <a href="#" class="navbar-brand">
+      <div class="logo-icon">CH</div>
+      CommunityHub
+    </a>
+    <div class="navbar-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search discussions, tags, users…">
+      <span class="search-shortcut">⌘K</span>
+    </div>
+    <div class="navbar-actions">
+      <button class="nav-btn" title="Notifications">
+        🔔
+        <span class="badge">5</span>
+      </button>
+      <button class="nav-btn" title="Messages">💬</button>
+      <button class="nav-btn" title="Bookmarks">🔖</button>
+      <div class="nav-avatar" title="Alex Chen">AC</div>
+    </div>
+  </nav>
+
+  <!-- ─── Hero Banner ─────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Join the Conversation</h1>
+      <p>A space for designers and developers to share ideas, give feedback, and build together.</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">12,847</div>
+          <div class="hero-stat-label">Members</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">3,291</div>
+          <div class="hero-stat-label">Discussions</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">47,502</div>
+          <div class="hero-stat-label">Replies</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value"><span class="online-dot"></span>342</div>
+          <div class="hero-stat-label">Online Now</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Trending Tags Bar ───────────────────────────────── -->
+  <div class="trending-bar">
+    <div class="trending-inner">
+      <span class="trending-label">🔥 Trending</span>
+      <span class="tag-pill tag-indigo">#design-system</span>
+      <span class="tag-pill tag-cyan">#figma</span>
+      <span class="tag-pill tag-emerald">#accessibility</span>
+      <span class="tag-pill tag-rose">#css-tricks</span>
+      <span class="tag-pill tag-amber">#api-design</span>
+      <span class="tag-pill tag-violet">#typescript</span>
+      <span class="tag-pill tag-sky">#react</span>
+      <span class="tag-pill tag-orange">#performance</span>
+      <span class="tag-pill tag-indigo">#tokens</span>
+      <span class="tag-pill tag-cyan">#dark-mode</span>
+      <span class="tag-pill tag-emerald">#motion</span>
+      <span class="tag-pill tag-rose">#wireframes</span>
+    </div>
+  </div>
+
+  <!-- ─── Main 3-Column Layout ────────────────────────────── -->
+  <main class="main-layout">
+
+    <!-- Left Sidebar: Categories -->
+    <aside class="sidebar-left">
+      <div class="sidebar-card">
+        <div class="sidebar-title">Categories</div>
+        <ul class="category-list">
+          <li class="category-item active" data-cat="general">
+            <span class="category-icon gen">💬</span>
+            <span class="category-name">General</span>
+            <span class="category-count">412</span>
+          </li>
+          <li class="category-item" data-cat="feedback">
+            <span class="category-icon fb">📝</span>
+            <span class="category-name">Product Feedback</span>
+            <span class="category-count">289</span>
+          </li>
+          <li class="category-item" data-cat="bugs">
+            <span class="category-icon bug">🐛</span>
+            <span class="category-name">Bug Reports</span>
+            <span class="category-count">156</span>
+          </li>
+          <li class="category-item" data-cat="features">
+            <span class="category-icon feat">✨</span>
+            <span class="category-name">Feature Requests</span>
+            <span class="category-count">347</span>
+          </li>
+          <li class="category-item" data-cat="show">
+            <span class="category-icon show">🎨</span>
+            <span class="category-name">Show &amp; Tell</span>
+            <span class="category-count">198</span>
+          </li>
+          <li class="category-item" data-cat="offtopic">
+            <span class="category-icon off">🎲</span>
+            <span class="category-name">Off-Topic</span>
+            <span class="category-count">88</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Quick Links</div>
+        <div class="quick-links">
+          <a href="#" class="quick-link">📖 Documentation</a>
+          <a href="#" class="quick-link">🚀 Roadmap</a>
+          <a href="#" class="quick-link">❓ FAQ</a>
+          <a href="#" class="quick-link">📋 Changelog</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main: Thread List -->
+    <section>
+      <div class="thread-header">
+        <h2>Discussions</h2>
+        <div class="thread-sort">
+          <button class="sort-btn active" data-sort="latest">Latest</button>
+          <button class="sort-btn" data-sort="top">Top</button>
+          <button class="sort-btn" data-sort="unanswered">Unanswered</button>
+        </div>
+      </div>
+
+      <div class="thread-list" id="threadList">
+
+        <!-- Pinned Thread 1 -->
+        <article class="thread-card pinned">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+              MK
+              <span class="status-dot online"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">Maya Kim</div>
+              <div class="thread-time">Pinned · 2 days ago</div>
+            </div>
+            <span class="pinned-badge">📌 Pinned</span>
+          </div>
+          <h3 class="thread-title">Welcome! Read the Community Guidelines before posting</h3>
+          <p class="thread-preview">Hey everyone! Before you dive in, please take a moment to review our community guidelines. We're committed to maintaining a respectful, inclusive, and productive environment for all members. Here's a quick summary of what we expect…</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-indigo">#announcements</span>
+            <span class="tag-pill tag-cyan">#guidelines</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                128 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                4.2k views
+              </span>
+            </div>
+            <button class="like-btn liked" onclick="this.classList.toggle('liked')">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              342
+            </button>
+          </div>
+        </article>
+
+        <!-- Pinned Thread 2 -->
+        <article class="thread-card pinned">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#06b6d4,#0ea5e9);">
+              JR
+              <span class="status-dot online"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">James Rivera</div>
+              <div class="thread-time">Pinned · 5 days ago</div>
+            </div>
+            <span class="pinned-badge">📌 Pinned</span>
+          </div>
+          <h3 class="thread-title">v3.0 Release Notes — What's New and Breaking Changes</h3>
+          <p class="thread-preview">We're excited to announce the release of v3.0! This is a major update with tons of new features including the new token system, improved dark mode support, and a complete redesign of the component library. Please read carefully for breaking changes…</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-emerald">#release</span>
+            <span class="tag-pill tag-amber">#breaking-changes</span>
+            <span class="tag-pill tag-indigo">#v3.0</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                89 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                2.8k views
+              </span>
+            </div>
+            <button class="like-btn liked" onclick="this.classList.toggle('liked')">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              217
+            </button>
+          </div>
+        </article>
+
+        <!-- Thread 3 -->
+        <article class="thread-card">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#f59e0b,#f97316);">
+              SP
+              <span class="status-dot online"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">Sarah Park</div>
+              <div class="thread-time">35 minutes ago</div>
+            </div>
+          </div>
+          <h3 class="thread-title">How do you handle responsive typography scales in your design system?</h3>
+          <p class="thread-preview">I've been experimenting with clamp() for fluid typography but running into issues with the token system. Has anyone found a good pattern for defining responsive type scales that work well with CSS custom properties? Currently looking at a modular scale approach…</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-rose">#css-tricks</span>
+            <span class="tag-pill tag-indigo">#design-system</span>
+            <span class="tag-pill tag-sky">#typography</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                23 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                567 views
+              </span>
+            </div>
+            <div class="thread-last-reply">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#06b6d4,#3b82f6);">LW</div>
+              Lisa W. · 12m ago
+            </div>
+          </div>
+        </article>
+
+        <!-- Thread 4 -->
+        <article class="thread-card">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">
+              TN
+              <span class="status-dot offline"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">Tomás Núñez</div>
+              <div class="thread-time">2 hours ago</div>
+            </div>
+          </div>
+          <h3 class="thread-title">Show &amp; Tell: Built a color palette generator using OKLCH color space</h3>
+          <p class="thread-preview">I've been working on a tool that generates accessible color palettes using the OKLCH color space instead of HSL. The results are much more perceptually uniform. Check out the demo and let me know what you think! It exports directly to CSS custom properties and Figma tokens.</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-emerald">#color</span>
+            <span class="tag-pill tag-violet">#tool</span>
+            <span class="tag-pill tag-amber">#accessibility</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                47 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                1.2k views
+              </span>
+            </div>
+            <button class="like-btn liked" onclick="this.classList.toggle('liked')">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              89
+            </button>
+          </div>
+        </article>
+
+        <!-- Thread 5 -->
+        <article class="thread-card">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);">
+              EJ
+              <span class="status-dot away"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">Emily Johnson</div>
+              <div class="thread-time">4 hours ago</div>
+            </div>
+          </div>
+          <h3 class="thread-title">Bug: Modal component loses focus trap when using tab switching</h3>
+          <p class="thread-preview">I've noticed that when switching between tabs inside a modal, the focus trap breaks and keyboard navigation stops working. This only happens in the latest version. Steps to reproduce: Open any modal with tabs → switch to second tab → press Tab key → focus escapes the modal.</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-rose">#bug</span>
+            <span class="tag-pill tag-sky">#react</span>
+            <span class="tag-pill tag-violet">#accessibility</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                12 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                389 views
+              </span>
+            </div>
+            <div class="thread-last-reply">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#ef4444,#f97316);">DB</div>
+              Dan B. · 1h ago
+            </div>
+          </div>
+        </article>
+
+        <!-- Thread 6 -->
+        <article class="thread-card">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e);">
+              AK
+              <span class="status-dot online"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">Aisha Khan</div>
+              <div class="thread-time">6 hours ago</div>
+            </div>
+          </div>
+          <h3 class="thread-title">Feature Request: Support for CSS container queries in the token system</h3>
+          <p class="thread-preview">With container queries becoming widely supported, it would be amazing if the token system could support context-aware tokens that change based on container size rather than viewport. This would be a game changer for component-based design systems.</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-amber">#feature-request</span>
+            <span class="tag-pill tag-indigo">#tokens</span>
+            <span class="tag-pill tag-rose">#css-tricks</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                34 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                891 views
+              </span>
+            </div>
+            <button class="like-btn" onclick="this.classList.toggle('liked')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              56
+            </button>
+          </div>
+        </article>
+
+        <!-- Thread 7 -->
+        <article class="thread-card">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#14b8a6,#06b6d4);">
+              RL
+              <span class="status-dot offline"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">Ryan Lee</div>
+              <div class="thread-time">8 hours ago</div>
+            </div>
+          </div>
+          <h3 class="thread-title">Best practices for naming CSS custom properties at scale?</h3>
+          <p class="thread-preview">Our team is growing and so is our token count. We're at around 400 custom properties now and naming is becoming inconsistent. What naming conventions have worked well for your teams? We're debating between BEM-style and a more semantic approach…</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-indigo">#design-system</span>
+            <span class="tag-pill tag-cyan">#naming</span>
+            <span class="tag-pill tag-violet">#tokens</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                41 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                1.1k views
+              </span>
+            </div>
+            <div class="thread-last-reply">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">MK</div>
+              Maya K. · 3h ago
+            </div>
+          </div>
+        </article>
+
+        <!-- Thread 8 -->
+        <article class="thread-card">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#f97316,#f59e0b);">
+              DW
+              <span class="status-dot online"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">Diana Wright</div>
+              <div class="thread-time">12 hours ago</div>
+            </div>
+          </div>
+          <h3 class="thread-title">Show &amp; Tell: Animated icon library with 200+ micro-interactions</h3>
+          <p class="thread-preview">After months of work, I'm releasing an open-source animated icon library. Each icon has carefully crafted micro-interactions for hover, click, and loading states. Built with CSS animations and SVG — no JS dependency. MIT licensed and ready to use!</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-emerald">#open-source</span>
+            <span class="tag-pill tag-orange">#icons</span>
+            <span class="tag-pill tag-rose">#animation</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                63 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                2.3k views
+              </span>
+            </div>
+            <button class="like-btn liked" onclick="this.classList.toggle('liked')">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              134
+            </button>
+          </div>
+        </article>
+
+        <!-- Thread 9 -->
+        <article class="thread-card">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">
+              CM
+              <span class="status-dot offline"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">Carlos Mendez</div>
+              <div class="thread-time">1 day ago</div>
+            </div>
+          </div>
+          <h3 class="thread-title">How are you handling dark mode token swapping in production?</h3>
+          <p class="thread-preview">We're looking at different strategies for dark mode — CSS custom properties, class toggling, media queries, or a combination. Our app has 50+ components and we need a reliable system. Would love to hear what's working for teams in production.</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-cyan">#dark-mode</span>
+            <span class="tag-pill tag-indigo">#tokens</span>
+            <span class="tag-pill tag-sky">#react</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                52 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                1.8k views
+              </span>
+            </div>
+            <div class="thread-last-reply">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">TN</div>
+              Tomás N. · 6h ago
+            </div>
+          </div>
+        </article>
+
+        <!-- Thread 10 -->
+        <article class="thread-card">
+          <div class="thread-top">
+            <div class="thread-avatar" style="background:linear-gradient(135deg,#a855f7,#ec4899);">
+              NP
+              <span class="status-dot online"></span>
+            </div>
+            <div class="thread-meta">
+              <div class="thread-author">Nina Patel</div>
+              <div class="thread-time">1 day ago</div>
+            </div>
+          </div>
+          <h3 class="thread-title">Off-Topic: What's your desk setup look like? 🖥️</h3>
+          <p class="thread-preview">Been curious about what setups fellow designers and developers are using. I recently upgraded to a dual ultrawide monitor setup and it's been a game changer for my workflow. Share your setups and any must-have accessories!</p>
+          <div class="thread-tags">
+            <span class="tag-pill tag-violet">#off-topic</span>
+            <span class="tag-pill tag-amber">#setups</span>
+          </div>
+          <div class="thread-bottom">
+            <div class="thread-stats">
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                76 replies
+              </span>
+              <span class="thread-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                3.1k views
+              </span>
+            </div>
+            <button class="like-btn" onclick="this.classList.toggle('liked')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              45
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Right Sidebar: Contributors & Rules -->
+    <aside class="sidebar-right">
+      <!-- Top Contributors -->
+      <div class="widget">
+        <div class="widget-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Top Contributors
+        </div>
+        <ul class="contributor-list">
+          <li class="contributor-item">
+            <span class="contributor-rank gold">1</span>
+            <div class="contributor-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">MK</div>
+            <div class="contributor-info">
+              <div class="contributor-name">Maya Kim</div>
+              <div class="contributor-posts">847 posts</div>
+            </div>
+            <div class="contributor-rep">⭐ 4,210</div>
+          </li>
+          <li class="contributor-item">
+            <span class="contributor-rank silver">2</span>
+            <div class="contributor-avatar" style="background:linear-gradient(135deg,#06b6d4,#0ea5e9);">JR</div>
+            <div class="contributor-info">
+              <div class="contributor-name">James Rivera</div>
+              <div class="contributor-posts">623 posts</div>
+            </div>
+            <div class="contributor-rep">⭐ 3,845</div>
+          </li>
+          <li class="contributor-item">
+            <span class="contributor-rank bronze">3</span>
+            <div class="contributor-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">TN</div>
+            <div class="contributor-info">
+              <div class="contributor-name">Tomás Núñez</div>
+              <div class="contributor-posts">591 posts</div>
+            </div>
+            <div class="contributor-rep">⭐ 3,612</div>
+          </li>
+          <li class="contributor-item">
+            <span class="contributor-rank">4</span>
+            <div class="contributor-avatar" style="background:linear-gradient(135deg,#f59e0b,#f97316);">SP</div>
+            <div class="contributor-info">
+              <div class="contributor-name">Sarah Park</div>
+              <div class="contributor-posts">478 posts</div>
+            </div>
+            <div class="contributor-rep">⭐ 2,930</div>
+          </li>
+          <li class="contributor-item">
+            <span class="contributor-rank">5</span>
+            <div class="contributor-avatar" style="background:linear-gradient(135deg,#ec4899,#f43f5e);">AK</div>
+            <div class="contributor-info">
+              <div class="contributor-name">Aisha Khan</div>
+              <div class="contributor-posts">412 posts</div>
+            </div>
+            <div class="contributor-rep">⭐ 2,785</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Community Rules -->
+      <div class="widget">
+        <div class="widget-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Community Rules
+        </div>
+        <ul class="rules-list">
+          <li>Be respectful and constructive in all interactions</li>
+          <li>Search before posting to avoid duplicates</li>
+          <li>Use appropriate tags and categories</li>
+          <li>Share code snippets with proper formatting</li>
+          <li>No spam, self-promotion, or off-topic content</li>
+        </ul>
+      </div>
+
+      <!-- Popular Tags -->
+      <div class="widget">
+        <div class="widget-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          Popular Tags
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span class="tag-pill tag-indigo">#design-system</span>
+          <span class="tag-pill tag-sky">#react</span>
+          <span class="tag-pill tag-violet">#typescript</span>
+          <span class="tag-pill tag-cyan">#figma</span>
+          <span class="tag-pill tag-emerald">#accessibility</span>
+          <span class="tag-pill tag-rose">#css-tricks</span>
+          <span class="tag-pill tag-amber">#api-design</span>
+          <span class="tag-pill tag-orange">#performance</span>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- ─── Floating New Post Button ────────────────────────── -->
+  <button class="fab" title="New Discussion" onclick="alert('Create new discussion dialog would open here')">＋</button>
+
+  <!-- ─── Footer ──────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="navbar-brand" style="margin-bottom:4px;">
+            <div class="logo-icon">CH</div>
+            CommunityHub
+          </a>
+          <p>A community-driven platform for designers and developers to collaborate, share knowledge, and build better products together.</p>
+        </div>
+        <div>
+          <div class="footer-heading">Community</div>
+          <ul class="footer-links">
+            <li><a href="#">All Discussions</a></li>
+            <li><a href="#">Categories</a></li>
+            <li><a href="#">Top Contributors</a></li>
+            <li><a href="#">Leaderboard</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Resources</div>
+          <ul class="footer-links">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">Component Library</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Company</div>
+          <ul class="footer-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 DesignLib Community. All rights reserved.</span>
+        <div class="footer-stats">
+          <span>12,847 members</span>
+          <span>3,291 discussions</span>
+          <span>47,502 replies</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── Minimal JS: Category switching & Sort tabs ──────── -->
+  <script>
+    // Category sidebar interaction
+    document.querySelectorAll('.category-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Sort tabs interaction
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Keyboard shortcut for search
+    document.addEventListener('keydown', e => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        document.querySelector('.navbar-search input')?.focus();
+      }
+    });
+  </script>
+
+</body>
+</html>
