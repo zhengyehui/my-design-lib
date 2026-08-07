@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BÉCANE — Collection</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --off-black: #0a0a0a;
+    --off-white: #f6f6f6;
+    --white: #ffffff;
+    --grey: #b2b2b2;
+    --divider: #e6e6e6;
+    --font: 'system-ui', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--off-white);
+    color: var(--off-black);
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header ── */
+  .header {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .pill-bar {
+    background: var(--white);
+    border-radius: 3px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    animation: slideDown 0.6s ease both;
+  }
+
+  .pill-bar--top { animation-delay: 0s; }
+  .pill-bar--bottom { animation-delay: 0.1s; }
+
+  .logo {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--off-black);
+    text-decoration: none;
+  }
+
+  .nav-link {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--off-black);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .nav-link:hover { opacity: 1; }
+
+  .nav-spacer { flex: 1; }
+
+  .nav-link--cart {
+    opacity: 1;
+    font-weight: 800;
+    position: relative;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--off-white);
+    padding: 120px 40px 80px;
+    text-align: center;
+  }
+
+  .hero__title {
+    font-size: clamp(64px, 14vw, 180px);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: var(--off-black);
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero__subtitle {
+    margin-top: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--grey);
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .hero__line {
+    width: 1px;
+    height: 60px;
+    background: var(--divider);
+    margin-top: 40px;
+    animation: growLine 1s ease 0.6s both;
+  }
+
+  /* ── Product Grid ── */
+  .products {
+    background: var(--off-black);
+    padding: 80px 40px 160px;
+    position: relative;
+  }
+
+  .products__header {
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+    opacity: 0.5;
+  }
+
+  .products__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .product-card {
+    animation: fadeUp 0.6s ease both;
+  }
+  .product-card:nth-child(1) { animation-delay: 0.05s; }
+  .product-card:nth-child(2) { animation-delay: 0.1s; }
+  .product-card:nth-child(3) { animation-delay: 0.15s; }
+  .product-card:nth-child(4) { animation-delay: 0.2s; }
+  .product-card:nth-child(5) { animation-delay: 0.25s; }
+  .product-card:nth-child(6) { animation-delay: 0.3s; }
+  .product-card:nth-child(7) { animation-delay: 0.35s; }
+  .product-card:nth-child(8) { animation-delay: 0.4s; }
+  .product-card:nth-child(9) { animation-delay: 0.45s; }
+
+  .product-card__image {
+    aspect-ratio: 3/4;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s ease;
+  }
+  .product-card__image:hover { transform: scale(1.02); }
+
+  .product-card__image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background: rgba(255,255,255,0.04);
+    transition: opacity 0.3s;
+  }
+  .product-card__image:hover::after { opacity: 1; }
+
+  /* CSS gradient placeholders */
+  .img-1 { background: linear-gradient(160deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%); }
+  .img-2 { background: linear-gradient(135deg, #2d2d2d 0%, #4a4a4a 50%, #1a1a1a 100%); }
+  .img-3 { background: linear-gradient(170deg, #0d0d0d 0%, #2c2c2c 30%, #3d3d3d 70%, #1a1a1a 100%); }
+  .img-4 { background: linear-gradient(145deg, #1c1c1c 0%, #2e2e2e 40%, #0a0a0a 100%); }
+  .img-5 { background: linear-gradient(155deg, #252525 0%, #3a3a3a 50%, #151515 100%); }
+  .img-6 { background: linear-gradient(130deg, #0f0f0f 0%, #282828 35%, #404040 70%, #1a1a1a 100%); }
+  .img-7 { background: linear-gradient(165deg, #1e1e2e 0%, #2a2a3e 50%, #151525 100%); }
+  .img-8 { background: linear-gradient(140deg, #202020 0%, #353535 45%, #121212 100%); }
+  .img-9 { background: linear-gradient(150deg, #181818 0%, #303030 50%, #0e0e0e 100%); }
+
+  /* Geometric overlays on placeholders */
+  .product-card__image::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+  }
+  .img-1::before { width: 60%; height: 80%; top: 10%; left: 20%; border: 1px solid rgba(255,255,255,0.06); }
+  .img-2::before { width: 40%; height: 40%; top: 30%; left: 30%; border-radius: 50%; border: 1px solid rgba(255,255,255,0.05); }
+  .img-3::before { width: 70%; height: 1px; top: 50%; left: 15%; background: rgba(255,255,255,0.08); }
+  .img-4::before { width: 50%; height: 60%; top: 20%; left: 25%; border: 1px solid rgba(255,255,255,0.04); transform: rotate(3deg); }
+  .img-5::before { width: 30%; height: 30%; top: 35%; left: 35%; border-radius: 50%; background: rgba(255,255,255,0.03); }
+  .img-6::before { width: 80%; height: 1px; top: 40%; left: 10%; background: rgba(255,255,255,0.07); }
+  .img-7::before { width: 45%; height: 55%; top: 22%; left: 28%; border: 1px solid rgba(255,255,255,0.05); border-radius: 2px; }
+  .img-8::before { width: 35%; height: 35%; top: 32%; left: 32%; border-radius: 50%; border: 1px solid rgba(255,255,255,0.06); }
+  .img-9::before { width: 60%; height: 1px; top: 55%; left: 20%; background: rgba(255,255,255,0.06); }
+
+  .product-card__name {
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .product-card__price {
+    color: var(--grey);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  /* Sticky bottom bar */
+  .products__sticky {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 90;
+    background: var(--white);
+    border-radius: 3px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    min-width: 320px;
+    animation: slideUp 0.5s ease 0.8s both;
+  }
+
+  .sticky__count {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--off-black);
+  }
+
+  .sticky__spacer { flex: 1; }
+
+  .sticky__btn {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--off-black);
+    border: none;
+    border-radius: 3px;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .sticky__btn:hover { opacity: 0.8; }
+
+  /* ── Manifesto ── */
+  .manifesto {
+    background: var(--off-white);
+    padding: 160px 40px 200px;
+    text-align: center;
+  }
+
+  .manifesto__text {
+    font-size: clamp(28px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--off-black);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .manifesto__accent {
+    color: var(--grey);
+    font-weight: 400;
+  }
+
+  .manifesto__divider {
+    width: 60px;
+    height: 2px;
+    background: var(--off-black);
+    margin: 40px auto;
+  }
+
+  .manifesto__sub {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+
+  /* ── Footer ── */
+  .footer {
+    background: var(--off-white);
+    padding: 0 20px 20px;
+  }
+
+  .footer__bars {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .footer-bar {
+    background: var(--white);
+    border-radius: 3px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .footer-bar__link {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--off-black);
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .footer-bar__link:hover { opacity: 1; }
+
+  .footer-bar__sep {
+    color: var(--divider);
+    font-size: 11px;
+    user-select: none;
+  }
+
+  /* ── Animations ── */
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes growLine {
+    from { opacity: 0; height: 0; }
+    to   { opacity: 1; height: 60px; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .products__grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  }
+  @media (max-width: 560px) {
+    .products__grid { grid-template-columns: 1fr; }
+    .header { left: 10px; top: 10px; }
+    .pill-bar { padding: 8px 14px; gap: 12px; }
+    .hero { padding: 100px 20px 60px; }
+    .products { padding: 60px 20px 140px; }
+    .manifesto { padding: 100px 20px 140px; }
+    .products__sticky { min-width: auto; left: 10px; right: 10px; transform: none; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .footer__bars { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="header">
+  <div class="pill-bar pill-bar--top">
+    <a href="#" class="logo">BÉCANE</a>
+    <span class="nav-spacer"></span>
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#b2b2b2;">PARIS</span>
+  </div>
+  <div class="pill-bar pill-bar--bottom">
+    <a href="#" class="nav-link">ALL 27</a>
+    <a href="#" class="nav-link">STORIES 05</a>
+    <span class="nav-spacer"></span>
+    <a href="#" class="nav-link nav-link--cart">CART 00</a>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <h1 class="hero__title">COLLECTION</h1>
+  <p class="hero__subtitle">SS27 — 01 THROUGH 14 — TECHNICAL RIDING WEAR</p>
+  <div class="hero__line"></div>
+</section>
+
+<!-- ── Products ── -->
+<section class="products" id="products">
+  <div class="products__header">SS27 — TECHNICAL COLLECTION</div>
+  <div class="products__grid">
+
+    <article class="product-card">
+      <div class="product-card__image img-1"></div>
+      <div class="product-card__name">JERSEY AÉRO PRO</div>
+      <div class="product-card__price">€185</div>
+    </article>
+
+    <article class="product-card">
+      <div class="product-card__image img-2"></div>
+      <div class="product-card__name">BIB SHORT ÉLITE</div>
+      <div class="product-card__price">€210</div>
+    </article>
+
+    <article class="product-card">
+      <div class="product-card__image img-3"></div>
+      <div class="product-card__name">GILET VENT PARIS</div>
+      <div class="product-card__price">€145</div>
+    </article>
+
+    <article class="product-card">
+      <div class="product-card__image img-4"></div>
+      <div class="product-card__name">CAP PRINTEMPS</div>
+      <div class="product-card__price">€45</div>
+    </article>
+
+    <article class="product-card">
+      <div class="product-card__image img-5"></div>
+      <div class="product-card__name">ARM WARMERS</div>
+      <div class="product-card__price">€55</div>
+    </article>
+
+    <article class="product-card">
+      <div class="product-card__image img-6"></div>
+      <div class="product-card__name">SOCKS MÉTIERS</div>
+      <div class="product-card__price">€22</div>
+    </article>
+
+    <article class="product-card">
+      <div class="product-card__image img-7"></div>
+      <div class="product-card__name">JACKET TEMPÊTE</div>
+      <div class="product-card__price">€295</div>
+    </article>
+
+    <article class="product-card">
+      <div class="product-card__image img-8"></div>
+      <div class="product-card__name">BASELAYER MESH</div>
+      <div class="product-card__price">€75</div>
+    </article>
+
+    <article class="product-card">
+      <div class="product-card__image img-9"></div>
+      <div class="product-card__name">NECK WARMER</div>
+      <div class="product-card__price">€35</div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ── Sticky Bar ── -->
+<div class="products__sticky" id="stickyBar">
+  <span class="sticky__count">14 PRODUCTS</span>
+  <span class="sticky__spacer"></span>
+  <button class="sticky__btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">DISCOVER</button>
+</div>
+
+<!-- ── Manifesto ── -->
+<section class="manifesto">
+  <p class="manifesto__text">
+    BUILT FOR THE ROAD.<br>
+    <span class="manifesto__accent">DESIGNED FOR HER.</span>
+  </p>
+  <div class="manifesto__divider"></div>
+  <p class="manifesto__sub">TECHNICAL CYCLING APPAREL — PARIS, FRANCE</p>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="footer__bars">
+    <div class="footer-bar">
+      <a href="#" class="footer-bar__link">TERMS</a>
+      <span class="footer-bar__sep">|</span>
+      <a href="#" class="footer-bar__link">SHIPPING</a>
+      <span class="footer-bar__sep">|</span>
+      <a href="#" class="footer-bar__link">SIZE GUIDE</a>
+    </div>
+    <div class="footer-bar">
+      <a href="mailto:hello@becaneparis.com" class="footer-bar__link">EMAIL</a>
+      <span class="footer-bar__sep">|</span>
+      <a href="#" class="footer-bar__link">INSTAGRAM</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
