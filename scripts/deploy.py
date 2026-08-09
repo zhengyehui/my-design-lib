@@ -21,7 +21,7 @@ for root, dirs, files in os.walk(local_dist):
         remote_path = os.path.join(remote_base, rel_path)
         remote_dir = os.path.dirname(remote_path)
         ssh.exec_command(f'mkdir -p {remote_dir}')
-        time.sleep(0.03)
+        time.sleep(0.02)
         sftp.put(local_path, remote_path)
         uploaded += 1
 
