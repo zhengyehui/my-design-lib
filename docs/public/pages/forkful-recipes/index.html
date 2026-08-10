@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forkful — Cook. Plan. Thrive.</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ff-cream: #faf8f4;
+  --ff-orange: #e8614d;
+  --ff-orange-light: #f08c7d;
+  --ff-orange-dark: #c94a38;
+  --ff-brown: #2c1810;
+  --ff-brown-light: #5a3a2e;
+  --ff-warm-gray: #8b7e74;
+  --ff-warm-gray-light: #d4cdc5;
+  --ff-white: #ffffff;
+  --ff-tomato: #e74c3c;
+  --ff-herb: #4a7c59;
+  --ff-golden: #f0a500;
+  --ff-plum: #8b5cf6;
+  --ff-ocean: #0ea5e9;
+  --ff-blush: #ec4899;
+  --ff-sage: #a3b18a;
+  --ff-terracotta: #c67a4b;
+  --ff-lavender: #b49adb;
+
+  --font-serif: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-sm: 0 2px 8px rgba(44,24,16,0.06);
+  --shadow-md: 0 4px 20px rgba(44,24,16,0.1);
+  --shadow-lg: 0 8px 40px rgba(44,24,16,0.14);
+  --shadow-xl: 0 16px 60px rgba(44,24,16,0.18);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--ff-cream);
+  color: var(--ff-brown);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; font-family: inherit; }
+input { font-family: inherit; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Sticky Nav ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(250,248,244,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(44,24,16,0.06);
+  transition: var(--transition);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.nav__logo {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--ff-brown);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.02em;
+}
+
+.nav__logo span { font-size: 1.3em; }
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav__links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ff-brown-light);
+  transition: color var(--transition);
+  position: relative;
+}
+
+.nav__links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--ff-orange);
+  border-radius: 1px;
+  transition: width var(--transition);
+}
+
+.nav__links a:hover { color: var(--ff-orange); }
+.nav__links a:hover::after { width: 100%; }
+
+.nav__cta {
+  background: var(--ff-orange);
+  color: var(--ff-white) !important;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: all var(--transition);
+  box-shadow: 0 4px 14px rgba(232,97,77,0.3);
+}
+
+.nav__cta:hover {
+  background: var(--ff-orange-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(232,97,77,0.4);
+}
+
+.nav__cta::after { display: none !important; }
+
+.nav__mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  padding: 4px;
+}
+
+.nav__mobile-toggle span {
+  width: 24px;
+  height: 2px;
+  background: var(--ff-brown);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+/* ── Hero ── */
+.hero {
+  padding: 80px 0 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(232,97,77,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(240,165,0,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(232,97,77,0.08);
+  color: var(--ff-orange);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+  line-height: 1.1;
+  color: var(--ff-brown);
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.hero__title em {
+  color: var(--ff-orange);
+  font-style: italic;
+}
+
+.hero__subtitle {
+  font-size: 1.15rem;
+  color: var(--ff-warm-gray);
+  max-width: 460px;
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition);
+}
+
+.btn--primary {
+  background: var(--ff-orange);
+  color: var(--ff-white);
+  box-shadow: 0 4px 18px rgba(232,97,77,0.35);
+}
+
+.btn--primary:hover {
+  background: var(--ff-orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(232,97,77,0.4);
+}
+
+.btn--secondary {
+  background: var(--ff-white);
+  color: var(--ff-brown);
+  border: 2px solid rgba(44,24,16,0.1);
+}
+
+.btn--secondary:hover {
+  border-color: var(--ff-orange);
+  color: var(--ff-orange);
+  transform: translateY(-2px);
+}
+
+/* ── Device Mockups ── */
+.hero__devices {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 440px;
+}
+
+.device-tablet {
+  width: 320px;
+  height: 400px;
+  background: var(--ff-white);
+  border-radius: 24px;
+  border: 3px solid var(--ff-brown);
+  box-shadow: var(--shadow-xl), inset 0 0 0 6px var(--ff-brown);
+  position: relative;
+  overflow: hidden;
+  transform: perspective(800px) rotateY(-8deg) rotateX(4deg);
+  z-index: 2;
+}
+
+.device-tablet__notch {
+  width: 40px;
+  height: 6px;
+  background: var(--ff-brown);
+  border-radius: 3px;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.device-tablet__screen {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #fef7f0, #faf0e6);
+  padding: 28px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.device-tablet__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.device-tablet__header-title {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  color: var(--ff-brown);
+}
+
+.device-tablet__header-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ff-orange), var(--ff-orange-dark));
+}
+
+.device-tablet__recipe-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  flex: 1;
+}
+
+.mini-recipe {
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mini-recipe::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.92;
+  z-index: 0;
+}
+
+.mini-recipe:nth-child(1)::before { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.mini-recipe:nth-child(2)::before { background: linear-gradient(135deg, #4a7c59, #3a6349); }
+.mini-recipe:nth-child(3)::before { background: linear-gradient(135deg, #f0a500, #d49000); }
+.mini-recipe:nth-child(4)::before { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+.mini-recipe__name {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--ff-white);
+  position: relative;
+  z-index: 1;
+}
+
+.mini-recipe__time {
+  font-size: 0.5rem;
+  color: rgba(255,255,255,0.8);
+  position: relative;
+  z-index: 1;
+}
+
+.device-phone {
+  width: 160px;
+  height: 300px;
+  background: var(--ff-white);
+  border-radius: 28px;
+  border: 3px solid var(--ff-brown);
+  box-shadow: var(--shadow-xl), inset 0 0 0 5px var(--ff-brown);
+  position: relative;
+  overflow: hidden;
+  transform: perspective(800px) rotateY(12deg) rotateX(3deg);
+  z-index: 3;
+  margin-left: -40px;
+  margin-bottom: -20px;
+}
+
+.device-phone__notch {
+  width: 50px;
+  height: 8px;
+  background: var(--ff-brown);
+  border-radius: 4px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.device-phone__screen {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #fef7f0, #faf0e6);
+  padding: 26px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.device-phone__img {
+  width: 100%;
+  height: 80px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--ff-orange), var(--ff-terracotta));
+  position: relative;
+  overflow: hidden;
+}
+
+.device-phone__img::after {
+  content: '🍝';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+}
+
+.device-phone__title {
+  font-family: var(--font-serif);
+  font-size: 0.7rem;
+  color: var(--ff-brown);
+}
+
+.device-phone__meta {
+  font-size: 0.48rem;
+  color: var(--ff-warm-gray);
+  display: flex;
+  gap: 6px;
+}
+
+.device-phone__meta span {
+  background: rgba(232,97,77,0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--ff-orange);
+  font-weight: 600;
+}
+
+.device-phone__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.phone-step {
+  height: 6px;
+  background: var(--ff-warm-gray-light);
+  border-radius: 3px;
+}
+
+.phone-step:first-child { width: 100%; background: var(--ff-orange); }
+.phone-step:nth-child(2) { width: 85%; }
+.phone-step:nth-child(3) { width: 70%; }
+
+/* ── Stats ── */
+.stats {
+  padding: 60px 0;
+  background: var(--ff-brown);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(232,97,77,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(240,165,0,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.stats__inner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat__number {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  color: var(--ff-white);
+  margin-bottom: 4px;
+}
+
+.stat__label {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 400;
+}
+
+/* ── Featured Recipes ── */
+.recipes {
+  padding: 100px 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-eyebrow {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ff-orange);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: var(--ff-brown);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--ff-warm-gray);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.recipe-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  transition: all var(--transition);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.recipe-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+}
+
+.recipe-card__bg {
+  height: 220px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.recipe-card__bg::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+}
+
+.recipe-card:nth-child(1) .recipe-card__bg { background: linear-gradient(135deg, #e74c3c, #c0392b, #e74c3c); }
+.recipe-card:nth-child(2) .recipe-card__bg { background: linear-gradient(135deg, #4a7c59, #2d5a3a, #4a7c59); }
+.recipe-card:nth-child(3) .recipe-card__bg { background: linear-gradient(135deg, #6bc06e, #4a9e4e, #a8e6a3); }
+.recipe-card:nth-child(4) .recipe-card__bg { background: linear-gradient(135deg, #f0a500, #e08e00, #f5c842); }
+.recipe-card:nth-child(5) .recipe-card__bg { background: linear-gradient(135deg, #c67a4b, #a8623a, #d4946a); }
+.recipe-card:nth-child(6) .recipe-card__bg { background: linear-gradient(135deg, #d45050, #b53030, #e06060); }
+
+.recipe-card__emoji {
+  font-size: 4rem;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+  transition: transform var(--transition);
+}
+
+.recipe-card:hover .recipe-card__emoji {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+.recipe-card__save {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: all var(--transition);
+  font-size: 1rem;
+  border: none;
+  color: white;
+}
+
+.recipe-card__save:hover {
+  background: rgba(255,255,255,0.4);
+  transform: scale(1.1);
+}
+
+.recipe-card__body {
+  background: var(--ff-white);
+  padding: 20px;
+}
+
+.recipe-card__name {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--ff-brown);
+  margin-bottom: 8px;
+}
+
+.recipe-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recipe-card__time {
+  font-size: 0.82rem;
+  color: var(--ff-warm-gray);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.recipe-card__difficulty {
+  display: flex;
+  gap: 4px;
+}
+
+.difficulty-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ff-warm-gray-light);
+}
+
+.difficulty-dot--active {
+  background: var(--ff-orange);
+}
+
+/* ── Meal Planner ── */
+.planner {
+  padding: 100px 0;
+  background: var(--ff-white);
+}
+
+.planner__calendar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: 100px repeat(7, 1fr);
+  gap: 2px;
+  background: rgba(44,24,16,0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.calendar-header {
+  background: var(--ff-brown);
+  color: var(--ff-white);
+  padding: 14px 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+}
+
+.calendar-header:first-child {
+  background: var(--ff-brown-light);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.calendar-label {
+  background: var(--ff-cream);
+  padding: 16px 12px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--ff-brown-light);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+}
+
+.calendar-cell {
+  background: var(--ff-cream);
+  padding: 10px 6px;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: background var(--transition);
+}
+
+.calendar-cell:hover {
+  background: rgba(232,97,77,0.04);
+}
+
+.meal-pill {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 50px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.meal-pill--tomato { background: rgba(231,76,60,0.12); color: #c0392b; }
+.meal-pill--herb { background: rgba(74,124,89,0.12); color: #3a6349; }
+.meal-pill--golden { background: rgba(240,165,0,0.12); color: #b07800; }
+.meal-pill--plum { background: rgba(139,92,246,0.12); color: #7c3aed; }
+.meal-pill--ocean { background: rgba(14,165,233,0.12); color: #0284c7; }
+.meal-pill--terracotta { background: rgba(198,122,75,0.12); color: #a8623a; }
+
+/* ── Features ── */
+.features {
+  padding: 100px 0;
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.feature-card {
+  background: var(--ff-white);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  text-align: center;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(44,24,16,0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--ff-orange);
+  transform: scaleX(0);
+  transition: transform var(--transition);
+}
+
+.feature-card:hover::before { transform: scaleX(1); }
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-card__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 20px;
+}
+
+.feature-card:nth-child(1) .feature-card__icon { background: rgba(232,97,77,0.1); }
+.feature-card:nth-child(2) .feature-card__icon { background: rgba(74,124,89,0.1); }
+.feature-card:nth-child(3) .feature-card__icon { background: rgba(240,165,0,0.1); }
+.feature-card:nth-child(4) .feature-card__icon { background: rgba(139,92,246,0.1); }
+
+.feature-card__title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--ff-brown);
+  margin-bottom: 10px;
+}
+
+.feature-card__desc {
+  font-size: 0.88rem;
+  color: var(--ff-warm-gray);
+  line-height: 1.6;
+}
+
+/* ── Chef's Picks ── */
+.chefs {
+  padding: 100px 0;
+  background: var(--ff-white);
+}
+
+.chefs__scroll {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  display: flex;
+  gap: 28px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chefs__scroll::-webkit-scrollbar { display: none; }
+
+.chef-card {
+  min-width: 320px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  background: var(--ff-cream);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  text-align: center;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(44,24,16,0.04);
+}
+
+.chef-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.chef-card__avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  position: relative;
+}
+
+.chef-card:nth-child(1) .chef-card__avatar { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.chef-card:nth-child(2) .chef-card__avatar { background: linear-gradient(135deg, #4a7c59, #3a6349); }
+.chef-card:nth-child(3) .chef-card__avatar { background: linear-gradient(135deg, #f0a500, #d49000); }
+
+.chef-card__avatar::after {
+  content: '✓';
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ff-orange);
+  color: white;
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--ff-cream);
+  font-weight: 700;
+}
+
+.chef-card__name {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--ff-brown);
+  margin-bottom: 4px;
+}
+
+.chef-card__specialty {
+  font-size: 0.85rem;
+  color: var(--ff-orange);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.chef-card__recipes {
+  font-size: 0.82rem;
+  color: var(--ff-warm-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.chef-card__recipes strong {
+  color: var(--ff-brown);
+  font-weight: 600;
+}
+
+/* ── Newsletter ── */
+.newsletter {
+  padding: 100px 0;
+  position: relative;
+}
+
+.newsletter__inner {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, var(--ff-orange), var(--ff-orange-dark));
+  border-radius: var(--radius-xl);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 48px rgba(232,97,77,0.3);
+}
+
+.newsletter__inner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.newsletter__emoji {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter__title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--ff-white);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter__subtitle {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter__form {
+  display: flex;
+  gap: 10px;
+  max-width: 440px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter__input {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 50px;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.2);
+  color: var(--ff-white);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all var(--transition);
+}
+
+.newsletter__input::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.newsletter__input:focus {
+  border-color: var(--ff-white);
+  background: rgba(255,255,255,0.25);
+}
+
+.newsletter__submit {
+  padding: 14px 28px;
+  border-radius: 50px;
+  background: var(--ff-brown);
+  color: var(--ff-white);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.newsletter__submit:hover {
+  background: var(--ff-brown-light);
+  transform: translateY(-1px);
+}
+
+/* ── Footer ── */
+.footer {
+  background: var(--ff-brown);
+  padding: 60px 0 30px;
+  color: rgba(255,255,255,0.7);
+}
+
+.footer__inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer__brand {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--ff-white);
+  margin-bottom: 12px;
+}
+
+.footer__desc {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  max-width: 280px;
+}
+
+.footer__heading {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--ff-white);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 18px;
+}
+
+.footer__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer__links a {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.6);
+  transition: color var(--transition);
+}
+
+.footer__links a:hover { color: var(--ff-orange-light); }
+
+.footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
+}
+
+.footer__copy {
+  font-size: 0.82rem;
+}
+
+.footer__socials {
+  display: flex;
+  gap: 12px;
+}
+
+.footer__social {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all var(--transition);
+}
+
+.footer__social:hover {
+  background: var(--ff-orange);
+  transform: translateY(-2px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .hero__inner { grid-template-columns: 1fr; text-align: center; }
+  .hero__subtitle { margin: 0 auto 36px; }
+  .hero__actions { justify-content: center; }
+  .hero__devices { justify-content: center; margin-top: 40px; }
+  .recipe-grid { grid-template-columns: repeat(2, 1fr); }
+  .features__grid { grid-template-columns: repeat(2, 1fr); }
+  .footer__inner { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .nav__links { display: none; }
+  .nav__mobile-toggle { display: flex; }
+  .stats__inner { grid-template-columns: 1fr; gap: 30px; }
+  .recipe-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .calendar-grid { overflow-x: auto; min-width: 700px; }
+  .planner__calendar { overflow-x: auto; }
+  .features__grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .newsletter__form { flex-direction: column; }
+  .footer__inner { grid-template-columns: 1fr; text-align: center; }
+  .footer__desc { max-width: 100%; }
+  .footer__bottom { flex-direction: column; gap: 16px; }
+  .device-tablet { width: 240px; height: 300px; }
+  .device-phone { width: 120px; height: 230px; }
+  .hero__devices { min-height: 340px; }
+}
+
+@media (max-width: 480px) {
+  .hero { padding: 40px 0 60px; }
+  .recipes, .planner, .features, .chefs, .newsletter { padding: 60px 0; }
+}
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.hero__devices { animation: fadeInUp 0.8s ease-out 0.3s both; }
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav class="nav">
+  <div class="nav__inner">
+    <a href="#" class="nav__logo"><span>🍴</span> Forkful</a>
+    <ul class="nav__links">
+      <li><a href="#recipes">Recipes</a></li>
+      <li><a href="#planner">Meal Planner</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#chefs">Chefs</a></li>
+      <li><a href="#get-app" class="nav__cta">Get the App</a></li>
+    </ul>
+    <button class="nav__mobile-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__content">
+      <div class="hero__badge">🥗 #1 Recipe App of 2026</div>
+      <h1 class="hero__title">Cook. Plan.<br><em>Thrive.</em></h1>
+      <p class="hero__subtitle">Discover 50,000+ chef-crafted recipes, plan your weekly meals in seconds, and make every bite count with smart nutrition tracking.</p>
+      <div class="hero__actions">
+        <a href="#get-app" class="btn btn--primary">Download Free 🍽️</a>
+        <a href="#recipes" class="btn btn--secondary">Browse Recipes</a>
+      </div>
+    </div>
+    <div class="hero__devices">
+      <div class="device-tablet">
+        <div class="device-tablet__notch"></div>
+        <div class="device-tablet__screen">
+          <div class="device-tablet__header">
+            <span class="device-tablet__header-title">Popular</span>
+            <span class="device-tablet__header-dot"></span>
+          </div>
+          <div class="device-tablet__recipe-grid">
+            <div class="mini-recipe">
+              <span class="mini-recipe__name">Thai Basil</span>
+              <span class="mini-recipe__time">25 min</span>
+            </div>
+            <div class="mini-recipe">
+              <span class="mini-recipe__name">Risotto</span>
+              <span class="mini-recipe__time">40 min</span>
+            </div>
+            <div class="mini-recipe">
+              <span class="mini-recipe__name">Matcha Cake</span>
+              <span class="mini-recipe__time">60 min</span>
+            </div>
+            <div class="mini-recipe">
+              <span class="mini-recipe__name">Miso Ramen</span>
+              <span class="mini-recipe__time">35 min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="device-phone">
+        <div class="device-phone__notch"></div>
+        <div class="device-phone__screen">
+          <div class="device-phone__img"></div>
+          <span class="device-phone__title">Spicy Miso Ramen</span>
+          <div class="device-phone__meta">
+            <span>35 min</span>
+            <span>Easy</span>
+          </div>
+          <div class="device-phone__steps">
+            <div class="phone-step"></div>
+            <div class="phone-step"></div>
+            <div class="phone-step"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats ── -->
+<section class="stats">
+  <div class="stats__inner">
+    <div class="stat">
+      <div class="stat__number">50K+</div>
+      <div class="stat__label">Chef-Crafted Recipes</div>
+    </div>
+    <div class="stat">
+      <div class="stat__number">2M+</div>
+      <div class="stat__label">Meals Planned</div>
+    </div>
+    <div class="stat">
+      <div class="stat__number">4.9★</div>
+      <div class="stat__label">App Store Rating</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Featured Recipes ── -->
+<section class="recipes" id="recipes">
+  <div class="section-header">
+    <div class="section-eyebrow">What's Cooking</div>
+    <h2 class="section-title">Featured Recipes</h2>
+    <p class="section-subtitle">Handpicked by our chefs — bold flavors, simple steps, unforgettable meals.</p>
+  </div>
+  <div class="recipe-grid">
+    <div class="recipe-card animate-on-scroll">
+      <div class="recipe-card__bg">
+        <span class="recipe-card__emoji">🍗</span>
+        <button class="recipe-card__save" aria-label="Save recipe">♡</button>
+      </div>
+      <div class="recipe-card__body">
+        <h3 class="recipe-card__name">Thai Basil Chicken</h3>
+        <div class="recipe-card__meta">
+          <span class="recipe-card__time">⏱ 25 min</span>
+          <div class="recipe-card__difficulty">
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card animate-on-scroll">
+      <div class="recipe-card__bg">
+        <span class="recipe-card__emoji">🍄</span>
+        <button class="recipe-card__save" aria-label="Save recipe">♡</button>
+      </div>
+      <div class="recipe-card__body">
+        <h3 class="recipe-card__name">Mushroom Risotto</h3>
+        <div class="recipe-card__meta">
+          <span class="recipe-card__time">⏱ 40 min</span>
+          <div class="recipe-card__difficulty">
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot difficulty-dot--active"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card animate-on-scroll">
+      <div class="recipe-card__bg">
+        <span class="recipe-card__emoji">🍰</span>
+        <button class="recipe-card__save" aria-label="Save recipe">♡</button>
+      </div>
+      <div class="recipe-card__body">
+        <h3 class="recipe-card__name">Matcha Cheesecake</h3>
+        <div class="recipe-card__meta">
+          <span class="recipe-card__time">⏱ 60 min</span>
+          <div class="recipe-card__difficulty">
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card animate-on-scroll">
+      <div class="recipe-card__bg">
+        <span class="recipe-card__emoji">🥗</span>
+        <button class="recipe-card__save" aria-label="Save recipe">♡</button>
+      </div>
+      <div class="recipe-card__body">
+        <h3 class="recipe-card__name">Grilled Mediterranean Bowl</h3>
+        <div class="recipe-card__meta">
+          <span class="recipe-card__time">⏱ 20 min</span>
+          <div class="recipe-card__difficulty">
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot"></span>
+            <span class="difficulty-dot"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card animate-on-scroll">
+      <div class="recipe-card__bg">
+        <span class="recipe-card__emoji">🍞</span>
+        <button class="recipe-card__save" aria-label="Save recipe">♡</button>
+      </div>
+      <div class="recipe-card__body">
+        <h3 class="recipe-card__name">Sourdough Bread</h3>
+        <div class="recipe-card__meta">
+          <span class="recipe-card__time">⏱ 3 hrs</span>
+          <div class="recipe-card__difficulty">
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot difficulty-dot--active"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card animate-on-scroll">
+      <div class="recipe-card__bg">
+        <span class="recipe-card__emoji">🍜</span>
+        <button class="recipe-card__save" aria-label="Save recipe">♡</button>
+      </div>
+      <div class="recipe-card__body">
+        <h3 class="recipe-card__name">Spicy Miso Ramen</h3>
+        <div class="recipe-card__meta">
+          <span class="recipe-card__time">⏱ 35 min</span>
+          <div class="recipe-card__difficulty">
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot difficulty-dot--active"></span>
+            <span class="difficulty-dot"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Meal Planner ── -->
+<section class="planner" id="planner">
+  <div class="section-header">
+    <div class="section-eyebrow">Plan Ahead</div>
+    <h2 class="section-title">Your Week, Planned</h2>
+    <p class="section-subtitle">Drag and drop recipes into your weekly calendar. Never wonder "what's for dinner?" again.</p>
+  </div>
+  <div class="planner__calendar">
+    <div class="calendar-grid">
+      <!-- Header Row -->
+      <div class="calendar-header">Meals</div>
+      <div class="calendar-header">Mon</div>
+      <div class="calendar-header">Tue</div>
+      <div class="calendar-header">Wed</div>
+      <div class="calendar-header">Thu</div>
+      <div class="calendar-header">Fri</div>
+      <div class="calendar-header">Sat</div>
+      <div class="calendar-header">Sun</div>
+
+      <!-- Breakfast -->
+      <div class="calendar-label">🌅 Breakfast</div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--golden">Avocado Toast</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--herb">Smoothie Bowl</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--terracotta">Granola Parfait</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--golden">Eggs Benedict</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--herb">Chia Pudding</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--terracotta">Pancake Stack</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--golden">French Toast</span></div>
+
+      <!-- Lunch -->
+      <div class="calendar-label">☀️ Lunch</div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--herb">Med. Bowl</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--tomato">Thai Basil</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--ocean">Poke Bowl</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--plum">Falafel Wrap</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--herb">Caesar Salad</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--ocean">Fish Tacos</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--tomato">Caprese Panini</span></div>
+
+      <!-- Dinner -->
+      <div class="calendar-label">🌙 Dinner</div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--plum">Miso Ramen</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--terracotta">Mushroom Risotto</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--tomato">Pasta Pomodoro</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--ocean">Grilled Salmon</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--herb">Veggie Stir-Fry</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--tomato">Margherita Pizza</span></div>
+      <div class="calendar-cell"><span class="meal-pill meal-pill--terracotta">Coq au Vin</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ── -->
+<section class="features" id="features">
+  <div class="section-header">
+    <div class="section-eyebrow">Why Forkful</div>
+    <h2 class="section-title">Built for Real Life</h2>
+    <p class="section-subtitle">Powerful tools that make cooking joyful and meal planning effortless.</p>
+  </div>
+  <div class="features__grid">
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-card__icon">🛒</div>
+      <h3 class="feature-card__title">Smart Shopping List</h3>
+      <p class="feature-card__desc">Auto-generate grocery lists from your meal plan. Group by aisle, check off as you shop, share with family.</p>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-card__icon">📊</div>
+      <h3 class="feature-card__title">Nutrition Tracking</h3>
+      <p class="feature-card__desc">See calories, macros, and micronutrients for every meal. Set goals and track your progress effortlessly.</p>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-card__icon">⏱️</div>
+      <h3 class="feature-card__title">Cooking Timer</h3>
+      <p class="feature-card__desc">Multi-step timers that guide you through complex recipes. Never overcook or undercook again.</p>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-card__icon">⚖️</div>
+      <h3 class="feature-card__title">Recipe Scaling</h3>
+      <p class="feature-card__desc">Cooking for 2 or 20? Scale ingredients instantly with perfect ratios. Adjust servings with one tap.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Chef's Picks ── -->
+<section class="chefs" id="chefs">
+  <div class="section-header">
+    <div class="section-eyebrow">Meet the Makers</div>
+    <h2 class="section-title">Chef's Picks</h2>
+    <p class="section-subtitle">Follow your favorite chefs and never miss a new creation.</p>
+  </div>
+  <div class="chefs__scroll">
+    <div class="chef-card">
+      <div class="chef-card__avatar">👨‍🍳</div>
+      <h3 class="chef-card__name">Marco Bellini</h3>
+      <p class="chef-card__specialty">Italian & Mediterranean</p>
+      <p class="chef-card__recipes">📚 <strong>342</strong> recipes</p>
+    </div>
+    <div class="chef-card">
+      <div class="chef-card__avatar">👩‍🍳</div>
+      <h3 class="chef-card__name">Yuki Tanaka</h3>
+      <p class="chef-card__specialty">Japanese & Fusion</p>
+      <p class="chef-card__recipes">📚 <strong>278</strong> recipes</p>
+    </div>
+    <div class="chef-card">
+      <div class="chef-card__avatar">👩‍🍳</div>
+      <h3 class="chef-card__name">Amara Osei</h3>
+      <p class="chef-card__specialty">West African & Modern</p>
+      <p class="chef-card__recipes">📚 <strong>195</strong> recipes</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Newsletter ── -->
+<section class="newsletter" id="get-app">
+  <div class="newsletter__inner">
+    <div class="newsletter__emoji">📬</div>
+    <h2 class="newsletter__title">Get Weekly Recipe Inspiration</h2>
+    <p class="newsletter__subtitle">Join 120,000+ home cooks who get our curated picks every Thursday.</p>
+    <form class="newsletter__form" onsubmit="event.preventDefault();">
+      <input type="email" class="newsletter__input" placeholder="your@email.com" required>
+      <button type="submit" class="newsletter__submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div>
+      <div class="footer__brand">🍴 Forkful</div>
+      <p class="footer__desc">Making home cooking joyful, one recipe at a time. Available on iOS and Android.</p>
+    </div>
+    <div>
+      <h4 class="footer__heading">Product</h4>
+      <ul class="footer__links">
+        <li><a href="#">Recipes</a></li>
+        <li><a href="#">Meal Planner</a></li>
+        <li><a href="#">Shopping List</a></li>
+        <li><a href="#">Pricing</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer__heading">Company</h4>
+      <ul class="footer__links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer__heading">Support</h4>
+      <ul class="footer__links">
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__copy">© 2026 Forkful Inc. All rights reserved.</span>
+    <div class="footer__socials">
+      <a href="#" class="footer__social" aria-label="Instagram">📷</a>
+      <a href="#" class="footer__social" aria-label="Twitter">🐦</a>
+      <a href="#" class="footer__social" aria-label="TikTok">🎵</a>
+      <a href="#" class="footer__social" aria-label="YouTube">▶️</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Intersection Observer for scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('is-visible');
+      }, i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+// Navbar shadow on scroll
+const nav = document.querySelector('.nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 10) {
+    nav.style.boxShadow = '0 2px 20px rgba(44,24,16,0.08)';
+  } else {
+    nav.style.boxShadow = 'none';
+  }
+}, { passive: true });
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

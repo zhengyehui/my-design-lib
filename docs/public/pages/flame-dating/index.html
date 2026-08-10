@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flame — Find Your Spark</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ============================================
+       FLAME DATING APP — LANDING PAGE
+       Dark theme with coral/pink accents
+       ============================================ */
+
+    /* --- CSS Variables (extend tokens) --- */
+    :root {
+      --flame-bg: #0a0a0f;
+      --flame-bg-card: #12121a;
+      --flame-bg-elevated: #1a1a2e;
+      --flame-coral: #ff6b6b;
+      --flame-pink: #ff4081;
+      --flame-hot: #ff1744;
+      --flame-gold: #ffd700;
+      --flame-text: #f0f0f5;
+      --flame-text-muted: #8888a0;
+      --flame-border: rgba(255,255,255,0.06);
+      --flame-glass: rgba(18,18,26,0.72);
+      --flame-gradient: linear-gradient(135deg, #ff6b6b, #ff4081, #ff1744);
+      --flame-gradient-soft: linear-gradient(135deg, #ff6b6b33, #ff408133);
+      --flame-radius: 16px;
+      --flame-radius-lg: 24px;
+      --flame-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      --flame-shadow-glow: 0 0 40px rgba(255,75,75,0.15);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    /* --- Reset & Base --- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--flame-bg);
+      color: var(--flame-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    /* --- Utility --- */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 100px 0; }
+    .section-label {
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--flame-coral);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .section-subtitle {
+      color: var(--flame-text-muted);
+      font-size: 1.1rem;
+      max-width: 560px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(.4,0,.2,1);
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--flame-gradient);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(255,75,75,0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(255,75,75,0.5);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--flame-text);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+    }
+    .btn-outline:hover {
+      border-color: var(--flame-coral);
+      color: var(--flame-coral);
+      transform: translateY(-2px);
+    }
+    .btn-sm { padding: 10px 24px; font-size: 0.85rem; }
+
+    /* --- Animated gradient text --- */
+    .gradient-text {
+      background: linear-gradient(135deg, #ff6b6b, #ff4081, #ff1744, #ff6b6b);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease infinite;
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* ============================================
+       NAVIGATION — Glassmorphism sticky nav
+       ============================================ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 16px 0;
+      transition: all 0.3s ease;
+    }
+    .nav.scrolled {
+      background: var(--flame-glass);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid var(--flame-border);
+      padding: 10px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: var(--flame-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { font-size: 1.8rem; }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--flame-text-muted);
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a:hover { color: var(--flame-text); }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--flame-gradient);
+      border-radius: 1px;
+      transition: width 0.3s;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta .btn-sm { font-size: 0.85rem; }
+
+    .nav-mobile-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-mobile-toggle span {
+      width: 24px;
+      height: 2px;
+      background: var(--flame-text);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .nav-mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .nav-mobile-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-mobile-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile menu */
+    .nav-mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10,10,15,0.97);
+      backdrop-filter: blur(20px);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-menu a {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--flame-text);
+      transition: color 0.2s;
+    }
+    .nav-mobile-menu a:hover { color: var(--flame-coral); }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-mobile-toggle { display: flex; }
+    }
+
+    /* ============================================
+       HERO SECTION
+       ============================================ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(255,75,75,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: pulse 6s ease-in-out infinite;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,64,129,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: pulse 8s ease-in-out infinite reverse;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    /* Floating heart particles */
+    .hearts-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .heart {
+      position: absolute;
+      font-size: 1rem;
+      opacity: 0;
+      animation: floatHeart linear infinite;
+    }
+    .heart:nth-child(1)  { left: 8%;  animation-duration: 12s; animation-delay: 0s;   font-size: 1rem; }
+    .heart:nth-child(2)  { left: 15%; animation-duration: 10s; animation-delay: 2s;   font-size: 0.8rem; }
+    .heart:nth-child(3)  { left: 25%; animation-duration: 14s; animation-delay: 1s;   font-size: 1.2rem; }
+    .heart:nth-child(4)  { left: 35%; animation-duration: 11s; animation-delay: 3s;   font-size: 0.7rem; }
+    .heart:nth-child(5)  { left: 48%; animation-duration: 13s; animation-delay: 0.5s; font-size: 1rem; }
+    .heart:nth-child(6)  { left: 58%; animation-duration: 15s; animation-delay: 4s;   font-size: 0.9rem; }
+    .heart:nth-child(7)  { left: 68%; animation-duration: 10s; animation-delay: 1.5s; font-size: 1.1rem; }
+    .heart:nth-child(8)  { left: 78%; animation-duration: 12s; animation-delay: 2.5s; font-size: 0.8rem; }
+    .heart:nth-child(9)  { left: 88%; animation-duration: 14s; animation-delay: 3.5s; font-size: 1rem; }
+    .heart:nth-child(10) { left: 95%; animation-duration: 11s; animation-delay: 0.8s; font-size: 0.75rem; }
+    .heart:nth-child(11) { left: 42%; animation-duration: 16s; animation-delay: 5s;   font-size: 0.9rem; }
+    .heart:nth-child(12) { left: 20%; animation-duration: 9s;  animation-delay: 6s;   font-size: 1.15rem; }
+
+    @keyframes floatHeart {
+      0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.7; }
+      100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-content { max-width: 560px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,107,107,0.1);
+      border: 1px solid rgba(255,107,107,0.2);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--flame-coral);
+      margin-bottom: 24px;
+    }
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--flame-coral);
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .hero-title {
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 20px;
+      letter-spacing: -1.5px;
+    }
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--flame-text-muted);
+      margin-bottom: 36px;
+      max-width: 460px;
+    }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      color: var(--flame-text);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .store-btn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,107,107,0.3);
+      transform: translateY(-2px);
+    }
+    .store-btn svg { width: 28px; height: 28px; fill: currentColor; }
+    .store-btn-text { text-align: left; }
+    .store-btn-text small { font-size: 0.65rem; color: var(--flame-text-muted); display: block; }
+    .store-btn-text strong { font-size: 0.95rem; }
+
+    /* Phone mockup — CSS only */
+    .hero-phone {
+      display: flex;
+      justify-content: center;
+      perspective: 1000px;
+    }
+    .phone {
+      width: 280px;
+      height: 580px;
+      background: #111118;
+      border-radius: 40px;
+      border: 3px solid #2a2a3a;
+      position: relative;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.05),
+        0 20px 60px rgba(0,0,0,0.5),
+        0 0 80px rgba(255,75,75,0.1);
+      animation: phoneFloat 6s ease-in-out infinite;
+      overflow: hidden;
+    }
+    @keyframes phoneFloat {
+      0%, 100% { transform: translateY(0) rotateY(-5deg) rotateX(2deg); }
+      50% { transform: translateY(-12px) rotateY(-5deg) rotateX(2deg); }
+    }
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 28px;
+      background: #111118;
+      border-radius: 0 0 18px 18px;
+      z-index: 10;
+    }
+    .phone-notch::after {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      background: #222;
+      border-radius: 50%;
+    }
+    .phone-screen {
+      position: absolute;
+      inset: 4px;
+      border-radius: 37px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+      padding: 40px 20px 20px;
+    }
+    .phone-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .phone-header .flame-logo {
+      font-size: 1.3rem;
+      font-weight: 900;
+      background: var(--flame-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .phone-header p {
+      font-size: 0.7rem;
+      color: var(--flame-text-muted);
+      margin-top: 2px;
+    }
+
+    /* Swipe cards inside phone */
+    .swipe-stack {
+      position: relative;
+      height: 340px;
+      margin-bottom: 20px;
+    }
+    .swipe-card {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      height: 300px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .swipe-card:nth-child(3) {
+      bottom: 0;
+      background: linear-gradient(135deg, #2a1a3e, #1a2a3e);
+      transform: scale(0.92);
+      z-index: 1;
+    }
+    .swipe-card:nth-child(2) {
+      bottom: 10px;
+      background: linear-gradient(135deg, #3a1a2e, #2a1a3e);
+      transform: scale(0.96);
+      z-index: 2;
+    }
+    .swipe-card:nth-child(1) {
+      bottom: 20px;
+      z-index: 3;
+      background: linear-gradient(180deg, #2a1a2e 0%, #1a1a2e 100%);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .swipe-card-img {
+      height: 65%;
+      background: linear-gradient(135deg, #3a2050, #203a50);
+      position: relative;
+    }
+    .swipe-card-img::after {
+      content: '👤';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      opacity: 0.5;
+    }
+    .swipe-card-info {
+      padding: 14px 16px;
+    }
+    .swipe-card-info h4 {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .swipe-card-info h4 span {
+      font-weight: 400;
+      color: var(--flame-text-muted);
+      margin-left: 4px;
+    }
+    .swipe-card-info p {
+      font-size: 0.7rem;
+      color: var(--flame-text-muted);
+      margin-top: 2px;
+    }
+
+    /* Swipe actions */
+    .swipe-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      align-items: center;
+    }
+    .swipe-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      cursor: pointer;
+    }
+    .swipe-btn.like {
+      width: 56px;
+      height: 56px;
+      background: var(--flame-gradient);
+      border: none;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 20px rgba(255,75,75,0.4);
+      animation: heartBeat 2s ease-in-out infinite;
+    }
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-content { max-width: 100%; margin: 0 auto; }
+      .hero-buttons { justify-content: center; }
+      .hero-phone { order: -1; }
+      .phone { width: 240px; height: 500px; }
+    }
+
+    /* ============================================
+       STATS BAR
+       ============================================ */
+    .stats {
+      padding: 48px 0;
+      border-top: 1px solid var(--flame-border);
+      border-bottom: 1px solid var(--flame-border);
+      background: rgba(255,255,255,0.01);
+    }
+    .stats-inner {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+    .stat-item {}
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: var(--flame-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--flame-text-muted);
+      margin-top: 4px;
+    }
+    @media (max-width: 600px) {
+      .stats-inner { grid-template-columns: 1fr; gap: 24px; }
+    }
+
+    /* ============================================
+       HOW IT WORKS
+       ============================================ */
+    .how-it-works { text-align: center; }
+    .how-it-works .section-subtitle { margin: 0 auto 60px; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 60px;
+      left: calc(33.33% - 16px);
+      right: calc(33.33% - 16px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--flame-coral), var(--flame-pink), var(--flame-hot));
+      opacity: 0.3;
+    }
+    .step-card {
+      background: var(--flame-bg-card);
+      border: 1px solid var(--flame-border);
+      border-radius: var(--flame-radius-lg);
+      padding: 48px 28px 36px;
+      position: relative;
+      transition: all 0.4s cubic-bezier(.4,0,.2,1);
+    }
+    .step-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--flame-shadow-glow);
+      border-color: rgba(255,107,107,0.2);
+    }
+    .step-number {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: var(--flame-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #fff;
+      margin: 0 auto 24px;
+      box-shadow: 0 4px 20px rgba(255,75,75,0.3);
+    }
+    .step-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .step-card p {
+      font-size: 0.9rem;
+      color: var(--flame-text-muted);
+    }
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 768px) {
+      .steps { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .steps::before { display: none; }
+    }
+
+    /* ============================================
+       FEATURES GRID
+       ============================================ */
+    .features { text-align: center; }
+    .features .section-subtitle { margin: 0 auto 60px; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--flame-bg-card);
+      border: 1px solid var(--flame-border);
+      border-radius: var(--flame-radius-lg);
+      padding: 36px 28px;
+      text-align: left;
+      transition: all 0.4s cubic-bezier(.4,0,.2,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--flame-gradient);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--flame-shadow-glow);
+      border-color: rgba(255,107,107,0.15);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-emoji {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .feature-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 0.88rem;
+      color: var(--flame-text-muted);
+      line-height: 1.6;
+    }
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================
+       SUCCESS STORIES
+       ============================================ */
+    .stories { text-align: center; }
+    .stories .section-subtitle { margin: 0 auto 60px; }
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .story-card {
+      background: var(--flame-bg-card);
+      border: 1px solid var(--flame-border);
+      border-radius: var(--flame-radius-lg);
+      padding: 36px 28px;
+      text-align: left;
+      transition: all 0.4s cubic-bezier(.4,0,.2,1);
+    }
+    .story-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--flame-shadow-glow);
+    }
+    .story-stars {
+      color: var(--flame-gold);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+    .story-quote {
+      font-size: 0.95rem;
+      color: var(--flame-text);
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .story-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .story-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .story-avatar.av1 { background: linear-gradient(135deg, #ff6b6b, #ff4081); }
+    .story-avatar.av2 { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+    .story-avatar.av3 { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
+    .story-name { font-weight: 700; font-size: 0.95rem; }
+    .story-detail { font-size: 0.8rem; color: var(--flame-text-muted); margin-top: 2px; }
+    @media (max-width: 768px) {
+      .stories-grid { grid-template-columns: 1fr; max-width: 460px; margin: 0 auto; }
+    }
+
+    /* ============================================
+       PRICING
+       ============================================ */
+    .pricing { text-align: center; }
+    .pricing .section-subtitle { margin: 0 auto 60px; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+    .pricing-card {
+      background: var(--flame-bg-card);
+      border: 1px solid var(--flame-border);
+      border-radius: var(--flame-radius-lg);
+      padding: 40px 28px;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(.4,0,.2,1);
+      position: relative;
+    }
+    .pricing-card.featured {
+      border-color: var(--flame-coral);
+      background: linear-gradient(180deg, rgba(255,107,107,0.06) 0%, var(--flame-bg-card) 100%);
+      transform: scale(1.04);
+      box-shadow: 0 0 50px rgba(255,75,75,0.12);
+    }
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--flame-shadow-glow);
+    }
+    .pricing-card.featured:hover {
+      transform: scale(1.04) translateY(-6px);
+    }
+    .pricing-popular {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--flame-gradient);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 5px 20px;
+      border-radius: 50px;
+    }
+    .pricing-tier {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+      color: var(--flame-text-muted);
+      margin-bottom: 12px;
+    }
+    .pricing-price {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .pricing-price span { font-size: 1rem; font-weight: 400; color: var(--flame-text-muted); }
+    .pricing-period {
+      font-size: 0.85rem;
+      color: var(--flame-text-muted);
+      margin-bottom: 28px;
+    }
+    .pricing-features {
+      text-align: left;
+      margin-bottom: 32px;
+    }
+    .pricing-features li {
+      padding: 8px 0;
+      font-size: 0.9rem;
+      color: var(--flame-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--flame-border);
+    }
+    .pricing-features li:last-child { border-bottom: none; }
+    .pricing-features .check {
+      color: var(--flame-coral);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .pricing-features .cross {
+      color: #444;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .pricing-card .btn { width: 100%; justify-content: center; }
+    @media (max-width: 900px) {
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .pricing-card.featured { transform: none; }
+      .pricing-card.featured:hover { transform: translateY(-6px); }
+    }
+
+    /* ============================================
+       FINAL CTA
+       ============================================ */
+    .final-cta {
+      text-align: center;
+      padding: 120px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,75,75,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .final-cta .section-title {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      margin-bottom: 16px;
+    }
+    .final-cta .section-subtitle {
+      margin: 0 auto 40px;
+    }
+    .final-cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer {
+      padding: 60px 0 32px;
+      border-top: 1px solid var(--flame-border);
+      background: rgba(255,255,255,0.01);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand .nav-logo { font-size: 1.4rem; margin-bottom: 12px; display: inline-block; }
+    .footer-brand p {
+      font-size: 0.88rem;
+      color: var(--flame-text-muted);
+      max-width: 280px;
+      line-height: 1.7;
+    }
+    .footer-col h4 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--flame-text);
+    }
+    .footer-col a {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--flame-text-muted);
+      padding: 6px 0;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--flame-coral); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--flame-border);
+    }
+    .footer-bottom p {
+      font-size: 0.8rem;
+      color: var(--flame-text-muted);
+    }
+    .footer-socials {
+      display: flex;
+      gap: 12px;
+    }
+    .footer-socials a {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--flame-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    .footer-socials a:hover {
+      background: rgba(255,107,107,0.1);
+      border-color: rgba(255,107,107,0.3);
+      transform: translateY(-2px);
+    }
+    @media (max-width: 768px) {
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .footer-top { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================
+       ANIMATIONS — scroll reveal
+       ============================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAVIGATION ============ -->
+  <nav class="nav" id="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">🔥 Flame</a>
+      <div class="nav-links">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#features">Features</a>
+        <a href="#stories">Stories</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div class="nav-cta">
+        <a href="#download" class="btn btn-primary btn-sm">Get Flame Free</a>
+      </div>
+      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu overlay -->
+  <div class="nav-mobile-menu" id="mobileMenu">
+    <a href="#how-it-works" onclick="closeMobile()">How It Works</a>
+    <a href="#features" onclick="closeMobile()">Features</a>
+    <a href="#stories" onclick="closeMobile()">Stories</a>
+    <a href="#pricing" onclick="closeMobile()">Pricing</a>
+    <a href="#download" class="btn btn-primary" onclick="closeMobile()">Get Flame Free</a>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hearts-container">
+      <span class="heart">❤️</span>
+      <span class="heart">💕</span>
+      <span class="heart">🔥</span>
+      <span class="heart">❤️</span>
+      <span class="heart">💖</span>
+      <span class="heart">💕</span>
+      <span class="heart">🔥</span>
+      <span class="heart">❤️</span>
+      <span class="heart">💖</span>
+      <span class="heart">💕</span>
+      <span class="heart">🔥</span>
+      <span class="heart">❤️</span>
+    </div>
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          #1 Dating App of 2025
+        </div>
+        <h1 class="hero-title">
+          Find Your<br><span class="gradient-text">Spark</span>
+        </h1>
+        <p class="hero-desc">
+          Where real connections ignite. Flame uses AI-powered matching to help you find meaningful relationships — not just matches.
+        </p>
+        <div class="hero-buttons">
+          <a href="#" class="store-btn">
+            <svg viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+            <div class="store-btn-text">
+              <small>Download on the</small>
+              <strong>App Store</strong>
+            </div>
+          </a>
+          <a href="#" class="store-btn">
+            <svg viewBox="0 0 24 24"><path d="M3.18 23.04c.72.46 1.58.42 2.38-.04l14.56-8.38c.82-.47 1.3-1.08 1.3-1.62s-.48-1.15-1.3-1.62L5.56.98C4.76.52 3.9.48 3.18.94L14.2 12 3.18 23.04zm.56-22.72L15.1 12 3.74 23.68c-.16-.1-.3-.26-.3-.48V.8c0-.22.14-.38.3-.48z"/><path d="M17.96 14.76l-2.82-2.82-9.4 5.42 9.4 5.42 2.82-2.82c.58-.58.58-1.52 0-2.1zm-2.12 1.42l1.42 1.42-7.28 4.18 5.86-5.6z"/></svg>
+            <div class="store-btn-text">
+              <small>Get it on</small>
+              <strong>Google Play</strong>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-phone">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-header">
+              <div class="flame-logo">🔥 Flame</div>
+              <p>Discover people nearby</p>
+            </div>
+            <div class="swipe-stack">
+              <div class="swipe-card">
+                <div class="swipe-card-img"></div>
+                <div class="swipe-card-info">
+                  <h4>Sarah<span>, 26</span></h4>
+                  <p>📍 2 miles away · Photography, Hiking</p>
+                </div>
+              </div>
+              <div class="swipe-card">
+                <div class="swipe-card-img" style="background: linear-gradient(135deg, #2a3050, #302040);"></div>
+                <div class="swipe-card-info">
+                  <h4>Jessica<span>, 24</span></h4>
+                  <p>📍 5 miles away · Music, Travel</p>
+                </div>
+              </div>
+              <div class="swipe-card">
+                <div class="swipe-card-img" style="background: linear-gradient(135deg, #203040, #303020);"></div>
+                <div class="swipe-card-info">
+                  <h4>Emma<span>, 28</span></h4>
+                  <p>📍 1 mile away · Art, Yoga</p>
+                </div>
+              </div>
+            </div>
+            <div class="swipe-actions">
+              <div class="swipe-btn">✕</div>
+              <div class="swipe-btn">⭐</div>
+              <div class="swipe-btn like">❤️</div>
+              <div class="swipe-btn">💬</div>
+              <div class="swipe-btn">⚡</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS BAR ============ -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-inner">
+        <div class="stat-item reveal">
+          <div class="stat-number">10M+</div>
+          <div class="stat-label">Matches Made</div>
+        </div>
+        <div class="stat-item reveal reveal-delay-1">
+          <div class="stat-number">150+</div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat-item reveal reveal-delay-2">
+          <div class="stat-number">4.8★</div>
+          <div class="stat-label">App Store Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="section how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">Three Steps to <span class="gradient-text">Magic</span></h2>
+      <p class="section-subtitle">Finding your person has never been easier. Here's how Flame works.</p>
+      <div class="steps" style="margin-top: 60px;">
+        <div class="step-card reveal">
+          <div class="step-icon">✨</div>
+          <div class="step-number">1</div>
+          <h3>Create Profile</h3>
+          <p>Show the real you. Add photos, prompts, and let your personality shine through.</p>
+        </div>
+        <div class="step-card reveal reveal-delay-1">
+          <div class="step-icon">👆</div>
+          <div class="step-number">2</div>
+          <h3>Swipe & Match</h3>
+          <p>Our AI curates compatible profiles. Swipe right on who catches your eye.</p>
+        </div>
+        <div class="step-card reveal reveal-delay-2">
+          <div class="step-icon">💬</div>
+          <div class="step-number">3</div>
+          <h3>Start Chatting</h3>
+          <p>Break the ice with AI-powered conversation starters and plan your first date.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="section features" id="features">
+    <div class="container">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Built for <span class="gradient-text">Real Connection</span></h2>
+      <p class="section-subtitle">Every feature is designed to help you find someone who truly gets you.</p>
+      <div class="features-grid" style="margin-top: 60px;">
+        <div class="feature-card reveal">
+          <div class="feature-emoji">🤖</div>
+          <h3>AI Matching</h3>
+          <p>Our neural matching engine analyzes 200+ compatibility signals to find people who truly click with you.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-emoji">📹</div>
+          <h3>Video Dates</h3>
+          <p>Break the ice face-to-face with built-in video calls. No need to share personal contact info.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-emoji">🛡️</div>
+          <h3>Safety First</h3>
+          <p>Photo verification, AI moderation, and emergency features keep you safe every step of the way.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-emoji">📍</div>
+          <h3>Location-Based</h3>
+          <p>Discover people nearby or expand your radius. Find matches in your neighborhood or across the globe.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-4">
+          <div class="feature-emoji">💡</div>
+          <h3>Smart Icebreakers</h3>
+          <p>Never stare at a blank screen. AI generates personalized conversation starters based on shared interests.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-5">
+          <div class="feature-emoji">✅</div>
+          <h3>Verified Profiles</h3>
+          <p>Every profile is verified with selfie checks and social linking, so you know who you're talking to.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SUCCESS STORIES ============ -->
+  <section class="section stories" id="stories">
+    <div class="container">
+      <div class="section-label">Success Stories</div>
+      <h2 class="section-title">Real People, <span class="gradient-text">Real Love</span></h2>
+      <p class="section-subtitle">Thousands of couples found their spark on Flame. Here are a few of their stories.</p>
+      <div class="stories-grid" style="margin-top: 60px;">
+        <div class="story-card reveal">
+          <div class="story-stars">★★★★★</div>
+          <p class="story-quote">"We matched on Flame and talked for 6 hours straight on our first video date. Three months later, we're inseparable. The AI really understood what I was looking for."</p>
+          <div class="story-author">
+            <div class="story-avatar av1">M</div>
+            <div>
+              <div class="story-name">Maya & Alex</div>
+              <div class="story-detail">Matched in San Francisco · Together 8 months</div>
+            </div>
+          </div>
+        </div>
+        <div class="story-card reveal reveal-delay-1">
+          <div class="story-stars">★★★★★</div>
+          <p class="story-quote">"After terrible experiences on other apps, Flame was a breath of fresh air. The verified profiles made me feel safe, and I met my partner on my very first date."</p>
+          <div class="story-author">
+            <div class="story-avatar av2">J</div>
+            <div>
+              <div class="story-name">James & Priya</div>
+              <div class="story-detail">Matched in London · Engaged 💍</div>
+            </div>
+          </div>
+        </div>
+        <div class="story-card reveal reveal-delay-2">
+          <div class="story-stars">★★★★★</div>
+          <p class="story-quote">"The icebreaker suggestions were genius! They gave us something real to talk about from the start. We skipped the awkward small talk and went straight to deep conversations."</p>
+          <div class="story-author">
+            <div class="story-avatar av3">R</div>
+            <div>
+              <div class="story-name">Rachel & Tom</div>
+              <div class="story-detail">Matched in Sydney · Together 1 year</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="section pricing" id="pricing">
+    <div class="container">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Choose Your <span class="gradient-text">Plan</span></h2>
+      <p class="section-subtitle">Start free and upgrade when you're ready to unlock the full Flame experience.</p>
+      <div class="pricing-grid" style="margin-top: 60px;">
+        <!-- Free -->
+        <div class="pricing-card reveal">
+          <div class="pricing-tier">Free</div>
+          <div class="pricing-price">$0<span>/mo</span></div>
+          <div class="pricing-period">Forever free</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> 10 swipes per day</li>
+            <li><span class="check">✓</span> Basic matching</li>
+            <li><span class="check">✓</span> Profile creation</li>
+            <li><span class="check">✓</span> Chat with matches</li>
+            <li><span class="cross">✗</span> See who liked you</li>
+            <li><span class="cross">✗</span> AI icebreakers</li>
+            <li><span class="cross">✗</span> Video dates</li>
+          </ul>
+          <a href="#" class="btn btn-outline">Get Started</a>
+        </div>
+        <!-- Plus -->
+        <div class="pricing-card featured reveal reveal-delay-1">
+          <div class="pricing-popular">Most Popular</div>
+          <div class="pricing-tier">Plus</div>
+          <div class="pricing-price">$14<span>.99/mo</span></div>
+          <div class="pricing-period">Billed monthly</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Unlimited swipes</li>
+            <li><span class="check">✓</span> Advanced AI matching</li>
+            <li><span class="check">✓</span> See who liked you</li>
+            <li><span class="check">✓</span> 5 Super Likes / day</li>
+            <li><span class="check">✓</span> AI icebreakers</li>
+            <li><span class="check">✓</span> Priority support</li>
+            <li><span class="cross">✗</span> Video dates</li>
+          </ul>
+          <a href="#" class="btn btn-primary">Upgrade to Plus</a>
+        </div>
+        <!-- Premium -->
+        <div class="pricing-card reveal reveal-delay-2">
+          <div class="pricing-tier">Premium</div>
+          <div class="pricing-price">$29<span>.99/mo</span></div>
+          <div class="pricing-period">Billed monthly</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Everything in Plus</li>
+            <li><span class="check">✓</span> Unlimited video dates</li>
+            <li><span class="check">✓</span> Profile boost (2x/week)</li>
+            <li><span class="check">✓</span> Read receipts</li>
+            <li><span class="check">✓</span> Incognito mode</li>
+            <li><span class="check">✓</span> Travel mode</li>
+            <li><span class="check">✓</span> Concierge matching</li>
+          </ul>
+          <a href="#" class="btn btn-outline">Go Premium</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="final-cta" id="download">
+    <div class="container">
+      <h2 class="section-title">Ready to Find Your<br><span class="gradient-text">Spark?</span></h2>
+      <p class="section-subtitle">Join millions of people who've found meaningful connections on Flame. Your story starts today.</p>
+      <div class="final-cta-buttons">
+        <a href="#" class="store-btn">
+          <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          <div class="store-btn-text">
+            <small>Download on the</small>
+            <strong>App Store</strong>
+          </div>
+        </a>
+        <a href="#" class="store-btn">
+          <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:currentColor"><path d="M3.18 23.04c.72.46 1.58.42 2.38-.04l14.56-8.38c.82-.47 1.3-1.08 1.3-1.62s-.48-1.15-1.3-1.62L5.56.98C4.76.52 3.9.48 3.18.94L14.2 12 3.18 23.04zm.56-22.72L15.1 12 3.74 23.68c-.16-.1-.3-.26-.3-.48V.8c0-.22.14-.38.3-.48z"/><path d="M17.96 14.76l-2.82-2.82-9.4 5.42 9.4 5.42 2.82-2.82c.58-.58.58-1.52 0-2.1zm-2.12 1.42l1.42 1.42-7.28 4.18 5.86-5.6z"/></svg>
+          <div class="store-btn-text">
+            <small>Get it on</small>
+            <strong>Google Play</strong>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">🔥 Flame</a>
+          <p>Where real connections ignite. Built with love for people who believe in meaningful relationships.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Safety</a>
+          <a href="#">Download</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Careers</a>
+          <a href="#">Blog</a>
+          <a href="#">Press</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="#">Help Center</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Flame Inc. All rights reserved.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Twitter">𝕏</a>
+          <a href="#" aria-label="Instagram">📷</a>
+          <a href="#" aria-label="TikTok">🎵</a>
+          <a href="#" aria-label="YouTube">▶</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ JAVASCRIPT — Minimal: nav scroll + mobile menu + scroll reveal ============ -->
+  <script>
+    // Sticky nav scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Mobile menu toggle
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileToggle.addEventListener('click', () => {
+      mobileToggle.classList.toggle('active');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    function closeMobile() {
+      mobileToggle.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Scroll reveal animation
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Trigger initial check for elements already in view
+    window.addEventListener('load', () => {
+      reveals.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          el.classList.add('visible');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

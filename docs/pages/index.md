@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 141 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 143 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1314,6 +1314,24 @@ const pages = [
     colors: ['#c9a96e', '#0a0a0c', '#f5f0e8'],
     rating: 9.4,
     description: '高端香水品牌的沉浸式数字体验页，暗金配色 + CSS香水瓶可视化 + 浮动粒子 + 滚动渐显动画',
+  },
+  {
+    id: 'flame-dating',
+    title: 'Flame 约会应用落地页',
+    category: 'landing',
+    tags: ['约会', '社交', '暗色主题', '暖色调', '手机模型'],
+    colors: ['#0a0a0f', '#ff6b6b', '#ff4081'],
+    rating: 9.4,
+    description: '现代约会应用落地页，暗色底 + 珊瑚粉暖色调 + CSS 手机模型滑动卡片 + 浮动爱心粒子 + 渐变文字 + 三栏定价',
+  },
+  {
+    id: 'forkful-recipes',
+    title: 'Forkful 美食食谱应用',
+    category: 'app',
+    tags: ['食谱', '健康', '暖色调', '膳食计划', '衬线字体'],
+    colors: ['#faf8f4', '#e8614d', '#2c1810'],
+    rating: 9.4,
+    description: '美食食谱与膳食计划应用落地页，奶油暖色调 + DM Serif Display 衬线字体 + 食谱卡片网格 + 每周膳食日历 + 横向滚动主厨推荐',
   },
 ]
 

@@ -101,7 +101,7 @@ export default defineConfig({
 
     // AI 爬虫友好
     ['meta', { name: 'ai-content-type', content: 'design-library' }],
-    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，141个完整页面模板，Design Tokens。可直接复制使用。' }],
+    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，143个完整页面模板，Design Tokens。可直接复制使用。' }],
 
     ['link', { rel: 'stylesheet', href: '/tokens/tokens.css' }],
     ...componentCSS.map(name => [
@@ -250,7 +250,8 @@ export default defineConfig({
             { text: 'SupportFlow AI 客户支持', link: '/pages/supportflow' },
             { text: 'CodeLens AI 代码审查', link: '/pages/codelens-review' },
             { text: 'BuildFlow 无代码构建', link: '/pages/nocode-builder' },
-            { text: 'FlowMetrics 渐变网格', link: '/pages/gradient-saas' }
+            { text: 'FlowMetrics 渐变网格', link: '/pages/gradient-saas' },
+            { text: 'Flame 约会应用', link: '/pages/flame-dating' }
           ]
         },
         {
@@ -303,6 +304,7 @@ export default defineConfig({
             { text: 'Meridian 证券交易终端', link: '/pages/trading-terminal' },
             { text: 'NexaHome 智能家居仪表盘', link: '/pages/smart-home-dashboard' },
             { text: 'Nebula Canvas 协作白板', link: '/pages/nebula-canvas' },
+            { text: 'Forkful 美食食谱应用', link: '/pages/forkful-recipes' },
           ]
         },
         {
