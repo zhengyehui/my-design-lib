@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maison Journal — Issue No. 47, Spring 2026</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream: #faf8f4;
+      --cream-dark: #f0ece4;
+      --terracotta: #c2703e;
+      --terracotta-light: #d4895a;
+      --terracotta-dark: #a35a2f;
+      --sage: #7c9a82;
+      --sage-light: #9db8a2;
+      --sage-dark: #5e7d64;
+      --charcoal: #1a1a1a;
+      --charcoal-light: #2d2d2d;
+      --charcoal-mid: #444;
+      --gold: #c9a96e;
+      --gold-light: #ddc28a;
+      --gold-muted: #b89a5f;
+      --white: #ffffff;
+      --off-white: #f5f2ec;
+      --text-primary: #1a1a1a;
+      --text-secondary: #5a5a5a;
+      --text-muted: #8a8a8a;
+      --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --container: 1240px;
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2.5rem;
+      --space-xl: 4rem;
+      --space-2xl: 6rem;
+      --space-3xl: 8rem;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-primary);
+      background-color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    .container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+
+    /* ═══════════════════════════════════════════
+       TYPOGRAPHY UTILITIES
+       ═══════════════════════════════════════════ */
+    .label {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .pill {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.35em 1em;
+      border-radius: 100px;
+      border: 1px solid currentColor;
+    }
+
+    .pill--terracotta { color: var(--terracotta); border-color: var(--terracotta); }
+    .pill--sage { color: var(--sage); border-color: var(--sage); }
+    .pill--gold { color: var(--gold); border-color: var(--gold); }
+    .pill--filled {
+      background: var(--charcoal);
+      color: var(--cream);
+      border-color: var(--charcoal);
+    }
+
+    .decorative-rule {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      border: none;
+    }
+
+    .decorative-rule--wide {
+      width: 100%;
+      max-width: 200px;
+    }
+
+    /* ═══════════════════════════════════════════
+       1. NAVIGATION
+       ═══════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(250, 248, 244, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+      transition: var(--transition);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+
+    .nav__logo {
+      font-family: var(--sans);
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+    }
+
+    .nav__logo span {
+      color: var(--terracotta);
+    }
+
+    .nav__center {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+
+    .nav__link {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+      position: relative;
+    }
+
+    .nav__link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--terracotta);
+      transition: width var(--transition);
+    }
+
+    .nav__link:hover { color: var(--charcoal); }
+    .nav__link:hover::after { width: 100%; }
+
+    .nav__date {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .nav__hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+    }
+
+    .nav__hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--charcoal);
+      transition: var(--transition);
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: rgba(250, 248, 244, 0.98);
+      backdrop-filter: blur(20px);
+      padding: var(--space-lg);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+      z-index: 999;
+    }
+
+    .mobile-menu.active { display: block; }
+
+    .mobile-menu__link {
+      display: block;
+      padding: var(--space-sm) 0;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .mobile-menu__link:hover { color: var(--terracotta); }
+
+    /* ═══════════════════════════════════════════
+       2. HERO ISSUE SECTION
+       ═══════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 64px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(194, 112, 62, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(124, 154, 130, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(201, 169, 110, 0.1) 0%, transparent 50%),
+        linear-gradient(170deg, #e8ddd0 0%, #d4c5b0 30%, #c9b99a 60%, #bfae8a 100%);
+    }
+
+    /* Film grain overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.035;
+      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      pointer-events: none;
+    }
+
+    /* Subtle pattern overlay */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(26, 26, 26, 0.01) 2px,
+          rgba(26, 26, 26, 0.01) 4px
+        );
+      pointer-events: none;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: var(--space-3xl) var(--space-lg);
+      max-width: 900px;
+    }
+
+    .hero__issue-label {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: var(--space-md);
+    }
+
+    .hero__divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto var(--space-lg);
+    }
+
+    .hero__issue-number {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--charcoal);
+      margin-bottom: var(--space-xs);
+      letter-spacing: -0.02em;
+    }
+
+    .hero__issue-number em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .hero__season {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-xl);
+    }
+
+    .hero__title {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--charcoal);
+      margin-bottom: var(--space-md);
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero__title em {
+      font-style: italic;
+    }
+
+    .hero__subtitle {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto var(--space-lg);
+    }
+
+    .hero__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6em;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      padding: 1em 2.5em;
+      border: 1px solid var(--charcoal);
+      transition: all var(--transition);
+    }
+
+    .hero__cta:hover {
+      background: var(--charcoal);
+      color: var(--cream);
+    }
+
+    .hero__cta svg {
+      width: 14px;
+      height: 14px;
+      transition: transform var(--transition);
+    }
+
+    .hero__cta:hover svg {
+      transform: translateX(4px);
+    }
+
+    .hero__scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero__scroll-indicator span {
+      font-family: var(--sans);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .hero__scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ═══════════════════════════════════════════
+       3. FEATURED ARTICLES GRID
+       ═══════════════════════════════════════════ */
+    .featured {
+      padding: var(--space-3xl) 0;
+    }
+
+    .featured__header {
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+
+    .featured__header .label {
+      color: var(--terracotta);
+      margin-bottom: var(--space-sm);
+    }
+
+    .featured__grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-lg);
+      min-height: 600px;
+    }
+
+    .featured__card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+    }
+
+    .featured__card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(26, 26, 26, 0.12);
+    }
+
+    .featured__card--large {
+      grid-row: 1 / 3;
+      min-height: 600px;
+    }
+
+    .featured__card-image {
+      position: absolute;
+      inset: 0;
+    }
+
+    .featured__card--large .featured__card-image {
+      background:
+        linear-gradient(135deg, #8b6f47 0%, #a67c52 25%, #c29a6c 50%, #d4b896 75%, #e8d5be 100%);
+    }
+
+    .featured__card--large .featured__card-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26, 26, 26, 0.85) 0%, rgba(26, 26, 26, 0.3) 50%, rgba(26, 26, 26, 0.05) 100%);
+    }
+
+    .featured__card--small-1 .featured__card-image {
+      background:
+        linear-gradient(160deg, #6b8f71 0%, #7c9a82 30%, #9db8a2 60%, #b5ccb8 100%);
+    }
+
+    .featured__card--small-1 .featured__card-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26, 26, 26, 0.8) 0%, rgba(26, 26, 26, 0.2) 60%, transparent 100%);
+    }
+
+    .featured__card--small-2 .featured__card-image {
+      background:
+        linear-gradient(145deg, #b87a4b 0%, #c98b5e 30%, #d4a57a 60%, #e0c09c 100%);
+    }
+
+    .featured__card--small-2 .featured__card-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26, 26, 26, 0.8) 0%, rgba(26, 26, 26, 0.2) 60%, transparent 100%);
+    }
+
+    .featured__card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: var(--space-lg);
+      z-index: 2;
+    }
+
+    .featured__card--large .featured__card-content {
+      padding: var(--space-xl);
+    }
+
+    .featured__card-category {
+      margin-bottom: var(--space-sm);
+    }
+
+    .featured__card-category .pill {
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--white);
+      border-color: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .featured__card-title {
+      font-family: var(--serif);
+      font-weight: 500;
+      line-height: 1.25;
+      color: var(--white);
+      margin-bottom: var(--space-sm);
+    }
+
+    .featured__card--large .featured__card-title {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    }
+
+    .featured__card--small-1 .featured__card-title,
+    .featured__card--small-2 .featured__card-title {
+      font-size: 1.3rem;
+    }
+
+    .featured__card-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .featured__card-meta-divider {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .featured__card-excerpt {
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: var(--space-sm);
+      max-width: 480px;
+    }
+
+    /* ═══════════════════════════════════════════
+       4. EDITOR'S PICKS — HORIZONTAL SCROLL
+       ═══════════════════════════════════════════ */
+    .picks {
+      padding: var(--space-3xl) 0;
+      background: var(--off-white);
+    }
+
+    .picks__header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: var(--space-xl);
+    }
+
+    .picks__header-left .label {
+      color: var(--sage);
+      margin-bottom: var(--space-xs);
+    }
+
+    .picks__header-title {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--charcoal);
+    }
+
+    .picks__nav {
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    .picks__nav-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(26, 26, 26, 0.15);
+      border-radius: 50%;
+      transition: all var(--transition);
+      color: var(--charcoal);
+    }
+
+    .picks__nav-btn:hover {
+      background: var(--charcoal);
+      color: var(--cream);
+      border-color: var(--charcoal);
+    }
+
+    .picks__scroll {
+      display: flex;
+      gap: var(--space-md);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding-bottom: var(--space-md);
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .picks__scroll::-webkit-scrollbar { display: none; }
+
+    .picks__card {
+      flex: 0 0 320px;
+      scroll-snap-align: start;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--white);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+    }
+
+    .picks__card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(26, 26, 26, 0.08);
+    }
+
+    .picks__card-image {
+      height: 200px;
+      position: relative;
+    }
+
+    .picks__card:nth-child(1) .picks__card-image {
+      background: linear-gradient(135deg, #c9a96e 0%, #ddc28a 50%, #e8d5b0 100%);
+    }
+    .picks__card:nth-child(2) .picks__card-image {
+      background: linear-gradient(135deg, #7c9a82 0%, #9db8a2 50%, #b8d0bc 100%);
+    }
+    .picks__card:nth-child(3) .picks__card-image {
+      background: linear-gradient(135deg, #c2703e 0%, #d4895a 50%, #e0a880 100%);
+    }
+    .picks__card:nth-child(4) .picks__card-image {
+      background: linear-gradient(135deg, #8b7355 0%, #a68f6f 50%, #c0ad93 100%);
+    }
+    .picks__card:nth-child(5) .picks__card-image {
+      background: linear-gradient(135deg, #6b7b8a 0%, #8a9bab 50%, #a8bcc8 100%);
+    }
+    .picks__card:nth-child(6) .picks__card-image {
+      background: linear-gradient(135deg, #9a7b6b 0%, #b59888 50%, #cbb5a5 100%);
+    }
+
+    .picks__card-number {
+      position: absolute;
+      top: var(--space-sm);
+      left: var(--space-sm);
+      font-family: var(--serif);
+      font-size: 0.85rem;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(26, 26, 26, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 0.3em 0.7em;
+      border-radius: var(--radius-sm);
+    }
+
+    .picks__card-body {
+      padding: var(--space-md);
+    }
+
+    .picks__card-category {
+      font-family: var(--sans);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: var(--space-xs);
+    }
+
+    .picks__card-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--charcoal);
+      margin-bottom: var(--space-sm);
+    }
+
+    .picks__card-excerpt {
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .picks__card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-sm);
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .picks__card-author {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .picks__card-time {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* ═══════════════════════════════════════════
+       5. CATEGORY SECTIONS
+       ═══════════════════════════════════════════ */
+    .category {
+      padding: var(--space-3xl) 0;
+    }
+
+    .category:nth-child(even) {
+      background: var(--off-white);
+    }
+
+    .category__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    .category__header-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--gold), transparent);
+    }
+
+    .category__header-line--left {
+      background: linear-gradient(to left, var(--gold), transparent);
+    }
+
+    .category__header-title {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      white-space: nowrap;
+    }
+
+    .category__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .category__card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--white);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+    }
+
+    .category__card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(26, 26, 26, 0.1);
+    }
+
+    .category__card-image {
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Travel gradients */
+    .category--travel .category__card:nth-child(1) .category__card-image {
+      background: linear-gradient(135deg, #5b8fa8 0%, #7ba8be 40%, #a0c5d6 70%, #c5dce8 100%);
+    }
+    .category--travel .category__card:nth-child(2) .category__card-image {
+      background: linear-gradient(135deg, #c2703e 0%, #d4955e 30%, #e0b88a 60%, #f0d5b5 100%);
+    }
+    .category--travel .category__card:nth-child(3) .category__card-image {
+      background: linear-gradient(135deg, #6b8f71 0%, #8bb492 30%, #aecfaa 60%, #d0e5cc 100%);
+    }
+
+    /* Food gradients */
+    .category--food .category__card:nth-child(1) .category__card-image {
+      background: linear-gradient(135deg, #b87a4b 0%, #d4955e 30%, #e0b88a 60%, #f0d5b5 100%);
+    }
+    .category--food .category__card:nth-child(2) .category__card-image {
+      background: linear-gradient(135deg, #8b6f47 0%, #a68a5e 30%, #c0a87e 60%, #d8c49e 100%);
+    }
+    .category--food .category__card:nth-child(3) .category__card-image {
+      background: linear-gradient(135deg, #c98b5e 0%, #d4a57a 30%, #e0bf9a 60%, #ecdbc0 100%);
+    }
+
+    /* Design gradients */
+    .category--design .category__card:nth-child(1) .category__card-image {
+      background: linear-gradient(135deg, #4a5568 0%, #6b7b8e 30%, #8fa0b0 60%, #b5c5d0 100%);
+    }
+    .category--design .category__card:nth-child(2) .category__card-image {
+      background: linear-gradient(135deg, #7c6b5e 0%, #9a8878 30%, #b8a898 60%, #d0c5b8 100%);
+    }
+    .category--design .category__card:nth-child(3) .category__card-image {
+      background: linear-gradient(135deg, #5e7d64 0%, #7c9a82 30%, #9db8a2 60%, #c0d5c4 100%);
+    }
+
+    .category__card-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.04) 100%);
+      transition: background var(--transition);
+    }
+
+    .category__card:hover .category__card-image-overlay {
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.08) 100%);
+    }
+
+    .category__card-tag {
+      position: absolute;
+      top: var(--space-sm);
+      left: var(--space-sm);
+    }
+
+    .category__card-tag .pill {
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--charcoal);
+      border-color: transparent;
+      font-size: 0.58rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .category__card-body {
+      padding: var(--space-md) var(--space-md) var(--space-lg);
+    }
+
+    .category__card-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--charcoal);
+      margin-bottom: var(--space-xs);
+    }
+
+    .category__card-excerpt {
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-md);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .category__card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .category__card-author {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .category__card-readtime {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* ═══════════════════════════════════════════
+       6. QUOTE / PULLOUT SECTION
+       ═══════════════════════════════════════════ */
+    .quote {
+      position: relative;
+      padding: var(--space-3xl) var(--space-lg);
+      background: var(--charcoal);
+      overflow: hidden;
+    }
+
+    .quote::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(194, 112, 62, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 30%, rgba(201, 169, 110, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Film grain on dark section */
+    .quote::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      pointer-events: none;
+    }
+
+    .quote__inner {
+      position: relative;
+      z-index: 2;
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .quote__mark {
+      font-family: var(--serif);
+      font-size: 5rem;
+      line-height: 1;
+      color: var(--terracotta);
+      opacity: 0.5;
+      margin-bottom: -1.5rem;
+    }
+
+    .quote__text {
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--cream);
+      margin-bottom: var(--space-lg);
+    }
+
+    .quote__divider {
+      width: 50px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto var(--space-md);
+    }
+
+    .quote__attribution {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .quote__source {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: rgba(250, 248, 244, 0.5);
+      margin-top: 0.3em;
+    }
+
+    /* ═══════════════════════════════════════════
+       7. NEWSLETTER SECTION
+       ═══════════════════════════════════════════ */
+    .newsletter {
+      position: relative;
+      padding: var(--space-3xl) var(--space-lg);
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(201, 169, 110, 0.12) 0%, transparent 60%),
+        linear-gradient(180deg, var(--cream) 0%, #f0ece4 100%);
+      overflow: hidden;
+    }
+
+    .newsletter::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+    .newsletter__deco-left,
+    .newsletter__deco-right {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border: 1px solid rgba(201, 169, 110, 0.15);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .newsletter__deco-left {
+      top: -60px;
+      left: -60px;
+    }
+
+    .newsletter__deco-right {
+      bottom: -80px;
+      right: -80px;
+      width: 300px;
+      height: 300px;
+    }
+
+    .newsletter__inner {
+      position: relative;
+      z-index: 2;
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .newsletter__label {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: var(--space-sm);
+    }
+
+    .newsletter__title {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      margin-bottom: var(--space-sm);
+    }
+
+    .newsletter__subtitle {
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+    }
+
+    .newsletter__form {
+      display: flex;
+      gap: 0;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    .newsletter__input {
+      flex: 1;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      padding: 1em 1.5em;
+      border: 1px solid rgba(26, 26, 26, 0.12);
+      border-right: none;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      background: var(--white);
+      color: var(--charcoal);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .newsletter__input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .newsletter__input:focus {
+      border-color: var(--terracotta);
+    }
+
+    .newsletter__btn {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 1em 2em;
+      background: var(--charcoal);
+      color: var(--cream);
+      border: 1px solid var(--charcoal);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .newsletter__btn:hover {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+    }
+
+    .newsletter__note {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: var(--space-sm);
+      font-style: italic;
+    }
+
+    /* ═══════════════════════════════════════════
+       8. FOOTER
+       ═══════════════════════════════════════════ */
+    .footer {
+      background: var(--charcoal);
+      color: var(--cream);
+      padding: var(--space-2xl) 0 var(--space-lg);
+    }
+
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-xl);
+      padding-bottom: var(--space-xl);
+      border-bottom: 1px solid rgba(250, 248, 244, 0.08);
+    }
+
+    .footer__brand-name {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-md);
+    }
+
+    .footer__brand-desc {
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(250, 248, 244, 0.6);
+      max-width: 300px;
+    }
+
+    .footer__social {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .footer__social-link {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(250, 248, 244, 0.15);
+      border-radius: 50%;
+      transition: all var(--transition);
+      color: rgba(250, 248, 244, 0.6);
+      font-size: 0.75rem;
+    }
+
+    .footer__social-link:hover {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      color: var(--white);
+    }
+
+    .footer__col-title {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer__links {
+      list-style: none;
+    }
+
+    .footer__links li {
+      margin-bottom: 0.6em;
+    }
+
+    .footer__links a {
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: rgba(250, 248, 244, 0.6);
+      transition: color var(--transition);
+    }
+
+    .footer__links a:hover {
+      color: var(--cream);
+    }
+
+    .footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-lg);
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      color: rgba(250, 248, 244, 0.35);
+    }
+
+    .footer__bottom-links {
+      display: flex;
+      gap: var(--space-md);
+    }
+
+    .footer__bottom-links a {
+      color: rgba(250, 248, 244, 0.35);
+      transition: color var(--transition);
+    }
+
+    .footer__bottom-links a:hover {
+      color: rgba(250, 248, 244, 0.7);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .featured__grid {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .featured__card--large {
+        grid-row: auto;
+        min-height: 450px;
+      }
+
+      .featured__card--small-1,
+      .featured__card--small-2 {
+        min-height: 300px;
+      }
+
+      .category__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer__top {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-lg);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav__center { display: none; }
+      .nav__date { display: none; }
+      .nav__hamburger { display: flex; }
+
+      .hero__content {
+        padding: var(--space-xl) var(--space-md);
+      }
+
+      .picks__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+      }
+
+      .picks__card {
+        flex: 0 0 280px;
+      }
+
+      .category__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .category__header-title {
+        font-size: 1.4rem;
+      }
+
+      .newsletter__form {
+        flex-direction: column;
+      }
+
+      .newsletter__input {
+        border-right: 1px solid rgba(26, 26, 26, 0.12);
+        border-radius: var(--radius-sm);
+        margin-bottom: var(--space-sm);
+      }
+
+      .newsletter__btn {
+        border-radius: var(--radius-sm);
+        padding: 1em;
+      }
+
+      .footer__top {
+        grid-template-columns: 1fr;
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: var(--space-sm);
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      :root {
+        --space-lg: 1.5rem;
+        --space-xl: 2.5rem;
+        --space-2xl: 4rem;
+        --space-3xl: 5rem;
+      }
+
+      .featured__card--large {
+        min-height: 350px;
+      }
+
+      .picks__card {
+        flex: 0 0 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">MAISON<span>.</span></a>
+      <div class="nav__center">
+        <a href="#travel" class="nav__link">Travel</a>
+        <a href="#food" class="nav__link">Food &amp; Culture</a>
+        <a href="#design" class="nav__link">Design</a>
+        <a href="#picks" class="nav__link">Editor's Picks</a>
+        <a href="#subscribe" class="nav__link">Subscribe</a>
+      </div>
+      <span class="nav__date">Spring 2026</span>
+      <button class="nav__hamburger" id="menuToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#travel" class="mobile-menu__link">Travel</a>
+    <a href="#food" class="mobile-menu__link">Food &amp; Culture</a>
+    <a href="#design" class="mobile-menu__link">Design</a>
+    <a href="#picks" class="mobile-menu__link">Editor's Picks</a>
+    <a href="#subscribe" class="mobile-menu__link">Subscribe</a>
+  </div>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section class="hero">
+    <div class="hero__content">
+      <p class="hero__issue-label">The Spring 2026 Edition</p>
+      <div class="hero__divider"></div>
+      <h1 class="hero__issue-number">Issue <em>No. 47</em></h1>
+      <p class="hero__season">Spring — Summer 2026</p>
+      <h2 class="hero__title">The Art of <em>Slow Living</em> — Finding Beauty in the Unhurried</h2>
+      <p class="hero__subtitle">In a world that moves relentlessly forward, we explore the quiet luxury of pausing, the elegance of intention, and the profound beauty found in taking one's time.</p>
+      <a href="#featured" class="hero__cta">
+        Explore This Issue
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+    <div class="hero__scroll-indicator">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FEATURED ARTICLES ═══════════════════ -->
+  <section class="featured" id="featured">
+    <div class="container">
+      <div class="featured__header">
+        <p class="label">Featured Stories</p>
+        <hr class="decorative-rule">
+      </div>
+      <div class="featured__grid">
+        <!-- Large Feature (Left) -->
+        <article class="featured__card featured__card--large">
+          <div class="featured__card-image"></div>
+          <div class="featured__card-content">
+            <div class="featured__card-category">
+              <span class="pill">Cover Story</span>
+            </div>
+            <h3 class="featured__card-title">The Quiet Revolution of Japanese Minimalism in Modern European Homes</h3>
+            <p class="featured__card-excerpt">How a new generation of architects is weaving the philosophy of wabi-sabi into the fabric of contemporary European living, creating spaces that breathe with intention and calm.</p>
+            <div class="featured__card-meta">
+              <span>Elena Marchetti</span>
+              <span class="featured__card-meta-divider"></span>
+              <span>18 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Small Feature 1 (Right Top) -->
+        <article class="featured__card featured__card--small-1">
+          <div class="featured__card-image"></div>
+          <div class="featured__card-content">
+            <div class="featured__card-category">
+              <span class="pill">Sustainability</span>
+            </div>
+            <h3 class="featured__card-title">Regenerative Retreats: Hotels That Give More Than They Take</h3>
+            <div class="featured__card-meta">
+              <span>James Holbrook</span>
+              <span class="featured__card-meta-divider"></span>
+              <span>12 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Small Feature 2 (Right Bottom) -->
+        <article class="featured__card featured__card--small-2">
+          <div class="featured__card-image"></div>
+          <div class="featured__card-content">
+            <div class="featured__card-category">
+              <span class="pill">Craft</span>
+            </div>
+            <h3 class="featured__card-title">The Last Ceramics Workshop of Provence</h3>
+            <div class="featured__card-meta">
+              <span>Sophie Laurent</span>
+              <span class="featured__card-meta-divider"></span>
+              <span>9 min read</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ EDITOR'S PICKS ═══════════════════ -->
+  <section class="picks" id="picks">
+    <div class="container">
+      <div class="picks__header">
+        <div class="picks__header-left">
+          <p class="label">Curated Selection</p>
+          <h2 class="picks__header-title">Editor's Picks</h2>
+        </div>
+        <div class="picks__nav">
+          <button class="picks__nav-btn" id="picksPrev" aria-label="Scroll left">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="picks__nav-btn" id="picksNext" aria-label="Scroll right">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="picks__scroll" id="picksScroll">
+        <!-- Card 1 -->
+        <article class="picks__card">
+          <div class="picks__card-image">
+            <span class="picks__card-number">01</span>
+          </div>
+          <div class="picks__card-body">
+            <p class="picks__card-category">Architecture</p>
+            <h3 class="picks__card-title">Concrete Poetry: Brutalism's Gentle Return to Copenhagen</h3>
+            <p class="picks__card-excerpt">The Danish capital embraces its concrete heritage with sensitivity and surprising warmth.</p>
+            <div class="picks__card-footer">
+              <span class="picks__card-author">Anders Kjeldsen</span>
+              <span class="picks__card-time">7 min</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="picks__card">
+          <div class="picks__card-image">
+            <span class="picks__card-number">02</span>
+          </div>
+          <div class="picks__card-body">
+            <p class="picks__card-category">Wellness</p>
+            <h3 class="picks__card-title">Forest Bathing in the Black Forest: A Photographer's Journal</h3>
+            <p class="picks__card-excerpt">Three weeks immersed in Germany's ancient woodland, documented through light and shadow.</p>
+            <div class="picks__card-footer">
+              <span class="picks__card-author">Mara Voss</span>
+              <span class="picks__card-time">11 min</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="picks__card">
+          <div class="picks__card-image">
+            <span class="picks__card-number">03</span>
+          </div>
+          <div class="picks__card-body">
+            <p class="picks__card-category">Gastronomy</p>
+            <h3 class="picks__card-title">The Fermentation Renaissance: From Seoul to San Sebastián</h3>
+            <p class="picks__card-excerpt">Ancient preservation meets modern cuisine in kitchens across two continents.</p>
+            <div class="picks__card-footer">
+              <span class="picks__card-author">Yuki Tanaka</span>
+              <span class="picks__card-time">14 min</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="picks__card">
+          <div class="picks__card-image">
+            <span class="picks__card-number">04</span>
+          </div>
+          <div class="picks__card-body">
+            <p class="picks__card-category">Design</p>
+            <h3 class="picks__card-title">Woven Light: The Textile Artists Redefining Interior Spaces</h3>
+            <p class="picks__card-excerpt">Hand-crafted fabrics bring warmth and narrative to contemporary architecture.</p>
+            <div class="picks__card-footer">
+              <span class="picks__card-author">Isabel Renard</span>
+              <span class="picks__card-time">8 min</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="picks__card">
+          <div class="picks__card-image">
+            <span class="picks__card-number">05</span>
+          </div>
+          <div class="picks__card-body">
+            <p class="picks__card-category">Travel</p>
+            <h3 class="picks__card-title">Lisbon's Hidden Courtyards: A Guide to the City's Secret Gardens</h3>
+            <p class="picks__card-excerpt">Behind azulejo-tiled walls lie some of Europe's most enchanting green spaces.</p>
+            <div class="picks__card-footer">
+              <span class="picks__card-author">Tomás Almeida</span>
+              <span class="picks__card-time">10 min</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="picks__card">
+          <div class="picks__card-image">
+            <span class="picks__card-number">06</span>
+          </div>
+          <div class="picks__card-body">
+            <p class="picks__card-category">Culture</p>
+            <h3 class="picks__card-title">The Independent Bookshops Keeping Literary Culture Alive</h3>
+            <p class="picks__card-excerpt">A celebration of the guardians of printed word in an increasingly digital world.</p>
+            <div class="picks__card-footer">
+              <span class="picks__card-author">Clara Whitfield</span>
+              <span class="picks__card-time">6 min</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CATEGORY: TRAVEL ═══════════════════ -->
+  <section class="category category--travel" id="travel">
+    <div class="container">
+      <div class="category__header">
+        <div class="category__header-line category__header-line--left"></div>
+        <h2 class="category__header-title">Travel</h2>
+        <div class="category__header-line"></div>
+      </div>
+      <div class="category__grid">
+        <article class="category__card">
+          <div class="category__card-image">
+            <div class="category__card-image-overlay"></div>
+            <div class="category__card-tag">
+              <span class="pill">Destinations</span>
+            </div>
+          </div>
+          <div class="category__card-body">
+            <h3 class="category__card-title">The Amalfi Coast's Best-Kept Secret: Cetara at Dawn</h3>
+            <p class="category__card-excerpt">Before the day-trippers arrive, this tiny fishing village reveals its true character — the scent of colatura di alici, the sound of boats against ancient stone.</p>
+            <div class="category__card-footer">
+              <span class="category__card-author">Giulia Ferrante</span>
+              <span class="category__card-readtime">12 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="category__card">
+          <div class="category__card-image">
+            <div class="category__card-image-overlay"></div>
+            <div class="category__card-tag">
+              <span class="pill">Journeys</span>
+            </div>
+          </div>
+          <div class="category__card-body">
+            <h3 class="category__card-title">Slow Rail Through the Scottish Highlands in Autumn</h3>
+            <p class="category__card-excerpt">Aboard the Jacobite steam train, through misty glens and over viaducts — a journey that reminds you why the destination matters less than the path.</p>
+            <div class="category__card-footer">
+              <span class="category__card-author">Fiona MacLeod</span>
+              <span class="category__card-readtime">15 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="category__card">
+          <div class="category__card-image">
+            <div class="category__card-image-overlay"></div>
+            <div class="category__card-tag">
+              <span class="pill">Hotels</span>
+            </div>
+          </div>
+          <div class="category__card-body">
+            <h3 class="category__card-title">Ryokan Redefined: Five Modern Takes on the Traditional Inn</h3>
+            <p class="category__card-excerpt">From Kyoto to Kanazawa, a new wave of innkeepers are honouring centuries of hospitality while embracing contemporary comfort and design.</p>
+            <div class="category__card-footer">
+              <span class="category__card-author">Haruki Mori</span>
+              <span class="category__card-readtime">10 min read</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CATEGORY: FOOD & CULTURE ═══════════════════ -->
+  <section class="category category--food" id="food">
+    <div class="container">
+      <div class="category__header">
+        <div class="category__header-line category__header-line--left"></div>
+        <h2 class="category__header-title">Food &amp; Culture</h2>
+        <div class="category__header-line"></div>
+      </div>
+      <div class="category__grid">
+        <article class="category__card">
+          <div class="category__card-image">
+            <div class="category__card-image-overlay"></div>
+            <div class="category__card-tag">
+              <span class="pill">Restaurants</span>
+            </div>
+          </div>
+          <div class="category__card-body">
+            <h3 class="category__card-title">Milan's New Wave: The Chefs Breaking Every Rule</h3>
+            <p class="category__card-excerpt">Forget nonna's risotto — these young Milanese cooks are reimagining Lombard cuisine through the lens of global influences and radical simplicity.</p>
+            <div class="category__card-footer">
+              <span class="category__card-author">Marco Bianchi</span>
+              <span class="category__card-readtime">13 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="category__card">
+          <div class="category__card-image">
+            <div class="category__card-image-overlay"></div>
+            <div class="category__card-tag">
+              <span class="pill">Ingredients</span>
+            </div>
+          </div>
+          <div class="category__card-body">
+            <h3 class="category__card-title">The Saffron Fields of La Mancha: Harvest by Hand</h3>
+            <p class="category__card-excerpt">In the Spanish plateau, families still gather crocus blooms before dawn, continuing a tradition that predates the Roman Empire.</p>
+            <div class="category__card-footer">
+              <span class="category__card-author">Carmen Vega</span>
+              <span class="category__card-readtime">9 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="category__card">
+          <div class="category__card-image">
+            <div class="category__card-image-overlay"></div>
+            <div class="category__card-tag">
+              <span class="pill">Rituals</span>
+            </div>
+          </div>
+          <div class="category__card-body">
+            <h3 class="category__card-title">The Art of the Turkish Coffee Ceremony, Reimagined</h3>
+            <p class="category__card-excerpt">How Istanbul's third-wave coffee scene is paying homage to Ottoman tradition while crafting something entirely new and beautiful.</p>
+            <div class="category__card-footer">
+              <span class="category__card-author">Defne Arslan</span>
+              <span class="category__card-readtime">7 min read</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CATEGORY: DESIGN & ARCHITECTURE ═══════════════════ -->
+  <section class="category category--design" id="design">
+    <div class="container">
+      <div class="category__header">
+        <div class="category__header-line category__header-line--left"></div>
+        <h2 class="category__header-title">Design &amp; Architecture</h2>
+        <div class="category__header-line"></div>
+      </div>
+      <div class="category__grid">
+        <article class="category__card">
+          <div class="category__card-image">
+            <div class="category__card-image-overlay"></div>
+            <div class="category__card-tag">
+              <span class="pill">Interiors</span>
+            </div>
+          </div>
+          <div class="category__card-body">
+            <h3 class="category__card-title">Living with Less: Three Homes That Prove Restraint is Luxury</h3>
+            <p class="category__card-excerpt">From a converted monastery in Tuscany to a lakeside cabin in Finland, these spaces demonstrate that emptiness can feel profoundly full.</p>
+            <div class="category__card-footer">
+              <span class="category__card-author">Nils Bergström</span>
+              <span class="category__card-readtime">16 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="category__card">
+          <div class="category__card-image">
+            <div class="category__card-image-overlay"></div>
+            <div class="category__card-tag">
+              <span class="pill">Furniture</span>
+            </div>
+          </div>
+          <div class="category__card-body">
+            <h3 class="category__card-title">The Chair Makers of Thonet: 200 Years of Bending Wood</h3>
+            <p class="category__card-excerpt">Inside the Austrian workshop that perfected steam-bent furniture and still produces icons of industrial design by hand.</p>
+            <div class="category__card-footer">
+              <span class="category__card-author">Katrin Weber</span>
+              <span class="category__card-readtime">11 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="category__card">
+          <div class="category__card-image">
+            <div class="category__card-image-overlay"></div>
+            <div class="category__card-tag">
+              <span class="pill">Public Spaces</span>
+            </div>
+          </div>
+          <div class="category__card-body">
+            <h3 class="category__card-title">How Copenhagen Turned Its Harbour Into the World's Best Public Space</h3>
+            <p class="category__card-excerpt">A masterclass in urban planning — the transformation of industrial waterfront into swimable, walkable, liveable civic treasure.</p>
+            <div class="category__card-footer">
+              <span class="category__card-author">Lars Henriksen</span>
+              <span class="category__card-readtime">14 min read</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ QUOTE SECTION ═══════════════════ -->
+  <section class="quote">
+    <div class="quote__inner">
+      <div class="quote__mark">&ldquo;</div>
+      <blockquote class="quote__text">
+        The real luxury of our age is not acquisition but attention — the rare and beautiful act of noticing the light change, the bread rise, the season turn.
+      </blockquote>
+      <div class="quote__divider"></div>
+      <p class="quote__attribution">Éloise Fontaine</p>
+      <p class="quote__source">Editor-in-Chief, Maison Journal</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ NEWSLETTER ═══════════════════ -->
+  <section class="newsletter" id="subscribe">
+    <div class="newsletter__deco-left"></div>
+    <div class="newsletter__deco-right"></div>
+    <div class="newsletter__inner">
+      <p class="newsletter__label">Stay Informed</p>
+      <h2 class="newsletter__title">Join the Maison Circle</h2>
+      <p class="newsletter__subtitle">A curated letter, delivered fortnightly — stories of craft, culture, and considered living. No noise, only what matters.</p>
+      <form class="newsletter__form" onsubmit="event.preventDefault(); this.querySelector('.newsletter__btn').textContent='Subscribed ✓'; this.querySelector('.newsletter__btn').style.background='var(--sage)'; this.querySelector('.newsletter__btn').style.borderColor='var(--sage)';">
+        <input type="email" class="newsletter__input" placeholder="Your email address" required aria-label="Email address">
+        <button type="submit" class="newsletter__btn">Subscribe</button>
+      </form>
+      <p class="newsletter__note">We respect your privacy. Unsubscribe at any time.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div>
+          <p class="footer__brand-name">MAISON<span style="color: var(--terracotta);">.</span></p>
+          <p class="footer__brand-desc">A journal of considered living — celebrating craft, culture, travel, and the art of making everyday life more beautiful.</p>
+          <div class="footer__social">
+            <a href="#" class="footer__social-link" aria-label="Instagram">IG</a>
+            <a href="#" class="footer__social-link" aria-label="Twitter">TW</a>
+            <a href="#" class="footer__social-link" aria-label="Pinterest">PI</a>
+            <a href="#" class="footer__social-link" aria-label="LinkedIn">LI</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Sections</p>
+          <ul class="footer__links">
+            <li><a href="#travel">Travel</a></li>
+            <li><a href="#food">Food &amp; Culture</a></li>
+            <li><a href="#design">Design &amp; Architecture</a></li>
+            <li><a href="#">Wellness</a></li>
+            <li><a href="#">Sustainability</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer__col-title">About</p>
+          <ul class="footer__links">
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Contributors</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer__col-title">Subscribe</p>
+          <ul class="footer__links">
+            <li><a href="#">Print Edition</a></li>
+            <li><a href="#">Digital Access</a></li>
+            <li><a href="#">Gift a Subscription</a></li>
+            <li><a href="#">Back Issues</a></li>
+            <li><a href="#">Newsletter</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2026 Maison Journal. All rights reserved.</p>
+        <div class="footer__bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Cookie Preferences</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════ MINIMAL JS ═══════════════════ -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
+      const spans = menuToggle.querySelectorAll('span');
+      if (mobileMenu.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(4px, -4px)';
+      } else {
+        spans[0].style.transform = '';
+        spans[1].style.opacity = '';
+        spans[2].style.transform = '';
+      }
+    });
+
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        const spans = menuToggle.querySelectorAll('span');
+        spans[0].style.transform = '';
+        spans[1].style.opacity = '';
+        spans[2].style.transform = '';
+      });
+    });
+
+    // Editor's Picks horizontal scroll buttons
+    const picksScroll = document.getElementById('picksScroll');
+    const picksPrev = document.getElementById('picksPrev');
+    const picksNext = document.getElementById('picksNext');
+
+    picksPrev.addEventListener('click', () => {
+      picksScroll.scrollBy({ left: -340, behavior: 'smooth' });
+    });
+
+    picksNext.addEventListener('click', () => {
+      picksScroll.scrollBy({ left: 340, behavior: 'smooth' });
+    });
+
+    // Nav background on scroll
+    const nav = document.getElementById('nav');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > 100) {
+        nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)';
+      } else {
+        nav.style.boxShadow = 'none';
+      }
+      lastScroll = currentScroll;
+    });
+  </script>
+
+</body>
+</html>
