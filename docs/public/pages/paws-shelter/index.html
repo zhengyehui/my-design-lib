@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paws & Hope — 宠物领养平台</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  /* ═══════════════════════════════════════════════════════
+     Paws & Hope — Pet Adoption Platform
+     Warm, emotionally-driven design with organic shapes
+     Inspired by Awwwards animal/welfare sites
+     ═══════════════════════════════════════════════════════ */
+
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --paws-cream: #faf7f2;
+    --paws-warm: #f5ebe0;
+    --paws-terracotta: #c67d5b;
+    --paws-terracotta-light: #e8a88a;
+    --paws-forest: #2d5a3d;
+    --paws-forest-light: #4a8c5e;
+    --paws-brown: #5c3d2e;
+    --paws-gold: #d4a853;
+    --paws-text: #2c2420;
+    --paws-text-secondary: #6b5b50;
+    --paws-white: #ffffff;
+    --paws-shadow: rgba(44, 36, 32, 0.08);
+    --paws-radius: 20px;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--paws-cream);
+    color: var(--paws-text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── Navigation ─────────────────────────── */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(250, 247, 242, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(198, 125, 91, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--paws-text);
+  }
+
+  .nav-logo-icon {
+    width: 42px;
+    height: 42px;
+    background: var(--paws-terracotta);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    position: relative;
+  }
+
+  .nav-logo-icon::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px dashed var(--paws-terracotta-light);
+    animation: logo-spin 20s linear infinite;
+  }
+
+  @keyframes logo-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .nav-logo-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--paws-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--paws-terracotta);
+    border-radius: 1px;
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover { color: var(--paws-terracotta); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    background: var(--paws-forest);
+    color: var(--paws-white) !important;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(45, 90, 61, 0.3);
+  }
+
+  .nav-cta:hover {
+    background: var(--paws-forest-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(45, 90, 61, 0.4);
+  }
+
+  .nav-cta::after { display: none !important; }
+
+  /* ── Hero ───────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: blob-float 8s ease-in-out infinite alternate;
+  }
+
+  .hero-blob-1 {
+    width: 500px;
+    height: 500px;
+    background: var(--paws-terracotta-light);
+    top: -100px;
+    right: -100px;
+    animation-delay: 0s;
+  }
+
+  .hero-blob-2 {
+    width: 400px;
+    height: 400px;
+    background: var(--paws-gold);
+    bottom: -50px;
+    left: -50px;
+    animation-delay: -3s;
+  }
+
+  .hero-blob-3 {
+    width: 300px;
+    height: 300px;
+    background: var(--paws-forest-light);
+    top: 40%;
+    left: 50%;
+    opacity: 0.2;
+    animation-delay: -5s;
+  }
+
+  @keyframes blob-float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, -30px) scale(1.1); }
+  }
+
+  .hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-content {
+    animation: fade-up 1s ease-out;
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(198, 125, 91, 0.12);
+    color: var(--paws-terracotta);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .hero-badge-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--paws-terracotta);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: var(--paws-text);
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--paws-terracotta);
+    position: relative;
+  }
+
+  .hero h1 em::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: rgba(198, 125, 91, 0.2);
+    border-radius: 4px;
+    z-index: -1;
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--paws-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 480px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--paws-terracotta);
+    color: var(--paws-white);
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(198, 125, 91, 0.35);
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: #b56a4a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(198, 125, 91, 0.45);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--paws-text);
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(44, 36, 32, 0.15);
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--paws-terracotta);
+    color: var(--paws-terracotta);
+    transform: translateY(-2px);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(198, 125, 91, 0.15);
+  }
+
+  .hero-stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--paws-terracotta);
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-size: 0.8rem;
+    color: var(--paws-text-secondary);
+    margin-top: 0.3rem;
+    font-weight: 500;
+  }
+
+  /* Hero Visual — Pet collage */
+  .hero-visual {
+    position: relative;
+    animation: fade-up 1s ease-out 0.3s both;
+  }
+
+  .hero-pet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 200px 200px 200px;
+    gap: 1rem;
+  }
+
+  .hero-pet-card {
+    border-radius: var(--paws-radius);
+    overflow: hidden;
+    position: relative;
+    background: var(--paws-warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    transition: transform 0.4s ease;
+    box-shadow: 0 8px 30px var(--paws-shadow);
+  }
+
+  .hero-pet-card:hover { transform: scale(1.03); }
+
+  .hero-pet-card:nth-child(1) {
+    grid-row: 1 / 3;
+    background: linear-gradient(135deg, #f5d5c8, #e8b4a0);
+  }
+
+  .hero-pet-card:nth-child(2) {
+    background: linear-gradient(135deg, #d4e8d0, #b8d4b0);
+  }
+
+  .hero-pet-card:nth-child(3) {
+    background: linear-gradient(135deg, #e0d4f0, #c8b8e0);
+  }
+
+  .hero-pet-card:nth-child(4) {
+    grid-column: 1 / 3;
+    background: linear-gradient(135deg, #f0e4c8, #e0d0a8);
+    font-size: 3rem;
+  }
+
+  .hero-pet-card-label {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--paws-text);
+  }
+
+  .hero-float-badge {
+    position: absolute;
+    background: var(--paws-white);
+    border-radius: 16px;
+    padding: 0.8rem 1.2rem;
+    box-shadow: 0 8px 30px var(--paws-shadow);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    animation: float 4s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  .hero-float-badge.badge-1 {
+    top: 10%;
+    right: -10px;
+    animation-delay: 0s;
+  }
+
+  .hero-float-badge.badge-2 {
+    bottom: 15%;
+    left: -20px;
+    animation-delay: -2s;
+  }
+
+  .hero-float-badge-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .hero-float-badge-icon.green { background: rgba(45, 90, 61, 0.1); }
+  .hero-float-badge-icon.orange { background: rgba(198, 125, 91, 0.1); }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* ── Marquee ────────────────────────────── */
+  .marquee-section {
+    padding: 1.5rem 0;
+    background: var(--paws-forest);
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 2rem;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .marquee-item span { color: var(--paws-gold); font-size: 1.1rem; }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── Section Shared ─────────────────────── */
+  .section {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--paws-terracotta);
+    margin-bottom: 1rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: var(--paws-terracotta);
+    border-radius: 1px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    color: var(--paws-text);
+    letter-spacing: -0.02em;
+  }
+
+  .section-desc {
+    font-size: 1.05rem;
+    color: var(--paws-text-secondary);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  /* ── Filter Bar ─────────────────────────── */
+  .filter-bar {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    border: 1.5px solid rgba(198, 125, 91, 0.2);
+    background: transparent;
+    color: var(--paws-text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--paws-terracotta);
+    color: var(--paws-terracotta);
+  }
+
+  .filter-btn.active {
+    background: var(--paws-terracotta);
+    border-color: var(--paws-terracotta);
+    color: var(--paws-white);
+  }
+
+  /* ── Pet Cards Grid ─────────────────────── */
+  .pets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .pet-card {
+    background: var(--paws-white);
+    border-radius: var(--paws-radius);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 20px var(--paws-shadow);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .pet-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(44, 36, 32, 0.12);
+  }
+
+  .pet-card-img {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+  }
+
+  .pet-card-img.cat-bg { background: linear-gradient(135deg, #f5d5c8, #e8b4a0); }
+  .pet-card-img.dog-bg { background: linear-gradient(135deg, #d4e8d0, #b8d4b0); }
+  .pet-card-img.bunny-bg { background: linear-gradient(135deg, #e0d4f0, #c8b8e0); }
+  .pet-card-img.bird-bg { background: linear-gradient(135deg, #f0e4c8, #e0d0a8); }
+
+  .pet-card-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .pet-card-badge.new {
+    background: var(--paws-forest);
+    color: var(--paws-white);
+  }
+
+  .pet-card-badge.urgent {
+    background: var(--paws-terracotta);
+    color: var(--paws-white);
+  }
+
+  .pet-card-body {
+    padding: 1.25rem;
+  }
+
+  .pet-card-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pet-card-gender {
+    font-size: 0.9rem;
+  }
+
+  .pet-card-info {
+    font-size: 0.8rem;
+    color: var(--paws-text-secondary);
+    margin-bottom: 0.8rem;
+  }
+
+  .pet-card-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .pet-tag {
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    background: rgba(198, 125, 91, 0.08);
+    color: var(--paws-terracotta);
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  .pet-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(198, 125, 91, 0.1);
+  }
+
+  .pet-card-location {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--paws-text-secondary);
+  }
+
+  .pet-card-heart {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(198, 125, 91, 0.08);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .pet-card-heart:hover {
+    background: var(--paws-terracotta);
+    transform: scale(1.15);
+  }
+
+  /* ── How It Works ───────────────────────── */
+  .how-section {
+    background: var(--paws-warm);
+    padding: 6rem 2rem;
+  }
+
+  .how-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    position: relative;
+  }
+
+  .how-grid::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--paws-terracotta-light), var(--paws-terracotta), var(--paws-terracotta-light));
+    opacity: 0.3;
+  }
+
+  .how-step {
+    text-align: center;
+    position: relative;
+  }
+
+  .how-step-num {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--paws-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    box-shadow: 0 8px 25px var(--paws-shadow);
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+  }
+
+  .how-step:hover .how-step-num {
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(198, 125, 91, 0.2);
+  }
+
+  .how-step-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .how-step-desc {
+    font-size: 0.85rem;
+    color: var(--paws-text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── Success Stories ────────────────────── */
+  .stories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .story-card {
+    background: var(--paws-white);
+    border-radius: var(--paws-radius);
+    padding: 2rem;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 20px var(--paws-shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .story-card::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 8rem;
+    color: rgba(198, 125, 91, 0.08);
+    line-height: 1;
+  }
+
+  .story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(44, 36, 32, 0.1);
+  }
+
+  .story-pet {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .story-pet-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+  }
+
+  .story-pet-avatar.s1 { background: linear-gradient(135deg, #f5d5c8, #e8b4a0); }
+  .story-pet-avatar.s2 { background: linear-gradient(135deg, #d4e8d0, #b8d4b0); }
+  .story-pet-avatar.s3 { background: linear-gradient(135deg, #e0d4f0, #c8b8e0); }
+
+  .story-pet-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+  }
+
+  .story-pet-type {
+    font-size: 0.8rem;
+    color: var(--paws-text-secondary);
+  }
+
+  .story-text {
+    font-size: 0.9rem;
+    color: var(--paws-text-secondary);
+    line-height: 1.7;
+    font-style: italic;
+    margin-bottom: 1.2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .story-author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--paws-text);
+  }
+
+  .story-author-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--paws-terracotta-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--paws-white);
+    font-weight: 700;
+  }
+
+  /* ── Impact Section ─────────────────────── */
+  .impact-section {
+    background: var(--paws-forest);
+    padding: 5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .impact-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+  }
+
+  .impact-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .impact-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    color: var(--paws-white);
+    margin-bottom: 1rem;
+  }
+
+  .impact-desc {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 500px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .impact-item {
+    text-align: center;
+  }
+
+  .impact-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: var(--paws-gold);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .impact-label {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    font-weight: 500;
+  }
+
+  /* ── CTA Section ────────────────────────── */
+  .cta-section {
+    padding: 6rem 2rem;
+    text-align: center;
+  }
+
+  .cta-container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cta-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    margin-bottom: 1rem;
+    color: var(--paws-text);
+  }
+
+  .cta-desc {
+    font-size: 1.05rem;
+    color: var(--paws-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .cta-form {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .cta-input {
+    flex: 1;
+    padding: 0.9rem 1.5rem;
+    border: 2px solid rgba(198, 125, 91, 0.2);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: var(--paws-white);
+    color: var(--paws-text);
+    transition: border-color 0.3s;
+    outline: none;
+  }
+
+  .cta-input:focus {
+    border-color: var(--paws-terracotta);
+  }
+
+  .cta-input::placeholder {
+    color: var(--paws-text-secondary);
+  }
+
+  /* ── Footer ─────────────────────────────── */
+  .footer {
+    background: var(--paws-brown);
+    color: rgba(255,255,255,0.7);
+    padding: 4rem 2rem 2rem;
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--paws-white);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .footer-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    max-width: 300px;
+  }
+
+  .footer-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--paws-white);
+    margin-bottom: 1rem;
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer-links a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s;
+  }
+
+  .footer-links a:hover { color: var(--paws-gold); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .footer-social a {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+  }
+
+  .footer-social a:hover {
+    background: var(--paws-terracotta);
+    color: var(--paws-white);
+    transform: translateY(-2px);
+  }
+
+  /* ── Responsive ─────────────────────────── */
+  @media (max-width: 968px) {
+    .hero-container { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-visual { order: -1; }
+    .hero-pet-grid { grid-template-rows: 150px 150px 150px; }
+    .how-grid { grid-template-columns: repeat(2, 1fr); }
+    .how-grid::before { display: none; }
+    .stories-grid { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 6rem 1.5rem 3rem; }
+    .hero-pet-grid { grid-template-columns: 1fr; grid-template-rows: repeat(4, 140px); }
+    .hero-pet-card:nth-child(1) { grid-row: auto; }
+    .hero-pet-card:nth-child(4) { grid-column: auto; }
+    .hero-stats { gap: 1.5rem; }
+    .how-grid { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .cta-form { flex-direction: column; }
+    .filter-bar { gap: 0.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">🐾</div>
+    <span class="nav-logo-text">Paws & Hope</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#pets">领养宠物</a></li>
+    <li><a href="#how">领养流程</a></li>
+    <li><a href="#stories">成功故事</a></li>
+    <li><a href="#about">关于我们</a></li>
+    <li><a href="#" class="nav-cta">立即领养</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-blob hero-blob-3"></div>
+
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        已帮助 12,000+ 宠物找到家
+      </div>
+      <h1>给每一只<em>毛孩子</em><br>一个温暖的家</h1>
+      <p class="hero-desc">
+        Paws & Hope 连接爱心家庭与等待领养的宠物。我们相信，每一只宠物都值得被爱，每一个家庭都能因宠物而更完整。
+      </p>
+      <div class="hero-actions">
+        <a href="#pets" class="btn-primary">
+          🔍 浏览可领养宠物
+        </a>
+        <a href="#how" class="btn-secondary">
+          了解领养流程 →
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">12,847</div>
+          <div class="hero-stat-label">成功领养</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">320+</div>
+          <div class="hero-stat-label">合作救助站</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">98%</div>
+          <div class="hero-stat-label">满意度</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-pet-grid">
+        <div class="hero-pet-card">🐕</div>
+        <div class="hero-pet-card">🐈</div>
+        <div class="hero-pet-card">🐇</div>
+        <div class="hero-pet-card">
+          🐦
+          <span class="hero-pet-card-label">等待领养中</span>
+        </div>
+      </div>
+      <div class="hero-float-badge badge-1">
+        <div class="hero-float-badge-icon green">✅</div>
+        <div>
+          <div style="font-weight:700;">今日领养</div>
+          <div style="font-size:0.7rem;color:var(--paws-text-secondary);">23 只宠物找到新家</div>
+        </div>
+      </div>
+      <div class="hero-float-badge badge-2">
+        <div class="hero-float-badge-icon orange">❤️</div>
+        <div>
+          <div style="font-weight:700;">最新成功</div>
+          <div style="font-size:0.7rem;color:var(--paws-text-secondary);">小橘 被领养了！</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item"><span>🐾</span> 用爱改变生命</div>
+    <div class="marquee-item"><span>🏠</span> 领养代替购买</div>
+    <div class="marquee-item"><span>💚</span> 负责任的宠物主人</div>
+    <div class="marquee-item"><span>🐕</span> 每一只都值得被爱</div>
+    <div class="marquee-item"><span>🐈</span> 科学养护知识</div>
+    <div class="marquee-item"><span>🏥</span> 健康保障承诺</div>
+    <div class="marquee-item"><span>📋</span> 全程跟踪服务</div>
+    <div class="marquee-item"><span>🤝</span> 社区互助</div>
+    <div class="marquee-item"><span>🐾</span> 用爱改变生命</div>
+    <div class="marquee-item"><span>🏠</span> 领养代替购买</div>
+    <div class="marquee-item"><span>💚</span> 负责任的宠物主人</div>
+    <div class="marquee-item"><span>🐕</span> 每一只都值得被爱</div>
+    <div class="marquee-item"><span>🐈</span> 科学养护知识</div>
+    <div class="marquee-item"><span>🏥</span> 健康保障承诺</div>
+    <div class="marquee-item"><span>📋</span> 全程跟踪服务</div>
+    <div class="marquee-item"><span>🤝</span> 社区互助</div>
+  </div>
+</div>
+
+<!-- Pets Section -->
+<section class="section" id="pets">
+  <div class="section-label">领养中心</div>
+  <h2 class="section-title">等待你带回家的小天使</h2>
+  <p class="section-desc">每一只宠物都已完成疫苗接种和健康检查，随时准备迎接新生活。</p>
+
+  <div class="filter-bar">
+    <button class="filter-btn active">全部</button>
+    <button class="filter-btn">🐕 狗狗</button>
+    <button class="filter-btn">🐈 猫咪</button>
+    <button class="filter-btn">🐇 小型动物</button>
+    <button class="filter-btn">🐦 鸟类</button>
+  </div>
+
+  <div class="pets-grid">
+    <div class="pet-card">
+      <div class="pet-card-img dog-bg">
+        🐕
+        <span class="pet-card-badge new">新到</span>
+      </div>
+      <div class="pet-card-body">
+        <div class="pet-card-name">旺财 <span class="pet-card-gender">♂</span></div>
+        <div class="pet-card-info">金毛寻回犬 · 2岁 · 已绝育</div>
+        <div class="pet-card-tags">
+          <span class="pet-tag">温顺</span>
+          <span class="pet-tag">适合家庭</span>
+          <span class="pet-tag">已训练</span>
+        </div>
+        <div class="pet-card-footer">
+          <span class="pet-card-location">📍 北京朝阳</span>
+          <button class="pet-card-heart">🤍</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pet-card">
+      <div class="pet-card-img cat-bg">
+        🐈
+        <span class="pet-card-badge urgent">急需</span>
+      </div>
+      <div class="pet-card-body">
+        <div class="pet-card-name">小橘 <span class="pet-card-gender">♂</span></div>
+        <div class="pet-card-info">中华田园猫 · 1岁 · 已绝育</div>
+        <div class="pet-card-tags">
+          <span class="pet-tag">活泼</span>
+          <span class="pet-tag">亲人</span>
+          <span class="pet-tag">会用猫砂</span>
+        </div>
+        <div class="pet-card-footer">
+          <span class="pet-card-location">📍 上海浦东</span>
+          <button class="pet-card-heart">🤍</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pet-card">
+      <div class="pet-card-img bunny-bg">
+        🐇
+      </div>
+      <div class="pet-card-body">
+        <div class="pet-card-name">棉花 <span class="pet-card-gender">♀</span></div>
+        <div class="pet-card-info">荷兰垂耳兔 · 8个月</div>
+        <div class="pet-card-tags">
+          <span class="pet-tag">安静</span>
+          <span class="pet-tag">适合公寓</span>
+        </div>
+        <div class="pet-card-footer">
+          <span class="pet-card-location">📍 广州天河</span>
+          <button class="pet-card-heart">🤍</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pet-card">
+      <div class="pet-card-img dog-bg">
+        🐕
+      </div>
+      <div class="pet-card-body">
+        <div class="pet-card-name">豆豆 <span class="pet-card-gender">♀</span></div>
+        <div class="pet-card-info">柯基犬 · 3岁 · 已绝育</div>
+        <div class="pet-card-tags">
+          <span class="pet-tag">粘人</span>
+          <span class="pet-tag">爱运动</span>
+          <span class="pet-tag">已训练</span>
+        </div>
+        <div class="pet-card-footer">
+          <span class="pet-card-location">📍 深圳南山</span>
+          <button class="pet-card-heart">🤍</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pet-card">
+      <div class="pet-card-img cat-bg">
+        🐈
+        <span class="pet-card-badge new">新到</span>
+      </div>
+      <div class="pet-card-body">
+        <div class="pet-card-name">雪球 <span class="pet-card-gender">♀</span></div>
+        <div class="pet-card-info">布偶猫 · 1.5岁 · 已绝育</div>
+        <div class="pet-card-tags">
+          <span class="pet-tag">温柔</span>
+          <span class="pet-tag">安静</span>
+          <span class="pet-tag">适合新手</span>
+        </div>
+        <div class="pet-card-footer">
+          <span class="pet-card-location">📍 杭州西湖</span>
+          <button class="pet-card-heart">🤍</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pet-card">
+      <div class="pet-card-img bird-bg">
+        🐦
+      </div>
+      <div class="pet-card-body">
+        <div class="pet-card-name">翠翠 <span class="pet-card-gender">♂</span></div>
+        <div class="pet-card-info">虎皮鹦鹉 · 1岁</div>
+        <div class="pet-card-tags">
+          <span class="pet-tag">会说话</span>
+          <span class="pet-tag">活泼</span>
+        </div>
+        <div class="pet-card-footer">
+          <span class="pet-card-location">📍 成都锦江</span>
+          <button class="pet-card-heart">🤍</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-section" id="how">
+  <div class="how-container">
+    <div style="text-align:center; margin-bottom:3rem;">
+      <div class="section-label" style="justify-content:center;">领养流程</div>
+      <h2 class="section-title" style="margin-left:auto;margin-right:auto;">四步完成领养</h2>
+      <p class="section-desc" style="margin-left:auto;margin-right:auto; text-align:center;">简单、透明、负责任的领养流程，确保每一只宠物都能去到最适合的家。</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-step-num">🔍</div>
+        <h3 class="how-step-title">浏览宠物</h3>
+        <p class="how-step-desc">在我们的平台上浏览可领养的宠物，按品种、年龄、性格筛选</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">📝</div>
+        <h3 class="how-step-title">提交申请</h3>
+        <p class="how-step-desc">填写领养申请表，告诉我们你的生活条件和养宠经验</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">🤝</div>
+        <h3 class="how-step-title">家访评估</h3>
+        <p class="how-step-desc">我们的志愿者会进行简单的家访，确保环境适合宠物生活</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">🏠</div>
+        <h3 class="how-step-title">迎接新成员</h3>
+        <p class="how-step-desc">签署领养协议，带你的新家人回家，开始美好新生活</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Success Stories -->
+<section class="section" id="stories">
+  <div class="section-label">成功故事</div>
+  <h2 class="section-title">它们找到了永远的家</h2>
+  <p class="section-desc">每一个领养故事都是一段温暖的旅程，听听主人们怎么说。</p>
+
+  <div class="stories-grid">
+    <div class="story-card">
+      <div class="story-pet">
+        <div class="story-pet-avatar s1">🐕</div>
+        <div>
+          <div class="story-pet-name">大黄的故事</div>
+          <div class="story-pet-type">中华田园犬 · 2024年被领养</div>
+        </div>
+      </div>
+      <p class="story-text">
+        "大黄刚来的时候很怕人，现在每天早上都要舔我的脸叫我起床。它教会了我什么是无条件的爱。感谢 Paws & Hope 让我们相遇。"
+      </p>
+      <div class="story-author">
+        <div class="story-author-avatar">李</div>
+        李明 · 北京
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-pet">
+        <div class="story-pet-avatar s2">🐈</div>
+        <div>
+          <div class="story-pet-name">团团的故事</div>
+          <div class="story-pet-type">英短蓝猫 · 2025年被领养</div>
+        </div>
+      </div>
+      <p class="story-text">
+        "团团是我女儿最好的朋友。每天放学回家，团团都会在门口等她。看到她们一起玩耍的样子，我觉得领养是最正确的决定。"
+      </p>
+      <div class="story-author">
+        <div class="story-author-avatar">王</div>
+        王芳 · 上海
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-pet">
+        <div class="story-pet-avatar s3">🐇</div>
+        <div>
+          <div class="story-pet-name">糯米的故事</div>
+          <div class="story-pet-type">荷兰垂耳兔 · 2025年被领养</div>
+        </div>
+      </div>
+      <p class="story-text">
+        "作为一个独居的上班族，糯米给了我很多陪伴。它很安静，很适合公寓生活。每天下班看到它，所有的疲惫都消失了。"
+      </p>
+      <div class="story-author">
+        <div class="story-author-avatar">张</div>
+        张雨 · 深圳
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Impact -->
+<section class="impact-section" id="about">
+  <div class="impact-container">
+    <h2 class="impact-title">我们的影响力</h2>
+    <p class="impact-desc">从 2020 年成立至今，Paws & Hope 一直在用行动改变宠物的命运。</p>
+    <div class="impact-grid">
+      <div class="impact-item">
+        <div class="impact-num">12,847</div>
+        <div class="impact-label">成功领养</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">320+</div>
+        <div class="impact-label">合作救助站</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">45</div>
+        <div class="impact-label">覆盖城市</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">98%</div>
+        <div class="impact-label">领养成功率</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-container">
+    <div class="cta-icon">🐾</div>
+    <h2 class="cta-title">准备好迎接新家人了吗？</h2>
+    <p class="cta-desc">订阅我们的通讯，每周获取最新的可领养宠物信息和养宠知识。</p>
+    <form class="cta-form" onsubmit="return false;">
+      <input type="email" class="cta-input" placeholder="输入你的邮箱地址">
+      <button type="submit" class="btn-primary">订阅通讯</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">🐾 Paws & Hope</div>
+        <p class="footer-desc">
+          用科技连接爱心，让每一只宠物都能找到温暖的家。我们是非营利宠物领养平台，致力于推广"领养代替购买"的理念。
+        </p>
+      </div>
+      <div>
+        <div class="footer-title">领养服务</div>
+        <ul class="footer-links">
+          <li><a href="#">浏览宠物</a></li>
+          <li><a href="#">领养流程</a></li>
+          <li><a href="#">领养须知</a></li>
+          <li><a href="#">常见问题</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-title">社区</div>
+        <ul class="footer-links">
+          <li><a href="#">成功故事</a></li>
+          <li><a href="#">养宠知识</a></li>
+          <li><a href="#">志愿者招募</a></li>
+          <li><a href="#">合作伙伴</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-title">关于我们</div>
+        <ul class="footer-links">
+          <li><a href="#">关于 Paws & Hope</a></li>
+          <li><a href="#">团队介绍</a></li>
+          <li><a href="#">联系我们</a></li>
+          <li><a href="#">隐私政策</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Paws & Hope. 用爱改变生命。</span>
+      <div class="footer-social">
+        <a href="#">微</a>
+        <a href="#">博</a>
+        <a href="#">抖</a>
+        <a href="#">B</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

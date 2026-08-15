@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 147 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 149 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1369,6 +1369,24 @@ const pages = [
     rating: 9.4,
     description: '高端生活方式数字杂志，灵感来自 Monocle/Wallpaper*，Playfair Display 衬线字体 + 暖色奶油底 + 陶土色配色 + 不对称文章网格 + 横向滚动编辑推荐 + 胶片噪点纹理 + 三大生活分类',
   },
+  {
+    id: 'neon-arcade',
+    title: 'NeonVault VR 游戏中心',
+    category: 'creative',
+    tags: ['VR游戏', '暗色主题', '霓虹', '游戏', 'Bento Grid'],
+    colors: ['#06060c', '#00f0ff', '#ff2d78'],
+    rating: 9.5,
+    description: '暗色赛博朋克风 VR 游戏中心落地页，Orbitron 科技字体 + 网格线背景 + 霓虹渐变标题 + 游戏卡片网格 + Bento 体验区 + 三栏定价',
+  },
+  {
+    id: 'paws-shelter',
+    title: 'Paws & Hope 宠物领养平台',
+    category: 'industry',
+    tags: ['宠物领养', '公益', '暖色调', '动物保护', '社区'],
+    colors: ['#faf7f2', '#c67d5b', '#2d5a3d'],
+    rating: 9.4,
+    description: '暖色调宠物领养平台，DM Serif Display 衬线字体 + Blob 渐变浮动背景 + 宠物卡片网格 + 四步领养流程 + 成功故事 + 影响力数据',
+  },
 ]
 
 const categories = [
@@ -1426,12 +1444,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 147 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 149 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="147 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="149 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1440,7 +1458,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 147 个完整页面</span>
+      <span>📦 149 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
