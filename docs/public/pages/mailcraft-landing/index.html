@@ -1,0 +1,3121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MailCraft — Email Marketing, Reimagined</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/tokens/tokens.css">
+    <style>
+        /* ============================================
+           DESIGN TOKENS (fallbacks)
+           ============================================ */
+        :root {
+            --color-bg: var(--color-surface, #0a0a0f);
+            --color-bg-secondary: var(--color-surface-2, #12121a);
+            --color-bg-tertiary: var(--color-surface-3, #1a1a25);
+            --color-primary: var(--color-brand-primary, #6366f1);
+            --color-primary-light: var(--color-brand-primary-light, #818cf8);
+            --color-primary-dark: var(--color-brand-primary-dark, #4f46e5);
+            --color-accent: var(--color-brand-accent, #ff6b6b);
+            --color-accent-light: var(--color-brand-accent-light, #ff8a8a);
+            --color-text: var(--color-text-primary, #f0f0f5);
+            --color-text-secondary: var(--color-text-secondary, #a0a0b8);
+            --color-text-muted: var(--color-text-muted, #6b6b80);
+            --color-border: var(--color-border-default, #2a2a3a);
+            --color-border-light: var(--color-border-light, #1e1e2e);
+            --color-success: var(--color-status-success, #10b981);
+            --color-warning: var(--color-status-warning, #f59e0b);
+            --radius-sm: var(--radius-sm, 6px);
+            --radius-md: var(--radius-md, 10px);
+            --radius-lg: var(--radius-lg, 16px);
+            --radius-xl: var(--radius-xl, 24px);
+            --radius-full: var(--radius-full, 9999px);
+            --shadow-sm: var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.3));
+            --shadow-md: var(--shadow-md, 0 4px 16px rgba(0,0,0,0.4));
+            --shadow-lg: var(--shadow-lg, 0 8px 32px rgba(0,0,0,0.5));
+            --shadow-glow: var(--shadow-glow, 0 0 40px rgba(99,102,241,0.3));
+            --font-sans: var(--font-family-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+            --transition-fast: 150ms ease;
+            --transition-base: 250ms ease;
+            --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ============================================
+           ANIMATION UTILITIES
+           ============================================ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+        .fade-in-delay-4 { transition-delay: 0.4s; }
+        .fade-in-delay-5 { transition-delay: 0.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(99,102,241,0.2); }
+            50% { box-shadow: 0 0 40px rgba(99,102,241,0.4); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes count-up {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes typing-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes slide-in-left {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 0;
+            transition: var(--transition-base);
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid transparent;
+        }
+
+        .navbar.scrolled {
+            border-bottom-color: var(--color-border-light);
+            background: rgba(10, 10, 15, 0.85);
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .navbar-links a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        .navbar-links a:hover {
+            color: var(--color-text);
+        }
+
+        .navbar-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-primary);
+            transition: var(--transition-base);
+            border-radius: 1px;
+        }
+
+        .navbar-links a:hover::after {
+            width: 100%;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: var(--transition-base);
+            border: none;
+            white-space: nowrap;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-text-secondary);
+        }
+
+        .btn-ghost:hover {
+            color: var(--color-text);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 2px 12px rgba(99,102,241,0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-light);
+            box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-large {
+            padding: 14px 32px;
+            font-size: 16px;
+            border-radius: var(--radius-lg);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--color-primary);
+            background: rgba(99,102,241,0.05);
+        }
+
+        .btn-accent {
+            background: var(--color-accent);
+            color: white;
+            box-shadow: 0 2px 12px rgba(255,107,107,0.3);
+        }
+
+        .btn-accent:hover {
+            background: var(--color-accent-light);
+            box-shadow: 0 4px 20px rgba(255,107,107,0.4);
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-text);
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            position: relative;
+            padding: 160px 0 100px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,107,107,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px 6px 8px;
+            background: rgba(99,102,241,0.1);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-primary-light);
+            margin-bottom: 28px;
+            animation: fade-in 0.6s ease forwards;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            animation: pulse-glow 2s ease infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 6vw, 72px);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--color-text) 0%, var(--color-text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--color-text-secondary);
+            max-width: 560px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .hero-note {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            margin-bottom: 60px;
+        }
+
+        .hero-note span {
+            color: var(--color-success);
+        }
+
+        /* ============================================
+           EMAIL BUILDER MOCKUP (Hero)
+           ============================================ */
+        .email-builder-hero {
+            max-width: 960px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .email-builder-hero::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: var(--radius-xl);
+            background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(255,107,107,0.2), rgba(99,102,241,0.1));
+            z-index: 0;
+        }
+
+        .email-builder-hero-window {
+            position: relative;
+            z-index: 1;
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        .window-titlebar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 18px;
+            background: var(--color-bg-tertiary);
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .window-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .window-dot.red { background: #ff5f57; }
+        .window-dot.yellow { background: #ffbd2e; }
+        .window-dot.green { background: #28c840; }
+
+        .window-title {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        .builder-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            min-height: 360px;
+        }
+
+        .builder-sidebar {
+            background: var(--color-bg-tertiary);
+            border-right: 1px solid var(--color-border-light);
+            padding: 16px;
+        }
+
+        .builder-sidebar-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-text-muted);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .builder-component {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid transparent;
+            transition: var(--transition-fast);
+            cursor: default;
+        }
+
+        .builder-component:hover {
+            background: rgba(99,102,241,0.1);
+            border-color: rgba(99,102,241,0.2);
+            color: var(--color-text);
+        }
+
+        .builder-component-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .builder-component-icon.purple { background: rgba(99,102,241,0.15); }
+        .builder-component-icon.blue { background: rgba(59,130,246,0.15); }
+        .builder-component-icon.green { background: rgba(16,185,129,0.15); }
+        .builder-component-icon.orange { background: rgba(245,158,11,0.15); }
+        .builder-component-icon.pink { background: rgba(236,72,153,0.15); }
+        .builder-component-icon.red { background: rgba(255,107,107,0.15); }
+
+        .builder-canvas {
+            padding: 20px;
+            background: var(--color-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .builder-canvas::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle, var(--color-border-light) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.5;
+        }
+
+        .canvas-email {
+            position: relative;
+            z-index: 1;
+            max-width: 380px;
+            margin: 0 auto;
+            background: #16162a;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .canvas-email-header {
+            background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .canvas-email-logo {
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .canvas-email-header-text {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .canvas-email-body {
+            padding: 24px;
+        }
+
+        .canvas-email-h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+
+        .canvas-email-text {
+            font-size: 11px;
+            line-height: 1.7;
+            color: var(--color-text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .canvas-email-text .line {
+            height: 8px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .canvas-email-text .line.w80 { width: 80%; }
+        .canvas-email-text .line.w60 { width: 60%; }
+        .canvas-email-text .line.w90 { width: 90%; }
+        .canvas-email-text .line.w70 { width: 70%; }
+
+        .canvas-email-btn {
+            display: inline-block;
+            padding: 10px 24px;
+            background: var(--color-accent);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .canvas-email-image {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(255,107,107,0.15));
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .canvas-selected {
+            outline: 2px dashed var(--color-primary);
+            outline-offset: 4px;
+            border-radius: var(--radius-sm);
+            position: relative;
+        }
+
+        .canvas-selected::after {
+            content: '✦ Selected';
+            position: absolute;
+            top: -10px;
+            right: -2px;
+            font-size: 9px;
+            background: var(--color-primary);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .builder-properties {
+            background: var(--color-bg-tertiary);
+            border-left: 1px solid var(--color-border-light);
+            padding: 16px;
+        }
+
+        .builder-properties-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-text-muted);
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+        .prop-group {
+            margin-bottom: 14px;
+        }
+
+        .prop-label {
+            font-size: 10px;
+            color: var(--color-text-muted);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .prop-input {
+            width: 100%;
+            padding: 8px 10px;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            color: var(--color-text);
+            font-family: var(--font-sans);
+        }
+
+        .prop-color-row {
+            display: flex;
+            gap: 6px;
+        }
+
+        .prop-color {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-sm);
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .prop-color.active {
+            border-color: var(--color-text);
+        }
+
+        .prop-slider {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--color-border);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .prop-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+        }
+
+        .prop-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-track {
+            width: 32px;
+            height: 18px;
+            background: var(--color-border);
+            border-radius: 9px;
+            position: relative;
+        }
+
+        .toggle-track.on {
+            background: var(--color-primary);
+        }
+
+        .toggle-track::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition-fast);
+        }
+
+        .toggle-track.on::after {
+            left: 17px;
+        }
+
+        /* ============================================
+           SOCIAL PROOF BAR
+           ============================================ */
+        .social-proof {
+            padding: 80px 0;
+            border-top: 1px solid var(--color-border-light);
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .social-proof-label {
+            text-align: center;
+            font-size: 13px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .social-proof-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .social-proof-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text-muted);
+            opacity: 0.5;
+            transition: var(--transition-base);
+        }
+
+        .social-proof-logo:hover {
+            opacity: 0.8;
+        }
+
+        .social-proof-logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* ============================================
+           FEATURES BENTO GRID
+           ============================================ */
+        .features {
+            padding: 120px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-primary-light);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 18px;
+        }
+
+        .section-subtitle {
+            font-size: 17px;
+            color: var(--color-text-secondary);
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+            gap: 20px;
+        }
+
+        .bento-card {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-xl);
+            padding: 36px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-slow);
+        }
+
+        .bento-card:hover {
+            border-color: rgba(99,102,241,0.3);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md), 0 0 30px rgba(99,102,241,0.08);
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent);
+            opacity: 0;
+            transition: var(--transition-base);
+        }
+
+        .bento-card:hover::before {
+            opacity: 1;
+        }
+
+        .bento-card.large {
+            grid-column: span 2;
+        }
+
+        .bento-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .bento-card-icon.indigo { background: rgba(99,102,241,0.12); }
+        .bento-card-icon.coral { background: rgba(255,107,107,0.12); }
+        .bento-card-icon.green { background: rgba(16,185,129,0.12); }
+        .bento-card-icon.amber { background: rgba(245,158,11,0.12); }
+        .bento-card-icon.blue { background: rgba(59,130,246,0.12); }
+        .bento-card-icon.pink { background: rgba(236,72,153,0.12); }
+
+        .bento-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        .bento-card p {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        .bento-card-visual {
+            margin-top: 24px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        /* AI Subject Lines Visual */
+        .ai-subject-visual {
+            background: var(--color-bg);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid var(--color-border-light);
+        }
+
+        .ai-subject-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            font-size: 12px;
+            transition: var(--transition-fast);
+        }
+
+        .ai-subject-line:hover {
+            background: rgba(99,102,241,0.05);
+        }
+
+        .ai-score {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .ai-score.high { background: rgba(16,185,129,0.15); color: var(--color-success); }
+        .ai-score.medium { background: rgba(245,158,11,0.15); color: var(--color-warning); }
+
+        .ai-subject-text {
+            color: var(--color-text-secondary);
+        }
+
+        .ai-sparkle {
+            color: var(--color-primary-light);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* A/B Testing Visual */
+        .ab-test-visual {
+            background: var(--color-bg);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid var(--color-border-light);
+        }
+
+        .ab-variant {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border: 1px solid var(--color-border-light);
+        }
+
+        .ab-variant-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 16px;
+            color: var(--color-text-muted);
+        }
+
+        .ab-bar-track {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .ab-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .ab-bar-fill.indigo { background: var(--color-primary); }
+        .ab-bar-fill.coral { background: var(--color-accent); }
+
+        .ab-pct {
+            font-size: 12px;
+            font-weight: 700;
+            width: 40px;
+            text-align: right;
+        }
+
+        /* Analytics Mini Chart */
+        .analytics-mini {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 60px;
+            margin-top: 16px;
+        }
+
+        .analytics-bar {
+            flex: 1;
+            background: linear-gradient(to top, rgba(99,102,241,0.3), rgba(99,102,241,0.1));
+            border-radius: 3px 3px 0 0;
+            transition: var(--transition-base);
+            min-height: 8px;
+        }
+
+        .analytics-bar:hover {
+            background: linear-gradient(to top, rgba(99,102,241,0.5), rgba(99,102,241,0.2));
+        }
+
+        /* Automation Flow Visual */
+        .automation-visual {
+            background: var(--color-bg);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid var(--color-border-light);
+        }
+
+        .automation-node {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            background: rgba(255,255,255,0.03);
+            margin-bottom: 4px;
+            font-size: 11px;
+            color: var(--color-text-secondary);
+        }
+
+        .automation-node-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .automation-connector {
+            width: 2px;
+            height: 12px;
+            background: var(--color-border);
+            margin-left: 21px;
+        }
+
+        /* ============================================
+           EMAIL BUILDER SHOWCASE
+           ============================================ */
+        .builder-showcase {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .builder-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+        }
+
+        .builder-showcase-window {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+
+        .builder-showcase-window::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: var(--radius-xl);
+            background: linear-gradient(135deg, rgba(99,102,241,0.2), transparent 40%, transparent 60%, rgba(255,107,107,0.15));
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .showcase-titlebar {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            background: var(--color-bg-tertiary);
+            border-bottom: 1px solid var(--color-border-light);
+            position: relative;
+            z-index: 1;
+        }
+
+        .showcase-titlebar-dots {
+            display: flex;
+            gap: 7px;
+        }
+
+        .showcase-titlebar-tabs {
+            display: flex;
+            margin-left: 24px;
+            gap: 2px;
+        }
+
+        .showcase-tab {
+            padding: 6px 16px;
+            font-size: 12px;
+            color: var(--color-text-muted);
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            cursor: default;
+        }
+
+        .showcase-tab.active {
+            background: rgba(99,102,241,0.1);
+            color: var(--color-primary-light);
+        }
+
+        .showcase-body {
+            display: grid;
+            grid-template-columns: 240px 1fr 260px;
+            min-height: 500px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Left Panel - Templates */
+        .showcase-left {
+            background: var(--color-bg-tertiary);
+            border-right: 1px solid var(--color-border-light);
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .showcase-panel-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-text-muted);
+            margin-bottom: 16px;
+        }
+
+        .template-card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: default;
+            transition: var(--transition-fast);
+        }
+
+        .template-card:hover {
+            border-color: rgba(99,102,241,0.3);
+        }
+
+        .template-card.selected {
+            border-color: var(--color-primary);
+            background: rgba(99,102,241,0.05);
+        }
+
+        .template-preview {
+            width: 100%;
+            height: 100px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .template-preview-1 {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        }
+
+        .template-preview-2 {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+        }
+
+        .template-preview-3 {
+            background: linear-gradient(135deg, #1a0a2e, #2d1b4e);
+        }
+
+        .template-header-bar {
+            height: 24px;
+            background: rgba(99,102,241,0.2);
+            margin: 8px;
+            border-radius: 3px;
+        }
+
+        .template-content-lines {
+            padding: 0 8px;
+        }
+
+        .template-content-line {
+            height: 4px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+            margin-bottom: 4px;
+        }
+
+        .template-content-line.short { width: 50%; }
+        .template-content-line.medium { width: 70%; }
+        .template-content-line.long { width: 90%; }
+
+        .template-btn-placeholder {
+            width: 50%;
+            height: 8px;
+            margin: 8px auto 0;
+            background: rgba(255,107,107,0.3);
+            border-radius: 2px;
+        }
+
+        .template-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .template-tag {
+            font-size: 10px;
+            color: var(--color-text-muted);
+            margin-top: 2px;
+        }
+
+        /* Canvas */
+        .showcase-canvas {
+            background: var(--color-bg);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .showcase-canvas::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle, var(--color-border-light) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.4;
+        }
+
+        .canvas-toolbar {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+        }
+
+        .canvas-toolbar-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            color: var(--color-text-muted);
+            cursor: default;
+            transition: var(--transition-fast);
+        }
+
+        .canvas-toolbar-btn:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--color-text);
+        }
+
+        .canvas-toolbar-btn.active {
+            background: rgba(99,102,241,0.15);
+            color: var(--color-primary-light);
+        }
+
+        .canvas-toolbar-divider {
+            width: 1px;
+            height: 20px;
+            background: var(--color-border);
+            margin: 0 4px;
+        }
+
+        .showcase-email {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 480px;
+            background: #111125;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+        }
+
+        .showcase-email-top {
+            background: linear-gradient(135deg, var(--color-primary), #7c3aed, var(--color-accent));
+            background-size: 200% 200%;
+            animation: gradient-shift 6s ease infinite;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .showcase-email-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255,255,255,0.15);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .showcase-email-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        .showcase-email-sub {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .showcase-email-body {
+            padding: 30px;
+        }
+
+        .showcase-email-body h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        .showcase-email-body-text {
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .showcase-email-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .showcase-email-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            color: var(--color-text-secondary);
+        }
+
+        .showcase-email-feature-icon {
+            font-size: 14px;
+        }
+
+        .showcase-email-cta {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .showcase-email-footer {
+            padding: 16px 30px;
+            border-top: 1px solid var(--color-border-light);
+            text-align: center;
+        }
+
+        .showcase-email-footer-text {
+            font-size: 10px;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        .showcase-email-footer a {
+            color: var(--color-primary-light);
+        }
+
+        /* Right Panel - Properties */
+        .showcase-right {
+            background: var(--color-bg-tertiary);
+            border-left: 1px solid var(--color-border-light);
+            padding: 20px;
+        }
+
+        .showcase-section {
+            margin-bottom: 24px;
+        }
+
+        .showcase-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .showcase-section-badge {
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(99,102,241,0.15);
+            color: var(--color-primary-light);
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .showcase-field {
+            margin-bottom: 12px;
+        }
+
+        .showcase-field-label {
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .showcase-field-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            color: var(--color-text);
+            font-family: var(--font-sans);
+            transition: var(--transition-fast);
+        }
+
+        .showcase-field-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+
+        .showcase-color-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+        }
+
+        .showcase-color-swatch {
+            aspect-ratio: 1;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition-fast);
+        }
+
+        .showcase-color-swatch.active {
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        .showcase-spacing-slider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .showcase-spacing-slider input {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--color-border);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .showcase-spacing-slider input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+        }
+
+        .showcase-spacing-value {
+            font-size: 11px;
+            color: var(--color-text-muted);
+            width: 32px;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .showcase-toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .showcase-toggle-label {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        .showcase-toggle {
+            width: 36px;
+            height: 20px;
+            background: var(--color-primary);
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .showcase-toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 14px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition-fast);
+        }
+
+        .showcase-toggle.off {
+            background: var(--color-border);
+        }
+
+        .showcase-toggle.off::after {
+            left: 19px;
+        }
+
+        /* ============================================
+           STATS SECTION
+           ============================================ */
+        .stats {
+            padding: 100px 0;
+            background: var(--color-bg-secondary);
+            border-top: 1px solid var(--color-border-light);
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: clamp(36px, 4vw, 56px);
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--color-text), var(--color-text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-number .accent {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        /* ============================================
+           PRICING SECTION
+           ============================================ */
+        .pricing {
+            padding: 120px 0;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-xl);
+            padding: 40px 32px;
+            position: relative;
+            transition: var(--transition-slow);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--color-primary);
+            background: linear-gradient(180deg, rgba(99,102,241,0.08) 0%, var(--color-bg-secondary) 100%);
+        }
+
+        .pricing-card.featured::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+        }
+
+        .pricing-popular {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 16px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pricing-tier {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+
+        .pricing-currency {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text-secondary);
+        }
+
+        .pricing-amount {
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        .pricing-period {
+            font-size: 14px;
+            color: var(--color-text-muted);
+        }
+
+        .pricing-desc {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+
+        .pricing-features li .check {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .pricing-features li .check.on {
+            background: rgba(16,185,129,0.15);
+            color: var(--color-success);
+        }
+
+        .pricing-features li .check.off {
+            background: rgba(255,255,255,0.05);
+            color: var(--color-text-muted);
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+        }
+
+        /* ============================================
+           TESTIMONIALS
+           ============================================ */
+        .testimonials {
+            padding: 120px 0;
+            background: var(--color-bg-secondary);
+            border-top: 1px solid var(--color-border-light);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-xl);
+            padding: 36px;
+            transition: var(--transition-slow);
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            border-color: rgba(99,102,241,0.2);
+            transform: translateY(-4px);
+        }
+
+        .testimonial-stars {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #f59e0b;
+        }
+
+        .testimonial-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+            margin-bottom: 28px;
+            font-style: italic;
+        }
+
+        .testimonial-text::before {
+            content: '"';
+            font-size: 40px;
+            line-height: 0;
+            vertical-align: -12px;
+            margin-right: 4px;
+            color: var(--color-primary);
+            font-style: normal;
+            font-weight: 800;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .testimonial-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .testimonial-avatar.a1 { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .testimonial-avatar.a2 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+        .testimonial-avatar.a3 { background: linear-gradient(135deg, #10b981, #06b6d4); }
+
+        .testimonial-name {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .testimonial-role {
+            font-size: 12px;
+            color: var(--color-text-muted);
+        }
+
+        /* ============================================
+           CTA SECTION
+           ============================================ */
+        .cta-section {
+            padding: 120px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 30% 50%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(255,107,107,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(36px, 4vw, 52px);
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 18px;
+        }
+
+        .cta-content p {
+            font-size: 17px;
+            color: var(--color-text-secondary);
+            margin-bottom: 36px;
+            line-height: 1.7;
+        }
+
+        .cta-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .cta-note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--color-text-muted);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            padding: 80px 0 40px;
+            border-top: 1px solid var(--color-border-light);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 64px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            margin-top: 16px;
+            max-width: 280px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--color-text-muted);
+            transition: var(--transition-fast);
+        }
+
+        .footer-social a:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary-light);
+            background: rgba(99,102,241,0.1);
+        }
+
+        .footer-col-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-text);
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            transition: var(--transition-fast);
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary-light);
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 32px;
+            border-top: 1px solid var(--color-border-light);
+        }
+
+        .footer-bottom p {
+            font-size: 13px;
+            color: var(--color-text-muted);
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-bottom-links a {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            transition: var(--transition-fast);
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--color-text-secondary);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .builder-layout {
+                grid-template-columns: 1fr;
+            }
+            .builder-sidebar,
+            .builder-properties {
+                display: none;
+            }
+            .showcase-body {
+                grid-template-columns: 1fr;
+            }
+            .showcase-left,
+            .showcase-right {
+                display: none;
+            }
+            .bento-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .bento-card.large {
+                grid-column: span 2;
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .btn-ghost {
+                display: none;
+            }
+            .hero {
+                padding: 130px 0 80px;
+            }
+            .hero h1 {
+                letter-spacing: -1px;
+            }
+            .hero-actions {
+                flex-direction: column;
+            }
+            .hero-actions .btn {
+                width: 100%;
+            }
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            .bento-card.large {
+                grid-column: span 1;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+            .social-proof-logos {
+                gap: 32px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            .cta-actions {
+                flex-direction: column;
+            }
+            .cta-actions .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+            }
+            .canvas-email-header {
+                padding: 16px;
+            }
+            .canvas-email-body {
+                padding: 16px;
+            }
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            padding: 100px 32px 32px;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 16px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            border-bottom: 1px solid var(--color-border-light);
+            transition: var(--transition-fast);
+        }
+
+        .mobile-menu a:hover {
+            color: var(--color-text);
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: none;
+            border: none;
+            color: var(--color-text);
+            font-size: 28px;
+            cursor: pointer;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+         NAVIGATION
+         ============================================ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="navbar-logo">
+                <div class="navbar-logo-icon">✉</div>
+                MailCraft
+            </a>
+            <ul class="navbar-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#builder">Builder</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#">Docs</a></li>
+            </ul>
+            <div class="navbar-actions">
+                <button class="btn btn-ghost">Sign In</button>
+                <button class="btn btn-primary">Get Started Free</button>
+                <button class="mobile-menu-toggle" id="menuToggle" aria-label="Open menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" id="menuClose" aria-label="Close menu">✕</button>
+        <a href="#features" onclick="closeMobileMenu()">Features</a>
+        <a href="#builder" onclick="closeMobileMenu()">Builder</a>
+        <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+        <a href="#testimonials" onclick="closeMobileMenu()">Testimonials</a>
+        <a href="#">Docs</a>
+        <a href="#">Sign In</a>
+    </div>
+
+    <!-- ============================================
+         HERO SECTION
+         ============================================ -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge fade-in">
+                    <span class="hero-badge-dot"></span>
+                    Now with AI-powered campaigns
+                </div>
+
+                <h1 class="fade-in fade-in-delay-1">
+                    Email Marketing,<br><span class="gradient-text">Reimagined</span>
+                </h1>
+
+                <p class="hero-subtitle fade-in fade-in-delay-2">
+                    Craft beautiful, high-converting email campaigns with AI-powered subject lines, 
+                    a drag-and-drop builder, and intelligent automation — all in one platform.
+                </p>
+
+                <div class="hero-actions fade-in fade-in-delay-3">
+                    <button class="btn btn-primary btn-large">
+                        Start Free Trial
+                        <span>→</span>
+                    </button>
+                    <button class="btn btn-outline btn-large">
+                        <span>▶</span>
+                        Watch Demo
+                    </button>
+                </div>
+
+                <p class="hero-note fade-in fade-in-delay-4">
+                    <span>✓</span> Free 14-day trial · No credit card required · Cancel anytime
+                </p>
+
+                <!-- Email Builder Mockup -->
+                <div class="email-builder-hero fade-in fade-in-delay-5">
+                    <div class="email-builder-hero-window">
+                        <div class="window-titlebar">
+                            <span class="window-dot red"></span>
+                            <span class="window-dot yellow"></span>
+                            <span class="window-dot green"></span>
+                            <span class="window-title">MailCraft — Email Builder</span>
+                        </div>
+                        <div class="builder-layout">
+                            <!-- Sidebar -->
+                            <div class="builder-sidebar">
+                                <div class="builder-sidebar-title">Components</div>
+                                <div class="builder-component">
+                                    <div class="builder-component-icon purple">𝐇</div>
+                                    Heading
+                                </div>
+                                <div class="builder-component">
+                                    <div class="builder-component-icon blue">¶</div>
+                                    Text Block
+                                </div>
+                                <div class="builder-component">
+                                    <div class="builder-component-icon green">◻</div>
+                                    Image
+                                </div>
+                                <div class="builder-component">
+                                    <div class="builder-component-icon coral">⬦</div>
+                                    Button
+                                </div>
+                                <div class="builder-component">
+                                    <div class="builder-component-icon orange">☰</div>
+                                    Divider
+                                </div>
+                                <div class="builder-component">
+                                    <div class="builder-component-icon pink">⊞</div>
+                                    Columns
+                                </div>
+                                <div class="builder-component">
+                                    <div class="builder-component-icon red">▦</div>
+                                    Social
+                                </div>
+                            </div>
+
+                            <!-- Canvas -->
+                            <div class="builder-canvas">
+                                <div class="canvas-email">
+                                    <div class="canvas-email-header">
+                                        <div class="canvas-email-logo">✉ MailCraft</div>
+                                        <div class="canvas-email-header-text">Your Weekly Digest</div>
+                                    </div>
+                                    <div class="canvas-email-body">
+                                        <div class="canvas-email-image">📸</div>
+                                        <div class="canvas-email-h2 canvas-selected">Welcome to the Future ✨</div>
+                                        <div class="canvas-email-text">
+                                            <div class="line w90"></div>
+                                            <div class="line w80"></div>
+                                            <div class="line w60"></div>
+                                        </div>
+                                        <div class="canvas-email-btn">Get Started →</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Properties -->
+                            <div class="builder-properties">
+                                <div class="builder-properties-title">Properties</div>
+                                <div class="prop-group">
+                                    <div class="prop-label">Heading Text</div>
+                                    <input type="text" class="prop-input" value="Welcome to the Future" readonly>
+                                </div>
+                                <div class="prop-group">
+                                    <div class="prop-label">Font Size</div>
+                                    <input type="range" class="prop-slider" min="12" max="32" value="22">
+                                </div>
+                                <div class="prop-group">
+                                    <div class="prop-label">Color</div>
+                                    <div class="prop-color-row">
+                                        <div class="prop-color active" style="background: #6366f1;"></div>
+                                        <div class="prop-color" style="background: #ff6b6b;"></div>
+                                        <div class="prop-color" style="background: #10b981;"></div>
+                                        <div class="prop-color" style="background: #f59e0b;"></div>
+                                        <div class="prop-color" style="background: #f0f0f5;"></div>
+                                    </div>
+                                </div>
+                                <div class="prop-group">
+                                    <div class="prop-label">Alignment</div>
+                                    <div style="display:flex;gap:4px;">
+                                        <div class="builder-component-icon purple" style="width:28px;height:28px;font-size:11px;cursor:pointer;">≡</div>
+                                        <div class="builder-component-icon" style="width:28px;height:28px;font-size:11px;cursor:pointer;background:rgba(255,255,255,0.05);">≡</div>
+                                        <div class="builder-component-icon" style="width:28px;height:28px;font-size:11px;cursor:pointer;background:rgba(255,255,255,0.05);">≡</div>
+                                    </div>
+                                </div>
+                                <div class="prop-group">
+                                    <div class="prop-toggle">
+                                        <span class="prop-label" style="margin-bottom:0;">Bold</span>
+                                        <div class="toggle-track on"></div>
+                                    </div>
+                                </div>
+                                <div class="prop-group">
+                                    <div class="prop-toggle">
+                                        <span class="prop-label" style="margin-bottom:0;">Italic</span>
+                                        <div class="toggle-track"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SOCIAL PROOF BAR
+         ============================================ -->
+    <section class="social-proof fade-in">
+        <div class="container">
+            <p class="social-proof-label">Trusted by 50,000+ companies worldwide</p>
+            <div class="social-proof-logos">
+                <div class="social-proof-logo">
+                    <div class="social-proof-logo-icon" style="background: rgba(99,102,241,0.1);">◆</div>
+                    Quantum
+                </div>
+                <div class="social-proof-logo">
+                    <div class="social-proof-logo-icon" style="background: rgba(255,107,107,0.1);">●</div>
+                    Nimbus
+                </div>
+                <div class="social-proof-logo">
+                    <div class="social-proof-logo-icon" style="background: rgba(16,185,129,0.1);">▲</div>
+                    Verdant
+                </div>
+                <div class="social-proof-logo">
+                    <div class="social-proof-logo-icon" style="background: rgba(245,158,11,0.1);">■</div>
+                    Helios
+                </div>
+                <div class="social-proof-logo">
+                    <div class="social-proof-logo-icon" style="background: rgba(236,72,153,0.1);">✦</div>
+                    Stellar
+                </div>
+                <div class="social-proof-logo">
+                    <div class="social-proof-logo-icon" style="background: rgba(59,130,246,0.1);">◈</div>
+                    Arcadia
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FEATURES BENTO GRID
+         ============================================ -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Features</span>
+                <h2 class="section-title">Everything you need to<br>master email marketing</h2>
+                <p class="section-subtitle">
+                    Powerful tools designed for modern teams. From AI-written subject lines 
+                    to advanced automations — we've got you covered.
+                </p>
+            </div>
+
+            <div class="bento-grid">
+                <!-- AI Subject Lines (Large) -->
+                <div class="bento-card large fade-in">
+                    <div class="bento-card-icon indigo">✨</div>
+                    <h3>AI Subject Lines</h3>
+                    <p>Let artificial intelligence craft the perfect subject lines that boost open rates. Our AI analyzes millions of campaigns to generate high-performing options.</p>
+                    <div class="bento-card-visual ai-subject-visual">
+                        <div class="ai-subject-line">
+                            <span class="ai-sparkle">✨</span>
+                            <span class="ai-subject-text">Your exclusive offer expires tonight ⏰</span>
+                            <span class="ai-score high">98%</span>
+                        </div>
+                        <div class="ai-subject-line">
+                            <span class="ai-sparkle">✨</span>
+                            <span class="ai-subject-text">Don't miss out — 50% off everything</span>
+                            <span class="ai-score high">94%</span>
+                        </div>
+                        <div class="ai-subject-line">
+                            <span class="ai-sparkle">✨</span>
+                            <span class="ai-subject-text">We saved your cart (with a surprise)</span>
+                            <span class="ai-score medium">87%</span>
+                        </div>
+                        <div class="ai-subject-line">
+                            <span class="ai-sparkle">✨</span>
+                            <span class="ai-subject-text">Quick update on your account 🚀</span>
+                            <span class="ai-score medium">82%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drag & Drop Builder -->
+                <div class="bento-card fade-in fade-in-delay-1">
+                    <div class="bento-card-icon coral">🧩</div>
+                    <h3>Drag & Drop Builder</h3>
+                    <p>Build stunning emails visually. No coding required. Choose from 200+ templates or start from scratch.</p>
+                </div>
+
+                <!-- Smart Segmentation -->
+                <div class="bento-card fade-in fade-in-delay-2">
+                    <div class="bento-card-icon green">🎯</div>
+                    <h3>Smart Segmentation</h3>
+                    <p>Target the right audience with AI-powered segments based on behavior, preferences, and engagement patterns.</p>
+                </div>
+
+                <!-- A/B Testing -->
+                <div class="bento-card fade-in fade-in-delay-1">
+                    <div class="bento-card-icon amber">⚖️</div>
+                    <h3>A/B Testing</h3>
+                    <p>Test everything — subject lines, content, send times. Let data drive your decisions for maximum impact.</p>
+                    <div class="bento-card-visual ab-test-visual">
+                        <div class="ab-variant">
+                            <span class="ab-variant-label">A</span>
+                            <div class="ab-bar-track">
+                                <div class="ab-bar-fill indigo" style="width: 72%;"></div>
+                            </div>
+                            <span class="ab-pct" style="color: var(--color-primary-light);">72%</span>
+                        </div>
+                        <div class="ab-variant">
+                            <span class="ab-variant-label">B</span>
+                            <div class="ab-bar-track">
+                                <div class="ab-bar-fill coral" style="width: 45%;"></div>
+                            </div>
+                            <span class="ab-pct" style="color: var(--color-accent);">45%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Dashboard (Large) -->
+                <div class="bento-card large fade-in fade-in-delay-2">
+                    <div class="bento-card-icon blue">📊</div>
+                    <h3>Analytics Dashboard</h3>
+                    <p>Real-time insights into opens, clicks, conversions, and revenue. Beautiful visualizations that make data actionable.</p>
+                    <div class="analytics-mini">
+                        <div class="analytics-bar" style="height: 40%;"></div>
+                        <div class="analytics-bar" style="height: 55%;"></div>
+                        <div class="analytics-bar" style="height: 35%;"></div>
+                        <div class="analytics-bar" style="height: 70%;"></div>
+                        <div class="analytics-bar" style="height: 60%;"></div>
+                        <div class="analytics-bar" style="height: 85%;"></div>
+                        <div class="analytics-bar" style="height: 75%;"></div>
+                        <div class="analytics-bar" style="height: 90%;"></div>
+                        <div class="analytics-bar" style="height: 65%;"></div>
+                        <div class="analytics-bar" style="height: 80%;"></div>
+                        <div class="analytics-bar" style="height: 95%;"></div>
+                        <div class="analytics-bar" style="height: 88%;"></div>
+                        <div class="analytics-bar" style="height: 72%;"></div>
+                        <div class="analytics-bar" style="height: 92%;"></div>
+                        <div class="analytics-bar" style="height: 78%;"></div>
+                        <div class="analytics-bar" style="height: 85%;"></div>
+                        <div class="analytics-bar" style="height: 70%;"></div>
+                        <div class="analytics-bar" style="height: 95%;"></div>
+                        <div class="analytics-bar" style="height: 82%;"></div>
+                        <div class="analytics-bar" style="height: 90%;"></div>
+                    </div>
+                </div>
+
+                <!-- Automations -->
+                <div class="bento-card fade-in fade-in-delay-3">
+                    <div class="bento-card-icon pink">⚡</div>
+                    <h3>Automations</h3>
+                    <p>Set up complex email workflows that run on autopilot. Welcome series, drip campaigns, and behavioral triggers.</p>
+                    <div class="bento-card-visual automation-visual">
+                        <div class="automation-node">
+                            <div class="automation-node-icon" style="background: rgba(99,102,241,0.15);">●</div>
+                            User signs up
+                        </div>
+                        <div class="automation-connector"></div>
+                        <div class="automation-node">
+                            <div class="automation-node-icon" style="background: rgba(245,158,11,0.15);">⏱</div>
+                            Wait 1 hour
+                        </div>
+                        <div class="automation-connector"></div>
+                        <div class="automation-node">
+                            <div class="automation-node-icon" style="background: rgba(16,185,129,0.15);">✉</div>
+                            Send welcome email
+                        </div>
+                        <div class="automation-connector"></div>
+                        <div class="automation-node">
+                            <div class="automation-node-icon" style="background: rgba(255,107,107,0.15);">◇</div>
+                            Check: Opened?
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         EMAIL BUILDER SHOWCASE
+         ============================================ -->
+    <section class="builder-showcase" id="builder">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Builder</span>
+                <h2 class="section-title">Design emails that<br>people actually love</h2>
+                <p class="section-subtitle">
+                    Our intuitive drag-and-drop editor makes it easy to create 
+                    pixel-perfect emails that drive results.
+                </p>
+            </div>
+
+            <div class="builder-showcase-window fade-in">
+                <div class="showcase-titlebar">
+                    <div class="showcase-titlebar-dots">
+                        <span class="window-dot red"></span>
+                        <span class="window-dot yellow"></span>
+                        <span class="window-dot green"></span>
+                    </div>
+                    <div class="showcase-titlebar-tabs">
+                        <div class="showcase-tab active">Design</div>
+                        <div class="showcase-tab">Preview</div>
+                        <div class="showcase-tab">Code</div>
+                        <div class="showcase-tab">Send Test</div>
+                    </div>
+                </div>
+
+                <div class="showcase-body">
+                    <!-- Left Panel - Templates -->
+                    <div class="showcase-left">
+                        <div class="showcase-panel-title">Templates</div>
+                        
+                        <div class="template-card selected">
+                            <div class="template-preview template-preview-1">
+                                <div class="template-header-bar"></div>
+                                <div class="template-content-lines">
+                                    <div class="template-content-line long"></div>
+                                    <div class="template-content-line medium"></div>
+                                    <div class="template-content-line short"></div>
+                                </div>
+                                <div class="template-btn-placeholder"></div>
+                            </div>
+                            <div class="template-name">Welcome Series</div>
+                            <div class="template-tag">Email • 3 layouts</div>
+                        </div>
+
+                        <div class="template-card">
+                            <div class="template-preview template-preview-2">
+                                <div class="template-header-bar" style="background: rgba(255,107,107,0.2);"></div>
+                                <div class="template-content-lines">
+                                    <div class="template-content-line medium"></div>
+                                    <div class="template-content-line long"></div>
+                                    <div class="template-content-line short"></div>
+                                </div>
+                                <div class="template-btn-placeholder" style="background: rgba(99,102,241,0.3);"></div>
+                            </div>
+                            <div class="template-name">Product Launch</div>
+                            <div class="template-tag">Email • 5 layouts</div>
+                        </div>
+
+                        <div class="template-card">
+                            <div class="template-preview template-preview-3">
+                                <div class="template-header-bar" style="background: rgba(16,185,129,0.2);"></div>
+                                <div class="template-content-lines">
+                                    <div class="template-content-line short"></div>
+                                    <div class="template-content-line long"></div>
+                                    <div class="template-content-line medium"></div>
+                                </div>
+                                <div class="template-btn-placeholder" style="background: rgba(245,158,11,0.3);"></div>
+                            </div>
+                            <div class="template-name">Newsletter</div>
+                            <div class="template-tag">Email • 4 layouts</div>
+                        </div>
+                    </div>
+
+                    <!-- Canvas -->
+                    <div class="showcase-canvas">
+                        <div class="canvas-toolbar">
+                            <div class="canvas-toolbar-btn" title="Undo">↶</div>
+                            <div class="canvas-toolbar-btn" title="Redo">↷</div>
+                            <div class="canvas-toolbar-divider"></div>
+                            <div class="canvas-toolbar-btn active" title="Desktop">🖥</div>
+                            <div class="canvas-toolbar-btn" title="Tablet">⊟</div>
+                            <div class="canvas-toolbar-btn" title="Mobile">📱</div>
+                            <div class="canvas-toolbar-divider"></div>
+                            <div class="canvas-toolbar-btn" title="Zoom Out">−</div>
+                            <div class="canvas-toolbar-btn" style="font-size:11px; width:auto; padding: 0 8px; color: var(--color-text-muted);">100%</div>
+                            <div class="canvas-toolbar-btn" title="Zoom In">+</div>
+                            <div class="canvas-toolbar-divider"></div>
+                            <div class="canvas-toolbar-btn" title="Grid">▦</div>
+                            <div class="canvas-toolbar-btn" title="Dark Mode" style="background:rgba(99,102,241,0.15);color:var(--color-primary-light);">☽</div>
+                        </div>
+
+                        <div class="showcase-email">
+                            <div class="showcase-email-top">
+                                <div class="showcase-email-icon">🚀</div>
+                                <div class="showcase-email-title">Welcome to MailCraft</div>
+                                <div class="showcase-email-sub">Your email marketing journey starts here</div>
+                            </div>
+                            <div class="showcase-email-body">
+                                <h3>Hi there, Sarah! 👋</h3>
+                                <div class="showcase-email-body-text">
+                                    We're thrilled to have you on board. MailCraft makes it incredibly easy to create beautiful email campaigns that convert.
+                                </div>
+                                <div class="showcase-email-features">
+                                    <div class="showcase-email-feature">
+                                        <span class="showcase-email-feature-icon">✨</span>
+                                        AI Subject Lines
+                                    </div>
+                                    <div class="showcase-email-feature">
+                                        <span class="showcase-email-feature-icon">📊</span>
+                                        Analytics
+                                    </div>
+                                    <div class="showcase-email-feature">
+                                        <span class="showcase-email-feature-icon">⚡</span>
+                                        Automations
+                                    </div>
+                                    <div class="showcase-email-feature">
+                                        <span class="showcase-email-feature-icon">🎯</span>
+                                        Segmentation
+                                    </div>
+                                </div>
+                                <div class="showcase-email-cta">Get Started →</div>
+                            </div>
+                            <div class="showcase-email-footer">
+                                <div class="showcase-email-footer-text">
+                                    MailCraft Inc. · 123 Email Street, San Francisco<br>
+                                    <a href="#">Unsubscribe</a> · <a href="#">Preferences</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel - Properties -->
+                    <div class="showcase-right">
+                        <div class="showcase-panel-title">Design</div>
+
+                        <div class="showcase-section">
+                            <div class="showcase-section-title">
+                                Layout
+                                <span class="showcase-section-badge">Block</span>
+                            </div>
+                            <div class="showcase-field">
+                                <div class="showcase-field-label">Width</div>
+                                <div class="showcase-spacing-slider">
+                                    <input type="range" min="400" max="800" value="600">
+                                    <span class="showcase-spacing-value">600px</span>
+                                </div>
+                            </div>
+                            <div class="showcase-field">
+                                <div class="showcase-field-label">Padding</div>
+                                <div class="showcase-spacing-slider">
+                                    <input type="range" min="0" max="60" value="30">
+                                    <span class="showcase-spacing-value">30px</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="showcase-section">
+                            <div class="showcase-section-title">Colors</div>
+                            <div class="showcase-color-grid">
+                                <div class="showcase-color-swatch active" style="background: #6366f1;"></div>
+                                <div class="showcase-color-swatch" style="background: #8b5cf6;"></div>
+                                <div class="showcase-color-swatch" style="background: #ec4899;"></div>
+                                <div class="showcase-color-swatch" style="background: #ff6b6b;"></div>
+                                <div class="showcase-color-swatch" style="background: #f59e0b;"></div>
+                                <div class="showcase-color-swatch" style="background: #10b981;"></div>
+                                <div class="showcase-color-swatch" style="background: #06b6d4;"></div>
+                                <div class="showcase-color-swatch" style="background: #3b82f6;"></div>
+                                <div class="showcase-color-swatch" style="background: #f0f0f5;"></div>
+                                <div class="showcase-color-swatch" style="background: #0a0a0f;"></div>
+                            </div>
+                        </div>
+
+                        <div class="showcase-section">
+                            <div class="showcase-section-title">
+                                Options
+                            </div>
+                            <div class="showcase-toggle-row">
+                                <span class="showcase-toggle-label">Rounded corners</span>
+                                <div class="showcase-toggle"></div>
+                            </div>
+                            <div class="showcase-toggle-row">
+                                <span class="showcase-toggle-label">Drop shadow</span>
+                                <div class="showcase-toggle off"></div>
+                            </div>
+                            <div class="showcase-toggle-row">
+                                <span class="showcase-toggle-label">Responsive</span>
+                                <div class="showcase-toggle"></div>
+                            </div>
+                            <div class="showcase-toggle-row">
+                                <span class="showcase-toggle-label">Dark mode</span>
+                                <div class="showcase-toggle"></div>
+                            </div>
+                        </div>
+
+                        <div class="showcase-section">
+                            <div class="showcase-section-title">
+                                Typography
+                            </div>
+                            <div class="showcase-field">
+                                <div class="showcase-field-label">Font Family</div>
+                                <input class="showcase-field-input" value="Inter" readonly>
+                            </div>
+                            <div class="showcase-field">
+                                <div class="showcase-field-label">Line Height</div>
+                                <div class="showcase-spacing-slider">
+                                    <input type="range" min="100" max="200" value="160">
+                                    <span class="showcase-spacing-value">1.6</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         STATS SECTION
+         ============================================ -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <div class="stat-number"><span class="accent" data-target="10">0</span>B+</div>
+                    <div class="stat-label">Emails Sent</div>
+                </div>
+                <div class="stat-item fade-in fade-in-delay-1">
+                    <div class="stat-number"><span class="accent" data-target="50">0</span>K+</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+                <div class="stat-item fade-in fade-in-delay-2">
+                    <div class="stat-number"><span class="accent" data-target="99.9">0</span>%</div>
+                    <div class="stat-label">Uptime SLA</div>
+                </div>
+                <div class="stat-item fade-in fade-in-delay-3">
+                    <div class="stat-number"><span class="accent" data-target="45">0</span>%</div>
+                    <div class="stat-label">Avg Open Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PRICING SECTION
+         ============================================ -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Pricing</span>
+                <h2 class="section-title">Simple, transparent pricing</h2>
+                <p class="section-subtitle">
+                    Start free and scale as you grow. No hidden fees, no surprises.
+                </p>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Starter -->
+                <div class="pricing-card fade-in">
+                    <div class="pricing-tier">Starter</div>
+                    <div class="pricing-price">
+                        <span class="pricing-currency">$</span>
+                        <span class="pricing-amount">9</span>
+                    </div>
+                    <span class="pricing-period">per month</span>
+                    <p class="pricing-desc">Perfect for small businesses just getting started with email marketing.</p>
+                    <ul class="pricing-features">
+                        <li><span class="check on">✓</span> Up to 1,000 contacts</li>
+                        <li><span class="check on">✓</span> 10,000 emails/month</li>
+                        <li><span class="check on">✓</span> Drag & drop builder</li>
+                        <li><span class="check on">✓</span> Basic templates</li>
+                        <li><span class="check on">✓</span> Email support</li>
+                        <li><span class="check off">—</span> AI subject lines</li>
+                        <li><span class="check off">—</span> A/B testing</li>
+                        <li><span class="check off">—</span> Automations</li>
+                    </ul>
+                    <button class="btn btn-outline" style="width:100%;">Get Started</button>
+                </div>
+
+                <!-- Pro (Featured) -->
+                <div class="pricing-card featured fade-in fade-in-delay-1">
+                    <div class="pricing-popular">Most Popular</div>
+                    <div class="pricing-tier">Pro</div>
+                    <div class="pricing-price">
+                        <span class="pricing-currency">$</span>
+                        <span class="pricing-amount">29</span>
+                    </div>
+                    <span class="pricing-period">per month</span>
+                    <p class="pricing-desc">For growing teams that need advanced features and higher limits.</p>
+                    <ul class="pricing-features">
+                        <li><span class="check on">✓</span> Up to 25,000 contacts</li>
+                        <li><span class="check on">✓</span> Unlimited emails</li>
+                        <li><span class="check on">✓</span> Drag & drop builder</li>
+                        <li><span class="check on">✓</span> 200+ premium templates</li>
+                        <li><span class="check on">✓</span> Priority support</li>
+                        <li><span class="check on">✓</span> AI subject lines</li>
+                        <li><span class="check on">✓</span> A/B testing</li>
+                        <li><span class="check on">✓</span> Advanced automations</li>
+                    </ul>
+                    <button class="btn btn-primary" style="width:100%;">Get Started</button>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="pricing-card fade-in fade-in-delay-2">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount" style="font-size: 36px;">Custom</span>
+                    </div>
+                    <span class="pricing-period">tailored for you</span>
+                    <p class="pricing-desc">For large organizations with custom requirements and dedicated support.</p>
+                    <ul class="pricing-features">
+                        <li><span class="check on">✓</span> Unlimited contacts</li>
+                        <li><span class="check on">✓</span> Unlimited emails</li>
+                        <li><span class="check on">✓</span> Custom templates</li>
+                        <li><span class="check on">✓</span> Dedicated IP</li>
+                        <li><span class="check on">✓</span> 24/7 phone support</li>
+                        <li><span class="check on">✓</span> AI subject lines</li>
+                        <li><span class="check on">✓</span> Custom integrations</li>
+                        <li><span class="check on">✓</span> SLA guarantee</li>
+                    </ul>
+                    <button class="btn btn-outline" style="width:100%;">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         TESTIMONIALS
+         ============================================ -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Testimonials</span>
+                <h2 class="section-title">Loved by marketers<br>everywhere</h2>
+                <p class="section-subtitle">
+                    Don't just take our word for it. Here's what our customers have to say.
+                </p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        MailCraft completely transformed our email strategy. The AI subject lines alone 
+                        boosted our open rates by 34%. It's like having a data scientist on the team.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar a1">S</div>
+                        <div>
+                            <div class="testimonial-name">Sarah Chen</div>
+                            <div class="testimonial-role">Marketing Director, Quantum Labs</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card fade-in fade-in-delay-1">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        The drag-and-drop builder is hands-down the best I've ever used. 
+                        We switched from our previous tool and cut our email creation time in half. 
+                        The templates are gorgeous.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar a2">M</div>
+                        <div>
+                            <div class="testimonial-name">Marcus Rivera</div>
+                            <div class="testimonial-role">Head of Growth, Nimbus</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card fade-in fade-in-delay-2">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        We automated our entire onboarding flow with MailCraft. The visual workflow 
+                        builder is incredibly intuitive. Our trial-to-paid conversion went up 28%.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar a3">E</div>
+                        <div>
+                            <div class="testimonial-name">Emily Nakamura</div>
+                            <div class="testimonial-role">CEO, Verdant Studio</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         CTA SECTION
+         ============================================ -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content fade-in">
+                <h2>Ready to <span class="gradient-text">transform</span> your email marketing?</h2>
+                <p>
+                    Join 50,000+ companies using MailCraft to send better emails, 
+                    grow their audience, and drive more revenue.
+                </p>
+                <div class="cta-actions">
+                    <button class="btn btn-primary btn-large">
+                        Start Free Trial
+                        <span>→</span>
+                    </button>
+                    <button class="btn btn-outline btn-large">
+                        Talk to Sales
+                    </button>
+                </div>
+                <p class="cta-note">Free 14-day trial · No credit card required</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="navbar-logo">
+                        <div class="navbar-logo-icon">✉</div>
+                        MailCraft
+                    </a>
+                    <p>
+                        Email marketing reimagined for modern teams. 
+                        Build, send, and track beautiful campaigns with AI-powered tools.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Twitter">𝕏</a>
+                        <a href="#" aria-label="GitHub">⌘</a>
+                        <a href="#" aria-label="LinkedIn">in</a>
+                        <a href="#" aria-label="YouTube">▶</a>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Product</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Templates</a></li>
+                        <li><a href="#">Integrations</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Resources</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Guides</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-col-title">Company</div>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Partners</a></li>
+                        <li><a href="#">Legal</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 MailCraft. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Settings</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        // Mobile menu
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuClose = document.getElementById('menuClose');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+        });
+
+        menuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+        }
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animated counters
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('[data-target]');
+                    counters.forEach(counter => {
+                        const target = parseFloat(counter.dataset.target);
+                        const isDecimal = target % 1 !== 0;
+                        const duration = 2000;
+                        const startTime = performance.now();
+
+                        function updateCounter(currentTime) {
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            const eased = 1 - Math.pow(1 - progress, 3);
+                            const current = eased * target;
+
+                            counter.textContent = isDecimal 
+                                ? current.toFixed(1)
+                                : Math.floor(current);
+
+                            if (progress < 1) {
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.textContent = isDecimal 
+                                    ? target.toFixed(1)
+                                    : target;
+                            }
+                        }
+
+                        requestAnimationFrame(updateCounter);
+                    });
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const statsSection = document.querySelector('.stats-grid');
+        if (statsSection) {
+            counterObserver.observe(statsSection);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

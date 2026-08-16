@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 149 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 151 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1387,6 +1387,24 @@ const pages = [
     rating: 9.4,
     description: '暖色调宠物领养平台，DM Serif Display 衬线字体 + Blob 渐变浮动背景 + 宠物卡片网格 + 四步领养流程 + 成功故事 + 影响力数据',
   },
+  {
+    id: 'mailcraft-landing',
+    title: 'MailCraft 邮件营销平台',
+    category: 'landing',
+    tags: ['SaaS', '邮件营销', '暗色主题', 'Bento Grid'],
+    colors: ['#0a0a0f', '#6366f1', '#ff6b6b'],
+    rating: 9.4,
+    description: '暗色科技风邮件营销 SaaS 落地页，CSS 三栏邮件编辑器 Mockup + Bento Grid 特性 + 统计计数器动画 + 三栏定价',
+  },
+  {
+    id: 'soleil-swim',
+    title: 'Soléil 奢华度假时装',
+    category: 'ecommerce',
+    tags: ['电商', '度假时装', '奢华品牌', '衬线字体'],
+    colors: ['#faf8f4', '#0a1628', '#e8614d'],
+    rating: 9.5,
+    description: '奢华度假时装品牌电商，CSS 多层渐变日落 Hero + Cormorant Garamond 衬线字体 + 产品网格 + Marquee 品牌价值 + 尺码指南手风琴',
+  },
 ]
 
 const categories = [
@@ -1444,12 +1462,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 149 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 151 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="149 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="151 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1458,7 +1476,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 149 个完整页面</span>
+      <span>📦 151 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
