@@ -1405,6 +1405,15 @@ const pages = [
     rating: 9.5,
     description: '奢华度假时装品牌电商，CSS 多层渐变日落 Hero + Cormorant Garamond 衬线字体 + 产品网格 + Marquee 品牌价值 + 尺码指南手风琴',
   },
+  {
+    id: 'ai-design-journal',
+    title: 'AI×Design Journal 数字编辑杂志',
+    category: 'content',
+    tags: ['编辑设计', '杂志', 'AI', '排版', 'Newsletter'],
+    colors: ['#FAF8F4', '#C4583A', '#0A0A0F'],
+    rating: 9.5,
+    description: 'AI 与设计交汇的数字编辑杂志，DM Serif Display 衬线字体 + 暖色奶油底 + 不对称文章网格 + 浮动圆形装饰 + 药丸筛选 + 横向滚动深度阅读 + Pull Quote + 数据统计条',
+  },
 ]
 
 const categories = [
@@ -1462,12 +1471,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 151 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 152 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="151 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="152 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1476,7 +1485,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 151 个完整页面</span>
+      <span>📦 152 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
