@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 151 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 152 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1404,6 +1404,15 @@ const pages = [
     colors: ['#faf8f4', '#0a1628', '#e8614d'],
     rating: 9.5,
     description: '奢华度假时装品牌电商，CSS 多层渐变日落 Hero + Cormorant Garamond 衬线字体 + 产品网格 + Marquee 品牌价值 + 尺码指南手风琴',
+  },
+  {
+    id: 'kaze-whisky',
+    title: 'KAZE 日本威士忌电商',
+    category: 'ecommerce',
+    tags: ['电商', '威士忌', '奢华', '暗色主题', '日本品牌'],
+    colors: ['#08080d', '#c9a96e', '#faf8f5'],
+    rating: 9.5,
+    description: '奢华日本威士忌品牌电商，暗色底 + 金色强调 + Playfair Display 衬线字体 + 年龄验证弹窗 + CSS 纯酒瓶造型 + 获奖 Marquee + 品鉴笔记强度条 + 传承故事双栏 + 工艺流程步骤',
   },
   {
     id: 'ai-design-journal',

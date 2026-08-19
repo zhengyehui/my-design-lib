@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAZE — Japanese Whisky</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #08080d;
+  color: #faf8f5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Noise Texture Overlay ─────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Gold Accent Variables ─────────────────────── */
+:root {
+  --gold: #c9a96e;
+  --gold-light: #e0c992;
+  --gold-dark: #a8884d;
+  --amber: #D4A04A;
+  --cream: #faf8f5;
+  --dark: #08080d;
+  --dark-surface: #111118;
+  --dark-border: rgba(201, 169, 110, 0.15);
+}
+
+/* ── Navigation ────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(8,8,13,0.95), rgba(8,8,13,0));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background 0.4s;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  text-decoration: none;
+}
+.nav-logo span { font-weight: 400; font-style: italic; color: rgba(250,248,245,0.6); font-size: 0.85rem; margin-left: 0.5rem; letter-spacing: 0.05em; }
+.nav-links { display: flex; gap: 2.5rem; align-items: center; }
+.nav-links a {
+  color: rgba(250,248,245,0.7);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cream);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+.nav-cart-count {
+  background: var(--gold);
+  color: var(--dark);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+/* ── Hero ──────────────────────────────────────── */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,169,110,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 80% 20%, rgba(212,160,74,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(201,169,110,0.04) 0%, transparent 60%),
+    linear-gradient(180deg, #08080d 0%, #0d0d15 50%, #08080d 100%);
+}
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.hero-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+  animation: float-particle 8s infinite ease-in-out;
+}
+@keyframes float-particle {
+  0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
+  20% { opacity: 0.6; }
+  50% { opacity: 0.3; transform: translateY(-120px) scale(1.5); }
+  80% { opacity: 0.1; }
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 0 2rem;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid var(--dark-border);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(8px);
+}
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--gold) 50%, var(--gold-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: rgba(250,248,245,0.6);
+  max-width: 550px;
+  margin: 0 auto 2.5rem;
+  font-weight: 300;
+}
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  background: var(--gold);
+  color: var(--dark);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-radius: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+.hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold-light);
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-cta:hover::before { transform: translateX(0); }
+.hero-cta span { position: relative; z-index: 1; }
+.hero-cta .arrow { position: relative; z-index: 1; transition: transform 0.3s; }
+.hero-cta:hover .arrow { transform: translateX(4px); }
+.hero-scroll {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(250,248,245,0.3);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scroll-line 2s infinite;
+}
+@keyframes scroll-line {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  50.01% { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ── Marquee Awards ────────────────────────────── */
+.marquee-section {
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+  padding: 1.25rem 0;
+  overflow: hidden;
+  background: rgba(201,169,110,0.02);
+}
+.marquee-track {
+  display: flex;
+  gap: 4rem;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(250,248,245,0.4);
+}
+.marquee-item .dot {
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.marquee-item strong { color: var(--gold); font-weight: 600; }
+
+/* ── Section Commons ───────────────────────────── */
+.section {
+  padding: 8rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.section-label::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  color: var(--cream);
+}
+.section-desc {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: rgba(250,248,245,0.5);
+  max-width: 600px;
+  font-weight: 300;
+}
+
+/* ── Philosophy ────────────────────────────────── */
+.philosophy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+.philosophy-visual {
+  position: relative;
+  aspect-ratio: 3/4;
+  background: linear-gradient(135deg, rgba(201,169,110,0.08), rgba(201,169,110,0.02));
+  border: 1px solid var(--dark-border);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.philosophy-visual::before {
+  content: '風';
+  font-family: 'Playfair Display', serif;
+  font-size: 20rem;
+  font-weight: 800;
+  color: rgba(201,169,110,0.06);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1;
+}
+.philosophy-bottle {
+  position: relative;
+  z-index: 2;
+  width: 120px;
+  height: 360px;
+  background: linear-gradient(180deg, #1a1a24 0%, #0f0f18 100%);
+  border-radius: 8px 8px 4px 4px;
+  border: 1px solid rgba(201,169,110,0.2);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.philosophy-bottle::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(180deg, #2a2a35, #1a1a24);
+  border-radius: 4px 4px 0 0;
+  border: 1px solid rgba(201,169,110,0.2);
+  border-bottom: none;
+}
+.philosophy-bottle::after {
+  content: 'KAZE';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  writing-mode: vertical-rl;
+}
+.philosophy-bottle-cap {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 18px;
+  background: linear-gradient(180deg, var(--gold), var(--gold-dark));
+  border-radius: 3px 3px 0 0;
+}
+.philosophy-bottle-label {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 1px;
+  background: rgba(201,169,110,0.3);
+}
+.philosophy-text .section-desc { margin-bottom: 2rem; }
+.philosophy-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--dark-border);
+}
+.stat-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(250,248,245,0.4);
+}
+
+/* ── Products Grid ─────────────────────────────── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+}
+.product-card {
+  background: var(--dark-surface);
+  border: 1px solid var(--dark-border);
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  group: true;
+}
+.product-card:hover {
+  border-color: rgba(201,169,110,0.35);
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+}
+.product-visual {
+  aspect-ratio: 3/4;
+  background: linear-gradient(135deg, #0f0f18, #151520);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.product-visual::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, var(--dark-surface), transparent);
+}
+.product-bottle-shape {
+  width: 70px;
+  height: 220px;
+  background: linear-gradient(180deg, #1a1a28, #12121c);
+  border-radius: 6px 6px 3px 3px;
+  border: 1px solid rgba(201,169,110,0.15);
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.product-card:hover .product-bottle-shape {
+  transform: scale(1.05);
+}
+.product-bottle-shape::before {
+  content: '';
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(180deg, #2a2a38, #1a1a28);
+  border-radius: 3px 3px 0 0;
+  border: 1px solid rgba(201,169,110,0.15);
+  border-bottom: none;
+}
+.product-bottle-shape .bottle-label-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Playfair Display', serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  writing-mode: vertical-rl;
+  opacity: 0.8;
+}
+.product-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,169,110,0.08), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.product-card:hover .product-glow { opacity: 1; }
+.product-info {
+  padding: 1.75rem;
+}
+.product-category {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.product-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.5rem;
+}
+.product-desc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: rgba(250,248,245,0.4);
+  margin-bottom: 1.25rem;
+}
+.product-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--dark-border);
+}
+.product-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--cream);
+}
+.product-price .currency {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(250,248,245,0.5);
+  margin-right: 0.15rem;
+}
+.product-add {
+  padding: 0.6rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.product-add:hover {
+  background: var(--gold);
+  color: var(--dark);
+}
+
+/* ── Tasting Notes ─────────────────────────────── */
+.tasting {
+  background: var(--dark-surface);
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+}
+.tasting-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+}
+.tasting-card {
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--dark-border);
+  text-align: center;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+.tasting-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(201,169,110,0.06), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.tasting-card:hover::before { opacity: 1; }
+.tasting-card:hover { border-color: rgba(201,169,110,0.3); }
+.tasting-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+.tasting-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.75rem;
+}
+.tasting-detail {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: rgba(250,248,245,0.4);
+}
+.tasting-meter {
+  margin-top: 1.25rem;
+  height: 2px;
+  background: rgba(201,169,110,0.1);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.tasting-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 1px;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Heritage ──────────────────────────────────── */
+.heritage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 4rem;
+  border: 1px solid var(--dark-border);
+}
+.heritage-item {
+  padding: 4rem;
+  position: relative;
+}
+.heritage-item:first-child {
+  border-right: 1px solid var(--dark-border);
+}
+.heritage-item::before {
+  content: attr(data-number);
+  font-family: 'Playfair Display', serif;
+  font-size: 8rem;
+  font-weight: 800;
+  color: rgba(201,169,110,0.04);
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  line-height: 1;
+}
+.heritage-year {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+.heritage-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+.heritage-text {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: rgba(250,248,245,0.45);
+}
+
+/* ── Process ───────────────────────────────────── */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 4rem;
+  border: 1px solid var(--dark-border);
+}
+.process-step {
+  padding: 3rem 2.5rem;
+  border-right: 1px solid var(--dark-border);
+  position: relative;
+}
+.process-step:last-child { border-right: none; }
+.process-step-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: rgba(201,169,110,0.1);
+  margin-bottom: 1.5rem;
+  line-height: 1;
+}
+.process-step-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.75rem;
+}
+.process-step-text {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: rgba(250,248,245,0.4);
+}
+
+/* ── Testimonials ──────────────────────────────── */
+.testimonials {
+  text-align: center;
+}
+.testimonial-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--cream);
+  max-width: 800px;
+  margin: 3rem auto 2rem;
+  position: relative;
+}
+.testimonial-quote::before {
+  content: '"';
+  font-size: 6rem;
+  color: var(--gold);
+  opacity: 0.2;
+  position: absolute;
+  top: -2rem;
+  left: -1rem;
+  font-style: normal;
+  line-height: 1;
+}
+.testimonial-author {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.25rem;
+}
+.testimonial-role {
+  font-size: 0.75rem;
+  color: rgba(250,248,245,0.35);
+}
+
+/* ── Newsletter CTA ────────────────────────────── */
+.newsletter {
+  background: linear-gradient(135deg, rgba(201,169,110,0.06), rgba(201,169,110,0.02));
+  border: 1px solid var(--dark-border);
+  padding: 5rem 4rem;
+  text-align: center;
+  margin-top: 4rem;
+}
+.newsletter h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+.newsletter p {
+  font-size: 0.9rem;
+  color: rgba(250,248,245,0.5);
+  margin-bottom: 2rem;
+}
+.newsletter-form {
+  display: flex;
+  gap: 0;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.newsletter-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--dark-border);
+  border-right: none;
+  color: var(--cream);
+  font-size: 0.85rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.newsletter-input::placeholder { color: rgba(250,248,245,0.3); }
+.newsletter-input:focus { border-color: var(--gold); }
+.newsletter-btn {
+  padding: 1rem 2rem;
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: var(--dark);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+}
+.newsletter-btn:hover { background: var(--gold-light); }
+
+/* ── Footer ────────────────────────────────────── */
+.footer {
+  padding: 5rem 3rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  border-top: 1px solid var(--dark-border);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+}
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+.footer-tagline {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: rgba(250,248,245,0.4);
+  max-width: 300px;
+}
+.footer-heading {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 0.75rem; }
+.footer-links a {
+  color: rgba(250,248,245,0.45);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--cream); }
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--dark-border);
+}
+.footer-copy {
+  font-size: 0.75rem;
+  color: rgba(250,248,245,0.25);
+}
+.footer-legal {
+  display: flex;
+  gap: 2rem;
+}
+.footer-legal a {
+  font-size: 0.75rem;
+  color: rgba(250,248,245,0.25);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-legal a:hover { color: rgba(250,248,245,0.5); }
+
+/* ── Age Gate Overlay ──────────────────────────── */
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(8,8,13,0.97);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.6s;
+}
+.age-gate.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.age-gate-content {
+  max-width: 400px;
+  padding: 2rem;
+}
+.age-gate-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-bottom: 2rem;
+}
+.age-gate h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+.age-gate p {
+  font-size: 0.85rem;
+  color: rgba(250,248,245,0.5);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.age-gate-buttons { display: flex; gap: 1rem; justify-content: center; }
+.age-btn {
+  padding: 0.8rem 2.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+}
+.age-btn-yes {
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: var(--dark);
+}
+.age-btn-yes:hover { background: var(--gold-light); }
+.age-btn-no {
+  background: transparent;
+  border: 1px solid rgba(250,248,245,0.2);
+  color: rgba(250,248,245,0.5);
+}
+.age-btn-no:hover { border-color: rgba(250,248,245,0.4); }
+
+/* ── Responsive ────────────────────────────────── */
+@media (max-width: 1024px) {
+  .philosophy { grid-template-columns: 1fr; gap: 3rem; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .tasting-grid { grid-template-columns: repeat(2, 1fr); }
+  .heritage { grid-template-columns: 1fr; }
+  .heritage-item:first-child { border-right: none; border-bottom: 1px solid var(--dark-border); }
+  .process-steps { grid-template-columns: 1fr; }
+  .process-step { border-right: none; border-bottom: 1px solid var(--dark-border); }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+}
+@media (max-width: 640px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .section { padding: 5rem 1.5rem; }
+  .products-grid { grid-template-columns: 1fr; }
+  .tasting-grid { grid-template-columns: 1fr; }
+  .philosophy-stats { grid-template-columns: 1fr; gap: 1.5rem; }
+  .newsletter { padding: 3rem 1.5rem; }
+  .newsletter-form { flex-direction: column; }
+  .newsletter-input { border-right: 1px solid var(--dark-border); }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Age Gate -->
+<div class="age-gate" id="ageGate">
+  <div class="age-gate-content">
+    <div class="age-gate-logo">KAZE</div>
+    <h3>Are you of legal drinking age?</h3>
+    <p>You must be of legal drinking age in your country to enter this website.</p>
+    <div class="age-gate-buttons">
+      <button class="age-btn age-btn-yes" onclick="document.getElementById('ageGate').classList.add('hidden')">Yes, I am</button>
+      <button class="age-btn age-btn-no" onclick="window.location.href='https://www.awwwards.com'">No</button>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">KAZE <span>since 1923</span></a>
+  <div class="nav-links">
+    <a href="#collection">Collection</a>
+    <a href="#craft">Our Craft</a>
+    <a href="#tasting">Tasting Notes</a>
+    <a href="#heritage">Heritage</a>
+  </div>
+  <div class="nav-cart">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+    <span class="nav-cart-count">2</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-particles">
+    <div class="hero-particle" style="left:10%;top:20%;animation-delay:0s"></div>
+    <div class="hero-particle" style="left:25%;top:60%;animation-delay:1.5s"></div>
+    <div class="hero-particle" style="left:45%;top:30%;animation-delay:3s"></div>
+    <div class="hero-particle" style="left:65%;top:70%;animation-delay:0.8s"></div>
+    <div class="hero-particle" style="left:80%;top:40%;animation-delay:2.2s"></div>
+    <div class="hero-particle" style="left:90%;top:15%;animation-delay:4s"></div>
+    <div class="hero-particle" style="left:15%;top:80%;animation-delay:5s"></div>
+    <div class="hero-particle" style="left:55%;top:50%;animation-delay:1s"></div>
+    <div class="hero-particle" style="left:70%;top:25%;animation-delay:3.5s"></div>
+    <div class="hero-particle" style="left:35%;top:85%;animation-delay:2.8s"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">Award-Winning Japanese Whisky</div>
+    <h1>The Spirit of Wind</h1>
+    <p>Three generations of mastery. Aged in rare Mizunara oak. Each bottle captures the essence of Japanese seasons.</p>
+    <a href="#collection" class="hero-cta">
+      <span>Explore Collection</span>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- Marquee Awards -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="dot"></span><strong>Double Gold</strong> San Francisco World Spirits 2025</div>
+    <div class="marquee-item"><span class="dot"></span><strong>Best Japanese Whisky</strong> International Wine & Spirits 2024</div>
+    <div class="marquee-item"><span class="dot"></span><strong>97 Points</strong> Whisky Advocate</div>
+    <div class="marquee-item"><span class="dot"></span><strong>Master</strong> The Spirits Business Awards 2025</div>
+    <div class="marquee-item"><span class="dot"></span><strong>Grand Gold</strong> Monde Selection 2024</div>
+    <div class="marquee-item"><span class="dot"></span><strong>Producer of the Year</strong> Intl Spirits Challenge 2025</div>
+    <!-- Duplicate for seamless loop -->
+    <div class="marquee-item"><span class="dot"></span><strong>Double Gold</strong> San Francisco World Spirits 2025</div>
+    <div class="marquee-item"><span class="dot"></span><strong>Best Japanese Whisky</strong> International Wine & Spirits 2024</div>
+    <div class="marquee-item"><span class="dot"></span><strong>97 Points</strong> Whisky Advocate</div>
+    <div class="marquee-item"><span class="dot"></span><strong>Master</strong> The Spirits Business Awards 2025</div>
+    <div class="marquee-item"><span class="dot"></span><strong>Grand Gold</strong> Monde Selection 2024</div>
+    <div class="marquee-item"><span class="dot"></span><strong>Producer of the Year</strong> Intl Spirits Challenge 2025</div>
+  </div>
+</div>
+
+<!-- Philosophy Section -->
+<section class="section">
+  <div class="philosophy">
+    <div class="philosophy-visual">
+      <div class="philosophy-bottle">
+        <div class="philosophy-bottle-cap"></div>
+        <div class="philosophy-bottle-label"></div>
+      </div>
+    </div>
+    <div class="philosophy-text">
+      <div class="section-label">Our Philosophy</div>
+      <h2 class="section-title">Patience Is<br>Our Process</h2>
+      <p class="section-desc">In the mountains of Nagano, where winter snow melts into crystal springs, we have perfected the art of slow maturation. Each expression rests in carefully selected Mizunara oak — a wood so rare it can only be harvested after 200 years of growth.</p>
+      <div class="philosophy-stats">
+        <div>
+          <div class="stat-number">103</div>
+          <div class="stat-label">Years of Craft</div>
+        </div>
+        <div>
+          <div class="stat-number">18</div>
+          <div class="stat-label">Year Minimum Age</div>
+        </div>
+        <div>
+          <div class="stat-number">200</div>
+          <div class="stat-label">Year Old Oak</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products Collection -->
+<section class="section" id="collection">
+  <div class="section-label">The Collection</div>
+  <h2 class="section-title">Signature Expressions</h2>
+  <p class="section-desc">Each bottle tells a story of season, soil, and the silent passage of time.</p>
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-visual">
+        <div class="product-glow"></div>
+        <div class="product-bottle-shape"><span class="bottle-label-text">HARU</span></div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Single Malt</div>
+        <div class="product-name">Haru — Spring</div>
+        <div class="product-desc">Cherry blossom and honey. Aged 12 years in American oak with a Mizunara finish.</div>
+        <div class="product-meta">
+          <div class="product-price"><span class="currency">$</span>185</div>
+          <button class="product-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-visual">
+        <div class="product-glow"></div>
+        <div class="product-bottle-shape"><span class="bottle-label-text">NATSU</span></div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Blended Whisky</div>
+        <div class="product-name">Natsu — Summer</div>
+        <div class="product-desc">Tropical fruit and vanilla. A vibrant blend aged 15 years in sherry casks.</div>
+        <div class="product-meta">
+          <div class="product-price"><span class="currency">$</span>245</div>
+          <button class="product-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-visual">
+        <div class="product-glow"></div>
+        <div class="product-bottle-shape"><span class="bottle-label-text">FUYU</span></div>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Cask Strength</div>
+        <div class="product-name">Fuyu — Winter</div>
+        <div class="product-desc">Dark chocolate and smoke. 18 years in Mizunara oak. Limited to 3,000 bottles.</div>
+        <div class="product-meta">
+          <div class="product-price"><span class="currency">$</span>420</div>
+          <button class="product-add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tasting Notes -->
+<section class="tasting" id="tasting">
+  <div class="section" style="padding-top:5rem;padding-bottom:5rem;">
+    <div style="text-align:center;">
+      <div class="section-label" style="justify-content:center;">Tasting Notes</div>
+      <h2 class="section-title">The Flavor Architecture</h2>
+      <p class="section-desc" style="margin:0 auto;">Every sip reveals new dimensions — a journey through Japanese terroir.</p>
+    </div>
+    <div class="tasting-grid">
+      <div class="tasting-card">
+        <span class="tasting-icon">🌸</span>
+        <div class="tasting-name">Nose</div>
+        <div class="tasting-detail">Cherry blossom, white peach, delicate sandalwood, morning dew on cedar</div>
+        <div class="tasting-meter"><div class="tasting-meter-fill" style="width:85%"></div></div>
+      </div>
+      <div class="tasting-card">
+        <span class="tasting-icon">🍯</span>
+        <div class="tasting-name">Palate</div>
+        <div class="tasting-detail">Wild honey, candied ginger, Mizunara spice, toasted rice, yuzu zest</div>
+        <div class="tasting-meter"><div class="tasting-meter-fill" style="width:92%"></div></div>
+      </div>
+      <div class="tasting-card">
+        <span class="tasting-icon">🔥</span>
+        <div class="tasting-name">Finish</div>
+        <div class="tasting-detail">Long and warming. Incense smoke, dark chocolate, lingering vanilla oak</div>
+        <div class="tasting-meter"><div class="tasting-meter-fill" style="width:88%"></div></div>
+      </div>
+      <div class="tasting-card">
+        <span class="tasting-icon">💧</span>
+        <div class="tasting-name">Water</div>
+        <div class="tasting-detail">Soft alpine springs from the Northern Alps, naturally filtered through volcanic rock</div>
+        <div class="tasting-meter"><div class="tasting-meter-fill" style="width:95%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Heritage -->
+<section class="section" id="heritage">
+  <div style="text-align:center;">
+    <div class="section-label" style="justify-content:center;">Heritage</div>
+    <h2 class="section-title">A Century of Mastery</h2>
+  </div>
+  <div class="heritage">
+    <div class="heritage-item" data-number="01">
+      <div class="heritage-year">1923 — Founding</div>
+      <div class="heritage-title">The First Distillery in Nagano</div>
+      <div class="heritage-text">Master distiller Takeshi Kaze established the distillery at the foot of the Japanese Alps, drawn by the pristine water and extreme temperature variations that would define our signature maturation process.</div>
+    </div>
+    <div class="heritage-item" data-number="02">
+      <div class="heritage-year">1967 — Innovation</div>
+      <div class="heritage-title">The Mizunara Discovery</div>
+      <div class="heritage-text">Third-generation master Kenji Kaze pioneered the use of Japanese Mizunara oak for whisky aging — a decision that would take decades to bear fruit but ultimately define Kaze's unmistakable character.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="section" id="craft">
+  <div style="text-align:center;">
+    <div class="section-label" style="justify-content:center;">The Craft</div>
+    <h2 class="section-title">From Grain to Glass</h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="process-step-num">01</div>
+      <div class="process-step-title">Selection</div>
+      <div class="process-step-text">Hand-selected barley from Hokkaido farms. Each harvest is tasted and graded before malting begins.</div>
+    </div>
+    <div class="process-step">
+      <div class="process-step-num">02</div>
+      <div class="process-step-title">Distillation</div>
+      <div class="process-step-text">Slow distillation in copper pot stills. The heart cut is taken at a precise moment — determined by aroma alone.</div>
+    </div>
+    <div class="process-step">
+      <div class="process-step-num">03</div>
+      <div class="process-step-title">Maturation</div>
+      <div class="process-step-text">Rested in our mountain warehouses where -15°C winters and 35°C summers create an angel's share unlike anywhere else on earth.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonial -->
+<section class="section testimonials">
+  <div class="section-label" style="justify-content:center;">Critical Acclaim</div>
+  <div class="testimonial-quote">Kaze represents the pinnacle of Japanese whisky craftsmanship. The Mizunara influence creates a complexity that simply cannot be replicated elsewhere in the world.</div>
+  <div class="testimonial-author">Marcus Chen</div>
+  <div class="testimonial-role">Senior Editor, Whisky Advocate</div>
+</section>
+
+<!-- Newsletter -->
+<div class="section">
+  <div class="newsletter">
+    <h3>The Kaze Journal</h3>
+    <p>Receive tasting notes, limited releases, and stories from the distillery.</p>
+    <form class="newsletter-form" onsubmit="event.preventDefault()">
+      <input type="email" class="newsletter-input" placeholder="Your email address">
+      <button type="submit" class="newsletter-btn">Subscribe</button>
+    </form>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">KAZE</div>
+      <p class="footer-tagline">Japanese whisky crafted at the foot of the Northern Alps since 1923. Three generations. One vision.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Collection</div>
+      <ul class="footer-links">
+        <li><a href="#">Haru — Spring</a></li>
+        <li><a href="#">Natsu — Summer</a></li>
+        <li><a href="#">Fuyu — Winter</a></li>
+        <li><a href="#">Limited Editions</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Experience</div>
+      <ul class="footer-links">
+        <li><a href="#">Distillery Tour</a></li>
+        <li><a href="#">Tasting Events</a></li>
+        <li><a href="#">Gift Sets</a></li>
+        <li><a href="#">Trade</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Kaze Whisky. Please drink responsibly.</div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Age Policy</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
