@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuron AI — Workspace Dashboard</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ── Dark Theme Variables ── */
+    :root {
+      --bg-base: #08080d;
+      --bg-surface: #0e0e18;
+      --bg-panel: rgba(14, 14, 24, 0.72);
+      --bg-elevated: rgba(30, 30, 50, 0.55);
+      --border-subtle: #1e1e32;
+      --border-active: rgba(99, 102, 241, 0.35);
+      --text-primary: #e8e8f0;
+      --text-secondary: #8888a8;
+      --text-muted: #55556a;
+      --accent-start: #6366f1;
+      --accent-end: #06b6d4;
+      --gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      --danger: #ef4444;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --sidebar-w: 240px;
+      --right-panel-w: 300px;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font-sans, 'Inter', system-ui, -apple-system, sans-serif);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 3px; }
+
+    /* ── Layout Shell ── */
+    .app { display: flex; height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: var(--bg-panel);
+      backdrop-filter: blur(24px);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+      transition: transform .3s ease, opacity .3s ease;
+      z-index: 30;
+    }
+    .sidebar-brand {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 12px;
+    }
+    .sidebar-brand h1 {
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar-brand h1 .dot {
+      width: 8px; height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+    .sidebar-brand span {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .sidebar nav { flex: 1; padding: 0 10px; }
+    .sidebar nav .section-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      padding: 12px 10px 6px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      transition: all .2s ease;
+      position: relative;
+    }
+    .nav-item:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+    .nav-item.active {
+      background: rgba(99, 102, 241, 0.12);
+      color: var(--text-primary);
+    }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 3px; height: 18px;
+      background: var(--gradient);
+      border-radius: 0 3px 3px 0;
+    }
+    .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: .7; }
+    .nav-item.active svg { opacity: 1; }
+    .nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      background: var(--bg-elevated);
+      padding: 2px 7px;
+      border-radius: 10px;
+      color: var(--text-muted);
+    }
+
+    .sidebar-footer {
+      padding: 16px 14px 0;
+      border-top: 1px solid var(--border-subtle);
+      margin-top: 8px;
+    }
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-radius: 8px;
+    }
+    .user-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .user-card .info { font-size: 13px; font-weight: 500; }
+    .user-card .info small { display: block; font-size: 11px; color: var(--text-muted); font-weight: 400; }
+
+    /* ── Main Chat Area ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg-base);
+    }
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+    }
+    .main-header h2 { font-size: 15px; font-weight: 600; }
+    .main-header .meta { font-size: 12px; color: var(--text-muted); }
+    .header-actions { display: flex; gap: 8px; }
+    .header-actions button {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      transition: all .2s;
+    }
+    .header-actions button:hover { border-color: var(--border-active); }
+
+    /* Hamburger for mobile */
+    .hamburger {
+      display: none;
+      width: 36px; height: 36px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      margin-right: 12px;
+    }
+    .hamburger svg { width: 18px; height: 18px; }
+
+    /* ── Messages ── */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .msg {
+      display: flex;
+      gap: 12px;
+      max-width: 780px;
+    }
+    .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .msg.assistant .msg-avatar { background: var(--gradient); color: #fff; }
+    .msg.user .msg-avatar { background: #2a2a40; color: var(--text-secondary); }
+    .msg-body {
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+    .msg.assistant .msg-body {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+    }
+    .msg.user .msg-body {
+      background: linear-gradient(135deg, rgba(99,102,241,.18), rgba(6,182,212,.12));
+      border: 1px solid var(--border-active);
+    }
+    .msg-body p + p { margin-top: 10px; }
+    .msg-body strong { color: var(--text-primary); }
+    .msg-body code {
+      font-family: var(--font-mono, 'Fira Code', monospace);
+      background: rgba(99, 102, 241, 0.12);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #a5b4fc;
+    }
+
+    /* Code blocks */
+    .code-block {
+      background: #0b0b14;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      background: rgba(30, 30, 50, 0.6);
+      font-size: 11px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .code-block-header .lang { text-transform: uppercase; letter-spacing: .8px; }
+    .code-block pre {
+      padding: 14px;
+      overflow-x: auto;
+      font-family: var(--font-mono, 'Fira Code', monospace);
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #c4c4e0;
+    }
+    .code-block .kw { color: #c084fc; }
+    .code-block .fn { color: #67e8f9; }
+    .code-block .str { color: #86efac; }
+    .code-block .cmt { color: #55556a; font-style: italic; }
+    .code-block .num { color: #fbbf24; }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex;
+      gap: 12px;
+      max-width: 780px;
+    }
+    .typing-dots {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 16px 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+    }
+    .typing-dots span {
+      width: 7px; height: 7px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: typing-bounce 1.4s ease-in-out infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: .15s; }
+    .typing-dots span:nth-child(3) { animation-delay: .3s; }
+    @keyframes typing-bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ── Composer ── */
+    .composer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+    }
+    .composer-inner {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px 14px;
+      transition: border-color .2s;
+    }
+    .composer-inner:focus-within { border-color: var(--accent-start); }
+    .composer-inner textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 13.5px;
+      resize: none;
+      min-height: 22px;
+      max-height: 120px;
+      line-height: 1.5;
+    }
+    .composer-inner textarea::placeholder { color: var(--text-muted); }
+    .composer-actions { display: flex; gap: 4px; }
+    .composer-actions button {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+    }
+    .composer-actions button:hover { background: var(--bg-elevated); }
+    .composer-actions button svg { width: 18px; height: 18px; }
+    .btn-send {
+      background: var(--gradient) !important;
+      border-radius: 8px;
+    }
+    .btn-send svg { color: #fff; }
+    .composer-hints {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+      padding: 0 4px;
+    }
+    .composer-hints span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .composer-hints kbd {
+      font-family: var(--font-mono, monospace);
+      background: var(--bg-elevated);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 10px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* ── Right Panel ── */
+    .right-panel {
+      width: var(--right-panel-w);
+      min-width: var(--right-panel-w);
+      background: var(--bg-panel);
+      backdrop-filter: blur(24px);
+      border-left: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .panel-section {
+      padding: 18px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .panel-section h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Model selector */
+    .model-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .model-card:hover { border-color: var(--border-active); background: var(--bg-elevated); }
+    .model-card.selected {
+      border-color: var(--accent-start);
+      background: rgba(99, 102, 241, 0.08);
+    }
+    .model-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .model-card:nth-child(1) .model-icon { background: linear-gradient(135deg, #6366f1, #818cf8); color: #fff; }
+    .model-card:nth-child(2) .model-icon { background: linear-gradient(135deg, #06b6d4, #22d3ee); color: #fff; }
+    .model-card:nth-child(3) .model-icon { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #fff; }
+    .model-info { flex: 1; min-width: 0; }
+    .model-info .name { font-size: 13px; font-weight: 600; }
+    .model-info .desc { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .model-status {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      flex-shrink: 0;
+    }
+    .model-status.slow { background: var(--warning); }
+
+    /* Token usage chart */
+    .token-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stat-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-box .value {
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-box .label { font-size: 10px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .5px; }
+
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 60px;
+      padding: 0 4px;
+    }
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .bar {
+      width: 100%;
+      border-radius: 3px 3px 0 0;
+      background: var(--gradient);
+      min-height: 4px;
+      transition: height .4s ease;
+    }
+    .bar-col .day {
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+
+    /* Prompt templates */
+    .template-card {
+      padding: 10px 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .template-card:hover { border-color: var(--border-active); }
+    .template-card .title {
+      font-size: 12.5px;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    .template-card .preview {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .template-tag {
+      display: inline-block;
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(99,102,241,.12);
+      color: var(--accent-start);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    /* ── Mobile Overlay ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 25;
+    }
+    .overlay.show { display: block; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1100px) {
+      .right-panel { display: none; }
+    }
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .sidebar {
+        position: fixed;
+        left: 0; top: 0; bottom: 0;
+        transform: translateX(-100%);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .messages { padding: 16px; }
+      .composer { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Mobile overlay -->
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- ═══════════ SIDEBAR ═══════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <h1><span class="dot"></span> Neuron AI</h1>
+      <span>Workspace v2.4.1</span>
+    </div>
+    <nav>
+      <div class="section-label">Workspace</div>
+      <a href="#" class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Conversations
+        <span class="nav-badge">12</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Prompts
+        <span class="nav-badge">28</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Models
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analytics
+      </a>
+
+      <div class="section-label" style="margin-top: 8px;">System</div>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Help
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar">AK</div>
+        <div class="info">
+          Alex Kowalski
+          <small>Pro Plan · 42k tokens left</small>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════ MAIN CHAT ═══════════ -->
+  <main class="main">
+    <div class="main-header">
+      <div style="display:flex;align-items:center;">
+        <button class="hamburger" onclick="toggleSidebar()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+          <h2>API Integration Helper</h2>
+          <div class="meta">Hermes 3 · 14 messages · Created 2h ago</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button>Share</button>
+        <button>Export</button>
+      </div>
+    </div>
+
+    <div class="messages">
+      <!-- User message 1 -->
+      <div class="msg user">
+        <div class="msg-avatar">AK</div>
+        <div class="msg-body">
+          <p>Can you help me build a REST API endpoint in Python using FastAPI that validates incoming JSON payloads against a Pydantic model and returns structured error responses?</p>
+        </div>
+      </div>
+
+      <!-- Assistant message 1 -->
+      <div class="msg assistant">
+        <div class="msg-avatar">N</div>
+        <div class="msg-body">
+          <p>Absolutely! Here's a complete FastAPI endpoint with Pydantic validation and structured error handling. I'll include custom exception handlers for a consistent error format:</p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="lang">python</span>
+              <span>fastapi_endpoint.py</span>
+            </div>
+            <pre><span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI, HTTPException, Request
+<span class="kw">from</span> fastapi.responses <span class="kw">import</span> JSONResponse
+<span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel, Field, validator
+<span class="kw">from</span> typing <span class="kw">import</span> Optional, List
+<span class="kw">import</span> uuid
+
+app = FastAPI(<span class="str">title="Neuron API"</span>)
+
+<span class="cmt"># ── Pydantic Models ──</span>
+<span class="kw">class</span> <span class="fn">ItemCreate</span>(BaseModel):
+    name: str = Field(..., min_length=<span class="num">1</span>, max_length=<span class="num">128</span>)
+    description: Optional[str] = <span class="kw">None</span>
+    price: float = Field(..., gt=<span class="num">0</span>)
+    tags: List[str] = Field(default_factory=list)
+
+    <span class="kw">@validator</span>(<span class="str">"tags"</span>)
+    <span class="kw">def</span> <span class="fn">validate_tags</span>(cls, v):
+        <span class="kw">if</span> len(v) > <span class="num">10</span>:
+            <span class="kw">raise</span> ValueError(<span class="str">"Maximum 10 tags allowed"</span>)
+        <span class="kw">return</span> [t.lower().strip() <span class="kw">for</span> t <span class="kw">in</span> v]
+
+<span class="cmt"># ── Custom Error Handler ──</span>
+<span class="kw">@app.exception_handler</span>(<span class="num">422</span>)
+<span class="kw">async def</span> <span class="fn">validation_handler</span>(request, exc):
+    errors = []
+    <span class="kw">for</span> err <span class="kw">in</span> exc.detail:
+        errors.append({
+            <span class="str">"field"</span>: <span class="str">" -> "</span>.join(
+                str(l) <span class="kw">for</span> l <span class="kw">in</span> err[<span class="str">"loc"</span>]
+            ),
+            <span class="str">"message"</span>: err[<span class="str">"msg"</span>],
+            <span class="str">"type"</span>: err[<span class="str">"type"</span>]
+        })
+    <span class="kw">return</span> JSONResponse(
+        status_code=<span class="num">422</span>,
+        content={<span class="str">"error"</span>: <span class="str">"validation_failed"</span>,
+                 <span class="str">"details"</span>: errors}
+    )
+
+<span class="kw">@app.post</span>(<span class="str">"/api/items"</span>, status_code=<span class="num">201</span>)
+<span class="kw">async def</span> <span class="fn">create_item</span>(item: ItemCreate):
+    <span class="kw">return</span> {<span class="str">"id"</span>: str(uuid.uuid4()),
+            <span class="str">"status"</span>: <span class="str">"created"</span>, **item.dict()}</pre>
+          </div>
+          <p style="margin-top:12px;">The key parts: the <code>ItemCreate</code> model uses Field validators for constraints, and the custom <code>422</code> handler reformats Pydantic's default error output into a cleaner structure your frontend can parse easily.</p>
+        </div>
+      </div>
+
+      <!-- User message 2 -->
+      <div class="msg user">
+        <div class="msg-avatar">AK</div>
+        <div class="msg-body">
+          <p>That's great. Now can you add authentication using JWT tokens? I want a /login endpoint that returns an access token and a dependency that protects routes.</p>
+        </div>
+      </div>
+
+      <!-- Assistant message 2 -->
+      <div class="msg assistant">
+        <div class="msg-avatar">N</div>
+        <div class="msg-body">
+          <p>Here's a JWT authentication layer with a login endpoint and a reusable <code>get_current_user</code> dependency. This uses <code>python-jose</code> for token signing:</p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="lang">python</span>
+              <span>auth.py</span>
+            </div>
+            <pre><span class="kw">from</span> datetime <span class="kw">import</span> datetime, timedelta
+<span class="kw">from</span> jose <span class="kw">import</span> JWTError, jwt
+<span class="kw">from</span> fastapi <span class="kw">import</span> Depends, HTTPException, status
+<span class="kw">from</span> fastapi.security <span class="kw">import</span> OAuth2PasswordBearer
+
+SECRET_KEY = <span class="str">"your-secret-key-here"</span>
+ALGORITHM = <span class="str">"HS256"</span>
+ACCESS_TOKEN_EXPIRE_MINUTES = <span class="num">30</span>
+
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl=<span class="str">"/login"</span>
+)
+
+<span class="kw">def</span> <span class="fn">create_access_token</span>(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(
+        minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+    )
+    to_encode.update({<span class="str">"exp"</span>: expire})
+    <span class="kw">return</span> jwt.encode(
+        to_encode, SECRET_KEY, algorithm=ALGORITHM
+    )
+
+<span class="kw">async def</span> <span class="fn">get_current_user</span>(
+    token: str = Depends(oauth2_scheme)
+):
+    credentials_exc = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=<span class="str">"Invalid or expired token"</span>,
+        headers={<span class="str">"WWW-Authenticate"</span>: <span class="str">"Bearer"</span>}
+    )
+    <span class="kw">try</span>:
+        payload = jwt.decode(
+            token, SECRET_KEY, algorithms=[ALGORITHM]
+        )
+        user_id: str = payload.get(<span class="str">"sub"</span>)
+        <span class="kw">if</span> user_id <span class="kw">is None</span>:
+            <span class="kw">raise</span> credentials_exc
+        <span class="kw">return</span> {<span class="str">"user_id"</span>: user_id}
+    <span class="kw">except</span> JWTError:
+        <span class="kw">raise</span> credentials_exc</pre>
+          </div>
+          <p style="margin-top:12px;">To protect a route, just add <code>user = Depends(get_current_user)</code> to your endpoint signature. The dependency will automatically return <code>401</code> if the token is missing, malformed, or expired.</p>
+        </div>
+      </div>
+
+      <!-- User message 3 -->
+      <div class="msg user">
+        <div class="msg-avatar">AK</div>
+        <div class="msg-body">
+          <p>Perfect. One last thing — how should I structure the error responses to be consistent across the whole API? I want something my frontend team can rely on.</p>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="typing-indicator">
+        <div class="msg-avatar" style="width:32px;height:32px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;">N</div>
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Composer -->
+    <div class="composer">
+      <div class="composer-inner">
+        <textarea rows="1" placeholder="Ask Neuron AI anything…"></textarea>
+        <div class="composer-actions">
+          <button title="Attach file">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          </button>
+          <button class="btn-send" title="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="composer-hints">
+        <span><kbd>Enter</kbd> to send</span>
+        <span><kbd>Shift + Enter</kbd> new line</span>
+        <span><kbd>/</kbd> commands</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══════════ RIGHT PANEL ═══════════ -->
+  <aside class="right-panel">
+    <!-- Model Selector -->
+    <div class="panel-section">
+      <h3>Active Model</h3>
+      <div class="model-card selected">
+        <div class="model-icon">H3</div>
+        <div class="model-info">
+          <div class="name">Hermes 3 70B</div>
+          <div class="desc">Best for complex reasoning</div>
+        </div>
+        <div class="model-status"></div>
+      </div>
+      <div class="model-card">
+        <div class="model-icon">L4</div>
+        <div class="model-info">
+          <div class="name">Llama 4 Scout</div>
+          <div class="desc">Fast, lightweight tasks</div>
+        </div>
+        <div class="model-status"></div>
+      </div>
+      <div class="model-card">
+        <div class="model-icon">QW</div>
+        <div class="model-info">
+          <div class="name">Qwen 3 32B</div>
+          <div class="desc">Multilingual · High context</div>
+        </div>
+        <div class="model-status slow"></div>
+      </div>
+    </div>
+
+    <!-- Token Usage -->
+    <div class="panel-section">
+      <h3>Token Usage — This Week</h3>
+      <div class="token-stats">
+        <div class="stat-box">
+          <div class="value">42.1k</div>
+          <div class="label">Remaining</div>
+        </div>
+        <div class="stat-box">
+          <div class="value">18.7k</div>
+          <div class="label">Used Today</div>
+        </div>
+      </div>
+      <div class="bar-chart">
+        <div class="bar-col"><div class="bar" style="height:35%"></div><span class="day">Mon</span></div>
+        <div class="bar-col"><div class="bar" style="height:52%"></div><span class="day">Tue</span></div>
+        <div class="bar-col"><div class="bar" style="height:28%"></div><span class="day">Wed</span></div>
+        <div class="bar-col"><div class="bar" style="height:70%"></div><span class="day">Thu</span></div>
+        <div class="bar-col"><div class="bar" style="height:45%"></div><span class="day">Fri</span></div>
+        <div class="bar-col"><div class="bar" style="height:18%"></div><span class="day">Sat</span></div>
+        <div class="bar-col"><div class="bar" style="height:60%"></div><span class="day">Sun</span></div>
+      </div>
+    </div>
+
+    <!-- Prompt Templates -->
+    <div class="panel-section">
+      <h3>Prompt Templates</h3>
+      <div class="template-card">
+        <div class="title">API Code Review</div>
+        <div class="preview">Review this endpoint for security issues, performance, and best practices. Suggest improvements with code examples.</div>
+        <span class="template-tag">Engineering</span>
+      </div>
+      <div class="template-card">
+        <div class="title">SQL Query Optimizer</div>
+        <div class="preview">Analyze this SQL query and suggest index additions, query rewrites, or schema changes to improve performance.</div>
+        <span class="template-tag">Database</span>
+      </div>
+      <div class="template-card">
+        <div class="title">Unit Test Generator</div>
+        <div class="preview">Generate comprehensive unit tests using pytest for the given function. Include edge cases and mocking where needed.</div>
+        <span class="template-tag">Testing</span>
+      </div>
+      <div class="template-card">
+        <div class="title">Docker Compose Builder</div>
+        <div class="preview">Create a production-ready docker-compose.yml for this microservice architecture with health checks and volumes.</div>
+        <span class="template-tag">DevOps</span>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('show');
+  }
+</script>
+</body>
+</html>

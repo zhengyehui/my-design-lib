@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kai Studio — Bento Grid Portfolio</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Dark theme overrides */
+  --bg-base: #0a0a0f;
+  --bg-elevated: #12121a;
+  --bg-card: rgba(18, 18, 28, 0.6);
+  --bg-card-hover: rgba(22, 22, 36, 0.8);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --text-primary: #f0f0f5;
+  --text-secondary: #8888a0;
+  --text-muted: #55556a;
+  --accent-cyan: #06b6d4;
+  --accent-violet: #8b5cf6;
+  --accent-gradient: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  --accent-gradient-soft: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.15));
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glow-cyan: 0 0 30px rgba(6, 182, 212, 0.15);
+  --glow-violet: 0 0 30px rgba(139, 92, 246, 0.15);
+  --glow-gradient: 0 0 40px rgba(6, 182, 212, 0.1), 0 0 60px rgba(139, 92, 246, 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #222 var(--bg-base);
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ── Ambient Background ───────────────────────────────────── */
+.ambient-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ambient-bg::before {
+  content: '';
+  position: absolute;
+  top: -20%; left: -10%;
+  width: 50vw; height: 50vw;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 70%);
+  animation: drift-1 25s ease-in-out infinite alternate;
+}
+
+.ambient-bg::after {
+  content: '';
+  position: absolute;
+  bottom: -20%; right: -10%;
+  width: 50vw; height: 50vw;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+  animation: drift-2 20s ease-in-out infinite alternate;
+}
+
+@keyframes drift-1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(8vw, 5vh) scale(1.1); }
+}
+
+@keyframes drift-2 {
+  0% { transform: translate(0, 0) scale(1.1); }
+  100% { transform: translate(-6vw, -4vh) scale(1); }
+}
+
+/* ── Noise Texture Overlay ────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+/* ── Page Container ───────────────────────────────────────── */
+.page-wrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+/* ── Top Bar ──────────────────────────────────────────────── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) 0 var(--space-8);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logo-mark {
+  width: 32px; height: 32px;
+  background: var(--accent-gradient);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: #fff;
+}
+
+.logo-text {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-6);
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-normal) var(--ease-default);
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--accent-gradient);
+  transition: width var(--duration-normal) var(--ease-out);
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* ── Bento Grid ───────────────────────────────────────────── */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(180px, auto);
+  gap: var(--space-4);
+}
+
+/* ── Bento Card Base ──────────────────────────────────────── */
+.bento-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  transition: transform var(--duration-slow) var(--ease-spring),
+              border-color var(--duration-normal) var(--ease-default),
+              box-shadow var(--duration-slow) var(--ease-default);
+}
+
+.bento-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 50%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: var(--border-hover);
+  box-shadow: var(--glow-gradient);
+}
+
+.bento-card span.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-3);
+}
+
+.bento-card span.label .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ── Grid Spans ───────────────────────────────────────────── */
+.hero-card     { grid-column: span 2; grid-row: span 2; }
+.project-card  { grid-column: span 2; grid-row: span 2; }
+.skills-card   { grid-column: span 2; grid-row: span 1; }
+.github-card   { grid-column: span 3; grid-row: span 1; }
+.music-card    { grid-column: span 1; grid-row: span 1; }
+.contact-card  { grid-column: span 1; grid-row: span 1; }
+.location-card { grid-column: span 1; grid-row: span 1; }
+.tools-card    { grid-column: span 2; grid-row: span 1; }
+.status-card   { grid-column: span 1; grid-row: span 1; }
+
+/* ── Hero Card ────────────────────────────────────────────── */
+.hero-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  background: linear-gradient(160deg, var(--bg-card) 40%, rgba(6, 182, 212, 0.05) 100%);
+}
+
+.hero-card:hover {
+  box-shadow: 0 0 60px rgba(6, 182, 212, 0.12), 0 0 100px rgba(139, 92, 246, 0.06);
+}
+
+.hero-name {
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-4);
+  background: linear-gradient(135deg, #ffffff 0%, #ccccdd 60%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-title {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-bottom: var(--space-6);
+  max-width: 400px;
+}
+
+.hero-title strong {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+.hero-stats {
+  display: flex;
+  gap: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.stat-value {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hero-accent {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  opacity: 0.08;
+  filter: blur(30px);
+}
+
+/* ── Featured Project Card ────────────────────────────────── */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(160deg, var(--bg-card) 30%, rgba(139, 92, 246, 0.06) 100%);
+}
+
+.project-card:hover {
+  box-shadow: 0 0 60px rgba(139, 92, 246, 0.12), 0 0 100px rgba(6, 182, 212, 0.06);
+}
+
+.project-preview {
+  flex: 1;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  margin-bottom: var(--space-5);
+  overflow: hidden;
+  position: relative;
+  min-height: 120px;
+}
+
+.project-preview-inner {
+  width: 100%;
+  height: 100%;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.preview-titlebar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.preview-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+
+.preview-dot:nth-child(1) { background: #ef4444; }
+.preview-dot:nth-child(2) { background: #f59e0b; }
+.preview-dot:nth-child(3) { background: #10b981; }
+
+.preview-url {
+  margin-left: var(--space-3);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.03);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+}
+
+.preview-content {
+  flex: 1;
+  display: flex;
+  gap: var(--space-4);
+}
+
+.preview-sidebar-shim {
+  width: 100px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+}
+
+.shim-line {
+  height: 6px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
+}
+
+.shim-line:nth-child(2) { width: 70%; }
+.shim-line:nth-child(3) { width: 85%; }
+
+.preview-main-shim {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+
+.shim-block {
+  height: 40px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-sm);
+}
+
+.shim-block.short {
+  height: 20px;
+  width: 60%;
+}
+
+.project-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.project-info h3 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.project-info p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.project-tags {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.tag {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  background: var(--glass-bg);
+}
+
+.tag.accent {
+  border-color: rgba(6, 182, 212, 0.3);
+  color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.06);
+}
+
+/* ── Skills Card ──────────────────────────────────────────── */
+.skills-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.skills-grid {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  transition: all var(--duration-normal) var(--ease-default);
+  cursor: default;
+}
+
+.skill-item:hover {
+  background: rgba(6, 182, 212, 0.08);
+  border-color: rgba(6, 182, 212, 0.2);
+  color: var(--text-primary);
+}
+
+.skill-icon {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font-mono);
+}
+
+/* Skill icon colors */
+.si-react { background: #61dafb; }
+.si-ts { background: #3178c6; }
+.si-py { background: #3776ab; }
+.si-rust { background: #ce422b; }
+.si-node { background: #339933; }
+.si-go { background: #00add8; }
+.si-wasm { background: #654ff0; }
+.si-fg { background: #f24e1e; }
+
+/* ── GitHub Contributions Card ───────────────────────────── */
+.github-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.github-heatmap {
+  display: grid;
+  grid-template-columns: repeat(52, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 2px;
+  margin-top: var(--space-3);
+  flex: 1;
+  align-content: end;
+}
+
+.gh-cell {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: background var(--duration-fast) var(--ease-default);
+}
+
+.gh-cell.l1 { background: rgba(6, 182, 212, 0.15); }
+.gh-cell.l2 { background: rgba(6, 182, 212, 0.3); }
+.gh-cell.l3 { background: rgba(139, 92, 246, 0.4); }
+.gh-cell.l4 { background: rgba(139, 92, 246, 0.7); }
+
+.github-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-3);
+}
+
+.github-count {
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.github-count strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.github-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.github-legend span {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin: 0 var(--space-1);
+}
+
+.github-legend .gh-legend-cell {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.github-legend .gh-legend-cell:nth-child(1) { background: rgba(255, 255, 255, 0.03); }
+.github-legend .gh-legend-cell:nth-child(2) { background: rgba(6, 182, 212, 0.15); }
+.github-legend .gh-legend-cell:nth-child(3) { background: rgba(6, 182, 212, 0.3); }
+.github-legend .gh-legend-cell:nth-child(4) { background: rgba(139, 92, 246, 0.4); }
+.github-legend .gh-legend-cell:nth-child(5) { background: rgba(139, 92, 246, 0.7); }
+
+/* ── Music Card ───────────────────────────────────────────── */
+.music-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(139, 92, 246, 0.06) 100%);
+}
+
+.music-artwork {
+  width: 56px; height: 56px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: var(--space-3);
+}
+
+.music-artwork::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.3), rgba(139, 92, 246, 0.3));
+}
+
+.music-artwork .vinyl-hole {
+  position: absolute;
+  width: 12px; height: 12px;
+  background: var(--bg-base);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.music-track {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-artist {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.music-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+}
+
+.eq-bar {
+  width: 3px;
+  background: var(--accent-gradient);
+  border-radius: 1.5px;
+  animation: eq-bounce var(--duration-slow) ease-in-out infinite alternate;
+}
+
+.eq-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
+.eq-bar:nth-child(2) { height: 70%; animation-delay: 0.1s; }
+.eq-bar:nth-child(3) { height: 50%; animation-delay: 0.2s; }
+.eq-bar:nth-child(4) { height: 90%; animation-delay: 0.15s; }
+.eq-bar:nth-child(5) { height: 60%; animation-delay: 0.25s; }
+.eq-bar:nth-child(6) { height: 30%; animation-delay: 0.05s; }
+
+@keyframes eq-bounce {
+  0% { transform: scaleY(0.3); }
+  100% { transform: scaleY(1); }
+}
+
+/* ── Contact Card ─────────────────────────────────────────── */
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(160deg, var(--bg-card) 40%, rgba(6, 182, 212, 0.04) 100%);
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  transition: all var(--duration-normal) var(--ease-default);
+}
+
+.contact-link:hover {
+  background: rgba(6, 182, 212, 0.08);
+  border-color: rgba(6, 182, 212, 0.2);
+  color: var(--text-primary);
+  transform: translateX(4px);
+}
+
+.contact-icon {
+  width: 20px;
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+/* ── Location Card ────────────────────────────────────────── */
+.location-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.location-map {
+  flex: 1;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  margin-top: var(--space-3);
+  position: relative;
+  overflow: hidden;
+  min-height: 80px;
+}
+
+.map-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.map-dot {
+  position: absolute;
+  width: 10px; height: 10px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  top: 45%; left: 60%;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.map-dot::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(6, 182, 212, 0.3);
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.map-line {
+  position: absolute;
+  background: rgba(255,255,255,0.03);
+}
+
+.map-line.h1 { width: 60%; height: 1px; top: 30%; left: 20%; }
+.map-line.h2 { width: 40%; height: 1px; top: 65%; left: 35%; }
+.map-line.v1 { width: 1px; height: 45%; top: 15%; left: 40%; }
+.map-line.v2 { width: 1px; height: 35%; top: 40%; left: 70%; }
+
+.location-text {
+  margin-top: var(--space-2);
+}
+
+.location-city {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.location-country {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ── Tools Card ───────────────────────────────────────────── */
+.tools-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.tool-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-normal) var(--ease-default);
+  cursor: default;
+}
+
+.tool-item:hover {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.2);
+  transform: translateY(-2px);
+}
+
+.tool-icon {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #fff;
+}
+
+.tool-name {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Tool colors */
+.ti-vs { background: linear-gradient(135deg, #0078d4, #1e90ff); }
+.ti-fig { background: linear-gradient(135deg, #f24e1e, #a259ff); }
+.ti-arc { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.ti-warp { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
+.ti-raycast { background: linear-gradient(135deg, #ff6363, #ff3366); }
+.ti-linear { background: linear-gradient(135deg, #5e6ad2, #7b8cde); }
+.ti-notion { background: linear-gradient(135deg, #37352f, #525049); }
+.ti-iterm { background: linear-gradient(135deg, #1a1a2e, #2d2d44); }
+
+/* ── Status Card ──────────────────────────────────────────── */
+.status-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  background: linear-gradient(160deg, var(--bg-card) 30%, rgba(16, 185, 129, 0.05) 100%);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.status-dot {
+  width: 10px; height: 10px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.status-text {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: #10b981;
+}
+
+.status-message {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.status-timezone {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ── Stagger Animation ────────────────────────────────────── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bento-card {
+  animation: fade-up 0.6s var(--ease-out) both;
+}
+
+.bento-card:nth-child(1) { animation-delay: 0.05s; }
+.bento-card:nth-child(2) { animation-delay: 0.1s; }
+.bento-card:nth-child(3) { animation-delay: 0.15s; }
+.bento-card:nth-child(4) { animation-delay: 0.2s; }
+.bento-card:nth-child(5) { animation-delay: 0.25s; }
+.bento-card:nth-child(6) { animation-delay: 0.3s; }
+.bento-card:nth-child(7) { animation-delay: 0.35s; }
+.bento-card:nth-child(8) { animation-delay: 0.4s; }
+.bento-card:nth-child(9) { animation-delay: 0.45s; }
+
+/* ── Footer ───────────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  padding: var(--space-12) 0 var(--space-8);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+}
+
+.footer a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-normal) var(--ease-default);
+}
+
+.footer a:hover {
+  color: var(--accent-cyan);
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hero-card     { grid-column: span 2; grid-row: span 2; }
+  .project-card  { grid-column: span 2; grid-row: span 2; }
+  .skills-card   { grid-column: span 2; grid-row: span 1; }
+  .github-card   { grid-column: span 2; grid-row: span 1; }
+  .music-card    { grid-column: span 1; grid-row: span 1; }
+  .contact-card  { grid-column: span 1; grid-row: span 1; }
+  .location-card { grid-column: span 1; grid-row: span 1; }
+  .tools-card    { grid-column: span 1; grid-row: span 1; }
+  .status-card   { grid-column: span 1; grid-row: span 1; }
+}
+
+@media (max-width: 640px) {
+  .page-wrapper {
+    padding: var(--space-4);
+  }
+  .bento-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  .bento-grid > .bento-card {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
+  }
+  .hero-card {
+    min-height: 300px;
+  }
+  .project-card {
+    min-height: 350px;
+  }
+  .tools-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-2);
+  }
+  .nav-links {
+    display: none;
+  }
+  .hero-name {
+    font-size: 2.4rem;
+  }
+  .hero-stats {
+    flex-wrap: wrap;
+    gap: var(--space-5);
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient-bg"></div>
+
+<div class="page-wrapper">
+
+  <!-- ── Top Bar ─────────────────────────────────────────── -->
+  <header class="top-bar">
+    <div class="logo">
+      <div class="logo-mark">K</div>
+      <span class="logo-text">Kai Studio</span>
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="mailto:hello@kaichen.dev">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ── Bento Grid ─────────────────────────────────────── -->
+  <div class="bento-grid">
+
+    <!-- Hero Card -->
+    <div class="bento-card hero-card">
+      <div class="hero-accent"></div>
+      <span class="label"><span class="dot" style="background: var(--accent-cyan);"></span> Introduction</span>
+      <h1 class="hero-name">Kai Chen</h1>
+      <p class="hero-title">Creative developer crafting <strong>digital experiences</strong> at the intersection of code and design.</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">7+</span>
+          <span class="stat-label">Years Exp</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">48</span>
+          <span class="stat-label">Projects</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">12k</span>
+          <span class="stat-label">GitHub Stars</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Project Card -->
+    <div class="bento-card project-card" id="work">
+      <span class="label"><span class="dot" style="background: var(--accent-violet);"></span> Featured Project</span>
+      <div class="project-preview">
+        <div class="project-preview-inner">
+          <div class="preview-titlebar">
+            <div class="preview-dot"></div>
+            <div class="preview-dot"></div>
+            <div class="preview-dot"></div>
+            <span class="preview-url">nebula-ui.dev</span>
+          </div>
+          <div class="preview-content">
+            <div class="preview-sidebar-shim">
+              <div class="shim-line"></div>
+              <div class="shim-line"></div>
+              <div class="shim-line"></div>
+            </div>
+            <div class="preview-main-shim">
+              <div class="shim-block"></div>
+              <div class="shim-block short"></div>
+              <div class="shim-block"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div>
+          <h3>Nebula UI</h3>
+          <p>An open-source component library with 60+ animated components</p>
+        </div>
+        <div class="project-tags">
+          <span class="tag accent">React</span>
+          <span class="tag">TS</span>
+          <span class="tag">Framer</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Card -->
+    <div class="bento-card skills-card" id="about">
+      <span class="label"><span class="dot" style="background: var(--accent-cyan);"></span> Tech Stack</span>
+      <div class="skills-grid">
+        <div class="skill-item">
+          <div class="skill-icon si-react">Re</div>
+          React
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon si-ts">TS</div>
+          TypeScript
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon si-py">Py</div>
+          Python
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon si-rust">Rs</div>
+          Rust
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon si-node">N</div>
+          Node.js
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon si-go">Go</div>
+          Go
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon si-wasm">W</div>
+          WebAssembly
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon si-fg">Fg</div>
+          Figma
+        </div>
+      </div>
+    </div>
+
+    <!-- Music Card -->
+    <div class="bento-card music-card">
+      <span class="label"><span class="dot" style="background: var(--accent-violet);"></span> Now Playing</span>
+      <div class="music-artwork">
+        <div class="vinyl-hole"></div>
+      </div>
+      <div class="music-track">Midnight City</div>
+      <div class="music-artist">M83 — Hurry Up, We're Dreaming</div>
+      <div class="music-eq">
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+        <div class="eq-bar"></div>
+      </div>
+    </div>
+
+    <!-- GitHub Contributions Card -->
+    <div class="bento-card github-card">
+      <span class="label"><span class="dot" style="background: var(--accent-cyan);"></span> GitHub Activity</span>
+      <div class="github-heatmap" id="heatmap"></div>
+      <div class="github-footer">
+        <span class="github-count"><strong>1,247</strong> contributions in the last year</span>
+        <div class="github-legend">
+          <span>Less</span>
+          <span class="gh-legend-cell"></span>
+          <span class="gh-legend-cell"></span>
+          <span class="gh-legend-cell"></span>
+          <span class="gh-legend-cell"></span>
+          <span class="gh-legend-cell"></span>
+          <span>More</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Card -->
+    <div class="bento-card contact-card">
+      <span class="label"><span class="dot" style="background: var(--accent-violet);"></span> Get In Touch</span>
+      <div class="contact-links">
+        <a href="mailto:hello@kaichen.dev" class="contact-link">
+          <span class="contact-icon">✉</span>
+          hello@kaichen.dev
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-icon">𝕏</span>
+          @kaichendev
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-icon">in</span>
+          /in/kaichen
+        </a>
+      </div>
+    </div>
+
+    <!-- Location Card -->
+    <div class="bento-card location-card">
+      <span class="label"><span class="dot" style="background: var(--accent-cyan);"></span> Location</span>
+      <div class="location-map">
+        <div class="map-grid"></div>
+        <div class="map-line h1"></div>
+        <div class="map-line h2"></div>
+        <div class="map-line v1"></div>
+        <div class="map-line v2"></div>
+        <div class="map-dot"></div>
+      </div>
+      <div class="location-text">
+        <div class="location-city">San Francisco, CA</div>
+        <div class="location-country">United States · PST (UTC-8)</div>
+      </div>
+    </div>
+
+    <!-- Tools Card -->
+    <div class="bento-card tools-card">
+      <span class="label"><span class="dot" style="background: var(--accent-violet);"></span> Daily Tools</span>
+      <div class="tools-grid">
+        <div class="tool-item">
+          <div class="tool-icon ti-vs">VS</div>
+          <span class="tool-name">VS Code</span>
+        </div>
+        <div class="tool-item">
+          <div class="tool-icon ti-fig">Fg</div>
+          <span class="tool-name">Figma</span>
+        </div>
+        <div class="tool-item">
+          <div class="tool-icon ti-arc">Ar</div>
+          <span class="tool-name">Arc</span>
+        </div>
+        <div class="tool-item">
+          <div class="tool-icon ti-warp">Wp</div>
+          <span class="tool-name">Warp</span>
+        </div>
+        <div class="tool-item">
+          <div class="tool-icon ti-raycast">Rc</div>
+          <span class="tool-name">Raycast</span>
+        </div>
+        <div class="tool-item">
+          <div class="tool-icon ti-linear">Ln</div>
+          <span class="tool-name">Linear</span>
+        </div>
+        <div class="tool-item">
+          <div class="tool-icon ti-notion">Nt</div>
+          <span class="tool-name">Notion</span>
+        </div>
+        <div class="tool-item">
+          <div class="tool-icon ti-iterm">iT</div>
+          <span class="tool-name">iTerm2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Card -->
+    <div class="bento-card status-card">
+      <span class="label"><span class="dot" style="background: #10b981;"></span> Status</span>
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span class="status-text">Available for work</span>
+      </div>
+      <p class="status-message">Open to freelance projects and full-time creative engineering roles. Currently building side projects and contributing to OSS.</p>
+      <div class="status-timezone">🕐 Local time: <span id="local-time"></span></div>
+    </div>
+
+  </div>
+
+  <!-- ── Footer ──────────────────────────────────────────── -->
+  <footer class="footer">
+    <p>Designed & built by <a href="#">Kai Chen</a> · © 2026 · All rights reserved.</p>
+  </footer>
+
+</div>
+
+<script>
+// ── GitHub Heatmap Generator ──────────────────────────────
+(function() {
+  var heatmap = document.getElementById('heatmap');
+  if (!heatmap) return;
+
+  // Seed-based pseudo-random for consistent pattern
+  var seed = 42;
+  function seededRandom() {
+    seed = (seed * 16807 + 0) % 2147483647;
+    return (seed - 1) / 2147483646;
+  }
+
+  // Generate 52 weeks × 7 days = 364 cells
+  for (var i = 0; i < 364; i++) {
+    var cell = document.createElement('div');
+    cell.className = 'gh-cell';
+    var r = seededRandom();
+    if (r > 0.82)      cell.classList.add('l4');
+    else if (r > 0.65) cell.classList.add('l3');
+    else if (r > 0.45) cell.classList.add('l2');
+    else if (r > 0.3)  cell.classList.add('l1');
+    heatmap.appendChild(cell);
+  }
+})();
+
+// ── Local Time Display ────────────────────────────────────
+(function() {
+  var el = document.getElementById('local-time');
+  if (!el) return;
+  function updateTime() {
+    var now = new Date();
+    var opts = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+    el.textContent = now.toLocaleTimeString('en-US', opts);
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+})();
+</script>
+
+</body>
+</html>

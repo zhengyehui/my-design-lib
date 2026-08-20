@@ -279,7 +279,8 @@ export default defineConfig({
             { text: 'Kai Nakamura 创意技术专家', link: '/pages/code-artist' },
             { text: 'Léa Moreau 插画师作品集', link: '/pages/illustrator-lookbook' },
             { text: 'Terminal Dev Portfolio', link: '/pages/terminal-dev-portfolio' },
-            { text: 'Elara Chen 极简设计师', link: '/pages/minimal-designer-bio' }
+            { text: 'Elara Chen 极简设计师', link: '/pages/minimal-designer-bio' },
+            { text: 'Kai Studio Bento Grid 作品集', link: '/pages/bento-portfolio' }
           ]
         },
         {
@@ -307,6 +308,7 @@ export default defineConfig({
             { text: 'NexaHome 智能家居仪表盘', link: '/pages/smart-home-dashboard' },
             { text: 'Nebula Canvas 协作白板', link: '/pages/nebula-canvas' },
             { text: 'Forkful 美食食谱应用', link: '/pages/forkful-recipes' },
+            { text: 'Neuron AI 工作台仪表盘', link: '/pages/ai-workspace' },
           ]
         },
         {

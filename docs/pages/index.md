@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 152 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 154 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1423,6 +1423,24 @@ const pages = [
     rating: 9.5,
     description: 'AI 与设计交汇的数字编辑杂志，DM Serif Display 衬线字体 + 暖色奶油底 + 不对称文章网格 + 浮动圆形装饰 + 药丸筛选 + 横向滚动深度阅读 + Pull Quote + 数据统计条',
   },
+  {
+    id: 'bento-portfolio',
+    title: 'Kai Studio Bento Grid 作品集',
+    category: 'portfolio',
+    tags: ['作品集', 'Bento Grid', '开发者', '暗色主题', '热力图'],
+    colors: ['#0a0a0f', '#06b6d4', '#8b5cf6'],
+    rating: 9.5,
+    description: 'Bento Grid 风格开发者作品集，灵感来自 2025 热门 Bento UI 趋势，9 个不等宽网格卡片 + GitHub 热力图 + 音乐等化器动画 + 毛玻璃卡片 + 渐变发光边框',
+  },
+  {
+    id: 'ai-workspace',
+    title: 'Neuron AI 工作台仪表盘',
+    category: 'app',
+    tags: ['AI', '仪表盘', '工作台', '暗色主题', '对话界面'],
+    colors: ['#08080d', '#6366f1', '#06b6d4'],
+    rating: 9.4,
+    description: 'AI 工作台仪表盘，三栏布局对话界面 + 模型选择器 + Token 用量统计 + 代码高亮 + CSS 打字动画 + 毛玻璃面板',
+  },
 ]
 
 const categories = [
@@ -1480,12 +1498,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 152 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 154 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="152 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="154 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
