@@ -252,7 +252,8 @@ export default defineConfig({
             { text: 'BuildFlow 无代码构建', link: '/pages/nocode-builder' },
             { text: 'FlowMetrics 渐变网格', link: '/pages/gradient-saas' },
             { text: 'Flame 约会应用', link: '/pages/flame-dating' },
-            { text: 'MailCraft 邮件营销', link: '/pages/mailcraft-landing' }
+            { text: 'MailCraft 邮件营销', link: '/pages/mailcraft-landing' },
+            { text: 'FormFlow 表单构建器', link: '/pages/form-builder' }
           ]
         },
         {

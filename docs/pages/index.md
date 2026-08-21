@@ -1441,6 +1441,15 @@ const pages = [
     rating: 9.4,
     description: 'AI 工作台仪表盘，三栏布局对话界面 + 模型选择器 + Token 用量统计 + 代码高亮 + CSS 打字动画 + 毛玻璃面板',
   },
+  {
+    id: 'form-builder',
+    title: 'FormFlow 表单构建器',
+    category: 'landing',
+    tags: ['SaaS', '表单', '交互式', '暗色主题', '落地页'],
+    colors: ['#0a0a0f', '#6366f1', '#06b6d4'],
+    rating: 9.4,
+    description: '现代 SaaS 表单构建器落地页，灵感来自 Typeform/Tally，交互式表单预览自动轮播 + 毛玻璃导航 + 特性网格 + 集成展示 + 定价卡片 + 用户评价',
+  },
 ]
 
 const categories = [

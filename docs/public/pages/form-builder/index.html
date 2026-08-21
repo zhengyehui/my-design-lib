@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FormFlow — Beautiful Forms That Convert</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ── Design Tokens ─────────────────────────────────── */
+:root {
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --accent: #06b6d4;
+  --accent-light: #22d3ee;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg: #0a0a0f;
+  --bg-subtle: #111118;
+  --bg-card: #16161f;
+  --bg-elevated: #1e1e2a;
+  --text: #f0f0f5;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border: #2a2a3a;
+  --border-hover: #3a3a4a;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 60px rgba(99,102,241,0.15);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Reset & Base ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* ── Utility ───────────────────────────────────────── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 120px 0; }
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-light);
+  margin-bottom: 16px;
+}
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 1px;
+}
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+.section-desc {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+/* ── Animated Background ───────────────────────────── */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-glow {
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-glow-1 { top: -200px; left: -100px; background: var(--primary); }
+.bg-glow-2 { bottom: -200px; right: -100px; background: var(--accent); }
+
+/* ── Navbar ────────────────────────────────────────── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 0;
+  transition: var(--transition);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(10,10,15,0.8);
+  border-bottom: 1px solid transparent;
+}
+.navbar.scrolled { border-bottom-color: var(--border); }
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+  font-weight: 800;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: var(--transition);
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: var(--primary);
+  color: white !important;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+.nav-cta:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+}
+
+/* ── Hero ──────────────────────────────────────────── */
+.hero {
+  position: relative;
+  padding: 180px 0 100px;
+  text-align: center;
+  overflow: hidden;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px 6px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  animation: fadeInUp 0.6s ease;
+}
+.hero-badge-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease 0.1s both;
+}
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-desc {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+  animation: fadeInUp 0.6s ease 0.2s both;
+}
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 64px;
+  animation: fadeInUp 0.6s ease 0.3s both;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(99,102,241,0.35);
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font);
+}
+.btn-secondary:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-elevated);
+  transform: translateY(-2px);
+}
+.hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  animation: fadeInUp 0.6s ease 0.4s both;
+}
+.hero-stat {
+  text-align: center;
+}
+.hero-stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.hero-stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ── Form Preview ──────────────────────────────────── */
+.form-preview {
+  position: relative;
+  max-width: 680px;
+  margin: 80px auto 0;
+  animation: fadeInUp 0.8s ease 0.5s both;
+}
+.form-preview-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-glow);
+}
+.form-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.form-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.form-dot-red { background: #ff5f57; }
+.form-dot-yellow { background: #febc2e; }
+.form-dot-green { background: #28c840; }
+.form-preview-url {
+  flex: 1;
+  margin-left: 12px;
+  padding: 6px 16px;
+  background: var(--bg);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: var(--font);
+}
+.form-preview-body {
+  padding: 40px;
+}
+.form-step {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+.form-step.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.form-question {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+.form-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+.form-input {
+  width: 100%;
+  padding: 16px 20px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 16px;
+  font-family: var(--font);
+  transition: var(--transition);
+  outline: none;
+}
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+}
+.form-input::placeholder { color: var(--text-muted); }
+.form-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.form-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 15px;
+}
+.form-option:hover {
+  border-color: var(--primary);
+  background: rgba(99,102,241,0.05);
+}
+.form-option.selected {
+  border-color: var(--primary);
+  background: rgba(99,102,241,0.1);
+}
+.form-option-radio {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.form-option.selected .form-option-radio {
+  border-color: var(--primary);
+}
+.form-option.selected .form-option-radio::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: var(--primary);
+  border-radius: 50%;
+}
+.form-progress {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.form-progress-dot {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: var(--transition);
+}
+.form-progress-dot.active { background: var(--primary); }
+.form-progress-dot.done { background: var(--success); }
+.form-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+}
+.form-nav-btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font);
+}
+.form-nav-btn.prev {
+  background: var(--bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.form-nav-btn.next {
+  background: var(--primary);
+  color: white;
+}
+.form-nav-btn:hover { transform: translateY(-1px); }
+
+/* ── Features ──────────────────────────────────────── */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 64px;
+}
+.feature-card {
+  padding: 36px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  opacity: 0;
+  transition: var(--transition);
+}
+.feature-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(99,102,241,0.1);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+.feature-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.feature-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── How It Works ──────────────────────────────────── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 64px;
+}
+.step {
+  text-align: center;
+  position: relative;
+}
+.step::after {
+  content: '';
+  position: absolute;
+  top: 32px;
+  right: -20px;
+  width: 40px;
+  height: 2px;
+  background: var(--border);
+}
+.step:last-child::after { display: none; }
+.step-number {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+}
+.step-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.step-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Integrations ──────────────────────────────────── */
+.integrations {
+  text-align: center;
+}
+.integrations-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+.integration-logo {
+  width: 56px;
+  height: 56px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: var(--transition);
+}
+.integration-logo:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ── Pricing ───────────────────────────────────────── */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 64px;
+}
+.pricing-card {
+  padding: 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+  position: relative;
+}
+.pricing-card.featured {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-glow);
+}
+.pricing-card.featured::before {
+  content: 'Most Popular';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 16px;
+  background: var(--primary);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 100px;
+}
+.pricing-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.pricing-price {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+}
+.pricing-price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.pricing-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+.pricing-features {
+  list-style: none;
+  margin-bottom: 32px;
+}
+.pricing-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.pricing-features li:last-child { border-bottom: none; }
+.pricing-check {
+  color: var(--success);
+  font-size: 16px;
+}
+.pricing-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font);
+  text-align: center;
+}
+.pricing-btn-primary {
+  background: var(--primary);
+  color: white;
+}
+.pricing-btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+.pricing-btn-outline {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.pricing-btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary-light);
+}
+
+/* ── Testimonials ──────────────────────────────────── */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 64px;
+}
+.testimonial-card {
+  padding: 36px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+}
+.testimonial-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+.testimonial-stars {
+  color: var(--warning);
+  font-size: 14px;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+.testimonial-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+}
+.testimonial-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.testimonial-role {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ── CTA ───────────────────────────────────────────── */
+.cta-section {
+  text-align: center;
+  position: relative;
+}
+.cta-card {
+  padding: 80px 40px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(6,182,212,0.1));
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+}
+.cta-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 60%);
+  animation: rotate 20s linear infinite;
+}
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.cta-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 16px;
+  position: relative;
+}
+.cta-desc {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 500px;
+  margin: 0 auto 32px;
+  position: relative;
+}
+.cta-actions {
+  position: relative;
+}
+
+/* ── Footer ────────────────────────────────────────── */
+.footer {
+  padding: 64px 0 32px;
+  border-top: 1px solid var(--border);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+.footer-brand p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+.footer-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.footer-links a {
+  font-size: 14px;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+.footer-links a:hover { color: var(--primary-light); }
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.footer-social {
+  display: flex;
+  gap: 16px;
+}
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: var(--transition);
+}
+.footer-social a:hover {
+  border-color: var(--primary);
+  background: rgba(99,102,241,0.1);
+}
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .features-grid,
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero { padding: 140px 0 60px; }
+  .hero h1 { font-size: 2.5rem; }
+  .hero-actions { flex-direction: column; }
+  .hero-stats { flex-direction: column; gap: 24px; }
+  .features-grid,
+  .steps,
+  .pricing-grid,
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .step::after { display: none; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 16px; }
+  .form-preview-body { padding: 24px; }
+  .form-question { font-size: 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background Effects -->
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a href="#" class="logo">
+      <div class="logo-icon">F</div>
+      <span>FormFlow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Get Started Free →</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Now with AI-powered form logic
+    </div>
+    <h1>Build forms that<br><span class="gradient-text">people love to fill</span></h1>
+    <p class="hero-desc">Create beautiful, conversational forms in minutes. No code needed. Higher completion rates guaranteed.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Start Building Free →</button>
+      <button class="btn-secondary">▶ Watch Demo</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">50K+</div>
+        <div class="hero-stat-label">Active creators</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">2.4M</div>
+        <div class="hero-stat-label">Forms submitted</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">87%</div>
+        <div class="hero-stat-label">Completion rate</div>
+      </div>
+    </div>
+
+    <!-- Interactive Form Preview -->
+    <div class="form-preview">
+      <div class="form-preview-card">
+        <div class="form-preview-header">
+          <div class="form-dot form-dot-red"></div>
+          <div class="form-dot form-dot-yellow"></div>
+          <div class="form-dot form-dot-green"></div>
+          <div class="form-preview-url">formflow.app/demo</div>
+        </div>
+        <div class="form-preview-body">
+          <div class="form-progress">
+            <div class="form-progress-dot done"></div>
+            <div class="form-progress-dot active"></div>
+            <div class="form-progress-dot"></div>
+            <div class="form-progress-dot"></div>
+          </div>
+
+          <!-- Step 1 -->
+          <div class="form-step active" data-step="0">
+            <div class="form-question">What's your name? 👋</div>
+            <div class="form-subtitle">Let's get to know each other</div>
+            <input type="text" class="form-input" placeholder="Type your name..." id="nameInput">
+          </div>
+
+          <!-- Step 2 -->
+          <div class="form-step" data-step="1">
+            <div class="form-question">What do you need a form for?</div>
+            <div class="form-subtitle">Choose the option that best fits</div>
+            <div class="form-options">
+              <div class="form-option" onclick="selectOption(this)">
+                <div class="form-option-radio"></div>
+                <span>Customer feedback survey</span>
+              </div>
+              <div class="form-option" onclick="selectOption(this)">
+                <div class="form-option-radio"></div>
+                <span>Event registration</span>
+              </div>
+              <div class="form-option" onclick="selectOption(this)">
+                <div class="form-option-radio"></div>
+                <span>Lead generation</span>
+              </div>
+              <div class="form-option" onclick="selectOption(this)">
+                <div class="form-option-radio"></div>
+                <span>Job application</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="form-step" data-step="2">
+            <div class="form-question">How many responses do you expect?</div>
+            <div class="form-subtitle">This helps us recommend the right plan</div>
+            <div class="form-options">
+              <div class="form-option" onclick="selectOption(this)">
+                <div class="form-option-radio"></div>
+                <span>Less than 100/month</span>
+              </div>
+              <div class="form-option" onclick="selectOption(this)">
+                <div class="form-option-radio"></div>
+                <span>100 - 1,000/month</span>
+              </div>
+              <div class="form-option" onclick="selectOption(this)">
+                <div class="form-option-radio"></div>
+                <span>1,000 - 10,000/month</span>
+              </div>
+              <div class="form-option" onclick="selectOption(this)">
+                <div class="form-option-radio"></div>
+                <span>Unlimited</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="form-step" data-step="3">
+            <div class="form-question">What's your email? 📧</div>
+            <div class="form-subtitle">We'll send you a personalized setup guide</div>
+            <input type="email" class="form-input" placeholder="you@company.com">
+          </div>
+
+          <div class="form-nav">
+            <button class="form-nav-btn prev" onclick="prevStep()" style="visibility: hidden;">← Back</button>
+            <button class="form-nav-btn next" onclick="nextStep()">Continue →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="animate-on-scroll">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Everything you need to<br>build better forms</h2>
+      <p class="section-desc">Powerful features wrapped in a delightful experience. No learning curve required.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">🎨</div>
+        <div class="feature-title">Drag & Drop Builder</div>
+        <div class="feature-desc">Build forms visually with our intuitive drag-and-drop interface. 30+ field types ready to use.</div>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">AI Logic Engine</div>
+        <div class="feature-desc">Smart conditional logic powered by AI. Forms adapt to each respondent in real-time.</div>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Live Analytics</div>
+        <div class="feature-desc">See completion rates, drop-off points, and response patterns as they happen.</div>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">🔗</div>
+        <div class="feature-title">200+ Integrations</div>
+        <div class="feature-desc">Connect to Slack, Notion, Google Sheets, Zapier, and 200+ other tools instantly.</div>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">GDPR Compliant</div>
+        <div class="feature-desc">Built-in consent management, data encryption, and privacy-first architecture.</div>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Partial Submissions</div>
+        <div class="feature-desc">Capture leads even from abandoned forms. Never lose a potential customer again.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="section" id="how-it-works" style="background: var(--bg-subtle);">
+  <div class="container">
+    <div style="text-align: center;" class="animate-on-scroll">
+      <div class="section-label" style="justify-content: center;">How It Works</div>
+      <h2 class="section-title">Three steps to<br>beautiful forms</h2>
+      <p class="section-desc" style="margin: 0 auto;">Go from zero to live form in under 5 minutes.</p>
+    </div>
+    <div class="steps">
+      <div class="step animate-on-scroll">
+        <div class="step-number">1</div>
+        <div class="step-title">Choose a template</div>
+        <div class="step-desc">Start from 100+ designer-made templates or build from scratch with AI assistance.</div>
+      </div>
+      <div class="step animate-on-scroll">
+        <div class="step-number">2</div>
+        <div class="step-title">Customize everything</div>
+        <div class="step-desc">Match your brand with custom colors, fonts, images, and layout. No coding needed.</div>
+      </div>
+      <div class="step animate-on-scroll">
+        <div class="step-number">3</div>
+        <div class="step-title">Share & collect</div>
+        <div class="step-desc">Publish with a link, embed on your site, or share via QR code. Responses flow in instantly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Integrations -->
+<section class="section integrations">
+  <div class="container">
+    <div class="animate-on-scroll">
+      <div class="section-label" style="justify-content: center;">Integrations</div>
+      <h2 class="section-title">Connects to your stack</h2>
+      <p class="section-desc" style="margin: 0 auto;">FormFlow plays nicely with the tools you already use.</p>
+    </div>
+    <div class="integrations-logos animate-on-scroll">
+      <div class="integration-logo" title="Slack">💬</div>
+      <div class="integration-logo" title="Notion">📝</div>
+      <div class="integration-logo" title="Google Sheets">📊</div>
+      <div class="integration-logo" title="Zapier">⚡</div>
+      <div class="integration-logo" title="Stripe">💳</div>
+      <div class="integration-logo" title="Mailchimp">📧</div>
+      <div class="integration-logo" title="HubSpot">🎯</div>
+      <div class="integration-logo" title="Airtable">🗄️</div>
+      <div class="integration-logo" title="Webhook">🔗</div>
+      <div class="integration-logo" title="API">🛠️</div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="section" id="pricing" style="background: var(--bg-subtle);">
+  <div class="container">
+    <div style="text-align: center;" class="animate-on-scroll">
+      <div class="section-label" style="justify-content: center;">Pricing</div>
+      <h2 class="section-title">Simple, transparent pricing</h2>
+      <p class="section-desc" style="margin: 0 auto;">Start free. Scale as you grow. No hidden fees.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card animate-on-scroll">
+        <div class="pricing-name">Starter</div>
+        <div class="pricing-price">$0<span>/mo</span></div>
+        <div class="pricing-desc">Perfect for personal projects</div>
+        <ul class="pricing-features">
+          <li><span class="pricing-check">✓</span> 3 active forms</li>
+          <li><span class="pricing-check">✓</span> 100 responses/month</li>
+          <li><span class="pricing-check">✓</span> Basic analytics</li>
+          <li><span class="pricing-check">✓</span> Email notifications</li>
+          <li><span class="pricing-check">✓</span> FormFlow branding</li>
+        </ul>
+        <button class="pricing-btn pricing-btn-outline">Get Started Free</button>
+      </div>
+      <div class="pricing-card featured animate-on-scroll">
+        <div class="pricing-name">Pro</div>
+        <div class="pricing-price">$29<span>/mo</span></div>
+        <div class="pricing-desc">For growing teams & businesses</div>
+        <ul class="pricing-features">
+          <li><span class="pricing-check">✓</span> Unlimited forms</li>
+          <li><span class="pricing-check">✓</span> 10,000 responses/month</li>
+          <li><span class="pricing-check">✓</span> Advanced analytics</li>
+          <li><span class="pricing-check">✓</span> AI logic engine</li>
+          <li><span class="pricing-check">✓</span> Custom branding</li>
+          <li><span class="pricing-check">✓</span> Priority support</li>
+        </ul>
+        <button class="pricing-btn pricing-btn-primary">Start 14-Day Trial</button>
+      </div>
+      <div class="pricing-card animate-on-scroll">
+        <div class="pricing-name">Enterprise</div>
+        <div class="pricing-price">$99<span>/mo</span></div>
+        <div class="pricing-desc">For large-scale operations</div>
+        <ul class="pricing-features">
+          <li><span class="pricing-check">✓</span> Everything in Pro</li>
+          <li><span class="pricing-check">✓</span> Unlimited responses</li>
+          <li><span class="pricing-check">✓</span> SSO & SAML</li>
+          <li><span class="pricing-check">✓</span> Dedicated support</li>
+          <li><span class="pricing-check">✓</span> Custom integrations</li>
+          <li><span class="pricing-check">✓</span> SLA guarantee</li>
+        </ul>
+        <button class="pricing-btn pricing-btn-outline">Contact Sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section" id="testimonials">
+  <div class="container">
+    <div style="text-align: center;" class="animate-on-scroll">
+      <div class="section-label" style="justify-content: center;">Testimonials</div>
+      <h2 class="section-title">Loved by 50,000+ creators</h2>
+      <p class="section-desc" style="margin: 0 auto;">See what our customers have to say about FormFlow.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card animate-on-scroll">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"FormFlow completely transformed our lead gen. Our completion rate went from 34% to 78% overnight. The conversational format is a game-changer."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">S</div>
+          <div>
+            <div class="testimonial-name">Sarah Chen</div>
+            <div class="testimonial-role">Marketing Director, TechScale</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card animate-on-scroll">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"We switched from Typeform and never looked back. The AI logic engine saves us hours of setup time. Plus the analytics are incredible."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">M</div>
+          <div>
+            <div class="testimonial-name">Marcus Rivera</div>
+            <div class="testimonial-role">Product Manager, GrowthLab</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card animate-on-scroll">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"The partial submissions feature alone paid for our annual subscription. We recovered 40% of leads we were previously losing."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">A</div>
+          <div>
+            <div class="testimonial-name">Aisha Patel</div>
+            <div class="testimonial-role">Founder, LaunchPad Studio</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card animate-on-scroll">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"Our event registration forms went from boring to beautiful in minutes. The template library is stunning and fully customizable."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">J</div>
+          <div>
+            <div class="testimonial-name">James Mitchell</div>
+            <div class="testimonial-role">Events Lead, Confetti Co</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta-section">
+  <div class="container">
+    <div class="cta-card animate-on-scroll">
+      <h2 class="cta-title">Ready to build better forms?</h2>
+      <p class="cta-desc">Join 50,000+ creators who build beautiful forms with FormFlow. Start free, no credit card required.</p>
+      <div class="cta-actions">
+        <button class="btn-primary">Start Building Free →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <div class="logo-icon">F</div>
+          <span>FormFlow</span>
+        </a>
+        <p>Beautiful forms that convert. Build, share, and analyze — all in one place.</p>
+      </div>
+      <div>
+        <div class="footer-title">Product</div>
+        <ul class="footer-links">
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Templates</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Integrations</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-title">Resources</div>
+        <ul class="footer-links">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Status</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 FormFlow. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="#" title="Twitter">𝕏</a>
+        <a href="#" title="GitHub">⌘</a>
+        <a href="#" title="Discord">💬</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+const navbar = document.querySelector('.navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+// Form preview interaction
+let currentStep = 0;
+const totalSteps = 4;
+
+function updateFormPreview() {
+  document.querySelectorAll('.form-step').forEach((step, i) => {
+    step.classList.toggle('active', i === currentStep);
+  });
+  document.querySelectorAll('.form-progress-dot').forEach((dot, i) => {
+    dot.classList.remove('active', 'done');
+    if (i < currentStep) dot.classList.add('done');
+    if (i === currentStep) dot.classList.add('active');
+  });
+  const prevBtn = document.querySelector('.form-nav-btn.prev');
+  prevBtn.style.visibility = currentStep === 0 ? 'hidden' : 'visible';
+  const nextBtn = document.querySelector('.form-nav-btn.next');
+  nextBtn.textContent = currentStep === totalSteps - 1 ? 'Submit ✓' : 'Continue →';
+}
+
+function nextStep() {
+  if (currentStep < totalSteps - 1) {
+    currentStep++;
+    updateFormPreview();
+  }
+}
+
+function prevStep() {
+  if (currentStep > 0) {
+    currentStep--;
+    updateFormPreview();
+  }
+}
+
+function selectOption(el) {
+  el.parentElement.querySelectorAll('.form-option').forEach(opt => opt.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// Auto-advance form demo
+let autoStepInterval;
+function startAutoDemo() {
+  autoStepInterval = setInterval(() => {
+    currentStep = (currentStep + 1) % totalSteps;
+    updateFormPreview();
+  }, 4000);
+}
+
+// Start auto-demo when form is visible
+const formPreview = document.querySelector('.form-preview');
+const formObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      startAutoDemo();
+    } else {
+      clearInterval(autoStepInterval);
+    }
+  });
+}, { threshold: 0.3 });
+formObserver.observe(formPreview);
+</script>
+
+</body>
+</html>
