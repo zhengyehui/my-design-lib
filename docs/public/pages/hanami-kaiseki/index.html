@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hanami — Kaiseki Dining</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0a0a0a;--cream:#faf8f4;--gold:#c9a96e;--gold-light:#d4b87a;
+  --warm:#f5f0eb;--charcoal:#1a1a1a;--stone:#8a8278;--moss:#4a5d3a;
+  --blush:#e8d5c4;
+}
+html{scroll-behavior:smooth;scroll-snap-type:y proximity}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.6}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:300;letter-spacing:0.04em}
+
+/* ── Navigation ─────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-sticky);padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:background .4s,backdrop-filter .4s}
+nav.scrolled{background:rgba(250,248,244,.92);backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;letter-spacing:.15em;text-transform:uppercase;color:var(--ink);text-decoration:none}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--ink)}
+.nav-reserve{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream);background:var(--ink);padding:.7rem 1.8rem;border:none;cursor:pointer;text-decoration:none;transition:background .3s}
+.nav-reserve:hover{background:var(--charcoal)}
+
+/* ── Hero ───────────────────────────────── */
+.hero{height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;scroll-snap-align:start}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 40%,#2a2018 100%)}
+.hero-pattern{position:absolute;inset:0;opacity:.06;background-image:
+  radial-gradient(circle at 20% 30%,var(--gold) 1px,transparent 1px),
+  radial-gradient(circle at 80% 70%,var(--gold) 1px,transparent 1px),
+  radial-gradient(circle at 50% 50%,var(--gold) .5px,transparent .5px);
+  background-size:60px 60px,80px 80px,40px 40px;animation:patternDrift 20s linear infinite}
+@keyframes patternDrift{to{background-position:60px 60px,-80px -80px,40px 40px}}
+.hero-branch{position:absolute;top:10%;right:5%;width:300px;height:400px;opacity:.12}
+.hero-branch svg{width:100%;height:100%}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:800px;padding:0 2rem}
+.hero-sub{font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;opacity:0;animation:fadeUp 1s .3s forwards}
+.hero-title{font-size:clamp(3rem,8vw,7rem);color:var(--cream);font-weight:300;line-height:1;margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s .5s forwards}
+.hero-title em{font-style:italic;color:var(--gold-light)}
+.hero-desc{font-size:1rem;color:var(--stone);max-width:500px;margin:0 auto 3rem;font-weight:300;line-height:1.8;opacity:0;animation:fadeUp 1s .7s forwards}
+.hero-cta{display:inline-flex;align-items:center;gap:.8rem;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream);text-decoration:none;border:1px solid rgba(201,169,110,.4);padding:1rem 2.5rem;transition:all .4s;opacity:0;animation:fadeUp 1s .9s forwards}
+.hero-cta:hover{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.hero-scroll{position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--stone);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;opacity:0;animation:fadeUp 1s 1.2s forwards}
+.hero-scroll .line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollLine 2s infinite}
+@keyframes scrollLine{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Philosophy ─────────────────────────── */
+.philosophy{padding:8rem 3rem;text-align:center;scroll-snap-align:start}
+.philosophy-inner{max-width:700px;margin:0 auto}
+.section-label{font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;display:flex;align-items:center;justify-content:center;gap:1rem}
+.section-label::before,.section-label::after{content:'';width:30px;height:1px;background:var(--gold)}
+.philosophy h2{font-size:clamp(2rem,4vw,3.5rem);color:var(--ink);margin-bottom:2rem;line-height:1.2}
+.philosophy p{color:var(--stone);font-size:1rem;line-height:2;max-width:550px;margin:0 auto}
+.philosophy-kanji{font-size:8rem;color:rgba(201,169,110,.08);font-family:serif;margin-top:2rem;line-height:1}
+
+/* ── Seasons ────────────────────────────── */
+.seasons{padding:6rem 0;scroll-snap-align:start}
+.seasons-header{text-align:center;padding:0 3rem 4rem}
+.seasons-header h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem}
+.seasons-header p{color:var(--stone);max-width:500px;margin:0 auto}
+.seasons-grid{display:grid;grid-template-columns:repeat(4,1fr);min-height:70vh}
+.season-card{position:relative;overflow:hidden;cursor:pointer;group:true}
+.season-card::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.8) 0%,rgba(10,10,10,.1) 60%,transparent 100%);z-index:1;transition:opacity .5s}
+.season-card:hover::before{opacity:.9}
+.season-visual{width:100%;height:100%;min-height:500px;display:flex;align-items:center;justify-content:center;transition:transform .8s var(--ease-default)}
+.season-card:hover .season-visual{transform:scale(1.05)}
+.sv-spring{background:linear-gradient(180deg,#f8e8e8 0%,#f0d0d0 50%,#e8c0b8 100%)}
+.sv-summer{background:linear-gradient(180deg,#e8f0e0 0%,#c8d8b0 50%,#a8c890 100%)}
+.sv-autumn{background:linear-gradient(180deg,#f0e0c8 0%,#d8b888 50%,#c09060 100%)}
+.sv-winter{background:linear-gradient(180deg,#e8e8f0 0%,#c8c8d8 50%,#a8a8c0 100%)}
+.season-icon{font-size:4rem;opacity:.4}
+.season-info{position:absolute;bottom:0;left:0;right:0;padding:2.5rem;z-index:2;transform:translateY(20px);transition:transform .5s}
+.season-card:hover .season-info{transform:translateY(0)}
+.season-name{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--cream);margin-bottom:.3rem}
+.season-jp{font-size:.75rem;letter-spacing:.2em;color:var(--gold);margin-bottom:.8rem}
+.season-desc{font-size:.85rem;color:rgba(250,248,244,.7);line-height:1.6;max-width:280px}
+
+/* ── Menu ───────────────────────────────── */
+.menu{padding:8rem 3rem;background:var(--ink);scroll-snap-align:start}
+.menu-inner{max-width:1100px;margin:0 auto}
+.menu-header{text-align:center;margin-bottom:5rem}
+.menu-header .section-label{color:var(--gold)}
+.menu-header h2{font-size:clamp(2rem,4vw,3rem);color:var(--cream);margin-bottom:1rem}
+.menu-header p{color:var(--stone);max-width:450px;margin:0 auto}
+.menu-courses{display:flex;flex-direction:column;gap:0}
+.menu-course{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:2.5rem 0;border-bottom:1px solid rgba(201,169,110,.12)}
+.course-num{font-family:'Cormorant Garamond',serif;font-size:3rem;color:rgba(201,169,110,.2);font-weight:300}
+.course-content{text-align:center;padding:0 2rem}
+.course-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--cream);margin-bottom:.3rem}
+.course-jp{font-size:.7rem;letter-spacing:.15em;color:var(--gold);margin-bottom:.5rem}
+.course-desc{font-size:.85rem;color:var(--stone);line-height:1.6}
+.course-price{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold-light);text-align:right}
+.menu-note{text-align:center;margin-top:3rem;font-size:.8rem;color:var(--stone);font-style:italic}
+
+/* ── Space ──────────────────────────────── */
+.space{padding:8rem 3rem;scroll-snap-align:start}
+.space-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.space-visual{position:relative;aspect-ratio:4/5;overflow:hidden}
+.space-img{width:100%;height:100%;background:linear-gradient(135deg,var(--charcoal) 0%,#2a2a2a 50%,#1a1a1a 100%);display:flex;align-items:center;justify-content:center;position:relative}
+.space-img::after{content:'';position:absolute;inset:20%;border:1px solid rgba(201,169,110,.15)}
+.space-kanji{font-size:6rem;color:rgba(201,169,110,.1);font-family:serif}
+.space-badge{position:absolute;bottom:2rem;right:2rem;background:var(--gold);color:var(--ink);padding:.6rem 1.2rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase}
+.space-content .section-label{justify-content:flex-start}
+.space-content h2{font-size:clamp(2rem,3.5vw,3rem);margin-bottom:1.5rem;line-height:1.2}
+.space-content p{color:var(--stone);line-height:2;margin-bottom:2rem}
+.space-features{list-style:none;display:flex;flex-direction:column;gap:1rem}
+.space-features li{display:flex;align-items:center;gap:1rem;font-size:.9rem;color:var(--charcoal)}
+.space-features .dot{width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0}
+
+/* ── Reservation ────────────────────────── */
+.reserve{padding:8rem 3rem;background:var(--charcoal);text-align:center;scroll-snap-align:start;position:relative;overflow:hidden}
+.reserve::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;border:1px solid rgba(201,169,110,.06)}
+.reserve .section-label{color:var(--gold)}
+.reserve h2{font-size:clamp(2rem,4vw,3.5rem);color:var(--cream);margin-bottom:1.5rem}
+.reserve p{color:var(--stone);max-width:450px;margin:0 auto 3rem;line-height:1.8}
+.reserve-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;max-width:800px;margin:0 auto 3rem}
+.reserve-item{text-align:center}
+.reserve-icon{font-size:1.5rem;margin-bottom:.8rem;opacity:.6}
+.reserve-label{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.reserve-value{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--cream)}
+.reserve-btn{display:inline-block;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink);background:var(--gold);padding:1.2rem 3rem;text-decoration:none;transition:all .4s}
+.reserve-btn:hover{background:var(--gold-light);transform:translateY(-2px)}
+
+/* ── Footer ─────────────────────────────── */
+footer{padding:4rem 3rem;background:var(--ink);border-top:1px solid rgba(201,169,110,.08)}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream);font-weight:300}
+.footer-links{display:flex;gap:2rem}
+.footer-links a{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);text-decoration:none;transition:color .3s}
+.footer-links a:hover{color:var(--gold)}
+.footer-copy{font-size:.75rem;color:rgba(138,130,120,.5)}
+
+/* ── Responsive ─────────────────────────── */
+@media(max-width:1024px){
+  .seasons-grid{grid-template-columns:repeat(2,1fr)}
+  .space-inner{grid-template-columns:1fr}
+  .menu-course{grid-template-columns:1fr;text-align:center;gap:1rem}
+  .course-price{text-align:center}
+}
+@media(max-width:640px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .seasons-grid{grid-template-columns:1fr}
+  .season-card .season-visual{min-height:300px}
+  .reserve-grid{grid-template-columns:1fr}
+  .footer-inner{flex-direction:column;gap:1.5rem;text-align:center}
+  .philosophy,.menu,.space,.reserve{padding:5rem 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Hanami</a>
+  <ul class="nav-links">
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#seasons">Seasons</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#space">Space</a></li>
+  </ul>
+  <a href="#reserve" class="nav-reserve">Reserve</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-branch">
+    <svg viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M280 0C280 0 200 80 180 160C160 240 120 280 80 320C40 360 20 400 20 400" stroke="#c9a96e" stroke-width="1" fill="none"/>
+      <circle cx="180" cy="120" r="20" fill="none" stroke="#c9a96e" stroke-width=".5"/>
+      <circle cx="140" cy="200" r="15" fill="none" stroke="#c9a96e" stroke-width=".5"/>
+      <circle cx="100" cy="280" r="25" fill="none" stroke="#c9a96e" stroke-width=".5"/>
+      <circle cx="220" cy="80" r="12" fill="none" stroke="#c9a96e" stroke-width=".5"/>
+      <circle cx="160" cy="180" r="8" fill="rgba(201,169,110,.15)"/>
+      <circle cx="120" cy="260" r="10" fill="rgba(201,169,110,.1)"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <p class="hero-sub">Kyoto · Est. 1987</p>
+    <h1 class="hero-title">Hana<em>mi</em></h1>
+    <p class="hero-desc">A kaiseki dining experience where each dish tells the story of Japan's fleeting seasons, crafted with reverence for nature's impermanence.</p>
+    <a href="#reserve" class="hero-cta">
+      Reserve a Table
+      <span>→</span>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- Philosophy -->
+<section class="philosophy" id="philosophy">
+  <div class="philosophy-inner">
+    <div class="section-label">Our Philosophy</div>
+    <h2>The art of honoring what is fleeting</h2>
+    <p>Kaiseki is more than cuisine — it is a meditation on impermanence. Each plate is composed to reflect the moment: the first cherry blossom of spring, the last crimson maple of autumn. We source exclusively from Kyoto's morning markets and our own garden, ensuring every ingredient speaks of its season.</p>
+    <div class="philosophy-kanji">花</div>
+  </div>
+</section>
+
+<!-- Seasons -->
+<section class="seasons" id="seasons">
+  <div class="seasons-header">
+    <div class="section-label">Seasonal Omakase</div>
+    <h2>Four journeys through the year</h2>
+    <p>Our omakase changes with the turning of seasons, each menu a unique composition of flavor, texture, and beauty.</p>
+  </div>
+  <div class="seasons-grid">
+    <div class="season-card">
+      <div class="season-visual sv-spring">
+        <span class="season-icon">🌸</span>
+      </div>
+      <div class="season-info">
+        <div class="season-name">Spring</div>
+        <div class="season-jp">春 — Haru</div>
+        <p class="season-desc">Cherry blossom, bamboo shoots, and the gentle bitterness of spring greens awaken the palate.</p>
+      </div>
+    </div>
+    <div class="season-card">
+      <div class="season-visual sv-summer">
+        <span class="season-icon">🌿</span>
+      </div>
+      <div class="season-info">
+        <div class="season-name">Summer</div>
+        <div class="season-jp">夏 — Natsu</div>
+        <p class="season-desc">Cooling dishes of ayu, unagi, and seasonal vegetables bring refreshment to warm evenings.</p>
+      </div>
+    </div>
+    <div class="season-card">
+      <div class="season-visual sv-autumn">
+        <span class="season-icon">🍂</span>
+      </div>
+      <div class="season-info">
+        <div class="season-name">Autumn</div>
+        <div class="season-jp">秋 — Aki</div>
+        <p class="season-desc">Matsutake mushrooms, persimmon, and Pacific saury celebrate the harvest's abundance.</p>
+      </div>
+    </div>
+    <div class="season-card">
+      <div class="season-visual sv-winter">
+        <span class="season-icon">❄</span>
+      </div>
+      <div class="season-info">
+        <div class="season-name">Winter</div>
+        <div class="season-jp">冬 — Fuyu</div>
+        <p class="season-desc">Root vegetables, hot pots, and warming broths provide comfort against the Kyoto cold.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Menu -->
+<section class="menu" id="menu">
+  <div class="menu-inner">
+    <div class="menu-header">
+      <div class="section-label">Current Menu</div>
+      <h2>Autumn Omakase</h2>
+      <p>Eight courses celebrating the season's finest offerings</p>
+    </div>
+    <div class="menu-courses">
+      <div class="menu-course">
+        <div class="course-num">01</div>
+        <div class="course-content">
+          <div class="course-jp">先付 — Sakizuke</div>
+          <div class="course-name">Autumn Amuse</div>
+          <p class="course-desc">Chestnut tofu with dashi gelée, shiso microgreens</p>
+        </div>
+        <div class="course-price">—</div>
+      </div>
+      <div class="menu-course">
+        <div class="course-num">02</div>
+        <div class="course-content">
+          <div class="course-jp">八寸 — Hassun</div>
+          <div class="course-name">Seasonal Platter</div>
+          <p class="course-desc">Pacific saury sushi, chrysanthemum, ginkgo nuts, grilled eel</p>
+        </div>
+        <div class="course-price">—</div>
+      </div>
+      <div class="menu-course">
+        <div class="course-num">03</div>
+        <div class="course-content">
+          <div class="course-jp">椀物 — Wanmono</div>
+          <div class="course-name">Clear Soup</div>
+          <p class="course-desc">Matsutake mushroom consommé with yuzu zest and mitsuba</p>
+        </div>
+        <div class="course-price">—</div>
+      </div>
+      <div class="menu-course">
+        <div class="course-num">04</div>
+        <div class="course-content">
+          <div class="course-jp">向付 — Mukōzuke</div>
+          <div class="course-name">Sashimi</div>
+          <p class="course-desc">Hirame and kampachi with freshly grated wasabi from Shizuoka</p>
+        </div>
+        <div class="course-price">—</div>
+      </div>
+      <div class="menu-course">
+        <div class="course-num">05</div>
+        <div class="course-content">
+          <div class="course-jp">焼物 — Yakimono</div>
+          <div class="course-name">Grilled Course</div>
+          <p class="course-desc">Miso-marinated black cod with pickled myoga and shiso</p>
+        </div>
+        <div class="course-price">—</div>
+      </div>
+      <div class="menu-course">
+        <div class="course-num">06</div>
+        <div class="course-content">
+          <div class="course-jp">煮物 — Nimono</div>
+          <div class="course-name">Simmered Dish</div>
+          <p class="course-desc">Kabocha squash in sweet dashi with tofu and edamame</p>
+        </div>
+        <div class="course-price">—</div>
+      </div>
+      <div class="menu-course">
+        <div class="course-num">07</div>
+        <div class="course-content">
+          <div class="course-jp">食事 — Shokuji</div>
+          <div class="course-name">Rice Course</div>
+          <p class="course-desc">Donabe clay pot rice with matsutake, pickles, and miso soup</p>
+        </div>
+        <div class="course-price">—</div>
+      </div>
+      <div class="menu-course">
+        <div class="course-num">08</div>
+        <div class="course-content">
+          <div class="course-jp">水物 — Mizumono</div>
+          <div class="course-name">Dessert</div>
+          <p class="course-desc">Persimmon sorbet with black sesame tuile and matcha</p>
+        </div>
+        <div class="course-price">—</div>
+      </div>
+    </div>
+    <p class="menu-note">¥28,000 per person · Wine pairing available · Please inform us of dietary requirements</p>
+  </div>
+</section>
+
+<!-- Space -->
+<section class="space" id="space">
+  <div class="space-inner">
+    <div class="space-visual">
+      <div class="space-img">
+        <span class="space-kanji">間</span>
+      </div>
+      <div class="space-badge">8 Seats Only</div>
+    </div>
+    <div class="space-content">
+      <div class="section-label">The Space</div>
+      <h2>An intimate sanctuary of stillness</h2>
+      <p>Our counter, carved from a single piece of hinoki cypress, seats only eight guests. The space is designed around the concept of "ma" — the beauty of negative space — where what is absent is as important as what is present.</p>
+      <ul class="space-features">
+        <li><span class="dot"></span>Hand-planed hinoki counter from Yoshino</li>
+        <li><span class="dot"></span>Seasonal ikebana arrangements</li>
+        <li><span class="dot"></span>Private garden view with moss and stone</li>
+        <li><span class="dot"></span>Sake collection of 40+ labels</li>
+        <li><span class="dot"></span>Traditional tatami private room (4 guests)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Reservation -->
+<section class="reserve" id="reserve">
+  <div class="section-label">Reserve</div>
+  <h2>Join us at the counter</h2>
+  <p>We welcome guests for dinner service, Wednesday through Sunday. Reservations are required and open 30 days in advance.</p>
+  <div class="reserve-grid">
+    <div class="reserve-item">
+      <div class="reserve-icon">🕐</div>
+      <div class="reserve-label">Seating</div>
+      <div class="reserve-value">18:00 & 20:30</div>
+    </div>
+    <div class="reserve-item">
+      <div class="reserve-icon">👥</div>
+      <div class="reserve-label">Capacity</div>
+      <div class="reserve-value">8 Guests</div>
+    </div>
+    <div class="reserve-item">
+      <div class="reserve-icon">📅</div>
+      <div class="reserve-label">Days</div>
+      <div class="reserve-value">Wed — Sun</div>
+    </div>
+  </div>
+  <a href="#" class="reserve-btn">Make a Reservation</a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Hanami</div>
+    <div class="footer-links">
+      <a href="#">Instagram</a>
+      <a href="#">Contact</a>
+      <a href="#">Access</a>
+    </div>
+    <div class="footer-copy">© 2026 Hanami Kaiseki · Kyoto, Japan</div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+// Intersection Observer for fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.philosophy-inner, .seasons-header, .menu-course, .space-content, .space-visual, .reserve-grid').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'opacity .8s, transform .8s';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

@@ -253,7 +253,8 @@ export default defineConfig({
             { text: 'FlowMetrics 渐变网格', link: '/pages/gradient-saas' },
             { text: 'Flame 约会应用', link: '/pages/flame-dating' },
             { text: 'MailCraft 邮件营销', link: '/pages/mailcraft-landing' },
-            { text: 'FormFlow 表单构建器', link: '/pages/form-builder' }
+            { text: 'FormFlow 表单构建器', link: '/pages/form-builder' },
+            { text: 'Hanami 怀石料理', link: '/pages/hanami-kaiseki' }
           ]
         },
         {
@@ -423,7 +424,8 @@ export default defineConfig({
             { text: 'Solaire 清洁能源公司', link: '/pages/solar-energy' },
             { text: 'Heart Aerospace 电动航空', link: '/pages/heart-aerospace' },
             { text: 'Nocturn 鸡尾酒吧', link: '/pages/cocktail-bar' },
-            { text: 'Paws & Hope 宠物领养', link: '/pages/paws-shelter' }
+            { text: 'Paws & Hope 宠物领养', link: '/pages/paws-shelter' },
+            { text: 'Fleurette 花艺设计工作室', link: '/pages/fleurette-atelier' }
           ]
         }
       ]

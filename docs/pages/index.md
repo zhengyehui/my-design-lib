@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 154 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 156 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1450,6 +1450,24 @@ const pages = [
     rating: 9.4,
     description: '现代 SaaS 表单构建器落地页，灵感来自 Typeform/Tally，交互式表单预览自动轮播 + 毛玻璃导航 + 特性网格 + 集成展示 + 定价卡片 + 用户评价',
   },
+  {
+    id: 'hanami-kaiseki',
+    title: 'Hanami 怀石料理',
+    category: 'landing',
+    tags: ['日式', '餐厅', '怀石料理', '暗色', '金色配色'],
+    colors: ['#0a0a0a', '#c9a96e', '#faf8f4'],
+    rating: 9.5,
+    description: '高端怀石料理餐厅落地页，暗色太空底 + 金箔色装饰 + CSS 微粒点阵 + SVG 花枝 + 四季卡片 + 菜单时间线 + 预约系统',
+  },
+  {
+    id: 'fleurette-atelier',
+    title: 'Fleurette 花艺设计工作室',
+    category: 'industry',
+    tags: ['花艺', '法式', '浪漫', '有机设计', 'Marquee'],
+    colors: ['#fdfbf8', '#c4756e', '#8fa584'],
+    rating: 9.4,
+    description: '法式花艺设计工作室落地页，CSS Blob 浮动动画 + CSS 花朵旋转 + 服务网格 + Marquee 画廊 + 推荐语 + 浪漫有机配色',
+  },
 ]
 
 const categories = [
@@ -1507,12 +1525,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 154 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 156 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="154 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="156 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1521,7 +1539,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 152 个完整页面</span>
+      <span>📦 154 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

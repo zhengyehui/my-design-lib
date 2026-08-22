@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleurette — Floral Design Atelier</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --petal:#f5e6e0;--blush:#e8c4b8;--sage:#8fa584;--sage-dark:#6b8a5e;
+  --cream:#fdfbf8;--warm:#f8f0e8;--ink:#2a2218;--stone:#8a7e72;
+  --rose:#c4756e;--lavender:#b8a9c8;--gold:#c9a96e;
+  --moss:#5a7a4a;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.6}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:300;letter-spacing:.02em}
+
+/* ── Nav ─────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-sticky);padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .4s}
+nav.scrolled{background:rgba(253,251,248,.95);backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;letter-spacing:.08em;color:var(--ink);text-decoration:none}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cream);background:var(--sage-dark);padding:.7rem 1.8rem;text-decoration:none;transition:all .3s;border-radius:2px}
+.nav-cta:hover{background:var(--sage)}
+
+/* ── Hero ─────────────────────────────────── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:6rem 5rem 6rem 6rem;position:relative}
+.hero-tag{font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
+.hero-tag::before{content:'';width:30px;height:1px;background:var(--sage-dark)}
+.hero h1{font-size:clamp(3rem,5.5vw,5.5rem);line-height:1.05;margin-bottom:1.5rem;color:var(--ink)}
+.hero h1 em{font-style:italic;color:var(--rose)}
+.hero-desc{font-size:1rem;color:var(--stone);max-width:420px;line-height:1.8;margin-bottom:2.5rem}
+.hero-actions{display:flex;gap:1rem;align-items:center}
+.btn-primary{display:inline-block;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;background:var(--sage-dark);color:var(--cream);padding:1rem 2.2rem;text-decoration:none;transition:all .3s;border-radius:2px}
+.btn-primary:hover{background:var(--sage);transform:translateY(-2px)}
+.btn-ghost{display:inline-block;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);border:1px solid var(--blush);padding:1rem 2.2rem;text-decoration:none;transition:all .3s;border-radius:2px}
+.btn-ghost:hover{background:var(--petal);border-color:var(--petal)}
+.hero-right{position:relative;overflow:hidden}
+.hero-visual{width:100%;height:100%;background:linear-gradient(135deg,var(--petal) 0%,var(--blush) 30%,var(--warm) 60%,var(--petal) 100%);display:flex;align-items:center;justify-content:center;position:relative}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(60px);animation:blobFloat 8s ease-in-out infinite}
+.blob-1{width:300px;height:300px;background:rgba(196,117,110,.2);top:20%;left:20%;animation-delay:0s}
+.blob-2{width:250px;height:250px;background:rgba(143,165,132,.2);bottom:20%;right:20%;animation-delay:2s}
+.blob-3{width:200px;height:200px;background:rgba(184,169,200,.2);top:50%;right:30%;animation-delay:4s}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(20px,-20px) scale(1.05)}66%{transform:translate(-15px,15px) scale(.95)}}
+.hero-flower{position:relative;z-index:2;width:280px;height:280px}
+.petal-ring{position:absolute;inset:0;animation:petalSpin 30s linear infinite}
+.petal-ring:nth-child(2){animation-direction:reverse;animation-duration:25s}
+.petal{position:absolute;width:40px;height:80px;border-radius:50%;top:50%;left:50%;transform-origin:0 0}
+@keyframes petalSpin{to{transform:rotate(360deg)}}
+.hero-scroll-hint{position:absolute;bottom:3rem;left:6rem;display:flex;align-items:center;gap:.8rem;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone)}
+.scroll-line{width:40px;height:1px;background:var(--blush);position:relative;overflow:hidden}
+.scroll-line::after{content:'';position:absolute;left:0;top:0;width:100%;height:100%;background:var(--sage-dark);animation:scrollDot 2s infinite}
+@keyframes scrollDot{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* ── About ────────────────────────────────── */
+.about{padding:8rem 6rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.about-visual{position:relative;aspect-ratio:3/4;overflow:hidden}
+.about-img{width:100%;height:100%;background:linear-gradient(180deg,var(--warm) 0%,var(--petal) 50%,var(--blush) 100%);position:relative;display:flex;align-items:center;justify-content:center}
+.about-img::before{content:'';position:absolute;inset:15%;border:1px solid rgba(143,165,132,.2);border-radius:50%}
+.about-img .icon{font-size:4rem;opacity:.2}
+.about-accent{position:absolute;bottom:-20px;right:-20px;width:150px;height:200px;background:var(--sage);opacity:.1}
+.about-content .section-tag{font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+.about-content .section-tag::before{content:'';width:25px;height:1px;background:var(--sage-dark)}
+.about-content h2{font-size:clamp(2rem,3.5vw,3rem);margin-bottom:1.5rem;line-height:1.15}
+.about-content p{color:var(--stone);line-height:2;margin-bottom:1.5rem}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:2.5rem;padding-top:2.5rem;border-top:1px solid rgba(232,196,184,.4)}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--sage-dark);font-weight:300}
+.stat-label{font-size:.75rem;color:var(--stone);letter-spacing:.08em;margin-top:.3rem}
+
+/* ── Services ─────────────────────────────── */
+.services{padding:6rem 6rem;background:var(--warm)}
+.services-header{text-align:center;margin-bottom:4rem}
+.services-header h2{font-size:clamp(2rem,3.5vw,3rem);margin-bottom:1rem}
+.services-header p{color:var(--stone);max-width:450px;margin:0 auto}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;max-width:1100px;margin:0 auto}
+.service-card{background:var(--cream);padding:2.5rem;position:relative;overflow:hidden;transition:all .4s;cursor:pointer}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sage-dark);transform:scaleX(0);transition:transform .4s;transform-origin:left}
+.service-card:hover::before{transform:scaleX(1)}
+.service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.service-icon{font-size:2rem;margin-bottom:1.5rem;display:block}
+.service-card h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:.8rem;font-weight:400}
+.service-card p{font-size:.85rem;color:var(--stone);line-height:1.7}
+.service-price{margin-top:1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--sage-dark)}
+
+/* ── Gallery ──────────────────────────────── */
+.gallery{padding:6rem 0}
+.gallery-header{text-align:center;padding:0 3rem 3rem}
+.gallery-header h2{font-size:clamp(2rem,3.5vw,3rem);margin-bottom:1rem}
+.gallery-header p{color:var(--stone)}
+.gallery-marquee{overflow:hidden;padding:1rem 0}
+.marquee-track{display:flex;gap:1.5rem;width:max-content;animation:marqueeScroll 40s linear infinite}
+.marquee-track:hover{animation-play-state:paused}
+@keyframes marqueeScroll{to{transform:translateX(-50%)}}
+.gallery-item{flex-shrink:0;width:320px;height:400px;position:relative;overflow:hidden;cursor:pointer}
+.gallery-item .visual{width:100%;height:100%;transition:transform .6s}
+.gallery-item:hover .visual{transform:scale(1.05)}
+.gi-1{background:linear-gradient(135deg,#f5e6e0,#e8c4b8,#dbb0a0)}
+.gi-2{background:linear-gradient(135deg,#e8ede5,#c8d8bc,#a8c89c)}
+.gi-3{background:linear-gradient(135deg,#ede5f0,#d0c0d8,#b8a0c8)}
+.gi-4{background:linear-gradient(135deg,#f0e8e0,#e0d0c0,#d0b8a0)}
+.gi-5{background:linear-gradient(135deg,#e5ede8,#c0d8c8,#98c0a8)}
+.gi-6{background:linear-gradient(135deg,#f0e5e8,#e0c0c8,#d0a0b0)}
+.gallery-item .label{position:absolute;bottom:1.5rem;left:1.5rem;z-index:2}
+.gallery-item .label h4{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--cream);text-shadow:0 1px 3px rgba(0,0,0,.2)}
+.gallery-item .label span{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(253,251,248,.8)}
+
+/* ── Testimonials ─────────────────────────── */
+.testimonials{padding:8rem 6rem;background:var(--petal)}
+.testimonials-inner{max-width:900px;margin:0 auto;text-align:center}
+.testimonials h2{font-size:clamp(2rem,3.5vw,3rem);margin-bottom:3rem}
+.testimonial-card{background:var(--cream);padding:3rem;margin-bottom:2rem;position:relative}
+.testimonial-card::before{content:'\201C';position:absolute;top:1rem;left:2rem;font-family:'Cormorant Garamond',serif;font-size:5rem;color:var(--blush);line-height:1;opacity:.5}
+.testimonial-text{font-family:'Cormorant Garamond',serif;font-size:1.4rem;line-height:1.8;color:var(--ink);font-style:italic;margin-bottom:1.5rem;position:relative;z-index:2}
+.testimonial-author{font-size:.8rem;color:var(--stone);letter-spacing:.08em}
+.testimonial-author strong{color:var(--ink);font-weight:500}
+.testimonial-nav{display:flex;justify-content:center;gap:.8rem;margin-top:2rem}
+.testimonial-dot{width:8px;height:8px;border-radius:50%;background:var(--blush);border:none;cursor:pointer;transition:all .3s}
+.testimonial-dot.active{background:var(--sage-dark);transform:scale(1.3)}
+
+/* ── CTA ──────────────────────────────────── */
+.cta{padding:8rem 6rem;text-align:center;background:linear-gradient(135deg,var(--sage-dark) 0%,var(--moss) 100%);color:var(--cream);position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;border:1px solid rgba(253,251,248,.06)}
+.cta h2{font-size:clamp(2rem,4vw,3.5rem);margin-bottom:1rem;color:var(--cream)}
+.cta p{max-width:450px;margin:0 auto 2.5rem;color:rgba(253,251,248,.8);line-height:1.8}
+.cta-btn{display:inline-block;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;background:var(--cream);color:var(--sage-dark);padding:1.1rem 2.8rem;text-decoration:none;transition:all .3s;border-radius:2px}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.15)}
+
+/* ── Footer ───────────────────────────────── */
+footer{padding:4rem 6rem;background:var(--ink);color:var(--cream)}
+.footer-inner{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1100px;margin:0 auto}
+.footer-brand .logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:500;letter-spacing:.05em;margin-bottom:1rem}
+.footer-brand p{font-size:.85rem;color:var(--stone);line-height:1.7;max-width:280px}
+.footer-col h4{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+.footer-col a{display:block;font-size:.85rem;color:var(--stone);text-decoration:none;margin-bottom:.6rem;transition:color .3s}
+.footer-col a:hover{color:var(--cream)}
+.footer-bottom{margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(138,126,114,.15);display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--stone)}
+
+/* ── Responsive ───────────────────────────── */
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr}
+  .hero-left{padding:8rem 3rem 4rem}
+  .hero-right{height:50vh}
+  .hero-scroll-hint{left:3rem}
+  .about{grid-template-columns:1fr;padding:5rem 3rem;gap:3rem}
+  .services-grid{grid-template-columns:1fr 1fr}
+  .footer-inner{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .hero-left{padding:6rem 1.5rem 3rem}
+  .services{padding:4rem 1.5rem}
+  .services-grid{grid-template-columns:1fr}
+  .gallery-item{width:260px;height:320px}
+  .testimonials{padding:5rem 1.5rem}
+  .cta{padding:5rem 1.5rem}
+  .footer-inner{grid-template-columns:1fr}
+  footer{padding:3rem 1.5rem}
+  .about-stats{grid-template-columns:1fr;gap:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Fleurette</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#testimonials">Kind Words</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get in Touch</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Paris · Floral Design Atelier</div>
+    <h1>Where flowers become <em>art</em></h1>
+    <p class="hero-desc">Fleurette is a Parisian floral design studio creating bespoke arrangements for weddings, events, and interiors — each composition a living sculpture of color, texture, and emotion.</p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">Explore Services</a>
+      <a href="#gallery" class="btn-ghost">View Gallery</a>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll to discover</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-blob blob-1"></div>
+      <div class="hero-blob blob-2"></div>
+      <div class="hero-blob blob-3"></div>
+      <div class="hero-flower">
+        <div class="petal-ring" style="transform:rotate(0deg)">
+          <div class="petal" style="background:rgba(196,117,110,.3);transform:rotate(0deg) translate(-20px,-80px)"></div>
+          <div class="petal" style="background:rgba(196,117,110,.25);transform:rotate(45deg) translate(-20px,-80px)"></div>
+          <div class="petal" style="background:rgba(196,117,110,.3);transform:rotate(90deg) translate(-20px,-80px)"></div>
+          <div class="petal" style="background:rgba(196,117,110,.25);transform:rotate(135deg) translate(-20px,-80px)"></div>
+          <div class="petal" style="background:rgba(196,117,110,.3);transform:rotate(180deg) translate(-20px,-80px)"></div>
+          <div class="petal" style="background:rgba(196,117,110,.25);transform:rotate(225deg) translate(-20px,-80px)"></div>
+          <div class="petal" style="background:rgba(196,117,110,.3);transform:rotate(270deg) translate(-20px,-80px)"></div>
+          <div class="petal" style="background:rgba(196,117,110,.25);transform:rotate(315deg) translate(-20px,-80px)"></div>
+        </div>
+        <div class="petal-ring" style="transform:rotate(22deg)">
+          <div class="petal" style="background:rgba(143,165,132,.25);transform:rotate(0deg) translate(-18px,-65px)"></div>
+          <div class="petal" style="background:rgba(143,165,132,.2);transform:rotate(60deg) translate(-18px,-65px)"></div>
+          <div class="petal" style="background:rgba(143,165,132,.25);transform:rotate(120deg) translate(-18px,-65px)"></div>
+          <div class="petal" style="background:rgba(143,165,132,.2);transform:rotate(180deg) translate(-18px,-65px)"></div>
+          <div class="petal" style="background:rgba(143,165,132,.25);transform:rotate(240deg) translate(-18px,-65px)"></div>
+          <div class="petal" style="background:rgba(143,165,132,.2);transform:rotate(300deg) translate(-18px,-65px)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about" id="about">
+  <div class="about-visual">
+    <div class="about-img">
+      <span class="icon">🌿</span>
+    </div>
+    <div class="about-accent"></div>
+  </div>
+  <div class="about-content">
+    <div class="section-tag">Our Story</div>
+    <h2>Rooted in nature, guided by artistry</h2>
+    <p>Founded by floral artist Camille Beaumont in 2014, Fleurette grew from a small Marais studio into one of Paris's most sought-after floral ateliers. Our philosophy is simple: every arrangement should feel like it was just gathered from a secret garden.</p>
+    <p>We source seasonally from French growers and forage from the countryside surrounding Paris, ensuring each creation carries the authentic beauty of the moment.</p>
+    <div class="about-stats">
+      <div>
+        <div class="stat-num">400+</div>
+        <div class="stat-label">Weddings styled</div>
+      </div>
+      <div>
+        <div class="stat-num">12</div>
+        <div class="stat-label">Years of craft</div>
+      </div>
+      <div>
+        <div class="stat-num">8</div>
+        <div class="stat-label">Floral artists</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="services" id="services">
+  <div class="services-header">
+    <h2>What we create</h2>
+    <p>From intimate bouquets to grand installations, each project receives our full creative devotion.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-icon">💐</span>
+      <h3>Wedding Florals</h3>
+      <p>Bridal bouquets, ceremony arches, tablescapes, and venue styling — designed to tell your love story through blooms.</p>
+      <div class="service-price">From €2,500</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🏛</span>
+      <h3>Event Design</h3>
+      <p>Corporate galas, product launches, and private dinners transformed by immersive floral environments.</p>
+      <div class="service-price">From €1,800</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🏠</span>
+      <h3>Interior Florals</h3>
+      <p>Weekly seasonal arrangements for homes, hotels, and restaurants — bringing the garden indoors year-round.</p>
+      <div class="service-price">From €180/week</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🎁</span>
+      <h3>Bespoke Bouquets</h3>
+      <p>Hand-tied seasonal bouquets for every occasion — from celebrations to quiet gestures of care.</p>
+      <div class="service-price">From €65</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">📸</span>
+      <h3>Editorial & Film</h3>
+      <p>Floral styling for photography, film sets, and editorial shoots — creating visual poetry with petals.</p>
+      <div class="service-price">On request</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🎨</span>
+      <h3>Workshops</h3>
+      <p>Seasonal flower arranging classes in our Marais studio — learn the art of composition with living materials.</p>
+      <div class="service-price">€95/person</div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="gallery" id="gallery">
+  <div class="gallery-header">
+    <h2>Our portfolio in bloom</h2>
+    <p>A curated selection of recent work across weddings, events, and editorial projects.</p>
+  </div>
+  <div class="gallery-marquee">
+    <div class="marquee-track">
+      <div class="gallery-item"><div class="visual gi-1"></div><div class="label"><h4>Spring Wedding</h4><span>Château de Versailles</span></div></div>
+      <div class="gallery-item"><div class="visual gi-2"></div><div class="label"><h4>Garden Party</h4><span>Le Bristol Paris</span></div></div>
+      <div class="gallery-item"><div class="visual gi-3"></div><div class="label"><h4>Lavender Fields</h4><span>Provence Editorial</span></div></div>
+      <div class="gallery-item"><div class="visual gi-4"></div><div class="label"><h4>Autumn Tablescape</h4><span>Private Residence</span></div></div>
+      <div class="gallery-item"><div class="visual gi-5"></div><div class="label"><h4>Corporate Gala</h4><span>Palais de Tokyo</span></div></div>
+      <div class="gallery-item"><div class="visual gi-6"></div><div class="label"><h4>Peony Season</h4><span>Studio Collection</span></div></div>
+      <!-- Duplicate for infinite scroll -->
+      <div class="gallery-item"><div class="visual gi-1"></div><div class="label"><h4>Spring Wedding</h4><span>Château de Versailles</span></div></div>
+      <div class="gallery-item"><div class="visual gi-2"></div><div class="label"><h4>Garden Party</h4><span>Le Bristol Paris</span></div></div>
+      <div class="gallery-item"><div class="visual gi-3"></div><div class="label"><h4>Lavender Fields</h4><span>Provence Editorial</span></div></div>
+      <div class="gallery-item"><div class="visual gi-4"></div><div class="label"><h4>Autumn Tablescape</h4><span>Private Residence</span></div></div>
+      <div class="gallery-item"><div class="visual gi-5"></div><div class="label"><h4>Corporate Gala</h4><span>Palais de Tokyo</span></div></div>
+      <div class="gallery-item"><div class="visual gi-6"></div><div class="label"><h4>Peony Season</h4><span>Studio Collection</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials" id="testimonials">
+  <div class="testimonials-inner">
+    <h2>Kind words</h2>
+    <div class="testimonial-card">
+      <p class="testimonial-text">Fleurette didn't just arrange flowers — they painted with them. Our wedding felt like stepping into a Monet garden. Every guest commented on the breathtaking beauty of the arrangements.</p>
+      <p class="testimonial-author"><strong>Sophie & Antoine Laurent</strong> · Wedding at Château de Chantilly</p>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-text">The weekly arrangements for our restaurant have transformed the dining room. Guests often ask if they can take the flowers home. Camille's team understands the language of flowers like no one else.</p>
+      <p class="testimonial-author"><strong>Jean-Pierre Moreau</strong> · Chef & Owner, Le Petit Versailles</p>
+    </div>
+    <div class="testimonial-nav">
+      <button class="testimonial-dot active"></button>
+      <button class="testimonial-dot"></button>
+      <button class="testimonial-dot"></button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <h2>Let's create something beautiful</h2>
+  <p>Whether it's a wedding, an event, or a weekly arrangement for your home — we'd love to hear your vision.</p>
+  <a href="#" class="cta-btn">Start a Conversation</a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">Fleurette</div>
+      <p>A Parisian floral design atelier creating bespoke botanical art for weddings, events, and interiors since 2014.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="#">Wedding Florals</a>
+      <a href="#">Event Design</a>
+      <a href="#">Interior Florals</a>
+      <a href="#">Workshops</a>
+    </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <a href="#">Our Story</a>
+      <a href="#">The Team</a>
+      <a href="#">Journal</a>
+      <a href="#">Press</a>
+    </div>
+    <div class="footer-col">
+      <h4>Visit Us</h4>
+      <a href="#">12 Rue de Turenne</a>
+      <a href="#">75003 Paris, France</a>
+      <a href="#">+33 1 42 78 xx xx</a>
+      <a href="#">hello@fleurette.fr</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Fleurette Atelier</span>
+    <span>Instagram · Pinterest · TikTok</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+// Intersection Observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.about-content, .about-visual, .service-card, .testimonial-card, .cta h2, .cta p').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = `opacity .6s ${i * .05}s, transform .6s ${i * .05}s`;
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
