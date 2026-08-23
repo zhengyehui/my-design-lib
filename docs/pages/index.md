@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 156 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 159 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1467,6 +1467,15 @@ const pages = [
     colors: ['#fdfbf8', '#c4756e', '#8fa584'],
     rating: 9.4,
     description: '法式花艺设计工作室落地页，CSS Blob 浮动动画 + CSS 花朵旋转 + 服务网格 + Marquee 画廊 + 推荐语 + 浪漫有机配色',
+  },
+  {
+    id: 'api-forge',
+    title: 'APIForge 开发者 API 控制台',
+    category: 'app',
+    tags: ['API', '开发者工具', '控制台', '暗色主题', '代码高亮'],
+    colors: ['#0a0b10', '#6366f1', '#06b6d4'],
+    rating: 9.5,
+    description: '暗色系开发者 API 控制台，三栏布局端点导航 + 请求构造器 + JSON 语法高亮响应 + 方法变色选择器 + 键值对参数编辑器 + 闪烁光标终端效果',
   },
 ]
 

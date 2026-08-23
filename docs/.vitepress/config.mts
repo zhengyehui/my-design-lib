@@ -311,6 +311,7 @@ export default defineConfig({
             { text: 'Nebula Canvas 协作白板', link: '/pages/nebula-canvas' },
             { text: 'Forkful 美食食谱应用', link: '/pages/forkful-recipes' },
             { text: 'Neuron AI 工作台仪表盘', link: '/pages/ai-workspace' },
+            { text: 'APIForge API 控制台', link: '/pages/api-forge' },
           ]
         },
         {

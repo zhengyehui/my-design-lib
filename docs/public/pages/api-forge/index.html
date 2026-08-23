@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APIForge — Developer API Console</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0b10;--bg-elevated:#12131a;--bg-surface:#181920;--bg-hover:#1e2028;
+  --border:#252730;--border-focus:#6366f1;
+  --text:#e2e8f0;--text-secondary:#8892a4;--text-muted:#555e6e;
+  --accent:#6366f1;--accent-light:#818cf8;--accent-glow:rgba(99,102,241,.15);
+  --green:#10b981;--green-bg:rgba(16,185,129,.1);
+  --red:#ef4444;--red-bg:rgba(239,68,68,.1);
+  --yellow:#f59e0b;--yellow-bg:rgba(245,158,11,.1);
+  --cyan:#06b6d4;--cyan-bg:rgba(6,182,212,.1);
+  --orange:#f97316;
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono','Fira Code','SF Mono',monospace;
+  --radius:8px;--radius-lg:12px;--radius-xl:16px;
+}
+html{font-size:14px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── Noise texture overlay ── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ── Glow orbs ── */
+.glow{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;opacity:.4}
+.glow-1{width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,.3),transparent 70%);top:-150px;right:-100px}
+.glow-2{width:400px;height:400px;background:radial-gradient(circle,rgba(6,182,212,.2),transparent 70%);bottom:-100px;left:-100px}
+
+/* ── Layout ── */
+.app{display:grid;grid-template-columns:260px 1fr;grid-template-rows:56px 1fr;height:100vh;position:relative;z-index:1}
+
+/* ── Navbar ── */
+.navbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--bg-elevated);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+.navbar-brand{display:flex;align-items:center;gap:10px}
+.navbar-logo{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
+.navbar-title{font-weight:700;font-size:15px;letter-spacing:-.02em}
+.navbar-title span{color:var(--text-muted);font-weight:400;margin-left:6px;font-size:12px}
+.navbar-actions{display:flex;align-items:center;gap:12px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.status-text{font-size:12px;color:var(--text-secondary)}
+.env-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--green-bg);color:var(--green);border:1px solid rgba(16,185,129,.2)}
+.api-key-pill{font-family:var(--font-mono);font-size:11px;padding:4px 12px;border-radius:20px;background:var(--bg-surface);border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all .2s}
+.api-key-pill:hover{border-color:var(--accent);color:var(--text)}
+
+/* ── Sidebar ── */
+.sidebar{background:var(--bg-elevated);border-right:1px solid var(--border);overflow-y:auto;padding:16px 0}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.sidebar-section{margin-bottom:8px}
+.sidebar-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);padding:8px 20px 6px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 20px;cursor:pointer;transition:all .15s;border-left:2px solid transparent;font-size:13px;color:var(--text-secondary)}
+.sidebar-item:hover{background:var(--bg-hover);color:var(--text)}
+.sidebar-item.active{background:var(--accent-glow);color:var(--accent-light);border-left-color:var(--accent)}
+.method-tag{font-family:var(--font-mono);font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;min-width:36px;text-align:center;flex-shrink:0}
+.method-get{background:var(--green-bg);color:var(--green)}
+.method-post{background:var(--yellow-bg);color:var(--yellow)}
+.method-put{background:var(--cyan-bg);color:var(--cyan)}
+.method-delete{background:var(--red-bg);color:var(--red)}
+.sidebar-item .path{font-family:var(--font-mono);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── Main content ── */
+.main{display:grid;grid-template-rows:auto 1fr;overflow:hidden}
+
+/* ── Request bar ── */
+.request-bar{display:flex;align-items:center;gap:0;padding:16px 24px;background:var(--bg-elevated);border-bottom:1px solid var(--border)}
+.method-select{font-family:var(--font-mono);font-weight:700;font-size:13px;padding:10px 16px;background:var(--green-bg);color:var(--green);border:1px solid rgba(16,185,129,.2);border-radius:var(--radius) 0 0 var(--radius);cursor:pointer;appearance:none;min-width:90px;text-align:center}
+.url-input{flex:1;font-family:var(--font-mono);font-size:13px;padding:10px 16px;background:var(--bg-surface);border:1px solid var(--border);border-left:none;border-right:none;color:var(--text);outline:none;transition:border-color .2s}
+.url-input:focus{border-color:var(--accent)}
+.url-input::placeholder{color:var(--text-muted)}
+.send-btn{padding:10px 28px;background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;font-weight:600;font-size:13px;border:none;border-radius:0 var(--radius) var(--radius) 0;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.send-btn:hover{filter:brightness(1.1);transform:translateX(1px)}
+.send-btn:active{transform:scale(.98)}
+.send-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);transform:translateX(-100%);transition:transform .5s}
+.send-btn:hover::after{transform:translateX(100%)}
+
+/* ── Panels ── */
+.panels{display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.panel{display:flex;flex-direction:column;overflow:hidden}
+.panel:first-child{border-right:1px solid var(--border)}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--bg-surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.panel-tabs{display:flex;gap:0}
+.panel-tab{font-size:12px;font-weight:500;padding:6px 14px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;transition:all .15s}
+.panel-tab:hover{color:var(--text-secondary)}
+.panel-tab.active{color:var(--accent-light);border-bottom-color:var(--accent)}
+.panel-badge{font-family:var(--font-mono);font-size:10px;padding:2px 6px;border-radius:10px;margin-left:6px}
+.status-200{background:var(--green-bg);color:var(--green)}
+.status-404{background:var(--red-bg);color:var(--red)}
+.status-401{background:var(--yellow-bg);color:var(--yellow)}
+.response-meta{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--text-muted)}
+.response-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--text-muted)}
+.panel-body{flex:1;overflow-y:auto;padding:0;background:var(--bg)}
+.panel-body::-webkit-scrollbar{width:6px}
+.panel-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* ── Code editor area ── */
+.code-area{font-family:var(--font-mono);font-size:12.5px;line-height:1.7;padding:16px 20px;color:var(--text);white-space:pre-wrap;word-break:break-all;min-height:100%}
+.code-area .line{display:flex}
+.code-area .line-num{color:var(--text-muted);min-width:32px;text-align:right;padding-right:16px;user-select:none;flex-shrink:0}
+.code-area .key{color:#7dd3fc}
+.code-area .string{color:#86efac}
+.code-area .number{color:#fbbf24}
+.code-area .bool{color:#c084fc}
+.code-area .null{color:var(--text-muted)}
+.code-area .bracket{color:var(--text-secondary)}
+.code-area .comment{color:var(--text-muted);font-style:italic}
+
+/* ── Key-Value editor ── */
+.kv-editor{padding:12px 20px}
+.kv-row{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin-bottom:6px}
+.kv-input{font-family:var(--font-mono);font-size:12px;padding:7px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);outline:none;transition:border-color .15s}
+.kv-input:focus{border-color:var(--accent)}
+.kv-input::placeholder{color:var(--text-muted)}
+.kv-delete{display:flex;align-items:center;justify-content:center;background:none;border:none;color:var(--text-muted);cursor:pointer;border-radius:var(--radius);transition:all .15s}
+.kv-delete:hover{background:var(--red-bg);color:var(--red)}
+.kv-add{font-size:12px;color:var(--accent);background:none;border:1px dashed var(--border);border-radius:var(--radius);padding:7px;cursor:pointer;width:100%;margin-top:4px;transition:all .15s}
+.kv-add:hover{border-color:var(--accent);background:var(--accent-glow)}
+
+/* ── Auth section ── */
+.auth-section{padding:16px 20px}
+.auth-type{display:flex;gap:8px;margin-bottom:16px}
+.auth-type-btn{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;transition:all .15s}
+.auth-type-btn.active{background:var(--accent-glow);border-color:var(--accent);color:var(--accent-light)}
+.auth-token-display{font-family:var(--font-mono);font-size:11px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-secondary);word-break:break-all;position:relative}
+.auth-token-display::before{content:'Bearer ';color:var(--text-muted)}
+
+/* ── Response status bar ── */
+.response-status{display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--bg-surface);border-bottom:1px solid var(--border);font-size:12px}
+.status-badge{font-family:var(--font-mono);font-weight:600;padding:3px 10px;border-radius:4px}
+.status-badge.s200{background:var(--green-bg);color:var(--green)}
+.status-badge.s404{background:var(--red-bg);color:var(--red)}
+.response-stat{color:var(--text-muted)}
+.response-stat strong{color:var(--text-secondary)}
+
+/* ── Request history ── */
+.history-item{display:flex;align-items:center;gap:10px;padding:6px 20px;font-size:11px;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.history-item:hover{background:var(--bg-hover)}
+.history-time{font-family:var(--font-mono);min-width:50px}
+
+/* ── Animations ── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes typing{from{width:0}to{width:100%}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.cursor-blink{animation:blink 1s step-end infinite;color:var(--accent)}
+.animate-in{animation:fadeIn .4s ease both}
+.animate-in-delay-1{animation:fadeIn .4s ease .1s both}
+.animate-in-delay-2{animation:fadeIn .4s ease .2s both}
+
+/* ── Loading shimmer ── */
+.shimmer{background:linear-gradient(90deg,var(--bg-surface) 25%,var(--bg-hover) 50%,var(--bg-surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── Bottom bar ── */
+.bottom-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 20px;background:var(--bg-elevated);border-top:1px solid var(--border);font-size:11px;color:var(--text-muted)}
+.bottom-bar .env{display:flex;align-items:center;gap:6px}
+.bottom-bar kbd{font-family:var(--font-mono);font-size:10px;padding:2px 6px;background:var(--bg-surface);border:1px solid var(--border);border-radius:3px}
+
+/* ── Collection panel ── */
+.collection-header{padding:16px 20px;border-bottom:1px solid var(--border)}
+.collection-search{width:100%;font-size:12px;padding:8px 12px 8px 32px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);outline:none;transition:border-color .15s}
+.collection-search:focus{border-color:var(--accent)}
+.search-wrapper{position:relative}
+.search-wrapper::before{content:'⌕';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:14px}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .panels{grid-template-columns:1fr}
+  .panel:first-child{border-right:none;border-bottom:1px solid var(--border)}
+}
+</style>
+</head>
+<body>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<div class="app">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-logo">⚡</div>
+      <div class="navbar-title">APIForge<span>v2.4.0</span></div>
+    </div>
+    <div class="navbar-actions">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="status-dot"></div>
+        <span class="status-text">All systems operational</span>
+      </div>
+      <span class="env-badge">Production</span>
+      <span class="api-key-pill">sk_live_••••••••4f2a</span>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="collection-header">
+      <div class="search-wrapper">
+        <input type="text" class="collection-search" placeholder="Search endpoints...">
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Users</div>
+      <div class="sidebar-item active">
+        <span class="method-tag method-get">GET</span>
+        <span class="path">/v2/users</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-get">GET</span>
+        <span class="path">/v2/users/:id</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-post">POST</span>
+        <span class="path">/v2/users</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-put">PUT</span>
+        <span class="path">/v2/users/:id</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-delete">DEL</span>
+        <span class="path">/v2/users/:id</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Projects</div>
+      <div class="sidebar-item">
+        <span class="method-tag method-get">GET</span>
+        <span class="path">/v2/projects</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-post">POST</span>
+        <span class="path">/v2/projects</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-get">GET</span>
+        <span class="path">/v2/projects/:id/members</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Analytics</div>
+      <div class="sidebar-item">
+        <span class="method-tag method-get">GET</span>
+        <span class="path">/v2/analytics/events</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-post">POST</span>
+        <span class="path">/v2/analytics/track</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-get">GET</span>
+        <span class="path">/v2/analytics/reports</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Webhooks</div>
+      <div class="sidebar-item">
+        <span class="method-tag method-get">GET</span>
+        <span class="path">/v2/webhooks</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-post">POST</span>
+        <span class="path">/v2/webhooks</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="method-tag method-delete">DEL</span>
+        <span class="path">/v2/webhooks/:id</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Recent History</div>
+      <div class="history-item">
+        <span class="history-time">10:42</span>
+        <span class="method-tag method-get">GET</span>
+        <span class="path">/v2/users</span>
+      </div>
+      <div class="history-item">
+        <span class="history-time">10:38</span>
+        <span class="method-tag method-post">POST</span>
+        <span class="path">/v2/analytics/track</span>
+      </div>
+      <div class="history-item">
+        <span class="history-time">10:35</span>
+        <span class="method-tag method-get">GET</span>
+        <span class="path">/v2/projects</span>
+      </div>
+      <div class="history-item">
+        <span class="history-time">10:31</span>
+        <span class="method-tag method-put">PUT</span>
+        <span class="path">/v2/users/:id</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Request Bar -->
+    <div class="request-bar animate-in">
+      <select class="method-select" id="methodSelect">
+        <option value="GET" style="color:#10b981">GET</option>
+        <option value="POST" style="color:#f59e0b">POST</option>
+        <option value="PUT" style="color:#06b6d4">PUT</option>
+        <option value="DELETE" style="color:#ef4444">DELETE</option>
+      </select>
+      <input type="text" class="url-input" value="https://api.forge.dev/v2/users?page=1&limit=20" spellcheck="false">
+      <button class="send-btn" id="sendBtn">
+        <span>Send</span> ⚡
+      </button>
+    </div>
+
+    <!-- Panels -->
+    <div class="panels">
+      <!-- Request Panel -->
+      <div class="panel animate-in-delay-1">
+        <div class="panel-header">
+          <div class="panel-tabs">
+            <div class="panel-tab active">Params</div>
+            <div class="panel-tab">Headers</div>
+            <div class="panel-tab">Body</div>
+            <div class="panel-tab">Auth</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <!-- Params -->
+          <div class="kv-editor" id="paramsEditor">
+            <div class="kv-row">
+              <input class="kv-input" value="page" readonly>
+              <input class="kv-input" value="1">
+              <button class="kv-delete">✕</button>
+            </div>
+            <div class="kv-row">
+              <input class="kv-input" value="limit" readonly>
+              <input class="kv-input" value="20">
+              <button class="kv-delete">✕</button>
+            </div>
+            <div class="kv-row">
+              <input class="kv-input" value="sort" readonly>
+              <input class="kv-input" value="created_at:desc">
+              <button class="kv-delete">✕</button>
+            </div>
+            <div class="kv-row">
+              <input class="kv-input" value="status" readonly>
+              <input class="kv-input" value="active">
+              <button class="kv-delete">✕</button>
+            </div>
+            <button class="kv-add">+ Add parameter</button>
+          </div>
+
+          <!-- Headers (hidden by default) -->
+          <div class="kv-editor" style="display:none">
+            <div class="kv-row">
+              <input class="kv-input" value="Content-Type" readonly>
+              <input class="kv-input" value="application/json">
+              <button class="kv-delete">✕</button>
+            </div>
+            <div class="kv-row">
+              <input class="kv-input" value="X-Request-Id" readonly>
+              <input class="kv-input" value="req_7f3a2b1c">
+              <button class="kv-delete">✕</button>
+            </div>
+            <div class="kv-row">
+              <input class="kv-input" value="Accept" readonly>
+              <input class="kv-input" value="application/json">
+              <button class="kv-delete">✕</button>
+            </div>
+            <button class="kv-add">+ Add header</button>
+          </div>
+
+          <!-- Body (hidden) -->
+          <div style="display:none">
+            <div class="code-area"><span class="bracket">{</span>
+  <span class="key">"name"</span>: <span class="string">"Ada Lovelace"</span>,
+  <span class="key">"email"</span>: <span class="string">"ada@forge.dev"</span>,
+  <span class="key">"role"</span>: <span class="string">"admin"</span>,
+  <span class="key">"metadata"</span>: <span class="bracket">{</span>
+    <span class="key">"team"</span>: <span class="string">"engineering"</span>,
+    <span class="key">"tier"</span>: <span class="string">"enterprise"</span>
+  <span class="bracket">}</span>
+<span class="bracket">}</span></div>
+          </div>
+
+          <!-- Auth (hidden) -->
+          <div style="display:none" class="auth-section">
+            <div class="auth-type">
+              <button class="auth-type-btn active">Bearer Token</button>
+              <button class="auth-type-btn">API Key</button>
+              <button class="auth-type-btn">OAuth 2.0</button>
+            </div>
+            <div class="auth-token-display">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFQSSBGb3JnZSIsImlhdCI6MTcxNjIzOTAyMn0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Response Panel -->
+      <div class="panel animate-in-delay-2">
+        <div class="panel-header">
+          <div class="panel-tabs">
+            <div class="panel-tab active">Body</div>
+            <div class="panel-tab">Headers <span class="panel-badge status-200">12</span></div>
+            <div class="panel-tab">Cookies</div>
+            <div class="panel-tab">Timeline</div>
+          </div>
+          <div class="response-meta">
+            <span class="status-badge s200">200 OK</span>
+            <span>142ms</span>
+            <span class="dot"></span>
+            <span>3.2 KB</span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="code-area"><span class="bracket">{</span>
+  <span class="key">"data"</span>: <span class="bracket">[</span>
+    <span class="bracket">{</span>
+      <span class="key">"id"</span>: <span class="string">"usr_8f2a3b1c"</span>,
+      <span class="key">"name"</span>: <span class="string">"Ada Lovelace"</span>,
+      <span class="key">"email"</span>: <span class="string">"ada@forge.dev"</span>,
+      <span class="key">"role"</span>: <span class="string">"admin"</span>,
+      <span class="key">"status"</span>: <span class="string">"active"</span>,
+      <span class="key">"created_at"</span>: <span class="string">"2026-01-15T09:42:00Z"</span>,
+      <span class="key">"last_login"</span>: <span class="string">"2026-08-23T08:12:33Z"</span>,
+      <span class="key">"projects_count"</span>: <span class="number">12</span>,
+      <span class="key">"metadata"</span>: <span class="bracket">{</span>
+        <span class="key">"team"</span>: <span class="string">"engineering"</span>,
+        <span class="key">"tier"</span>: <span class="string">"enterprise"</span>
+      <span class="bracket">}</span>
+    <span class="bracket">}</span>,
+    <span class="bracket">{</span>
+      <span class="key">"id"</span>: <span class="string">"usr_5c7d9e2f"</span>,
+      <span class="key">"name"</span>: <span class="string">"Grace Hopper"</span>,
+      <span class="key">"email"</span>: <span class="string">"grace@forge.dev"</span>,
+      <span class="key">"role"</span>: <span class="string">"developer"</span>,
+      <span class="key">"status"</span>: <span class="string">"active"</span>,
+      <span class="key">"created_at"</span>: <span class="string">"2026-03-22T14:08:00Z"</span>,
+      <span class="key">"last_login"</span>: <span class="string">"2026-08-22T16:45:12Z"</span>,
+      <span class="key">"projects_count"</span>: <span class="number">8</span>,
+      <span class="key">"metadata"</span>: <span class="bracket">{</span>
+        <span class="key">"team"</span>: <span class="string">"platform"</span>,
+        <span class="key">"tier"</span>: <span class="string">"pro"</span>
+      <span class="bracket">}</span>
+    <span class="bracket">}</span>,
+    <span class="bracket">{</span>
+      <span class="key">"id"</span>: <span class="string">"usr_1a4b6c8d"</span>,
+      <span class="key">"name"</span>: <span class="string">"Alan Turing"</span>,
+      <span class="key">"email"</span>: <span class="string">"alan@forge.dev"</span>,
+      <span class="key">"role"</span>: <span class="string">"viewer"</span>,
+      <span class="key">"status"</span>: <span class="string">"active"</span>,
+      <span class="key">"created_at"</span>: <span class="string">"2026-05-10T11:20:00Z"</span>,
+      <span class="key">"last_login"</span>: <span class="string">"2026-08-21T09:30:45Z"</span>,
+      <span class="key">"projects_count"</span>: <span class="number">3</span>,
+      <span class="key">"metadata"</span>: <span class="bracket">{</span>
+        <span class="key">"team"</span>: <span class="string">"research"</span>,
+        <span class="key">"tier"</span>: <span class="string">"starter"</span>
+      <span class="bracket">}</span>
+    <span class="bracket">}</span>
+  <span class="bracket">]</span>,
+  <span class="key">"meta"</span>: <span class="bracket">{</span>
+    <span class="key">"page"</span>: <span class="number">1</span>,
+    <span class="key">"limit"</span>: <span class="number">20</span>,
+    <span class="key">"total"</span>: <span class="number">847</span>,
+    <span class="key">"has_more"</span>: <span class="bool">true</span>
+  <span class="bracket">}</span>,
+  <span class="key">"request_id"</span>: <span class="string">"req_7f3a2b1c9d4e"</span>,
+  <span class="key">"rate_limit"</span>: <span class="bracket">{</span>
+    <span class="key">"remaining"</span>: <span class="number">4982</span>,
+    <span class="key">"reset_at"</span>: <span class="string">"2026-08-23T11:00:00Z"</span>
+  <span class="bracket">}</span>
+<span class="bracket">}</span><span class="cursor-blink">▌</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <div class="env">
+        <span class="status-dot" style="width:6px;height:6px"></span>
+        <span>Connected to <strong style="color:var(--text-secondary)">api.forge.dev</strong></span>
+      </div>
+      <div style="display:flex;gap:16px">
+        <span><kbd>⌘</kbd> + <kbd>Enter</kbd> Send</span>
+        <span><kbd>⌘</kbd> + <kbd>K</kbd> Quick Switch</span>
+        <span><kbd>⌘</kbd> + <kbd>S</kbd> Save to Collection</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Interactive method select color
+const methodSelect = document.getElementById('methodSelect');
+const methodColors = {GET:'var(--green)',POST:'var(--yellow)',PUT:'var(--cyan)',DELETE:'var(--red)'};
+const methodBgs = {GET:'var(--green-bg)',POST:'var(--yellow-bg)',PUT:'var(--cyan-bg)',DELETE:'var(--red-bg)'};
+
+methodSelect.addEventListener('change', () => {
+  const v = methodSelect.value;
+  methodSelect.style.color = methodColors[v];
+  methodSelect.style.background = methodBgs[v];
+  methodSelect.style.borderColor = methodColors[v].replace('var(','').replace(')','').trim();
+});
+
+// Send button animation
+const sendBtn = document.getElementById('sendBtn');
+sendBtn.addEventListener('click', () => {
+  sendBtn.innerHTML = '<span>Sending...</span> ⏳';
+  sendBtn.style.pointerEvents = 'none';
+  setTimeout(() => {
+    sendBtn.innerHTML = '<span>Send</span> ⚡';
+    sendBtn.style.pointerEvents = 'auto';
+  }, 800);
+});
+
+// Sidebar item click
+document.querySelectorAll('.sidebar-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+// Panel tab switching
+document.querySelectorAll('.panel-tabs').forEach(tabs => {
+  tabs.querySelectorAll('.panel-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+});
+
+// Auth type switching
+document.querySelectorAll('.auth-type-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.auth-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
