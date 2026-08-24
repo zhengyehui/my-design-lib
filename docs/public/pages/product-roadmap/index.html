@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse Roadmap — Public Product Roadmap</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+    background: #08080d;
+    color: #e2e8f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ═══ Ambient Background ═══ */
+  .ambient {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .ambient::before {
+    content: ''; position: absolute;
+    top: -200px; left: -100px; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    animation: float1 20s ease-in-out infinite;
+  }
+  .ambient::after {
+    content: ''; position: absolute;
+    bottom: -200px; right: -100px; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 70%);
+    animation: float2 25s ease-in-out infinite;
+  }
+  @keyframes float1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(60px, 40px); } }
+  @keyframes float2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-50px, -30px); } }
+
+  /* ═══ Container ═══ */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+
+  /* ═══ Navigation ═══ */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(8, 8, 13, 0.75);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 2rem;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-weight: 700; font-size: 1.1rem; color: #fff;
+    text-decoration: none;
+  }
+  .nav-brand .logo {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, #6366f1, #06b6d4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 800; color: #fff;
+  }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a {
+    color: #94a3b8; text-decoration: none; font-size: 0.875rem;
+    font-weight: 500; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-cta {
+    background: #6366f1; color: #fff !important;
+    padding: 0.5rem 1.25rem; border-radius: 8px;
+    font-weight: 600 !important; font-size: 0.85rem;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: #4f46e5; transform: translateY(-1px); }
+
+  /* ═══ Hero ═══ */
+  .hero {
+    text-align: center; padding: 5rem 0 3rem;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 100px; padding: 0.4rem 1.2rem;
+    font-size: 0.8rem; color: #818cf8; font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #22c55e; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800;
+    color: #fff; line-height: 1.15; margin-bottom: 1rem;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, #6366f1, #06b6d4);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1.1rem; color: #94a3b8; max-width: 600px;
+    margin: 0 auto 2rem; line-height: 1.7;
+  }
+
+  /* ═══ Stats Bar ═══ */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 3rem;
+    margin-bottom: 3rem; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-value { font-size: 2rem; font-weight: 800; color: #fff; }
+  .stat-label { font-size: 0.8rem; color: #64748b; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* ═══ Filter Bar ═══ */
+  .filter-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;
+  }
+  .filter-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .filter-tab {
+    padding: 0.45rem 1rem; border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent; color: #94a3b8;
+    font-size: 0.82rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; font-family: inherit;
+  }
+  .filter-tab:hover { border-color: rgba(99, 102, 241, 0.3); color: #e2e8f0; }
+  .filter-tab.active {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: #818cf8;
+  }
+  .search-box {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; padding: 0.5rem 1rem; min-width: 240px;
+  }
+  .search-box svg { color: #64748b; flex-shrink: 0; }
+  .search-box input {
+    background: none; border: none; outline: none;
+    color: #e2e8f0; font-size: 0.85rem; font-family: inherit;
+    width: 100%;
+  }
+  .search-box input::placeholder { color: #4a5568; }
+
+  /* ═══ Board Layout ═══ */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+  @media (max-width: 900px) { .board { grid-template-columns: 1fr; } }
+
+  .board-column {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 1.25rem;
+    min-height: 400px;
+  }
+  .column-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem; padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .column-header-left { display: flex; align-items: center; gap: 0.6rem; }
+  .column-icon {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .column-title {
+    font-size: 0.82rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: #94a3b8;
+  }
+  .column-count {
+    font-size: 0.7rem; font-weight: 600;
+    background: rgba(255,255,255,0.06);
+    color: #64748b; padding: 2px 8px;
+    border-radius: 100px;
+  }
+
+  /* ═══ Feature Cards ═══ */
+  .feature-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 1.1rem;
+    margin-bottom: 0.75rem;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .feature-card:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(99, 102, 241, 0.2);
+    transform: translateY(-2px);
+  }
+  .card-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 0.75rem; margin-bottom: 0.6rem;
+  }
+  .card-title {
+    font-size: 0.92rem; font-weight: 600; color: #e2e8f0;
+    line-height: 1.4;
+  }
+  .card-vote {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 2px; flex-shrink: 0; min-width: 36px;
+  }
+  .vote-btn {
+    width: 32px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px; color: #64748b;
+    cursor: pointer; transition: all 0.2s; font-size: 0.65rem;
+  }
+  .vote-btn:hover { background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #818cf8; }
+  .vote-count { font-size: 0.72rem; font-weight: 700; color: #94a3b8; }
+  .card-desc {
+    font-size: 0.8rem; color: #64748b; line-height: 1.6;
+    margin-bottom: 0.8rem;
+  }
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .card-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .card-tag {
+    font-size: 0.68rem; font-weight: 600;
+    padding: 0.15rem 0.55rem; border-radius: 100px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .tag-feature { background: rgba(99, 102, 241, 0.12); color: #818cf8; }
+  .tag-improvement { background: rgba(6, 182, 212, 0.12); color: #22d3ee; }
+  .tag-bug { background: rgba(239, 68, 68, 0.12); color: #f87171; }
+  .tag-integration { background: rgba(16, 185, 129, 0.12); color: #34d399; }
+  .card-meta {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.72rem; color: #4a5568;
+  }
+  .card-meta svg { width: 12px; height: 12px; }
+
+  /* ═══ Progress Bar (for Shipped items) ═══ */
+  .progress-ring {
+    width: 24px; height: 24px; position: relative; flex-shrink: 0;
+  }
+  .progress-ring svg { transform: rotate(-90deg); }
+  .progress-ring circle {
+    fill: none; stroke-width: 2.5;
+  }
+  .progress-ring .bg { stroke: rgba(255,255,255,0.06); }
+  .progress-ring .fg { stroke: #22c55e; stroke-linecap: round; transition: stroke-dashoffset 0.5s; }
+
+  /* ═══ Shipped Checkmark ═══ */
+  .shipped-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(34, 197, 94, 0.15);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .shipped-check svg { width: 12px; height: 12px; color: #22c55e; }
+
+  /* ═══ Footer CTA ═══ */
+  .footer-cta {
+    text-align: center; padding: 3rem 0;
+    margin-bottom: 2rem;
+  }
+  .footer-cta-box {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(6, 182, 212, 0.06));
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 20px; padding: 3rem 2rem;
+    max-width: 640px; margin: 0 auto;
+  }
+  .footer-cta-box h2 {
+    font-size: 1.5rem; font-weight: 700; color: #fff;
+    margin-bottom: 0.75rem;
+  }
+  .footer-cta-box p {
+    color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem;
+  }
+  .cta-row {
+    display: flex; gap: 0.75rem; justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cta-btn {
+    padding: 0.7rem 1.8rem; border-radius: 10px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; border: none; font-family: inherit;
+  }
+  .cta-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+  }
+  .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3); }
+  .cta-secondary {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #e2e8f0;
+  }
+  .cta-secondary:hover { background: rgba(255,255,255,0.1); }
+
+  /* ═══ Footer ═══ */
+  footer {
+    text-align: center; padding: 2rem 0;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    color: #4a5568; font-size: 0.8rem;
+  }
+
+  /* ═══ Animations ═══ */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .board-column { animation: fadeInUp 0.6s ease both; }
+  .board-column:nth-child(2) { animation-delay: 0.1s; }
+  .board-column:nth-child(3) { animation-delay: 0.2s; }
+  .feature-card { animation: fadeInUp 0.5s ease both; }
+  .feature-card:nth-child(2) { animation-delay: 0.05s; }
+  .feature-card:nth-child(3) { animation-delay: 0.1s; }
+  .feature-card:nth-child(4) { animation-delay: 0.15s; }
+  .feature-card:nth-child(5) { animation-delay: 0.2s; }
+
+  /* ═══ Noise Texture ═══ */
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <div class="logo">P</div>
+      Pulse
+    </a>
+    <div class="nav-links">
+      <a href="#">Changelog</a>
+      <a href="#">Docs</a>
+      <a href="#">Community</a>
+      <a href="#" class="nav-cta">Sign Up</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="container">
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Updated Aug 24, 2026
+    </div>
+    <h1>Product <span class="gradient">Roadmap</span></h1>
+    <p>See what we're building, what's in progress, and what's shipped. Vote on features and help shape the future of Pulse.</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value">47</div>
+      <div class="stat-label">Shipped</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">12</div>
+      <div class="stat-label">In Progress</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">28</div>
+      <div class="stat-label">Planned</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">2.4k</div>
+      <div class="stat-label">Votes Cast</div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab active">All</button>
+      <button class="filter-tab">Features</button>
+      <button class="filter-tab">Improvements</button>
+      <button class="filter-tab">Integrations</button>
+      <button class="filter-tab">Bug Fixes</button>
+    </div>
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search roadmap...">
+    </div>
+  </div>
+
+  <!-- Board -->
+  <div class="board">
+
+    <!-- ═══ Planned Column ═══ -->
+    <div class="board-column">
+      <div class="column-header">
+        <div class="column-header-left">
+          <div class="column-icon" style="background: #818cf8;"></div>
+          <span class="column-title">Planned</span>
+        </div>
+        <span class="column-count">5</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-top">
+          <div class="card-title">Native Mobile Apps (iOS & Android)</div>
+          <div class="card-vote">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">342</span>
+          </div>
+        </div>
+        <div class="card-desc">Full-featured mobile experience with offline support, push notifications, and native gestures.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-feature">Feature</span></div>
+          <div class="card-meta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            28
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-top">
+          <div class="card-title">AI-Powered Smart Search</div>
+          <div class="card-vote">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">287</span>
+          </div>
+        </div>
+        <div class="card-desc">Natural language search across all your projects with semantic understanding and context-aware results.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-feature">Feature</span></div>
+          <div class="card-meta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            19
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-top">
+          <div class="card-title">Custom Dashboards</div>
+          <div class="card-vote">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">198</span>
+          </div>
+        </div>
+        <div class="card-desc">Build your own dashboard views with drag-and-drop widgets, custom metrics, and real-time data.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-feature">Feature</span></div>
+          <div class="card-meta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            14
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-top">
+          <div class="card-title">Notion Integration</div>
+          <div class="card-vote">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">156</span>
+          </div>
+        </div>
+        <div class="card-desc">Two-way sync with Notion databases. Keep your docs and tasks in sync across both platforms.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-integration">Integration</span></div>
+          <div class="card-meta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            8
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="card-top">
+          <div class="card-title">Team Permissions & Roles</div>
+          <div class="card-vote">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">134</span>
+          </div>
+        </div>
+        <div class="card-desc">Granular access control with custom roles, workspace-level permissions, and audit logs.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-feature">Feature</span></div>
+          <div class="card-meta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            11
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ In Progress Column ═══ -->
+    <div class="board-column">
+      <div class="column-header">
+        <div class="column-header-left">
+          <div class="column-icon" style="background: #f59e0b;"></div>
+          <span class="column-title">In Progress</span>
+        </div>
+        <span class="column-count">4</span>
+      </div>
+
+      <div class="feature-card" style="border-left: 2px solid #f59e0b;">
+        <div class="card-top">
+          <div class="card-title">API v3 with GraphQL</div>
+          <div class="card-vote">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">421</span>
+          </div>
+        </div>
+        <div class="card-desc">Next-gen API with GraphQL support, real-time subscriptions, and improved rate limiting.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-feature">Feature</span></div>
+          <div class="card-meta">
+            <div class="progress-ring">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <circle class="bg" cx="12" cy="12" r="10"/>
+                <circle class="fg" cx="12" cy="12" r="10" stroke-dasharray="62.83" stroke-dashoffset="15.71"/>
+              </svg>
+            </div>
+            75%
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card" style="border-left: 2px solid #f59e0b;">
+        <div class="card-top">
+          <div class="card-title">Real-time Collaboration</div>
+          <div class="card-vote">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">389</span>
+          </div>
+        </div>
+        <div class="card-desc">Multiplayer editing with live cursors, presence indicators, and conflict resolution.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-feature">Feature</span></div>
+          <div class="card-meta">
+            <div class="progress-ring">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <circle class="bg" cx="12" cy="12" r="10"/>
+                <circle class="fg" cx="12" cy="12" r="10" stroke-dasharray="62.83" stroke-dashoffset="25.13"/>
+              </svg>
+            </div>
+            60%
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card" style="border-left: 2px solid #f59e0b;">
+        <div class="card-top">
+          <div class="card-title">Webhook & Event System</div>
+          <div class="card-vote">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">267</span>
+          </div>
+        </div>
+        <div class="card-desc">Comprehensive webhook system with event filtering, retry logic, and delivery logs.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-integration">Integration</span></div>
+          <div class="card-meta">
+            <div class="progress-ring">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <circle class="bg" cx="12" cy="12" r="10"/>
+                <circle class="fg" cx="12" cy="12" r="10" stroke-dasharray="62.83" stroke-dashoffset="37.7"/>
+              </svg>
+            </div>
+            40%
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card" style="border-left: 2px solid #f59e0b;">
+        <div class="card-top">
+          <div class="card-title">Dark Mode Improvements</div>
+          <div class="card-vote">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">198</span>
+          </div>
+        </div>
+        <div class="card-desc">Refined dark theme with OLED-true-black option, improved contrast ratios, and custom accent colors.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-improvement">Improvement</span></div>
+          <div class="card-meta">
+            <div class="progress-ring">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <circle class="bg" cx="12" cy="12" r="10"/>
+                <circle class="fg" cx="12" cy="12" r="10" stroke-dasharray="62.83" stroke-dashoffset="6.28"/>
+              </svg>
+            </div>
+            90%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Shipped Column ═══ -->
+    <div class="board-column">
+      <div class="column-header">
+        <div class="column-header-left">
+          <div class="column-icon" style="background: #22c55e;"></div>
+          <span class="column-title">Shipped</span>
+        </div>
+        <span class="column-count">5</span>
+      </div>
+
+      <div class="feature-card" style="border-left: 2px solid #22c55e;">
+        <div class="card-top">
+          <div class="card-title">Keyboard Shortcuts (Cmd+K)</div>
+          <div class="card-vote">
+            <div class="shipped-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="card-desc">Full command palette with fuzzy search, contextual actions, and customizable key bindings.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-feature">Feature</span></div>
+          <div class="card-meta">Shipped Aug 15</div>
+        </div>
+      </div>
+
+      <div class="feature-card" style="border-left: 2px solid #22c55e;">
+        <div class="card-top">
+          <div class="card-title">Slack Integration</div>
+          <div class="card-vote">
+            <div class="shipped-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="card-desc">Receive notifications, create tasks, and update status directly from Slack channels.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-integration">Integration</span></div>
+          <div class="card-meta">Shipped Aug 8</div>
+        </div>
+      </div>
+
+      <div class="feature-card" style="border-left: 2px solid #22c55e;">
+        <div class="card-top">
+          <div class="card-title">Advanced Filters & Views</div>
+          <div class="card-vote">
+            <div class="shipped-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="card-desc">Save custom filter combinations as views. Share views with team members and pin favorites.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-feature">Feature</span></div>
+          <div class="card-meta">Shipped Jul 28</div>
+        </div>
+      </div>
+
+      <div class="feature-card" style="border-left: 2px solid #22c55e;">
+        <div class="card-top">
+          <div class="card-title">GitHub Integration v2</div>
+          <div class="card-vote">
+            <div class="shipped-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="card-desc">Bi-directional sync with GitHub Issues and PRs. Auto-link commits to tasks.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-integration">Integration</span></div>
+          <div class="card-meta">Shipped Jul 15</div>
+        </div>
+      </div>
+
+      <div class="feature-card" style="border-left: 2px solid #22c55e;">
+        <div class="card-top">
+          <div class="card-title">Performance: 2x Faster Loading</div>
+          <div class="card-vote">
+            <div class="shipped-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="card-desc">Optimized rendering pipeline and lazy loading. Average page load under 200ms.</div>
+        <div class="card-footer">
+          <div class="card-tags"><span class="card-tag tag-improvement">Improvement</span></div>
+          <div class="card-meta">Shipped Jul 1</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="footer-cta">
+    <div class="footer-cta-box">
+      <h2>Have a feature request?</h2>
+      <p>Help us build the best product by voting on features or suggesting new ones.</p>
+      <div class="cta-row">
+        <button class="cta-btn cta-primary">Submit a Request</button>
+        <button class="cta-btn cta-secondary">Join Discord</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>© 2026 Pulse — Built with transparency. Powered by community feedback.</p>
+  </div>
+</footer>
+
+</body>
+</html>
