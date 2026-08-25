@@ -369,7 +369,8 @@ export default defineConfig({
             { text: 'Lumina AI 艺术创作', link: '/pages/ai-art-studio' },
             { text: 'ESSENCE 高端香水品牌', link: '/pages/fragrance-atelier' },
             { text: 'Drift 沉浸式诗歌体验', link: '/pages/drift-poetry' },
-            { text: 'NeonVault VR 游戏中心', link: '/pages/neon-arcade' }
+            { text: 'NeonVault VR 游戏中心', link: '/pages/neon-arcade' },
+            { text: 'Flux AI 创意设计平台', link: '/pages/design-tool-saas' }
           ]
         },
         {
