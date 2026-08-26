@@ -3,32 +3,27 @@ import sys, os, time
 sys.path.insert(0, '/Users/weta/Library/Python/3.9/lib/python/site-packages')
 import paramiko
 
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect("192.168.124.17", port=11928, username="root", password="Weta@0928")
+transport = paramiko.Transport(('192.168.124.17', 11928))
+transport.connect(username='root', password='Weta@0928')
+sftp = paramiko.SFTPClient.from_transport(transport)
 
-sftp = ssh.open_sftp()
 local_dist = os.path.expanduser('~/desktop/project/design-lib/docs/.vitepress/dist')
-remote_base = '/var/www/design-lib/'
+remote_base = '/var/www/design-lib'
 
-ssh.exec_command(f'mkdir -p {remote_base}')
-time.sleep(0.5)
-
-uploaded = 0
-for root, dirs, files in os.walk(local_dist):
-    for f in files:
-        local_path = os.path.join(root, f)
-        rel_path = os.path.relpath(local_path, local_dist)
-        remote_path = os.path.join(remote_base, rel_path)
-        remote_dir = os.path.dirname(remote_path)
-        try:
-            ssh.exec_command(f'mkdir -p {remote_dir}')
-            time.sleep(0.03)
+def upload_dir(local_dir, remote_dir):
+    try:
+        sftp.mkdir(remote_dir)
+    except:
+        pass
+    for item in os.listdir(local_dir):
+        local_path = os.path.join(local_dir, item)
+        remote_path = remote_dir + '/' + item
+        if os.path.isdir(local_path):
+            upload_dir(local_path, remote_path)
+        else:
             sftp.put(local_path, remote_path)
-            uploaded += 1
-        except Exception as e:
-            print(f'Error uploading {rel_path}: {e}')
 
+upload_dir(local_dist, remote_base)
 sftp.close()
-ssh.close()
-print(f'Deployed {uploaded} files to {remote_base}')
+transport.close()
+print(f'Deployed successfully to {remote_base}')
