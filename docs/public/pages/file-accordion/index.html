@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>American Modernism — An Archive of Architectural Innovation</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Folder colors */
+      --folder-blue:   #2563eb;
+      --folder-blue-light: #3b82f6;
+      --folder-green:  #059669;
+      --folder-green-light: #10b981;
+      --folder-teal:   #0d9488;
+      --folder-teal-light: #14b8a6;
+      --folder-purple: #7c3aed;
+      --folder-purple-light: #8b5cf6;
+      --folder-red:    #dc2626;
+      --folder-red-light: #ef4444;
+
+      --bg-dark: #1a1a1a;
+      --bg-panel: #232323;
+      --bg-panel-inner: #2a2a2a;
+      --text-body: #d4d4d4;
+      --text-muted: #888;
+      --border-subtle: #333;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-body);
+      font-family: var(--font-sans);
+      line-height: var(--leading-normal);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Page Container ───────────────────────────────────── */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: var(--space-8) var(--space-6) var(--space-16);
+    }
+
+    /* ── Header ───────────────────────────────────────────── */
+    .header {
+      text-align: center;
+      padding: var(--space-12) 0 var(--space-10);
+      position: relative;
+    }
+
+    .header::after {
+      content: '';
+      display: block;
+      width: 120px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--folder-blue), var(--folder-green), var(--folder-teal), var(--folder-purple), var(--folder-red));
+      margin: var(--space-6) auto 0;
+      border-radius: 2px;
+    }
+
+    .header__title {
+      font-family: Georgia, 'Times New Roman', var(--font-display);
+      font-weight: var(--weight-bold);
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      letter-spacing: 0.15em;
+      line-height: var(--leading-tight);
+      color: #f5f5f5;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .header__subtitle {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-top: var(--space-3);
+    }
+
+    /* ── Folder Accordion ─────────────────────────────────── */
+    .folders {
+      position: relative;
+      margin-top: var(--space-8);
+    }
+
+    .folder {
+      position: relative;
+      margin-bottom: -2px;
+    }
+
+    /* ── Tab (the clickable folder label) ─────────────────── */
+    .folder__tab {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-4) var(--space-6);
+      padding-left: var(--space-8);
+      cursor: pointer;
+      user-select: none;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: var(--text-lg);
+      font-weight: var(--weight-semibold);
+      color: #fff;
+      letter-spacing: 0.04em;
+      transition: transform var(--duration-normal) var(--ease-default),
+                  box-shadow var(--duration-normal) var(--ease-default);
+      z-index: 1;
+
+      /* Skeuomorphic folder shape */
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      clip-path: polygon(
+        0% 0%,
+        28% 0%,
+        32% 14%,
+        35% 14%,
+        100% 14%,
+        100% 100%,
+        0% 100%
+      );
+      min-height: 56px;
+    }
+
+    .folder__tab:hover {
+      transform: translateY(-2px);
+      z-index: 10;
+    }
+
+    /* Colored tab backgrounds */
+    .folder--blue .folder__tab {
+      background: linear-gradient(135deg, var(--folder-blue), var(--folder-blue-light));
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .folder--green .folder__tab {
+      background: linear-gradient(135deg, var(--folder-green), var(--folder-green-light));
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .folder--teal .folder__tab {
+      background: linear-gradient(135deg, var(--folder-teal), var(--folder-teal-light));
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .folder--purple .folder__tab {
+      background: linear-gradient(135deg, var(--folder-purple), var(--folder-purple-light));
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .folder--red .folder__tab {
+      background: linear-gradient(135deg, var(--folder-red), var(--folder-red-light));
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    /* Active (open) tab */
+    .folder.is-open .folder__tab {
+      z-index: 5;
+      transform: translateY(-2px);
+    }
+    .folder--blue.is-open .folder__tab   { box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45); }
+    .folder--green.is-open .folder__tab  { box-shadow: 0 6px 20px rgba(5, 150, 105, 0.45); }
+    .folder--teal.is-open .folder__tab   { box-shadow: 0 6px 20px rgba(13, 148, 136, 0.45); }
+    .folder--purple.is-open .folder__tab { box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45); }
+    .folder--red.is-open .folder__tab    { box-shadow: 0 6px 20px rgba(220, 38, 38, 0.45); }
+
+    /* ── Tab icon / decoration ────────────────────────────── */
+    .folder__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      background: rgba(0,0,0,0.2);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .folder__label {
+      flex: 1;
+    }
+
+    .folder__number {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      opacity: 0.6;
+      margin-right: var(--space-2);
+    }
+
+    .folder__arrow {
+      width: 20px;
+      height: 20px;
+      transition: transform var(--duration-normal) var(--ease-default);
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    .folder.is-open .folder__arrow {
+      transform: rotate(180deg);
+    }
+
+    /* ── Content Panel ────────────────────────────────────── */
+    .folder__panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-top: none;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height var(--duration-slow) var(--ease-default),
+                  opacity var(--duration-normal) var(--ease-default);
+      position: relative;
+      z-index: 0;
+    }
+
+    .folder.is-open .folder__panel {
+      max-height: 600px;
+      opacity: 1;
+      z-index: 5;
+    }
+
+    /* Color accent stripe at top of panel */
+    .folder__panel::before {
+      content: '';
+      display: block;
+      height: 3px;
+      width: 100%;
+    }
+    .folder--blue .folder__panel::before   { background: var(--folder-blue); }
+    .folder--green .folder__panel::before  { background: var(--folder-green); }
+    .folder--teal .folder__panel::before   { background: var(--folder-teal); }
+    .folder--purple .folder__panel::before { background: var(--folder-purple); }
+    .folder--red .folder__panel::before    { background: var(--folder-red); }
+
+    .folder__content {
+      padding: var(--space-6) var(--space-8);
+    }
+
+    .folder__content h3 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: var(--text-xl);
+      font-weight: var(--weight-bold);
+      margin-bottom: var(--space-4);
+      letter-spacing: 0.02em;
+    }
+    .folder--blue .folder__content h3   { color: var(--folder-blue-light); }
+    .folder--green .folder__content h3  { color: var(--folder-green-light); }
+    .folder--teal .folder__content h3   { color: var(--folder-teal-light); }
+    .folder--purple .folder__content h3 { color: var(--folder-purple-light); }
+    .folder--red .folder__content h3    { color: var(--folder-red-light); }
+
+    .folder__content p {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      line-height: var(--leading-relaxed);
+      color: var(--text-body);
+      margin-bottom: var(--space-4);
+    }
+
+    .folder__content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── Decorative ruler line in panels ──────────────────── */
+    .folder__ruler {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--border-subtle) 0,
+        var(--border-subtle) 4px,
+        transparent 4px,
+        transparent 8px
+      );
+      margin: var(--space-4) 0;
+    }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    .footer {
+      margin-top: var(--space-16);
+      text-align: center;
+      padding: var(--space-8) 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer__icons {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+
+    .footer__icon {
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 16px;
+      transition: color var(--duration-fast) var(--ease-default),
+                  border-color var(--duration-fast) var(--ease-default);
+    }
+
+    .footer__icon:hover {
+      color: var(--text-body);
+      border-color: var(--text-muted);
+    }
+
+    .footer__text {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .footer__year {
+      display: block;
+      margin-top: var(--space-2);
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: var(--text-2xl);
+      color: #444;
+      font-weight: var(--weight-bold);
+      letter-spacing: 0.2em;
+    }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .page {
+        padding: var(--space-4) var(--space-3) var(--space-10);
+      }
+
+      .header {
+        padding: var(--space-8) 0 var(--space-6);
+      }
+
+      .folder__tab {
+        padding: var(--space-3) var(--space-4);
+        padding-left: var(--space-6);
+        font-size: var(--text-base);
+        clip-path: polygon(
+          0% 0%,
+          24% 0%,
+          28% 12%,
+          32% 12%,
+          100% 12%,
+          100% 100%,
+          0% 100%
+        );
+        min-height: 48px;
+      }
+
+      .folder__content {
+        padding: var(--space-4) var(--space-5);
+      }
+
+      .folder__content p {
+        font-size: var(--text-xs);
+      }
+    }
+
+    /* ── Subtle background texture ────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(37,99,235,0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(124,58,237,0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- ── Header ──────────────────────────────────────────── -->
+    <header class="header">
+      <h1 class="header__title">American<br>Modernism</h1>
+      <p class="header__subtitle">An Archive of Architectural Innovation</p>
+    </header>
+
+    <!-- ── Folder Accordion ────────────────────────────────── -->
+    <div class="folders">
+
+      <!-- Folder 1 — Blue -->
+      <div class="folder folder--blue is-open">
+        <button class="folder__tab" aria-expanded="true" onclick="toggleFolder(this)">
+          <span class="folder__icon">◆</span>
+          <span class="folder__label"><span class="folder__number">01</span>Bauhaus Influence</span>
+          <svg class="folder__arrow" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+        </button>
+        <div class="folder__panel">
+          <div class="folder__content">
+            <h3>The Bauhaus Legacy in American Soil</h3>
+            <p>When Walter Gropius fled Nazi Germany in 1937 and settled at Harvard's Graduate School of Design, he carried with him the philosophical DNA of the Bauhaus — the radical notion that art, craft, and technology must converge into a single unified vision. His appointment as chairman of the Department of Architecture reshaped American architectural education overnight. The curriculum shifted from Beaux-Arts classicism toward functionalism, industrial materials, and geometric clarity.</p>
+            <span class="folder__ruler"></span>
+            <p>László Moholy-Nagy established the New Bauhaus in Chicago that same year, later becoming the Institute of Design at IIT. Mies van der Rohe followed, taking the helm of IIT's architecture program in 1938. Together, these émigré professors created a transatlantic pipeline of ideas that fused European modernism with American industrial ambition. The result was a new vernacular: steel frames expressed as honest structure, glass facades dissolving the boundary between interior and exterior, and open floor plans that liberated space from the tyranny of load-bearing walls.</p>
+            <p>The Bauhaus influence extended far beyond individual buildings. It fundamentally altered how Americans conceived of the relationship between design and mass production. Prefabrication, modular construction, and the integration of mechanical systems became not just technical strategies but ideological imperatives — the democratic promise that good design could be manufactured at scale for everyone.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Folder 2 — Green -->
+      <div class="folder folder--green">
+        <button class="folder__tab" aria-expanded="false" onclick="toggleFolder(this)">
+          <span class="folder__icon">◆</span>
+          <span class="folder__label"><span class="folder__number">02</span>Mid-Century Masters</span>
+          <svg class="folder__arrow" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+        </button>
+        <div class="folder__panel">
+          <div class="folder__content">
+            <h3>Saarinen, Mies, and the Architecture of Optimism</h3>
+            <p>Eero Saarinen's TWA Terminal at JFK Airport, completed in 1962, remains one of the most expressive structures ever built in concrete. Its four interlocking shells seem to defy gravity — a bird in flight frozen mid-wingbeat. Saarinen rejected the rigid orthogonality of International Style orthodoxy, insisting that "the purpose of architecture is to shelter and enhance man's life on earth and to fulfill his belief in the nobility of his existence." Every project he touched — from the Gateway Arch in St. Louis to the Dulles International Airport — was a quest to find the singular, organic form appropriate to each building's unique purpose.</p>
+            <span class="folder__ruler"></span>
+            <p>Mies van der Rohe pursued the opposite pole of the same modernist spectrum. His Seagram Building on Park Avenue (1958) distilled skyscraper design to its Platonic essence: a bronze-and-glass rectangle of absolute proportional refinement. The building's set-back plaza — revolutionary at the time — gave breathing room to the urban fabric and established a template that would define corporate architecture for decades. "Less is more" was not merely a slogan; it was a rigorous philosophical commitment to the eloquence of structural clarity and material honesty.</p>
+            <p>Between Saarinen's sculptural expressivism and Mies's crystalline minimalism, mid-century American architecture achieved a creative tension that proved enormously generative. Other masters — Philip Johnson, Eero Saarinen's father Eliel, Paul Rudolph, Marcel Breuer — each carved distinct positions along this spectrum, producing an astonishing body of work that remains the benchmark against which American architecture is measured.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Folder 3 — Teal -->
+      <div class="folder folder--teal">
+        <button class="folder__tab" aria-expanded="false" onclick="toggleFolder(this)">
+          <span class="folder__icon">◆</span>
+          <span class="folder__label"><span class="folder__number">03</span>The Glass Revolution</span>
+          <svg class="folder__arrow" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+        </button>
+        <div class="folder__panel">
+          <div class="folder__content">
+            <h3>Transparency as Ideology</h3>
+            <p>The glass curtain wall was more than a construction innovation — it was a philosophical statement wrapped in aluminum and float glass. When Lever House rose on Park Avenue in 1952, designed by SOM's Gordon Bunshaft, it announced that corporate architecture had entered a new era of transparency. The building's blue-green glass skin floated above a ground-floor colonnade like a luminous object, reflecting the sky and dissolving the boundary between the city and its interior. For the first time, an office tower did not read as a massive stone fortress but as a dematerialized volume of light.</p>
+            <span class="folder__ruler"></span>
+            <p>The technical evolution was remarkable. Early curtain walls used single-pane glass set in steel frames, but by the 1960s, double-glazed insulated units with aluminum mullions had become standard. Skidmore, Owings & Merrill perfected the modular curtain wall system, allowing vast expanses of glass to be installed with industrial precision. The John Hancock Center in Chicago (1969) and the World Trade Center (1973) pushed the curtain wall to monumental scales, transforming entire city skylines into shimmering grids of reflected light.</p>
+            <p>Yet the glass revolution carried its own contradictions. The very transparency that symbolized corporate openness and democratic visibility also created environments of constant surveillance. The energy costs of floor-to-ceiling glass — solar heat gain in summer, radiant heat loss in winter — would eventually demand the development of high-performance glazing, low-emissivity coatings, and sophisticated building management systems. The story of the glass curtain wall is ultimately a story about the negotiation between aspiration and physics.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Folder 4 — Purple -->
+      <div class="folder folder--purple">
+        <button class="folder__tab" aria-expanded="false" onclick="toggleFolder(this)">
+          <span class="folder__icon">◆</span>
+          <span class="folder__label"><span class="folder__number">04</span>Brutalism Reimagined</span>
+          <svg class="folder__arrow" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+        </button>
+        <div class="folder__panel">
+          <div class="folder__content">
+            <h3>Concrete Honesty and Monumental Presence</h3>
+            <p>American Brutalism arrived with the moral weight of social purpose. Paul Rudolph's Government Service Center in Boston (1962), Marcel Breuer's Whitney Museum (1966), and the HUD Building in Washington by Marcel Breuer (1968) all shared a conviction that architecture should express its structural and material truth without apology. Board-formed concrete — bearing the imprint of its wooden molds — became a surface of raw, tactile honesty. These buildings did not seduce; they confronted. Their massive geometries projected civic gravitas, asserting that public institutions deserved monumental expression.</p>
+            <span class="folder__ruler"></span>
+            <p>The movement drew from Le Corbusier's late-career béton brut, but American practitioners adapted it to democratic purposes. Brutalist university campuses — at UC San Diego, UMass Dartmouth, and the State University of New York — embodied the postwar belief that higher education was a public good worth building with uncompromising ambition. The architecture was meant to last, to resist the ephemerals of fashion, and to stand as permanent monuments to collective investment in knowledge.</p>
+            <p>By the 1980s, Brutalism had fallen deeply out of favor. Critics accused it of being oppressive, inhuman, and indifferent to context. Many significant buildings were demolished or grotesquely reskinned. Yet a remarkable reassessment has emerged in the 21st century. Architects and preservationists now recognize the intellectual rigor, material honesty, and civic ambition of Brutalist works. New scholarship, social media communities, and landmark designations have transformed "Brutalist" from a pejorative into a badge of honor — a testament to architecture's capacity for uncompromising conviction.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Folder 5 — Red -->
+      <div class="folder folder--red">
+        <button class="folder__tab" aria-expanded="false" onclick="toggleFolder(this)">
+          <span class="folder__icon">◆</span>
+          <span class="folder__label"><span class="folder__number">05</span>Digital Futures</span>
+          <svg class="folder__arrow" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+        </button>
+        <div class="folder__panel">
+          <div class="folder__content">
+            <h3>Parametric Design and the Computational Turn</h3>
+            <p>The arrival of computational design tools in the late 1990s fundamentally transformed what was structurally and formally possible. Frank Gehry's Guggenheim Museum Bilbao (1997) — enabled by CATIA software originally developed for the aerospace industry — demonstrated that architecture could achieve the fluid, non-Euclidean geometries that hand-drafting could never describe. In the United States, firms like Morphosis, Diller Scofidio + Renfro, and SHOP Architects began leveraging parametric modeling to generate buildings whose forms emerged from algorithmic processes rather than intuitive sketching.</p>
+            <span class="folder__ruler"></span>
+            <p>Parametric design — popularized through platforms like Grasshopper for Rhino — allows architects to define buildings as systems of relationships rather than fixed geometries. A facade panel's angle, for instance, might be determined by solar exposure calculations, structural loads, and view optimization simultaneously, producing organic patterns of variation that would be impossible to design manually. The Vessel at Hudson Yards, the Perelman Performing Arts Center, and numerous pavilion projects across American cities demonstrate this approach at varying scales.</p>
+            <p>The frontier has now shifted toward artificial intelligence and machine learning. Generative design tools can produce thousands of design iterations optimized for energy performance, material efficiency, and spatial quality. Robotic fabrication allows these computationally derived forms to be built with sub-millimeter precision. The question facing American architecture is no longer whether technology can produce novel forms, but whether it can produce meaningful ones — buildings that serve human experience with the same moral seriousness as the modernist masters who came before.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.folders -->
+
+    <!-- ── Footer ──────────────────────────────────────────── -->
+    <footer class="footer">
+      <div class="footer__icons">
+        <!-- Blueprint / grid icon -->
+        <span class="footer__icon" title="Archive">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </span>
+        <!-- Compass / architecture icon -->
+        <span class="footer__icon" title="Design">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+          </svg>
+        </span>
+        <!-- Document / file icon -->
+        <span class="footer__icon" title="Files">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </span>
+        <!-- Building icon -->
+        <span class="footer__icon" title="Architecture">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><path d="M9 22v-4h6v4"/>
+          </svg>
+        </span>
+        <!-- Pen / curation icon -->
+        <span class="footer__icon" title="Curated">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/>
+          </svg>
+        </span>
+      </div>
+
+      <p class="footer__text">Curated by the Bureau of Architectural Studies</p>
+      <span class="footer__year">2026</span>
+    </footer>
+
+  </div><!-- /.page -->
+
+  <!-- ── Minimal JS: Accordion toggle ──────────────────────── -->
+  <script>
+    function toggleFolder(btn) {
+      var folder = btn.parentElement;
+      var isOpen = folder.classList.contains('is-open');
+
+      // Close all
+      document.querySelectorAll('.folder').forEach(function(f) {
+        f.classList.remove('is-open');
+        f.querySelector('.folder__tab').setAttribute('aria-expanded', 'false');
+      });
+
+      // Open clicked (if it was closed)
+      if (!isOpen) {
+        folder.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+  </script>
+
+</body>
+</html>

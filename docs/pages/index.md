@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 162 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 164 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1504,6 +1504,24 @@ const pages = [
     rating: 9.4,
     description: '灵感来自 FORA Concept 的策略传播工作室，赤陶+薰衣草+深青三色无缝色块网格 + 底部固定导航 + Playfair Display 衬线字体 + 分屏案例研究 + CSS Marquee 客户滚动',
   },
+  {
+    id: 'silo-minimal',
+    title: 'SILO 极简工业产品页',
+    category: 'ecommerce',
+    tags: ['极简', '工业', '产品页'],
+    colors: ['#ffffff', '#000000', '#362E3D'],
+    rating: 9.1,
+    description: '极致极简工业产品页，纯黑白单色 + 三列产品网格 + 固定购物栏',
+  },
+  {
+    id: 'file-accordion',
+    title: 'File Accordion 文件档案馆',
+    category: 'creative',
+    tags: ['暗色', '手风琴', '拟物化'],
+    colors: ['#1a1a1a', '#2563eb', '#059669'],
+    rating: 9.3,
+    description: '拟物化文件夹手风琴体验，暗色底 + 5色标签层叠 + 等宽字体档案风格',
+  },
 ]
 
 const categories = [
@@ -1561,12 +1579,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 162 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 164 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="162 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="164 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1575,7 +1593,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 162 个完整页面</span>
+      <span>📦 164 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
