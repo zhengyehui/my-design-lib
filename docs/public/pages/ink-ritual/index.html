@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ink Ritual — 纹身艺术工作室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink-black: #0A0A0A;
+  --ink-charcoal: #141414;
+  --ink-gray: #1E1E1E;
+  --ink-muted: #888888;
+  --ink-light: #F5F0EB;
+  --ink-red: #C41E3A;
+  --ink-gold: #C9A96E;
+  --ink-warm: #E8DCC8;
+}
+
+body {
+  font-family: 'Inter', var(--font-sans);
+  background: var(--ink-black);
+  color: var(--ink-light);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── Navigation ─────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-sticky);
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--duration-normal) var(--ease-default);
+}
+
+.nav.scrolled {
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 1rem 3rem;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.nav-logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--ink-light);
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--ink-light);
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  transition: opacity var(--duration-fast);
+}
+
+.nav-links a:hover { opacity: 1; }
+
+.nav-book {
+  background: var(--ink-red);
+  color: white !important;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2px;
+  opacity: 1 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.15em !important;
+  transition: all var(--duration-normal) var(--ease-default) !important;
+}
+
+.nav-book:hover {
+  background: #a01830;
+  transform: translateY(-1px);
+}
+
+/* ── Hero ────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink-black);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(196, 30, 58, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(201, 169, 110, 0.05) 0%, transparent 50%);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  border: 1px solid rgba(255,255,255,0.03);
+  border-radius: 50%;
+  animation: pulse-ring 4s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+}
+
+.hero-content {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 2rem;
+}
+
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-red);
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  font-weight: 400;
+  line-height: 0.95;
+  margin-bottom: 2rem;
+  color: var(--ink-light);
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--ink-red);
+}
+
+.hero-desc {
+  font-size: 1rem;
+  color: var(--ink-light);
+  opacity: 0.4;
+  max-width: 500px;
+  margin: 0 auto 3rem;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-red {
+  background: var(--ink-red);
+  color: white;
+  padding: 1rem 2.5rem;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all var(--duration-normal) var(--ease-default);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-red:hover {
+  background: #a01830;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(196, 30, 58, 0.3);
+}
+
+.btn-outline {
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--ink-light);
+  padding: 0.95rem 2.5rem;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all var(--duration-normal) var(--ease-default);
+}
+
+.btn-outline:hover {
+  border-color: var(--ink-gold);
+  color: var(--ink-gold);
+}
+
+/* ── Stats Bar ───────────────────────────────────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.stat-item {
+  padding: 2.5rem;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+
+.stat-item:last-child { border-right: none; }
+
+.stat-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ink-red);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+
+/* ── Section Base ────────────────────────────────── */
+section {
+  padding: 6rem 3rem;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-red);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  margin-bottom: 1rem;
+  line-height: 1.15;
+}
+
+.section-desc {
+  color: var(--ink-light);
+  opacity: 0.35;
+  max-width: 480px;
+  line-height: 1.8;
+  font-weight: 300;
+  font-size: 0.95rem;
+}
+
+/* ── Styles Showcase ─────────────────────────────── */
+.styles {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.styles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+}
+
+.styles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.style-card {
+  position: relative;
+  aspect-ratio: 3/4;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--duration-slow) var(--ease-default);
+  background: var(--ink-charcoal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.style-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.style-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-md);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.style-art {
+  font-size: 6rem;
+  opacity: 0.8;
+  transition: transform var(--duration-slow) var(--ease-spring);
+}
+
+.style-card:hover .style-art {
+  transform: scale(1.1);
+}
+
+.style-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(transparent, rgba(10,10,10,0.9));
+  z-index: 1;
+}
+
+.style-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+
+.style-desc {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+/* ── Artists Section ─────────────────────────────── */
+.artists {
+  background: var(--ink-charcoal);
+}
+
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.artist-card {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-normal) var(--ease-default);
+}
+
+.artist-card:hover {
+  border-color: rgba(196, 30, 58, 0.3);
+  background: rgba(255,255,255,0.02);
+}
+
+.artist-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  position: relative;
+}
+
+.artist-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-red);
+  opacity: 0.3;
+}
+
+.artist-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.artist-style {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--ink-red);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.artist-bio {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+/* ── Process Section ─────────────────────────────── */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 3rem;
+  counter-reset: step;
+}
+
+.process-step {
+  padding: 2.5rem 2rem;
+  border-right: 1px solid rgba(255,255,255,0.04);
+  position: relative;
+  counter-increment: step;
+}
+
+.process-step:last-child { border-right: none; }
+
+.process-step::before {
+  content: counter(step, decimal-leading-zero);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--ink-red);
+  opacity: 0.3;
+  line-height: 1;
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.process-icon {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.process-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.process-desc {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+/* ── Gallery Section ─────────────────────────────── */
+.gallery {
+  padding: 0;
+  overflow: hidden;
+}
+
+.gallery-header {
+  padding: 0 3rem 3rem;
+}
+
+.gallery-scroll {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 3rem 3rem;
+}
+
+.gallery-scroll::-webkit-scrollbar { display: none; }
+
+.gallery-item {
+  flex: 0 0 300px;
+  aspect-ratio: 3/4;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-normal) var(--ease-default);
+  cursor: pointer;
+}
+
+.gallery-item:hover {
+  transform: scale(1.02);
+}
+
+.gallery-item .icon {
+  font-size: 5rem;
+  opacity: 0.7;
+}
+
+.gallery-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-md);
+  pointer-events: none;
+}
+
+/* ── Pricing ─────────────────────────────────────── */
+.pricing-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.price-card {
+  background: var(--ink-charcoal);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-md);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  transition: all var(--duration-normal) var(--ease-default);
+  position: relative;
+}
+
+.price-card.featured {
+  border-color: var(--ink-red);
+  transform: scale(1.05);
+  box-shadow: 0 20px 60px rgba(196, 30, 58, 0.15);
+}
+
+.price-card.featured::before {
+  content: '热门';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink-red);
+  color: white;
+  padding: 0.3rem 1.2rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.price-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-red);
+  margin-bottom: 1rem;
+}
+
+.price-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.price-range {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin-bottom: 1.5rem;
+}
+
+.price-features {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+
+.price-features li {
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--ink-muted);
+}
+
+.price-btn {
+  display: inline-block;
+  width: 100%;
+  padding: 0.85rem;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all var(--duration-normal) var(--ease-default);
+  cursor: pointer;
+  border: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.price-card.featured .price-btn {
+  background: var(--ink-red);
+  color: white;
+}
+
+.price-card:not(.featured) .price-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--ink-light);
+}
+
+.price-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Testimonials ────────────────────────────────── */
+.testimonials {
+  background: var(--ink-charcoal);
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.testimonial-card {
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+}
+
+.testimonial-stars {
+  color: var(--ink-gold);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+}
+
+.testimonial-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+}
+
+.testimonial-author {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.testimonial-work {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+/* ── CTA Section ─────────────────────────────────── */
+.cta-section {
+  text-align: center;
+  padding: 8rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 30, 58, 0.1) 0%, transparent 70%);
+}
+
+.cta-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.cta-subtitle {
+  color: var(--ink-muted);
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+  position: relative;
+}
+
+/* ── Footer ──────────────────────────────────────── */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 4rem 3rem 2rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.footer-tagline {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  line-height: 1.8;
+  max-width: 300px;
+}
+
+.footer-col h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 1rem;
+}
+
+.footer-col a {
+  display: block;
+  color: var(--ink-light);
+  text-decoration: none;
+  font-size: 0.85rem;
+  opacity: 0.5;
+  margin-bottom: 0.6rem;
+  transition: opacity var(--duration-fast);
+}
+
+.footer-col a:hover { opacity: 1; }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 1024px) {
+  .styles-grid { grid-template-columns: repeat(2, 1fr); }
+  .artists-grid { grid-template-columns: repeat(2, 1fr); }
+  .process-grid { grid-template-columns: repeat(2, 1fr); }
+  .process-step { border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .price-card.featured { transform: none; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  section { padding: 4rem 1.5rem; }
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .styles-grid { grid-template-columns: 1fr; }
+  .artists-grid { grid-template-columns: 1fr; }
+  .process-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr; }
+  .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .footer-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">Ink Ritual</a>
+  <ul class="nav-links">
+    <li><a href="#styles">风格</a></li>
+    <li><a href="#artists">纹身师</a></li>
+    <li><a href="#process">流程</a></li>
+    <li><a href="#pricing">价格</a></li>
+    <li><a href="#contact" class="nav-book">预约咨询</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-label">纹身艺术工作室 · 上海</div>
+    <h1>皮肤上的<br><em>仪式</em></h1>
+    <p class="hero-desc">每一枚纹身都是一次与自我的对话。我们的纹身师团队精通多种风格，从极简线条到写实肖像，为你创造独一无二的身体艺术。</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-red">预约免费咨询</a>
+      <a href="#styles" class="btn-outline">浏览风格</a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat-item">
+    <div class="stat-number">2,800+</div>
+    <div class="stat-label">完成作品</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">6</div>
+    <div class="stat-label">资深纹身师</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">12</div>
+    <div class="stat-label">年行业经验</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">4.9</div>
+    <div class="stat-label">客户评分</div>
+  </div>
+</div>
+
+<!-- Styles -->
+<section class="styles" id="styles">
+  <div class="styles-header">
+    <div>
+      <div class="section-label">纹身风格</div>
+      <h2 class="section-title">找到你的表达</h2>
+    </div>
+    <a href="#" class="btn-outline" style="font-size: 0.75rem;">查看全部 →</a>
+  </div>
+  <div class="styles-grid">
+    <div class="style-card" style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a);">
+      <div class="style-art">🖊️</div>
+      <div class="style-overlay">
+        <div class="style-name">极简线条</div>
+        <div class="style-desc">精致的单线条设计，几何图形与抽象艺术的完美融合</div>
+      </div>
+    </div>
+    <div class="style-card" style="background: linear-gradient(135deg, #1a1510, #2a2018);">
+      <div class="style-art">🐉</div>
+      <div class="style-overlay">
+        <div class="style-name">东方传统</div>
+        <div class="style-desc">龙凤、花鸟、浮世绘，传承千年的东方美学</div>
+      </div>
+    </div>
+    <div class="style-card" style="background: linear-gradient(135deg, #0a1520, #152530);">
+      <div class="style-art">🌹</div>
+      <div class="style-overlay">
+        <div class="style-name">写实肖像</div>
+        <div class="style-desc">超写实人像与动物肖像，光影层次栩栩如生</div>
+      </div>
+    </div>
+    <div class="style-card" style="background: linear-gradient(135deg, #1a0a1a, #2a1525);">
+      <div class="style-art">⚡</div>
+      <div class="style-overlay">
+        <div class="style-name">暗黑风格</div>
+        <div class="style-desc">哥特、暗黑奇幻、骷髅与死亡美学的艺术表达</div>
+      </div>
+    </div>
+    <div class="style-card" style="background: linear-gradient(135deg, #0a1a0a, #152515);">
+      <div class="style-art">🌿</div>
+      <div class="style-overlay">
+        <div class="style-name">植物花卉</div>
+        <div class="style-desc">精致的花卉与植物插画，自然之美的永恒印记</div>
+      </div>
+    </div>
+    <div class="style-card" style="background: linear-gradient(135deg, #1a1a0a, #252515);">
+      <div class="style-art">✒️</div>
+      <div class="style-overlay">
+        <div class="style-name">字体设计</div>
+        <div class="style-desc">手写字体、书法与文字艺术，让文字成为装饰</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Artists -->
+<section class="artists" id="artists">
+  <div style="text-align: center;">
+    <div class="section-label">纹身师团队</div>
+    <h2 class="section-title">匠人之手</h2>
+    <p class="section-desc" style="margin: 0 auto;">每位纹身师平均拥有 8 年以上专业经验</p>
+  </div>
+  <div class="artists-grid">
+    <div class="artist-card">
+      <div class="artist-avatar" style="background: linear-gradient(135deg, #C41E3A, #8B0000);">🖊️</div>
+      <div class="artist-name">林墨</div>
+      <div class="artist-style">极简线条 · 几何</div>
+      <p class="artist-bio">毕业于中央美术学院，作品被多家国际纹身杂志收录。擅长将建筑美学融入极简设计。</p>
+    </div>
+    <div class="artist-card">
+      <div class="artist-avatar" style="background: linear-gradient(135deg, #C9A96E, #8B7355);">🐉</div>
+      <div class="artist-name">陈龙</div>
+      <div class="artist-style">东方传统 · 新传统</div>
+      <p class="artist-bio">师从日本纹身大师三代目彫祐，精通浮世绘与东方传统图腾，将古典美学与现代技法融合。</p>
+    </div>
+    <div class="artist-card">
+      <div class="artist-avatar" style="background: linear-gradient(135deg, #4A6741, #2D3D28);">🌹</div>
+      <div class="artist-name">Sophia Wu</div>
+      <div class="artist-style">写实 · 肖像</div>
+      <p class="artist-bio">曾在纽约学习超写实绘画，回国后将油画技法应用于纹身创作，作品以惊人的光影还原度著称。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section id="process">
+  <div style="text-align: center;">
+    <div class="section-label">预约流程</div>
+    <h2 class="section-title">从想法到作品</h2>
+    <p class="section-desc" style="margin: 0 auto;">我们用专业流程确保每一枚纹身都达到最高品质</p>
+  </div>
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="process-icon">💬</div>
+      <div class="process-name">咨询沟通</div>
+      <p class="process-desc">线上或到店沟通你的想法、风格偏好与预算，我们的顾问会为你推荐最合适的纹身师。</p>
+    </div>
+    <div class="process-step">
+      <div class="process-icon">✏️</div>
+      <div class="process-name">设计创作</div>
+      <p class="process-desc">纹身师根据沟通内容进行原创设计，提供 2-3 个方案供你选择，并可多次修改直到满意。</p>
+    </div>
+    <div class="process-step">
+      <div class="process-icon">🎨</div>
+      <div class="process-name">纹身创作</div>
+      <p class="process-desc">使用进口色料与一次性器材，在无菌环境中完成纹身。全程舒适体验，可随时休息。</p>
+    </div>
+    <div class="process-step">
+      <div class="process-icon">✨</div>
+      <div class="process-name">售后护理</div>
+      <p class="process-desc">提供专业护理包与详细恢复指南，30 天内免费补色，确保作品完美呈现。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="gallery">
+  <div class="gallery-header">
+    <div class="section-label">作品画廊</div>
+    <h2 class="section-title">近期作品</h2>
+  </div>
+  <div class="gallery-scroll">
+    <div class="gallery-item" style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a);">
+      <span class="icon">🖊️</span>
+    </div>
+    <div class="gallery-item" style="background: linear-gradient(135deg, #1a1510, #2a2018);">
+      <span class="icon">🐉</span>
+    </div>
+    <div class="gallery-item" style="background: linear-gradient(135deg, #0a1520, #152530);">
+      <span class="icon">🌹</span>
+    </div>
+    <div class="gallery-item" style="background: linear-gradient(135deg, #1a0a1a, #2a1525);">
+      <span class="icon">⚡</span>
+    </div>
+    <div class="gallery-item" style="background: linear-gradient(135deg, #0a1a0a, #152515);">
+      <span class="icon">🌿</span>
+    </div>
+    <div class="gallery-item" style="background: linear-gradient(135deg, #1a1a0a, #252515);">
+      <span class="icon">✒️</span>
+    </div>
+    <div class="gallery-item" style="background: linear-gradient(135deg, #151515, #252525);">
+      <span class="icon">🦋</span>
+    </div>
+    <div class="gallery-item" style="background: linear-gradient(135deg, #0a0a1a, #151525);">
+      <span class="icon">💀</span>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+  <div class="pricing-header">
+    <div class="section-label">价格参考</div>
+    <h2 class="section-title">透明定价</h2>
+    <p class="section-desc" style="margin: 0 auto;">最终价格根据设计复杂度与尺寸确定</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-type">小型纹身</div>
+      <div class="price-amount">¥800</div>
+      <div class="price-range">起 · 约 5cm 以内</div>
+      <ul class="price-features">
+        <li>极简线条 / 小图案</li>
+        <li>1 小时内完成</li>
+        <li>含护理包</li>
+        <li>30 天免费补色</li>
+      </ul>
+      <button class="price-btn">预约咨询</button>
+    </div>
+    <div class="price-card featured">
+      <div class="price-type">中型纹身</div>
+      <div class="price-amount">¥2,500</div>
+      <div class="price-range">起 · 约 10-20cm</div>
+      <ul class="price-features">
+        <li>花卉 / 动物 / 几何</li>
+        <li>2-4 小时完成</li>
+        <li>含设计修改 2 次</li>
+        <li>含护理包 + 补色</li>
+        <li>免费到店咨询</li>
+      </ul>
+      <button class="price-btn">预约咨询</button>
+    </div>
+    <div class="price-card">
+      <div class="price-type">大型纹身</div>
+      <div class="price-amount">¥6,000</div>
+      <div class="price-range">起 · 半臂 / 背部</div>
+      <ul class="price-features">
+        <li>写实 / 传统 / 满背</li>
+        <li>分多次完成</li>
+        <li>含无限次设计修改</li>
+        <li>VIP 全程服务</li>
+        <li>终身免费补色</li>
+      </ul>
+      <button class="price-btn">预约咨询</button>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div style="text-align: center;">
+    <div class="section-label">客户评价</div>
+    <h2 class="section-title">他们的故事</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"林墨老师的设计能力太强了，我只描述了一个模糊的想法，她就画出了超出我想象的作品。整个过程非常舒适。"</p>
+      <div class="testimonial-author">张先生</div>
+      <div class="testimonial-work">极简线条 · 手臂</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"找了很久才找到能做好传统龙纹的工作室。陈龙老师的手法非常细腻，每一片龙鳞都栩栩如生。强烈推荐！"</p>
+      <div class="testimonial-author">李女士</div>
+      <div class="testimonial-work">东方传统 · 后背</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2 class="cta-title">准备好了吗？</h2>
+  <p class="cta-subtitle">预约免费咨询，让我们一起创造你的专属纹身</p>
+  <a href="#" class="btn-red">预约免费咨询</a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">Ink Ritual</div>
+      <p class="footer-tagline">皮肤上的仪式。每一枚纹身都是一次与自我的对话，我们用专业与匠心，为你创造独一无二的身体艺术。</p>
+    </div>
+    <div class="footer-col">
+      <h4>服务</h4>
+      <a href="#">纹身风格</a>
+      <a href="#">纹身师介绍</a>
+      <a href="#">纹身护理</a>
+      <a href="#">遮盖修复</a>
+    </div>
+    <div class="footer-col">
+      <h4>工作室</h4>
+      <a href="#">关于我们</a>
+      <a href="#">空间环境</a>
+      <a href="#">卫生标准</a>
+      <a href="#">常见问题</a>
+    </div>
+    <div class="footer-col">
+      <h4>联系方式</h4>
+      <a href="#">上海市黄浦区外滩源 1 号</a>
+      <a href="#">hello@inkritual.com</a>
+      <a href="#">+86 21 6321 0000</a>
+      <a href="#">Instagram @inkritual</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Ink Ritual Studio. All rights reserved.</span>
+    <span>沪 ICP 备 XXXXXXXXXX 号</span>
+  </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Intersection Observer for animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.style-card, .artist-card, .process-step, .price-card, .testimonial-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>

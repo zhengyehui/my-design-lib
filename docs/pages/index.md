@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 164 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 166 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1521,6 +1521,24 @@ const pages = [
     colors: ['#1a1a1a', '#2563eb', '#059669'],
     rating: 9.3,
     description: '拟物化文件夹手风琴体验，暗色底 + 5色标签层叠 + 等宽字体档案风格',
+  },
+  {
+    id: 'zen-flow-yoga',
+    title: 'Zen Flow 瑜伽与正念工作室',
+    category: 'landing',
+    tags: ['瑜伽', '工作室', '正念', '暖色调', '呼吸动画'],
+    colors: ['#7B8F6B', '#FAF6F0', '#2C2C2C'],
+    rating: 9.4,
+    description: '瑜伽与正念工作室落地页，Cormorant Garamond 衬线字体 + CSS 呼吸圆环动画 + 课程网格 + 7日时间表 + 导师卡片 + 三栏定价',
+  },
+  {
+    id: 'ink-ritual',
+    title: 'Ink Ritual 纹身艺术工作室',
+    category: 'portfolio',
+    tags: ['纹身', '作品集', '暗色主题', '工作室', '暗黑美学'],
+    colors: ['#0A0A0A', '#C41E3A', '#C9A96E'],
+    rating: 9.4,
+    description: '暗色系纹身艺术工作室落地页，JetBrains Mono 标签 + 暗红强调 + 风格展示网格 + 纹身师团队 + 横滚画廊 + 流程步骤 + 三栏定价',
   },
 ]
 

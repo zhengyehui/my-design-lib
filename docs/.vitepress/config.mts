@@ -254,7 +254,8 @@ export default defineConfig({
             { text: 'Flame 约会应用', link: '/pages/flame-dating' },
             { text: 'MailCraft 邮件营销', link: '/pages/mailcraft-landing' },
             { text: 'FormFlow 表单构建器', link: '/pages/form-builder' },
-            { text: 'Hanami 怀石料理', link: '/pages/hanami-kaiseki' }
+            { text: 'Hanami 怀石料理', link: '/pages/hanami-kaiseki' },
+            { text: 'Zen Flow 瑜伽工作室', link: '/pages/zen-flow-yoga' }
           ]
         },
         {
@@ -283,7 +284,8 @@ export default defineConfig({
             { text: 'Terminal Dev Portfolio', link: '/pages/terminal-dev-portfolio' },
             { text: 'Elara Chen 极简设计师', link: '/pages/minimal-designer-bio' },
             { text: 'Kai Studio Bento Grid 作品集', link: '/pages/bento-portfolio' },
-            { text: 'ATELIER RÉSONANCE 策略传播', link: '/pages/atelier-resonance' }
+            { text: 'ATELIER RÉSONANCE 策略传播', link: '/pages/atelier-resonance' },
+            { text: 'Ink Ritual 纹身工作室', link: '/pages/ink-ritual' }
           ]
         },
         {
