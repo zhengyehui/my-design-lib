@@ -1478,6 +1478,15 @@ const pages = [
     description: '暗色系开发者 API 控制台，三栏布局端点导航 + 请求构造器 + JSON 语法高亮响应 + 方法变色选择器 + 键值对参数编辑器 + 闪烁光标终端效果',
   },
   {
+    id: 'mindwell-tracker',
+    title: 'MindWell 心理健康追踪',
+    category: 'app',
+    tags: ['Wellness', 'Dashboard', 'Mental Health', 'Mood Tracking', '冥想'],
+    colors: ['#8b7ec8', '#7da87b', '#2d2b3d'],
+    rating: 9.2,
+    description: '薰衣草紫心理健康追踪仪表盘，侧边栏深色导航 + 三列网格布局，含 SVG 渐变圆环健康评分、情绪柱状图、CSS 呼吸动画冥想圆圈、日记写作区、活动时间线、周报洞察卡片和目标进度条',
+  },
+  {
     id: 'product-roadmap',
     title: 'Pulse 公开产品路线图',
     category: 'content',
@@ -1597,12 +1606,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 164 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 166 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="164 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="166 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1611,7 +1620,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 164 个完整页面</span>
+      <span>📦 166 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
