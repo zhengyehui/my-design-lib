@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arcline API — Reference Documentation</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ─── Reset & Foundation ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Dark theme overrides */
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #1c2128;
+      --bg-card: #161b22;
+      --bg-card-hover: #1c2128;
+      --bg-code: #0d1117;
+      --border-primary: #30363d;
+      --border-secondary: #21262d;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-tertiary: #6e7681;
+      --accent-blue: #58a6ff;
+      --accent-green: #3fb950;
+      --accent-orange: #d29922;
+      --accent-red: #f85149;
+      --accent-purple: #bc8cff;
+      --accent-cyan: #39d2c0;
+      --method-get: #3fb950;
+      --method-get-bg: rgba(63, 185, 80, 0.12);
+      --method-post: #58a6ff;
+      --method-post-bg: rgba(88, 166, 255, 0.12);
+      --method-put: #d29922;
+      --method-put-bg: rgba(210, 153, 34, 0.12);
+      --method-delete: #f85149;
+      --method-delete-bg: rgba(248, 81, 73, 0.12);
+      --sidebar-width: 280px;
+      --header-height: 64px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 100px;
+      --shadow-card: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+      --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+      --transition-fast: 150ms ease;
+      --transition-normal: 250ms ease;
+      --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-height) + 24px); }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Subtle grid pattern on body */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(88, 166, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(88, 166, 255, 0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Top Header Bar ─── */
+    .top-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-height);
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid var(--border-secondary);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .header-logo svg { flex-shrink: 0; }
+
+    .header-logo .logo-wordmark {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-version {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      background: rgba(57, 210, 192, 0.1);
+      border: 1px solid rgba(57, 210, 192, 0.25);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      margin-left: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .header-search {
+      margin-left: auto;
+      position: relative;
+    }
+
+    .header-search input {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px 8px 36px;
+      color: var(--text-primary);
+      font-size: 13px;
+      width: 240px;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .header-search input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+    }
+
+    .header-search input::placeholder { color: var(--text-tertiary); }
+
+    .header-search svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-tertiary);
+      pointer-events: none;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      padding: 8px;
+      cursor: pointer;
+      margin-right: 12px;
+      transition: background var(--transition-fast);
+    }
+
+    .menu-toggle:hover { background: var(--bg-tertiary); }
+
+    /* ─── Layout ─── */
+    .layout {
+      display: flex;
+      padding-top: var(--header-height);
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── Sidebar ─── */
+    .sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-secondary);
+      overflow-y: auto;
+      padding: 20px 0;
+      z-index: 50;
+      transition: transform var(--transition-slow);
+    }
+
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border-primary); border-radius: 3px; }
+
+    .sidebar-section { margin-bottom: 8px; }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-tertiary);
+      padding: 12px 20px 6px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-right: 2px solid transparent;
+      transition: all var(--transition-fast);
+    }
+
+    .sidebar-link:hover {
+      color: var(--text-primary);
+      background: rgba(88, 166, 255, 0.05);
+    }
+
+    .sidebar-link.active {
+      color: var(--accent-blue);
+      background: rgba(88, 166, 255, 0.08);
+      border-right-color: var(--accent-blue);
+    }
+
+    .sidebar-link svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .sidebar-link.active svg { opacity: 1; }
+
+    .sidebar-method-badge {
+      font-size: 9px;
+      font-weight: 700;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      padding: 1px 6px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-method-badge.get { color: var(--method-get); background: var(--method-get-bg); }
+    .sidebar-method-badge.post { color: var(--method-post); background: var(--method-post-bg); }
+    .sidebar-method-badge.put { color: var(--method-put); background: var(--method-put-bg); }
+    .sidebar-method-badge.delete { color: var(--method-delete); background: var(--method-delete-bg); }
+
+    /* ─── Main Content ─── */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      padding: 40px 48px 80px;
+      max-width: 960px;
+    }
+
+    /* ─── Hero / Overview Section ─── */
+    .hero {
+      margin-bottom: 48px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    .base-url-box {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      font-size: 14px;
+      color: var(--accent-cyan);
+      width: fit-content;
+    }
+
+    .base-url-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-tertiary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    /* ─── Section Headers (Sticky) ─── */
+    .section-header {
+      position: sticky;
+      top: var(--header-height);
+      background: rgba(13, 17, 23, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px 0;
+      margin-bottom: 24px;
+      z-index: 10;
+      border-bottom: 1px solid var(--border-secondary);
+    }
+
+    .section-header h2 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .section-header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .section-divider {
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+      border-radius: 2px;
+      margin-top: 10px;
+    }
+
+    /* ─── Endpoint Cards ─── */
+    .endpoint-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-secondary);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 24px;
+      transition: all var(--transition-normal);
+      box-shadow: var(--shadow-card);
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .endpoint-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .endpoint-card:hover {
+      border-color: var(--border-primary);
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .endpoint-card.visible:hover {
+      transform: translateY(-2px);
+    }
+
+    .endpoint-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .method-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.5px;
+      min-width: 72px;
+      text-align: center;
+    }
+
+    .method-badge.get { color: var(--method-get); background: var(--method-get-bg); border: 1px solid rgba(63, 185, 80, 0.2); }
+    .method-badge.post { color: var(--method-post); background: var(--method-post-bg); border: 1px solid rgba(88, 166, 255, 0.2); }
+    .method-badge.put { color: var(--method-put); background: var(--method-put-bg); border: 1px solid rgba(210, 153, 34, 0.2); }
+    .method-badge.delete { color: var(--method-delete); background: var(--method-delete-bg); border: 1px solid rgba(248, 81, 73, 0.2); }
+
+    .endpoint-path {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      font-size: 15px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .endpoint-path .param {
+      color: var(--accent-orange);
+    }
+
+    .try-btn {
+      margin-left: auto;
+      background: transparent;
+      border: 1px solid var(--accent-blue);
+      color: var(--accent-blue);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      letter-spacing: 0.3px;
+    }
+
+    .try-btn:hover {
+      background: var(--accent-blue);
+      color: var(--bg-primary);
+      box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+    }
+
+    .endpoint-description {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    /* ─── Code Blocks ─── */
+    .code-block-wrapper {
+      margin-bottom: 16px;
+    }
+
+    .code-block-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+    }
+
+    .code-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      overflow-x: auto;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      position: relative;
+    }
+
+    .code-block .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-primary);
+      color: var(--text-tertiary);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      opacity: 0;
+    }
+
+    .code-block:hover .copy-btn { opacity: 1; }
+    .code-block .copy-btn:hover { color: var(--text-primary); border-color: var(--accent-blue); }
+
+    /* Syntax highlighting tokens */
+    .syn-key { color: var(--accent-blue); }
+    .syn-string { color: var(--accent-green); }
+    .syn-number { color: var(--accent-orange); }
+    .syn-bool { color: var(--accent-purple); }
+    .syn-null { color: var(--text-tertiary); }
+    .syn-comment { color: var(--text-tertiary); font-style: italic; }
+    .syn-keyword { color: var(--accent-purple); }
+    .syn-func { color: var(--accent-cyan); }
+    .syn-url { color: var(--accent-blue); text-decoration: underline; text-underline-offset: 2px; }
+    .syn-header { color: var(--accent-orange); }
+
+    /* ─── Parameter Tables ─── */
+    .params-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .params-table th {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-tertiary);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .params-table td {
+      font-size: 13px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-secondary);
+      color: var(--text-secondary);
+      vertical-align: top;
+    }
+
+    .params-table tr:last-child td { border-bottom: none; }
+
+    .param-name {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .param-type {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      color: var(--accent-purple);
+      font-size: 12px;
+    }
+
+    .param-required {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent-red);
+      background: rgba(248, 81, 73, 0.1);
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+      margin-left: 6px;
+    }
+
+    .param-optional {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-tertiary);
+      background: rgba(110, 118, 129, 0.15);
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+      margin-left: 6px;
+    }
+
+    /* ─── Auth Section ─── */
+    .auth-demo {
+      background: var(--bg-card);
+      border: 1px solid var(--border-secondary);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .auth-demo.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .auth-demo h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .auth-demo p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+
+    .auth-input-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: stretch;
+    }
+
+    .auth-input-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .auth-field {
+      flex: 1;
+    }
+
+    .auth-field input {
+      width: 100%;
+      background: var(--bg-code);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      font-size: 13px;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .auth-field input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+    }
+
+    .auth-field input::placeholder { color: var(--text-tertiary); }
+
+    .auth-generate-btn {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      border: none;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .auth-generate-btn:hover {
+      box-shadow: 0 4px 16px rgba(88, 166, 255, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .bearer-display {
+      background: var(--bg-code);
+      border: 1px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bearer-label {
+      color: var(--accent-orange);
+      font-weight: 600;
+    }
+
+    .bearer-token {
+      color: var(--text-secondary);
+      word-break: break-all;
+    }
+
+    /* ─── Status Code Table ─── */
+    .status-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-secondary);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .status-table th {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-tertiary);
+      text-align: left;
+      padding: 14px 18px;
+      background: var(--bg-tertiary);
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .status-table td {
+      font-size: 14px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-secondary);
+      color: var(--text-secondary);
+    }
+
+    .status-table tr:last-child td { border-bottom: none; }
+
+    .status-table tr:hover td { background: rgba(88, 166, 255, 0.03); }
+
+    .status-code {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .status-code.s2xx { color: var(--accent-green); }
+    .status-code.s3xx { color: var(--accent-cyan); }
+    .status-code.s4xx { color: var(--accent-orange); }
+    .status-code.s5xx { color: var(--accent-red); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        margin-left: 0;
+        padding: 24px 20px 60px;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+      .header-search input { width: 160px; }
+      .endpoint-top { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .try-btn { margin-left: 0; }
+      .auth-input-group { flex-direction: column; }
+    }
+
+    @media (max-width: 600px) {
+      .header-search { display: none; }
+      .hero h1 { font-size: 28px; }
+      .section-header h2 { font-size: 22px; }
+      .main { padding: 16px 14px 40px; }
+      .endpoint-card { padding: 20px; }
+    }
+
+    /* ─── Overlay for mobile sidebar ─── */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 40;
+    }
+
+    .sidebar-overlay.active { display: block; }
+
+    /* ─── Scroll Animation Base ─── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Top Header ═══ -->
+  <header class="top-header">
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="#" class="header-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <path d="M14 2L26 8v12l-12 6L2 20V8l12-6z" fill="url(#arc-grad)" opacity="0.15"/>
+        <path d="M14 2L26 8v12l-12 6L2 20V8l12-6z" stroke="url(#arc-grad)" stroke-width="1.5" fill="none"/>
+        <path d="M8 18l4-8 4 4 4-6" stroke="url(#arc-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs>
+          <linearGradient id="arc-grad" x1="2" y1="2" x2="26" y2="26">
+            <stop stop-color="#39d2c0"/>
+            <stop offset="1" stop-color="#58a6ff"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="logo-wordmark">Arcline</span>
+      <span class="header-version">v2.4</span>
+    </a>
+    <div class="header-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search endpoints…">
+    </div>
+  </header>
+
+  <!-- ═══ Sidebar Overlay (mobile) ═══ -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ═══ Layout ═══ -->
+  <div class="layout">
+
+    <!-- ─── Sidebar ─── -->
+    <aside class="sidebar" id="sidebar">
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <a href="#overview" class="sidebar-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          API Overview
+        </a>
+        <a href="#authentication" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Authentication
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Endpoints</div>
+        <a href="#users" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Users
+        </a>
+        <a href="#users-list" class="sidebar-link">
+          <span class="sidebar-method-badge get">GET</span>
+          /users
+        </a>
+        <a href="#users-create" class="sidebar-link">
+          <span class="sidebar-method-badge post">POST</span>
+          /users
+        </a>
+        <a href="#users-update" class="sidebar-link">
+          <span class="sidebar-method-badge put">PUT</span>
+          /users/:id
+        </a>
+
+        <a href="#products" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Products
+        </a>
+        <a href="#products-list" class="sidebar-link">
+          <span class="sidebar-method-badge get">GET</span>
+          /products
+        </a>
+        <a href="#products-create" class="sidebar-link">
+          <span class="sidebar-method-badge post">POST</span>
+          /products
+        </a>
+        <a href="#products-delete" class="sidebar-link">
+          <span class="sidebar-method-badge delete">DEL</span>
+          /products/:id
+        </a>
+
+        <a href="#orders" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="9" y1="3" x2="9" y2="9"/></svg>
+          Orders
+        </a>
+        <a href="#orders-list" class="sidebar-link">
+          <span class="sidebar-method-badge get">GET</span>
+          /orders
+        </a>
+        <a href="#orders-create" class="sidebar-link">
+          <span class="sidebar-method-badge post">POST</span>
+          /orders
+        </a>
+
+        <a href="#webhooks" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Webhooks
+        </a>
+        <a href="#webhooks-list" class="sidebar-link">
+          <span class="sidebar-method-badge get">GET</span>
+          /webhooks
+        </a>
+        <a href="#webhooks-create" class="sidebar-link">
+          <span class="sidebar-method-badge post">POST</span>
+          /webhooks
+        </a>
+        <a href="#webhooks-delete" class="sidebar-link">
+          <span class="sidebar-method-badge delete">DEL</span>
+          /webhooks/:id
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Reference</div>
+        <a href="#errors" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Error Codes
+        </a>
+        <a href="#rate-limits" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Rate Limits
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- ─── Main Content ─── -->
+    <main class="main">
+
+      <!-- ═══ Overview ═══ -->
+      <section id="overview" class="hero">
+        <h1>Arcline API Reference</h1>
+        <p>Build powerful commerce experiences with the Arcline REST API. Manage users, products, orders, and real-time webhooks with a consistent, predictable interface.</p>
+        <div class="base-url-box">
+          <span class="base-url-label">Base URL</span>
+          <code>https://api.arcline.dev/v2</code>
+        </div>
+      </section>
+
+      <!-- ═══ Authentication ═══ -->
+      <section id="authentication">
+        <div class="section-header">
+          <h2>Authentication</h2>
+          <p>Authenticate requests with API keys or Bearer tokens.</p>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="auth-demo fade-in">
+          <h3>API Key Authentication</h3>
+          <p>All API requests must include a valid API key in the <code>Authorization</code> header. You can generate keys from your Arcline Dashboard.</p>
+
+          <div class="auth-input-group">
+            <div class="auth-field">
+              <label>Your API Key</label>
+              <input type="text" placeholder="sk_live_••••••••••••••••" id="apiKeyInput">
+            </div>
+            <button class="auth-generate-btn" onclick="generateBearer()">Generate Bearer</button>
+          </div>
+
+          <div class="code-block-label">Authorization Header</div>
+          <div class="bearer-display">
+            <span class="bearer-label">Authorization:</span>
+            <span class="bearer-token" id="bearerDisplay">Bearer sk_live_••••••••••••••••</span>
+          </div>
+
+          <div style="margin-top:20px;">
+            <div class="code-block-label">Example Request</div>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="syn-keyword">curl</span> <span class="syn-string">https://api.arcline.dev/v2/users</span> \
+  <span class="syn-key">-H</span> <span class="syn-string">"Authorization: Bearer sk_live_a1b2c3d4e5f6"</span> \
+  <span class="syn-key">-H</span> <span class="syn-string">"Content-Type: application/json"</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Users Endpoints ═══ -->
+      <section id="users">
+        <div class="section-header">
+          <h2>Users</h2>
+          <p>Create, retrieve, and manage user accounts in your organization.</p>
+          <div class="section-divider"></div>
+        </div>
+
+        <!-- GET /users -->
+        <div class="endpoint-card fade-in" id="users-list">
+          <div class="endpoint-top">
+            <span class="method-badge get">GET</span>
+            <span class="endpoint-path">/v2/users</span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Returns a paginated list of all users. Results are sorted by creation date in descending order. Supports filtering by status and role.</p>
+
+          <table class="params-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">limit</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">integer</span></td>
+                <td>Number of results per page (1–100, default 25)</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">status</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Filter by status: <code>active</code>, <code>suspended</code>, <code>pending</code></td>
+              </tr>
+              <tr>
+                <td><span class="param-name">cursor</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Pagination cursor from previous response</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="code-block-label">Response — 200 OK</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"object"</span>: <span class="syn-string">"list"</span>,
+  <span class="syn-key">"data"</span>: [
+    {
+      <span class="syn-key">"id"</span>: <span class="syn-string">"usr_9f8e7d6c5b4a"</span>,
+      <span class="syn-key">"object"</span>: <span class="syn-string">"user"</span>,
+      <span class="syn-key">"name"</span>: <span class="syn-string">"Elena Vasquez"</span>,
+      <span class="syn-key">"email"</span>: <span class="syn-string">"elena@example.com"</span>,
+      <span class="syn-key">"role"</span>: <span class="syn-string">"admin"</span>,
+      <span class="syn-key">"status"</span>: <span class="syn-string">"active"</span>,
+      <span class="syn-key">"created_at"</span>: <span class="syn-string">"2026-08-15T09:42:00Z"</span>
+    }
+  ],
+  <span class="syn-key">"has_more"</span>: <span class="syn-bool">true</span>,
+  <span class="syn-key">"total_count"</span>: <span class="syn-number">1284</span>
+}
+          </div>
+        </div>
+
+        <!-- POST /users -->
+        <div class="endpoint-card fade-in" id="users-create">
+          <div class="endpoint-top">
+            <span class="method-badge post">POST</span>
+            <span class="endpoint-path">/v2/users</span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Creates a new user account. An activation email is sent automatically unless <code>skip_verification</code> is set.</p>
+
+          <table class="params-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">name</span><span class="param-required">required</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Full name of the user</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">email</span><span class="param-required">required</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Unique email address</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">role</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td><code>admin</code>, <code>member</code>, or <code>viewer</code> (default: <code>member</code>)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="code-block-label">Request</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="syn-keyword">POST</span> <span class="syn-url">/v2/users</span> <span class="syn-comment">HTTP/1.1</span>
+<span class="syn-header">Content-Type:</span> application/json
+<span class="syn-header">Authorization:</span> Bearer sk_live_a1b2c3d4e5f6
+
+{
+  <span class="syn-key">"name"</span>: <span class="syn-string">"Marcus Chen"</span>,
+  <span class="syn-key">"email"</span>: <span class="syn-string">"marcus@example.com"</span>,
+  <span class="syn-key">"role"</span>: <span class="syn-string">"admin"</span>
+}
+          </div>
+
+          <div class="code-block-label">Response — 201 Created</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"id"</span>: <span class="syn-string">"usr_3a2b1c0d9e8f"</span>,
+  <span class="syn-key">"object"</span>: <span class="syn-string">"user"</span>,
+  <span class="syn-key">"name"</span>: <span class="syn-string">"Marcus Chen"</span>,
+  <span class="syn-key">"email"</span>: <span class="syn-string">"marcus@example.com"</span>,
+  <span class="syn-key">"role"</span>: <span class="syn-string">"admin"</span>,
+  <span class="syn-key">"status"</span>: <span class="syn-string">"pending"</span>,
+  <span class="syn-key">"created_at"</span>: <span class="syn-string">"2026-08-30T10:15:00Z"</span>
+}
+          </div>
+        </div>
+
+        <!-- PUT /users/:id -->
+        <div class="endpoint-card fade-in" id="users-update">
+          <div class="endpoint-top">
+            <span class="method-badge put">PUT</span>
+            <span class="endpoint-path">/v2/users/<span class="param">:id</span></span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Updates an existing user by ID. Only the provided fields are modified; omitted fields remain unchanged.</p>
+
+          <table class="params-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">id</span><span class="param-required">required</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>The user's unique identifier (path parameter)</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">name</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Updated full name</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">status</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td><code>active</code> or <code>suspended</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="code-block-label">Response — 200 OK</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"id"</span>: <span class="syn-string">"usr_9f8e7d6c5b4a"</span>,
+  <span class="syn-key">"object"</span>: <span class="syn-string">"user"</span>,
+  <span class="syn-key">"name"</span>: <span class="syn-string">"Elena V. (Updated)"</span>,
+  <span class="syn-key">"status"</span>: <span class="syn-string">"active"</span>,
+  <span class="syn-key">"updated_at"</span>: <span class="syn-string">"2026-08-30T10:20:00Z"</span>
+}
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Products Endpoints ═══ -->
+      <section id="products">
+        <div class="section-header">
+          <h2>Products</h2>
+          <p>Manage your product catalog — items, pricing, and inventory metadata.</p>
+          <div class="section-divider"></div>
+        </div>
+
+        <!-- GET /products -->
+        <div class="endpoint-card fade-in" id="products-list">
+          <div class="endpoint-top">
+            <span class="method-badge get">GET</span>
+            <span class="endpoint-path">/v2/products</span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Lists all products with optional category filtering and full-text search. Returns pricing tiers and availability status.</p>
+
+          <table class="params-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">category</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Filter by product category slug</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">q</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Full-text search query</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">in_stock</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">boolean</span></td>
+                <td>Filter to only in-stock items</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="code-block-label">Response — 200 OK</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"object"</span>: <span class="syn-string">"list"</span>,
+  <span class="syn-key">"data"</span>: [
+    {
+      <span class="syn-key">"id"</span>: <span class="syn-string">"prod_xK9mL2nP"</span>,
+      <span class="syn-key">"object"</span>: <span class="syn-string">"product"</span>,
+      <span class="syn-key">"name"</span>: <span class="syn-string">"Arc Starter Kit"</span>,
+      <span class="syn-key">"description"</span>: <span class="syn-string">"Complete toolkit for new developers"</span>,
+      <span class="syn-key">"price"</span>: {
+        <span class="syn-key">"amount"</span>: <span class="syn-number">4999</span>,
+        <span class="syn-key">"currency"</span>: <span class="syn-string">"usd"</span>,
+        <span class="syn-key">"interval"</span>: <span class="syn-null">null</span>
+      },
+      <span class="syn-key">"in_stock"</span>: <span class="syn-bool">true</span>,
+      <span class="syn-key">"created_at"</span>: <span class="syn-string">"2026-06-01T12:00:00Z"</span>
+    }
+  ],
+  <span class="syn-key">"has_more"</span>: <span class="syn-bool">false</span>
+}
+          </div>
+        </div>
+
+        <!-- POST /products -->
+        <div class="endpoint-card fade-in" id="products-create">
+          <div class="endpoint-top">
+            <span class="method-badge post">POST</span>
+            <span class="endpoint-path">/v2/products</span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Creates a new product in your catalog. Pricing is specified in the smallest currency unit (e.g., cents for USD).</p>
+
+          <table class="params-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">name</span><span class="param-required">required</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Product display name</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">price</span><span class="param-required">required</span></td>
+                <td><span class="param-type">object</span></td>
+                <td>Price object with <code>amount</code> (integer) and <code>currency</code> (string)</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">description</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Product description (max 500 chars)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="code-block-label">Request Body</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"name"</span>: <span class="syn-string">"Arc Pro Plan"</span>,
+  <span class="syn-key">"description"</span>: <span class="syn-string">"Full access to all Arcline features"</span>,
+  <span class="syn-key">"price"</span>: {
+    <span class="syn-key">"amount"</span>: <span class="syn-number">19900</span>,
+    <span class="syn-key">"currency"</span>: <span class="syn-string">"usd"</span>,
+    <span class="syn-key">"interval"</span>: <span class="syn-string">"month"</span>
+  },
+  <span class="syn-key">"category"</span>: <span class="syn-string">"subscriptions"</span>
+}
+          </div>
+        </div>
+
+        <!-- DELETE /products/:id -->
+        <div class="endpoint-card fade-in" id="products-delete">
+          <div class="endpoint-top">
+            <span class="method-badge delete">DELETE</span>
+            <span class="endpoint-path">/v2/products/<span class="param">:id</span></span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Permanently deletes a product. This action is irreversible. Products with active subscriptions cannot be deleted.</p>
+
+          <div class="code-block-label">Response — 200 OK</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"id"</span>: <span class="syn-string">"prod_xK9mL2nP"</span>,
+  <span class="syn-key">"object"</span>: <span class="syn-string">"product"</span>,
+  <span class="syn-key">"deleted"</span>: <span class="syn-bool">true</span>
+}
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Orders Endpoints ═══ -->
+      <section id="orders">
+        <div class="section-header">
+          <h2>Orders</h2>
+          <p>Process and track customer orders through fulfillment.</p>
+          <div class="section-divider"></div>
+        </div>
+
+        <!-- GET /orders -->
+        <div class="endpoint-card fade-in" id="orders-list">
+          <div class="endpoint-top">
+            <span class="method-badge get">GET</span>
+            <span class="endpoint-path">/v2/orders</span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Retrieves all orders with line items, payment status, and shipping information. Supports date-range filtering.</p>
+
+          <table class="params-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">status</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td><code>pending</code>, <code>confirmed</code>, <code>shipped</code>, <code>delivered</code>, <code>cancelled</code></td>
+              </tr>
+              <tr>
+                <td><span class="param-name">created_after</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>ISO 8601 timestamp — filter orders created after this date</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">customer_id</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Filter by customer user ID</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="code-block-label">Response — 200 OK</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"object"</span>: <span class="syn-string">"list"</span>,
+  <span class="syn-key">"data"</span>: [
+    {
+      <span class="syn-key">"id"</span>: <span class="syn-string">"ord_Qp4R7sT1"</span>,
+      <span class="syn-key">"object"</span>: <span class="syn-string">"order"</span>,
+      <span class="syn-key">"customer_id"</span>: <span class="syn-string">"usr_9f8e7d6c5b4a"</span>,
+      <span class="syn-key">"status"</span>: <span class="syn-string">"confirmed"</span>,
+      <span class="syn-key">"items"</span>: [
+        {
+          <span class="syn-key">"product_id"</span>: <span class="syn-string">"prod_xK9mL2nP"</span>,
+          <span class="syn-key">"quantity"</span>: <span class="syn-number">2</span>,
+          <span class="syn-key">"unit_price"</span>: <span class="syn-number">4999</span>
+        }
+      ],
+      <span class="syn-key">"total"</span>: <span class="syn-number">9998</span>,
+      <span class="syn-key">"currency"</span>: <span class="syn-string">"usd"</span>,
+      <span class="syn-key">"created_at"</span>: <span class="syn-string">"2026-08-29T16:30:00Z"</span>
+    }
+  ],
+  <span class="syn-key">"has_more"</span>: <span class="syn-bool">false</span>
+}
+          </div>
+        </div>
+
+        <!-- POST /orders -->
+        <div class="endpoint-card fade-in" id="orders-create">
+          <div class="endpoint-top">
+            <span class="method-badge post">POST</span>
+            <span class="endpoint-path">/v2/orders</span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Creates a new order. Inventory is reserved immediately upon creation. Payment is processed asynchronously via webhook.</p>
+
+          <div class="code-block-label">Request Body</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"customer_id"</span>: <span class="syn-string">"usr_9f8e7d6c5b4a"</span>,
+  <span class="syn-key">"items"</span>: [
+    {
+      <span class="syn-key">"product_id"</span>: <span class="syn-string">"prod_xK9mL2nP"</span>,
+      <span class="syn-key">"quantity"</span>: <span class="syn-number">1</span>
+    },
+    {
+      <span class="syn-key">"product_id"</span>: <span class="syn-string">"prod_Hj3Kl8Mn"</span>,
+      <span class="syn-key">"quantity"</span>: <span class="syn-number">3</span>
+    }
+  ],
+  <span class="syn-key">"shipping_address"</span>: {
+    <span class="syn-key">"line1"</span>: <span class="syn-string">"42 Quantum Lane"</span>,
+    <span class="syn-key">"city"</span>: <span class="syn-string">"San Francisco"</span>,
+    <span class="syn-key">"state"</span>: <span class="syn-string">"CA"</span>,
+    <span class="syn-key">"postal_code"</span>: <span class="syn-string">"94102"</span>,
+    <span class="syn-key">"country"</span>: <span class="syn-string">"US"</span>
+  }
+}
+          </div>
+
+          <div class="code-block-label">Response — 201 Created</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"id"</span>: <span class="syn-string">"ord_Mn2Bv5Cx"</span>,
+  <span class="syn-key">"object"</span>: <span class="syn-string">"order"</span>,
+  <span class="syn-key">"status"</span>: <span class="syn-string">"pending"</span>,
+  <span class="syn-key">"total"</span>: <span class="syn-number">24996</span>,
+  <span class="syn-key">"currency"</span>: <span class="syn-string">"usd"</span>,
+  <span class="syn-key">"payment_status"</span>: <span class="syn-string">"awaiting"</span>,
+  <span class="syn-key">"created_at"</span>: <span class="syn-string">"2026-08-30T10:25:00Z"</span>
+}
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Webhooks Endpoints ═══ -->
+      <section id="webhooks">
+        <div class="section-header">
+          <h2>Webhooks</h2>
+          <p>Subscribe to real-time event notifications for your application.</p>
+          <div class="section-divider"></div>
+        </div>
+
+        <!-- GET /webhooks -->
+        <div class="endpoint-card fade-in" id="webhooks-list">
+          <div class="endpoint-top">
+            <span class="method-badge get">GET</span>
+            <span class="endpoint-path">/v2/webhooks</span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Returns all registered webhook endpoints for your account, including delivery status and recent failure counts.</p>
+
+          <div class="code-block-label">Response — 200 OK</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"object"</span>: <span class="syn-string">"list"</span>,
+  <span class="syn-key">"data"</span>: [
+    {
+      <span class="syn-key">"id"</span>: <span class="syn-string">"whk_Lp8Mn2Bv"</span>,
+      <span class="syn-key">"object"</span>: <span class="syn-string">"webhook_endpoint"</span>,
+      <span class="syn-key">"url"</span>: <span class="syn-string">"https://app.example.com/hooks/arcline"</span>,
+      <span class="syn-key">"events"</span>: [
+        <span class="syn-string">"order.created"</span>,
+        <span class="syn-string">"order.paid"</span>,
+        <span class="syn-string">"user.created"</span>
+      ],
+      <span class="syn-key">"active"</span>: <span class="syn-bool">true</span>,
+      <span class="syn-key">"failure_count"</span>: <span class="syn-number">0</span>,
+      <span class="syn-key">"created_at"</span>: <span class="syn-string">"2026-07-10T08:00:00Z"</span>
+    }
+  ]
+}
+          </div>
+        </div>
+
+        <!-- POST /webhooks -->
+        <div class="endpoint-card fade-in" id="webhooks-create">
+          <div class="endpoint-top">
+            <span class="method-badge post">POST</span>
+            <span class="endpoint-path">/v2/webhooks</span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Registers a new webhook endpoint. Arcline will send an HTTP POST request to your URL with a JSON payload whenever a subscribed event occurs.</p>
+
+          <table class="params-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">url</span><span class="param-required">required</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>The HTTPS URL to receive webhook payloads</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">events</span><span class="param-required">required</span></td>
+                <td><span class="param-type">string[]</span></td>
+                <td>List of event types to subscribe to</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">secret</span><span class="param-optional">optional</span></td>
+                <td><span class="param-type">string</span></td>
+                <td>Custom signing secret (auto-generated if omitted)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="code-block-label">Request Body</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"url"</span>: <span class="syn-string">"https://app.example.com/hooks/arcline"</span>,
+  <span class="syn-key">"events"</span>: [
+    <span class="syn-string">"order.created"</span>,
+    <span class="syn-string">"order.paid"</span>,
+    <span class="syn-string">"order.cancelled"</span>,
+    <span class="syn-string">"product.updated"</span>
+  ]
+}
+          </div>
+        </div>
+
+        <!-- DELETE /webhooks/:id -->
+        <div class="endpoint-card fade-in" id="webhooks-delete">
+          <div class="endpoint-top">
+            <span class="method-badge delete">DELETE</span>
+            <span class="endpoint-path">/v2/webhooks/<span class="param">:id</span></span>
+            <button class="try-btn">Try it</button>
+          </div>
+          <p class="endpoint-description">Removes a webhook endpoint. Pending deliveries in the retry queue are discarded.</p>
+
+          <div class="code-block-label">Response — 200 OK</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"id"</span>: <span class="syn-string">"whk_Lp8Mn2Bv"</span>,
+  <span class="syn-key">"object"</span>: <span class="syn-string">"webhook_endpoint"</span>,
+  <span class="syn-key">"deleted"</span>: <span class="syn-bool">true</span>
+}
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Error Codes ═══ -->
+      <section id="errors">
+        <div class="section-header">
+          <h2>Error Codes</h2>
+          <p>Standard HTTP status codes and Arcline-specific error types.</p>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="fade-in">
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; line-height: 1.7;">
+            Arcline uses conventional HTTP status codes to indicate the success or failure of an API request. Codes in the <code>2xx</code> range indicate success, <code>4xx</code> indicate client errors, and <code>5xx</code> indicate server-side issues.
+          </p>
+
+          <table class="status-table">
+            <thead>
+              <tr><th>Code</th><th>Status</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="status-code s2xx">200</span></td>
+                <td>OK</td>
+                <td>Request succeeded. Response body contains the result.</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s2xx">201</span></td>
+                <td>Created</td>
+                <td>A new resource was successfully created.</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s2xx">204</span></td>
+                <td>No Content</td>
+                <td>Request succeeded with no response body (common for deletes).</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s4xx">400</span></td>
+                <td>Bad Request</td>
+                <td>The request was malformed or missing required parameters.</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s4xx">401</span></td>
+                <td>Unauthorized</td>
+                <td>Missing or invalid API key / Bearer token.</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s4xx">403</span></td>
+                <td>Forbidden</td>
+                <td>Authenticated but insufficient permissions for this resource.</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s4xx">404</span></td>
+                <td>Not Found</td>
+                <td>The requested resource does not exist.</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s4xx">409</span></td>
+                <td>Conflict</td>
+                <td>A conflicting operation is in progress (e.g., duplicate email).</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s4xx">422</span></td>
+                <td>Unprocessable</td>
+                <td>Syntax is valid but semantically incorrect (e.g., negative price).</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s4xx">429</span></td>
+                <td>Rate Limited</td>
+                <td>Too many requests. Retry after the <code>Retry-After</code> header value.</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s5xx">500</span></td>
+                <td>Server Error</td>
+                <td>An unexpected internal error. Contact support if persistent.</td>
+              </tr>
+              <tr>
+                <td><span class="status-code s5xx">503</span></td>
+                <td>Unavailable</td>
+                <td>Service temporarily down for maintenance. Check status page.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 28px; margin-bottom: 8px;">
+            <div class="code-block-label">Error Response Format</div>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+{
+  <span class="syn-key">"error"</span>: {
+    <span class="syn-key">"type"</span>: <span class="syn-string">"invalid_request_error"</span>,
+    <span class="syn-key">"code"</span>: <span class="syn-string">"parameter_missing"</span>,
+    <span class="syn-key">"message"</span>: <span class="syn-string">"The 'email' field is required."</span>,
+    <span class="syn-key">"param"</span>: <span class="syn-string">"email"</span>,
+    <span class="syn-key">"doc_url"</span>: <span class="syn-string">"https://docs.arcline.dev/errors/parameter_missing"</span>
+  }
+}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Rate Limits ═══ -->
+      <section id="rate-limits">
+        <div class="section-header">
+          <h2>Rate Limits</h2>
+          <p>API request quotas and throttling behavior.</p>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="fade-in">
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; line-height: 1.7;">
+            The Arcline API enforces rate limits to ensure fair usage. Limits are applied per API key and measured using a sliding window algorithm.
+          </p>
+
+          <table class="status-table">
+            <thead>
+              <tr><th>Plan</th><th>Rate Limit</th><th>Burst Limit</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Free</td>
+                <td>100 requests / minute</td>
+                <td>10 requests / second</td>
+              </tr>
+              <tr>
+                <td>Pro</td>
+                <td>1,000 requests / minute</td>
+                <td>50 requests / second</td>
+              </tr>
+              <tr>
+                <td>Enterprise</td>
+                <td>10,000 requests / minute</td>
+                <td>200 requests / second</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 20px;">
+            <div class="code-block-label">Rate Limit Headers</div>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="syn-header">X-RateLimit-Limit:</span> 1000
+<span class="syn-header">X-RateLimit-Remaining:</span> 987
+<span class="syn-header">X-RateLimit-Reset:</span> 1693396200
+<span class="syn-header">Retry-After:</span> <span class="syn-number">30</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ═══ JavaScript ═══ -->
+  <script>
+    // ─── Sidebar Toggle (mobile) ───
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+    });
+
+    // Close sidebar on link click (mobile)
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 900) {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+        }
+      });
+    });
+
+    // ─── Active Sidebar Link on Scroll ───
+    const sections = document.querySelectorAll('section[id], .endpoint-card[id]');
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+    function updateActiveLink() {
+      let current = '';
+      const scrollY = window.scrollY + 100;
+
+      document.querySelectorAll('section[id]').forEach(section => {
+        if (section.offsetTop <= scrollY) {
+          current = section.id;
+        }
+      });
+
+      sidebarLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href && href === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveLink, { passive: true });
+
+    // ─── Fade-in on Scroll (Intersection Observer) ───
+    const observerOptions = {
+      threshold: 0.08,
+      rootMargin: '0px 0px -40px 0px'
+    };
+
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      fadeObserver.observe(el);
+    });
+
+    // ─── Copy Button ───
+    function copyCode(btn) {
+      const codeBlock = btn.closest('.code-block');
+      const text = codeBlock.textContent.replace('Copy', '').trim();
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      }).catch(() => {
+        btn.textContent = 'Failed';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+    }
+
+    // ─── Bearer Token Generator ───
+    function generateBearer() {
+      const input = document.getElementById('apiKeyInput');
+      const display = document.getElementById('bearerDisplay');
+      const key = input.value.trim() || 'sk_live_' + Array.from({ length: 16 }, () =>
+        'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)]
+      ).join('');
+      display.textContent = 'Bearer ' + key;
+    }
+
+    // ─── Try It Button Ripple ───
+    document.querySelectorAll('.try-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.style.cssText = `
+          position:absolute; border-radius:50%;
+          background:rgba(88,166,255,0.3);
+          width:20px; height:20px;
+          transform:scale(0);
+          animation: ripple-out 0.5s ease-out;
+          pointer-events:none;
+          left:${e.offsetX - 10}px;
+          top:${e.offsetY - 10}px;
+        `;
+        this.style.position = 'relative';
+        this.style.overflow = 'hidden';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 500);
+      });
+    });
+
+    // Ripple keyframe
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple-out {
+        to { transform: scale(6); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+
+</body>
+</html>

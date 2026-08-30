@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whiskers & Brew — Cat Café</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --cream: #FFF8F0;
+      --terracotta: #C4704B;
+      --terracotta-light: #d4896a;
+      --sage: #8B9E7C;
+      --sage-light: #a3b496;
+      --warm-brown: #5C3D2E;
+      --soft-pink: #F0D5C8;
+      --soft-pink-dark: #e0b8a6;
+      --white: #FFFFFF;
+      --text-dark: #3a2518;
+      --text-medium: #6b4d3e;
+      --text-light: #8a7060;
+
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', 'Segoe UI', sans-serif;
+
+      --shadow-sm: 0 2px 8px rgba(92, 61, 46, 0.08);
+      --shadow-md: 0 4px 20px rgba(92, 61, 46, 0.12);
+      --shadow-lg: 0 8px 40px rgba(92, 61, 46, 0.16);
+      --shadow-glow: 0 0 30px rgba(196, 112, 75, 0.2);
+
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-heading);
+      line-height: 1.3;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== PAW PRINT DECORATIONS ===== */
+    .paw-decoration {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.08;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 248, 240, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(196, 112, 75, 0.1);
+      transition: var(--transition);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--warm-brown);
+    }
+
+    .nav-logo span {
+      color: var(--terracotta);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--text-medium);
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--terracotta);
+      transition: var(--transition);
+      border-radius: 1px;
+    }
+
+    .nav-links a:hover {
+      color: var(--terracotta);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--warm-brown);
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(139, 158, 124, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(240, 213, 200, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(196, 112, 75, 0.1) 0%, transparent 50%),
+        linear-gradient(180deg, var(--cream) 0%, #fff5eb 50%, var(--soft-pink) 100%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        radial-gradient(circle at 25% 25%, var(--terracotta) 1px, transparent 1px),
+        radial-gradient(circle at 75% 75%, var(--sage) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.06;
+      animation: patternShift 20s linear infinite;
+    }
+
+    @keyframes patternShift {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    .hero-paws {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-paws span {
+      position: absolute;
+      font-size: 3rem;
+      opacity: 0.06;
+      animation: floatPaw 15s ease-in-out infinite;
+    }
+
+    .hero-paws span:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; font-size: 2.5rem; }
+    .hero-paws span:nth-child(2) { top: 20%; right: 8%; animation-delay: -3s; font-size: 2rem; }
+    .hero-paws span:nth-child(3) { top: 60%; left: 10%; animation-delay: -6s; font-size: 3.5rem; }
+    .hero-paws span:nth-child(4) { top: 75%; right: 15%; animation-delay: -9s; font-size: 2rem; }
+    .hero-paws span:nth-child(5) { top: 40%; left: 80%; animation-delay: -12s; font-size: 2.5rem; }
+    .hero-paws span:nth-child(6) { bottom: 15%; left: 30%; animation-delay: -4s; font-size: 2rem; }
+
+    @keyframes floatPaw {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-15px) rotate(5deg); }
+      50% { transform: translateY(0) rotate(0deg); }
+      75% { transform: translateY(10px) rotate(-3deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 120px 24px 80px;
+    }
+
+    .hero-emoji {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      display: inline-block;
+      animation: catBounce 3s ease-in-out infinite;
+    }
+
+    @keyframes catBounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.05); }
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      color: var(--warm-brown);
+      margin-bottom: 8px;
+      letter-spacing: -1px;
+    }
+
+    .hero-title .amp {
+      color: var(--terracotta);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-heading);
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-style: italic;
+      color: var(--terracotta);
+      margin-bottom: 40px;
+      opacity: 0.9;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .btn-primary {
+      background: var(--terracotta);
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(196, 112, 75, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--terracotta-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(196, 112, 75, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--warm-brown);
+      border: 2px solid var(--warm-brown);
+    }
+
+    .btn-secondary:hover {
+      background: var(--warm-brown);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      animation: scrollBounce 2s ease-in-out infinite;
+    }
+
+    .hero-scroll-hint span {
+      font-size: 1.5rem;
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ===== SECTION COMMON ===== */
+    .section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--terracotta);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--warm-brown);
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ===== ABOUT SECTION ===== */
+    .about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-text h3 {
+      font-size: 1.8rem;
+      color: var(--warm-brown);
+      margin-bottom: 20px;
+    }
+
+    .about-text p {
+      color: var(--text-medium);
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+    }
+
+    .about-features {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .about-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .about-feature-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: var(--soft-pink);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .about-feature-text strong {
+      display: block;
+      color: var(--warm-brown);
+      margin-bottom: 2px;
+    }
+
+    .about-feature-text span {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .about-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-cat-scene {
+      background: linear-gradient(135deg, var(--soft-pink) 0%, var(--cream) 100%);
+      border-radius: var(--radius-xl);
+      padding: 60px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .about-cat-scene::before {
+      content: '🐾 🐾 🐾';
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 1.5rem;
+      opacity: 0.2;
+    }
+
+    .cat-art {
+      font-size: 6rem;
+      margin-bottom: 16px;
+      display: block;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .cat-art-sub {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .about-cat-scene p {
+      font-family: var(--font-heading);
+      font-style: italic;
+      color: var(--terracotta);
+      font-size: 1.1rem;
+    }
+
+    .cat-art-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      font-size: 2.5rem;
+      margin-top: 20px;
+    }
+
+    .cat-art-row span {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .cat-art-row span:nth-child(2) { animation-delay: -1s; }
+    .cat-art-row span:nth-child(3) { animation-delay: -2s; }
+
+    /* ===== CAT RESIDENTS ===== */
+    .cats {
+      background: var(--cream);
+    }
+
+    .cats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .cat-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      animation: catFloat 6s ease-in-out infinite;
+    }
+
+    .cat-card:nth-child(2) { animation-delay: -1s; }
+    .cat-card:nth-child(3) { animation-delay: -2s; }
+    .cat-card:nth-child(4) { animation-delay: -3s; }
+    .cat-card:nth-child(5) { animation-delay: -4s; }
+    .cat-card:nth-child(6) { animation-delay: -5s; }
+
+    @keyframes catFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .cat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--terracotta), var(--sage));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .cat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-glow), var(--shadow-lg);
+    }
+
+    .cat-card:hover::before {
+      opacity: 1;
+    }
+
+    .cat-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--soft-pink), var(--cream));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      margin: 0 auto 16px;
+      border: 3px solid var(--soft-pink);
+      transition: var(--transition);
+    }
+
+    .cat-card:hover .cat-avatar {
+      transform: scale(1.05);
+      border-color: var(--terracotta);
+    }
+
+    .cat-name {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      color: var(--warm-brown);
+      margin-bottom: 4px;
+    }
+
+    .cat-breed {
+      font-size: 0.85rem;
+      color: var(--terracotta);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .cat-personality {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .cat-tag {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--cream);
+      color: var(--text-medium);
+      border: 1px solid rgba(196, 112, 75, 0.15);
+    }
+
+    .cat-fact {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      font-style: italic;
+      line-height: 1.5;
+      padding-top: 12px;
+      border-top: 1px solid rgba(196, 112, 75, 0.1);
+    }
+
+    .cat-fact::before {
+      content: '💬 ';
+    }
+
+    /* ===== MENU SECTION ===== */
+    .menu {
+      background: var(--white);
+      position: relative;
+    }
+
+    .menu::before {
+      content: '🐾';
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      font-size: 4rem;
+      opacity: 0.04;
+    }
+
+    .menu::after {
+      content: '🐾';
+      position: absolute;
+      bottom: 60px;
+      right: 60px;
+      font-size: 5rem;
+      opacity: 0.04;
+    }
+
+    .menu-categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
+    }
+
+    .menu-category {
+      background: var(--cream);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      position: relative;
+    }
+
+    .menu-category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid rgba(196, 112, 75, 0.1);
+    }
+
+    .menu-category-icon {
+      font-size: 2rem;
+    }
+
+    .menu-category-title {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      color: var(--warm-brown);
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px dashed rgba(196, 112, 75, 0.12);
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item-info {
+      flex: 1;
+    }
+
+    .menu-item-name {
+      font-weight: 600;
+      color: var(--warm-brown);
+      font-size: 1rem;
+      margin-bottom: 3px;
+    }
+
+    .menu-item-desc {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .menu-item-price {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--terracotta);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+
+    /* ===== VISIT US ===== */
+    .visit {
+      background: linear-gradient(135deg, var(--warm-brown) 0%, #4a3020 100%);
+      color: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .visit::before {
+      content: '🐾 🐾 🐾 🐾 🐾 🐾';
+      position: absolute;
+      top: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 2rem;
+      opacity: 0.06;
+      letter-spacing: 20px;
+    }
+
+    .visit .section-label {
+      color: var(--soft-pink);
+    }
+
+    .visit .section-title {
+      color: var(--cream);
+    }
+
+    .visit .section-subtitle {
+      color: rgba(255, 248, 240, 0.7);
+    }
+
+    .visit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .visit-info {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .visit-block {
+      background: rgba(255, 248, 240, 0.07);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      border: 1px solid rgba(255, 248, 240, 0.1);
+    }
+
+    .visit-block h3 {
+      font-size: 1.2rem;
+      color: var(--soft-pink);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .visit-hours {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .visit-hours-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+    }
+
+    .visit-hours-day {
+      color: rgba(255, 248, 240, 0.7);
+    }
+
+    .visit-hours-time {
+      font-weight: 600;
+      color: var(--cream);
+    }
+
+    .visit-address p {
+      color: rgba(255, 248, 240, 0.8);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .visit-contact a {
+      color: var(--soft-pink);
+      font-weight: 500;
+    }
+
+    .visit-contact a:hover {
+      color: var(--cream);
+    }
+
+    .visit-contact p {
+      color: rgba(255, 248, 240, 0.8);
+      margin-bottom: 6px;
+    }
+
+    .visit-map {
+      background: rgba(255, 248, 240, 0.05);
+      border-radius: var(--radius-lg);
+      height: 100%;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed rgba(255, 248, 240, 0.15);
+      text-align: center;
+      padding: 40px;
+    }
+
+    .visit-map-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      opacity: 0.6;
+    }
+
+    .visit-map p {
+      color: rgba(255, 248, 240, 0.5);
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+
+    .visit-map-address {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      color: rgba(255, 248, 240, 0.8);
+    }
+
+    /* ===== ADOPTION CTA ===== */
+    .adoption {
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(139, 158, 124, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 50%, rgba(240, 213, 200, 0.3) 0%, transparent 50%),
+        var(--cream);
+      text-align: center;
+    }
+
+    .adoption-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 60px 48px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .adoption-card::before {
+      content: '🐱 💕 🐱';
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
+      opacity: 0.15;
+    }
+
+    .adoption-emoji {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .adoption h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: var(--warm-brown);
+      margin-bottom: 16px;
+    }
+
+    .adoption p {
+      font-size: 1.1rem;
+      color: var(--text-medium);
+      max-width: 550px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .adoption-steps {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .adoption-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .adoption-step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--soft-pink);
+      color: var(--terracotta);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .adoption-step span {
+      font-size: 0.9rem;
+      color: var(--text-medium);
+      font-weight: 500;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--warm-brown);
+      color: rgba(255, 248, 240, 0.8);
+      padding: 60px 0 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand h3 {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      color: var(--cream);
+      margin-bottom: 12px;
+    }
+
+    .footer-brand h3 span {
+      color: var(--terracotta-light);
+    }
+
+    .footer-brand p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(255, 248, 240, 0.6);
+      max-width: 300px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 248, 240, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: var(--transition);
+    }
+
+    .footer-social a:hover {
+      background: var(--terracotta);
+      transform: translateY(-2px);
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-heading);
+      color: var(--cream);
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a {
+      font-size: 0.9rem;
+      color: rgba(255, 248, 240, 0.6);
+    }
+
+    .footer-col a:hover {
+      color: var(--soft-pink);
+    }
+
+    .footer-bottom {
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 248, 240, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: rgba(255, 248, 240, 0.4);
+    }
+
+    .footer-bottom-paws {
+      letter-spacing: 6px;
+      font-size: 0.8rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 968px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-visual {
+        order: -1;
+      }
+
+      .visit-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .visit-map {
+        min-height: 250px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: 70px 0;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 248, 240, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 20px 24px;
+        gap: 16px;
+        border-bottom: 1px solid rgba(196, 112, 75, 0.1);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-mobile-toggle {
+        display: block;
+      }
+
+      .menu-categories {
+        grid-template-columns: 1fr;
+      }
+
+      .cats-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .adoption-card {
+        padding: 40px 24px;
+      }
+
+      .adoption-steps {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+      }
+
+      .visit-hours-row {
+        flex-direction: column;
+        gap: 2px;
+      }
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Whiskers <span>&</span> Brew</a>
+      <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#cats">Our Cats</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#visit">Visit</a></li>
+        <li><a href="#adopt">Adopt</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
+    <div class="hero-paws">
+      <span>🐾</span>
+      <span>🐾</span>
+      <span>🐾</span>
+      <span>🐾</span>
+      <span>🐾</span>
+      <span>🐾</span>
+    </div>
+    <div class="hero-content">
+      <div class="hero-emoji">🐱</div>
+      <h1 class="hero-title">Whiskers <span class="amp">&</span> Brew</h1>
+      <p class="hero-tagline">Where every cup comes with a purr</p>
+      <div class="hero-buttons">
+        <a href="#menu" class="btn btn-primary">☕ View Our Menu</a>
+        <a href="#cats" class="btn btn-secondary">🐾 Meet the Cats</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>↓</span>
+      Scroll to explore
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">🐾 Our Story</div>
+        <h2 class="section-title">Welcome to Whiskers & Brew</h2>
+        <p class="section-subtitle">A cozy corner where artisan coffee meets feline friendship</p>
+      </div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <h3>More Than Just a Coffee Shop</h3>
+          <p>
+            Founded in 2020, Whiskers & Brew began with a simple dream: create a warm, welcoming space where people could enjoy exceptional coffee while spending time with rescue cats looking for their forever homes.
+          </p>
+          <p>
+            Every cat in our café is a rescue, and every visit supports our mission to find them loving families. Whether you're here for a latte, a cuddle, or both — you're making a difference.
+          </p>
+          <div class="about-features">
+            <div class="about-feature">
+              <div class="about-feature-icon">☕</div>
+              <div class="about-feature-text">
+                <strong>Artisan Coffee & Tea</strong>
+                <span>Locally roasted beans, hand-crafted beverages</span>
+              </div>
+            </div>
+            <div class="about-feature">
+              <div class="about-feature-icon">🐾</div>
+              <div class="about-feature-text">
+                <strong>Rescue Cat Lounge</strong>
+                <span>12+ adoptable cats in a cozy, open environment</span>
+              </div>
+            </div>
+            <div class="about-feature">
+              <div class="about-feature-icon">🍰</div>
+              <div class="about-feature-text">
+                <strong>Fresh Pastries Daily</strong>
+                <span>Baked every morning by local artisan bakers</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-visual reveal">
+          <div class="about-cat-scene">
+            <span class="cat-art">😺</span>
+            <span class="cat-art-sub">☕ ✨ 🧶</span>
+            <p>"Life is better with cats and coffee"</p>
+            <div class="cat-art-row">
+              <span>🐱</span>
+              <span>🐈</span>
+              <span>😺</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAT RESIDENTS SECTION -->
+  <section class="section cats" id="cats">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">🐾 Furry Friends</div>
+        <h2 class="section-title">Meet Our Cat Residents</h2>
+        <p class="section-subtitle">Each of our cats has a unique personality and a story to tell. Come meet them!</p>
+      </div>
+      <div class="cats-grid">
+        <!-- Cat 1 -->
+        <div class="cat-card reveal">
+          <div class="cat-avatar">🐱</div>
+          <h3 class="cat-name">Mochi</h3>
+          <p class="cat-breed">Scottish Fold</p>
+          <div class="cat-personality">
+            <span class="cat-tag">Gentle</span>
+            <span class="cat-tag">Lap Cat</span>
+            <span class="cat-tag">Shy</span>
+          </div>
+          <p class="cat-fact">Loves to curl up in your lap while you read. Will purr for hours if you scratch behind her ears.</p>
+        </div>
+
+        <!-- Cat 2 -->
+        <div class="cat-card reveal">
+          <div class="cat-avatar">😺</div>
+          <h3 class="cat-name">Biscuit</h3>
+          <p class="cat-breed">Orange Tabby</p>
+          <div class="cat-personality">
+            <span class="cat-tag">Playful</span>
+            <span class="cat-tag">Goofy</span>
+            <span class="cat-tag">Foodie</span>
+          </div>
+          <p class="cat-fact">Will steal your croissant when you're not looking. Has perfected the art of looking innocent.</p>
+        </div>
+
+        <!-- Cat 3 -->
+        <div class="cat-card reveal">
+          <div class="cat-avatar">🐈‍⬛</div>
+          <h3 class="cat-name">Shadow</h3>
+          <p class="cat-breed">Black Domestic Shorthair</p>
+          <div class="cat-personality">
+            <span class="cat-tag">Mysterious</span>
+            <span class="cat-tag">Independent</span>
+            <span class="cat-tag">Sweet</span>
+          </div>
+          <p class="cat-fact">Appears out of nowhere when you open a tuna can. The unofficial security guard of the café.</p>
+        </div>
+
+        <!-- Cat 4 -->
+        <div class="cat-card reveal">
+          <div class="cat-avatar">🐱</div>
+          <h3 class="cat-name">Hazel</h3>
+          <p class="cat-breed">Calico</p>
+          <div class="cat-personality">
+            <span class="cat-tag">Sassy</span>
+            <span class="cat-tag">Smart</span>
+            <span class="cat-tag">Vocal</span>
+          </div>
+          <p class="cat-fact">Will tell you exactly what she thinks — loudly. Has very strong opinions about cream vs. oat milk.</p>
+        </div>
+
+        <!-- Cat 5 -->
+        <div class="cat-card reveal">
+          <div class="cat-avatar">😺</div>
+          <h3 class="cat-name">Noodle</h3>
+          <p class="cat-breed">Ragdoll Mix</p>
+          <div class="cat-personality">
+            <span class="cat-tag">Chill</span>
+            <span class="cat-tag">Floppy</span>
+            <span class="cat-tag">Cuddly</span>
+          </div>
+          <p class="cat-fact">Goes completely limp when you pick him up. The ultimate therapy cat — certified good vibes only.</p>
+        </div>
+
+        <!-- Cat 6 -->
+        <div class="cat-card reveal">
+          <div class="cat-avatar">🐱</div>
+          <h3 class="cat-name">Clover</h3>
+          <p class="cat-breed">Tabby & White</p>
+          <div class="cat-personality">
+            <span class="cat-tag">Adventurous</span>
+            <span class="cat-tag">Curious</span>
+            <span class="cat-tag">Young</span>
+          </div>
+          <p class="cat-fact">The youngest resident at 8 months. Can be found climbing the bookshelf or chasing her own tail.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU SECTION -->
+  <section class="section menu" id="menu">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">☕ Sip & Snack</div>
+        <h2 class="section-title">Our Menu</h2>
+        <p class="section-subtitle">Handcrafted drinks and freshly baked treats, served with a side of purrs</p>
+      </div>
+      <div class="menu-categories">
+        <!-- Coffee -->
+        <div class="menu-category reveal">
+          <div class="menu-category-header">
+            <span class="menu-category-icon">☕</span>
+            <h3 class="menu-category-title">Coffee & Espresso</h3>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">The Purr-fect Latte</div>
+              <div class="menu-item-desc">Double shot, steamed oat milk, vanilla</div>
+            </div>
+            <div class="menu-item-price">$5.50</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Whiskers Cappuccino</div>
+              <div class="menu-item-desc">Classic cap with cat latte art</div>
+            </div>
+            <div class="menu-item-price">$5.00</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Meow-cha Latte</div>
+              <div class="menu-item-desc">Ceremonial matcha, honey, steamed milk</div>
+            </div>
+            <div class="menu-item-price">$6.00</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Cold Brew Tonic</div>
+              <div class="menu-item-desc">Cold brew, sparkling water, citrus twist</div>
+            </div>
+            <div class="menu-item-price">$5.50</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Espresso (Single/Double)</div>
+              <div class="menu-item-desc">Bold, rich, locally roasted</div>
+            </div>
+            <div class="menu-item-price">$3.50</div>
+          </div>
+        </div>
+
+        <!-- Tea -->
+        <div class="menu-category reveal">
+          <div class="menu-category-header">
+            <span class="menu-category-icon">🍵</span>
+            <h3 class="menu-category-title">Tea & Other Sips</h3>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Kitty Chamomile</div>
+              <div class="menu-item-desc">Chamomile, lavender, honey</div>
+            </div>
+            <div class="menu-item-price">$4.50</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Earl Grey Cream</div>
+              <div class="menu-item-desc">Classic Earl Grey with a splash of cream</div>
+            </div>
+            <div class="menu-item-price">$4.00</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Spiced Chai</div>
+              <div class="menu-item-desc">House-blend spices, steamed milk, cinnamon</div>
+            </div>
+            <div class="menu-item-price">$5.00</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Fresh Lemonade</div>
+              <div class="menu-item-desc">House-made, mint garnish</div>
+            </div>
+            <div class="menu-item-price">$4.00</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Hot Chocolate</div>
+              <div class="menu-item-desc">Belgian chocolate, whipped cream, marshmallows</div>
+            </div>
+            <div class="menu-item-price">$5.00</div>
+          </div>
+        </div>
+
+        <!-- Pastries -->
+        <div class="menu-category reveal">
+          <div class="menu-category-header">
+            <span class="menu-category-icon">🥐</span>
+            <h3 class="menu-category-title">Pastries & Treats</h3>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Cat Paw Cookie</div>
+              <div class="menu-item-desc">Buttery shortbread, paw-shaped, with jam</div>
+            </div>
+            <div class="menu-item-price">$3.50</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Blueberry Muffin</div>
+              <div class="menu-item-desc">Fresh blueberries, crumble top</div>
+            </div>
+            <div class="menu-item-price">$4.00</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Cinnamon Roll</div>
+              <div class="menu-item-desc">Warm, gooey, cream cheese glaze</div>
+            </div>
+            <div class="menu-item-price">$4.50</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Almond Croissant</div>
+              <div class="menu-item-desc">Flaky, filled with almond cream</div>
+            </div>
+            <div class="menu-item-price">$4.50</div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">Banana Bread Slice</div>
+              <div class="menu-item-desc">Walnuts, chocolate chips, toasted</div>
+            </div>
+            <div class="menu-item-price">$3.50</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT US SECTION -->
+  <section class="section visit" id="visit">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">📍 Come Say Hi</div>
+        <h2 class="section-title">Visit Us</h2>
+        <p class="section-subtitle">We'd love to see you! Walk-ins welcome, reservations recommended for weekends.</p>
+      </div>
+      <div class="visit-grid">
+        <div class="visit-info reveal">
+          <div class="visit-block">
+            <h3>🕐 Hours</h3>
+            <div class="visit-hours">
+              <div class="visit-hours-row">
+                <span class="visit-hours-day">Monday – Thursday</span>
+                <span class="visit-hours-time">8:00 AM – 7:00 PM</span>
+              </div>
+              <div class="visit-hours-row">
+                <span class="visit-hours-day">Friday</span>
+                <span class="visit-hours-time">8:00 AM – 9:00 PM</span>
+              </div>
+              <div class="visit-hours-row">
+                <span class="visit-hours-day">Saturday</span>
+                <span class="visit-hours-time">9:00 AM – 9:00 PM</span>
+              </div>
+              <div class="visit-hours-row">
+                <span class="visit-hours-day">Sunday</span>
+                <span class="visit-hours-time">9:00 AM – 6:00 PM</span>
+              </div>
+            </div>
+          </div>
+          <div class="visit-block visit-address">
+            <h3>📍 Location</h3>
+            <p>
+              42 Whisker Lane<br>
+              Purrington District<br>
+              Portland, OR 97201
+            </p>
+          </div>
+          <div class="visit-block visit-contact">
+            <h3>📞 Contact</h3>
+            <p>Phone: <a href="tel:+15035551234">(503) 555-1234</a></p>
+            <p>Email: <a href="mailto:hello@whiskersandbrew.com">hello@whiskersandbrew.com</a></p>
+          </div>
+        </div>
+        <div class="visit-map reveal">
+          <div class="visit-map-icon">🗺️</div>
+          <p class="visit-map-address">42 Whisker Lane, Portland, OR</p>
+          <p>Map placeholder — embed your favorite map service here</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADOPTION CTA -->
+  <section class="section adoption" id="adopt">
+    <div class="container">
+      <div class="adoption-card reveal">
+        <span class="adoption-emoji">💕🐱💕</span>
+        <h2>Find Your Purr-fect Match</h2>
+        <p>
+          All of our café cats are rescues looking for their forever homes. Our adoption process is simple, supportive, and designed to create lasting bonds between cats and families.
+        </p>
+        <div class="adoption-steps">
+          <div class="adoption-step">
+            <div class="adoption-step-num">1</div>
+            <span>Visit & Connect</span>
+          </div>
+          <div class="adoption-step">
+            <div class="adoption-step-num">2</div>
+            <span>Fill Application</span>
+          </div>
+          <div class="adoption-step">
+            <div class="adoption-step-num">3</div>
+            <span>Meet & Greet</span>
+          </div>
+          <div class="adoption-step">
+            <div class="adoption-step-num">4</div>
+            <span>Welcome Home! 🏡</span>
+          </div>
+        </div>
+        <a href="#" class="btn btn-primary">🐾 Start Adoption Process</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Whiskers <span>&</span> Brew</h3>
+          <p>A cozy cat café where great coffee meets adoptable rescue cats. Every sip supports a second chance.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Instagram">📸</a>
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="TikTok">🎵</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="#about">Our Story</a></li>
+            <li><a href="#cats">Cat Residents</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#visit">Visit Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Get Involved</h4>
+          <ul>
+            <li><a href="#adopt">Adopt a Cat</a></li>
+            <li><a href="#">Volunteer</a></li>
+            <li><a href="#">Donate</a></li>
+            <li><a href="#">Partner With Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Info</h4>
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Gift Cards</a></li>
+            <li><a href="#">Private Events</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Whiskers & Brew. All rights reserved. Made with ☕ & 💕</span>
+        <span class="footer-bottom-paws">🐾🐾🐾</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MINIMAL JS -->
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Close mobile nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+      });
+    });
+
+    // Scroll reveal animation
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const offset = 80;
+          const position = target.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({ top: position, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

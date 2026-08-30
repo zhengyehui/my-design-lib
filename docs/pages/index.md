@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 166 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 168 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1549,6 +1549,25 @@ const pages = [
     rating: 9.4,
     description: '暗色系纹身艺术工作室落地页，JetBrains Mono 标签 + 暗红强调 + 风格展示网格 + 纹身师团队 + 横滚画廊 + 流程步骤 + 三栏定价',
   },
+  {
+    id: 'api-reference',
+    title: 'Arcline API 参考文档',
+    category: 'content',
+    tags: ['API文档', '开发者', '暗色主题', '参考手册'],
+    colors: ['#0d1117', '#1f6feb', '#238636'],
+    rating: 9.3,
+    description: '暗色主题 API 参考文档，侧边栏导航 + HTTP 方法徽标 + 代码示例 + 参数表格',
+  },
+  {
+    id: 'cat-cafe',
+    title: 'Whiskers & Brew 猫咪咖啡馆',
+    category: 'industry',
+    tags: ['咖啡馆', '温暖', '可爱', '餐饮'],
+    colors: ['#FFF8F0', '#C4704B', '#8B9E7C'],
+    rating: 9.1,
+    description: '温暖风格猫咪咖啡馆落地页，奶油色调 + 猫咪居民卡片 + 菜单 + 领养号召',
+  },
+,
 ]
 
 const categories = [
@@ -1606,12 +1625,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 166 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 168 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="166 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="168 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1620,7 +1639,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 166 个完整页面</span>
+      <span>📦 168 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
