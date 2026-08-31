@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Momentum — Build Better Habits, One Day at a Time</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== CSS Reset & Variables ===== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --color-bg: #faf8f5;
+            --color-bg-alt: #f3f0ec;
+            --color-surface: #ffffff;
+            --color-primary: #6366f1;
+            --color-primary-light: #818cf8;
+            --color-primary-dark: #4f46e5;
+            --color-success: #10b981;
+            --color-success-light: #34d399;
+            --color-streak: #f59e0b;
+            --color-streak-light: #fbbf24;
+            --color-text: #1e1b2e;
+            --color-text-secondary: #6b7280;
+            --color-text-muted: #9ca3af;
+            --color-border: #e5e2dd;
+            --font-serif: 'DM Serif Display', Georgia, serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.04);
+            --shadow-xl: 0 20px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.06);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== Animations ===== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-up-delay-1 { transition-delay: 0.1s; }
+        .fade-up-delay-2 { transition-delay: 0.2s; }
+        .fade-up-delay-3 { transition-delay: 0.3s; }
+        .fade-up-delay-4 { transition-delay: 0.4s; }
+        .fade-up-delay-5 { transition-delay: 0.5s; }
+
+        /* ===== Navigation ===== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 0;
+            background: rgba(250, 248, 245, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .nav.scrolled {
+            border-bottom-color: var(--color-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--color-text);
+        }
+
+        .nav-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            transition: color var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        .nav-cta {
+            background: var(--color-primary);
+            color: white !important;
+            padding: 10px 22px;
+            border-radius: 100px;
+            font-weight: 600;
+            transition: background var(--transition), transform var(--transition);
+        }
+
+        .nav-cta:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .nav-mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .nav-mobile-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--color-text);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            padding: 160px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-success);
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            color: var(--color-text);
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 36px;
+            max-width: 460px;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-primary);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--color-text);
+            padding: 16px 28px;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid var(--color-border);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background: rgba(99, 102, 241, 0.04);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .hero-stat-number {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            color: var(--color-text);
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-top: 2px;
+        }
+
+        /* ===== App Mockup ===== */
+        .app-mockup {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .mockup-phone {
+            width: 320px;
+            margin: 0 auto;
+            background: var(--color-surface);
+            border-radius: 36px;
+            padding: 16px;
+            box-shadow: var(--shadow-xl), 0 0 0 1px rgba(0,0,0,0.05);
+            transform: rotateY(-5deg) rotateX(2deg);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mockup-phone:hover {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+
+        .mockup-notch {
+            width: 120px;
+            height: 28px;
+            background: var(--color-bg);
+            border-radius: 0 0 16px 16px;
+            margin: 0 auto 16px;
+        }
+
+        .mockup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+
+        .mockup-greeting {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+        }
+
+        .mockup-user-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--color-text);
+        }
+
+        .mockup-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--color-streak-light), var(--color-streak));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .mockup-date {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+
+        .mockup-streak-bar {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .streak-fire {
+            font-size: 1.4rem;
+        }
+
+        .streak-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .streak-count {
+            margin-left: auto;
+            background: #f59e0b;
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 100px;
+        }
+
+        .mockup-habits {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mockup-habit {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: var(--color-bg);
+            border-radius: var(--radius-md);
+            transition: all 0.2s;
+        }
+
+        .mockup-habit.completed {
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .mockup-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .mockup-habit.completed .mockup-checkbox {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .mockup-habit-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .mockup-habit-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .mockup-habit-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .mockup-habit.completed .mockup-habit-name {
+            text-decoration: line-through;
+            color: var(--color-text-muted);
+        }
+
+        .mockup-habit-streak {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mockup-progress-mini {
+            width: 40px;
+            height: 4px;
+            background: var(--color-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .mockup-progress-mini-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        /* ===== How It Works ===== */
+        .how-it-works {
+            padding: 120px 0;
+            background: var(--color-surface);
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+            color: var(--color-text);
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            max-width: 520px;
+            line-height: 1.7;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-header .section-subtitle {
+            margin: 0 auto;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            position: relative;
+        }
+
+        .steps-grid::before {
+            content: '';
+            position: absolute;
+            top: 48px;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-success), var(--color-streak));
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .step-card {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .step-card:nth-child(1) .step-number {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(99, 102, 241, 0.06));
+            color: var(--color-primary);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .step-card:nth-child(2) .step-number {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.06));
+            color: var(--color-success);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .step-card:nth-child(3) .step-number {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.06));
+            color: var(--color-streak);
+            border: 2px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .step-desc {
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        /* ===== Features Bento Grid ===== */
+        .features {
+            padding: 120px 0;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+            gap: 20px;
+        }
+
+        .bento-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            border: 1px solid var(--color-border);
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .bento-card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .bento-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 10px;
+        }
+
+        .bento-card p {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        .bento-card.featured {
+            grid-column: span 2;
+            grid-row: span 1;
+        }
+
+        .bento-card.featured .bento-visual {
+            margin-top: 24px;
+        }
+
+        /* Progress rings visual */
+        .progress-rings-showcase {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .progress-ring-wrapper {
+            text-align: center;
+        }
+
+        .progress-ring {
+            width: 80px;
+            height: 80px;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: var(--color-bg-alt);
+            stroke-width: 6;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke-width: 6;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .progress-ring-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            margin-top: 8px;
+        }
+
+        .progress-ring-percent {
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* Streak calendar visual */
+        .streak-calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-top: 20px;
+        }
+
+        .cal-day {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 4px;
+            background: var(--color-bg);
+        }
+
+        .cal-day.active {
+            background: var(--color-success);
+            opacity: 0.3;
+        }
+
+        .cal-day.active.high {
+            opacity: 1;
+        }
+
+        .cal-day.active.medium {
+            opacity: 0.6;
+        }
+
+        /* ===== Progress Rings Section ===== */
+        .progress-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .progress-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+            transition: all var(--transition);
+        }
+
+        .progress-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .progress-ring-large {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-large .progress-ring-bg {
+            stroke-width: 8;
+        }
+
+        .progress-ring-large .progress-ring-fill {
+            stroke-width: 8;
+        }
+
+        .progress-card-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .progress-card-subtitle {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        /* ===== Testimonials ===== */
+        .testimonials {
+            padding: 120px 0;
+            background: var(--color-surface);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: var(--color-bg);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--color-border);
+            transition: all var(--transition);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .testimonial-stars {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 16px;
+            color: var(--color-streak);
+            font-size: 1rem;
+        }
+
+        .testimonial-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--color-text);
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+        }
+
+        /* ===== Pricing ===== */
+        .pricing {
+            padding: 120px 0;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            position: relative;
+            transition: all var(--transition);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-card.popular {
+            border-color: var(--color-primary);
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 6px 20px;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            color: var(--color-text);
+            margin-bottom: 4px;
+        }
+
+        .pricing-price span {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin-bottom: 28px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        .pricing-features li .check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .pricing-features li .check.yes {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--color-success);
+        }
+
+        .pricing-features li .check.no {
+            background: var(--color-bg);
+            color: var(--color-text-muted);
+        }
+
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 14px;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: none;
+        }
+
+        .pricing-btn-primary {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .pricing-btn-primary:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+        }
+
+        .pricing-btn-secondary {
+            background: var(--color-bg);
+            color: var(--color-text);
+            border: 2px solid var(--color-border);
+        }
+
+        .pricing-btn-secondary:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        /* ===== CTA Section ===== */
+        .cta {
+            padding: 120px 0;
+            background: linear-gradient(135deg, #1e1b2e 0%, #2d2654 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-inner {
+            text-align: center;
+            max-width: 560px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 2.8rem;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 12px;
+            max-width: 460px;
+            margin: 0 auto;
+        }
+
+        .cta-form input {
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: 100px;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
+            color: white;
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: border-color var(--transition);
+        }
+
+        .cta-form input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .cta-form input:focus {
+            border-color: var(--color-primary-light);
+        }
+
+        .cta-form button {
+            padding: 16px 32px;
+            border-radius: 100px;
+            background: var(--color-primary);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+
+        .cta-form button:hover {
+            background: var(--color-primary-light);
+            transform: translateY(-2px);
+        }
+
+        .cta-note {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 16px;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            padding: 60px 0 40px;
+            background: var(--color-bg);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand p {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            margin-top: 12px;
+            max-width: 280px;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--color-text-muted);
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            transition: color var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 32px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer-bottom p {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-socials a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--color-bg-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            transition: all var(--transition);
+        }
+
+        .footer-socials a:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2.3rem;
+            }
+
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .bento-card.featured {
+                grid-column: span 2;
+            }
+
+            .progress-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-mobile-toggle {
+                display: flex;
+            }
+
+            .hero {
+                padding: 120px 0 80px;
+            }
+
+            .hero-inner {
+                grid-template-columns: 1fr;
+                gap: 48px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+
+            .hero-tagline {
+                margin: 0 auto 32px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-primary, .btn-secondary {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .mockup-phone {
+                width: 280px;
+                transform: rotateY(0deg);
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .steps-grid::before {
+                display: none;
+            }
+
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bento-card.featured {
+                grid-column: span 1;
+            }
+
+            .progress-rings-showcase {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .progress-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .cta h2 {
+                font-size: 2rem;
+            }
+
+            .cta-form {
+                flex-direction: column;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">
+                <div class="nav-logo-icon">M</div>
+                Momentum
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#cta" class="nav-cta">Get Started Free</a></li>
+            </ul>
+            <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <div class="hero-badge fade-up">
+                        <span class="hero-badge-dot"></span>
+                        Trusted by 50,000+ habit builders
+                    </div>
+                    <h1 class="fade-up fade-up-delay-1">
+                        Build <span>Better Habits</span>,<br>One Day at a Time
+                    </h1>
+                    <p class="hero-tagline fade-up fade-up-delay-2">
+                        Momentum helps you create lasting habits with beautiful tracking,
+                        insightful analytics, and streak-based motivation that keeps you going.
+                    </p>
+                    <div class="hero-actions fade-up fade-up-delay-3">
+                        <button class="btn-primary">Start Building Free →</button>
+                        <button class="btn-secondary">See How It Works</button>
+                    </div>
+                    <div class="hero-stats fade-up fade-up-delay-4">
+                        <div>
+                            <div class="hero-stat-number">50K+</div>
+                            <div class="hero-stat-label">Active Users</div>
+                        </div>
+                        <div>
+                            <div class="hero-stat-number">2.4M</div>
+                            <div class="hero-stat-label">Habits Tracked</div>
+                        </div>
+                        <div>
+                            <div class="hero-stat-number">89%</div>
+                            <div class="hero-stat-label">Success Rate</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-mockup fade-up fade-up-delay-2">
+                    <div class="mockup-phone">
+                        <div class="mockup-notch"></div>
+                        <div class="mockup-header">
+                            <div>
+                                <div class="mockup-greeting">Good morning 👋</div>
+                                <div class="mockup-user-name">Sarah</div>
+                            </div>
+                            <div class="mockup-avatar">S</div>
+                        </div>
+                        <div class="mockup-date">Monday, January 15</div>
+                        <div class="mockup-streak-bar">
+                            <span class="streak-fire">🔥</span>
+                            <span class="streak-text">You're on a streak!</span>
+                            <span class="streak-count">12 days</span>
+                        </div>
+                        <div class="mockup-habits">
+                            <div class="mockup-habit completed">
+                                <div class="mockup-checkbox">✓</div>
+                                <span class="mockup-habit-icon">🧘</span>
+                                <div class="mockup-habit-info">
+                                    <div class="mockup-habit-name">Morning Meditation</div>
+                                    <div class="mockup-habit-streak">🔥 12 day streak</div>
+                                </div>
+                                <div class="mockup-progress-mini">
+                                    <div class="mockup-progress-mini-fill" style="width:100%;background:var(--color-success)"></div>
+                                </div>
+                            </div>
+                            <div class="mockup-habit completed">
+                                <div class="mockup-checkbox">✓</div>
+                                <span class="mockup-habit-icon">💧</span>
+                                <div class="mockup-habit-info">
+                                    <div class="mockup-habit-name">Drink 8 Glasses Water</div>
+                                    <div class="mockup-habit-streak">🔥 8 day streak</div>
+                                </div>
+                                <div class="mockup-progress-mini">
+                                    <div class="mockup-progress-mini-fill" style="width:100%;background:var(--color-success)"></div>
+                                </div>
+                            </div>
+                            <div class="mockup-habit">
+                                <div class="mockup-checkbox"></div>
+                                <span class="mockup-habit-icon">📚</span>
+                                <div class="mockup-habit-info">
+                                    <div class="mockup-habit-name">Read 30 Minutes</div>
+                                    <div class="mockup-habit-streak">🔥 5 day streak</div>
+                                </div>
+                                <div class="mockup-progress-mini">
+                                    <div class="mockup-progress-mini-fill" style="width:60%;background:var(--color-primary)"></div>
+                                </div>
+                            </div>
+                            <div class="mockup-habit">
+                                <div class="mockup-checkbox"></div>
+                                <span class="mockup-habit-icon">🏃</span>
+                                <div class="mockup-habit-info">
+                                    <div class="mockup-habit-name">Evening Run</div>
+                                    <div class="mockup-habit-streak">🔥 3 day streak</div>
+                                </div>
+                                <div class="mockup-progress-mini">
+                                    <div class="mockup-progress-mini-fill" style="width:30%;background:var(--color-streak)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header fade-up">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">Three Simple Steps to Change</h2>
+                <p class="section-subtitle">
+                    Getting started with Momentum takes less than a minute. Here's how you'll build habits that stick.
+                </p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card fade-up fade-up-delay-1">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Set Your Goals</h3>
+                    <p class="step-desc">
+                        Choose the habits you want to build. From fitness to mindfulness, customize your daily routine.
+                    </p>
+                </div>
+                <div class="step-card fade-up fade-up-delay-2">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Track Daily</h3>
+                    <p class="step-desc">
+                        Check off habits each day with a single tap. Our beautiful interface makes tracking a joy, not a chore.
+                    </p>
+                </div>
+                <div class="step-card fade-up fade-up-delay-3">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Build Streaks</h3>
+                    <p class="step-desc">
+                        Watch your streaks grow and unlock achievements. Momentum keeps you motivated day after day.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Bento Grid -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header fade-up">
+                <div class="section-label">Features</div>
+                <h2 class="section-title">Everything You Need to Succeed</h2>
+                <p class="section-subtitle">
+                    Powerful features wrapped in a beautiful, intuitive interface designed to help you thrive.
+                </p>
+            </div>
+            <div class="bento-grid">
+                <!-- Daily Check-in - Featured -->
+                <div class="bento-card featured fade-up">
+                    <div class="bento-card-icon" style="background:linear-gradient(135deg, rgba(99,102,241,0.12), rgba(99,102,241,0.04));">
+                        ✨
+                    </div>
+                    <h3>Daily Check-in</h3>
+                    <p>Start each day with a focused check-in. Our smart interface surfaces your most important habits first, adapts to your schedule, and celebrates your wins with satisfying animations.</p>
+                    <div class="streak-calendar-grid">
+                        <div class="cal-day"></div><div class="cal-day active high"></div><div class="cal-day active high"></div><div class="cal-day active medium"></div><div class="cal-day active high"></div><div class="cal-day"></div><div class="cal-day"></div>
+                        <div class="cal-day active high"></div><div class="cal-day active high"></div><div class="cal-day"></div><div class="cal-day active high"></div><div class="cal-day active medium"></div><div class="cal-day active high"></div><div class="cal-day"></div>
+                        <div class="cal-day active medium"></div><div class="cal-day active high"></div><div class="cal-day active high"></div><div class="cal-day active high"></div><div class="cal-day"></div><div class="cal-day active high"></div><div class="cal-day active high"></div>
+                        <div class="cal-day active high"></div><div class="cal-day"></div><div class="cal-day active high"></div><div class="cal-day active medium"></div><div class="cal-day active high"></div><div class="cal-day active high"></div><div class="cal-day active high"></div>
+                    </div>
+                </div>
+
+                <!-- Streak Calendar -->
+                <div class="bento-card fade-up fade-up-delay-1">
+                    <div class="bento-card-icon" style="background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04));">
+                        🔥
+                    </div>
+                    <h3>Streak Calendar</h3>
+                    <p>Visualize your consistency with a beautiful heatmap calendar. See your progress at a glance and never break the chain.</p>
+                </div>
+
+                <!-- Progress Rings -->
+                <div class="bento-card fade-up fade-up-delay-2">
+                    <div class="bento-card-icon" style="background:linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.04));">
+                        📊
+                    </div>
+                    <h3>Progress Rings</h3>
+                    <p>Circular progress indicators show your habit completion at a glance. Watch them fill up as you crush your goals.</p>
+                    <div class="progress-rings-showcase">
+                        <div class="progress-ring-wrapper">
+                            <svg class="progress-ring" viewBox="0 0 80 80">
+                                <circle class="progress-ring-bg" cx="40" cy="40" r="34"/>
+                                <circle class="progress-ring-fill" cx="40" cy="40" r="34" stroke="#6366f1" stroke-dasharray="213.6" stroke-dashoffset="42.7" data-target="42.7"/>
+                            </svg>
+                            <div class="progress-ring-percent" style="color:#6366f1">80%</div>
+                        </div>
+                        <div class="progress-ring-wrapper">
+                            <svg class="progress-ring" viewBox="0 0 80 80">
+                                <circle class="progress-ring-bg" cx="40" cy="40" r="34"/>
+                                <circle class="progress-ring-fill" cx="40" cy="40" r="34" stroke="#10b981" stroke-dasharray="213.6" stroke-dashoffset="21.4" data-target="21.4"/>
+                            </svg>
+                            <div class="progress-ring-percent" style="color:#10b981">90%</div>
+                        </div>
+                        <div class="progress-ring-wrapper">
+                            <svg class="progress-ring" viewBox="0 0 80 80">
+                                <circle class="progress-ring-bg" cx="40" cy="40" r="34"/>
+                                <circle class="progress-ring-fill" cx="40" cy="40" r="34" stroke="#f59e0b" stroke-dasharray="213.6" stroke-dashoffset="106.8" data-target="106.8"/>
+                            </svg>
+                            <div class="progress-ring-percent" style="color:#f59e0b">50%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goal Setting -->
+                <div class="bento-card fade-up fade-up-delay-1">
+                    <div class="bento-card-icon" style="background:linear-gradient(135deg, rgba(99,102,241,0.12), rgba(99,102,241,0.04));">
+                        🎯
+                    </div>
+                    <h3>Goal Setting</h3>
+                    <p>Define clear, achievable goals with our guided setup. Break big ambitions into daily actions that build momentum over time.</p>
+                </div>
+
+                <!-- Reminders -->
+                <div class="bento-card fade-up fade-up-delay-2">
+                    <div class="bento-card-icon" style="background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04));">
+                        🔔
+                    </div>
+                    <h3>Reminders</h3>
+                    <p>Smart notifications that adapt to your routine. Get gentle nudges at the perfect time to keep your habits on track.</p>
+                </div>
+
+                <!-- Insights -->
+                <div class="bento-card fade-up fade-up-delay-3">
+                    <div class="bento-card-icon" style="background:linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.04));">
+                        💡
+                    </div>
+                    <h3>Insights</h3>
+                    <p>Discover patterns in your behavior with AI-powered analytics. Understand what works and optimize your habit-building strategy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Rings Section -->
+    <section class="progress-section">
+        <div class="container">
+            <div class="section-header fade-up">
+                <div class="section-label">Track Your Progress</div>
+                <h2 class="section-title">See How Far You've Come</h2>
+                <p class="section-subtitle">
+                    Beautiful visualizations that make your progress tangible and motivating.
+                </p>
+            </div>
+            <div class="progress-grid">
+                <div class="progress-card fade-up fade-up-delay-1">
+                    <svg class="progress-ring-large" viewBox="0 0 120 120">
+                        <circle class="progress-ring-bg" cx="60" cy="60" r="50"/>
+                        <circle class="progress-ring-fill" cx="60" cy="60" r="50" stroke="#6366f1" stroke-dasharray="314" stroke-dashoffset="63" data-target="63"/>
+                    </svg>
+                    <div class="progress-card-title">Meditation</div>
+                    <div class="progress-card-subtitle">80% this week</div>
+                </div>
+                <div class="progress-card fade-up fade-up-delay-2">
+                    <svg class="progress-ring-large" viewBox="0 0 120 120">
+                        <circle class="progress-ring-bg" cx="60" cy="60" r="50"/>
+                        <circle class="progress-ring-fill" cx="60" cy="60" r="50" stroke="#10b981" stroke-dasharray="314" stroke-dashoffset="31" data-target="31"/>
+                    </svg>
+                    <div class="progress-card-title">Exercise</div>
+                    <div class="progress-card-subtitle">90% this week</div>
+                </div>
+                <div class="progress-card fade-up fade-up-delay-3">
+                    <svg class="progress-ring-large" viewBox="0 0 120 120">
+                        <circle class="progress-ring-bg" cx="60" cy="60" r="50"/>
+                        <circle class="progress-ring-fill" cx="60" cy="60" r="50" stroke="#f59e0b" stroke-dasharray="314" stroke-dashoffset="94" data-target="94"/>
+                    </svg>
+                    <div class="progress-card-title">Reading</div>
+                    <div class="progress-card-subtitle">70% this week</div>
+                </div>
+                <div class="progress-card fade-up fade-up-delay-4">
+                    <svg class="progress-ring-large" viewBox="0 0 120 120">
+                        <circle class="progress-ring-bg" cx="60" cy="60" r="50"/>
+                        <circle class="progress-ring-fill" cx="60" cy="60" r="50" stroke="#8b5cf6" stroke-dasharray="314" stroke-dashoffset="16" data-target="16"/>
+                    </svg>
+                    <div class="progress-card-title">Hydration</div>
+                    <div class="progress-card-subtitle">95% this week</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header fade-up">
+                <div class="section-label">Testimonials</div>
+                <h2 class="section-title">Loved by Habit Builders</h2>
+                <p class="section-subtitle">
+                    Join thousands of people who've transformed their lives with Momentum.
+                </p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-up fade-up-delay-1">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        "Momentum completely changed my mornings. I've meditated every day for 3 months straight — something I never thought possible. The streak feature is incredibly motivating!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar" style="background:linear-gradient(135deg, #6366f1, #818cf8);">A</div>
+                        <div>
+                            <div class="testimonial-name">Alex Chen</div>
+                            <div class="testimonial-role">Product Designer</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-up fade-up-delay-2">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        "The progress rings are so satisfying to fill up. I've tried dozens of habit apps but Momentum is the only one that stuck. The design is absolutely beautiful."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar" style="background:linear-gradient(135deg, #10b981, #34d399);">M</div>
+                        <div>
+                            <div class="testimonial-name">Maria Santos</div>
+                            <div class="testimonial-role">Fitness Coach</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-up fade-up-delay-3">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        "As a developer, I appreciate the attention to detail. The insights feature helped me realize I'm most productive when I exercise first thing. Game changer!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar" style="background:linear-gradient(135deg, #f59e0b, #fbbf24);">J</div>
+                        <div>
+                            <div class="testimonial-name">James Wilson</div>
+                            <div class="testimonial-role">Software Engineer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header fade-up">
+                <div class="section-label">Pricing</div>
+                <h2 class="section-title">Simple, Transparent Pricing</h2>
+                <p class="section-subtitle">
+                    Start free and upgrade when you're ready for more powerful features.
+                </p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card fade-up fade-up-delay-1">
+                    <div class="pricing-name">Free</div>
+                    <div class="pricing-price">$0 <span>/ forever</span></div>
+                    <div class="pricing-desc">Perfect for getting started</div>
+                    <ul class="pricing-features">
+                        <li><span class="check yes">✓</span> Up to 5 habits</li>
+                        <li><span class="check yes">✓</span> Daily check-ins</li>
+                        <li><span class="check yes">✓</span> Basic streak tracking</li>
+                        <li><span class="check yes">✓</span> 7-day history</li>
+                        <li><span class="check no">—</span> Progress rings</li>
+                        <li><span class="check no">—</span> AI insights</li>
+                        <li><span class="check no">—</span> Custom reminders</li>
+                        <li><span class="check no">—</span> Export data</li>
+                    </ul>
+                    <button class="pricing-btn pricing-btn-secondary">Get Started Free</button>
+                </div>
+                <div class="pricing-card popular fade-up fade-up-delay-2">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-name">Pro</div>
+                    <div class="pricing-price">$9.99 <span>/ month</span></div>
+                    <div class="pricing-desc">For serious habit builders</div>
+                    <ul class="pricing-features">
+                        <li><span class="check yes">✓</span> Unlimited habits</li>
+                        <li><span class="check yes">✓</span> Daily check-ins</li>
+                        <li><span class="check yes">✓</span> Advanced streak tracking</li>
+                        <li><span class="check yes">✓</span> Full history & trends</li>
+                        <li><span class="check yes">✓</span> Progress rings & charts</li>
+                        <li><span class="check yes">✓</span> AI-powered insights</li>
+                        <li><span class="check yes">✓</span> Smart reminders</li>
+                        <li><span class="check yes">✓</span> Export & integrations</li>
+                    </ul>
+                    <button class="pricing-btn pricing-btn-primary">Start 14-Day Trial</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="cta">
+        <div class="container">
+            <div class="cta-inner fade-up">
+                <h2>Ready to Build Momentum?</h2>
+                <p>
+                    Join 50,000+ people who are transforming their lives one habit at a time.
+                    Start your journey today — it's completely free.
+                </p>
+                <form class="cta-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Welcome aboard! 🎉'; this.querySelector('input').value='';">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Get Started</button>
+                </form>
+                <p class="cta-note">No credit card required · Free forever plan available</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="nav-logo">
+                        <div class="nav-logo-icon">M</div>
+                        Momentum
+                    </a>
+                    <p>Build better habits, one day at a time. The most beautiful and effective habit tracker for people who want to grow.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Changelog</a></li>
+                        <li><a href="#">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Momentum. All rights reserved.</p>
+                <div class="footer-socials">
+                    <a href="#" aria-label="Twitter">𝕏</a>
+                    <a href="#" aria-label="Instagram">📷</a>
+                    <a href="#" aria-label="GitHub">⌨</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript: Scroll animations + Nav scroll state -->
+    <script>
+        // IntersectionObserver for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -60px 0px'
+        });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Nav scroll state
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 20);
+        }, { passive: true });
+
+        // Progress ring animation on scroll
+        const ringObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const circles = entry.target.querySelectorAll('.progress-ring-fill');
+                    circles.forEach(circle => {
+                        const target = circle.getAttribute('data-target');
+                        if (target) {
+                            circle.style.strokeDashoffset = target;
+                        }
+                    });
+                    ringObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.progress-ring, .progress-ring-large').forEach(el => {
+            // Start with full dashoffset (hidden)
+            const fill = el.querySelector('.progress-ring-fill');
+            if (fill) {
+                const total = fill.getAttribute('stroke-dasharray');
+                fill.style.strokeDashoffset = total;
+            }
+            ringObserver.observe(el);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VELO Studio — Indoor Cycling Reimagined</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════════════════
+       VELO Studio — Design Tokens Override
+       ══════════════════════════════════════════════════════ */
+    :root {
+      --velo-dark: #0a0a0a;
+      --velo-surface: #1a1a1a;
+      --velo-gold: #c9a96e;
+      --velo-gold-light: #dbbf8a;
+      --velo-gold-dark: #a8874e;
+      --velo-cream: #f5f0eb;
+      --velo-gray: #8a8a8a;
+      --velo-gray-light: #b0b0b0;
+      --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Reset & Base
+       ══════════════════════════════════════════════════════ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--velo-dark);
+      color: var(--velo-cream);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.3s var(--ease-default);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Typography
+       ══════════════════════════════════════════════════════ */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--velo-gold);
+      margin-bottom: var(--space-4);
+      display: inline-block;
+      position: relative;
+      padding-left: 3rem;
+    }
+
+    .section-label::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 2rem;
+      height: 1px;
+      background: var(--velo-gold);
+    }
+
+    .section-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--velo-cream);
+      margin-bottom: var(--space-6);
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--velo-gold);
+    }
+
+    .section-subtitle {
+      font-size: var(--text-lg);
+      color: var(--velo-gray-light);
+      max-width: 540px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Scroll Animations
+       ══════════════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Navigation
+       ══════════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      padding: var(--space-5) var(--space-8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.4s var(--ease-default);
+      background: transparent;
+    }
+
+    .nav.scrolled {
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: var(--space-3) var(--space-8);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.15);
+    }
+
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--velo-cream);
+      text-transform: uppercase;
+    }
+
+    .nav-logo span {
+      color: var(--velo-gold);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--velo-gray-light);
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--velo-gold);
+      transition: width 0.3s var(--ease-default);
+    }
+
+    .nav-links a:hover {
+      color: var(--velo-gold);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      font-size: 0.75rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.15em !important;
+      padding: 0.6rem 1.6rem;
+      border: 1px solid var(--velo-gold);
+      color: var(--velo-gold) !important;
+      transition: all 0.3s var(--ease-default) !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--velo-gold) !important;
+      color: var(--velo-dark) !important;
+    }
+
+    .nav-cta::after {
+      display: none !important;
+    }
+
+    .nav-mobile-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-mobile-toggle span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--velo-cream);
+      transition: all 0.3s var(--ease-default);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Hero Section
+       ══════════════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201, 169, 110, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 80% at 20% 80%, rgba(201, 169, 110, 0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(100, 80, 40, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, #0a0a0a 0%, #111111 40%, #0d0d0d 100%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle 400px at 50% 45%, rgba(201, 169, 110, 0.06) 0%, transparent 70%),
+        radial-gradient(circle 200px at 30% 70%, rgba(201, 169, 110, 0.03) 0%, transparent 70%),
+        radial-gradient(circle 300px at 70% 30%, rgba(180, 150, 100, 0.04) 0%, transparent 70%);
+      animation: heroGlow 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroGlow {
+      0% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: linear-gradient(to top, var(--velo-dark), transparent);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      padding: 0 var(--space-6);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--velo-gold);
+      margin-bottom: var(--space-8);
+      padding: 0.5rem 1.4rem;
+      border: 1px solid rgba(201, 169, 110, 0.3);
+      background: rgba(201, 169, 110, 0.05);
+    }
+
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--velo-gold);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-title {
+      font-size: clamp(3.2rem, 8vw, 7rem);
+      font-weight: 400;
+      color: var(--velo-cream);
+      margin-bottom: var(--space-6);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-title .accent {
+      font-style: italic;
+      color: var(--velo-gold);
+      display: block;
+    }
+
+    .hero-description {
+      font-size: var(--text-lg);
+      color: var(--velo-gray-light);
+      max-width: 500px;
+      margin: 0 auto var(--space-10);
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-5);
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 1rem 2.4rem;
+      background: var(--velo-gold);
+      color: var(--velo-dark);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-default);
+    }
+
+    .btn-primary:hover {
+      background: var(--velo-gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(201, 169, 110, 0.25);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 1rem 2.4rem;
+      background: transparent;
+      color: var(--velo-cream);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: 1px solid rgba(245, 240, 235, 0.2);
+      cursor: pointer;
+      transition: all 0.3s var(--ease-default);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--velo-gold);
+      color: var(--velo-gold);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .hero-scroll span {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--velo-gray);
+      writing-mode: vertical-lr;
+    }
+
+    .hero-scroll .line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--velo-gold), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Section Shared
+       ══════════════════════════════════════════════════════ */
+    .section {
+      padding: var(--space-24) var(--space-8);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-16);
+    }
+
+    .section-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Divider
+       ══════════════════════════════════════════════════════ */
+    .divider {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--space-8);
+    }
+
+    .divider-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.2), transparent);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Classes Section
+       ══════════════════════════════════════════════════════ */
+    .classes-section {
+      background: var(--velo-dark);
+    }
+
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    .class-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      padding: var(--space-10) var(--space-8);
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      cursor: pointer;
+      transition: transform 0.5s var(--ease-default);
+    }
+
+    .class-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .class-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      transition: opacity 0.5s var(--ease-default);
+    }
+
+    .class-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(180deg, transparent 30%, rgba(10, 10, 10, 0.85) 100%);
+    }
+
+    .class-card > * {
+      position: relative;
+      z-index: 3;
+    }
+
+    /* RIDE card — warm amber */
+    .class-card--ride {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(201, 169, 110, 0.4) 0%, transparent 60%),
+        radial-gradient(circle at 70% 80%, rgba(160, 100, 50, 0.3) 0%, transparent 50%),
+        linear-gradient(160deg, #1a1510 0%, #0f0d0a 100%);
+    }
+
+    .class-card--ride::before {
+      background:
+        radial-gradient(ellipse 100px 100px at 50% 30%, rgba(201, 169, 110, 0.25), transparent),
+        radial-gradient(ellipse 200px 150px at 25% 60%, rgba(180, 140, 80, 0.12), transparent);
+    }
+
+    /* POWER card — deep rose/red */
+    .class-card--power {
+      background:
+        radial-gradient(circle at 60% 20%, rgba(180, 70, 70, 0.35) 0%, transparent 60%),
+        radial-gradient(circle at 30% 80%, rgba(200, 100, 80, 0.2) 0%, transparent 50%),
+        linear-gradient(160deg, #1a1110 0%, #0f0a0a 100%);
+    }
+
+    .class-card--power::before {
+      background:
+        radial-gradient(ellipse 120px 100px at 55% 25%, rgba(200, 90, 70, 0.2), transparent),
+        radial-gradient(ellipse 180px 120px at 30% 70%, rgba(160, 60, 60, 0.1), transparent);
+    }
+
+    /* ENDURE card — cool blue-teal */
+    .class-card--endure {
+      background:
+        radial-gradient(circle at 40% 30%, rgba(70, 130, 180, 0.3) 0%, transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(50, 100, 140, 0.2) 0%, transparent 50%),
+        linear-gradient(160deg, #0f1218 0%, #0a0c10 100%);
+    }
+
+    .class-card--endure::before {
+      background:
+        radial-gradient(ellipse 100px 100px at 45% 35%, rgba(80, 140, 200, 0.18), transparent),
+        radial-gradient(ellipse 200px 150px at 65% 65%, rgba(50, 100, 160, 0.1), transparent);
+    }
+
+    .class-card:hover::before {
+      opacity: 1.5;
+    }
+
+    .class-card__number {
+      font-family: var(--font-heading);
+      font-size: 5rem;
+      font-weight: 400;
+      color: rgba(245, 240, 235, 0.06);
+      position: absolute;
+      top: var(--space-6);
+      right: var(--space-6);
+      z-index: 3;
+      line-height: 1;
+    }
+
+    .class-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 169, 110, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-6);
+      font-size: 1.2rem;
+    }
+
+    .class-card__name {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 500;
+      margin-bottom: var(--space-2);
+      color: var(--velo-cream);
+      letter-spacing: 0.05em;
+    }
+
+    .class-card__meta {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--velo-gold);
+      margin-bottom: var(--space-4);
+      font-weight: 500;
+    }
+
+    .class-card__desc {
+      font-size: var(--text-sm);
+      color: var(--velo-gray-light);
+      line-height: 1.7;
+      margin-bottom: var(--space-6);
+    }
+
+    .class-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--velo-gold);
+      font-weight: 500;
+      transition: gap 0.3s var(--ease-default);
+    }
+
+    .class-card:hover .class-card__link {
+      gap: var(--space-4);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Team Section
+       ══════════════════════════════════════════════════════ */
+    .team-section {
+      background: var(--velo-surface);
+      border-top: 1px solid rgba(201, 169, 110, 0.08);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.08);
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .team-card {
+      text-align: center;
+      padding: var(--space-10) var(--space-6);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(201, 169, 110, 0.06);
+      border-radius: var(--radius-lg);
+      transition: all 0.4s var(--ease-default);
+    }
+
+    .team-card:hover {
+      background: rgba(201, 169, 110, 0.04);
+      border-color: rgba(201, 169, 110, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .team-card__avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto var(--space-6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-card__avatar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(201, 169, 110, 0.3);
+      z-index: 2;
+    }
+
+    /* Maya — warm amber/gold gradient */
+    .team-card__avatar--maya {
+      background:
+        radial-gradient(circle at 40% 35%, rgba(220, 190, 140, 0.9) 0%, transparent 60%),
+        radial-gradient(circle at 60% 65%, rgba(180, 140, 80, 0.8) 0%, transparent 50%),
+        linear-gradient(135deg, #c9a96e 0%, #8a6d3b 100%);
+    }
+
+    .team-card__avatar--maya::after {
+      content: 'M';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 500;
+      color: rgba(10, 10, 10, 0.6);
+      z-index: 1;
+    }
+
+    /* Kai — deep rose/terracotta gradient */
+    .team-card__avatar--kai {
+      background:
+        radial-gradient(circle at 35% 30%, rgba(210, 130, 110, 0.9) 0%, transparent 60%),
+        radial-gradient(circle at 65% 70%, rgba(160, 80, 60, 0.8) 0%, transparent 50%),
+        linear-gradient(135deg, #b87060 0%, #7a4030 100%);
+    }
+
+    .team-card__avatar--kai::after {
+      content: 'K';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 500;
+      color: rgba(10, 10, 10, 0.6);
+      z-index: 1;
+    }
+
+    /* Priya — cool blue/slate gradient */
+    .team-card__avatar--priya {
+      background:
+        radial-gradient(circle at 45% 35%, rgba(130, 170, 210, 0.9) 0%, transparent 60%),
+        radial-gradient(circle at 55% 65%, rgba(80, 120, 160, 0.8) 0%, transparent 50%),
+        linear-gradient(135deg, #6a9cc7 0%, #3a6a8f 100%);
+    }
+
+    .team-card__avatar--priya::after {
+      content: 'P';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 500;
+      color: rgba(10, 10, 10, 0.6);
+      z-index: 1;
+    }
+
+    .team-card__name {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--velo-cream);
+      margin-bottom: var(--space-2);
+    }
+
+    .team-card__specialty {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--velo-gold);
+      font-weight: 500;
+      margin-bottom: var(--space-4);
+    }
+
+    .team-card__bio {
+      font-size: var(--text-sm);
+      color: var(--velo-gray);
+      line-height: 1.7;
+      max-width: 260px;
+      margin: 0 auto;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Pricing Section
+       ══════════════════════════════════════════════════════ */
+    .pricing-section {
+      background: var(--velo-dark);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      position: relative;
+      padding: var(--space-10) var(--space-8);
+      background: var(--velo-surface);
+      border: 1px solid rgba(201, 169, 110, 0.08);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      transition: all 0.4s var(--ease-default);
+      overflow: hidden;
+    }
+
+    .pricing-card:hover {
+      border-color: rgba(201, 169, 110, 0.2);
+      transform: translateY(-4px);
+    }
+
+    .pricing-card--featured {
+      border-color: rgba(201, 169, 110, 0.25);
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(201, 169, 110, 0.06) 0%, transparent 60%),
+        var(--velo-surface);
+    }
+
+    .pricing-card--featured::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 0.4rem;
+      background: var(--velo-gold);
+      color: var(--velo-dark);
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    .pricing-card--featured .pricing-card__inner {
+      padding-top: var(--space-4);
+    }
+
+    .pricing-card__tier {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--velo-cream);
+      margin-bottom: var(--space-4);
+    }
+
+    .pricing-card__price {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      font-weight: 400;
+      color: var(--velo-gold);
+      line-height: 1;
+      margin-bottom: var(--space-1);
+    }
+
+    .pricing-card__price .currency {
+      font-size: 0.5em;
+      vertical-align: super;
+      margin-right: 2px;
+    }
+
+    .pricing-card__price .period {
+      font-size: 0.3em;
+      color: var(--velo-gray);
+      font-family: var(--font-body);
+      font-weight: 400;
+    }
+
+    .pricing-card__desc {
+      font-size: var(--text-sm);
+      color: var(--velo-gray);
+      margin-bottom: var(--space-8);
+      line-height: 1.6;
+    }
+
+    .pricing-card__features {
+      list-style: none;
+      margin-bottom: var(--space-8);
+      text-align: left;
+    }
+
+    .pricing-card__features li {
+      font-size: var(--text-sm);
+      color: var(--velo-gray-light);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .pricing-card__features li::before {
+      content: '✦';
+      color: var(--velo-gold);
+      font-size: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    .pricing-card .btn-primary,
+    .pricing-card .btn-ghost {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Location Section
+       ══════════════════════════════════════════════════════ */
+    .location-section {
+      background: var(--velo-surface);
+      border-top: 1px solid rgba(201, 169, 110, 0.08);
+    }
+
+    .location-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+      align-items: center;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .location-info {
+      padding: var(--space-8) 0;
+    }
+
+    .location-map {
+      position: relative;
+      height: 420px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(201, 169, 110, 0.1);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(201, 169, 110, 0.08) 0%, transparent 60%),
+        linear-gradient(135deg, #1a1a1a 0%, #141414 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .location-map__pin {
+      text-align: center;
+    }
+
+    .location-map__pin-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(201, 169, 110, 0.15);
+      border: 2px solid var(--velo-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-4);
+      font-size: 1.4rem;
+      animation: pinPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pinPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(201, 169, 110, 0.3); }
+      50% { box-shadow: 0 0 0 20px rgba(201, 169, 110, 0); }
+    }
+
+    .location-map__pin-text {
+      font-size: var(--text-sm);
+      color: var(--velo-gray);
+    }
+
+    .location-map::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(201, 169, 110, 0.03) 40px, rgba(201, 169, 110, 0.03) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(201, 169, 110, 0.03) 40px, rgba(201, 169, 110, 0.03) 41px);
+      pointer-events: none;
+    }
+
+    .location-block {
+      margin-bottom: var(--space-8);
+    }
+
+    .location-block__title {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--velo-gold);
+      margin-bottom: var(--space-4);
+    }
+
+    .location-block__content {
+      font-size: var(--text-base);
+      color: var(--velo-cream);
+      line-height: 1.8;
+    }
+
+    .location-block__content span {
+      display: block;
+      color: var(--velo-gray-light);
+    }
+
+    .hours-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--space-2) var(--space-6);
+      font-size: var(--text-sm);
+    }
+
+    .hours-grid .day {
+      color: var(--velo-cream);
+      font-weight: 500;
+    }
+
+    .hours-grid .time {
+      color: var(--velo-gray-light);
+      text-align: right;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       CTA Banner
+       ══════════════════════════════════════════════════════ */
+    .cta-banner {
+      padding: var(--space-20) var(--space-8);
+      text-align: center;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201, 169, 110, 0.08) 0%, transparent 70%),
+        var(--velo-dark);
+      border-top: 1px solid rgba(201, 169, 110, 0.08);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.08);
+    }
+
+    .cta-banner__title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--velo-cream);
+      margin-bottom: var(--space-4);
+    }
+
+    .cta-banner__title em {
+      font-style: italic;
+      color: var(--velo-gold);
+    }
+
+    .cta-banner__subtitle {
+      font-size: var(--text-lg);
+      color: var(--velo-gray-light);
+      margin-bottom: var(--space-8);
+      font-weight: 300;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Footer
+       ══════════════════════════════════════════════════════ */
+    .footer {
+      background: #050505;
+      padding: var(--space-16) var(--space-8) var(--space-8);
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-12);
+      padding-bottom: var(--space-12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-brand__logo {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--velo-cream);
+      text-transform: uppercase;
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-brand__logo span {
+      color: var(--velo-gold);
+    }
+
+    .footer-brand__desc {
+      font-size: var(--text-sm);
+      color: var(--velo-gray);
+      line-height: 1.7;
+      max-width: 300px;
+      margin-bottom: var(--space-6);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .footer-social__link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 169, 110, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--velo-gray-light);
+      transition: all 0.3s var(--ease-default);
+    }
+
+    .footer-social__link:hover {
+      border-color: var(--velo-gold);
+      color: var(--velo-gold);
+      background: rgba(201, 169, 110, 0.08);
+    }
+
+    .footer-column__title {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--velo-gold);
+      margin-bottom: var(--space-5);
+    }
+
+    .footer-column__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .footer-column__links a {
+      font-size: var(--text-sm);
+      color: var(--velo-gray);
+      transition: color 0.3s var(--ease-default);
+    }
+
+    .footer-column__links a:hover {
+      color: var(--velo-cream);
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-top: var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: var(--velo-gray);
+    }
+
+    .footer-bottom__legal {
+      display: flex;
+      gap: var(--space-6);
+    }
+
+    .footer-bottom__legal a {
+      font-size: 0.75rem;
+      color: var(--velo-gray);
+    }
+
+    .footer-bottom__legal a:hover {
+      color: var(--velo-gold);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Responsive — Tablet (≤1024px)
+       ══════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .classes-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin: 0 auto;
+      }
+
+      .class-card {
+        min-height: 380px;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .location-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .location-map {
+        height: 300px;
+        order: -1;
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-8);
+      }
+
+      .footer-brand {
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* ══════════════════════════════════════════════════════
+       Responsive — Mobile (≤768px)
+       ══════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(10, 10, 10, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-8);
+        z-index: 999;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 1.1rem;
+      }
+
+      .nav-mobile-toggle {
+        display: flex;
+        z-index: 1001;
+      }
+
+      .hero-title {
+        font-size: clamp(2.4rem, 10vw, 4rem);
+      }
+
+      .hero-description {
+        font-size: var(--text-base);
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .hero-actions .btn-primary,
+      .hero-actions .btn-ghost {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .section {
+        padding: var(--space-16) var(--space-5);
+      }
+
+      .section-header {
+        margin-bottom: var(--space-10);
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+        margin: 0 auto;
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-4);
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       Navigation
+       ══════════════════════════════════════════════════════ -->
+  <nav class="nav" id="nav">
+    <a href="#" class="nav-logo">VELO<span>.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#classes">Classes</a></li>
+      <li><a href="#team">Instructors</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#location">Location</a></li>
+      <li><a href="#book" class="nav-cta">Book a Ride</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       Hero Section
+       ══════════════════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <span class="dot"></span>
+        Now Open in West Hollywood
+      </div>
+      <h1 class="hero-title reveal reveal-delay-1">
+        Move.<br>
+        <span class="accent">Transcend.</span>
+        Repeat.
+      </h1>
+      <p class="hero-description reveal reveal-delay-2">
+        An immersive indoor cycling experience designed to push your limits, quiet your mind, and transform your body — all in 45 minutes.
+      </p>
+      <div class="hero-actions reveal reveal-delay-3">
+        <a href="#book" class="btn-primary">Book Your First Ride →</a>
+        <a href="#classes" class="btn-ghost">Explore Classes</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       Classes Section
+       ══════════════════════════════════════════════════════ -->
+  <section class="section classes-section" id="classes">
+    <div class="section-header reveal">
+      <span class="section-label">The Experience</span>
+      <h2 class="section-title">Our <em>Classes</em></h2>
+      <p class="section-subtitle">
+        Three distinct ride formats, each crafted with intention. Every class is a journey — from the warm-up to the final sprint.
+      </p>
+    </div>
+    <div class="classes-grid">
+      <div class="class-card class-card--ride reveal reveal-delay-1">
+        <span class="class-card__number">01</span>
+        <div class="class-card__icon">🔥</div>
+        <h3 class="class-card__name">RIDE</h3>
+        <p class="class-card__meta">45 Min · Rhythm-Based</p>
+        <p class="class-card__desc">
+          Our signature class. Sync your pedal strokes to the beat of curated playlists as the room transforms into a moving meditation. Lights pulse. Bass drops. You ride.
+        </p>
+        <span class="class-card__link">Book a RIDE →</span>
+      </div>
+      <div class="class-card class-card--power reveal reveal-delay-2">
+        <span class="class-card__number">02</span>
+        <div class="class-card__icon">⚡</div>
+        <h3 class="class-card__name">POWER</h3>
+        <p class="class-card__meta">50 Min · HIIT Intervals</p>
+        <p class="class-card__desc">
+          High-intensity intervals that demand everything. Alternating between maximal sprints and resistance climbs, this class builds explosive strength and cardiovascular dominance.
+        </p>
+        <span class="class-card__link">Book a POWER →</span>
+      </div>
+      <div class="class-card class-card--endure reveal reveal-delay-3">
+        <span class="class-card__number">03</span>
+        <div class="class-card__icon">🌊</div>
+        <h3 class="class-card__name">ENDURE</h3>
+        <p class="class-card__meta">60 Min · Steady State</p>
+        <p class="class-card__desc">
+          A long-form endurance ride that builds mental resilience alongside physical stamina. Steady cadence, progressive resistance, and meditative focus for the long haul.
+        </p>
+        <span class="class-card__link">Book an ENDURE →</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       Team Section
+       ══════════════════════════════════════════════════════ -->
+  <section class="section team-section" id="team">
+    <div class="section-header reveal">
+      <span class="section-label">The Crew</span>
+      <h2 class="section-title">Meet the <em>Team</em></h2>
+      <p class="section-subtitle">
+        Certified instructors who don't just lead rides — they create transformative experiences. Every class, every time.
+      </p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal reveal-delay-1">
+        <div class="team-card__avatar team-card__avatar--maya"></div>
+        <h3 class="team-card__name">Maya Chen</h3>
+        <p class="team-card__specialty">Rhythm &amp; Ride Specialist</p>
+        <p class="team-card__bio">
+          Former professional dancer turned cycling instructor. Maya's RIDE classes blend music, movement, and mindfulness into 45 minutes of pure flow state.
+        </p>
+      </div>
+      <div class="team-card reveal reveal-delay-2">
+        <div class="team-card__avatar team-card__avatar--kai"></div>
+        <h3 class="team-card__name">Kai Nakamura</h3>
+        <p class="team-card__specialty">HIIT &amp; Power Coach</p>
+        <p class="team-card__bio">
+          Certified strength coach with 12 years in elite athletics. Kai's POWER classes are known for their intensity, precision, and the way they push you beyond what you thought possible.
+        </p>
+      </div>
+      <div class="team-card reveal reveal-delay-3">
+        <div class="team-card__avatar team-card__avatar--priya"></div>
+        <h3 class="team-card__name">Priya Sharma</h3>
+        <p class="team-card__specialty">Endurance &amp; Wellness</p>
+        <p class="team-card__bio">
+          Yoga teacher and endurance athlete. Priya brings a meditative approach to long-form rides, helping riders find calm within effort and strength within stillness.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       Pricing Section
+       ══════════════════════════════════════════════════════ -->
+  <section class="section pricing-section" id="pricing">
+    <div class="section-header reveal">
+      <span class="section-label">Investment</span>
+      <h2 class="section-title">Choose Your <em>Path</em></h2>
+      <p class="section-subtitle">
+        No contracts. No hidden fees. Just world-class rides, whenever you want them.
+      </p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card reveal reveal-delay-1">
+        <div class="pricing-card__inner">
+          <h3 class="pricing-card__tier">Single Class</h3>
+          <p class="pricing-card__price">
+            <span class="currency">$</span>35
+          </p>
+          <p class="pricing-card__desc">Perfect for visitors or trying us out for the first time.</p>
+          <ul class="pricing-card__features">
+            <li>Access to any class format</li>
+            <li>Complimentary shoe rental</li>
+            <li>Towel service included</li>
+            <li>Post-ride smoothie bar</li>
+          </ul>
+          <a href="#book" class="btn-ghost">Book Now</a>
+        </div>
+      </div>
+      <div class="pricing-card pricing-card--featured reveal reveal-delay-2">
+        <div class="pricing-card__inner">
+          <h3 class="pricing-card__tier">Monthly Unlimited</h3>
+          <p class="pricing-card__price">
+            <span class="currency">$</span>189
+            <span class="period">/month</span>
+          </p>
+          <p class="pricing-card__desc">For dedicated riders who want unlimited access every month.</p>
+          <ul class="pricing-card__features">
+            <li>Unlimited classes all month</li>
+            <li>Priority booking (48hr advance)</li>
+            <li>Guest passes (2 per month)</li>
+            <li>10% off retail &amp; smoothies</li>
+            <li>Heart rate monitor included</li>
+          </ul>
+          <a href="#book" class="btn-primary">Get Started →</a>
+        </div>
+      </div>
+      <div class="pricing-card reveal reveal-delay-3">
+        <div class="pricing-card__inner">
+          <h3 class="pricing-card__tier">Annual Membership</h3>
+          <p class="pricing-card__price">
+            <span class="currency">$</span>149
+            <span class="period">/month</span>
+          </p>
+          <p class="pricing-card__desc">Our best value. Commit to your transformation and save $480/year.</p>
+          <ul class="pricing-card__features">
+            <li>Everything in Monthly Unlimited</li>
+            <li>Early access to new classes</li>
+            <li>Private ride sessions (1/month)</li>
+            <li>Exclusive member events</li>
+            <li>Complimentary merchandise</li>
+          </ul>
+          <a href="#book" class="btn-ghost">Join Annual</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       Location Section
+       ══════════════════════════════════════════════════════ -->
+  <section class="section location-section" id="location">
+    <div class="section-header reveal">
+      <span class="section-label">Find Us</span>
+      <h2 class="section-title">The <em>Studio</em></h2>
+      <p class="section-subtitle">
+        Step through our doors and leave the world behind. A purpose-built space designed for total immersion.
+      </p>
+    </div>
+    <div class="location-grid">
+      <div class="location-info reveal-left">
+        <div class="location-block">
+          <h4 class="location-block__title">Address</h4>
+          <div class="location-block__content">
+            VELO Studio
+            <span>8842 Santa Monica Boulevard</span>
+            <span>West Hollywood, CA 90069</span>
+          </div>
+        </div>
+        <div class="location-block">
+          <h4 class="location-block__title">Studio Hours</h4>
+          <div class="hours-grid">
+            <span class="day">Monday – Friday</span>
+            <span class="time">5:30 AM – 9:00 PM</span>
+            <span class="day">Saturday</span>
+            <span class="time">7:00 AM – 6:00 PM</span>
+            <span class="day">Sunday</span>
+            <span class="time">8:00 AM – 4:00 PM</span>
+          </div>
+        </div>
+        <div class="location-block">
+          <h4 class="location-block__title">Contact</h4>
+          <div class="location-block__content">
+            hello@velostudio.com
+            <span>(323) 555-VELO</span>
+          </div>
+        </div>
+      </div>
+      <div class="location-map reveal-right">
+        <div class="location-map__pin">
+          <div class="location-map__pin-icon">📍</div>
+          <p class="location-map__pin-text">West Hollywood, CA</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       CTA Banner
+       ══════════════════════════════════════════════════════ -->
+  <section class="cta-banner" id="book">
+    <div class="reveal">
+      <span class="section-label" style="display: block; text-align: center; padding-left: 0;">Ready?</span>
+      <h2 class="cta-banner__title">Your first ride is <em>on us.</em></h2>
+      <p class="cta-banner__subtitle">New riders get their first class complimentary. No strings, just sweat.</p>
+      <a href="#" class="btn-primary">Claim Your Free Ride →</a>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       Footer
+       ══════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand__logo">VELO<span>.</span></div>
+        <p class="footer-brand__desc">
+          An immersive indoor cycling studio in the heart of West Hollywood. We believe in the transformative power of movement, music, and community.
+        </p>
+        <div class="footer-social">
+          <a href="#" class="footer-social__link" aria-label="Instagram">IG</a>
+          <a href="#" class="footer-social__link" aria-label="TikTok">TK</a>
+          <a href="#" class="footer-social__link" aria-label="YouTube">YT</a>
+          <a href="#" class="footer-social__link" aria-label="Spotify">SP</a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4 class="footer-column__title">Studio</h4>
+        <ul class="footer-column__links">
+          <li><a href="#classes">Our Classes</a></li>
+          <li><a href="#team">Instructors</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#">Schedule</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4 class="footer-column__title">Info</h4>
+        <ul class="footer-column__links">
+          <li><a href="#">First Ride Guide</a></li>
+          <li><a href="#">What to Bring</a></li>
+          <li><a href="#">Gift Cards</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4 class="footer-column__title">Connect</h4>
+        <ul class="footer-column__links">
+          <li><a href="#">hello@velostudio.com</a></li>
+          <li><a href="#">(323) 555-VELO</a></li>
+          <li><a href="#">8842 Santa Monica Blvd</a></li>
+          <li><a href="#">West Hollywood, CA</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 VELO Studio. All rights reserved.</p>
+      <div class="footer-bottom__legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Accessibility</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════════
+       JavaScript — Scroll Animations & Navigation
+       ══════════════════════════════════════════════════════ -->
+  <script>
+    (function() {
+      'use strict';
+
+      /* ── IntersectionObserver for scroll reveals ──────── */
+      const revealElements = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right');
+
+      const revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -60px 0px'
+      });
+
+      revealElements.forEach(function(el) {
+        revealObserver.observe(el);
+      });
+
+      /* ── Sticky nav scroll behavior ──────────────────── */
+      var nav = document.getElementById('nav');
+      var lastScrollY = 0;
+
+      window.addEventListener('scroll', function() {
+        var scrollY = window.scrollY;
+
+        if (scrollY > 80) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+
+        lastScrollY = scrollY;
+      }, { passive: true });
+
+      /* ── Mobile menu toggle ──────────────────────────── */
+      var navToggle = document.getElementById('navToggle');
+      var navLinks = document.getElementById('navLinks');
+
+      navToggle.addEventListener('click', function() {
+        navLinks.classList.toggle('open');
+      });
+
+      /* Close mobile menu on link click */
+      var mobileLinks = navLinks.querySelectorAll('a');
+      mobileLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          navLinks.classList.remove('open');
+        });
+      });
+
+      /* ── Smooth scroll for anchor links ──────────────── */
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          var targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+
+          var target = document.querySelector(targetId);
+          if (target) {
+            e.preventDefault();
+            var navHeight = nav.offsetHeight;
+            var targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
+
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

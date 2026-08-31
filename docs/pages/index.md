@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 168 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 171 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1567,7 +1567,24 @@ const pages = [
     rating: 9.1,
     description: '温暖风格猫咪咖啡馆落地页，奶油色调 + 猫咪居民卡片 + 菜单 + 领养号召',
   },
-,
+  {
+    id: 'velo-studio',
+    title: 'VELO Studio 室内骑行工作室',
+    category: 'industry',
+    tags: ['健身', '骑行', '工作室', '暗色主题', '奢华'],
+    colors: ['#0a0a0a', '#c9a96e', '#f5f0eb'],
+    rating: 9.4,
+    description: '暗色奢华室内骑行工作室落地页，Playfair Display 衬线字体 + CSS 径向渐变灯光 + 课程卡片 + 教练团队 + 三栏定价',
+  },
+  {
+    id: 'momentum-habit',
+    title: 'Momentum 习惯追踪应用',
+    category: 'app',
+    tags: ['习惯追踪', '健康', 'SaaS', '暖色调', '进度环'],
+    colors: ['#faf8f5', '#6366f1', '#10b981'],
+    rating: 9.4,
+    description: '暖色调习惯追踪应用落地页，CSS App Mockup + SVG 进度环 + Bento Grid 特性 + 连胜日历 + 定价对比',
+  },
 ]
 
 const categories = [
@@ -1625,12 +1642,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 168 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 171 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="168 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="171 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1639,7 +1656,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 168 个完整页面</span>
+      <span>📦 171 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
