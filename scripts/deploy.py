@@ -11,7 +11,8 @@ sftp = ssh.open_sftp()
 local_dist = os.path.expanduser('~/desktop/project/design-lib/docs/.vitepress/dist')
 remote_base = '/var/www/design-lib/'
 
-ssh.exec_command(f'mkdir -p {remote_base}')
+ssh.exec_command('mkdir -p ' + remote_base)
+time.sleep(0.1)
 
 uploaded = 0
 for root, dirs, files in os.walk(local_dist):
@@ -20,11 +21,11 @@ for root, dirs, files in os.walk(local_dist):
         rel_path = os.path.relpath(local_path, local_dist)
         remote_path = os.path.join(remote_base, rel_path)
         remote_dir = os.path.dirname(remote_path)
-        ssh.exec_command(f'mkdir -p {remote_dir}')
+        ssh.exec_command('mkdir -p ' + remote_dir)
         time.sleep(0.03)
         sftp.put(local_path, remote_path)
         uploaded += 1
 
 sftp.close()
 ssh.close()
-print(f'Deployed {uploaded} files to {remote_base}')
+print('Deployed ' + str(uploaded) + ' files to ' + remote_base)

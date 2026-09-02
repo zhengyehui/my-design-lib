@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUMINA — Digital Art Exhibition</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       LUMINA Digital Art Exhibition
+       A museum-grade immersive experience
+       ======================================== */
+
+    :root {
+      --lumina-bg: #050510;
+      --lumina-bg-alt: #0a0a1a;
+      --lumina-surface: #0f0f24;
+      --lumina-surface-elevated: #161635;
+      --lumina-gold: #d4a853;
+      --lumina-gold-light: #e8c878;
+      --lumina-gold-dim: #a88532;
+      --lumina-white: #f0ece4;
+      --lumina-white-muted: #a09c94;
+      --lumina-border: rgba(212, 168, 83, 0.12);
+      --lumina-border-bright: rgba(212, 168, 83, 0.3);
+      --lumina-glow: rgba(212, 168, 83, 0.08);
+      --lumina-text: #e8e4dc;
+      --lumina-text-muted: #7a7680;
+      --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    /* ---- Reset & Base ---- */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--lumina-bg);
+      color: var(--lumina-text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: var(--lumina-bg);
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--lumina-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--lumina-gold-dim); border-radius: 3px; }
+
+    a { color: var(--lumina-gold); text-decoration: none; transition: color 0.3s ease; }
+    a:hover { color: var(--lumina-gold-light); }
+
+    img { display: block; max-width: 100%; }
+
+    /* ---- Utility: Scroll Reveal ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+    .reveal-delay-4 { transition-delay: 0.6s; }
+
+    /* ---- Decorative grain overlay ---- */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(5,5,16,0.95) 0%, rgba(5,5,16,0) 100%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.4s ease;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--lumina-gold);
+      font-weight: 400;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--lumina-white-muted);
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--lumina-gold);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--lumina-gold); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ---- Hero Section ---- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 2rem;
+    }
+
+    /* Hero ambient background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(212, 168, 83, 0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 20% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 80% 20%, rgba(6, 182, 212, 0.03) 0%, transparent 60%);
+      animation: heroAmbient 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroAmbient {
+      0% { opacity: 0.8; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.05); }
+    }
+
+    /* Hero floating geometric elements */
+    .hero-geo {
+      position: absolute;
+      border: 1px solid var(--lumina-border);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: geoFloat 20s ease-in-out infinite;
+    }
+    .hero-geo--1 {
+      width: 400px; height: 400px;
+      top: 10%; left: -5%;
+      animation-delay: 0s;
+      opacity: 0.3;
+    }
+    .hero-geo--2 {
+      width: 250px; height: 250px;
+      bottom: 15%; right: 5%;
+      animation-delay: -5s;
+      opacity: 0.2;
+      border-radius: 30%;
+    }
+    .hero-geo--3 {
+      width: 150px; height: 150px;
+      top: 30%; right: 15%;
+      animation-delay: -10s;
+      opacity: 0.15;
+    }
+    @keyframes geoFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      33% { transform: translateY(-20px) rotate(5deg); }
+      66% { transform: translateY(10px) rotate(-3deg); }
+    }
+
+    /* Vertical golden line */
+    .hero-line {
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(180deg, transparent, var(--lumina-gold), transparent);
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.3s forwards;
+    }
+
+    .hero-overline {
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--lumina-gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.5s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 10vw, 10rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--lumina-white);
+      margin-bottom: 0.3em;
+      opacity: 0;
+      animation: fadeInUp 1.2s ease 0.7s forwards;
+    }
+
+    .hero-title span {
+      display: block;
+      background: linear-gradient(135deg, var(--lumina-gold-light) 0%, var(--lumina-gold) 50%, var(--lumina-gold-dim) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.6rem);
+      color: var(--lumina-white-muted);
+      font-weight: 400;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 1s forwards;
+    }
+
+    .hero-date {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--lumina-text-muted);
+      border: 1px solid var(--lumina-border);
+      padding: 0.8rem 2rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 1.2s forwards;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 1.5s forwards;
+    }
+    .hero-scroll span {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--lumina-text-muted);
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(180deg, var(--lumina-gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.3); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- Section Shared ---- */
+    .section {
+      padding: 8rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .section--full {
+      max-width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--lumina-gold);
+      margin-bottom: 1rem;
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: var(--lumina-white);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-desc {
+      font-size: 1rem;
+      color: var(--lumina-white-muted);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 1px;
+      background: var(--lumina-gold);
+      margin: 2rem 0;
+    }
+
+    /* ---- Featured Artwork ---- */
+    .featured {
+      padding: 10rem 2rem 8rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .featured-header {
+      text-align: center;
+      margin-bottom: 6rem;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .featured-item {
+      position: relative;
+      border-radius: 2px;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 4/3;
+    }
+
+    .featured-item--large {
+      grid-column: span 2;
+      aspect-ratio: 21/9;
+    }
+
+    /* CSS-generated artwork canvases */
+    .art-canvas {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+    }
+
+    .featured-item:hover .art-canvas {
+      transform: scale(1.03);
+      filter: brightness(1.1);
+    }
+
+    /* Artwork 1: Nebula */
+    .art-nebula {
+      background:
+        radial-gradient(circle at 30% 50%, rgba(99, 102, 241, 0.6) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(6, 182, 212, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 50% 70%, rgba(212, 168, 83, 0.3) 0%, transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.3) 0%, transparent 35%),
+        linear-gradient(135deg, #050510 0%, #0a0a2e 50%, #0f0520 100%);
+      animation: nebulaShift 15s ease-in-out infinite alternate;
+    }
+    @keyframes nebulaShift {
+      0% { filter: hue-rotate(0deg) brightness(1); }
+      100% { filter: hue-rotate(15deg) brightness(1.05); }
+    }
+
+    /* Artwork 2: Fractal Waves */
+    .art-waves {
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 3px,
+          rgba(212, 168, 83, 0.08) 3px,
+          rgba(212, 168, 83, 0.08) 4px
+        ),
+        repeating-conic-gradient(
+          from 0deg at 50% 50%,
+          rgba(99, 102, 241, 0.15) 0deg,
+          transparent 3deg,
+          rgba(6, 182, 212, 0.1) 6deg,
+          transparent 9deg
+        ),
+        radial-gradient(circle at 50% 50%, rgba(212, 168, 83, 0.1) 0%, transparent 70%),
+        linear-gradient(180deg, #050510 0%, #0a0520 100%);
+      animation: waveRotate 30s linear infinite;
+    }
+    @keyframes waveRotate {
+      to { filter: hue-rotate(360deg); }
+    }
+
+    /* Artwork 3: Crystal Lattice */
+    .art-crystal {
+      background:
+        conic-gradient(from 0deg at 50% 50%,
+          rgba(212, 168, 83, 0.4) 0deg,
+          transparent 30deg,
+          rgba(99, 102, 241, 0.3) 60deg,
+          transparent 90deg,
+          rgba(6, 182, 212, 0.3) 120deg,
+          transparent 150deg,
+          rgba(212, 168, 83, 0.4) 180deg,
+          transparent 210deg,
+          rgba(168, 85, 247, 0.3) 240deg,
+          transparent 270deg,
+          rgba(6, 182, 212, 0.3) 300deg,
+          transparent 330deg,
+          rgba(212, 168, 83, 0.4) 360deg
+        ),
+        radial-gradient(circle at 50% 50%, rgba(5, 5, 16, 0.9) 20%, transparent 70%);
+    }
+
+    /* Artwork 4: Digital Flora */
+    .art-flora {
+      background:
+        radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.3) 0%, transparent 25%),
+        radial-gradient(circle at 80% 60%, rgba(212, 168, 83, 0.4) 0%, transparent 30%),
+        radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.3) 0%, transparent 35%),
+        radial-gradient(circle at 40% 20%, rgba(6, 182, 212, 0.2) 0%, transparent 20%),
+        radial-gradient(circle at 60% 40%, rgba(236, 72, 153, 0.15) 0%, transparent 25%),
+        linear-gradient(200deg, #050510 0%, #0a1520 100%);
+    }
+
+    /* Artwork 5: Quantum Mesh */
+    .art-mesh {
+      background:
+        linear-gradient(30deg, rgba(99, 102, 241, 0.15) 12%, transparent 12.5%),
+        linear-gradient(150deg, rgba(99, 102, 241, 0.15) 12%, transparent 12.5%),
+        linear-gradient(210deg, rgba(6, 182, 212, 0.1) 12%, transparent 12.5%),
+        linear-gradient(330deg, rgba(6, 182, 212, 0.1) 12%, transparent 12.5%),
+        linear-gradient(60deg, rgba(212, 168, 83, 0.08) 25%, transparent 25.5%),
+        linear-gradient(240deg, rgba(212, 168, 83, 0.08) 25%, transparent 25.5%),
+        radial-gradient(circle at 50% 50%, rgba(212, 168, 83, 0.1) 0%, transparent 60%),
+        var(--lumina-bg);
+      background-size: 80px 140px;
+    }
+
+    /* Artwork 6: Aurora */
+    .art-aurora {
+      background:
+        radial-gradient(ellipse 120% 50% at 50% 100%,
+          rgba(34, 197, 94, 0.2) 0%,
+          rgba(6, 182, 212, 0.15) 30%,
+          rgba(99, 102, 241, 0.1) 60%,
+          transparent 80%
+        ),
+        radial-gradient(ellipse 80% 40% at 30% 90%,
+          rgba(212, 168, 83, 0.15) 0%,
+          transparent 60%
+        ),
+        linear-gradient(180deg, #050510 0%, #050510 40%, #0a1520 100%);
+      animation: auroraPulse 8s ease-in-out infinite alternate;
+    }
+    @keyframes auroraPulse {
+      0% { opacity: 0.9; }
+      100% { opacity: 1; }
+    }
+
+    /* Artwork 7: Particle Cloud */
+    .art-particles {
+      background:
+        radial-gradient(2px 2px at 20% 30%, rgba(212, 168, 83, 0.6), transparent),
+        radial-gradient(2px 2px at 40% 70%, rgba(99, 102, 241, 0.5), transparent),
+        radial-gradient(2px 2px at 60% 20%, rgba(6, 182, 212, 0.5), transparent),
+        radial-gradient(2px 2px at 80% 50%, rgba(212, 168, 83, 0.4), transparent),
+        radial-gradient(3px 3px at 35% 55%, rgba(168, 85, 247, 0.4), transparent),
+        radial-gradient(2px 2px at 70% 85%, rgba(212, 168, 83, 0.5), transparent),
+        radial-gradient(2px 2px at 15% 80%, rgba(6, 182, 212, 0.4), transparent),
+        radial-gradient(3px 3px at 55% 40%, rgba(99, 102, 241, 0.5), transparent),
+        radial-gradient(2px 2px at 85% 15%, rgba(212, 168, 83, 0.3), transparent),
+        radial-gradient(2px 2px at 45% 10%, rgba(34, 197, 94, 0.3), transparent),
+        radial-gradient(150px 150px at 50% 50%, rgba(212, 168, 83, 0.05), transparent),
+        var(--lumina-bg);
+    }
+
+    /* Artwork 8: Sacred Geometry */
+    .art-sacred {
+      background:
+        conic-gradient(from 30deg at 50% 50%,
+          rgba(212, 168, 83, 0.5) 0deg,
+          transparent 60deg,
+          rgba(99, 102, 241, 0.4) 120deg,
+          transparent 180deg,
+          rgba(6, 182, 212, 0.4) 240deg,
+          transparent 300deg,
+          rgba(212, 168, 83, 0.5) 360deg
+        ),
+        radial-gradient(circle at 50% 50%, transparent 30%, var(--lumina-bg) 65%);
+    }
+
+    /* Featured artwork info overlay */
+    .featured-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 3rem 2rem 2rem;
+      background: linear-gradient(0deg, rgba(5,5,16,0.95) 0%, rgba(5,5,16,0.6) 60%, transparent 100%);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+    }
+    .featured-item:hover .featured-info {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .featured-info h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--lumina-white);
+      margin-bottom: 0.25rem;
+    }
+    .featured-info p {
+      font-size: 0.8rem;
+      color: var(--lumina-white-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* Featured artwork number */
+    .featured-num {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--lumina-gold);
+      opacity: 0.6;
+      z-index: 2;
+    }
+
+    /* ---- Exhibition Statement ---- */
+    .statement {
+      padding: 10rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .statement blockquote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+      line-height: 1.5;
+      color: var(--lumina-white);
+      position: relative;
+    }
+    .statement blockquote::before {
+      content: '"';
+      font-family: var(--font-display);
+      font-size: 8rem;
+      color: var(--lumina-gold);
+      opacity: 0.2;
+      position: absolute;
+      top: -3rem;
+      left: -1rem;
+      line-height: 1;
+    }
+    .statement cite {
+      display: block;
+      margin-top: 2rem;
+      font-style: normal;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lumina-gold);
+    }
+
+    /* ---- Artist Profiles ---- */
+    .artists {
+      padding: 8rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .artists-header {
+      margin-bottom: 5rem;
+    }
+
+    .artists-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .artist-card {
+      position: relative;
+      padding: 2.5rem;
+      background: rgba(15, 15, 36, 0.5);
+      border: 1px solid var(--lumina-border);
+      border-radius: 2px;
+      transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow: hidden;
+    }
+    .artist-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--lumina-gold), transparent);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .artist-card:hover {
+      border-color: var(--lumina-border-bright);
+      transform: translateY(-4px);
+    }
+    .artist-card:hover::before {
+      opacity: 1;
+    }
+
+    .artist-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* CSS avatars */
+    .avatar-1 {
+      background: conic-gradient(from 45deg, rgba(212,168,83,0.8), rgba(99,102,241,0.6), rgba(6,182,212,0.6), rgba(212,168,83,0.8));
+    }
+    .avatar-2 {
+      background: conic-gradient(from 180deg, rgba(168,85,247,0.7), rgba(212,168,83,0.6), rgba(34,197,94,0.5), rgba(168,85,247,0.7));
+    }
+    .avatar-3 {
+      background: conic-gradient(from 270deg, rgba(6,182,212,0.7), rgba(236,72,153,0.5), rgba(212,168,83,0.6), rgba(6,182,212,0.7));
+    }
+    .avatar-4 {
+      background: conic-gradient(from 90deg, rgba(99,102,241,0.7), rgba(34,197,94,0.5), rgba(212,168,83,0.7), rgba(99,102,241,0.7));
+    }
+    .avatar-5 {
+      background: conic-gradient(from 0deg, rgba(212,168,83,0.7), rgba(236,72,153,0.5), rgba(6,182,212,0.6), rgba(212,168,83,0.7));
+    }
+    .avatar-6 {
+      background: conic-gradient(from 135deg, rgba(34,197,94,0.6), rgba(168,85,247,0.6), rgba(212,168,83,0.7), rgba(34,197,94,0.6));
+    }
+
+    .artist-avatar::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--lumina-surface);
+    }
+
+    .artist-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--lumina-white);
+      margin-bottom: 0.25rem;
+    }
+
+    .artist-role {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--lumina-gold);
+      margin-bottom: 1rem;
+    }
+
+    .artist-bio {
+      font-size: 0.9rem;
+      color: var(--lumina-white-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .artist-works {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--lumina-text-muted);
+      padding-top: 1rem;
+      border-top: 1px solid var(--lumina-border);
+    }
+
+    /* ---- Gallery Grid ---- */
+    .gallery {
+      padding: 8rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .gallery-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+    }
+
+    .gallery-filters {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .gallery-filter {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid var(--lumina-border);
+      background: transparent;
+      color: var(--lumina-white-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-body);
+    }
+    .gallery-filter:hover,
+    .gallery-filter.active {
+      border-color: var(--lumina-gold);
+      color: var(--lumina-gold);
+      background: rgba(212, 168, 83, 0.05);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .gallery-item:nth-child(1) { grid-row: span 2; aspect-ratio: auto; }
+    .gallery-item:nth-child(5) { grid-column: span 2; aspect-ratio: 2/1; }
+
+    .gallery-art {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .gallery-item:hover .gallery-art {
+      transform: scale(1.08);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(5,5,16,0.9) 0%, rgba(5,5,16,0.2) 50%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+    .gallery-overlay h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--lumina-white);
+      margin-bottom: 0.2rem;
+    }
+    .gallery-overlay p {
+      font-size: 0.7rem;
+      color: var(--lumina-white-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* Gallery mini art pieces */
+    .art-g1 {
+      background: radial-gradient(circle at 30% 40%, rgba(212,168,83,0.6), transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(99,102,241,0.5), transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(6,182,212,0.4), transparent 40%),
+        var(--lumina-bg);
+    }
+    .art-g2 {
+      background: linear-gradient(135deg, rgba(212,168,83,0.3), rgba(168,85,247,0.3)),
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px),
+        var(--lumina-bg);
+    }
+    .art-g3 {
+      background: conic-gradient(from 90deg at 50% 50%, rgba(6,182,212,0.5), transparent 120deg, rgba(212,168,83,0.4) 240deg, transparent 360deg),
+        radial-gradient(circle at 50% 50%, rgba(5,5,16,0.8) 30%, transparent 70%);
+    }
+    .art-g4 {
+      background: radial-gradient(circle at 50% 0%, rgba(236,72,153,0.3), transparent 50%),
+        radial-gradient(circle at 0% 100%, rgba(99,102,241,0.3), transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(6,182,212,0.3), transparent 50%),
+        var(--lumina-bg);
+    }
+    .art-g5 {
+      background:
+        repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 20px, rgba(212,168,83,0.05) 21px, transparent 22px),
+        radial-gradient(circle at 50% 50%, rgba(212,168,83,0.15), transparent 60%),
+        var(--lumina-bg);
+    }
+    .art-g6 {
+      background:
+        linear-gradient(60deg, rgba(99,102,241,0.2) 0%, transparent 40%),
+        linear-gradient(180deg, rgba(212,168,83,0.15) 0%, transparent 50%),
+        linear-gradient(300deg, rgba(6,182,212,0.2) 0%, transparent 40%),
+        var(--lumina-bg);
+    }
+    .art-g7 {
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(34,197,94,0.3), transparent 40%),
+        radial-gradient(ellipse at 80% 50%, rgba(212,168,83,0.3), transparent 40%),
+        var(--lumina-bg);
+    }
+    .art-g8 {
+      background:
+        conic-gradient(from 0deg at 30% 70%, rgba(212,168,83,0.4), transparent 90deg),
+        conic-gradient(from 120deg at 70% 30%, rgba(99,102,241,0.3), transparent 90deg),
+        conic-gradient(from 240deg at 50% 50%, rgba(6,182,212,0.3), transparent 90deg),
+        var(--lumina-bg);
+    }
+
+    /* ---- Timeline / Schedule ---- */
+    .timeline {
+      padding: 8rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .timeline-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .timeline-list {
+      position: relative;
+    }
+
+    .timeline-list::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--lumina-border-bright), var(--lumina-border-bright), transparent);
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+    .timeline-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .timeline-content {
+      width: calc(50% - 2rem);
+      padding: 2rem;
+      background: rgba(15, 15, 36, 0.4);
+      border: 1px solid var(--lumina-border);
+      border-radius: 2px;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .timeline-content:hover {
+      border-color: var(--lumina-border-bright);
+      transform: translateY(-2px);
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 2rem;
+      width: 12px;
+      height: 12px;
+      background: var(--lumina-gold);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 20px rgba(212, 168, 83, 0.3);
+      z-index: 1;
+    }
+
+    .timeline-date {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lumina-gold);
+      margin-bottom: 0.5rem;
+    }
+    .timeline-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--lumina-white);
+      margin-bottom: 0.5rem;
+    }
+    .timeline-content p {
+      font-size: 0.85rem;
+      color: var(--lumina-white-muted);
+      line-height: 1.6;
+    }
+
+    /* ---- Visitor Info ---- */
+    .visitor {
+      padding: 8rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .visitor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 4rem;
+    }
+
+    .visitor-details {
+      display: grid;
+      gap: 2.5rem;
+    }
+
+    .visitor-item {
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--lumina-border);
+    }
+    .visitor-item h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--lumina-white);
+      margin-bottom: 0.75rem;
+    }
+    .visitor-item p {
+      font-size: 0.9rem;
+      color: var(--lumina-white-muted);
+      line-height: 1.7;
+    }
+
+    .visitor-cta {
+      background: rgba(15, 15, 36, 0.5);
+      border: 1px solid var(--lumina-border);
+      padding: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .visitor-cta h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      color: var(--lumina-white);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .visitor-cta p {
+      font-size: 0.95rem;
+      color: var(--lumina-white-muted);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--lumina-gold) 0%, var(--lumina-gold-dim) 100%);
+      color: var(--lumina-bg);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      width: fit-content;
+    }
+    .btn-gold::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--lumina-gold-light) 0%, var(--lumina-gold) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212, 168, 83, 0.3);
+    }
+    .btn-gold:hover::before {
+      opacity: 1;
+    }
+    .btn-gold span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 2rem;
+      background: transparent;
+      border: 1px solid var(--lumina-border-bright);
+      color: var(--lumina-gold);
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: 1rem;
+    }
+    .btn-outline:hover {
+      background: rgba(212, 168, 83, 0.08);
+      border-color: var(--lumina-gold);
+    }
+
+    /* ---- Footer ---- */
+    .footer {
+      padding: 4rem 2rem;
+      border-top: 1px solid var(--lumina-border);
+      margin-top: 4rem;
+    }
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--lumina-gold);
+    }
+    .footer-copy {
+      font-size: 0.7rem;
+      color: var(--lumina-text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ---- Parallax-like decorative line accents ---- */
+    .deco-line-h {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--lumina-border-bright), transparent);
+      pointer-events: none;
+    }
+    .deco-line-v {
+      position: absolute;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--lumina-border-bright), transparent);
+      pointer-events: none;
+    }
+
+    /* ---- Number counter decoration ---- */
+    .num-deco {
+      font-family: var(--font-display);
+      font-size: 10rem;
+      font-weight: 900;
+      color: rgba(212, 168, 83, 0.03);
+      position: absolute;
+      top: -2rem;
+      right: -1rem;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 1024px) {
+      .featured-grid { grid-template-columns: 1fr; }
+      .featured-item--large { grid-column: span 1; aspect-ratio: 16/9; }
+      .artists-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+      .gallery-item:nth-child(1) { grid-row: span 1; aspect-ratio: 1; }
+      .gallery-item:nth-child(5) { grid-column: span 1; aspect-ratio: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .section { padding: 5rem 1.5rem; }
+      .featured { padding: 6rem 1.5rem 4rem; }
+      .featured-header { margin-bottom: 3rem; }
+      .artists { padding: 5rem 1.5rem; }
+      .artists-grid { grid-template-columns: 1fr; }
+      .gallery { padding: 5rem 1.5rem; }
+      .gallery-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-filters { flex-wrap: wrap; }
+      .timeline { padding: 5rem 1.5rem; }
+      .timeline-list::before { left: 0; }
+      .timeline-item, .timeline-item:nth-child(even) {
+        flex-direction: column;
+        padding-left: 2.5rem;
+      }
+      .timeline-content { width: 100%; }
+      .timeline-dot { left: 0; top: 0; }
+      .visitor { padding: 5rem 1.5rem; }
+      .visitor-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .visitor-cta { padding: 2.5rem; }
+      .statement { padding: 6rem 1.5rem; }
+      .hero-geo { display: none; }
+      .footer-inner { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .btn-outline { margin-left: 0; margin-top: 0.75rem; }
+      .btn-gold, .btn-outline { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">Lumina</div>
+    <ul class="nav-links">
+      <li><a href="#exhibition">Exhibition</a></li>
+      <li><a href="#artists">Artists</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#schedule">Schedule</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+  </nav>
+
+  <!-- ==============================
+       HERO SECTION
+       ============================== -->
+  <header class="hero" id="exhibition">
+    <div class="hero-geo hero-geo--1"></div>
+    <div class="hero-geo hero-geo--2"></div>
+    <div class="hero-geo hero-geo--3"></div>
+
+    <div class="hero-line"></div>
+    <p class="hero-overline">A Curated Digital Art Experience</p>
+    <h1 class="hero-title">
+      <span>LUMINA</span>
+    </h1>
+    <p class="hero-subtitle">Where Light Meets Algorithm</p>
+    <div class="hero-date">September 15 — December 30, 2026 &nbsp;·&nbsp; Digital Gallery</div>
+
+    <div class="hero-scroll">
+      <span>Scroll to explore</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </header>
+
+  <!-- ==============================
+       FEATURED ARTWORKS
+       ============================== -->
+  <section class="featured reveal" id="featured">
+    <div class="featured-header">
+      <p class="section-label">Featured Works</p>
+      <h2 class="section-heading">Selected Masterworks</h2>
+      <div class="section-divider" style="margin: 2rem auto;"></div>
+      <p class="section-desc" style="margin: 0 auto;">
+        Eight boundary-pushing works that redefine the intersection of technology and artistic vision. Each piece exists at the frontier where human creativity meets computational possibility.
+      </p>
+    </div>
+
+    <div class="featured-grid">
+      <!-- Featured 1: Large -->
+      <div class="featured-item featured-item--large reveal">
+        <span class="featured-num">01</span>
+        <div class="art-canvas art-nebula"></div>
+        <div class="featured-info">
+          <h3>Cosmic Genesis</h3>
+          <p>Elena Vasquez &nbsp;·&nbsp; Generative Algorithm &nbsp;·&nbsp; 2026</p>
+        </div>
+      </div>
+
+      <!-- Featured 2 -->
+      <div class="featured-item reveal reveal-delay-1">
+        <span class="featured-num">02</span>
+        <div class="art-canvas art-waves"></div>
+        <div class="featured-info">
+          <h3>Harmonic Resonance</h3>
+          <p>Kenji Murakami &nbsp;·&nbsp; AI Collaboration &nbsp;·&nbsp; 2026</p>
+        </div>
+      </div>
+
+      <!-- Featured 3 -->
+      <div class="featured-item reveal reveal-delay-2">
+        <span class="featured-num">03</span>
+        <div class="art-canvas art-crystal"></div>
+        <div class="featured-info">
+          <h3>Prismatic Thought</h3>
+          <p>Zara Okonkwo &nbsp;·&nbsp; Digital Installation &nbsp;·&nbsp; 2025</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       EXHIBITION STATEMENT
+       ============================== -->
+  <section class="statement reveal">
+    <blockquote>
+      Art is not what you see, but what you make others see — and in the digital realm, the canvas is infinite, the palette boundless, the imagination unchained from physical constraint.
+    </blockquote>
+    <cite>— LUMINA Exhibition Manifesto</cite>
+  </section>
+
+  <!-- ==============================
+       FEATURED WORKS CONTINUED
+       ============================== -->
+  <section class="featured reveal" style="padding-top: 0;">
+    <div class="featured-grid">
+      <!-- Featured 4 -->
+      <div class="featured-item reveal">
+        <span class="featured-num">04</span>
+        <div class="art-canvas art-flora"></div>
+        <div class="featured-info">
+          <h3>Digital Flora No. 7</h3>
+          <p>Liam Chen &nbsp;·&nbsp; Procedural Generation &nbsp;·&nbsp; 2026</p>
+        </div>
+      </div>
+
+      <!-- Featured 5 -->
+      <div class="featured-item reveal reveal-delay-1">
+        <span class="featured-num">05</span>
+        <div class="art-canvas art-mesh"></div>
+        <div class="featured-info">
+          <h3>Quantum Lattice</h3>
+          <p>Anya Petrov &nbsp;·&nbsp; Data Sculpture &nbsp;·&nbsp; 2025</p>
+        </div>
+      </div>
+
+      <!-- Featured 6: Large -->
+      <div class="featured-item featured-item--large reveal">
+        <span class="featured-num">06</span>
+        <div class="art-canvas art-aurora"></div>
+        <div class="featured-info">
+          <h3>Northern Algorithm</h3>
+          <p>Samuel Osei &nbsp;·&nbsp; Immersive Installation &nbsp;·&nbsp; 2026</p>
+        </div>
+      </div>
+
+      <!-- Featured 7 -->
+      <div class="featured-item reveal reveal-delay-1">
+        <span class="featured-num">07</span>
+        <div class="art-canvas art-particles"></div>
+        <div class="featured-info">
+          <h3>Stardust Memory</h3>
+          <p>Mira Johansson &nbsp;·&nbsp; Particle System &nbsp;·&nbsp; 2026</p>
+        </div>
+      </div>
+
+      <!-- Featured 8 -->
+      <div class="featured-item reveal reveal-delay-2">
+        <span class="featured-num">08</span>
+        <div class="art-canvas art-sacred"></div>
+        <div class="featured-info">
+          <h3>Sacred Geometry IX</h3>
+          <p>Rafael Santos &nbsp;·&nbsp; Mathematical Art &nbsp;·&nbsp; 2025</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       ARTIST PROFILES
+       ============================== -->
+  <section class="artists" id="artists">
+    <div class="artists-header reveal">
+      <p class="section-label">The Visionaries</p>
+      <h2 class="section-heading">Featured Artists</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">
+        Six pioneering artists working at the intersection of code, creativity, and consciousness. Their diverse practices span generative art, machine learning, and immersive digital environments.
+      </p>
+    </div>
+
+    <div class="artists-grid">
+      <div class="artist-card reveal">
+        <div class="artist-avatar avatar-1"></div>
+        <h3 class="artist-name">Elena Vasquez</h3>
+        <p class="artist-role">Generative Artist</p>
+        <p class="artist-bio">
+          Madrid-born, Berlin-based. Elena's work explores emergent complexity through algorithmic systems, creating vast cosmic landscapes from simple mathematical rules.
+        </p>
+        <p class="artist-works">3 works in exhibition</p>
+      </div>
+
+      <div class="artist-card reveal reveal-delay-1">
+        <div class="artist-avatar avatar-2"></div>
+        <h3 class="artist-name">Kenji Murakami</h3>
+        <p class="artist-role">AI Artist &amp; Researcher</p>
+        <p class="artist-bio">
+          Tokyo-based researcher and artist pushing the boundaries of human-AI creative collaboration. His work questions authorship in the age of machine intelligence.
+        </p>
+        <p class="artist-works">2 works in exhibition</p>
+      </div>
+
+      <div class="artist-card reveal reveal-delay-2">
+        <div class="artist-avatar avatar-3"></div>
+        <h3 class="artist-name">Zara Okonkwo</h3>
+        <p class="artist-role">Digital Sculptor</p>
+        <p class="artist-bio">
+          Lagos and London-based. Zara transforms data into physical and digital sculptures, revealing hidden patterns in human migration, language, and cultural exchange.
+        </p>
+        <p class="artist-works">2 works in exhibition</p>
+      </div>
+
+      <div class="artist-card reveal">
+        <div class="artist-avatar avatar-4"></div>
+        <h3 class="artist-name">Liam Chen</h3>
+        <p class="artist-role">Creative Coder</p>
+        <p class="artist-bio">
+          Vancouver-based creative technologist whose procedural ecosystems blur the line between digital nature and computational imagination. Former Pixar technical director.
+        </p>
+        <p class="artist-works">2 works in exhibition</p>
+      </div>
+
+      <div class="artist-card reveal reveal-delay-1">
+        <div class="artist-avatar avatar-5"></div>
+        <h3 class="artist-name">Anya Petrov</h3>
+        <p class="artist-role">Data Artist</p>
+        <p class="artist-bio">
+          Moscow-born, Amsterdam-based. Anya transforms scientific datasets into haunting visual meditations on climate, memory, and the fragility of our digital infrastructure.
+        </p>
+        <p class="artist-works">1 work in exhibition</p>
+      </div>
+
+      <div class="artist-card reveal reveal-delay-2">
+        <div class="artist-avatar avatar-6"></div>
+        <h3 class="artist-name">Samuel Osei</h3>
+        <p class="artist-role">Immersive Designer</p>
+        <p class="artist-bio">
+          Accra-based immersive experience designer creating large-scale digital environments that respond to human presence, breath, and collective movement.
+        </p>
+        <p class="artist-works">2 works in exhibition</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       GALLERY GRID
+       ============================== -->
+  <section class="gallery" id="gallery">
+    <div class="gallery-header reveal">
+      <div>
+        <p class="section-label">The Collection</p>
+        <h2 class="section-heading">Gallery</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="gallery-filters">
+        <button class="gallery-filter active">All</button>
+        <button class="gallery-filter">Generative</button>
+        <button class="gallery-filter">AI Art</button>
+        <button class="gallery-filter">Installation</button>
+        <button class="gallery-filter">Data Art</button>
+      </div>
+    </div>
+
+    <div class="gallery-grid reveal">
+      <div class="gallery-item">
+        <div class="gallery-art art-g1"></div>
+        <div class="gallery-overlay">
+          <h4>Nebula Genesis</h4>
+          <p>Elena Vasquez · Generative</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-art art-g2"></div>
+        <div class="gallery-overlay">
+          <h4>Woven Frequencies</h4>
+          <p>Kenji Murakami · AI Art</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-art art-g3"></div>
+        <div class="gallery-overlay">
+          <h4>Radial Consciousness</h4>
+          <p>Zara Okonkwo · Installation</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-art art-g4"></div>
+        <div class="gallery-overlay">
+          <h4>Chromatic Drift</h4>
+          <p>Liam Chen · Generative</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-art art-g5"></div>
+        <div class="gallery-overlay">
+          <h4>Echo Patterns</h4>
+          <p>Anya Petrov · Data Art</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-art art-g6"></div>
+        <div class="gallery-overlay">
+          <h4>Light Prism</h4>
+          <p>Samuel Osei · Installation</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-art art-g7"></div>
+        <div class="gallery-overlay">
+          <h4>Dual Horizons</h4>
+          <p>Mira Johansson · Generative</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-art art-g8"></div>
+        <div class="gallery-overlay">
+          <h4>Sacred Tessellation</h4>
+          <p>Rafael Santos · Mathematical Art</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       TIMELINE / SCHEDULE
+       ============================== -->
+  <section class="timeline" id="schedule">
+    <div class="timeline-header reveal">
+      <p class="section-label">Exhibition Programme</p>
+      <h2 class="section-heading">Schedule</h2>
+      <div class="section-divider" style="margin: 2rem auto;"></div>
+      <p class="section-desc" style="margin: 0 auto;">
+        A carefully curated programme of openings, artist talks, workshops, and immersive experiences running throughout the exhibition period.
+      </p>
+    </div>
+
+    <div class="timeline-list">
+      <div class="timeline-item reveal">
+        <div class="timeline-content">
+          <p class="timeline-date">September 15, 2026</p>
+          <h3>Grand Opening &amp; Reception</h3>
+          <p>Join us for the inaugural evening featuring live generative art performances, artist meet-and-greet, and a champagne reception in the main gallery hall.</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-content">
+          <p class="timeline-date">October 1 — 3, 2026</p>
+          <h3>Artist Talk Series: Code as Canvas</h3>
+          <p>Three-day intensive with Elena Vasquez, Kenji Murakami, and Liam Chen exploring the philosophy and practice of computational art creation.</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-content">
+          <p class="timeline-date">October 18, 2026</p>
+          <h3>Workshop: Generative Art Fundamentals</h3>
+          <p>A hands-on workshop led by Liam Chen introducing participants to creative coding with p5.js and algorithmic design principles. All skill levels welcome.</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-content">
+          <p class="timeline-date">November 5 — 12, 2026</p>
+          <h3>Immersive Week: Northern Algorithm</h3>
+          <p>Experience Samuel Osei's full-room immersive installation in an expanded format with synchronized sound design and responsive lighting environments.</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-content">
+          <p class="timeline-date">November 22, 2026</p>
+          <h3>Panel: AI, Art &amp; Authorship</h3>
+          <p>A thought-provoking panel discussion featuring all six exhibiting artists, moderated by digital art critic Maya Hernandez. Exploring the future of creative AI.</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-content">
+          <p class="timeline-date">December 30, 2026</p>
+          <h3>Closing Night: Lumina Finale</h3>
+          <p>The exhibition culminates in an extraordinary closing ceremony featuring a collaborative generative artwork created live by all six artists simultaneously.</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       VISITOR INFORMATION
+       ============================== -->
+  <section class="visitor" id="visit">
+    <div class="reveal">
+      <p class="section-label">Plan Your Visit</p>
+      <h2 class="section-heading">Visitor Information</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="visitor-grid">
+      <div class="visitor-details">
+        <div class="visitor-item reveal">
+          <h4>Location</h4>
+          <p>
+            LUMINA Digital Gallery<br>
+            Nexus Arts Centre, Level 3<br>
+            42 Spectrum Boulevard<br>
+            Digital Arts District
+          </p>
+        </div>
+
+        <div class="visitor-item reveal reveal-delay-1">
+          <h4>Opening Hours</h4>
+          <p>
+            Tuesday — Friday: 10:00 — 20:00<br>
+            Saturday — Sunday: 11:00 — 22:00<br>
+            Monday: Closed<br>
+            <em style="color: var(--lumina-gold); font-size: 0.8rem;">Extended hours on event nights</em>
+          </p>
+        </div>
+
+        <div class="visitor-item reveal reveal-delay-2">
+          <h4>Admission</h4>
+          <p>
+            General Admission: £18<br>
+            Concessions: £12<br>
+            Under 16: Free<br>
+            First Wednesday of month: Free for all
+          </p>
+        </div>
+
+        <div class="visitor-item reveal reveal-delay-3">
+          <h4>Accessibility</h4>
+          <p>
+            The gallery is fully wheelchair accessible. Audio descriptions and tactile guides available upon request. Quiet hours every Wednesday morning, 10:00–12:00.
+          </p>
+        </div>
+      </div>
+
+      <div class="visitor-cta reveal">
+        <h3>Experience<br><em style="color: var(--lumina-gold);">LUMINA</em></h3>
+        <p>
+          Reserve your visit to one of the most anticipated digital art exhibitions of 2026. Limited timed-entry slots ensure an intimate, uncrowded experience with each artwork.
+        </p>
+        <div>
+          <button class="btn-gold"><span>Book Tickets</span></button>
+          <button class="btn-outline">Group Bookings</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       FOOTER
+       ============================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">LUMINA</div>
+      <p class="footer-copy">© 2026 LUMINA Digital Art Exhibition. All rights reserved. A Nexus Arts Centre presentation.</p>
+    </div>
+  </footer>
+
+  <!-- ==============================
+       MINIMAL JS: Scroll Reveal
+       ============================== -->
+  <script>
+    // Intersection Observer for scroll-based reveals
+    (function() {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              // Once revealed, stop observing
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.1,
+          rootMargin: '0px 0px -60px 0px'
+        }
+      );
+
+      document.querySelectorAll('.reveal').forEach((el) => {
+        observer.observe(el);
+      });
+    })();
+
+    // Navbar scroll effect
+    (function() {
+      const nav = document.querySelector('.nav');
+      let lastScroll = 0;
+
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        if (currentScroll > 100) {
+          nav.style.background = 'rgba(5,5,16,0.97)';
+          nav.style.backdropFilter = 'blur(16px)';
+        } else {
+          nav.style.background = 'linear-gradient(180deg, rgba(5,5,16,0.95) 0%, rgba(5,5,16,0) 100%)';
+          nav.style.backdropFilter = 'blur(8px)';
+        }
+        lastScroll = currentScroll;
+      });
+    })();
+
+    // Gallery filter interaction (visual toggle)
+    (function() {
+      const filters = document.querySelectorAll('.gallery-filter');
+      filters.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          filters.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
