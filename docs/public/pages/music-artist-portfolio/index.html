@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAEL — Music Artist Portfolio</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;
+  --bg-elevated:#111111;
+  --bg-card:#161616;
+  --text:#f5f5f5;
+  --text-muted:#888;
+  --accent-lime:#AAFF00;
+  --accent-orange:#FF6B35;
+  --accent-cyan:#00D4FF;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-serif:'Playfair Display',Georgia,serif;
+}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#333 #0a0a0a}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* ── Loading Screen ── */
+.loader{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;transition:opacity .6s,visibility .6s}
+.loader.hide{opacity:0;visibility:hidden}
+.loader-text{font-size:clamp(3rem,10vw,8rem);font-weight:900;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:2px var(--accent-lime);animation:pulse-stroke 1.5s ease-in-out infinite}
+@keyframes pulse-stroke{0%,100%{-webkit-text-stroke-color:var(--accent-lime);opacity:1}50%{-webkit-text-stroke-color:rgba(170,255,0,.4);opacity:.6}}
+
+/* ── Navigation ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(20px);background:rgba(10,10,10,.7);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-logo{font-size:1.4rem;font-weight:900;letter-spacing:-.02em}
+.nav-logo span{color:var(--accent-lime)}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:.85rem;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);transition:color .3s;position:relative}
+.nav-links a:hover,.nav-links a.active{color:var(--accent-lime)}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent-lime);transition:width .3s}
+.nav-links a:hover::after{width:100%}
+.sound-toggle{background:none;border:1px solid rgba(255,255,255,.15);color:var(--text);padding:.4rem 1rem;border-radius:100px;font-size:.75rem;font-weight:600;letter-spacing:.08em;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:.5rem}
+.sound-toggle:hover{border-color:var(--accent-lime);color:var(--accent-lime)}
+.sound-wave{display:flex;align-items:end;gap:2px;height:14px}
+.sound-wave span{width:2px;background:var(--accent-lime);border-radius:1px;animation:wave .8s ease-in-out infinite}
+.sound-wave span:nth-child(1){height:4px;animation-delay:0s}
+.sound-wave span:nth-child(2){height:8px;animation-delay:.1s}
+.sound-wave span:nth-child(3){height:12px;animation-delay:.2s}
+.sound-wave span:nth-child(4){height:6px;animation-delay:.3s}
+.sound-wave span:nth-child(5){height:10px;animation-delay:.15s}
+.sound-toggle.muted .sound-wave span{animation:none;height:2px}
+@keyframes wave{0%,100%{height:4px}50%{height:14px}}
+
+/* ── Hero ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:6rem 2.5rem 4rem}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:1200px;width:100%;align-items:center}
+.hero-visual{position:relative}
+.hero-letter{font-size:clamp(12rem,22vw,20rem);font-weight:900;line-height:.85;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.15);position:relative}
+.hero-letter-fill{position:absolute;inset:0;font-size:inherit;font-weight:inherit;line-height:inherit;background:linear-gradient(135deg,var(--accent-lime),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;clip-path:inset(0 50% 0 0);animation:reveal-fill 2s ease-out .8s forwards}
+@keyframes reveal-fill{to{clip-path:inset(0 0 0 0)}}
+.hero-content h1{font-family:var(--font-serif);font-size:clamp(2.5rem,5vw,4.5rem);font-weight:400;font-style:italic;line-height:1.1;margin-bottom:1.5rem;letter-spacing:-.02em}
+.hero-content h1 em{font-style:normal;color:var(--accent-lime)}
+.hero-content p{color:var(--text-muted);font-size:1.05rem;max-width:440px;line-height:1.7;margin-bottom:2rem}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{padding:.8rem 2rem;background:var(--accent-lime);color:#000;font-weight:700;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;border-radius:100px;transition:all .3s;border:none;cursor:pointer}
+.btn-primary:hover{box-shadow:0 0 30px rgba(170,255,0,.3);transform:translateY(-2px)}
+.btn-outline{padding:.8rem 2rem;border:1px solid rgba(255,255,255,.2);color:var(--text);font-weight:600;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;border-radius:100px;transition:all .3s;background:none;cursor:pointer}
+.btn-outline:hover{border-color:var(--accent-lime);color:var(--accent-lime)}
+
+/* Floating particles */
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particle{position:absolute;width:3px;height:3px;background:var(--accent-lime);border-radius:50%;opacity:.3;animation:float-particle linear infinite}
+@keyframes float-particle{0%{transform:translateY(100vh) scale(0);opacity:0}20%{opacity:.4}80%{opacity:.4}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+
+/* ── Section Common ── */
+.section{padding:6rem 2.5rem}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-lime);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+.section-label::before{content:'';width:30px;height:1px;background:var(--accent-lime)}
+.section-title{font-family:var(--font-serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:400;font-style:italic;margin-bottom:3rem;letter-spacing:-.01em}
+
+/* ── Now Playing Bar ── */
+.now-playing{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(17,17,17,.95);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);padding:.8rem 2.5rem;display:flex;align-items:center;gap:1.5rem}
+.np-artwork{width:48px;height:48px;border-radius:6px;background:linear-gradient(135deg,var(--accent-lime),#1a3a0a);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.np-info{flex:1;min-width:0}
+.np-title{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-artist{font-size:.75rem;color:var(--text-muted)}
+.np-controls{display:flex;align-items:center;gap:1.2rem}
+.np-btn{background:none;border:none;color:var(--text);cursor:pointer;font-size:1.1rem;transition:color .3s;padding:.3rem}
+.np-btn:hover{color:var(--accent-lime)}
+.np-btn.play{width:36px;height:36px;border-radius:50%;background:var(--accent-lime);color:#000;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.np-progress{flex:2;display:flex;align-items:center;gap:.8rem;font-size:.7rem;color:var(--text-muted)}
+.np-bar{flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;position:relative;cursor:pointer}
+.np-bar-fill{position:absolute;left:0;top:0;height:100%;width:35%;background:var(--accent-lime);border-radius:2px}
+.np-volume{display:flex;align-items:center;gap:.5rem}
+.np-vol-bar{width:60px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;position:relative}
+.np-vol-fill{position:absolute;left:0;top:0;height:100%;width:70%;background:var(--text-muted);border-radius:2px}
+
+/* ── Stats Counter ── */
+.stats{background:var(--bg-elevated);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center;padding:3rem 0}
+.stat-num{font-size:clamp(2.5rem,5vw,4rem);font-weight:900;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--accent-lime),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:.8rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.15em;margin-top:.3rem}
+
+/* ── Music Discography ── */
+.discography-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.album-card{background:var(--bg-card);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden;transition:all .4s;position:relative}
+.album-card:hover{border-color:var(--accent-lime);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.album-art{aspect-ratio:1;position:relative;overflow:hidden}
+.album-art-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative}
+.album-art-inner::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(170,255,0,.1),rgba(0,212,255,.05))}
+.album-art-inner::after{content:'';position:absolute;inset:20%;border-radius:50%;border:2px solid rgba(255,255,255,.08)}
+.album-play{position:absolute;bottom:1rem;right:1rem;width:44px;height:44px;border-radius:50%;background:var(--accent-lime);color:#000;display:flex;align-items:center;justify-content:center;font-size:1rem;opacity:0;transform:scale(.8);transition:all .3s;cursor:pointer;border:none}
+.album-card:hover .album-play{opacity:1;transform:scale(1)}
+.album-info{padding:1.2rem}
+.album-name{font-weight:700;font-size:1rem;margin-bottom:.3rem}
+.album-meta{font-size:.8rem;color:var(--text-muted);display:flex;align-items:center;gap:.5rem}
+.album-meta .dot{width:3px;height:3px;background:var(--text-muted);border-radius:50%}
+
+/* ── Tour Dates ── */
+.tour-list{display:flex;flex-direction:column;gap:0}
+.tour-item{display:grid;grid-template-columns:auto 1fr auto auto;gap:2rem;align-items:center;padding:1.5rem 0;border-bottom:1px solid rgba(255,255,255,.06);transition:all .3s}
+.tour-item:hover{padding-left:1rem;border-color:var(--accent-lime)}
+.tour-date{text-align:center;min-width:60px}
+.tour-date .day{font-size:2rem;font-weight:900;line-height:1;color:var(--accent-lime)}
+.tour-date .month{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)}
+.tour-venue{font-weight:600;font-size:1.05rem}
+.tour-city{font-size:.85rem;color:var(--text-muted);margin-top:.2rem}
+.tour-status{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.4rem 1rem;border-radius:100px}
+.tour-status.on-sale{background:rgba(170,255,0,.15);color:var(--accent-lime)}
+.tour-status.sold-out{background:rgba(255,255,255,.06);color:var(--text-muted)}
+.tour-status.soon{background:rgba(255,107,53,.15);color:var(--accent-orange)}
+.tour-btn{padding:.6rem 1.5rem;border:1px solid rgba(255,255,255,.15);background:none;color:var(--text);font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border-radius:100px;cursor:pointer;transition:all .3s}
+.tour-btn:hover{border-color:var(--accent-lime);color:var(--accent-lime)}
+
+/* ── Gallery ── */
+.gallery-scroll{display:flex;gap:1.5rem;overflow-x:auto;padding-bottom:1rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.gallery-scroll::-webkit-scrollbar{display:none}
+.gallery-item{flex:0 0 auto;width:clamp(300px,30vw,420px);aspect-ratio:3/4;border-radius:12px;overflow:hidden;position:relative;scroll-snap-align:start;cursor:pointer}
+.gallery-item-bg{width:100%;height:100%;transition:transform .6s}
+.gallery-item:hover .gallery-item-bg{transform:scale(1.05)}
+.gallery-item-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem}
+.gallery-item-title{font-weight:700;font-size:1.1rem}
+.gallery-item-sub{font-size:.8rem;color:var(--text-muted);margin-top:.2rem}
+
+/* ── Journey Timeline ── */
+.timeline{position:relative;padding-left:3rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--accent-lime),var(--accent-cyan),transparent)}
+.timeline-item{position:relative;margin-bottom:3rem}
+.timeline-item::before{content:'';position:absolute;left:-3rem;top:.5rem;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--accent-lime);z-index:1}
+.timeline-year{font-size:2rem;font-weight:900;color:var(--accent-lime);font-variant-numeric:tabular-nums;margin-bottom:.5rem}
+.timeline-text{color:var(--text-muted);font-size:.95rem;line-height:1.7;max-width:600px}
+
+/* ── Footer ── */
+.footer{padding:4rem 2.5rem 8rem;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.footer-brand{font-size:2rem;font-weight:900;margin-bottom:1rem}
+.footer-brand span{color:var(--accent-lime)}
+.footer-links{display:flex;justify-content:center;gap:2rem;margin-bottom:2rem;flex-wrap:wrap}
+.footer-links a{color:var(--text-muted);font-size:.85rem;transition:color .3s}
+.footer-links a:hover{color:var(--accent-lime)}
+.footer-copy{font-size:.75rem;color:rgba(255,255,255,.2)}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hero-grid{grid-template-columns:1fr;gap:2rem;text-align:center}
+  .hero-content p{margin:0 auto 2rem}
+  .hero-cta{justify-content:center}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .tour-item{grid-template-columns:auto 1fr;gap:1rem}
+  .tour-status,.tour-btn{grid-column:2}
+  .now-playing{padding:.6rem 1rem;gap:1rem}
+  .np-progress,.np-volume{display:none}
+  .section{padding:4rem 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="loader" id="loader">
+  <div class="loader-text">KAEL</div>
+</div>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">KA<span>E</span>L</div>
+  <ul class="nav-links">
+    <li><a href="#music" class="active">Music</a></li>
+    <li><a href="#tour">Tour</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#journey">Journey</a></li>
+  </ul>
+  <button class="sound-toggle" id="soundToggle">
+    <div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div>
+    SOUND ON
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+    <div class="hero-visual">
+      <div class="hero-letter" aria-hidden="true">K
+        <div class="hero-letter-fill">K</div>
+      </div>
+    </div>
+    <div class="hero-content">
+      <h1>Electronic music <em>reimagined</em> for the digital age</h1>
+      <p>Berlin-born producer and live performer crafting immersive sonic landscapes since2012. Four studio albums,200+ shows across6 continents.</p>
+      <div class="hero-cta">
+        <button class="btn-primary">▶ Listen Now</button>
+        <button class="btn-outline">Tour Dates</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="section stats">
+  <div class="section-inner">
+    <div class="stats-grid">
+      <div><div class="stat-num" data-target="4">0</div><div class="stat-label">Studio Albums</div></div>
+      <div><div class="stat-num" data-target="200">0</div><div class="stat-label">Live Shows</div></div>
+      <div><div class="stat-num" data-target="6">0</div><div class="stat-label">Continents</div></div>
+      <div><div class="stat-num" data-target="2800000">0</div><div class="stat-label">Monthly Listeners</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Music / Discography -->
+<section class="section" id="music">
+  <div class="section-inner">
+    <div class="section-label">Discography</div>
+    <div class="section-title">Selected Works</div>
+    <div class="discography-grid">
+      <div class="album-card">
+        <div class="album-art"><div class="album-art-inner" style="background:linear-gradient(135deg,#1a3a0a,#0a2a1a)">🎹</div><button class="album-play">▶</button></div>
+        <div class="album-info"><div class="album-name">Neon Horizons</div><div class="album-meta"><span>2025</span><span class="dot"></span><span>12 tracks</span><span class="dot"></span><span>58 min</span></div></div>
+      </div>
+      <div class="album-card">
+        <div class="album-art"><div class="album-art-inner" style="background:linear-gradient(135deg,#1a1a3a,#0a0a2a)">🌊</div><button class="album-play">▶</button></div>
+        <div class="album-info"><div class="album-name">Pulse Memory</div><div class="album-meta"><span>2023</span><span class="dot"></span><span>10 tracks</span><span class="dot"></span><span>47 min</span></div></div>
+      </div>
+      <div class="album-card">
+        <div class="album-art"><div class="album-art-inner" style="background:linear-gradient(135deg,#2a1a0a,#3a1a1a)">🔥</div><button class="album-play">▶</button></div>
+        <div class="album-info"><div class="album-name">Static Dreams</div><div class="album-meta"><span>2020</span><span class="dot"></span><span>11 tracks</span><span class="dot"></span><span>52 min</span></div></div>
+      </div>
+      <div class="album-card">
+        <div class="album-art"><div class="album-art-inner" style="background:linear-gradient(135deg,#0a1a1a,#1a2a2a)">⚡</div><button class="album-play">▶</button></div>
+        <div class="album-info"><div class="album-name">Origin Signal</div><div class="album-meta"><span>2017</span><span class="dot"></span><span>9 tracks</span><span class="dot"></span><span>44 min</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tour Dates -->
+<section class="section" id="tour" style="background:var(--bg-elevated)">
+  <div class="section-inner">
+    <div class="section-label">On The Road</div>
+    <div class="section-title">Upcoming Shows</div>
+    <div class="tour-list">
+      <div class="tour-item">
+        <div class="tour-date"><div class="day">15</div><div class="month">SEP</div></div>
+        <div><div class="tour-venue">Berghain</div><div class="tour-city">Berlin, Germany</div></div>
+        <span class="tour-status on-sale">On Sale</span>
+        <button class="tour-btn">Get Tickets</button>
+      </div>
+      <div class="tour-item">
+        <div class="tour-date"><div class="day">22</div><div class="month">SEP</div></div>
+        <div><div class="tour-venue">Fabric</div><div class="tour-city">London, UK</div></div>
+        <span class="tour-status sold-out">Sold Out</span>
+        <button class="tour-btn">Waitlist</button>
+      </div>
+      <div class="tour-item">
+        <div class="tour-date"><div class="day">05</div><div class="month">OCT</div></div>
+        <div><div class="tour-venue">Warehouse Project</div><div class="tour-city">Manchester, UK</div></div>
+        <span class="tour-status on-sale">On Sale</span>
+        <button class="tour-btn">Get Tickets</button>
+      </div>
+      <div class="tour-item">
+        <div class="tour-date"><div class="day">18</div><div class="month">OCT</div></div>
+        <div><div class="tour-venue">Tresor</div><div class="tour-city">Berlin, Germany</div></div>
+        <span class="tour-status soon">Coming Soon</span>
+        <button class="tour-btn">Notify Me</button>
+      </div>
+      <div class="tour-item">
+        <div class="tour-date"><div class="day">02</div><div class="month">NOV</div></div>
+        <div><div class="tour-venue">Output</div><div class="tour-city">Brooklyn, NY</div></div>
+        <span class="tour-status on-sale">On Sale</span>
+        <button class="tour-btn">Get Tickets</button>
+      </div>
+      <div class="tour-item">
+        <div class="tour-date"><div class="day">15</div><div class="month">NOV</div></div>
+        <div><div class="tour-venue">Contact</div><div class="tour-city">Tokyo, Japan</div></div>
+        <span class="tour-status soon">Coming Soon</span>
+        <button class="tour-btn">Notify Me</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="section" id="gallery">
+  <div class="section-inner">
+    <div class="section-label">Visual Archive</div>
+    <div class="section-title">Moments captured</div>
+    <div class="gallery-scroll">
+      <div class="gallery-item"><div class="gallery-item-bg" style="background:linear-gradient(135deg,#1a3a0a,#0a1a0a)"></div><div class="gallery-item-overlay"><div class="gallery-item-title">Berghain 2025</div><div class="gallery-item-sub">Berlin, Germany</div></div></div>
+      <div class="gallery-item"><div class="gallery-item-bg" style="background:linear-gradient(135deg,#0a1a3a,#0a0a2a)"></div><div class="gallery-item-overlay"><div class="gallery-item-title">Sonar Festival</div><div class="gallery-item-sub">Barcelona, Spain</div></div></div>
+      <div class="gallery-item"><div class="gallery-item-bg" style="background:linear-gradient(135deg,#2a1a0a,#1a0a0a)"></div><div class="gallery-item-overlay"><div class="gallery-item-title">Coachella 2024</div><div class="gallery-item-sub">Indio, CA</div></div></div>
+      <div class="gallery-item"><div class="gallery-item-bg" style="background:linear-gradient(135deg,#1a0a2a,#2a0a3a)"></div><div class="gallery-item-overlay"><div class="gallery-item-title">Fuji Rock</div><div class="gallery-item-sub">Niigata, Japan</div></div></div>
+      <div class="gallery-item"><div class="gallery-item-bg" style="background:linear-gradient(135deg,#0a2a2a,#0a1a1a)"></div><div class="gallery-item-overlay"><div class="gallery-item-title">Awakenings</div><div class="gallery-item-sub">Amsterdam, NL</div></div></div>
+      <div class="gallery-item"><div class="gallery-item-bg" style="background:linear-gradient(135deg,#2a2a0a,#1a1a0a)"></div><div class="gallery-item-overlay"><div class="gallery-item-title">Dekmantel</div><div class="gallery-item-sub">Amsterdam, NL</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Journey -->
+<section class="section" id="journey" style="background:var(--bg-elevated)">
+  <div class="section-inner">
+    <div class="section-label">Life Works</div>
+    <div class="section-title">The journey so far</div>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2025</div><div class="timeline-text">Released "Neon Horizons" to critical acclaim. Sold-out world tour spanning 40 cities. Headlined Berghain's legendary NYE marathon set.</div></div>
+      <div class="timeline-item"><div class="timeline-year">2023</div><div class="timeline-text">Third album "Pulse Memory" debuted at #3 on the Electronic charts. Collaborated with modular synth pioneer Suzanne Ciani on the single "Crystal Lattice."</div></div>
+      <div class="timeline-item"><div class="timeline-year">2020</div><div class="timeline-text">"Static Dreams" explored ambient territories during lockdown. Livestreamed a 4-hour set from an empty Berghain to 500,000 viewers worldwide.</div></div>
+      <div class="timeline-item"><div class="timeline-year">2017</div><div class="timeline-text">Debut album "Origin Signal" released on Kompakt Records. Named "Breakthrough Artist" by Resident Advisor. First international tour.</div></div>
+      <div class="timeline-item"><div class="timeline-year">2012</div><div class="timeline-text">Started producing in a Berlin basement studio. First release on a local underground label. Played first live set at://about blank.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-brand">KA<span>E</span>L</div>
+  <div class="footer-links">
+    <a href="#">Spotify</a>
+    <a href="#">Apple Music</a>
+    <a href="#">SoundCloud</a>
+    <a href="#">Instagram</a>
+    <a href="#">YouTube</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">©2026 KAEL. All rights reserved. Management: Pulse Artists GmbH</div>
+</footer>
+
+<!-- Now Playing Bar -->
+<div class="now-playing">
+  <div class="np-artwork">🎹</div>
+  <div class="np-info"><div class="np-title">Neon Horizons (Original Mix)</div><div class="np-artist">KAEL</div></div>
+  <div class="np-controls">
+    <button class="np-btn">⏮</button>
+    <button class="np-btn play" id="playBtn">▶</button>
+    <button class="np-btn">⏭</button>
+  </div>
+  <div class="np-progress"><span>1:24</span><div class="np-bar"><div class="np-bar-fill" id="npBarFill"></div></div><span>5:32</span></div>
+  <div class="np-volume"><button class="np-btn">🔊</button><div class="np-vol-bar"><div class="np-vol-fill"></div></div></div>
+</div>
+
+<script>
+// Loader
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('loader').classList.add('hide'),800)})
+
+// Particles
+const particles=document.getElementById('particles')
+for(let i=0;i<20;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*8+'s';p.style.width=p.style.height=(1+Math.random()*3)+'px';particles.appendChild(p)}
+
+// Counter animation
+const counters=document.querySelectorAll('.stat-num')
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const target=+e.target.dataset.target;let current=0;const increment=target/60;const timer=setInterval(()=>{current+=increment;if(current>=target){current=target;clearInterval(timer)}e.target.textContent=current>=1000000?(current/1000000).toFixed(1)+'M':current>=1000?Math.floor(current/1000)+'K':Math.floor(current)},30);observer.unobserve(e.target)}})},{threshold:.5})
+counters.forEach(c=>observer.observe(c))
+
+// Sound toggle
+const soundToggle=document.getElementById('soundToggle')
+let soundOn=true
+soundToggle.addEventListener('click',()=>{soundOn=!soundOn;soundToggle.classList.toggle('muted');soundToggle.innerHTML=soundOn?'<div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div> SOUND ON':'<div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div> SOUND OFF'})
+
+// Play button
+const playBtn=document.getElementById('playBtn')
+let playing=false
+playBtn.addEventListener('click',()=>{playing=!playing;playBtn.textContent=playing?'⏸':'▶'})
+
+// Progress bar animation
+let progress=0
+setInterval(()=>{if(playing){progress+=.5;if(progress>100)progress=0;document.getElementById('npBarFill').style.width=progress+'%'}},200)
+
+// Nav active state on scroll
+const sections=document.querySelectorAll('section[id]')
+const navLinks=document.querySelectorAll('.nav-links a')
+window.addEventListener('scroll',()=>{let current='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-200)current=s.id});navLinks.forEach(a=>{a.classList.remove('active');if(a.getAttribute('href')==='#'+current)a.classList.add('active')})})
+</script>
+</body>
+</html>
