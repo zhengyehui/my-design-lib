@@ -348,7 +348,8 @@ export default defineConfig({
             { text: 'Soléil 奢华度假时装', link: '/pages/soleil-swim' },
             { text: 'KAZE 日本威士忌电商', link: '/pages/kaze-whisky' },
             { text: 'SILO 极简工业产品页', link: '/pages/silo-minimal' },
-            { text: 'Chado 日式茶道电商', link: '/pages/tea-ceremony' }
+            { text: 'Chado 日式茶道电商', link: '/pages/tea-ceremony' },
+            { text: 'BookHaven 精品读书俱乐部', link: '/pages/book-club' }
           ]
         },
         {
