@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 176 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 177 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1630,6 +1630,15 @@ const pages = [
     rating: 9.4,
     description: '暖色调精品读书俱乐部，灵感来自 Aardvark Book Club，明黄渐变 Hero + 浮动书本动画 + 书籍网格 + 四步流程 + 流派标签云 + FAQ 手风琴',
   },
+  {
+    id: 'lumina-dental',
+    title: 'Lumina Dental 现代牙科诊所',
+    category: 'industry',
+    tags: ['牙科诊所', '医疗健康', '预约系统', '行业垂直', '洁净设计'],
+    colors: ['#0ea5e9', '#06b6d4', '#fafbfc'],
+    rating: 9.4,
+    description: '现代牙科诊所落地页，天蓝+青色洁净配色 + 浮动渐变圆形背景 + 服务网格 + 深色双栏关于我们 + 医疗团队 + 患者评价 + 联系预约表单',
+  },
 ]
 
 const categories = [
@@ -1687,7 +1696,7 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 176 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 177 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
@@ -1701,7 +1710,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 176 个完整页面</span>
+      <span>📦 177 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

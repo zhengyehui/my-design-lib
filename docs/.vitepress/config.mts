@@ -443,7 +443,8 @@ export default defineConfig({
             { text: 'Paws & Hope 宠物领养', link: '/pages/paws-shelter' },
             { text: 'Fleurette 花艺设计工作室', link: '/pages/fleurette-atelier' },
             { text: 'Whiskers & Brew 猫咪咖啡馆', link: '/pages/cat-cafe' },
-            { text: 'VELO Studio 室内骑行工作室', link: '/pages/velo-studio' }
+            { text: 'VELO Studio 室内骑行工作室', link: '/pages/velo-studio' },
+            { text: 'Lumina Dental 现代牙科诊所', link: '/pages/lumina-dental' }
           ]
         }
       ]

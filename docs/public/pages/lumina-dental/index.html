@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumina Dental — 现代牙科诊所</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1a1a2e;
+  background: #fafbfc;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ===== CSS Variables ===== */
+:root {
+  --primary: #0ea5e9;
+  --primary-dark: #0284c7;
+  --primary-light: #e0f2fe;
+  --accent: #06b6d4;
+  --accent-light: #ecfeff;
+  --dark: #0f172a;
+  --dark-soft: #1e293b;
+  --text: #334155;
+  --text-light: #64748b;
+  --bg: #fafbfc;
+  --bg-alt: #f1f5f9;
+  --white: #ffffff;
+  --border: #e2e8f0;
+  --radius: 16px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.1);
+  --max-w: 1200px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Navigation ===== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+.nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--dark);
+}
+.nav-logo svg { width: 32px; height: 32px; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: var(--transition);
+  position: relative;
+}
+.nav-links a:hover { color: var(--primary); }
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s;
+}
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  padding: 10px 24px;
+  background: var(--primary);
+  color: white !important;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+.nav-cta:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(14,165,233,0.3);
+}
+.nav-cta::after { display: none !important; }
+
+/* ===== Hero ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 50%, var(--white) 100%);
+  overflow: hidden;
+  padding-top: 72px;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.15;
+}
+.hero-circle-1 {
+  width: 600px;
+  height: 600px;
+  background: var(--primary);
+  top: -200px;
+  right: -100px;
+  animation: float 8s ease-in-out infinite;
+}
+.hero-circle-2 {
+  width: 400px;
+  height: 400px;
+  background: var(--accent);
+  bottom: -100px;
+  left: -100px;
+  animation: float 10s ease-in-out infinite reverse;
+}
+.hero-circle-3 {
+  width: 200px;
+  height: 200px;
+  background: var(--primary);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 6s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.2; }
+}
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--dark);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+.hero-content h1 span {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-content p {
+  font-size: 1.15rem;
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 480px;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  padding: 14px 32px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(14,165,233,0.3);
+}
+.btn-secondary {
+  padding: 14px 32px;
+  background: transparent;
+  color: var(--dark);
+  border: 2px solid var(--border);
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+.hero-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 440px;
+}
+.hero-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+.hero-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+}
+.hero-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dark);
+}
+.hero-card-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.hero-stat {
+  text-align: center;
+  padding: 1rem;
+  background: var(--bg-alt);
+  border-radius: 12px;
+}
+.hero-stat-num {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+.hero-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+.hero-card-cta {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.hero-card-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(14,165,233,0.3);
+}
+.hero-badges {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+.hero-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+.hero-badge svg { color: var(--primary); }
+
+/* ===== Section Common ===== */
+.section {
+  padding: 6rem 2rem;
+}
+.section-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.section-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--dark);
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+.section-desc {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ===== Services ===== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.service-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+.service-card:hover::before { transform: scaleX(1); }
+.service-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.service-icon-1 { background: #dbeafe; color: #2563eb; }
+.service-icon-2 { background: #d1fae5; color: #059669; }
+.service-icon-3 { background: #fce7f3; color: #db2777; }
+.service-icon-4 { background: #fef3c7; color: #d97706; }
+.service-icon-5 { background: #e0e7ff; color: #4f46e5; }
+.service-icon-6 { background: #ccfbf1; color: #0d9488; }
+.service-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 0.75rem;
+}
+.service-desc {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* ===== About ===== */
+.about {
+  background: var(--dark);
+  color: white;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.about-visual {
+  position: relative;
+}
+.about-img {
+  background: linear-gradient(135deg, var(--primary-dark), var(--accent));
+  border-radius: 24px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.about-img::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.about-img-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+}
+.about-img-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+.about-img-text {
+  font-size: 1.3rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+.about-floating-card {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  background: var(--white);
+  color: var(--dark);
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.about-floating-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+}
+.about-floating-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.about-floating-sub {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+.about-content h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+.about-content p {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+.about-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.about-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.about-feature-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(14,165,233,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.about-feature-text h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.about-feature-text p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+/* ===== Team ===== */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+.team-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  text-align: center;
+}
+.team-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+.team-avatar {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.team-avatar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to top, var(--white), transparent);
+}
+.team-info {
+  padding: 1.5rem;
+}
+.team-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+.team-role {
+  font-size: 0.85rem;
+  color: var(--primary);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+.team-desc {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* ===== Testimonials ===== */
+.testimonials {
+  background: var(--bg-alt);
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.testimonial-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 2rem;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  position: relative;
+}
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+.testimonial-quote {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 3rem;
+  color: var(--primary-light);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+.testimonial-stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 1rem;
+  color: #f59e0b;
+  font-size: 0.9rem;
+}
+.testimonial-text {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testimonial-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 0.9rem;
+}
+.testimonial-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+.testimonial-date {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+/* ===== CTA ===== */
+.cta {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+}
+.cta-inner {
+  position: relative;
+  z-index: 2;
+}
+.cta h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+.cta p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.cta-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-white {
+  padding: 14px 32px;
+  background: white;
+  color: var(--primary);
+  border: none;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.btn-outline-white {
+  padding: 14px 32px;
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-outline-white:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: white;
+  transform: translateY(-2px);
+}
+
+/* ===== Contact ===== */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+.contact-form {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  box-shadow: var(--shadow);
+}
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--dark);
+  transition: var(--transition);
+  background: var(--bg);
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+}
+.form-input::placeholder { color: var(--text-light); }
+textarea.form-input {
+  min-height: 120px;
+  resize: vertical;
+}
+.form-submit {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.form-submit:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.contact-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: var(--transition);
+}
+.contact-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+}
+.contact-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.contact-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+.contact-card-text {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+.contact-map {
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* ===== Footer ===== */
+.footer {
+  background: var(--dark);
+  color: rgba(255,255,255,0.7);
+  padding: 4rem 2rem 2rem;
+}
+.footer-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1rem;
+}
+.footer-brand p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+.footer-social {
+  display: flex;
+  gap: 12px;
+}
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: var(--transition);
+}
+.footer-social a:hover { background: var(--primary); }
+.footer-col h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1rem;
+}
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 0.5rem; }
+.footer-col a {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  transition: var(--transition);
+}
+.footer-col a:hover { color: var(--primary); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .about-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero-content h1 { font-size: 2.5rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .about-features { grid-template-columns: 1fr; }
+  .section-title { font-size: 2rem; }
+  .footer-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/><path d="M10 16c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="2" fill="currentColor"/></svg>
+      Lumina Dental
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">服务项目</a></li>
+      <li><a href="#about">关于我们</a></li>
+      <li><a href="#team">医疗团队</a></li>
+      <li><a href="#testimonials">患者评价</a></li>
+      <li><a href="#contact">联系我们</a></li>
+      <li><a href="#contact" class="nav-cta">预约就诊</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-circle hero-circle-1"></div>
+    <div class="hero-circle hero-circle-2"></div>
+    <div class="hero-circle hero-circle-3"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <h1>让每一次<br><span>微笑</span>都自信</h1>
+      <p>Lumina Dental 汇聚顶尖牙科专家，采用国际先进设备与技术，为您提供从日常护理到美学修复的全方位口腔健康服务。</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          在线预约
+        </a>
+        <a href="#services" class="btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          了解服务
+        </a>
+      </div>
+      <div class="hero-badges">
+        <span class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          15年+专业经验
+        </span>
+        <span class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          德国进口设备
+        </span>
+        <span class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          无痛舒适诊疗
+        </span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <div class="hero-card-icon">🦷</div>
+          <div>
+            <div class="hero-card-title">今日预约</div>
+            <div class="hero-card-subtitle">选择您方便的时间</div>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num">98%</div>
+            <div class="hero-stat-label">满意度</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">50k+</div>
+            <div class="hero-stat-label">服务患者</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">24h</div>
+            <div class="hero-stat-label">急诊服务</div>
+          </div>
+        </div>
+        <button class="hero-card-cta">立即预约 →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="section" id="services">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-tag">专业服务</span>
+      <h2 class="section-title">全方位口腔护理</h2>
+      <p class="section-desc">从日常检查到复杂修复，我们提供完整的牙科解决方案，守护您的口腔健康</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon service-icon-1">🪥</div>
+        <h3 class="service-title">日常检查与洁牙</h3>
+        <p class="service-desc">专业口腔检查、超声波洁牙、牙周护理，预防胜于治疗，定期检查守护口腔健康。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon service-icon-2">✨</div>
+        <h3 class="service-title">牙齿美白</h3>
+        <p class="service-desc">冷光美白、家用美白套装，安全高效提亮牙齿色度，让您自信绽放迷人笑容。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon service-icon-3">🦷</div>
+        <h3 class="service-title">种植牙</h3>
+        <p class="service-desc">采用瑞士/韩国进口种植体，数字化精准植入，媲美天然牙齿的咀嚼功能与美观度。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon service-icon-4">😁</div>
+        <h3 class="service-title">正畸矫正</h3>
+        <p class="service-desc">隐适美隐形矫正、陶瓷托槽、自锁托槽，个性化方案重塑整齐齿列与完美咬合。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon service-icon-5">💎</div>
+        <h3 class="service-title">美学修复</h3>
+        <p class="service-desc">全瓷贴面、嵌体修复、美学树脂，精细还原牙齿自然形态与色泽，打造完美微笑曲线。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon service-icon-6">👶</div>
+        <h3 class="service-title">儿童齿科</h3>
+        <p class="service-desc">温馨儿童诊室、涂氟防龋、窝沟封闭，专业又温柔的护理，让孩子爱上看牙。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="section about" id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-visual">
+        <div class="about-img">
+          <div class="about-img-content">
+            <div class="about-img-icon">🏥</div>
+            <div class="about-img-text">国际化标准诊疗空间</div>
+          </div>
+        </div>
+        <div class="about-floating-card">
+          <div class="about-floating-icon">✓</div>
+          <div>
+            <div class="about-floating-text">JCI 国际认证</div>
+            <div class="about-floating-sub">医疗质量标准</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-content">
+        <h2>专注口腔健康<br>15年匠心传承</h2>
+        <p>Lumina Dental 创立于2011年，始终秉承「以患者为中心」的理念，引进德国西诺德、瑞士士卓曼等国际顶级设备与材料，打造安全、舒适、高效的诊疗体验。</p>
+        <div class="about-features">
+          <div class="about-feature">
+            <div class="about-feature-icon">🔬</div>
+            <div class="about-feature-text">
+              <h4>数字化诊疗</h4>
+              <p>CBCT、口扫、3D打印全流程数字化</p>
+            </div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">🛡️</div>
+            <div class="about-feature-text">
+              <h4>严格消毒</h4>
+              <p>18道消毒工序，一人一机一用</p>
+            </div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">💊</div>
+            <div class="about-feature-text">
+              <h4>无痛舒适</h4>
+              <p>笑气镇静、计算机麻醉注射</p>
+            </div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">📋</div>
+            <div class="about-feature-text">
+              <h4>个性方案</h4>
+              <p>多学科会诊，定制专属治疗计划</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section class="section" id="team">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-tag">专家团队</span>
+      <h2 class="section-title">值得信赖的医疗团队</h2>
+      <p class="section-desc">每位医生均拥有10年以上临床经验，定期赴海外交流学习</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">👨‍⚕️</div>
+        <div class="team-info">
+          <h3 class="team-name">陈明远</h3>
+          <div class="team-role">种植修复科主任</div>
+          <p class="team-desc">20年种植经验，国际种植牙学会会员，累计完成5000+种植案例</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👩‍⚕️</div>
+        <div class="team-info">
+          <h3 class="team-name">林雅婷</h3>
+          <div class="team-role">正畸科主任</div>
+          <p class="team-desc">隐适美认证专家，美国正畸学会会员，专注隐形矫正15年</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👨‍⚕️</div>
+        <div class="team-info">
+          <h3 class="team-name">张维</h3>
+          <div class="team-role">美学修复专家</div>
+          <p class="team-desc">DSD数字化微笑设计认证，擅长全瓷贴面与微创美学修复</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">👩‍⚕️</div>
+        <div class="team-info">
+          <h3 class="team-name">王思琪</h3>
+          <div class="team-role">儿童齿科专家</div>
+          <p class="team-desc">儿童行为管理专家，温柔耐心，让孩子不再害怕看牙</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section testimonials" id="testimonials">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-tag">患者评价</span>
+      <h2 class="section-title">真实患者心声</h2>
+      <p class="section-desc">每一条评价都是我们前进的动力</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">在 Lumina 做了种植牙，从检查到完成全程无痛，陈医生非常专业耐心。现在吃东西完全没问题，跟真牙一样！</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">李</div>
+          <div>
+            <div class="testimonial-name">李先生</div>
+            <div class="testimonial-date">2026年8月</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">女儿在这里做涂氟，王医生特别温柔，孩子一点都不害怕。环境也很温馨，以后就认准这家了！</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">张</div>
+          <div>
+            <div class="testimonial-name">张女士</div>
+            <div class="testimonial-date">2026年7月</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">隐适美矫正戴了18个月，效果超出预期！林医生每次复诊都很仔细调整，现在牙齿整齐多了，拍照终于敢笑了。</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">陈</div>
+          <div>
+            <div class="testimonial-name">陈小姐</div>
+            <div class="testimonial-date">2026年6月</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta">
+  <div class="section-inner cta-inner">
+    <h2>开启您的微笑蜕变之旅</h2>
+    <p>新患者首次检查免费，预约即享专属口腔健康方案</p>
+    <div class="cta-actions">
+      <a href="#contact" class="btn-white">立即预约</a>
+      <a href="tel:400-888-6666" class="btn-outline-white">☎ 400-888-6666</a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section" id="contact">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-tag">联系我们</span>
+      <h2 class="section-title">预约您的专属时间</h2>
+      <p class="section-desc">填写以下信息，我们将在24小时内与您确认预约</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-form">
+        <div class="form-group">
+          <label class="form-label">您的姓名</label>
+          <input type="text" class="form-input" placeholder="请输入您的姓名">
+        </div>
+        <div class="form-group">
+          <label class="form-label">联系电话</label>
+          <input type="tel" class="form-input" placeholder="请输入您的手机号码">
+        </div>
+        <div class="form-group">
+          <label class="form-label">预约项目</label>
+          <select class="form-input">
+            <option>请选择预约项目</option>
+            <option>日常检查与洁牙</option>
+            <option>牙齿美白</option>
+            <option>种植牙咨询</option>
+            <option>正畸矫正</option>
+            <option>美学修复</option>
+            <option>儿童齿科</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">备注信息</label>
+          <textarea class="form-input" placeholder="请描述您的需求或问题"></textarea>
+        </div>
+        <button class="form-submit">提交预约</button>
+      </div>
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="contact-card-icon">📍</div>
+          <div>
+            <div class="contact-card-title">诊所地址</div>
+            <div class="contact-card-text">上海市静安区南京西路1266号<br>恒隆广场 3F 301室</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon">🕐</div>
+          <div>
+            <div class="contact-card-title">营业时间</div>
+            <div class="contact-card-text">周一至周五：9:00 - 21:00<br>周末及节假日：9:00 - 18:00<br>急诊服务：24小时</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon">📞</div>
+          <div>
+            <div class="contact-card-title">联系方式</div>
+            <div class="contact-card-text">电话：400-888-6666<br>微信：LuminaDental<br>邮箱：hello@lumina-dental.com</div>
+          </div>
+        </div>
+        <div class="contact-map">
+          <span>📍 地图加载中...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>Lumina Dental</h3>
+        <p>专注口腔健康15年，以国际标准与匠心精神，为每一位患者提供专业、舒适、值得信赖的牙科诊疗服务。</p>
+        <div class="footer-social">
+          <a href="#">微</a>
+          <a href="#">博</a>
+          <a href="#">抖</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>服务项目</h4>
+        <ul>
+          <li><a href="#">日常检查</a></li>
+          <li><a href="#">牙齿美白</a></li>
+          <li><a href="#">种植牙</a></li>
+          <li><a href="#">正畸矫正</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>关于我们</h4>
+        <ul>
+          <li><a href="#">医院介绍</a></li>
+          <li><a href="#">医疗团队</a></li>
+          <li><a href="#">设备技术</a></li>
+          <li><a href="#">荣誉资质</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>患者服务</h4>
+        <ul>
+          <li><a href="#">在线预约</a></li>
+          <li><a href="#">就诊指南</a></li>
+          <li><a href="#">费用说明</a></li>
+          <li><a href="#">常见问题</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Lumina Dental. All rights reserved.</span>
+      <span>沪ICP备2026XXXXXX号</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
