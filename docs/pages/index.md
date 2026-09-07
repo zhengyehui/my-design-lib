@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 177 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 178 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1639,6 +1639,15 @@ const pages = [
     rating: 9.4,
     description: '现代牙科诊所落地页，天蓝+青色洁净配色 + 浮动渐变圆形背景 + 服务网格 + 深色双栏关于我们 + 医疗团队 + 患者评价 + 联系预约表单',
   },
+  {
+    id: 'shipforge',
+    title: 'ShipForge 云部署平台',
+    category: 'landing',
+    tags: ['SaaS', '开发者工具', '暗色主题', '终端美学', '部署平台'],
+    colors: ['#0a0a0f', '#00d4ff', '#6366f1'],
+    rating: 9.5,
+    description: '暗色科技风云部署平台落地页，灵感来自 Vercel/Railway，终端打字机动画 Hero + Bento Grid 特性 + 部署流水线可视化 + 全球边缘网络地图 + 整合 Marquee + 三栏定价',
+  },
 ]
 
 const categories = [
@@ -1701,7 +1710,7 @@ function getScoreColor(score) {
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="176 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="178 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1710,7 +1719,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 177 个完整页面</span>
+      <span>📦 178 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

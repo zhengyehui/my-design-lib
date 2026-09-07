@@ -255,7 +255,8 @@ export default defineConfig({
             { text: 'MailCraft 邮件营销', link: '/pages/mailcraft-landing' },
             { text: 'FormFlow 表单构建器', link: '/pages/form-builder' },
             { text: 'Hanami 怀石料理', link: '/pages/hanami-kaiseki' },
-            { text: 'Zen Flow 瑜伽工作室', link: '/pages/zen-flow-yoga' }
+            { text: 'Zen Flow 瑜伽工作室', link: '/pages/zen-flow-yoga' },
+            { text: 'ShipForge 云部署平台', link: '/pages/shipforge' }
           ]
         },
         {

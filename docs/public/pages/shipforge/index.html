@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShipForge — Deploy to the Edge in Seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-elevated: #1a1a24;
+  --border: rgba(255,255,255,0.06);
+  --border-hover: rgba(255,255,255,0.12);
+  --text: #f0f0f5;
+  --text-secondary: #8888a0;
+  --text-muted: #55556a;
+  --accent: #00d4ff;
+  --accent-glow: rgba(0,212,255,0.15);
+  --violet: #6366f1;
+  --violet-glow: rgba(99,102,241,0.15);
+  --green: #10b981;
+  --green-glow: rgba(16,185,129,0.12);
+  --orange: #f59e0b;
+  --radius: 12px;
+  --radius-lg: 20px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Grid Lines Background ─────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Navigation ────────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10,10,15,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.nav-logo svg { width: 28px; height: 28px; }
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+.btn-ghost {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.btn-ghost:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+.btn-primary {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #0a0a0f;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.btn-primary:hover {
+  background: #33ddff;
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* ── Hero ──────────────────────────────────────────── */
+.hero {
+  position: relative;
+  padding: 10rem 2rem 6rem;
+  text-align: center;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+}
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, var(--accent), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-large {
+  padding: 14px 32px;
+  font-size: 1rem;
+  border-radius: 10px;
+}
+.btn-outline {
+  padding: 14px 32px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-hover);
+  background: transparent;
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Terminal Mockup ───────────────────────────────── */
+.terminal-wrap {
+  max-width: 680px;
+  margin: 4rem auto 0;
+  position: relative;
+}
+.terminal {
+  background: #0d0d14;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-align: left;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 20px 60px rgba(0,0,0,0.5),
+    0 0 80px var(--accent-glow);
+}
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.terminal-dot:nth-child(1) { background: #ff5f57; }
+.terminal-dot:nth-child(2) { background: #febc2e; }
+.terminal-dot:nth-child(3) { background: #28c840; }
+.terminal-title {
+  flex: 1;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono, monospace);
+}
+.terminal-body {
+  padding: 20px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  min-height: 200px;
+}
+.terminal-line {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+  opacity: 0;
+  animation: terminal-appear 0.3s forwards;
+}
+.terminal-line:nth-child(1) { animation-delay: 0.5s; }
+.terminal-line:nth-child(2) { animation-delay: 1.2s; }
+.terminal-line:nth-child(3) { animation-delay: 2.0s; }
+.terminal-line:nth-child(4) { animation-delay: 2.8s; }
+.terminal-line:nth-child(5) { animation-delay: 3.5s; }
+.terminal-line:nth-child(6) { animation-delay: 4.2s; }
+.terminal-line:nth-child(7) { animation-delay: 4.8s; }
+.terminal-line:nth-child(8) { animation-delay: 5.5s; }
+@keyframes terminal-appear {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.prompt { color: var(--accent); }
+.cmd { color: var(--text); }
+.output { color: var(--text-muted); }
+.success-text { color: var(--green); }
+.warning-text { color: var(--orange); }
+.violet-text { color: var(--violet); }
+
+/* ── Stats Bar ─────────────────────────────────────── */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  padding: 4rem 2rem;
+  flex-wrap: wrap;
+}
+.stat { text-align: center; }
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--accent), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ── Section Common ────────────────────────────────── */
+.section {
+  position: relative;
+  padding: 6rem 2rem;
+  z-index: 1;
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.section-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.section-desc {
+  color: var(--text-secondary);
+  max-width: 520px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+}
+
+/* ── Bento Features Grid ───────────────────────────── */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  max-width: 1100px;
+  margin: 0 auto;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.bento-card {
+  background: var(--bg-card);
+  padding: 2.5rem;
+  position: relative;
+  transition: background 0.3s;
+}
+.bento-card:hover {
+  background: var(--bg-elevated);
+}
+.bento-card.wide {
+  grid-column: span 2;
+}
+.bento-card.tall {
+  grid-row: span 2;
+}
+.bento-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+}
+.bento-icon.cyan { background: var(--accent-glow); color: var(--accent); }
+.bento-icon.violet { background: var(--violet-glow); color: var(--violet); }
+.bento-icon.green { background: var(--green-glow); color: var(--green); }
+.bento-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.bento-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Code Preview in Bento ─────────────────────────── */
+.code-preview {
+  background: #08080d;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 1rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  overflow: hidden;
+}
+.code-preview .ln { color: var(--text-muted); margin-right: 12px; user-select: none; }
+.code-preview .kw { color: var(--violet); }
+.code-preview .str { color: var(--green); }
+.code-preview .fn { color: var(--accent); }
+.code-preview .cm { color: var(--text-muted); font-style: italic; }
+
+/* ── Pipeline Visualization ────────────────────────── */
+.pipeline {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 2rem 0;
+}
+.pipeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+.pipeline-node {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  position: relative;
+}
+.pipeline-node.active {
+  background: var(--accent-glow);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+  animation: pipeline-pulse 2s infinite;
+}
+.pipeline-node.done {
+  background: var(--green-glow);
+  border: 2px solid var(--green);
+}
+.pipeline-node.waiting {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+}
+@keyframes pipeline-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+  50% { box-shadow: 0 0 40px var(--accent-glow); }
+}
+.pipeline-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.pipeline-sublabel {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.pipeline-arrow {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green), var(--accent));
+  position: relative;
+  margin-bottom: 40px;
+}
+.pipeline-arrow::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--accent);
+  border-top: 2px solid var(--accent);
+  transform: rotate(45deg);
+}
+
+/* ── Global Map ────────────────────────────────────── */
+.map-section {
+  position: relative;
+}
+.map-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  aspect-ratio: 2/1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.map-grid {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.map-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.map-dot::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0.3;
+  animation: map-ring 3s infinite;
+}
+@keyframes map-ring {
+  0% { transform: scale(1); opacity: 0.3; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+.map-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-weight: 500;
+}
+.map-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.15;
+  transform-origin: left center;
+}
+
+/* ── Marquee ───────────────────────────────────────── */
+.marquee-wrap {
+  overflow: hidden;
+  padding: 3rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.marquee-track {
+  display: flex;
+  gap: 4rem;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-item {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+.marquee-item:hover { opacity: 1; }
+
+/* ── Pricing ───────────────────────────────────────── */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.pricing-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  position: relative;
+  transition: all 0.3s;
+}
+.pricing-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+}
+.pricing-card.featured {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, var(--bg-card) 100%);
+}
+.pricing-card.featured::before {
+  content: 'Most Popular';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 16px;
+  border-radius: 100px;
+  background: var(--accent);
+  color: #0a0a0f;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.pricing-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.pricing-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+.pricing-price {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.25rem;
+}
+.pricing-price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.pricing-features {
+  list-style: none;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.pricing-features li {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pricing-features li::before {
+  content: '✓';
+  color: var(--green);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+.pricing-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.pricing-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.pricing-card.featured .pricing-btn {
+  background: var(--accent);
+  color: #0a0a0f;
+  border-color: var(--accent);
+}
+.pricing-card.featured .pricing-btn:hover {
+  background: #33ddff;
+}
+
+/* ── CTA ───────────────────────────────────────────── */
+.cta-section {
+  text-align: center;
+  padding: 8rem 2rem;
+  position: relative;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse, var(--violet-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.cta-section p {
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto 2.5rem;
+  font-size: 1.1rem;
+}
+
+/* ── Footer ────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 4rem 2rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  max-width: 280px;
+  line-height: 1.6;
+}
+.footer-col h4 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+.footer-col a {
+  display: block;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--text); }
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .bento { grid-template-columns: 1fr; }
+  .bento-card.wide { grid-column: span 1; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+  .pipeline { flex-direction: column; gap: 1rem; }
+  .pipeline-arrow { width: 2px; height: 40px; margin-bottom: 0; }
+  .pipeline-arrow::after { right: -4px; top: auto; bottom: -4px; transform: rotate(135deg); }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .stats { gap: 2rem; }
+  .map-container { aspect-ratio: 1.5/1; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a class="nav-logo" href="#">
+    <svg viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill="url(#logo-grad)"/>
+      <path d="M8 14l4 4 8-8" stroke="#0a0a0f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#00d4ff"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+    </svg>
+    ShipForge
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pipeline">Pipeline</a></li>
+    <li><a href="#network">Network</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#">Docs</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="btn-ghost">Log In</button>
+    <button class="btn-primary">Start Free</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    v3.2 — Edge Functions now in GA
+  </div>
+  <h1>Ship to Production<br><span class="gradient-text">in Seconds, Not Hours</span></h1>
+  <p class="hero-sub">The modern deployment platform for frontend teams. Push code, get a global URL. Zero config, instant rollbacks, edge-first by default.</p>
+  <div class="hero-actions">
+    <button class="btn-primary btn-large">Deploy for Free →</button>
+    <button class="btn-outline">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3.5 8.5l-5 3A.5.5 0 016 11V5a.5.5 0 01.75-.43l5 3a.5.5 0 010 .86z"/></svg>
+      Watch Demo
+    </button>
+  </div>
+
+  <!-- Terminal Mockup -->
+  <div class="terminal-wrap">
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="terminal-dot"></div>
+        <div class="terminal-dot"></div>
+        <div class="terminal-dot"></div>
+        <span class="terminal-title">~/my-app — shipforge deploy</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line"><span class="prompt">$</span> <span class="cmd">git push origin main</span></div>
+        <div class="terminal-line"><span class="output">Enumerating objects: 12, done.</span></div>
+        <div class="terminal-line"><span class="violet-text">⚡ ShipForge: Build started</span></div>
+        <div class="terminal-line"><span class="output">  → Installing dependencies... <span class="success-text">2.1s</span></span></div>
+        <div class="terminal-line"><span class="output">  → Building application... <span class="success-text">4.3s</span></span></div>
+        <div class="terminal-line"><span class="output">  → Deploying to 42 edge regions... <span class="success-text">1.8s</span></span></div>
+        <div class="terminal-line"><span class="success-text">✓ Deployed to https://my-app.shipforge.dev</span></div>
+        <div class="terminal-line"><span class="output">  Preview: <span class="violet-text">https://my-abc123.shipforge.dev</span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-value" data-count="2.4">2.4M+</div>
+    <div class="stat-label">Deployments per day</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">42</div>
+    <div class="stat-label">Edge regions</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">&lt;50ms</div>
+    <div class="stat-label">Global TTFB</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">99.99%</div>
+    <div class="stat-label">Uptime SLA</div>
+  </div>
+</div>
+
+<!-- Features Bento Grid -->
+<section class="section" id="features">
+  <div class="section-header">
+    <div class="section-tag">Features</div>
+    <h2 class="section-title">Everything you need to ship</h2>
+    <p class="section-desc">From preview deployments to edge functions, every feature is built for speed and developer experience.</p>
+  </div>
+  <div class="bento">
+    <div class="bento-card wide">
+      <div class="bento-icon cyan">⚡</div>
+      <h3>Instant Deployments</h3>
+      <p>Push to git and get a live URL in under 10 seconds. Every branch gets its own preview URL automatically.</p>
+      <div class="code-preview">
+        <div><span class="ln">1</span><span class="cm">// shipforge.config.ts</span></div>
+        <div><span class="ln">2</span><span class="kw">export default</span> {</div>
+        <div><span class="ln">3</span>  <span class="fn">framework</span>: <span class="str">'nextjs'</span>,</div>
+        <div><span class="ln">4</span>  <span class="fn">edge</span>: <span class="kw">true</span>,</div>
+        <div><span class="ln">5</span>  <span class="fn">regions</span>: [<span class="str">'us-east'</span>, <span class="str">'eu-west'</span>, <span class="str">'ap-south'</span>]</div>
+        <div><span class="ln">6</span>}</div>
+      </div>
+    </div>
+    <div class="bento-card">
+      <div class="bento-icon violet">🔄</div>
+      <h3>Instant Rollbacks</h3>
+      <p>One click to revert any deployment. Your previous version is always ready to go live again.</p>
+    </div>
+    <div class="bento-card">
+      <div class="bento-icon green">🔒</div>
+      <h3>Zero-Config SSL</h3>
+      <p>Automatic HTTPS on every deployment. Custom domains with free SSL certificates included.</p>
+    </div>
+    <div class="bento-card">
+      <div class="bento-icon cyan">🌐</div>
+      <h3>Edge Functions</h3>
+      <p>Run serverless functions at the edge. Sub-mission cold starts with V8 isolates across42 regions.</p>
+    </div>
+    <div class="bento-card wide">
+      <div class="bento-icon violet">📊</div>
+      <h3>Real-Time Analytics</h3>
+      <p>Monitor performance, Core Web Vitals, and traffic in real time. No third-party scripts needed — analytics are built into the edge layer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Pipeline -->
+<section class="section" id="pipeline">
+  <div class="section-header">
+    <div class="section-tag">Pipeline</div>
+    <h2 class="section-title">From push to production</h2>
+    <p class="section-desc">Your deployment pipeline, fully automated. No Jenkins, no YAML, no headaches.</p>
+  </div>
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="pipeline-node done">📝</div>
+      <div class="pipeline-label">Git Push</div>
+      <div class="pipeline-sublabel">0s</div>
+    </div>
+    <div class="pipeline-arrow"></div>
+    <div class="pipeline-step">
+      <div class="pipeline-node done">🔍</div>
+      <div class="pipeline-label">Detect</div>
+      <div class="pipeline-sublabel">Auto-detect framework</div>
+    </div>
+    <div class="pipeline-arrow"></div>
+    <div class="pipeline-step">
+      <div class="pipeline-node done">🔨</div>
+      <div class="pipeline-label">Build</div>
+      <div class="pipeline-sublabel">Cached · 4.3s</div>
+    </div>
+    <div class="pipeline-arrow"></div>
+    <div class="pipeline-step">
+      <div class="pipeline-node active">🌍</div>
+      <div class="pipeline-label">Deploy</div>
+      <div class="pipeline-sublabel">42 regions</div>
+    </div>
+    <div class="pipeline-arrow"></div>
+    <div class="pipeline-step">
+      <div class="pipeline-node waiting">✅</div>
+      <div class="pipeline-label">Live</div>
+      <div class="pipeline-sublabel">~8s total</div>
+    </div>
+  </div>
+</section>
+
+<!-- Global Network Map -->
+<section class="section map-section" id="network">
+  <div class="section-header">
+    <div class="section-tag">Network</div>
+    <h2 class="section-title">Global edge network</h2>
+    <p class="section-desc">Your code runs at the edge, closest to your users.42 regions, one deploy command.</p>
+  </div>
+  <div class="map-container">
+    <div class="map-grid"></div>
+    <!-- Edge nodes -->
+    <div class="map-dot" data-label="US East" style="left:22%;top:35%"></div>
+    <div class="map-dot" data-label="US West" style="left:12%;top:38%"></div>
+    <div class="map-dot" data-label="EU West" style="left:48%;top:30%"></div>
+    <div class="map-dot" data-label="EU Central" style="left:52%;top:28%"></div>
+    <div class="map-dot" data-label="AP South" style="left:72%;top:50%"></div>
+    <div class="map-dot" data-label="AP East" style="left:80%;top:35%"></div>
+    <div class="map-dot" data-label="SA East" style="left:30%;top:65%"></div>
+    <div class="map-dot" data-label="AF South" style="left:52%;top:60%"></div>
+    <div class="map-dot" data-label="OC East" style="left:85%;top:70%"></div>
+    <div class="map-dot" data-label="ME South" style="left:60%;top:42%"></div>
+    <!-- Connection lines -->
+    <div class="map-line" style="left:22%;top:36%;width:26%;transform:rotate(-3deg)"></div>
+    <div class="map-line" style="left:48%;top:31%;width:24%;transform:rotate(5deg)"></div>
+    <div class="map-line" style="left:52%;top:29%;width:20%;transform:rotate(15deg)"></div>
+    <div class="map-line" style="left:72%;top:51%;width:8%;transform:rotate(-50deg)"></div>
+    <div class="map-line" style="left:22%;top:36%;width:8%;transform:rotate(60deg)"></div>
+  </div>
+</section>
+
+<!-- Integrations Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">▲ Next.js</span>
+    <span class="marquee-item">⚛ React</span>
+    <span class="marquee-item">🟢 Vue</span>
+    <span class="marquee-item">🔶 Nuxt</span>
+    <span class="marquee-item">🦊 Astro</span>
+    <span class="marquee-item">⚡ SvelteKit</span>
+    <span class="marquee-item">🔥 Remix</span>
+    <span class="marquee-item">📦 Vite</span>
+    <span class="marquee-item">🟣 Gatsby</span>
+    <span class="marquee-item">🐳 Docker</span>
+    <span class="marquee-item">◆ GitHub</span>
+    <span class="marquee-item">● GitLab</span>
+    <span class="marquee-item">⬡ Bitbucket</span>
+    <span class="marquee-item">▲ Next.js</span>
+    <span class="marquee-item">⚛ React</span>
+    <span class="marquee-item">🟢 Vue</span>
+    <span class="marquee-item">🔶 Nuxt</span>
+    <span class="marquee-item">🦊 Astro</span>
+    <span class="marquee-item">⚡ SvelteKit</span>
+    <span class="marquee-item">🔥 Remix</span>
+    <span class="marquee-item">📦 Vite</span>
+    <span class="marquee-item">🟣 Gatsby</span>
+    <span class="marquee-item">🐳 Docker</span>
+    <span class="marquee-item">◆ GitHub</span>
+    <span class="marquee-item">● GitLab</span>
+    <span class="marquee-item">⬡ Bitbucket</span>
+  </div>
+</div>
+
+<!-- Pricing -->
+<section class="section" id="pricing">
+  <div class="section-header">
+    <div class="section-tag">Pricing</div>
+    <h2 class="section-title">Start free, scale infinitely</h2>
+    <p class="section-desc">No credit card required. Upgrade when you're ready.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-name">Hobby</div>
+      <div class="pricing-desc">For personal projects and experiments</div>
+      <div class="pricing-price">$0<span>/mo</span></div>
+      <ul class="pricing-features">
+        <li>Unlimited deployments</li>
+        <li>Automatic HTTPS</li>
+        <li>Preview deployments</li>
+        <li>100 GB bandwidth/mo</li>
+        <li>Community support</li>
+      </ul>
+      <button class="pricing-btn">Start Free</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-name">Pro</div>
+      <div class="pricing-desc">For professional teams shipping daily</div>
+      <div class="pricing-price">$20<span>/seat/mo</span></div>
+      <ul class="pricing-features">
+        <li>Everything in Hobby</li>
+        <li>Unlimited bandwidth</li>
+        <li>Edge Functions</li>
+        <li>Custom domains</li>
+        <li>Team collaboration</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="pricing-btn">Start Pro Trial</button>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-name">Enterprise</div>
+      <div class="pricing-desc">For organizations with custom needs</div>
+      <div class="pricing-price">Custom</div>
+      <ul class="pricing-features">
+        <li>Everything in Pro</li>
+        <li>SLA guarantee</li>
+        <li>SSO / SAML</li>
+        <li>Dedicated support</li>
+        <li>Custom regions</li>
+        <li>Audit logs</li>
+      </ul>
+      <button class="pricing-btn">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready to ship faster?</h2>
+  <p>Join thousands of teams deploying to the edge. Your first project is always free.</p>
+  <div class="hero-actions">
+    <button class="btn-primary btn-large">Get Started for Free →</button>
+    <button class="btn-outline">Talk to Sales</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="#">
+        <svg viewBox="0 0 28 28" fill="none" width="28" height="28">
+          <rect width="28" height="28" rx="6" fill="url(#logo-grad2)"/>
+          <path d="M8 14l4 4 8-8" stroke="#0a0a0f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="logo-grad2" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#00d4ff"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+        </svg>
+        ShipForge
+      </a>
+      <p>The modern deployment platform for frontend teams. Ship to the edge in seconds.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+      <a href="#">Changelog</a>
+      <a href="#">Roadmap</a>
+    </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <a href="#">Documentation</a>
+      <a href="#">API Reference</a>
+      <a href="#">Guides</a>
+      <a href="#">Status</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About</a>
+      <a href="#">Blog</a>
+      <a href="#">Careers</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 ShipForge, Inc.</span>
+    <span>Privacy · Terms</span>
+  </div>
+</footer>
+
+</body>
+</html>
