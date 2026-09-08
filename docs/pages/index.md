@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 178 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 180 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1648,6 +1648,24 @@ const pages = [
     rating: 9.5,
     description: '暗色科技风云部署平台落地页，灵感来自 Vercel/Railway，终端打字机动画 Hero + Bento Grid 特性 + 部署流水线可视化 + 全球边缘网络地图 + 整合 Marquee + 三栏定价',
   },
+  {
+    id: 'annual-report',
+    title: 'Meridian Group 年度可持续发展报告',
+    category: 'content',
+    tags: ['年报', '可持续发展', 'ESG', '数据可视化', '编辑设计'],
+    colors: ['#0a0a0a', '#2d6a4f', '#b08d57'],
+    rating: 9.5,
+    description: '企业年度可持续发展报告，深黑底+可持续绿+金色双强调色。全屏 Hero + 关键指标数字滚动 + CEO 编辑式信件 + 三大支柱卡片 + 影响力数据 + ESG 数据表格 + 年表时间线',
+  },
+  {
+    id: 'vault-app',
+    title: 'CipherVault 密码管理器',
+    category: 'app',
+    tags: ['密码管理', '安全', '仪表盘', '暗色主题', '三栏布局'],
+    colors: ['#0d1117', '#58a6ff', '#bc8cff'],
+    rating: 9.4,
+    description: 'GitHub 暗色风格密码管理器仪表盘，侧边栏分类导航 + 搜索过滤 + 18个真实密码卡片网格 + 密码强度指示器 + 右侧详情面板 + 键盘快捷键支持',
+  },
 ]
 
 const categories = [
@@ -1705,12 +1723,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 177 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 180 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="178 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="180 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1719,7 +1737,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 178 个完整页面</span>
+      <span>📦 180 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
