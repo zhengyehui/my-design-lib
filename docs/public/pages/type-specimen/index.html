@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instrumenta — Type Specimen</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Instrumenta — Type Specimen Page
+   A fictional geometric sans-serif inspired by Bauhaus
+   ============================================================ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --specimen-bg: #0A0A0F;
+  --specimen-surface: #12121A;
+  --specimen-surface-2: #1A1A25;
+  --specimen-border: #2A2A3A;
+  --specimen-accent: var(--color-primary, #6366f1);
+  --specimen-cyan: var(--color-secondary, #06b6d4);
+  --specimen-white: #FFFFFF;
+  --specimen-gray: #8888A0;
+  --specimen-light-gray: #C0C0D0;
+  --font-specimen: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-specimen);
+  background: var(--specimen-bg);
+  color: var(--specimen-white);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Dot Pattern Background ────────────────────────────── */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.dot-pattern-dense {
+  background-image: radial-gradient(circle, rgba(6, 182, 212, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ── Navigation ────────────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-sticky);
+  padding: var(--space-4) var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+  transition: all var(--duration-normal) var(--ease-default);
+}
+
+.nav.scrolled {
+  padding: var(--space-3) var(--space-8);
+  background: rgba(10, 10, 15, 0.95);
+}
+
+.nav__logo {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--specimen-white);
+  text-decoration: none;
+}
+
+.nav__logo span { color: var(--specimen-accent); }
+
+.nav__links {
+  display: flex;
+  gap: var(--space-6);
+  list-style: none;
+}
+
+.nav__links a {
+  color: var(--specimen-gray);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: color var(--duration-fast) var(--ease-default);
+  position: relative;
+}
+
+.nav__links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--specimen-accent);
+  transition: width var(--duration-normal) var(--ease-default);
+}
+
+.nav__links a:hover { color: var(--specimen-white); }
+.nav__links a:hover::after { width: 100%; }
+
+/* ── Sections ──────────────────────────────────────────── */
+.section {
+  padding: var(--space-24) var(--space-8);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section--full-bleed {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.section__label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--specimen-accent);
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.section__label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--specimen-accent);
+}
+
+.section__title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: var(--space-6);
+}
+
+.section__desc {
+  font-size: var(--text-lg);
+  color: var(--specimen-gray);
+  max-width: 640px;
+  line-height: 1.7;
+  margin-bottom: var(--space-12);
+}
+
+/* ── Reveal Animation ──────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-20) var(--space-8);
+}
+
+.hero__glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: pulse-glow 6s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+.hero__letter {
+  font-size: clamp(200px, 35vw, 420px);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  background: linear-gradient(135deg, var(--specimen-white) 0%, rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  z-index: 1;
+  user-select: none;
+}
+
+.hero__name {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--specimen-gray);
+  margin-top: var(--space-8);
+  position: relative;
+  z-index: 1;
+}
+
+.hero__tagline {
+  font-size: clamp(var(--text-base), 2vw, var(--text-xl));
+  color: var(--specimen-light-gray);
+  margin-top: var(--space-4);
+  max-width: 500px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: var(--space-10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--specimen-gray);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: float 3s ease-in-out infinite;
+}
+
+.hero__scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--specimen-accent), transparent);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+/* ============================================================
+   OVERVIEW SECTION
+   ============================================================ */
+.overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: start;
+}
+
+.overview__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  margin-top: var(--space-10);
+}
+
+.stat {
+  padding: var(--space-6);
+  border: 1px solid var(--specimen-border);
+  border-radius: var(--radius-lg);
+  background: var(--specimen-surface);
+  transition: border-color var(--duration-normal) var(--ease-default);
+}
+
+.stat:hover { border-color: var(--specimen-accent); }
+
+.stat__number {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--specimen-accent);
+  letter-spacing: -0.02em;
+}
+
+.stat__label {
+  font-size: var(--text-sm);
+  color: var(--specimen-gray);
+  margin-top: var(--space-1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.overview__design-text {
+  font-size: var(--text-xl);
+  line-height: 1.8;
+  color: var(--specimen-light-gray);
+}
+
+.overview__design-text strong {
+  color: var(--specimen-white);
+  font-weight: 600;
+}
+
+.overview__philosophy {
+  margin-top: var(--space-8);
+  padding: var(--space-6);
+  border-left: 3px solid var(--specimen-accent);
+  background: var(--specimen-surface);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: italic;
+  color: var(--specimen-gray);
+  font-size: var(--text-lg);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   WEIGHT SHOWCASE
+   ============================================================ */
+.weights {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.weight-row {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  align-items: baseline;
+  padding: var(--space-6) 0;
+  border-bottom: 1px solid var(--specimen-border);
+  transition: background var(--duration-normal) var(--ease-default);
+}
+
+.weight-row:hover {
+  background: rgba(99, 102, 241, 0.03);
+}
+
+.weight-row:first-child { border-top: 1px solid var(--specimen-border); }
+
+.weight__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.weight__name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--specimen-accent);
+}
+
+.weight__value {
+  font-size: var(--text-xs);
+  color: var(--specimen-gray);
+}
+
+.weight__sample {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.weight__css {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--specimen-gray);
+  background: var(--specimen-surface);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   CHARACTER SET
+   ============================================================ */
+.charset {
+  margin-bottom: var(--space-10);
+}
+
+.charset__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--specimen-gray);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--specimen-border);
+}
+
+.charset__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 2px;
+}
+
+.charset__grid--special {
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+}
+
+.charset__char {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 400;
+  background: var(--specimen-surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: default;
+  transition: all var(--duration-fast) var(--ease-default);
+  position: relative;
+}
+
+.charset__char:hover {
+  background: var(--specimen-surface-2);
+  border-color: var(--specimen-accent);
+  transform: scale(1.1);
+  z-index: 2;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.charset__char--special {
+  aspect-ratio: auto;
+  padding: var(--space-3) var(--space-2);
+  font-size: 1.2rem;
+}
+
+/* ============================================================
+   SIZE SCALE
+   ============================================================ */
+.size-scale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.size-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-6);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid rgba(42, 42, 58, 0.5);
+}
+
+.size__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--specimen-gray);
+  min-width: 60px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.size__text {
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--specimen-white);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* ============================================================
+   PARAGRAPH SPECIMEN
+   ============================================================ */
+.paragraph-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--space-8);
+}
+
+.paragraph-card {
+  padding: var(--space-8);
+  background: var(--specimen-surface);
+  border: 1px solid var(--specimen-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--duration-normal) var(--ease-default);
+}
+
+.paragraph-card:hover { border-color: var(--specimen-accent); }
+
+.paragraph-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--specimen-border);
+}
+
+.paragraph-card__label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--specimen-accent);
+}
+
+.paragraph-card__meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--specimen-gray);
+}
+
+.paragraph-card__text {
+  color: var(--specimen-light-gray);
+}
+
+/* ============================================================
+   OPENTYPE FEATURES
+   ============================================================ */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.feature-card {
+  padding: var(--space-8);
+  background: var(--specimen-surface);
+  border: 1px solid var(--specimen-border);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: all var(--duration-normal) var(--ease-default);
+}
+
+.feature-card:hover {
+  border-color: var(--specimen-accent);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.feature-card__icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-4);
+}
+
+.feature-card__name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--specimen-accent);
+  margin-bottom: var(--space-3);
+}
+
+.feature-card__sample {
+  font-size: var(--text-5xl);
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: var(--space-3);
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-card__tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--specimen-gray);
+  background: rgba(99, 102, 241, 0.1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+
+/* ============================================================
+   COLOR & BACKGROUND COMBOS
+   ============================================================ */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+}
+
+.color-card {
+  padding: var(--space-10) var(--space-8);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 240px;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--duration-normal) var(--ease-default);
+}
+
+.color-card:hover { transform: scale(1.02); }
+
+.color-card__text {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-4);
+}
+
+.color-card__meta {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+}
+
+.color-card--dark {
+  background: #0A0A0F;
+  color: #FFFFFF;
+}
+
+.color-card--white {
+  background: #FFFFFF;
+  color: #0A0A0F;
+}
+
+.color-card--indigo {
+  background: #6366f1;
+  color: #FFFFFF;
+}
+
+.color-card--cyan {
+  background: #06b6d4;
+  color: #0A0A0F;
+}
+
+.color-card--warm {
+  background: #F59E0B;
+  color: #0A0A0F;
+}
+
+.color-card--rose {
+  background: #F43F5E;
+  color: #FFFFFF;
+}
+
+.color-card--slate {
+  background: #1E293B;
+  color: #E2E8F0;
+}
+
+.color-card--gradient {
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  color: #FFFFFF;
+}
+
+/* ============================================================
+   LIVE TYPE TESTER
+   ============================================================ */
+.tester {
+  background: var(--specimen-surface);
+  border: 1px solid var(--specimen-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.tester__preview {
+  padding: var(--space-12) var(--space-10);
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-bottom: 1px solid var(--specimen-border);
+  transition: font-size var(--duration-fast) var(--ease-default),
+              font-weight var(--duration-fast) var(--ease-default);
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+.tester__controls {
+  padding: var(--space-6) var(--space-8);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  align-items: end;
+}
+
+.control-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.control-group__label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.control-group__title {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--specimen-gray);
+}
+
+.control-group__value {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--specimen-accent);
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--specimen-border);
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--specimen-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  transition: transform var(--duration-fast) var(--ease-spring);
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.control-group input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--specimen-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+}
+
+.tester__input-row {
+  padding: 0 var(--space-8) var(--space-6);
+}
+
+.tester__input {
+  width: 100%;
+  background: var(--specimen-surface-2);
+  border: 1px solid var(--specimen-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  font-family: var(--font-specimen);
+  font-size: var(--text-base);
+  color: var(--specimen-white);
+  outline: none;
+  transition: border-color var(--duration-normal) var(--ease-default);
+}
+
+.tester__input:focus { border-color: var(--specimen-accent); }
+
+.tester__input::placeholder { color: var(--specimen-gray); }
+
+/* ============================================================
+   DOWNLOAD / CTA SECTION
+   ============================================================ */
+.cta {
+  text-align: center;
+  padding: var(--space-24) var(--space-8);
+  position: relative;
+}
+
+.cta__content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cta__title {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: var(--space-6);
+}
+
+.cta__title span {
+  background: linear-gradient(135deg, var(--specimen-accent), var(--specimen-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cta__desc {
+  font-size: var(--text-lg);
+  color: var(--specimen-gray);
+  margin-bottom: var(--space-10);
+  line-height: 1.7;
+}
+
+.cta__buttons {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
+  font-family: var(--font-specimen);
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-default);
+  border: none;
+  letter-spacing: 0.02em;
+}
+
+.btn--primary {
+  background: var(--specimen-accent);
+  color: var(--specimen-white);
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-light, #818cf8);
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--specimen-white);
+  border: 1px solid var(--specimen-border);
+}
+
+.btn--outline:hover {
+  border-color: var(--specimen-accent);
+  background: rgba(99, 102, 241, 0.08);
+  transform: translateY(-2px);
+}
+
+.cta__meta {
+  margin-top: var(--space-8);
+  font-size: var(--text-sm);
+  color: var(--specimen-gray);
+}
+
+.cta__meta a {
+  color: var(--specimen-accent);
+  text-decoration: none;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  border-top: 1px solid var(--specimen-border);
+  padding: var(--space-8);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--specimen-gray);
+}
+
+.footer a {
+  color: var(--specimen-accent);
+  text-decoration: none;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .overview { grid-template-columns: 1fr; gap: var(--space-10); }
+  .weight-row { grid-template-columns: 140px 1fr; }
+  .weight__css { display: none; }
+  .nav__links { gap: var(--space-4); }
+}
+
+@media (max-width: 768px) {
+  .section { padding: var(--space-16) var(--space-5); }
+  .hero { padding: var(--space-16) var(--space-5); }
+  .nav { padding: var(--space-3) var(--space-5); }
+  .nav__links { display: none; }
+  .weight-row { grid-template-columns: 1fr; gap: var(--space-2); }
+  .weight__sample { font-size: 1.8rem; }
+  .size-row { flex-direction: column; gap: var(--space-2); }
+  .size__label { text-align: left; min-width: auto; }
+  .paragraph-grid { grid-template-columns: 1fr; }
+  .tester__controls { flex-direction: column; }
+  .color-grid { grid-template-columns: 1fr; }
+  .charset__grid { grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); }
+  .cta__buttons { flex-direction: column; align-items: center; }
+}
+
+@media (max-width: 480px) {
+  .hero__letter { font-size: 160px; }
+  .overview__stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────── -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav__logo">Instru<span>menta</span></a>
+  <ul class="nav__links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#weights">Weights</a></li>
+    <li><a href="#charset">Characters</a></li>
+    <li><a href="#sizes">Sizes</a></li>
+    <li><a href="#paragraphs">Paragraphs</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#tester">Try It</a></li>
+  </ul>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────── -->
+<section class="hero" id="hero">
+  <div class="hero__glow"></div>
+  <div class="hero__letter">Aa</div>
+  <div class="hero__name">Instrumenta</div>
+  <p class="hero__tagline">A geometric sans-serif typeface forged at the intersection of Bauhaus precision and contemporary clarity.</p>
+  <div class="hero__scroll">
+    <span>Scroll</span>
+    <div class="hero__scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── Overview ───────────────────────────────────────── -->
+<section class="section" id="overview">
+  <div class="reveal">
+    <div class="section__label">01 — Overview</div>
+    <h2 class="section__title">Design Philosophy</h2>
+  </div>
+  <div class="overview">
+    <div class="reveal reveal-delay-1">
+      <p class="overview__design-text">
+        <strong>Instrumenta</strong> draws its DNA from the Bauhaus school's pursuit of functional beauty. 
+        Every curve is calculated, every counter optimized. The result is a typeface that feels both 
+        <strong>engineered</strong> and <strong>alive</strong> — equally at home on a building blueprint 
+        and a magazine cover.
+      </p>
+      <p class="overview__design-text" style="margin-top: var(--space-4);">
+        Built on a strict geometric grid with humanist refinements, Instrumenta bridges the gap between 
+        <strong>cold precision</strong> and <strong>warm readability</strong>. Its generous x-height 
+        and open apertures ensure clarity at any size, from micro UI labels to billboard headlines.
+      </p>
+      <blockquote class="overview__philosophy">
+        "Form follows function, but function should never forget elegance."
+      </blockquote>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="overview__stats">
+        <div class="stat">
+          <div class="stat__number">6</div>
+          <div class="stat__label">Weights</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number">640+</div>
+          <div class="stat__label">Glyphs</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number">200+</div>
+          <div class="stat__label">Languages</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number">∞</div>
+          <div class="stat__label">Possibilities</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Weight Showcase ────────────────────────────────── -->
+<section class="section dot-pattern" id="weights">
+  <div class="reveal">
+    <div class="section__label">02 — Type Family</div>
+    <h2 class="section__title">Weight Spectrum</h2>
+    <p class="section__desc">Six carefully calibrated weights spanning from whisper-thin to commanding black. Each weight is optically adjusted for its intended use case.</p>
+  </div>
+  <div class="weights">
+    <div class="weight-row reveal" style="font-weight: 100;">
+      <div class="weight__info">
+        <span class="weight__name">Thin</span>
+        <span class="weight__value">100</span>
+      </div>
+      <div class="weight__sample" style="font-weight: 100;">Aa Instrumenta</div>
+      <span class="weight__css">font-weight: 100</span>
+    </div>
+    <div class="weight-row reveal reveal-delay-1" style="font-weight: 300;">
+      <div class="weight__info">
+        <span class="weight__name">Light</span>
+        <span class="weight__value">300</span>
+      </div>
+      <div class="weight__sample" style="font-weight: 300;">Aa Instrumenta</div>
+      <span class="weight__css">font-weight: 300</span>
+    </div>
+    <div class="weight-row reveal reveal-delay-2" style="font-weight: 400;">
+      <div class="weight__info">
+        <span class="weight__name">Regular</span>
+        <span class="weight__value">400</span>
+      </div>
+      <div class="weight__sample" style="font-weight: 400;">Aa Instrumenta</div>
+      <span class="weight__css">font-weight: 400</span>
+    </div>
+    <div class="weight-row reveal reveal-delay-3" style="font-weight: 500;">
+      <div class="weight__info">
+        <span class="weight__name">Medium</span>
+        <span class="weight__value">500</span>
+      </div>
+      <div class="weight__sample" style="font-weight: 500;">Aa Instrumenta</div>
+      <span class="weight__css">font-weight: 500</span>
+    </div>
+    <div class="weight-row reveal" style="font-weight: 700;">
+      <div class="weight__info">
+        <span class="weight__name">Bold</span>
+        <span class="weight__value">700</span>
+      </div>
+      <div class="weight__sample" style="font-weight: 700;">Aa Instrumenta</div>
+      <span class="weight__css">font-weight: 700</span>
+    </div>
+    <div class="weight-row reveal reveal-delay-1" style="font-weight: 900;">
+      <div class="weight__info">
+        <span class="weight__name">Black</span>
+        <span class="weight__value">900</span>
+      </div>
+      <div class="weight__sample" style="font-weight: 900;">Aa Instrumenta</div>
+      <span class="weight__css">font-weight: 900</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── Character Set ──────────────────────────────────── -->
+<section class="section" id="charset">
+  <div class="reveal">
+    <div class="section__label">03 — Character Set</div>
+    <h2 class="section__title">Every Glyph, Crafted</h2>
+    <p class="section__desc">A comprehensive character set designed for precision. Each glyph is built on a consistent geometric grid with careful optical corrections.</p>
+  </div>
+
+  <div class="charset reveal">
+    <div class="charset__label">Uppercase — A Z</div>
+    <div class="charset__grid" id="uppercase-grid"></div>
+  </div>
+
+  <div class="charset reveal">
+    <div class="charset__label">Lowercase — a z</div>
+    <div class="charset__grid" id="lowercase-grid"></div>
+  </div>
+
+  <div class="charset reveal">
+    <div class="charset__label">Numerals — 0 9</div>
+    <div class="charset__grid" id="numbers-grid"></div>
+  </div>
+
+  <div class="charset reveal">
+    <div class="charset__label">Punctuation &amp; Symbols</div>
+    <div class="charset__grid charset__grid--special" id="special-grid"></div>
+  </div>
+</section>
+
+<!-- ── Size Scale ─────────────────────────────────────── -->
+<section class="section dot-pattern-dense" id="sizes">
+  <div class="reveal">
+    <div class="section__label">04 — Size Scale</div>
+    <h2 class="section__title">From Micro to Monument</h2>
+    <p class="section__desc">Instrumenta maintains its character and legibility across extreme size ranges — from 12px interface text to 120px display headlines.</p>
+  </div>
+  <div class="size-scale">
+    <div class="size-row reveal">
+      <span class="size__label">12px</span>
+      <span class="size__text" style="font-size: 12px;">The quick brown fox jumps over the lazy dog</span>
+    </div>
+    <div class="size-row reveal reveal-delay-1">
+      <span class="size__label">16px</span>
+      <span class="size__text" style="font-size: 16px;">The quick brown fox jumps over the lazy dog</span>
+    </div>
+    <div class="size-row reveal reveal-delay-2">
+      <span class="size__label">20px</span>
+      <span class="size__text" style="font-size: 20px;">The quick brown fox jumps over the lazy dog</span>
+    </div>
+    <div class="size-row reveal reveal-delay-3">
+      <span class="size__label">28px</span>
+      <span class="size__text" style="font-size: 28px;">The quick brown fox jumps over the lazy dog</span>
+    </div>
+    <div class="size-row reveal reveal-delay-4">
+      <span class="size__label">36px</span>
+      <span class="size__text" style="font-size: 36px;">The quick brown fox jumps</span>
+    </div>
+    <div class="size-row reveal">
+      <span class="size__label">48px</span>
+      <span class="size__text" style="font-size: 48px; font-weight: 500;">The quick brown fox</span>
+    </div>
+    <div class="size-row reveal reveal-delay-1">
+      <span class="size__label">64px</span>
+      <span class="size__text" style="font-size: 64px; font-weight: 600; letter-spacing: -0.03em;">Quick brown fox</span>
+    </div>
+    <div class="size-row reveal reveal-delay-2">
+      <span class="size__label">80px</span>
+      <span class="size__text" style="font-size: 80px; font-weight: 700; letter-spacing: -0.03em;">Brown fox</span>
+    </div>
+    <div class="size-row reveal reveal-delay-3">
+      <span class="size__label">120px</span>
+      <span class="size__text" style="font-size: clamp(60px, 10vw, 120px); font-weight: 700; letter-spacing: -0.04em;">Fox</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── Paragraph Specimen ─────────────────────────────── -->
+<section class="section" id="paragraphs">
+  <div class="reveal">
+    <div class="section__label">05 — Paragraph Specimen</div>
+    <h2 class="section__title">Readability at Scale</h2>
+    <p class="section__desc">Body text is where a typeface earns its keep. Instrumenta's generous x-height and open counters deliver exceptional readability in long-form text.</p>
+  </div>
+  <div class="paragraph-grid">
+    <div class="paragraph-card reveal">
+      <div class="paragraph-card__header">
+        <span class="paragraph-card__label">Tight — 1.3</span>
+        <span class="paragraph-card__meta">16px / 1.3</span>
+      </div>
+      <p class="paragraph-card__text" style="line-height: 1.3; font-size: 16px;">
+        Typography is the craft of endowing human language with a durable visual form, and thus with an independent existence. Its highest aim is to make the reader's experience as seamless and effortless as possible. Good typography whispers; bad typography shouts.
+      </p>
+    </div>
+    <div class="paragraph-card reveal reveal-delay-1">
+      <div class="paragraph-card__header">
+        <span class="paragraph-card__label">Normal — 1.5</span>
+        <span class="paragraph-card__meta">16px / 1.5</span>
+      </div>
+      <p class="paragraph-card__text" style="line-height: 1.5; font-size: 16px;">
+        Typography is the craft of endowing human language with a durable visual form, and thus with an independent existence. Its highest aim is to make the reader's experience as seamless and effortless as possible. Good typography whispers; bad typography shouts.
+      </p>
+    </div>
+    <div class="paragraph-card reveal reveal-delay-2">
+      <div class="paragraph-card__header">
+        <span class="paragraph-card__label">Relaxed — 1.75</span>
+        <span class="paragraph-card__meta">16px / 1.75</span>
+      </div>
+      <p class="paragraph-card__text" style="line-height: 1.75; font-size: 16px;">
+        Typography is the craft of endowing human language with a durable visual form, and thus with an independent existence. Its highest aim is to make the reader's experience as seamless and effortless as possible. Good typography whispers; bad typography shouts.
+      </p>
+    </div>
+    <div class="paragraph-card reveal reveal-delay-3">
+      <div class="paragraph-card__header">
+        <span class="paragraph-card__label">Large Body — 1.6</span>
+        <span class="paragraph-card__meta">20px / 1.6</span>
+      </div>
+      <p class="paragraph-card__text" style="line-height: 1.6; font-size: 20px;">
+        Typography is the craft of endowing human language with a durable visual form, and thus with an independent existence. Its highest aim is to make the reader's experience as seamless and effortless as possible.
+      </p>
+    </div>
+    <div class="paragraph-card reveal">
+      <div class="paragraph-card__header">
+        <span class="paragraph-card__label">Small Caption — 1.4</span>
+        <span class="paragraph-card__meta">13px / 1.4</span>
+      </div>
+      <p class="paragraph-card__text" style="line-height: 1.4; font-size: 13px; color: var(--specimen-gray);">
+        Typography is the craft of endowing human language with a durable visual form, and thus with an independent existence. Its highest aim is to make the reader's experience as seamless and effortless as possible. Good typography whispers; bad typography shouts. Every element of a typographic system — from the macro rhythm of the page to the micro texture of the letterforms — contributes to the whole.
+      </p>
+    </div>
+    <div class="paragraph-card reveal reveal-delay-1">
+      <div class="paragraph-card__header">
+        <span class="paragraph-card__label">Wide Measure — 1.6</span>
+        <span class="paragraph-card__meta">18px / 1.6</span>
+      </div>
+      <p class="paragraph-card__text" style="line-height: 1.6; font-size: 18px; max-width: 100%;">
+        Typography is the craft of endowing human language with a durable visual form, and thus with an independent existence. Its highest aim is to make the reader's experience as seamless and effortless as possible. Good typography whispers; bad typography shouts. Every element of a typographic system contributes to the whole.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── OpenType Features ──────────────────────────────── -->
+<section class="section dot-pattern" id="features">
+  <div class="reveal">
+    <div class="section__label">06 — OpenType Features</div>
+    <h2 class="section__title">Beyond Basic Letters</h2>
+    <p class="section__desc">Instrumenta ships with a rich set of OpenType features that give designers granular control over typographic expression.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-card__icon">🔗</div>
+      <div class="feature-card__name">Standard Ligatures</div>
+      <div class="feature-card__sample">fi fl ff ffi</div>
+      <span class="feature-card__tag">liga</span>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-card__icon">✨</div>
+      <div class="feature-card__name">Stylistic Alternates</div>
+      <div class="feature-card__sample">a g R Q</div>
+      <span class="feature-card__tag">salt</span>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-card__icon">🔢</div>
+      <div class="feature-card__name">Tabular Figures</div>
+      <div class="feature-card__sample">0123456789</div>
+      <span class="feature-card__tag">tnum</span>
+    </div>
+    <div class="feature-card reveal reveal-delay-3">
+      <div class="feature-card__icon">📐</div>
+      <div class="feature-card__name">Oldstyle Figures</div>
+      <div class="feature-card__sample">0123456789</div>
+      <span class="feature-card__tag">onum</span>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-card__icon">➗</div>
+      <div class="feature-card__name">Fractions</div>
+      <div class="feature-card__sample">½ ¼ ¾ ⅓</div>
+      <span class="feature-card__tag">frac</span>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-card__icon">⬆️</div>
+      <div class="feature-card__name">Superscripts</div>
+      <div class="feature-card__sample">1st 2nd 3rd</div>
+      <span class="feature-card__tag">sups</span>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-card__icon">✏️</div>
+      <div class="feature-card__name">Small Caps</div>
+      <div class="feature-card__sample" style="font-variant: small-caps;">Instrumenta</div>
+      <span class="feature-card__tag">smcp</span>
+    </div>
+    <div class="feature-card reveal reveal-delay-3">
+      <div class="feature-card__icon">↔️</div>
+      <div class="feature-card__name">Case-Sensitive Forms</div>
+      <div class="feature-card__sample">A«B»C—D</div>
+      <span class="feature-card__tag">case</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── Color & Background Combos ──────────────────────── -->
+<section class="section" id="colors">
+  <div class="reveal">
+    <div class="section__label">07 — Color Combinations</div>
+    <h2 class="section__title">Versatile by Nature</h2>
+    <p class="section__desc">Instrumenta adapts effortlessly to any color system. Strong enough for high-contrast pairs, refined enough for subtle tonal work.</p>
+  </div>
+  <div class="color-grid">
+    <div class="color-card color-card--dark reveal">
+      <div class="color-card__text">Dark on<br>Nothing</div>
+      <div class="color-card__meta">#0A0A0F / #FFFFFF</div>
+    </div>
+    <div class="color-card color-card--white reveal reveal-delay-1">
+      <div class="color-card__text">Light on<br>Paper</div>
+      <div class="color-card__meta">#FFFFFF / #0A0A0F</div>
+    </div>
+    <div class="color-card color-card--indigo reveal reveal-delay-2">
+      <div class="color-card__text">Indigo<br>Night</div>
+      <div class="color-card__meta">#6366F1 / #FFFFFF</div>
+    </div>
+    <div class="color-card color-card--cyan reveal reveal-delay-3">
+      <div class="color-card__text">Cyan<br>Signal</div>
+      <div class="color-card__meta">#06B6D4 / #0A0A0F</div>
+    </div>
+    <div class="color-card color-card--warm reveal">
+      <div class="color-card__text">Warmth<br>&amp; Energy</div>
+      <div class="color-card__meta">#F59E0B / #0A0A0F</div>
+    </div>
+    <div class="color-card color-card--rose reveal reveal-delay-1">
+      <div class="color-card__text">Rose<br>Alert</div>
+      <div class="color-card__meta">#F43F5E / #FFFFFF</div>
+    </div>
+    <div class="color-card color-card--slate reveal reveal-delay-2">
+      <div class="color-card__text">Slate<br>Matter</div>
+      <div class="color-card__meta">#1E293B / #E2E8F0</div>
+    </div>
+    <div class="color-card color-card--gradient reveal reveal-delay-3">
+      <div class="color-card__text">Gradient<br>Flow</div>
+      <div class="color-card__meta">Indigo → Cyan</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Live Type Tester ───────────────────────────────── -->
+<section class="section dot-pattern-dense" id="tester">
+  <div class="reveal">
+    <div class="section__label">08 — Type Tester</div>
+    <h2 class="section__title">Try It Yourself</h2>
+    <p class="section__desc">Type anything below and experiment with weight, size, and line-height. See how Instrumenta performs in your own context.</p>
+  </div>
+  <div class="tester reveal">
+    <div class="tester__preview" id="tester-preview">
+      Type something wonderful
+    </div>
+    <div class="tester__input-row">
+      <input 
+        type="text" 
+        class="tester__input" 
+        id="tester-input" 
+        placeholder="Start typing here..." 
+        autocomplete="off"
+        spellcheck="false"
+      >
+    </div>
+    <div class="tester__controls">
+      <div class="control-group">
+        <div class="control-group__label">
+          <span class="control-group__title">Weight</span>
+          <span class="control-group__value" id="weight-value">400</span>
+        </div>
+        <input type="range" id="weight-slider" min="100" max="900" step="1" value="400">
+      </div>
+      <div class="control-group">
+        <div class="control-group__label">
+          <span class="control-group__title">Size</span>
+          <span class="control-group__value" id="size-value">48px</span>
+        </div>
+        <input type="range" id="size-slider" min="12" max="200" step="1" value="48">
+      </div>
+      <div class="control-group">
+        <div class="control-group__label">
+          <span class="control-group__title">Letter Spacing</span>
+          <span class="control-group__value" id="spacing-value">0em</span>
+        </div>
+        <input type="range" id="spacing-slider" min="-10" max="30" step="1" value="0">
+      </div>
+      <div class="control-group">
+        <div class="control-group__label">
+          <span class="control-group__title">Line Height</span>
+          <span class="control-group__value" id="leading-value">1.2</span>
+        </div>
+        <input type="range" id="leading-slider" min="80" max="200" step="1" value="120">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Download / CTA ─────────────────────────────────── -->
+<section class="section cta dot-pattern" id="download">
+  <div class="cta__content reveal">
+    <h2 class="cta__title">Get <span>Instrumenta</span></h2>
+    <p class="cta__desc">
+      Available in 6 weights with full Latin, Cyrillic, and Greek support. 
+      Free for personal and commercial use under the OFL license.
+    </p>
+    <div class="cta__buttons">
+      <a href="#" class="btn btn--primary">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Family
+      </a>
+      <a href="#" class="btn btn--outline">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        View on GitHub
+      </a>
+      <a href="#" class="btn btn--outline">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Specimen PDF
+      </a>
+    </div>
+    <p class="cta__meta" style="margin-top: var(--space-8);">
+      Instrumenta is licensed under the <a href="#">SIL Open Font License 1.1</a>. 
+      You're free to use, modify, and redistribute.
+    </p>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────── -->
+<footer class="footer">
+  <p>Designed with precision. Built with purpose. — <a href="#">Instrumenta Type Foundry</a>, 2026</p>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Character Set Population ──────────────────────────────
+  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const lowercase = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  const numbers = '0123456789'.split('');
+  const specials = [
+    '.', ',', ';', ':', '!', '?',
+    '«', '»', '"', '"', ''', ''',
+    '–', '—', '…', '·',
+    '@', '#', '$', '%', '&',
+    '*', '+', '=', '<', '>',
+    '/', '\\', '|', '~', '^',
+    '(', ')', '[', ']', '{', '}',
+    '©', '®', '™', '°', '€', '£', '¥'
+  ];
+
+  function populateGrid(containerId, chars, special) {
+    const grid = document.getElementById(containerId);
+    if (!grid) return;
+    chars.forEach(function(ch) {
+      const el = document.createElement('div');
+      el.className = 'charset__char' + (special ? ' charset__char--special' : '');
+      el.textContent = ch;
+      grid.appendChild(el);
+    });
+  }
+
+  populateGrid('uppercase-grid', uppercase, false);
+  populateGrid('lowercase-grid', lowercase, false);
+  populateGrid('numbers-grid', numbers, false);
+  populateGrid('special-grid', specials, true);
+
+  // ── Scroll Navigation ─────────────────────────────────────
+  var nav = document.getElementById('nav');
+  var lastScroll = 0;
+
+  window.addEventListener('scroll', function() {
+    var scrollY = window.pageYOffset;
+    if (scrollY > 80) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+    lastScroll = scrollY;
+  }, { passive: true });
+
+  // ── Smooth Scroll for Anchor Links ────────────────────────
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      var target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        var offset = 80;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ── Intersection Observer for Reveal Animations ───────────
+  var revealElements = document.querySelectorAll('.reveal');
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(function(el) {
+      observer.observe(el);
+    });
+  } else {
+    // Fallback: show everything
+    revealElements.forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }
+
+  // ── Live Type Tester ──────────────────────────────────────
+  var preview = document.getElementById('tester-preview');
+  var input = document.getElementById('tester-input');
+  var weightSlider = document.getElementById('weight-slider');
+  var sizeSlider = document.getElementById('size-slider');
+  var spacingSlider = document.getElementById('spacing-slider');
+  var leadingSlider = document.getElementById('leading-slider');
+
+  var weightValue = document.getElementById('weight-value');
+  var sizeValue = document.getElementById('size-value');
+  var spacingValue = document.getElementById('spacing-value');
+  var leadingValue = document.getElementById('leading-value');
+
+  function updatePreview() {
+    preview.style.fontWeight = weightSlider.value;
+    preview.style.fontSize = sizeSlider.value + 'px';
+    preview.style.letterSpacing = (spacingSlider.value / 100) + 'em';
+    preview.style.lineHeight = (leadingSlider.value / 100);
+
+    weightValue.textContent = weightSlider.value;
+    sizeValue.textContent = sizeSlider.value + 'px';
+    spacingValue.textContent = (spacingSlider.value / 100) + 'em';
+    leadingValue.textContent = (leadingSlider.value / 100).toFixed(2);
+  }
+
+  // Input text update
+  input.addEventListener('input', function() {
+    var val = this.value.trim();
+    preview.textContent = val || 'Type something wonderful';
+  });
+
+  // Slider events
+  weightSlider.addEventListener('input', updatePreview);
+  sizeSlider.addEventListener('input', updatePreview);
+  spacingSlider.addEventListener('input', updatePreview);
+  leadingSlider.addEventListener('input', updatePreview);
+
+  // Initial state
+  updatePreview();
+
+  // ── Hero Letter Parallax (subtle) ─────────────────────────
+  var heroLetter = document.querySelector('.hero__letter');
+  var heroGlow = document.querySelector('.hero__glow');
+
+  window.addEventListener('scroll', function() {
+    var scrollY = window.pageYOffset;
+    var heroHeight = window.innerHeight;
+    if (scrollY < heroHeight) {
+      var progress = scrollY / heroHeight;
+      var letterScale = 1 - progress * 0.15;
+      var letterOpacity = 1 - progress * 1.2;
+      heroLetter.style.transform = 'scale(' + Math.max(letterScale, 0.85) + ')';
+      heroLetter.style.opacity = Math.max(letterOpacity, 0);
+      heroGlow.style.opacity = Math.max(1 - progress * 2, 0);
+    }
+  }, { passive: true });
+
+})();
+</script>
+
+</body>
+</html>

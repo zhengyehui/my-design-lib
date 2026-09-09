@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 180 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 182 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1666,6 +1666,24 @@ const pages = [
     rating: 9.4,
     description: 'GitHub 暗色风格密码管理器仪表盘，侧边栏分类导航 + 搜索过滤 + 18个真实密码卡片网格 + 密码强度指示器 + 右侧详情面板 + 键盘快捷键支持',
   },
+  {
+    id: 'product-designer-portfolio',
+    title: 'Maren Vogt 产品设计师作品集',
+    category: 'portfolio',
+    tags: ['作品集', '产品设计', '暖色调', '衬线字体', '个人品牌'],
+    colors: ['#FAF7F2', '#C2703E', '#8B6F47'],
+    rating: 9.5,
+    description: '暖色调产品设计师个人作品集，DM Serif Display 衬线字体 + 渐变网格动画 Hero + 6 宫格作品展示 + 服务卡片 + 滚动入场动画',
+  },
+  {
+    id: 'type-specimen',
+    title: 'Instrumenta 交互式字体展示',
+    category: 'creative',
+    tags: ['字体设计', '排版', '交互式', '暗色主题', '实时预览'],
+    colors: ['#0A0A0F', '#6366f1', '#06b6d4'],
+    rating: 9.5,
+    description: '交互式字体展示页，巨型字母 Hero + 字重/字号实时滑块 + CSS Grid 字符集 + 段落排版样例 + OpenType 特性展示 + 色彩组合预览',
+  },
 ]
 
 const categories = [
@@ -1723,12 +1741,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 180 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+    <meta name="description" content="My Design Lib 页面灵感画廊 — 182 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="180 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="182 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1737,7 +1755,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 180 个完整页面</span>
+      <span>📦 182 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
