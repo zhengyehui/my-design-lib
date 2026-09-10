@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 182 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 184 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1683,6 +1683,24 @@ const pages = [
     colors: ['#0A0A0F', '#6366f1', '#06b6d4'],
     rating: 9.5,
     description: '交互式字体展示页，巨型字母 Hero + 字重/字号实时滑块 + CSS Grid 字符集 + 段落排版样例 + OpenType 特性展示 + 色彩组合预览',
+  },
+  {
+    id: 'ocean-autonomy',
+    title: 'Ocean Autonomy 海洋自主机器人',
+    category: 'industry',
+    tags: ['海洋科技', '机器人', '产品展示', '工业'],
+    colors: ['#0a1628', '#619785', '#BF5114'],
+    rating: 9.5,
+    description: '海洋自主机器人公司落地页，灵感来自 Seasats，深海蓝底 + 青蓝绿主色 + 橙色强调 + CSS 波浪动画 + 船舶轮廓 clip-path + 产品对比 + 3D 地球旋转',
+  },
+  {
+    id: 'pulse-vr',
+    title: 'Pulse VR 沉浸式虚拟现实体验',
+    category: 'creative',
+    tags: ['VR', '沉浸式', '科技', '创意'],
+    colors: ['#050508', '#8b5cf6', '#06b6d4'],
+    rating: 9.4,
+    description: 'VR 体验平台落地页，深空黑底 + 紫色主色 + 青色辅助 + 浮动光球动画 + VR 头显轮廓 + 渐变文字 + 伪终端 UI + 定价方案',
   },
 ]
 
