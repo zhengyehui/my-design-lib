@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，184 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，185 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -86,7 +86,7 @@ export default defineConfig({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "My Design Lib",
-"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 184 个完整页面",
+"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 185 个完整页面",
       "url": "http://101.37.166.208:11930",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
@@ -101,7 +101,7 @@ export default defineConfig({
 
     // AI 爬虫友好
     ['meta', { name: 'ai-content-type', content: 'design-library' }],
-    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，184个完整页面模板，Design Tokens。可直接复制使用。' }],
+    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，185个完整页面模板，Design Tokens。可直接复制使用。' }],
 
     ['link', { rel: 'stylesheet', href: '/tokens/tokens.css' }],
     ...componentCSS.map(name => [
@@ -352,7 +352,8 @@ export default defineConfig({
             { text: 'KAZE 日本威士忌电商', link: '/pages/kaze-whisky' },
             { text: 'SILO 极简工业产品页', link: '/pages/silo-minimal' },
             { text: 'Chado 日式茶道电商', link: '/pages/tea-ceremony' },
-            { text: 'BookHaven 精品读书俱乐部', link: '/pages/book-club' }
+            { text: 'BookHaven 精品读书俱乐部', link: '/pages/book-club' },
+            { text: 'Cacao & Co 手工巧克力', link: '/pages/cacao-co' }
           ]
         },
         {

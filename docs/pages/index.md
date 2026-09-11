@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 184 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 185 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1631,6 +1631,15 @@ const pages = [
     description: '暖色调精品读书俱乐部，灵感来自 Aardvark Book Club，明黄渐变 Hero + 浮动书本动画 + 书籍网格 + 四步流程 + 流派标签云 + FAQ 手风琴',
   },
   {
+    id: 'cacao-co',
+    title: 'Cacao & Co 手工巧克力电商',
+    category: 'ecommerce',
+    tags: ['电商', '巧克力', '奢华', '暗色Hero', '衬线字体'],
+    colors: ['#1a0e0a', '#c9a96e', '#faf5ee'],
+    rating: 9.4,
+    description: '奢华手工巧克力品牌电商，Cormorant Garamond 衬线字体 + 深巧克力棕配色 + CSS 巧克力条插画 + 可可粉粒子动画 + Marquee 产地滚动 + 品牌故事双栏 + 风味卡片',
+  },
+  {
     id: 'lumina-dental',
     title: 'Lumina Dental 现代牙科诊所',
     category: 'industry',
@@ -1759,12 +1768,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-    <meta name="description" content="My Design Lib 页面灵感画廊 — 184 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。">
+content=\"My Design Lib 页面灵感画廊 — 185 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="184 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="185 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1773,7 +1782,7 @@ function getScoreColor(score) {
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 184 个完整页面</span>
+      <span>📦 185 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
