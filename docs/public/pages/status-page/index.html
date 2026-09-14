@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StatusPulse 服务状态</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  background: #f9fafb;
+  color: #111827;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Top Nav ── */
+.topnav {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0 2rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topnav-brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.topnav-brand .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  animation: pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+  50% { box-shadow: 0 0 16px rgba(16, 185, 129, 0.7); }
+}
+.topnav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+.topnav-links a {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.topnav-links a:hover { color: #111827; }
+.subscribe-btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.45rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.subscribe-btn:hover { background: var(--color-primary-dark); }
+
+/* ── Hero Banner ── */
+.hero-banner {
+  text-align: center;
+  padding: 3.5rem 2rem 2rem;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 50%, #f9fafb 100%);
+  border-bottom: 1px solid #e5e7eb;
+}
+.hero-banner h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+.hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 0.6rem 1.5rem;
+  border-radius: 100px;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #065f46;
+  font-size: 1rem;
+}
+.hero-status .status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+  animation: pulse-dot 2s ease infinite;
+}
+
+/* ── Container ── */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ── Section Title ── */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Component Status Grid ── */
+.components-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.component-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s;
+}
+.component-row:last-child { border-bottom: none; }
+.component-row:hover { background: #f9fafb; }
+.component-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.component-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.component-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #111827;
+}
+.component-desc {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.1rem;
+}
+.status-badge {
+  padding: 0.3rem 0.9rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.status-operational {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.status-degraded {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+.status-partial {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+/* ── Uptime Graph ── */
+.uptime-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.uptime-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+.uptime-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+}
+.uptime-percentage {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #10b981;
+}
+.uptime-bars {
+  display: flex;
+  gap: 2px;
+  height: 42px;
+  align-items: flex-end;
+}
+.uptime-bar {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  min-height: 6px;
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+.uptime-bar:hover {
+  opacity: 0.8;
+  transform: scaleY(1.08);
+  transform-origin: bottom;
+}
+.uptime-bar.green { background: #10b981; height: 100%; }
+.uptime-bar.yellow { background: #f59e0b; height: 75%; }
+.uptime-bar.red { background: #ef4444; height: 50%; }
+.uptime-bar.empty { background: #e5e7eb; height: 100%; }
+.uptime-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+.uptime-bar-labels {
+  display: flex;
+  gap: 2px;
+  margin-top: 0.3rem;
+}
+.bar-label {
+  flex: 1;
+  text-align: center;
+  font-size: 0.6rem;
+  color: #d1d5db;
+}
+.tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: #fff;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
+.uptime-bar:hover .tooltip { display: block; }
+
+/* ── Overall Metrics ── */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.metric-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+}
+.metric-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1;
+}
+.metric-value.green { color: #10b981; }
+.metric-value.yellow { color: #f59e0b; }
+.metric-label {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.4rem;
+}
+
+/* ── Incidents Timeline ── */
+.incidents-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+.incident-header-bar {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.incident-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+.incident-tab {
+  padding: 0.35rem 1rem;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.incident-tab.active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+.incident-list { padding: 0; }
+.incident-item {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+.incident-item:last-child { border-bottom: none; }
+.incident-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.incident-severity {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.severity-critical { background: #ef4444; }
+.severity-major { background: #f59e0b; }
+.severity-minor { background: #3b82f6; }
+.incident-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #111827;
+}
+.incident-time {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-left: auto;
+}
+.incident-body {
+  font-size: 0.85rem;
+  color: #6b7280;
+  line-height: 1.6;
+  padding-left: 1.25rem;
+}
+.incident-updates {
+  margin-top: 0.75rem;
+  padding-left: 1.25rem;
+}
+.update-item {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+.update-time {
+  color: #9ca3af;
+  white-space: nowrap;
+  min-width: 52px;
+}
+.update-status {
+  font-weight: 600;
+  color: #6b7280;
+}
+.update-text { color: #6b7280; }
+
+/* ── Scheduled Maintenance ── */
+.maintenance-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.maintenance-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+.maintenance-item:last-child { border-bottom: none; }
+.maintenance-date {
+  flex-shrink: 0;
+  width: 52px;
+  text-align: center;
+}
+.maintenance-month {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.maintenance-day {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.1;
+}
+.maintenance-info h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.2rem;
+}
+.maintenance-info p {
+  font-size: 0.82rem;
+  color: #9ca3af;
+}
+.maintenance-badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  margin-top: 0.3rem;
+}
+
+/* ── Subscribe CTA ── */
+.subscribe-cta {
+  background: linear-gradient(135deg, #111827, #1f2937);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.subscribe-cta h2 {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+.subscribe-cta p {
+  color: #9ca3af;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+.subscribe-form {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.subscribe-input {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background: #1f2937;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.subscribe-input:focus { border-color: var(--color-primary); }
+.subscribe-input::placeholder { color: #6b7280; }
+.subscribe-submit {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.subscribe-submit:hover { background: var(--color-primary-dark); }
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  border-top: 1px solid #e5e7eb;
+}
+.footer a { color: var(--color-primary); text-decoration: none; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .metrics-row { grid-template-columns: repeat(2, 1fr); }
+  .subscribe-form { flex-direction: column; }
+  .component-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .incident-title-row { flex-wrap: wrap; }
+  .incident-time { margin-left: 0; width: 100%; }
+  .maintenance-item { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="topnav">
+  <a href="#" class="topnav-brand">
+    <span class="dot"></span>
+    StatusPulse
+  </a>
+  <div class="topnav-links">
+    <a href="#">状态</a>
+    <a href="#">历史</a>
+    <a href="#">API</a>
+    <button class="subscribe-btn">订阅更新</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero-banner">
+  <h1>StatusPulse 服务状态</h1>
+  <p style="color:#6b7280;font-size:0.95rem;">实时监控所有服务运行状态</p>
+  <div class="hero-status">
+    <span class="status-dot"></span>
+    所有系统运行正常
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Metrics -->
+  <div class="metrics-row">
+    <div class="metric-card">
+      <div class="metric-value green">99.98%</div>
+      <div class="metric-label">整体可用性</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">42ms</div>
+      <div class="metric-label">平均响应时间</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value green">0</div>
+      <div class="metric-label">当前故障</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">847</div>
+      <div class="metric-label">已解决事件</div>
+    </div>
+  </div>
+
+  <!-- Components -->
+  <div class="section-title">🧩 组件状态</div>
+  <div class="components-card">
+    <div class="component-row">
+      <div class="component-left">
+        <div class="component-icon" style="background:#ecfdf5;color:#10b981;">🌐</div>
+        <div>
+          <div class="component-name">API 网关</div>
+          <div class="component-desc">api.statuspulse.io</div>
+        </div>
+      </div>
+      <span class="status-badge status-operational">正常运行</span>
+    </div>
+    <div class="component-row">
+      <div class="component-left">
+        <div class="component-icon" style="background:#eff6ff;color:#3b82f6;">🗄️</div>
+        <div>
+          <div class="component-name">数据库集群</div>
+          <div class="component-desc">主从复制 + 读写分离</div>
+        </div>
+      </div>
+      <span class="status-badge status-operational">正常运行</span>
+    </div>
+    <div class="component-row">
+      <div class="component-left">
+        <div class="component-icon" style="background:#fef3c7;color:#f59e0b;">⚡</div>
+        <div>
+          <div class="component-name">CDN 加速</div>
+          <div class="component-desc">全球 42 个边缘节点</div>
+        </div>
+      </div>
+      <span class="status-badge status-degraded">性能降低</span>
+    </div>
+    <div class="component-row">
+      <div class="component-left">
+        <div class="component-icon" style="background:#f0fdf4;color:#22c55e;">📧</div>
+        <div>
+          <div class="component-name">邮件服务</div>
+          <div class="component-desc">事务邮件 + 营销邮件</div>
+        </div>
+      </div>
+      <span class="status-badge status-operational">正常运行</span>
+    </div>
+    <div class="component-row">
+      <div class="component-left">
+        <div class="component-icon" style="background:#ecfeff;color:#06b6d4;">🔍</div>
+        <div>
+          <div class="component-name">搜索引擎</div>
+          <div class="component-desc">Elasticsearch 集群</div>
+        </div>
+      </div>
+      <span class="status-badge status-operational">正常运行</span>
+    </div>
+    <div class="component-row">
+      <div class="component-left">
+        <div class="component-icon" style="background:#f5f3ff;color:#8b5cf6;">🔐</div>
+        <div>
+          <div class="component-name">身份认证</div>
+          <div class="component-desc">OAuth2 + SSO + MFA</div>
+        </div>
+      </div>
+      <span class="status-badge status-operational">正常运行</span>
+    </div>
+    <div class="component-row">
+      <div class="component-left">
+        <div class="component-icon" style="background:#fdf2f8;color:#ec4899;">📊</div>
+        <div>
+          <div class="component-name">数据分析</div>
+          <div class="component-desc">实时数据管道 + BI</div>
+        </div>
+      </div>
+      <span class="status-badge status-operational">正常运行</span>
+    </div>
+    <div class="component-row">
+      <div class="component-left">
+        <div class="component-icon" style="background:#fef3c7;color:#f59e0b;">🪣</div>
+        <div>
+          <div class="component-name">对象存储</div>
+          <div class="component-desc">S3 兼容存储服务</div>
+        </div>
+      </div>
+      <span class="status-badge status-partial">部分中断</span>
+    </div>
+  </div>
+
+  <!-- Uptime Graph -->
+  <div class="section-title">📈 90 天可用性</div>
+  <div class="uptime-card">
+    <div class="uptime-header">
+      <h3>API 网关 — 整体可用性</h3>
+      <span class="uptime-percentage">99.98%</span>
+    </div>
+    <div class="uptime-bars">
+      <div class="uptime-bar green"><span class="tooltip">9月12日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月11日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月10日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月9日 — 99.99%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月8日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月7日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月6日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月5日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月4日 — 100%</span></div>
+      <div class="uptime-bar yellow"><span class="tooltip">9月3日 — 98.5%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月2日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">9月1日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月31日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月30日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月29日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月28日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月27日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月26日 — 99.98%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月25日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月24日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月23日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月22日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月21日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月20日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月19日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月18日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月17日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月16日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月15日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月14日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月13日 — 100%</span></div>
+      <div class="uptime-bar red"><span class="tooltip">8月12日 — 95.2%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月11日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月10日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月9日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月8日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月7日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月6日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月5日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月4日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月3日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月2日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">8月1日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月31日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月30日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月29日 — 99.99%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月28日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月27日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月26日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月25日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月24日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月23日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月22日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月21日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月20日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月19日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月18日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月17日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月16日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月15日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月14日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月13日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月12日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月11日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月10日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月9日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月8日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月7日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月6日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月5日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月4日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月3日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月2日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">7月1日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月30日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月29日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月28日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月27日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月26日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月25日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月24日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月23日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月22日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月21日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月20日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月19日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月18日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月17日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月16日 — 100%</span></div>
+      <div class="uptime-bar green"><span class="tooltip">6月15日 — 100%</span></div>
+    </div>
+    <div class="uptime-legend">
+      <span>90 天前</span>
+      <span>今天</span>
+    </div>
+  </div>
+
+  <!-- Incidents -->
+  <div class="section-title">🔔 事件报告</div>
+  <div class="incidents-card">
+    <div class="incident-header-bar">
+      <div class="section-title" style="margin:0;">近期事件</div>
+      <div class="incident-tabs">
+        <button class="incident-tab active">全部</button>
+        <button class="incident-tab">故障</button>
+        <button class="incident-tab">维护</button>
+      </div>
+    </div>
+    <div class="incident-list">
+      <div class="incident-item">
+        <div class="incident-title-row">
+          <span class="incident-severity severity-major"></span>
+          <span class="incident-title">CDN 边缘节点响应延迟</span>
+          <span class="incident-time">2026年9月13日 14:30 UTC</span>
+        </div>
+        <div class="incident-updates">
+          <div class="update-item">
+            <span class="update-time">16:45</span>
+            <span class="update-status">已解决</span>
+            <span class="update-text">亚太区域节点已恢复正常，延迟降至正常水平。</span>
+          </div>
+          <div class="update-item">
+            <span class="update-time">15:20</span>
+            <span class="update-status">调查中</span>
+            <span class="update-text">正在排查亚太区域 CDN 节点的网络拥塞问题。</span>
+          </div>
+          <div class="update-item">
+            <span class="update-time">14:30</span>
+            <span class="update-status">已确认</span>
+            <span class="update-text">检测到亚太区域部分 CDN 节点响应时间升高。</span>
+          </div>
+        </div>
+      </div>
+      <div class="incident-item">
+        <div class="incident-title-row">
+          <span class="incident-severity severity-critical"></span>
+          <span class="incident-title">对象存储服务间歇性超时</span>
+          <span class="incident-time">2026年9月12日 09:15 UTC</span>
+        </div>
+        <div class="incident-updates">
+          <div class="update-item">
+            <span class="update-time">12:00</span>
+            <span class="update-status">已解决</span>
+            <span class="update-text">存储服务已完全恢复，正在部署预防性扩容方案。</span>
+          </div>
+          <div class="update-item">
+            <span class="update-time">10:30</span>
+            <span class="update-status">修复中</span>
+            <span class="update-text">已定位到存储集群的热点分片问题，正在执行数据重分布。</span>
+          </div>
+          <div class="update-item">
+            <span class="update-time">09:15</span>
+            <span class="update-status">已确认</span>
+            <span class="update-text">对象存储 API 出现间歇性 503 错误，影响文件上传和下载。</span>
+          </div>
+        </div>
+      </div>
+      <div class="incident-item">
+        <div class="incident-title-row">
+          <span class="incident-severity severity-minor"></span>
+          <span class="incident-title">数据库集群计划内维护</span>
+          <span class="incident-time">2026年9月10日 03:00 UTC</span>
+        </div>
+        <div class="incident-updates">
+          <div class="update-item">
+            <span class="update-time">04:15</span>
+            <span class="update-status">已完成</span>
+            <span class="update-text">数据库版本升级完成，查询性能提升约 15%。</span>
+          </div>
+          <div class="update-item">
+            <span class="update-time">03:00</span>
+            <span class="update-status">进行中</span>
+            <span class="update-text">开始执行 PostgreSQL 15→16 升级，预计 1 小时完成。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scheduled Maintenance -->
+  <div class="section-title">🔧 计划维护</div>
+  <div class="maintenance-card">
+    <div class="maintenance-item">
+      <div class="maintenance-date">
+        <div class="maintenance-month">Sep</div>
+        <div class="maintenance-day">20</div>
+      </div>
+      <div class="maintenance-info">
+        <h4>搜索引擎索引重建</h4>
+        <p>预计影响：搜索功能延迟增加 2-5 秒，持续约 30 分钟</p>
+        <span class="maintenance-badge">UTC 02:00 — 04:00</span>
+      </div>
+    </div>
+    <div class="maintenance-item">
+      <div class="maintenance-date">
+        <div class="maintenance-month">Oct</div>
+        <div class="maintenance-day">05</div>
+      </div>
+      <div class="maintenance-info">
+        <h4>全站 SSL 证书轮换</h4>
+        <p>预计影响：短暂连接中断（< 5 分钟），自动重连无需操作</p>
+        <span class="maintenance-badge">UTC 01:00 — 03:00</span>
+      </div>
+    </div>
+    <div class="maintenance-item">
+      <div class="maintenance-date">
+        <div class="maintenance-month">Oct</div>
+        <div class="maintenance-day">15</div>
+      </div>
+      <div class="maintenance-info">
+        <h4>数据库主从切换演练</h4>
+        <p>预计影响：写入操作暂停约 30 秒，读取不受影响</p>
+        <span class="maintenance-badge">UTC 03:00 — 04:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subscribe CTA -->
+  <div class="subscribe-cta">
+    <h2>订阅服务状态更新</h2>
+    <p>当服务出现异常或计划维护时，第一时间收到邮件通知</p>
+    <div class="subscribe-form">
+      <input type="email" class="subscribe-input" placeholder="your@email.com">
+      <button class="subscribe-submit">订阅</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>Powered by <a href="#">StatusPulse</a> — 实时服务状态监控</p>
+  <p style="margin-top:0.3rem;">© 2026 StatusPulse Inc. · <a href="#">API</a> · <a href="#">历史数据</a> · <a href="#">联系我们</a></p>
+</div>
+
+</body>
+</html>

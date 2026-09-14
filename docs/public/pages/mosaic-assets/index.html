@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mosaic 数字资产管理</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  background: #0a0a12;
+  color: #e2e8f0;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Layout ── */
+.app-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr 300px;
+  grid-template-rows: 56px 1fr;
+  height: 100vh;
+}
+
+/* ── Top Bar ── */
+.topbar {
+  grid-column: 1 / -1;
+  background: #0f0f1a;
+  border-bottom: 1px solid #1e1e2e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  z-index: 10;
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.brand {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.brand-icon {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+.search-bar {
+  position: relative;
+  width: 360px;
+}
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.2rem;
+  background: #1a1a2e;
+  border: 1px solid #2a2a3e;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-bar input:focus { border-color: var(--color-primary); }
+.search-bar input::placeholder { color: #4a4a5e; }
+.search-bar svg {
+  position: absolute;
+  left: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4a4a5e;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.topbar-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #2a2a3e;
+  background: transparent;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.topbar-btn:hover { border-color: var(--color-primary); color: #fff; }
+.avatar-sm {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  background: #0f0f1a;
+  border-right: 1px solid #1e1e2e;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+.sidebar-section {
+  margin-bottom: 1.5rem;
+  padding: 0 0.75rem;
+}
+.sidebar-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4a4a5e;
+  font-weight: 700;
+  padding: 0 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sidebar-item:hover { background: #1a1a2e; color: #e2e8f0; }
+.sidebar-item.active {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--color-primary-light);
+}
+.sidebar-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+.sidebar-item .count {
+  margin-left: auto;
+  font-size: 0.7rem;
+  background: #1e1e2e;
+  padding: 0.1rem 0.45rem;
+  border-radius: 100px;
+  color: #6b7280;
+}
+.sidebar-item.active .count {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--color-primary-light);
+}
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.25rem 0.5rem;
+}
+.tag-pill {
+  padding: 0.2rem 0.55rem;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  background: #1a1a2e;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.tag-pill:hover { border-color: var(--color-primary); color: #e2e8f0; }
+.tag-pill.active { background: rgba(99, 102, 241, 0.15); color: var(--color-primary-light); border-color: rgba(99, 102, 241, 0.3); }
+.storage-bar {
+  margin: 0.5rem 0.5rem 0;
+  padding: 0.75rem;
+  background: #1a1a2e;
+  border-radius: 10px;
+}
+.storage-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 0.4rem;
+}
+.storage-track {
+  height: 6px;
+  background: #2a2a3e;
+  border-radius: 100px;
+  overflow: hidden;
+}
+.storage-fill {
+  height: 100%;
+  width: 68%;
+  background: linear-gradient(90deg, var(--color-primary), #8b5cf6);
+  border-radius: 100px;
+}
+
+/* ── Main Content ── */
+.main-content {
+  background: #0a0a12;
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+}
+
+/* ── Toolbar ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.toolbar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+.toolbar-count {
+  font-size: 0.8rem;
+  color: #4a4a5e;
+  background: #1e1e2e;
+  padding: 0.15rem 0.6rem;
+  border-radius: 100px;
+}
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.view-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #2a2a3e;
+  background: transparent;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+}
+.view-btn.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+.view-btn:hover:not(.active) { border-color: #4a4a5e; color: #e2e8f0; }
+.sort-select {
+  padding: 0.4rem 0.8rem;
+  background: #1a1a2e;
+  border: 1px solid #2a2a3e;
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  outline: none;
+  cursor: pointer;
+}
+.upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.upload-btn:hover { background: var(--color-primary-dark); }
+
+/* ── Asset Grid ── */
+.asset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+.asset-card {
+  background: #13131f;
+  border: 1px solid #1e1e2e;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.asset-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.asset-thumb {
+  aspect-ratio: 4/3;
+  position: relative;
+  overflow: hidden;
+}
+.asset-thumb-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+.asset-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.asset-card:hover .asset-overlay { opacity: 1; }
+.overlay-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+}
+.overlay-btn:hover { background: var(--color-primary); }
+.asset-type-badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  color: #e2e8f0;
+}
+.asset-fav {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.4);
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.15s;
+}
+.asset-fav:hover, .asset-fav.active { color: #ef4444; background: rgba(239, 68, 68, 0.15); }
+.asset-info {
+  padding: 0.6rem 0.75rem;
+}
+.asset-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.asset-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+  font-size: 0.7rem;
+  color: #4a4a5e;
+}
+.asset-tags {
+  display: flex;
+  gap: 0.25rem;
+}
+.asset-tag {
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: #1a1a2e;
+  color: #6b7280;
+  font-size: 0.6rem;
+}
+
+/* ── Preview Panel ── */
+.preview-panel {
+  background: #0f0f1a;
+  border-left: 1px solid #1e1e2e;
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.preview-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+}
+.preview-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #2a2a3e;
+  background: transparent;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.preview-close:hover { color: #e2e8f0; border-color: #4a4a5e; }
+.preview-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+.preview-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+.preview-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.meta-item {
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+}
+.meta-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4a4a5e;
+  margin-bottom: 0.15rem;
+}
+.meta-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+.preview-tags {
+  margin-bottom: 1rem;
+}
+.preview-tags-label {
+  font-size: 0.7rem;
+  color: #4a4a5e;
+  margin-bottom: 0.4rem;
+}
+.preview-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.preview-tag {
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--color-primary-light);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+.preview-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.preview-action-btn {
+  flex: 1;
+  padding: 0.55rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.preview-action-primary {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+}
+.preview-action-primary:hover { background: var(--color-primary-dark); }
+.preview-action-secondary {
+  background: transparent;
+  color: #e2e8f0;
+  border: 1px solid #2a2a3e;
+}
+.preview-action-secondary:hover { border-color: #4a4a5e; }
+.preview-colors {
+  margin-bottom: 1rem;
+}
+.color-swatches {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 2px solid #2a2a3e;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.color-swatch:hover { transform: scale(1.15); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .app-layout { grid-template-columns: 1fr; }
+  .sidebar, .preview-panel { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="brand">
+        <div class="brand-icon">◈</div>
+        Mosaic
+      </div>
+      <div class="search-bar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="搜索素材、标签、颜色...">
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" title="通知">🔔</button>
+      <button class="topbar-btn" title="设置">⚙️</button>
+      <div class="avatar-sm">W</div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">素材库</div>
+      <div class="sidebar-item active">
+        <span class="icon">📁</span> 全部素材 <span class="count">2,847</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">⭐</span> 收藏 <span class="count">156</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">🕐</span> 最近使用 <span class="count">89</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">📤</span> 已分享 <span class="count">34</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">🗑️</span> 回收站 <span class="count">12</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">文件类型</div>
+      <div class="sidebar-item">
+        <span class="icon">🖼️</span> 图片 <span class="count">1,204</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">🎨</span> 设计稿 <span class="count">487</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">📐</span> 矢量图 <span class="count">356</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">🎬</span> 视频 <span class="count">128</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">📄</span> 文档 <span class="count">234</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">🔤</span> 字体 <span class="count">78</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">🎵</span> 音频 <span class="count">45</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">合集</div>
+      <div class="sidebar-item">
+        <span class="icon">🏷️</span> 品牌重设计 <span class="count">67</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">🏷️</span> 移动端 UI <span class="count">124</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">🏷️</span> 图标库 <span class="count">312</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="icon">🏷️</span> 营销素材 <span class="count">89</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">标签</div>
+      <div class="tag-cloud">
+        <span class="tag-pill active">渐变</span>
+        <span class="tag-pill">暗色</span>
+        <span class="tag-pill">3D</span>
+        <span class="tag-pill">插画</span>
+        <span class="tag-pill">图标</span>
+        <span class="tag-pill">照片</span>
+        <span class="tag-pill">纹理</span>
+        <span class="tag-pill">背景</span>
+        <span class="tag-pill">按钮</span>
+        <span class="tag-pill">卡片</span>
+        <span class="tag-pill">排版</span>
+        <span class="tag-pill">配色</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="storage-bar">
+        <div class="storage-label">
+          <span>存储空间</span>
+          <span>6.8 / 10 GB</span>
+        </div>
+        <div class="storage-track">
+          <div class="storage-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span class="toolbar-title">全部素材</span>
+        <span class="toolbar-count">2,847 个文件</span>
+      </div>
+      <div class="toolbar-right">
+        <button class="view-btn active" title="网格">⊞</button>
+        <button class="view-btn" title="列表">☰</button>
+        <select class="sort-select">
+          <option>最近添加</option>
+          <option>名称 A-Z</option>
+          <option>文件大小</option>
+          <option>最近使用</option>
+        </select>
+        <button class="upload-btn">+ 上传</button>
+      </div>
+    </div>
+
+    <div class="asset-grid">
+      <!-- Card 1 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#667eea,#764ba2);">🎨</div>
+          <span class="asset-type-badge">PNG</span>
+          <button class="asset-fav active">♥</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">hero-gradient-purple.png</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">渐变</span></div>
+            <span>2.4 MB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:#1a1a2e;">📐</div>
+          <span class="asset-type-badge">SVG</span>
+          <button class="asset-fav">♡</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">logo-mark-dark.svg</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">图标</span></div>
+            <span>24 KB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#f093fb,#f5576c);">🖼️</div>
+          <span class="asset-type-badge">JPG</span>
+          <button class="asset-fav">♡</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">product-shot-01.jpg</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">照片</span></div>
+            <span>4.1 MB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">📐</div>
+          <span class="asset-type-badge">FIGMA</span>
+          <button class="asset-fav active">♥</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">dashboard-v3.fig</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">设计稿</span></div>
+            <span>12 MB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb);">🔤</div>
+          <span class="asset-type-badge">OTF</span>
+          <button class="asset-fav">♡</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">Satoshi-Variable.otf</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">字体</span></div>
+            <span>186 KB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#13547a,#80d0c7);">🖼️</div>
+          <span class="asset-type-badge">WEBP</span>
+          <button class="asset-fav">♡</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">hero-mockup-laptop.webp</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">照片</span></div>
+            <span>1.8 MB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:#0a0a12;border:1px dashed #2a2a3e;">🎬</div>
+          <span class="asset-type-badge">MP4</span>
+          <button class="asset-fav">♡</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">▶</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">product-demo-reel.mp4</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">视频</span></div>
+            <span>48 MB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#ffecd2,#fcb69f);">📐</div>
+          <span class="asset-type-badge">AI</span>
+          <button class="asset-fav active">♥</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">icon-set-2024.ai</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">图标</span></div>
+            <span>3.2 MB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 9 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#2d3436,#636e72);">🎨</div>
+          <span class="asset-type-badge">PNG</span>
+          <button class="asset-fav">♡</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">noise-texture-dark.png</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">纹理</span></div>
+            <span>856 KB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 10 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#11998e,#38ef7d);">📐</div>
+          <span class="asset-type-badge">SVG</span>
+          <button class="asset-fav">♡</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">wave-pattern.svg</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">背景</span></div>
+            <span>8 KB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 11 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#fc5c7d,#6a82fb);">🎨</div>
+          <span class="asset-type-badge">PNG</span>
+          <button class="asset-fav">♡</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">abstract-blob-03.png</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">插画</span></div>
+            <span>1.2 MB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 12 -->
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <div class="asset-thumb-inner" style="background:linear-gradient(135deg,#e0c3fc,#8ec5fc);">📄</div>
+          <span class="asset-type-badge">PDF</span>
+          <button class="asset-fav">♡</button>
+          <div class="asset-overlay">
+            <button class="overlay-btn">👁</button>
+            <button class="overlay-btn">⬇</button>
+            <button class="overlay-btn">⋯</button>
+          </div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-name">brand-guidelines-v2.pdf</div>
+          <div class="asset-meta">
+            <div class="asset-tags"><span class="asset-tag">文档</span></div>
+            <span>5.6 MB</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Panel -->
+  <div class="preview-panel">
+    <div class="preview-header">
+      <h3>素材详情</h3>
+      <button class="preview-close">✕</button>
+    </div>
+
+    <div class="preview-image" style="background:linear-gradient(135deg,#667eea,#764ba2);">🎨</div>
+
+    <div class="preview-title">hero-gradient-purple.png</div>
+
+    <div class="preview-meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">尺寸</div>
+        <div class="meta-value">3840 × 2160</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">文件大小</div>
+        <div class="meta-value">2.4 MB</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">格式</div>
+        <div class="meta-value">PNG</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">色彩空间</div>
+        <div class="meta-value">sRGB</div>
+      </div>
+    </div>
+
+    <div class="preview-tags">
+      <div class="preview-tags-label">标签</div>
+      <div class="preview-tags-list">
+        <span class="preview-tag">渐变</span>
+        <span class="preview-tag">紫色</span>
+        <span class="preview-tag">Hero</span>
+        <span class="preview-tag">背景</span>
+      </div>
+    </div>
+
+    <div class="preview-colors">
+      <div class="preview-tags-label">提取色彩</div>
+      <div class="color-swatches">
+        <div class="color-swatch" style="background:#667eea;"></div>
+        <div class="color-swatch" style="background:#764ba2;"></div>
+        <div class="color-swatch" style="background:#5a4fcf;"></div>
+        <div class="color-swatch" style="background:#8b5cf6;"></div>
+        <div class="color-swatch" style="background:#a78bfa;"></div>
+      </div>
+    </div>
+
+    <div class="preview-meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">添加日期</div>
+        <div class="meta-value">2026-09-10</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">使用次数</div>
+        <div class="meta-value">23 次</div>
+      </div>
+    </div>
+
+    <div class="preview-actions">
+      <button class="preview-action-btn preview-action-primary">⬇ 下载</button>
+      <button class="preview-action-btn preview-action-secondary">🔗 分享</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

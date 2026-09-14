@@ -1703,6 +1703,24 @@ const pages = [
     description: '海洋自主机器人公司落地页，灵感来自 Seasats，深海蓝底 + 青蓝绿主色 + 橙色强调 + CSS 波浪动画 + 船舶轮廓 clip-path + 产品对比 + 3D 地球旋转',
   },
   {
+    id: 'status-page',
+    title: 'StatusPulse 服务状态页',
+    category: 'content',
+    tags: ['状态页', '服务监控', 'SaaS', '运维', '可用性'],
+    colors: ['#f9fafb', '#10b981', '#6366f1'],
+    rating: 9.3,
+    description: '现代 SaaS 服务状态页，灵感来自 Statuspage.io/Instatus，90天uptime柱状图 + 组件状态网格 + 事件时间线 + 计划维护日历 + 订阅通知',
+  },
+  {
+    id: 'mosaic-assets',
+    title: 'Mosaic 数字资产管理系统',
+    category: 'app',
+    tags: ['资产管理', '暗色主题', '仪表盘', '设计工具', '素材管理'],
+    colors: ['#0a0a12', '#6366f1', '#8b5cf6'],
+    rating: 9.4,
+    description: '暗色系数字资产管理系统，灵感来自 Eagle.cool，三栏布局 + 素材网格 + 标签筛选 + 右侧预览面板 + 色彩提取 + 存储统计',
+  },
+  {
     id: 'pulse-vr',
     title: 'Pulse VR 沉浸式虚拟现实体验',
     category: 'creative',
@@ -1782,7 +1800,7 @@ content=\"My Design Lib 页面灵感画廊 — 185 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 185 个完整页面</span>
+      <span>📦 187 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

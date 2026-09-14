@@ -320,7 +320,8 @@ export default defineConfig({
             { text: 'APIForge API 控制台', link: '/pages/api-forge' },
             { text: 'MindWell 心理健康追踪', link: '/pages/mindwell-tracker' },
             { text: 'Momentum 习惯追踪应用', link: '/pages/momentum-habit' },
-            { text: 'CipherVault 密码管理器', link: '/pages/vault-app' }
+            { text: 'CipherVault 密码管理器', link: '/pages/vault-app' },
+            { text: 'Mosaic 数字资产管理', link: '/pages/mosaic-assets' }
           ]
         },
         {
@@ -419,7 +420,8 @@ export default defineConfig({
             { text: 'Pulse 公开产品路线图', link: '/pages/product-roadmap' },
             { text: 'Arcline API 参考文档', link: '/pages/api-reference' },
             { text: 'StackCompare 产品对比页', link: '/pages/compare-platform' },
-            { text: 'Meridian 年度可持续发展报告', link: '/pages/annual-report' }
+            { text: 'Meridian 年度可持续发展报告', link: '/pages/annual-report' },
+            { text: 'StatusPulse 服务状态页', link: '/pages/status-page' }
           ]
         },
         {
