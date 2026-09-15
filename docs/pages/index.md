@@ -1729,6 +1729,15 @@ const pages = [
     rating: 9.4,
     description: 'VR 体验平台落地页，深空黑底 + 紫色主色 + 青色辅助 + 浮动光球动画 + VR 头显轮廓 + 渐变文字 + 伪终端 UI + 定价方案',
   },
+  {
+    id: 'kaze-sake-brewery',
+    title: 'KAZE 日本清酒酿造所',
+    category: 'landing',
+    tags: ['日本清酒', '落地页', '奢华', '日式美学', '衬线字体'],
+    colors: ['#f5f0e8', '#0a0a0a', '#c9a96e'],
+    rating: 9.5,
+    description: '极简日式美学清酒酿造所落地页，Cormorant Garamond 衬线字体 + 巨型汉字水印 + 清酒系列展示 + 酿造流程四步骤 + 风土介绍 + 奶油底配金色强调',
+  },
 ]
 
 const categories = [
@@ -1800,7 +1809,7 @@ content=\"My Design Lib 页面灵感画廊 — 185 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 187 个完整页面</span>
+      <span>📦 188 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
