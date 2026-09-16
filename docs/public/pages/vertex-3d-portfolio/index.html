@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertex Studio — 3D Artist Portfolio</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0a0a0f;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --bg-glass: rgba(255, 255, 255, 0.06);
+  --purple: #8b5cf6;
+  --purple-light: #a78bfa;
+  --cyan: #06b6d4;
+  --cyan-light: #22d3ee;
+  --pink: #ec4899;
+  --text: #e2e8f0;
+  --text-muted: #64748b;
+  --text-dim: #475569;
+  --border: rgba(255, 255, 255, 0.08);
+  --glow-purple: rgba(139, 92, 246, 0.3);
+  --glow-cyan: rgba(6, 182, 212, 0.3);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── Animated Background ────────────────────────────── */
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-mesh::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--glow-purple) 0%, transparent 70%);
+  top: -200px;
+  right: -100px;
+  animation: float1 20s ease-in-out infinite;
+}
+
+.bg-mesh::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%);
+  bottom: -150px;
+  left: -100px;
+  animation: float2 25s ease-in-out infinite;
+}
+
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-80px, 60px) scale(1.1); }
+  66% { transform: translate(40px, -40px) scale(0.9); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, -80px) scale(1.15); }
+  66% { transform: translate(-40px, 30px) scale(0.85); }
+}
+
+/* ── Grid Overlay ───────────────────────────────────── */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* ── Navigation ─────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  background: rgba(10, 10, 15, 0.8);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.nav-logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-logo .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--purple);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--glow-purple);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.8); }
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+
+/* ── Hero Section ───────────────────────────────────── */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 3rem 4rem;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  width: fit-content;
+}
+
+.hero-badge .status {
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.hero h1 {
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, var(--purple-light), var(--cyan), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero h1 .outline-text {
+  -webkit-text-stroke: 1.5px var(--text-dim);
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 550px;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--purple), #7c3aed);
+  color: white;
+  box-shadow: 0 4px 20px var(--glow-purple);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--glow-purple);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-glass);
+  border-color: var(--text-dim);
+}
+
+/* ── Floating Shapes ────────────────────────────────── */
+.floating-shapes {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 400px;
+  height: 400px;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  border: 1px solid var(--border);
+  animation: rotate 20s linear infinite;
+}
+
+.shape-1 {
+  width: 200px;
+  height: 200px;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  top: 50px;
+  left: 50px;
+  border-color: rgba(139, 92, 246, 0.2);
+  animation-duration: 15s;
+}
+
+.shape-2 {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  top: 120px;
+  left: 180px;
+  border-color: rgba(6, 182, 212, 0.2);
+  animation-duration: 20s;
+  animation-direction: reverse;
+}
+
+.shape-3 {
+  width: 100px;
+  height: 100px;
+  transform: rotate(45deg);
+  top: 30px;
+  left: 220px;
+  border-color: rgba(236, 72, 153, 0.15);
+  animation-duration: 25s;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Stats Bar ──────────────────────────────────────── */
+.stats-bar {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.stat {
+  background: var(--bg-deep);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  background: linear-gradient(135deg, var(--purple-light), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.3rem;
+}
+
+/* ── Section Common ─────────────────────────────────── */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 3rem;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--purple-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-label::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--purple);
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  color: var(--text-muted);
+  max-width: 500px;
+  margin-bottom: 3rem;
+  line-height: 1.7;
+}
+
+/* ── Projects Grid ──────────────────────────────────── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.project-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  group: true;
+}
+
+.project-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  border-color: rgba(139, 92, 246, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px var(--glow-purple);
+}
+
+.project-thumb {
+  aspect-ratio: 16/10;
+  background: linear-gradient(135deg, var(--bg-glass), rgba(139, 92, 246, 0.1));
+  position: relative;
+  overflow: hidden;
+}
+
+.project-thumb .preview {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  opacity: 0.6;
+  transition: all 0.4s;
+}
+
+.project-card:hover .preview {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.project-thumb .tag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.3rem 0.8rem;
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  color: var(--cyan-light);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.project-info {
+  padding: 1.5rem;
+}
+
+.project-info h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  transition: color 0.3s;
+}
+
+.project-card:hover .project-info h3 {
+  color: var(--purple-light);
+}
+
+.project-info p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.project-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.project-meta .tool {
+  padding: 0.2rem 0.6rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Featured Project (Full Width) ──────────────────── */
+.featured {
+  margin-bottom: 1.5rem;
+}
+
+.featured-card {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.featured-card:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px var(--glow-purple);
+}
+
+.featured-visual {
+  aspect-ratio: 16/10;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(139, 92, 246, 0.2));
+}
+
+.featured-content {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.featured-content .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+
+.featured-content h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.featured-content p {
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Skills Section ─────────────────────────────────── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.skill-card {
+  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: all 0.3s;
+}
+
+.skill-card:hover {
+  border-color: rgba(139, 92, 246, 0.2);
+  background: var(--bg-glass);
+}
+
+.skill-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
+}
+
+.skill-card h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.skill-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.skill-bar {
+  margin-top: 1rem;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.skill-bar .fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
+  transition: width 1s ease-out;
+}
+
+/* ── Process Section ────────────────────────────────── */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.step {
+  background: var(--bg-deep);
+  padding: 2.5rem 2rem;
+  position: relative;
+}
+
+.step::before {
+  content: attr(data-step);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 3rem;
+  font-weight: 700;
+  color: rgba(139, 92, 246, 0.1);
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+}
+
+.step h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.step p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ── Tools Section ──────────────────────────────────── */
+.tools-marquee {
+  overflow: hidden;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.tools-track {
+  display: flex;
+  gap: 3rem;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+
+.tools-track .tool-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.tools-track .tool-item .dot {
+  width: 4px;
+  height: 4px;
+  background: var(--purple);
+  border-radius: 50%;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── Contact Section ────────────────────────────────── */
+.contact-section {
+  text-align: center;
+  padding: 8rem 3rem;
+}
+
+.contact-section h2 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.contact-section .sub {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.3s;
+}
+
+.contact-link:hover {
+  border-color: var(--purple);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+footer {
+  position: relative;
+  z-index: 1;
+  padding: 2rem 3rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+footer a:hover { color: var(--purple-light); }
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 7rem 1.5rem 3rem; }
+  .floating-shapes { display: none; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  section { padding: 4rem 1.5rem; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .featured-card { grid-template-columns: 1fr; }
+  .process-steps { grid-template-columns: repeat(2, 1fr); }
+  .skills-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .stats-bar { grid-template-columns: 1fr; }
+  .process-steps { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2.5rem; }
+}
+
+/* ── Scroll Reveal ──────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Noise Texture ──────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+</style>
+</head>
+<body>
+
+<!-- Background Effects -->
+<div class="bg-mesh"></div>
+<div class="grid-overlay"></div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-logo">
+    <span class="dot"></span>
+    VERTEX STUDIO
+  </div>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#skills">Capabilities</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="status"></span>
+    Available for projects — 2026
+  </div>
+
+  <h1>
+    <span class="gradient-text">3D Art</span><br>
+    <span class="outline-text">& Motion</span><br>
+    Design
+  </h1>
+
+  <p class="hero-sub">
+    Crafting immersive digital experiences through 3D visualization, motion design, and creative technology. Based in Berlin, working worldwide.
+  </p>
+
+  <div class="hero-cta">
+    <a href="#work" class="btn btn-primary">View Projects ↓</a>
+    <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+  </div>
+
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+</section>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat reveal">
+    <div class="stat-number">120+</div>
+    <div class="stat-label">Projects Delivered</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-number">8yr</div>
+    <div class="stat-label">Experience</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-number">40+</div>
+    <div class="stat-label">Global Clients</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-number">15</div>
+    <div class="stat-label">Awards Won</div>
+  </div>
+</div>
+
+<!-- Projects Section -->
+<section id="work">
+  <div class="section-label">Selected Work</div>
+  <h2 class="section-title">Featured Projects</h2>
+  <p class="section-desc">
+    A curated selection of 3D art, motion design, and creative technology projects from the past two years.
+  </p>
+
+  <!-- Featured Project -->
+  <div class="featured reveal">
+    <div class="featured-card">
+      <div class="featured-visual">🌌</div>
+      <div class="featured-content">
+        <span class="label">Featured — Brand Film</span>
+        <h3>Nebula Cosmetics Launch</h3>
+        <p>A full CGI brand film for Nebula's skincare line, blending macro product shots with abstract cosmic environments. 90-second hero film + 6 social cuts.</p>
+        <div class="project-meta">
+          <span class="tool">Cinema 4D</span>
+          <span class="tool">Octane</span>
+          <span class="tool">After Effects</span>
+          <span class="tool">Houdini</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Grid -->
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #1a0a2e, #2d1b4e);">
+        <div class="preview">🏔️</div>
+        <span class="tag">Product Viz</span>
+      </div>
+      <div class="project-info">
+        <h3>Alpine Watch Collection</h3>
+        <p>Photorealistic watch renders for Alpine's luxury timepiece campaign. 24 hero images across 3 colorways.</p>
+        <div class="project-meta">
+          <span class="tool">Blender</span>
+          <span class="tool">Substance</span>
+          <span class="tool">PS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #0a1628, #162a4a);">
+        <div class="preview">🏙️</div>
+        <span class="tag">Arch Viz</span>
+      </div>
+      <div class="project-info">
+        <h3>Horizon Tower Renders</h3>
+        <p>Architectural visualization for a 45-story mixed-use tower. Day, dusk, and night environments with full interior views.</p>
+        <div class="project-meta">
+          <span class="tool">3ds Max</span>
+          <span class="tool">V-Ray</span>
+          <span class="tool">Forest Pack</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #1a0f0a, #2e1a0a);">
+        <div class="preview">🎵</div>
+        <span class="tag">Motion</span>
+      </div>
+      <div class="project-info">
+        <h3>Resonance — Music Visual</h3>
+        <p>Real-time audio-reactive visuals for electronic artist RESONANCE's world tour. 12-minute loop across 3 LED walls.</p>
+        <div class="project-meta">
+          <span class="tool">TouchDesigner</span>
+          <span class="tool">C4D</span>
+          <span class="tool">GLSL</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #0a1a0f, #0a2e1a);">
+        <div class="preview">🧪</div>
+        <span class="tag">Brand Identity</span>
+      </div>
+      <div class="project-info">
+        <h3>Vertex Rebrand 2026</h3>
+        <p>Complete 3D brand identity refresh — logo animations, generative patterns, and a library of 200+ 3D assets for the brand system.</p>
+        <div class="project-meta">
+          <span class="tool">Houdini</span>
+          <span class="tool">C4D</span>
+          <span class="tool">AE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #1a0a1a, #2e0a2e);">
+        <div class="preview">👗</div>
+        <span class="tag">Fashion</span>
+      </div>
+      <div class="project-info">
+        <h3>Ethereal — Digital Fashion</h3>
+        <p>Virtual fashion collection for Maison Éclat. 8 fully rigged garments rendered in surreal environments for FW26 campaign.</p>
+        <div class="project-meta">
+          <span class="tool">Marvelous</span>
+          <span class="tool">ZBrush</span>
+          <span class="tool">Octane</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #0f0a1a, #1a0f2e);">
+        <div class="preview">🎮</div>
+        <span class="tag">Game Art</span>
+      </div>
+      <div class="project-info">
+        <h3>Axiom — Game Environment</h3>
+        <p>Concept art and real-time environment for indie sci-fi game Axiom. 6 biomes with full PBR materials and lighting.</p>
+        <div class="project-meta">
+          <span class="tool">Unreal 5</span>
+          <span class="tool">Substance</span>
+          <span class="tool">World Machine</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills Section -->
+<section id="skills">
+  <div class="section-label">Capabilities</div>
+  <h2 class="section-title">What I Do</h2>
+  <p class="section-desc">
+    From concept to final render — full-service 3D art and motion design for brands, agencies, and artists.
+  </p>
+
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon">🎨</div>
+      <h3>3D Modeling & Texturing</h3>
+      <p>High-poly and low-poly modeling, UV unwrapping, PBR texturing for product visualization, characters, and environments.</p>
+      <div class="skill-bar"><div class="fill" style="width: 95%"></div></div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">🎬</div>
+      <h3>Motion Design</h3>
+      <p>Character animation, product reveals, abstract motion graphics, and audio-reactive visuals for brand campaigns and live events.</p>
+      <div class="skill-bar"><div class="fill" style="width: 90%"></div></div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">✨</div>
+      <h3>Look Development</h3>
+      <p>Shading, lighting, and compositing to achieve photorealistic or stylized aesthetics. Expert in Octane, V-Ray, and Redshift.</p>
+      <div class="skill-bar"><div class="fill" style="width: 92%"></div></div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">🌐</div>
+      <h3>Real-Time & WebGL</h3>
+      <p>Interactive 3D experiences for the web using Three.js, WebGL, and Unreal Engine. Product configurators and immersive landing pages.</p>
+      <div class="skill-bar"><div class="fill" style="width: 85%"></div></div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">🏗️</div>
+      <h3>Architectural Viz</h3>
+      <p>Photorealistic exterior and interior renders for architecture firms. Aerial views, twilight shots, and VR walkthroughs.</p>
+      <div class="skill-bar"><div class="fill" style="width: 88%"></div></div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">💎</div>
+      <h3>Product Visualization</h3>
+      <p>Hyper-realistic product renders for e-commerce, advertising, and packaging. Jewelry, watches, cosmetics, and consumer electronics.</p>
+      <div class="skill-bar"><div class="fill" style="width: 93%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Process Section -->
+<section id="process">
+  <div class="section-label">Workflow</div>
+  <h2 class="section-title">How I Work</h2>
+  <p class="section-desc">
+    A structured creative process that ensures every project delivers on both vision and quality.
+  </p>
+
+  <div class="process-steps">
+    <div class="step reveal" data-step="01">
+      <h3>Discovery</h3>
+      <p>Understanding your vision, brand, and technical requirements. Mood boards and reference gathering.</p>
+    </div>
+    <div class="step reveal" data-step="02">
+      <h3>Concept</h3>
+      <p>Sketches, styleframes, and previz. Defining the visual direction before production begins.</p>
+    </div>
+    <div class="step reveal" data-step="03">
+      <h3>Production</h3>
+      <p>Modeling, texturing, animation, and rendering. Regular check-ins with work-in-progress renders.</p>
+    </div>
+    <div class="step reveal" data-step="04">
+      <h3>Delivery</h3>
+      <p>Final compositing, color grading, and format delivery. All source files included.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Tools Marquee -->
+<div class="tools-marquee">
+  <div class="tools-track">
+    <span class="tool-item"><span class="dot"></span>Cinema 4D</span>
+    <span class="tool-item"><span class="dot"></span>Blender</span>
+    <span class="tool-item"><span class="dot"></span>Houdini</span>
+    <span class="tool-item"><span class="dot"></span>Unreal Engine 5</span>
+    <span class="tool-item"><span class="dot"></span>Octane Render</span>
+    <span class="tool-item"><span class="dot"></span>Redshift</span>
+    <span class="tool-item"><span class="dot"></span>V-Ray</span>
+    <span class="tool-item"><span class="dot"></span>Substance Painter</span>
+    <span class="tool-item"><span class="dot"></span>ZBrush</span>
+    <span class="tool-item"><span class="dot"></span>After Effects</span>
+    <span class="tool-item"><span class="dot"></span>TouchDesigner</span>
+    <span class="tool-item"><span class="dot"></span>Three.js</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="tool-item"><span class="dot"></span>Cinema 4D</span>
+    <span class="tool-item"><span class="dot"></span>Blender</span>
+    <span class="tool-item"><span class="dot"></span>Houdini</span>
+    <span class="tool-item"><span class="dot"></span>Unreal Engine 5</span>
+    <span class="tool-item"><span class="dot"></span>Octane Render</span>
+    <span class="tool-item"><span class="dot"></span>Redshift</span>
+    <span class="tool-item"><span class="dot"></span>V-Ray</span>
+    <span class="tool-item"><span class="dot"></span>Substance Painter</span>
+    <span class="tool-item"><span class="dot"></span>ZBrush</span>
+    <span class="tool-item"><span class="dot"></span>After Effects</span>
+    <span class="tool-item"><span class="dot"></span>TouchDesigner</span>
+    <span class="tool-item"><span class="dot"></span>Three.js</span>
+  </div>
+</div>
+
+<!-- Contact Section -->
+<section id="contact" class="contact-section">
+  <h2>Let's Create<br><span class="gradient-text" style="background: linear-gradient(135deg, var(--purple-light), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Something Amazing</span></h2>
+  <p class="sub">
+    Open to freelance projects, brand collaborations, and long-term creative partnerships. Let's talk.
+  </p>
+  <div class="contact-links">
+    <a href="#" class="contact-link">✉️ hello@vertexstudio.design</a>
+    <a href="#" class="contact-link">📸 Instagram</a>
+    <a href="#" class="contact-link">🐦 Twitter</a>
+    <a href="#" class="contact-link">💼 LinkedIn</a>
+    <a href="#" class="contact-link">🎥 Vimeo</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <span>© 2026 Vertex Studio. All rights reserved.</span>
+  <span>Built with passion & polygons</span>
+</footer>
+
+<!-- Scroll Reveal Script -->
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

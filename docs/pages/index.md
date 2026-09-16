@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 185 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 189 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1738,6 +1738,15 @@ const pages = [
     rating: 9.5,
     description: '极简日式美学清酒酿造所落地页，Cormorant Garamond 衬线字体 + 巨型汉字水印 + 清酒系列展示 + 酿造流程四步骤 + 风土介绍 + 奶油底配金色强调',
   },
+  {
+    id: 'vertex-3d-portfolio',
+    title: 'Vertex Studio 3D 艺术家作品集',
+    category: 'portfolio',
+    tags: ['3D艺术', '动态设计', '暗色主题', '赛博朋克', '作品集'],
+    colors: ['#0a0a0f', '#8b5cf6', '#06b6d4'],
+    rating: 9.5,
+    description: '暗色赛博朋克风3D艺术家作品集，渐变光晕背景 + 浮动几何体 + 渐变填充文字 Hero + 精选项目双栏大卡片 + 6宫格项目网格 + 技能卡片 + 流程步骤 + 工具跑马灯',
+  },
 ]
 
 const categories = [
@@ -1795,12 +1804,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 185 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 189 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="185 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="189 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1809,7 +1818,7 @@ content=\"My Design Lib 页面灵感画廊 — 185 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 188 个完整页面</span>
+      <span>📦 189 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
