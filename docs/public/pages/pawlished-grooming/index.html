@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pawlished — Premium Pet Grooming Salon</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ──────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', var(--font-sans, sans-serif);
+  color: #2c1810;
+  background: #faf8f5;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ── Design Tokens Override ────────────── */
+:root {
+  --paw-cream:    #faf8f5;
+  --paw-warm:     #f5efe6;
+  --paw-terra:    #c4756e;
+  --paw-terra-dk: #a85a54;
+  --paw-sage:     #8fa584;
+  --paw-sage-lt:  #b5c9ab;
+  --paw-brown:    #3c2415;
+  --paw-gold:     #c9a96e;
+  --paw-blush:    #f0d9d0;
+  --paw-white:    #ffffff;
+  --paw-dark:     #1a1210;
+  --serif: 'DM Serif Display', Georgia, serif;
+}
+
+/* ── Floating Decorations ──────────────── */
+.paw-float {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06;
+  font-size: 3rem;
+  animation: floatPaw 12s ease-in-out infinite;
+}
+.paw-float:nth-child(1) { top: 15%; left: 5%; animation-delay: 0s; animation-duration: 14s; }
+.paw-float:nth-child(2) { top: 40%; right: 8%; animation-delay: 3s; animation-duration: 11s; font-size: 2rem; }
+.paw-float:nth-child(3) { top: 65%; left: 12%; animation-delay: 6s; animation-duration: 16s; font-size: 4rem; }
+.paw-float:nth-child(4) { top: 85%; right: 15%; animation-delay: 2s; animation-duration: 13s; font-size: 2.5rem; }
+.paw-float:nth-child(5) { top: 25%; right: 25%; animation-delay: 8s; animation-duration: 15s; font-size: 2rem; }
+@keyframes floatPaw {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-20px) rotate(5deg); }
+  50% { transform: translateY(-10px) rotate(-3deg); }
+  75% { transform: translateY(-25px) rotate(4deg); }
+}
+
+/* ── Bubble Animation ──────────────────── */
+.bubble {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(196,117,110,0.1));
+  border: 1px solid rgba(196,117,110,0.15);
+  animation: bubbleFloat 18s ease-in-out infinite;
+}
+.bubble:nth-child(1) { width: 60px; height: 60px; bottom: -60px; left: 10%; animation-delay: 0s; animation-duration: 16s; }
+.bubble:nth-child(2) { width: 40px; height: 40px; bottom: -40px; left: 30%; animation-delay: 4s; animation-duration: 20s; }
+.bubble:nth-child(3) { width: 80px; height: 80px; bottom: -80px; left: 55%; animation-delay: 2s; animation-duration: 18s; }
+.bubble:nth-child(4) { width: 35px; height: 35px; bottom: -35px; left: 75%; animation-delay: 7s; animation-duration: 22s; }
+.bubble:nth-child(5) { width: 50px; height: 50px; bottom: -50px; left: 90%; animation-delay: 5s; animation-duration: 15s; }
+@keyframes bubbleFloat {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-110vh) scale(0.5); opacity: 0; }
+}
+
+/* ── Navigation ────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(250,248,245,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(196,117,110,0.1);
+  transition: all 0.3s ease;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  color: var(--paw-brown);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-logo span { color: var(--paw-terra); }
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  align-items: center;
+}
+.nav-links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--paw-brown);
+  opacity: 0.7;
+  transition: opacity 0.3s;
+  letter-spacing: 0.02em;
+}
+.nav-links a:hover { opacity: 1; }
+.nav-cta {
+  background: var(--paw-terra) !important;
+  color: var(--paw-white) !important;
+  padding: 0.6rem 1.5rem;
+  border-radius: 100px;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+  transition: background 0.3s, transform 0.2s !important;
+}
+.nav-cta:hover { background: var(--paw-terra-dk) !important; transform: translateY(-1px); }
+
+/* ── Hero Section ──────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(196,117,110,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(143,165,132,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 60%),
+    var(--paw-cream);
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(196,117,110,0.1);
+  border: 1px solid rgba(196,117,110,0.2);
+  border-radius: 100px;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.85rem;
+  color: var(--paw-terra);
+  font-weight: 500;
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  color: var(--paw-brown);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--paw-terra);
+  position: relative;
+}
+.hero h1 em::after {
+  content: '';
+  position: absolute;
+  bottom: 0.1em;
+  left: 0; right: 0;
+  height: 0.15em;
+  background: var(--paw-terra);
+  opacity: 0.25;
+  border-radius: 4px;
+}
+.hero-sub {
+  font-size: 1.2rem;
+  color: #6b5a4e;
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+.btn-primary {
+  background: var(--paw-terra);
+  color: var(--paw-white);
+  padding: 0.9rem 2.2rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(196,117,110,0.3);
+}
+.btn-primary:hover { background: var(--paw-terra-dk); transform: translateY(-2px); box-shadow: 0 6px 25px rgba(196,117,110,0.4); }
+.btn-secondary {
+  background: transparent;
+  color: var(--paw-brown);
+  padding: 0.9rem 2.2rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 2px solid rgba(60,36,21,0.15);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-secondary:hover { border-color: var(--paw-terra); color: var(--paw-terra); }
+
+/* CSS Paw Print Hero Decoration */
+.hero-paw {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: pawBounce 2s ease-in-out infinite;
+  font-size: 2rem;
+  opacity: 0.3;
+}
+@keyframes pawBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-10px); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Stats Bar ─────────────────────────── */
+.stats {
+  background: var(--paw-brown);
+  color: var(--paw-cream);
+  padding: 3rem 2rem;
+}
+.stats-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  color: var(--paw-gold);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.stat-label {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Services Section ──────────────────── */
+.services {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--paw-terra);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--paw-brown);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.section-desc {
+  color: #6b5a4e;
+  font-size: 1.05rem;
+  max-width: 500px;
+  margin-bottom: 3rem;
+  line-height: 1.7;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.service-card {
+  background: var(--paw-white);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(196,117,110,0.1);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--paw-terra), var(--paw-gold));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(196,117,110,0.12); }
+.service-card:hover::before { transform: scaleX(1); }
+.service-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1.2rem;
+  background: rgba(196,117,110,0.08);
+}
+.service-card h3 {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  color: var(--paw-brown);
+  margin-bottom: 0.5rem;
+}
+.service-card p {
+  color: #6b5a4e;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+.service-price {
+  font-weight: 700;
+  color: var(--paw-terra);
+  font-size: 1.1rem;
+}
+
+/* ── Before/After Gallery ──────────────── */
+.gallery {
+  padding: 6rem 2rem;
+  background: var(--paw-warm);
+}
+.gallery-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.gallery-item {
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, var(--paw-blush), var(--paw-sage-lt));
+  cursor: pointer;
+  transition: transform 0.4s;
+}
+.gallery-item:hover { transform: scale(1.02); }
+.gallery-item-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.gallery-item-icon {
+  font-size: 3rem;
+  animation: galleryPulse 3s ease-in-out infinite;
+}
+.gallery-item-label {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--paw-brown);
+}
+.gallery-item-sub {
+  font-size: 0.8rem;
+  color: #6b5a4e;
+}
+@keyframes galleryPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+/* Different gradient combos for variety */
+.gallery-item:nth-child(2) { background: linear-gradient(135deg, #e8d5c4, #c4a882); }
+.gallery-item:nth-child(3) { background: linear-gradient(135deg, #d4e4d0, #a8c4a0); }
+.gallery-item:nth-child(4) { background: linear-gradient(135deg, #f0d9d0, #d4a890); }
+.gallery-item:nth-child(5) { background: linear-gradient(135deg, #d0d8e4, #a0b0c4); }
+.gallery-item:nth-child(6) { background: linear-gradient(135deg, #e4d8d0, #c4b0a0); }
+
+/* ── Testimonials ──────────────────────── */
+.testimonials {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.testimonial-card {
+  background: var(--paw-white);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(196,117,110,0.08);
+  position: relative;
+}
+.testimonial-stars {
+  color: var(--paw-gold);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+}
+.testimonial-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #4a3a2e;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.testimonial-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  background: rgba(196,117,110,0.1);
+}
+.testimonial-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--paw-brown);
+}
+.testimonial-pet {
+  font-size: 0.8rem;
+  color: #8a7a6e;
+}
+/* Decorative quote mark */
+.testimonial-card::before {
+  content: '"';
+  position: absolute;
+  top: 1rem; right: 1.5rem;
+  font-family: var(--serif);
+  font-size: 4rem;
+  color: var(--paw-terra);
+  opacity: 0.08;
+  line-height: 1;
+}
+
+/* ── Pricing Section ───────────────────── */
+.pricing {
+  padding: 6rem 2rem;
+  background: var(--paw-brown);
+  color: var(--paw-cream);
+}
+.pricing-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+.pricing .section-label { color: var(--paw-gold); }
+.pricing .section-title { color: var(--paw-cream); }
+.pricing .section-desc { color: rgba(250,248,245,0.6); margin: 0 auto 3rem; }
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.price-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  text-align: left;
+  transition: all 0.4s;
+  position: relative;
+}
+.price-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-4px); }
+.price-card.featured {
+  background: linear-gradient(135deg, rgba(196,117,110,0.2), rgba(201,169,110,0.15));
+  border-color: var(--paw-terra);
+}
+.price-badge {
+  position: absolute;
+  top: -12px; right: 2rem;
+  background: var(--paw-terra);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 1rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.price-name {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+.price-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--paw-gold);
+  margin-bottom: 0.3rem;
+}
+.price-period {
+  font-size: 0.85rem;
+  opacity: 0.5;
+  margin-bottom: 1.5rem;
+}
+.price-features {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.price-features li {
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.price-features li::before {
+  content: '✓';
+  color: var(--paw-sage);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.price-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.8rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.price-btn-primary {
+  background: var(--paw-terra);
+  color: white;
+}
+.price-btn-primary:hover { background: var(--paw-terra-dk); }
+.price-btn-outline {
+  background: transparent;
+  color: var(--paw-cream);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.price-btn-outline:hover { border-color: var(--paw-terra); color: var(--paw-terra); }
+
+/* ── Team Section ──────────────────────── */
+.team {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.team-card {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  background: var(--paw-white);
+  border: 1px solid rgba(196,117,110,0.08);
+  transition: all 0.3s;
+}
+.team-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(196,117,110,0.1); }
+.team-avatar {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  background: linear-gradient(135deg, var(--paw-blush), var(--paw-sage-lt));
+}
+.team-card h3 {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--paw-brown);
+  margin-bottom: 0.3rem;
+}
+.team-role {
+  font-size: 0.85rem;
+  color: var(--paw-terra);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.team-bio {
+  font-size: 0.85rem;
+  color: #6b5a4e;
+  line-height: 1.5;
+}
+
+/* ── CTA Section ───────────────────────── */
+.cta {
+  padding: 6rem 2rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(196,117,110,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(143,165,132,0.08) 0%, transparent 50%),
+    var(--paw-cream);
+}
+.cta-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.cta h2 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--paw-brown);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.cta p {
+  color: #6b5a4e;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+.cta-form {
+  display: flex;
+  gap: 0.8rem;
+  max-width: 450px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cta-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.9rem 1.3rem;
+  border-radius: 100px;
+  border: 2px solid rgba(196,117,110,0.2);
+  background: var(--paw-white);
+  font-size: 0.95rem;
+  color: var(--paw-brown);
+  outline: none;
+  transition: border-color 0.3s;
+}
+.cta-input:focus { border-color: var(--paw-terra); }
+.cta-input::placeholder { color: #b0a090; }
+
+/* ── Footer ────────────────────────────── */
+.footer {
+  background: var(--paw-dark);
+  color: rgba(250,248,245,0.6);
+  padding: 4rem 2rem 2rem;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+.footer-brand {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  color: var(--paw-cream);
+  margin-bottom: 1rem;
+}
+.footer-brand span { color: var(--paw-terra); }
+.footer-desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+.footer-social {
+  display: flex;
+  gap: 0.8rem;
+}
+.footer-social a {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+.footer-social a:hover { background: var(--paw-terra); }
+.footer-col h4 {
+  color: var(--paw-cream);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 0.5rem; }
+.footer-col a {
+  font-size: 0.85rem;
+  transition: color 0.3s;
+}
+.footer-col a:hover { color: var(--paw-terra); }
+.footer-bottom {
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+/* ── Scroll Animations ─────────────────── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Responsive ────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
+  .hero h1 { font-size: 2.5rem; }
+}
+@media (max-width: 480px) {
+  .stats-inner { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .hero { padding: 6rem 1.5rem 3rem; }
+  .section-title { font-size: 1.8rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Floating Decorations -->
+<div class="paw-float">🐾</div>
+<div class="paw-float">🐾</div>
+<div class="paw-float">🐾</div>
+<div class="paw-float">🐾</div>
+<div class="paw-float">🐾</div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">🐾 <span>Paw</span>lished</div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#book" class="nav-cta">Book Now</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">✨ Award-Winning Pet Grooming Studio</div>
+  <h1>Where Every Pet<br>Gets <em>Pawlished</em></h1>
+  <p class="hero-sub">Premium grooming experiences crafted with love, gentle techniques, and organic products — because your furry family deserves the very best.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="document.getElementById('book').scrollIntoView({behavior:'smooth'})">Book Appointment</button>
+    <button class="btn-secondary" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">View Services</button>
+  </div>
+  <div class="hero-paw">🐾</div>
+</section>
+
+<!-- Stats -->
+<section class="stats">
+  <div class="stats-inner">
+    <div class="fade-in">
+      <div class="stat-num">12k+</div>
+      <div class="stat-label">Happy Pets</div>
+    </div>
+    <div class="fade-in">
+      <div class="stat-num">98%</div>
+      <div class="stat-label">Return Rate</div>
+    </div>
+    <div class="fade-in">
+      <div class="stat-num">15+</div>
+      <div class="stat-label">Expert Groomers</div>
+    </div>
+    <div class="fade-in">
+      <div class="stat-num">4.9★</div>
+      <div class="stat-label">Average Rating</div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="services" id="services">
+  <div class="section-label fade-in">Our Services</div>
+  <h2 class="section-title fade-in">Tail-Wagging Treatments</h2>
+  <p class="section-desc fade-in">From a quick freshen-up to a full spa day, we offer bespoke grooming packages tailored to your pet's breed, coat type, and personality.</p>
+  <div class="services-grid">
+    <div class="service-card fade-in">
+      <div class="service-icon">🛁</div>
+      <h3>Luxury Bath & Blow-Dry</h3>
+      <p>Organic shampoo, deep conditioning, blow-dry, and brush-out. Includes ear cleaning and nail trim.</p>
+      <div class="service-price">From $45</div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-icon">✂️</div>
+      <h3>Breed-Specific Styling</h3>
+      <p>Expert cuts tailored to breed standards or your preferred style. Hand-scissoring for precision finish.</p>
+      <div class="service-price">From $65</div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-icon">🧖</div>
+      <h3>Spa & Wellness Package</h3>
+      <p>Blueberry facial, paw pad treatment, aromatherapy massage, and de-shedding therapy for total relaxation.</p>
+      <div class="service-price">From $85</div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-icon">🎨</div>
+      <h3>Creative Grooming</h3>
+      <p>Safe, pet-friendly color accents, fun patterns, and seasonal styles for the fashion-forward pup.</p>
+      <div class="service-price">From $55</div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-icon">🦷</div>
+      <h3>Dental & Hygiene Care</h3>
+      <p>Non-anesthetic teeth cleaning, breath freshening, and hygiene clip for optimal pet health.</p>
+      <div class="service-price">From $40</div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-icon">👑</div>
+      <h3>VIP Puppy First Groom</h3>
+      <p>Gentle introduction for puppies under 6 months. Builds trust with treats, soft handling, and patience.</p>
+      <div class="service-price">From $35</div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="gallery" id="gallery">
+  <div class="gallery-inner">
+    <div class="section-label fade-in">Transformations</div>
+    <h2 class="section-title fade-in">Before & After Magic</h2>
+    <p class="section-desc fade-in">See the incredible transformations our groomers achieve — from scruffy to stunning.</p>
+    <div class="gallery-grid">
+      <div class="gallery-item fade-in">
+        <div class="gallery-item-inner">
+          <div class="gallery-item-icon">🐩</div>
+          <div class="gallery-item-label">Poodle Full Style</div>
+          <div class="gallery-item-sub">Teddy Bear Cut</div>
+        </div>
+      </div>
+      <div class="gallery-item fade-in">
+        <div class="gallery-item-inner">
+          <div class="gallery-item-icon">🐕</div>
+          <div class="gallery-item-label">Golden Retriever</div>
+          <div class="gallery-item-sub">De-shed & Trim</div>
+        </div>
+      </div>
+      <div class="gallery-item fade-in">
+        <div class="gallery-item-inner">
+          <div class="gallery-item-icon">🐈</div>
+          <div class="gallery-item-label">Persian Cat</div>
+          <div class="gallery-item-sub">Lion Cut</div>
+        </div>
+      </div>
+      <div class="gallery-item fade-in">
+        <div class="gallery-item-inner">
+          <div class="gallery-item-icon">🐶</div>
+          <div class="gallery-item-label">Shih Tzu</div>
+          <div class="gallery-item-sub">Puppy Trim</div>
+        </div>
+      </div>
+      <div class="gallery-item fade-in">
+        <div class="gallery-item-inner">
+          <div class="gallery-item-icon">🐕‍🦺</div>
+          <div class="gallery-item-label">Schnauzer</div>
+          <div class="gallery-item-sub">Breed Standard</div>
+        </div>
+      </div>
+      <div class="gallery-item fade-in">
+        <div class="gallery-item-inner">
+          <div class="gallery-item-icon">🐾</div>
+          <div class="gallery-item-label">Yorkshire Terrier</div>
+          <div class="gallery-item-sub">Show Ready</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="section-label fade-in">Happy Tails</div>
+  <h2 class="section-title fade-in">What Pet Parents Say</h2>
+  <div class="testimonial-grid">
+    <div class="testimonial-card fade-in">
+      <div class="testimonial-stars">★ ★ ★ ★ ★</div>
+      <div class="testimonial-text">"My anxious rescue dog actually enjoys grooming now! The team at Pawlished is incredibly patient and gentle. Luna comes home smelling amazing and so happy."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">👩</div>
+        <div>
+          <div class="testimonial-name">Sarah Mitchell</div>
+          <div class="testimonial-pet">Mom of Luna (Lab Mix)</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-in">
+      <div class="testimonial-stars">★ ★ ★ ★ ★</div>
+      <div class="testimonial-text">"Best grooming experience in the city. My poodle's teddy bear cut gets compliments everywhere we go. The organic products make such a difference for his sensitive skin."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">👨</div>
+        <div>
+          <div class="testimonial-name">James Chen</div>
+          <div class="testimonial-pet">Dad of Mochi (Toy Poodle)</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-in">
+      <div class="testimonial-stars">★ ★ ★ ★ ★</div>
+      <div class="testimonial-text">"I've tried many groomers, but Pawlished is the only place I trust with my Persian cat. They understand cat-specific needs and the lion cut is always perfect."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">👩‍🦰</div>
+        <div>
+          <div class="testimonial-name">Emma Rodriguez</div>
+          <div class="testimonial-pet">Mom of Cleo (Persian)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="pricing-inner">
+    <div class="section-label fade-in">Packages</div>
+    <h2 class="section-title fade-in">Simple, Transparent Pricing</h2>
+    <p class="section-desc fade-in">Choose the perfect package for your pet. All packages include a complimentary bandana and treat.</p>
+    <div class="pricing-grid">
+      <div class="price-card fade-in">
+        <div class="price-name">Essential</div>
+        <div class="price-amount">$45</div>
+        <div class="price-period">per session</div>
+        <ul class="price-features">
+          <li>Bath & blow-dry</li>
+          <li>Nail trim</li>
+          <li>Ear cleaning</li>
+          <li>Brush-out</li>
+          <li>Complimentary bandana</li>
+        </ul>
+        <button class="price-btn price-btn-outline">Book Essential</button>
+      </div>
+      <div class="price-card featured fade-in">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-name">Premium</div>
+        <div class="price-amount">$85</div>
+        <div class="price-period">per session</div>
+        <ul class="price-features">
+          <li>Everything in Essential</li>
+          <li>Breed-specific haircut</li>
+          <li>Blueberry facial</li>
+          <li>Paw pad treatment</li>
+          <li>Teeth brushing</li>
+          <li>Cologne spritz</li>
+        </ul>
+        <button class="price-btn price-btn-primary">Book Premium</button>
+      </div>
+      <div class="price-card fade-in">
+        <div class="price-name">Royal</div>
+        <div class="price-amount">$130</div>
+        <div class="price-period">per session</div>
+        <ul class="price-features">
+          <li>Everything in Premium</li>
+          <li>Aromatherapy massage</li>
+          <li>De-shedding treatment</li>
+          <li>Creative color accent</li>
+          <li>Photo session</li>
+          <li>Priority booking</li>
+        </ul>
+        <button class="price-btn price-btn-outline">Book Royal</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section class="team" id="team">
+  <div class="section-label fade-in">Meet the Team</div>
+  <h2 class="section-title fade-in">Our Expert Groomers</h2>
+  <p class="section-desc fade-in">Certified, passionate, and obsessed with making your pet look and feel their absolute best.</p>
+  <div class="team-grid">
+    <div class="team-card fade-in">
+      <div class="team-avatar">👩‍⚕️</div>
+      <h3>Lisa Park</h3>
+      <div class="team-role">Lead Groomer & Founder</div>
+      <div class="team-bio">15+ years experience, certified master groomer, specializing in poodles and terriers.</div>
+    </div>
+    <div class="team-card fade-in">
+      <div class="team-avatar">👨‍⚕️</div>
+      <h3>Marco Rivera</h3>
+      <div class="team-role">Senior Cat Specialist</div>
+      <div class="team-bio">Fear-free certified, expert in handling anxious cats and creative lion cuts.</div>
+    </div>
+    <div class="team-card fade-in">
+      <div class="team-avatar">👩‍🎨</div>
+      <h3>Aisha Khan</h3>
+      <div class="team-role">Creative Styling Expert</div>
+      <div class="team-bio">Award-winning creative groomer, specializing in color accents and seasonal styles.</div>
+    </div>
+    <div class="team-card fade-in">
+      <div class="team-avatar">🧑‍⚕️</div>
+      <h3>Danny Kim</h3>
+      <div class="team-role">Puppy Care Specialist</div>
+      <div class="team-bio">Gentle approach for first-time grooms, building positive associations for puppies.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="book">
+  <div class="cta-inner">
+    <h2 class="fade-in">Ready to Get Your Pet<br><em style="font-style:normal;color:var(--paw-terra)">Pawlished</em>?</h2>
+    <p class="fade-in">Book your appointment today and give your furry friend the spa day they deserve. First visit gets 20% off!</p>
+    <div class="cta-form fade-in">
+      <input type="email" class="cta-input" placeholder="Enter your email for 20% off">
+      <button class="btn-primary">Get Started</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">🐾 <span>Paw</span>lished</div>
+      <p class="footer-desc">Premium pet grooming studio dedicated to making every pet look and feel their best. Organic products, gentle techniques, and endless love.</p>
+      <div class="footer-social">
+        <a href="#">📷</a>
+        <a href="#">🐦</a>
+        <a href="#">📘</a>
+        <a href="#">📌</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Bath & Grooming</a></li>
+        <li><a href="#">Styling</a></li>
+        <li><a href="#">Spa Packages</a></li>
+        <li><a href="#">Puppy Care</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Team</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">📍 123 Bark Avenue, NYC</a></li>
+        <li><a href="#">📞 (555) PAW-LOVE</a></li>
+        <li><a href="#">✉️ hello@pawlished.com</a></li>
+        <li><a href="#">🕐 Mon-Sat 8am-7pm</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Pawlished. All rights reserved.</span>
+    <span>Made with 🐾 for pets everywhere</span>
+  </div>
+</footer>
+
+<!-- Scroll Animation Script -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+});
+</script>
+</body>
+</html>
