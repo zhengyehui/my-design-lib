@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineVault — Your Cinema, Curated</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cv-bg: #0a0a0f;
+      --cv-bg-card: #141420;
+      --cv-bg-card-hover: #1c1c2e;
+      --cv-bg-surface: #101018;
+      --cv-accent-red: #e50914;
+      --cv-accent-gold: #f5c518;
+      --cv-accent-purple: #7b2fbe;
+      --cv-accent-purple-light: #9b59b6;
+      --cv-text-primary: #ffffff;
+      --cv-text-secondary: #a0a0b0;
+      --cv-text-muted: #6a6a7a;
+      --cv-border: rgba(255, 255, 255, 0.06);
+      --cv-border-hover: rgba(255, 255, 255, 0.12);
+      --cv-shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+      --cv-shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 60px rgba(123, 47, 190, 0.15);
+      --cv-radius-sm: 6px;
+      --cv-radius-md: 10px;
+      --cv-radius-lg: 16px;
+      --cv-radius-xl: 20px;
+      --cv-transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --cv-transition-fast: 0.18s ease;
+      --cv-transition-slow: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --cv-nav-height: 68px;
+      --cv-section-gap: 48px;
+      --cv-content-padding: 60px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--cv-bg);
+      color: var(--cv-text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--cv-nav-height);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--cv-content-padding);
+      background: linear-gradient(180deg, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.8) 60%, transparent 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background var(--cv-transition);
+    }
+
+    .nav.scrolled {
+      background: rgba(10, 10, 15, 0.97);
+      border-bottom: 1px solid var(--cv-border);
+    }
+
+    .nav__left {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .nav__logo {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--cv-text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav__logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--cv-accent-red), var(--cv-accent-purple));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .nav__link {
+      color: var(--cv-text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: var(--cv-radius-sm);
+      transition: color var(--cv-transition-fast), background var(--cv-transition-fast);
+    }
+
+    .nav__link:hover, .nav__link--active {
+      color: var(--cv-text-primary);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .nav__link--active {
+      color: var(--cv-text-primary);
+      font-weight: 600;
+    }
+
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav__search {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--cv-text-secondary);
+      cursor: pointer;
+      transition: all var(--cv-transition-fast);
+      font-size: 18px;
+    }
+
+    .nav__search:hover {
+      color: var(--cv-text-primary);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--cv-border);
+    }
+
+    .nav__profile {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--cv-accent-purple), var(--cv-accent-purple-light));
+      cursor: pointer;
+      transition: transform var(--cv-transition-fast), box-shadow var(--cv-transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav__profile:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(123, 47, 190, 0.4);
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 var(--cv-content-padding);
+      padding-bottom: 80px;
+      overflow: hidden;
+    }
+
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(123, 47, 190, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 70% 30%, rgba(229, 9, 20, 0.12) 0%, transparent 50%),
+        linear-gradient(135deg, #0d0d18 0%, #0a0a0f 30%, #12101f 60%, #0a0a0f 100%);
+      z-index: 0;
+    }
+
+    .hero__bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+
+    .hero__gradient {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(to top, var(--cv-bg) 0%, transparent 100%);
+      z-index: 1;
+    }
+
+    .hero__gradient-left {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--cv-bg) 0%, rgba(10, 10, 15, 0.6) 40%, transparent 70%);
+      z-index: 1;
+    }
+
+    /* Decorative floating elements */
+    .hero__deco {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .hero__deco--1 {
+      width: 400px;
+      height: 400px;
+      background: rgba(123, 47, 190, 0.15);
+      top: 10%;
+      right: 15%;
+      animation-delay: 0s;
+    }
+
+    .hero__deco--2 {
+      width: 300px;
+      height: 300px;
+      background: rgba(229, 9, 20, 0.1);
+      top: 30%;
+      right: 30%;
+      animation-delay: -3s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.05); }
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+    }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(229, 9, 20, 0.15);
+      border: 1px solid rgba(229, 9, 20, 0.3);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--cv-accent-red);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+    }
+
+    .hero__badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--cv-accent-red);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero__title {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 0%, #e0d0f0 50%, #ffffff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero__meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero__rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero__stars {
+      display: flex;
+      gap: 2px;
+      color: var(--cv-accent-gold);
+      font-size: 16px;
+    }
+
+    .hero__rating-number {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--cv-accent-gold);
+    }
+
+    .hero__meta-sep {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--cv-text-muted);
+    }
+
+    .hero__meta-item {
+      font-size: 14px;
+      color: var(--cv-text-secondary);
+      font-weight: 500;
+    }
+
+    .hero__tags {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .hero__tag {
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--cv-text-secondary);
+      background: rgba(255, 255, 255, 0.04);
+      transition: all var(--cv-transition-fast);
+    }
+
+    .hero__tag:hover {
+      border-color: var(--cv-accent-purple-light);
+      color: var(--cv-accent-purple-light);
+      background: rgba(123, 47, 190, 0.1);
+    }
+
+    .hero__desc {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--cv-text-secondary);
+      margin-bottom: 32px;
+      max-width: 560px;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border-radius: var(--cv-radius-md);
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all var(--cv-transition);
+      text-decoration: none;
+    }
+
+    .btn--primary {
+      background: linear-gradient(135deg, var(--cv-accent-red) 0%, #c40810 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(229, 9, 20, 0.35);
+    }
+
+    .btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(229, 9, 20, 0.5);
+    }
+
+    .btn--secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--cv-text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+    }
+
+    .btn--secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn__icon {
+      font-size: 18px;
+    }
+
+    /* ===== SECTION LAYOUT ===== */
+    .section {
+      padding: 0 var(--cv-content-padding);
+      margin-bottom: var(--cv-section-gap);
+    }
+
+    .section__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .section__title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--cv-text-primary);
+    }
+
+    .section__see-all {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cv-accent-purple-light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color var(--cv-transition-fast);
+    }
+
+    .section__see-all:hover {
+      color: var(--cv-text-primary);
+    }
+
+    /* ===== HORIZONTAL SCROLL CONTAINER ===== */
+    .scroll-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scroll-row::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .scroll-row::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+    }
+
+    /* ===== CONTINUE WATCHING CARDS ===== */
+    .cw-card {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+      background: var(--cv-bg-card);
+      border: 1px solid var(--cv-border);
+      border-radius: var(--cv-radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--cv-transition);
+      position: relative;
+    }
+
+    .cw-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: var(--cv-border-hover);
+      box-shadow: var(--cv-shadow-card-hover);
+    }
+
+    .cw-card__poster {
+      width: 100%;
+      height: 160px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cw-card__poster-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cw-card__play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transition: opacity var(--cv-transition-fast);
+    }
+
+    .cw-card:hover .cw-card__play {
+      opacity: 1;
+    }
+
+    .cw-card__play-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+      transition: transform var(--cv-transition-fast);
+    }
+
+    .cw-card:hover .cw-card__play-btn {
+      transform: scale(1.1);
+    }
+
+    .cw-card__info {
+      padding: 14px 16px;
+    }
+
+    .cw-card__title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cw-card__meta {
+      font-size: 12px;
+      color: var(--cv-text-muted);
+      margin-bottom: 10px;
+    }
+
+    .cw-card__progress {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .cw-card__progress-bar {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--cv-accent-red), var(--cv-accent-purple));
+      transition: width var(--cv-transition-slow);
+    }
+
+    /* ===== TRENDING CARDS ===== */
+    .trending-card {
+      flex: 0 0 220px;
+      scroll-snap-align: start;
+      position: relative;
+      cursor: pointer;
+      transition: all var(--cv-transition);
+    }
+
+    .trending-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .trending-card__poster {
+      width: 100%;
+      height: 320px;
+      border-radius: var(--cv-radius-md);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--cv-border);
+      transition: border-color var(--cv-transition-fast), box-shadow var(--cv-transition-fast);
+    }
+
+    .trending-card:hover .trending-card__poster {
+      border-color: var(--cv-border-hover);
+      box-shadow: var(--cv-shadow-card-hover);
+    }
+
+    .trending-card__poster-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .trending-card__number {
+      position: absolute;
+      bottom: -10px;
+      left: -8px;
+      font-size: 100px;
+      font-weight: 900;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 3px rgba(255, 255, 255, 0.15);
+      z-index: 2;
+      pointer-events: none;
+      font-style: italic;
+      transition: -webkit-text-stroke var(--cv-transition-fast);
+    }
+
+    .trending-card:hover .trending-card__number {
+      -webkit-text-stroke: 3px rgba(255, 255, 255, 0.3);
+    }
+
+    .trending-card__overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 14px 14px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+    }
+
+    .trending-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .trending-card__genre {
+      font-size: 11px;
+      color: var(--cv-text-muted);
+      font-weight: 500;
+    }
+
+    /* ===== TOP RATED GRID ===== */
+    .top-rated-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .poster-card {
+      position: relative;
+      border-radius: var(--cv-radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--cv-transition);
+      border: 1px solid var(--cv-border);
+    }
+
+    .poster-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: var(--cv-shadow-card-hover);
+      border-color: var(--cv-border-hover);
+    }
+
+    .poster-card__img {
+      width: 100%;
+      aspect-ratio: 2/3;
+      display: block;
+    }
+
+    .poster-card__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.3) 40%, transparent 70%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 16px;
+      opacity: 0;
+      transition: opacity var(--cv-transition);
+    }
+
+    .poster-card:hover .poster-card__overlay {
+      opacity: 1;
+    }
+
+    .poster-card__rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .poster-card__rating-star {
+      color: var(--cv-accent-gold);
+      font-size: 13px;
+    }
+
+    .poster-card__rating-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cv-accent-gold);
+    }
+
+    .poster-card__title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .poster-card__year {
+      font-size: 12px;
+      color: var(--cv-text-muted);
+    }
+
+    /* ===== NEW RELEASES SECTION ===== */
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cv-text-secondary);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--cv-border);
+      cursor: pointer;
+      transition: all var(--cv-transition-fast);
+      font-family: inherit;
+    }
+
+    .filter-pill:hover {
+      color: var(--cv-text-primary);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--cv-border-hover);
+    }
+
+    .filter-pill--active {
+      color: white;
+      background: linear-gradient(135deg, var(--cv-accent-purple), var(--cv-accent-purple-light));
+      border-color: transparent;
+    }
+
+    .filter-pill--active:hover {
+      background: linear-gradient(135deg, var(--cv-accent-purple-light), var(--cv-accent-purple));
+    }
+
+    .release-card {
+      flex: 0 0 240px;
+      scroll-snap-align: start;
+      background: var(--cv-bg-card);
+      border: 1px solid var(--cv-border);
+      border-radius: var(--cv-radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--cv-transition);
+    }
+
+    .release-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--cv-border-hover);
+      box-shadow: var(--cv-shadow-card-hover);
+    }
+
+    .release-card__poster {
+      width: 100%;
+      height: 140px;
+      position: relative;
+    }
+
+    .release-card__new {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 3px 10px;
+      background: var(--cv-accent-red);
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .release-card__info {
+      padding: 14px 16px;
+    }
+
+    .release-card__title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .release-card__meta {
+      font-size: 12px;
+      color: var(--cv-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .release-card__rating {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      color: var(--cv-accent-gold);
+      font-weight: 600;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      margin-top: 80px;
+      padding: 60px var(--cv-content-padding) 40px;
+      border-top: 1px solid var(--cv-border);
+      background: var(--cv-bg-surface);
+    }
+
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer__brand-desc {
+      font-size: 14px;
+      color: var(--cv-text-muted);
+      line-height: 1.7;
+      max-width: 320px;
+      margin-top: 12px;
+    }
+
+    .footer__col-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--cv-text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer__link {
+      font-size: 14px;
+      color: var(--cv-text-muted);
+      text-decoration: none;
+      transition: color var(--cv-transition-fast);
+    }
+
+    .footer__link:hover {
+      color: var(--cv-text-primary);
+    }
+
+    .footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--cv-border);
+    }
+
+    .footer__copy {
+      font-size: 13px;
+      color: var(--cv-text-muted);
+    }
+
+    .footer__socials {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer__social {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--cv-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cv-text-muted);
+      font-size: 14px;
+      text-decoration: none;
+      transition: all var(--cv-transition-fast);
+    }
+
+    .footer__social:hover {
+      color: var(--cv-text-primary);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--cv-border-hover);
+      transform: translateY(-2px);
+    }
+
+    /* ===== PLACEHOLDER POSTERS ===== */
+    .ph {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.15);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .ph--1 { background: linear-gradient(135deg, #1a1a3e 0%, #2d1b4e 50%, #1a1a3e 100%); }
+    .ph--2 { background: linear-gradient(135deg, #1b2838 0%, #2d1b38 50%, #1b2838 100%); }
+    .ph--3 { background: linear-gradient(135deg, #2d1b1b 0%, #3e1a1a 50%, #2d1b1b 100%); }
+    .ph--4 { background: linear-gradient(135deg, #1b2d1b 0%, #1a3e2d 50%, #1b2d1b 100%); }
+    .ph--5 { background: linear-gradient(135deg, #2d2d1b 0%, #3e3e1a 50%, #2d2d1b 100%); }
+    .ph--6 { background: linear-gradient(135deg, #1b1b2d 0%, #2d1a3e 50%, #1b1b2d 100%); }
+    .ph--7 { background: linear-gradient(135deg, #2d1b28 0%, #3e1a2d 50%, #2d1b28 100%); }
+    .ph--8 { background: linear-gradient(135deg, #1b2d2d 0%, #1a3e3e 50%, #1b2d2d 100%); }
+    .ph--9 { background: linear-gradient(135deg, #1a2040 0%, #301848 50%, #1a2040 100%); }
+    .ph--10 { background: linear-gradient(135deg, #302010 0%, #402810 50%, #302010 100%); }
+
+    /* Featured hero poster */
+    .ph--hero {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(123, 47, 190, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 30%, rgba(229, 9, 20, 0.2) 0%, transparent 40%),
+        linear-gradient(135deg, #0f0f1e 0%, #1a0f2e 30%, #0f1a1e 60%, #0f0f1e 100%);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      :root {
+        --cv-content-padding: 32px;
+      }
+      .hero__title {
+        font-size: 48px;
+      }
+      .footer__top {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --cv-content-padding: 20px;
+        --cv-nav-height: 60px;
+      }
+      .hero__title {
+        font-size: 36px;
+        letter-spacing: -1px;
+      }
+      .hero__desc {
+        font-size: 14px;
+      }
+      .nav__links {
+        display: none;
+      }
+      .top-rated-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .footer__top {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    /* ===== FADE-IN ANIMATION ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .fade-in:nth-child(2) { animation-delay: 0.2s; }
+    .fade-in:nth-child(3) { animation-delay: 0.3s; }
+    .fade-in:nth-child(4) { animation-delay: 0.4s; }
+    .fade-in:nth-child(5) { animation-delay: 0.5s; }
+    .fade-in:nth-child(6) { animation-delay: 0.6s; }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="nav" id="nav">
+    <div class="nav__left">
+      <a href="#" class="nav__logo">
+        <span class="nav__logo-icon">▶</span>
+        CineVault
+      </a>
+      <ul class="nav__links">
+        <li><a href="#" class="nav__link nav__link--active">Home</a></li>
+        <li><a href="#" class="nav__link">Browse</a></li>
+        <li><a href="#" class="nav__link">My List</a></li>
+        <li><a href="#" class="nav__link">New & Popular</a></li>
+      </ul>
+    </div>
+    <div class="nav__right">
+      <button class="nav__search" aria-label="Search">🔍</button>
+      <div class="nav__profile">JD</div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="hero">
+    <div class="hero__bg">
+      <div class="ph--hero"></div>
+    </div>
+    <div class="hero__deco hero__deco--1"></div>
+    <div class="hero__deco hero__deco--2"></div>
+    <div class="hero__gradient"></div>
+    <div class="hero__gradient-left"></div>
+
+    <div class="hero__content">
+      <div class="hero__badge">✦ Featured Film</div>
+      <h1 class="hero__title">Echoes of Tomorrow</h1>
+      <div class="hero__meta">
+        <div class="hero__rating">
+          <span class="hero__stars">★★★★★</span>
+          <span class="hero__rating-number">8.7</span>
+        </div>
+        <span class="hero__meta-sep"></span>
+        <span class="hero__meta-item">2025</span>
+        <span class="hero__meta-sep"></span>
+        <span class="hero__meta-item">2h 18min</span>
+        <span class="hero__meta-sep"></span>
+        <span class="hero__meta-item">PG-13</span>
+      </div>
+      <div class="hero__tags">
+        <span class="hero__tag">Sci-Fi</span>
+        <span class="hero__tag">Thriller</span>
+        <span class="hero__tag">Drama</span>
+        <span class="hero__tag">Mystery</span>
+      </div>
+      <p class="hero__desc">
+        In a world where memories can be transferred between minds, a brilliant neuroscientist 
+        discovers a conspiracy that threatens to erase humanity's collective past. As she races 
+        against time, she must confront fragments of her own forgotten history.
+      </p>
+      <div class="hero__actions">
+        <button class="btn btn--primary">
+          <span class="btn__icon">▶</span>
+          Watch Now
+        </button>
+        <button class="btn btn--secondary">
+          <span class="btn__icon">+</span>
+          Add to List
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTINUE WATCHING ===== -->
+  <section class="section">
+    <div class="section__header">
+      <h2 class="section__title">Continue Watching</h2>
+      <a href="#" class="section__see-all">See All →</a>
+    </div>
+    <div class="scroll-row">
+
+      <div class="cw-card fade-in">
+        <div class="cw-card__poster">
+          <div class="ph ph--1">NOIR</div>
+          <div class="cw-card__play"><div class="cw-card__play-btn">▶</div></div>
+        </div>
+        <div class="cw-card__info">
+          <div class="cw-card__title">Midnight Protocol</div>
+          <div class="cw-card__meta">S1 E4 · 32 min left</div>
+          <div class="cw-card__progress"><div class="cw-card__progress-bar" style="width: 65%"></div></div>
+        </div>
+      </div>
+
+      <div class="cw-card fade-in">
+        <div class="cw-card__poster">
+          <div class="ph ph--2">DUSK</div>
+          <div class="cw-card__play"><div class="cw-card__play-btn">▶</div></div>
+        </div>
+        <div class="cw-card__info">
+          <div class="cw-card__title">The Last Cartographer</div>
+          <div class="cw-card__meta">1h 42min · 28 min left</div>
+          <div class="cw-card__progress"><div class="cw-card__progress-bar" style="width: 40%"></div></div>
+        </div>
+      </div>
+
+      <div class="cw-card fade-in">
+        <div class="cw-card__poster">
+          <div class="ph ph--3">BLOOD</div>
+          <div class="cw-card__play"><div class="cw-card__play-btn">▶</div></div>
+        </div>
+        <div class="cw-card__info">
+          <div class="cw-card__title">Crimson Meridian</div>
+          <div class="cw-card__meta">2h 05min · 52 min left</div>
+          <div class="cw-card__progress"><div class="cw-card__progress-bar" style="width: 22%"></div></div>
+        </div>
+      </div>
+
+      <div class="cw-card fade-in">
+        <div class="cw-card__poster">
+          <div class="ph ph--4">WILD</div>
+          <div class="cw-card__play"><div class="cw-card__play-btn">▶</div></div>
+        </div>
+        <div class="cw-card__info">
+          <div class="cw-card__title">Emerald Frontier</div>
+          <div class="cw-card__meta">S2 E7 · 18 min left</div>
+          <div class="cw-card__progress"><div class="cw-card__progress-bar" style="width: 82%"></div></div>
+        </div>
+      </div>
+
+      <div class="cw-card fade-in">
+        <div class="cw-card__poster">
+          <div class="ph ph--5">GOLD</div>
+          <div class="cw-card__play"><div class="cw-card__play-btn">▶</div></div>
+        </div>
+        <div class="cw-card__info">
+          <div class="cw-card__title">The Aurum Heist</div>
+          <div class="cw-card__meta">1h 56min · 44 min left</div>
+          <div class="cw-card__progress"><div class="cw-card__progress-bar" style="width: 55%"></div></div>
+        </div>
+      </div>
+
+      <div class="cw-card fade-in">
+        <div class="cw-card__poster">
+          <div class="ph ph--6">VOID</div>
+          <div class="cw-card__play"><div class="cw-card__play-btn">▶</div></div>
+        </div>
+        <div class="cw-card__info">
+          <div class="cw-card__title">Signal Lost</div>
+          <div class="cw-card__meta">1h 38min · 8 min left</div>
+          <div class="cw-card__progress"><div class="cw-card__progress-bar" style="width: 92%"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== TRENDING NOW ===== -->
+  <section class="section">
+    <div class="section__header">
+      <h2 class="section__title">Trending Now</h2>
+      <a href="#" class="section__see-all">See All →</a>
+    </div>
+    <div class="scroll-row">
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--3" style="font-size:14px">NEON</div>
+          <span class="trending-card__number">1</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">Neon Requiem</div>
+            <div class="trending-card__genre">Action · Sci-Fi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--1" style="font-size:14px">DUNE</div>
+          <span class="trending-card__number">2</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">Dune: Awakening</div>
+            <div class="trending-card__genre">Sci-Fi · Adventure</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--7" style="font-size:14px">GHOST</div>
+          <span class="trending-card__number">3</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">Ghost Protocol: Zero</div>
+            <div class="trending-card__genre">Thriller · Espionage</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--8" style="font-size:14px">DEEP</div>
+          <span class="trending-card__number">4</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">The Deep Unknown</div>
+            <div class="trending-card__genre">Horror · Mystery</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--9" style="font-size:14px">SKY</div>
+          <span class="trending-card__number">5</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">Skyline Descent</div>
+            <div class="trending-card__genre">Action · Thriller</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--10" style="font-size:14px">AMBER</div>
+          <span class="trending-card__number">6</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">Amber & Ash</div>
+            <div class="trending-card__genre">Drama · Romance</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--4" style="font-size:14px">FROST</div>
+          <span class="trending-card__number">7</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">Frostbite</div>
+            <div class="trending-card__genre">Survival · Drama</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--6" style="font-size:14px">VOID</div>
+          <span class="trending-card__number">8</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">Void Walker</div>
+            <div class="trending-card__genre">Sci-Fi · Horror</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--2" style="font-size:14px">ECHO</div>
+          <span class="trending-card__number">9</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">Echo Chamber</div>
+            <div class="trending-card__genre">Psychological</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trending-card fade-in">
+        <div class="trending-card__poster">
+          <div class="ph ph--5" style="font-size:14px">KING</div>
+          <span class="trending-card__number">10</span>
+          <div class="trending-card__overlay">
+            <div class="trending-card__title">The Last Kingdom</div>
+            <div class="trending-card__genre">Historical · Epic</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== TOP RATED ===== -->
+  <section class="section">
+    <div class="section__header">
+      <h2 class="section__title">Top Rated</h2>
+      <a href="#" class="section__see-all">See All →</a>
+    </div>
+    <div class="top-rated-grid">
+
+      <div class="poster-card fade-in">
+        <div class="ph ph--9 poster-card__img" style="font-size:14px">INTERSTELLAR</div>
+        <div class="poster-card__overlay">
+          <div class="poster-card__rating">
+            <span class="poster-card__rating-star">★</span>
+            <span class="poster-card__rating-num">9.2</span>
+          </div>
+          <div class="poster-card__title">Interstellar</div>
+          <div class="poster-card__year">2014 · 2h 49min</div>
+        </div>
+      </div>
+
+      <div class="poster-card fade-in">
+        <div class="ph ph--3 poster-card__img" style="font-size:14px">INCEPTION</div>
+        <div class="poster-card__overlay">
+          <div class="poster-card__rating">
+            <span class="poster-card__rating-star">★</span>
+            <span class="poster-card__rating-num">8.9</span>
+          </div>
+          <div class="poster-card__title">Inception</div>
+          <div class="poster-card__year">2010 · 2h 28min</div>
+        </div>
+      </div>
+
+      <div class="poster-card fade-in">
+        <div class="ph ph--1 poster-card__img" style="font-size:14px">BLADE RUNNER</div>
+        <div class="poster-card__overlay">
+          <div class="poster-card__rating">
+            <span class="poster-card__rating-star">★</span>
+            <span class="poster-card__rating-num">8.4</span>
+          </div>
+          <div class="poster-card__title">Blade Runner 2049</div>
+          <div class="poster-card__year">2017 · 2h 44min</div>
+        </div>
+      </div>
+
+      <div class="poster-card fade-in">
+        <div class="ph ph--7 poster-card__img" style="font-size:14px">PARASITE</div>
+        <div class="poster-card__overlay">
+          <div class="poster-card__rating">
+            <span class="poster-card__rating-star">★</span>
+            <span class="poster-card__rating-num">8.6</span>
+          </div>
+          <div class="poster-card__title">Parasite</div>
+          <div class="poster-card__year">2019 · 2h 12min</div>
+        </div>
+      </div>
+
+      <div class="poster-card fade-in">
+        <div class="ph ph--8 poster-card__img" style="font-size:14px">DUNE</div>
+        <div class="poster-card__overlay">
+          <div class="poster-card__rating">
+            <span class="poster-card__rating-star">★</span>
+            <span class="poster-card__rating-num">8.3</span>
+          </div>
+          <div class="poster-card__title">Dune: Part Two</div>
+          <div class="poster-card__year">2024 · 2h 46min</div>
+        </div>
+      </div>
+
+      <div class="poster-card fade-in">
+        <div class="ph ph--10 poster-card__img" style="font-size:14px">OPPENHEIMER</div>
+        <div class="poster-card__overlay">
+          <div class="poster-card__rating">
+            <span class="poster-card__rating-star">★</span>
+            <span class="poster-card__rating-num">8.5</span>
+          </div>
+          <div class="poster-card__title">Oppenheimer</div>
+          <div class="poster-card__year">2023 · 3h 0min</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== NEW RELEASES ===== -->
+  <section class="section">
+    <div class="section__header">
+      <h2 class="section__title">New Releases</h2>
+      <a href="#" class="section__see-all">See All →</a>
+    </div>
+    <div class="filter-pills">
+      <button class="filter-pill filter-pill--active">All</button>
+      <button class="filter-pill">Action</button>
+      <button class="filter-pill">Comedy</button>
+      <button class="filter-pill">Drama</button>
+      <button class="filter-pill">Horror</button>
+      <button class="filter-pill">Sci-Fi</button>
+      <button class="filter-pill">Documentary</button>
+    </div>
+    <div class="scroll-row">
+
+      <div class="release-card fade-in">
+        <div class="release-card__poster">
+          <div class="ph ph--3">QUANTUM</div>
+          <span class="release-card__new">New</span>
+        </div>
+        <div class="release-card__info">
+          <div class="release-card__title">Quantum Paradox</div>
+          <div class="release-card__meta">
+            <span class="release-card__rating">★ 7.8</span>
+            <span>2025</span>
+            <span>Sci-Fi</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="release-card fade-in">
+        <div class="release-card__poster">
+          <div class="ph ph--7">BLOODLINE</div>
+          <span class="release-card__new">New</span>
+        </div>
+        <div class="release-card__info">
+          <div class="release-card__title">Bloodline: Origins</div>
+          <div class="release-card__meta">
+            <span class="release-card__rating">★ 8.1</span>
+            <span>2025</span>
+            <span>Drama</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="release-card fade-in">
+        <div class="release-card__poster">
+          <div class="ph ph--8">TIDAL</div>
+          <span class="release-card__new">New</span>
+        </div>
+        <div class="release-card__info">
+          <div class="release-card__title">Tidal Force</div>
+          <div class="release-card__meta">
+            <span class="release-card__rating">★ 7.2</span>
+            <span>2025</span>
+            <span>Action</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="release-card fade-in">
+        <div class="release-card__poster">
+          <div class="ph ph--4">WHISPER</div>
+          <span class="release-card__new">New</span>
+        </div>
+        <div class="release-card__info">
+          <div class="release-card__title">The Whisper Garden</div>
+          <div class="release-card__meta">
+            <span class="release-card__rating">★ 8.5</span>
+            <span>2025</span>
+            <span>Mystery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="release-card fade-in">
+        <div class="release-card__poster">
+          <div class="ph ph--9">NOVA</div>
+          <span class="release-card__new">New</span>
+        </div>
+        <div class="release-card__info">
+          <div class="release-card__title">Nova Cascade</div>
+          <div class="release-card__meta">
+            <span class="release-card__rating">★ 7.6</span>
+            <span>2025</span>
+            <span>Sci-Fi</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="release-card fade-in">
+        <div class="release-card__poster">
+          <div class="ph ph--10">IRON</div>
+          <span class="release-card__new">New</span>
+        </div>
+        <div class="release-card__info">
+          <div class="release-card__title">Iron & Ember</div>
+          <div class="release-card__meta">
+            <span class="release-card__rating">★ 8.0</span>
+            <span>2025</span>
+            <span>Drama</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="#" class="nav__logo">
+          <span class="nav__logo-icon">▶</span>
+          CineVault
+        </a>
+        <p class="footer__brand-desc">
+          Your personal cinema, curated. Discover thousands of films, track your watchlist, 
+          and dive into stories that move you. CineVault — where every frame matters.
+        </p>
+      </div>
+      <div>
+        <h4 class="footer__col-title">Browse</h4>
+        <ul class="footer__links">
+          <li><a href="#" class="footer__link">Movies</a></li>
+          <li><a href="#" class="footer__link">TV Shows</a></li>
+          <li><a href="#" class="footer__link">Originals</a></li>
+          <li><a href="#" class="footer__link">Collections</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer__col-title">Help</h4>
+        <ul class="footer__links">
+          <li><a href="#" class="footer__link">FAQ</a></li>
+          <li><a href="#" class="footer__link">Account</a></li>
+          <li><a href="#" class="footer__link">Devices</a></li>
+          <li><a href="#" class="footer__link">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer__col-title">Legal</h4>
+        <ul class="footer__links">
+          <li><a href="#" class="footer__link">Privacy Policy</a></li>
+          <li><a href="#" class="footer__link">Terms of Service</a></li>
+          <li><a href="#" class="footer__link">Cookie Settings</a></li>
+          <li><a href="#" class="footer__link">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span class="footer__copy">© 2025 CineVault. All rights reserved.</span>
+      <div class="footer__socials">
+        <a href="#" class="footer__social" aria-label="Twitter">𝕏</a>
+        <a href="#" class="footer__social" aria-label="Instagram">◎</a>
+        <a href="#" class="footer__social" aria-label="YouTube">▶</a>
+        <a href="#" class="footer__social" aria-label="Discord">💬</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Minimal JS for scroll-based nav style & filter pills -->
+  <script>
+    // Nav background on scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Filter pill toggle
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelector('.filter-pill--active')?.classList.remove('filter-pill--active');
+        pill.classList.add('filter-pill--active');
+      });
+    });
+
+    // Intersection Observer for fade-in animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      el.style.animationPlayState = 'paused';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 190 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 192 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1755,6 +1755,24 @@ const pages = [
     colors: ['#faf8f5', '#c4756e', '#8fa584'],
     rating: 9.4,
     description: '高端宠物美容沙龙落地页，DM Serif Display 衬线字体 + 暖奶油底赤陶配色 + CSS 浮动爪印肥皂泡动画 + 服务卡片网格 + 定价方案 + 团队展示 + 滚动渐入动画',
+  },
+  {
+    id: 'cinevault',
+    title: 'CineVault 电影流媒体平台',
+    category: 'app',
+    tags: ['流媒体', '电影', '暗色主题', '仪表盘'],
+    colors: ['#0a0a0f', '#e50914', '#f5c518'],
+    rating: 9.5,
+    description: '暗色系电影流媒体平台，Netflix 风格 Hero + 继续观看进度条 + 热门排行数字叠加 + 评分最高网格 + 类型筛选药丸 + 滚动淡入动画',
+  },
+  {
+    id: 'maison-boulangerie',
+    title: 'Maison Boulangerie 法式手工面包店',
+    category: 'ecommerce',
+    tags: ['电商', '面包店', '法式', '暖色'],
+    colors: ['#faf8f5', '#c9a96e', '#2c1810'],
+    rating: 9.4,
+    description: '法式手工面包店电商，Playfair Display 衬线字体 + 暖奶油底 + 金色强调 + 签名产品大卡片 + 产品网格 + 品牌故事同心圆动画 + 客户评价',
   },
 ]
 

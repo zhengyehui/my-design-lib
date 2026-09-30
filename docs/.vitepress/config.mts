@@ -323,7 +323,8 @@ export default defineConfig({
             { text: 'MindWell 心理健康追踪', link: '/pages/mindwell-tracker' },
             { text: 'Momentum 习惯追踪应用', link: '/pages/momentum-habit' },
             { text: 'CipherVault 密码管理器', link: '/pages/vault-app' },
-            { text: 'Mosaic 数字资产管理', link: '/pages/mosaic-assets' }
+            { text: 'Mosaic 数字资产管理', link: '/pages/mosaic-assets' },
+            { text: 'CineVault 电影流媒体', link: '/pages/cinevault' }
           ]
         },
         {
@@ -356,7 +357,8 @@ export default defineConfig({
             { text: 'SILO 极简工业产品页', link: '/pages/silo-minimal' },
             { text: 'Chado 日式茶道电商', link: '/pages/tea-ceremony' },
             { text: 'BookHaven 精品读书俱乐部', link: '/pages/book-club' },
-            { text: 'Cacao & Co 手工巧克力', link: '/pages/cacao-co' }
+            { text: 'Cacao & Co 手工巧克力', link: '/pages/cacao-co' },
+            { text: 'Maison Boulangerie 法式面包店', link: '/pages/maison-boulangerie' }
           ]
         },
         {
