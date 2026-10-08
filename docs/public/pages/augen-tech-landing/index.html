@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUREN — Beyond Humanware</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════
+       TOKENS & CUSTOM PROPERTIES
+       ═══════════════════════════════════════════ */
+    :root {
+      --color-off-black: var(--color-primary, #0F1012);
+      --color-off-white: var(--color-surface, #F2F2F4);
+      --color-accent: var(--color-accent, #0071E3);
+      --color-white: #FFFFFF;
+      --color-near-black: #1D1E20;
+      --color-light-gray: #EFEFEF;
+      --color-green: #00B982;
+      --radius-pill: var(--radius-lg, 50px);
+      --radius-card: var(--radius-md, 16px);
+      --container: 1200px;
+      --section-pad: clamp(80px, 10vw, 140px);
+      --gap: clamp(16px, 2.5vw, 32px);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 300;
+      color: var(--color-near-black);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; transition: color 0.3s; }
+    a:hover { color: var(--color-accent); }
+    img { max-width: 100%; display: block; }
+
+    /* ═══════════════════════════════════════════
+       UTILITY
+       ═══════════════════════════════════════════ */
+    .container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 clamp(20px, 4vw, 40px);
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ═══════════════════════════════════════════
+       NAVIGATION
+       ═══════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 20px 0;
+      transition: background 0.4s, backdrop-filter 0.4s, padding 0.4s;
+    }
+    .nav.scrolled {
+      background: rgba(15, 16, 18, 0.82);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      padding: 14px 0;
+    }
+    .nav__inner {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 clamp(20px, 4vw, 40px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav__logo {
+      font-weight: 600;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+      color: var(--color-near-black);
+      transition: color 0.4s;
+    }
+    .nav.scrolled .nav__logo { color: var(--color-white); }
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav__links a {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: var(--color-near-black);
+      opacity: 0.7;
+      transition: opacity 0.3s, color 0.4s;
+    }
+    .nav.scrolled .nav__links a { color: var(--color-white); }
+    .nav__links a:hover { opacity: 1; color: var(--color-accent); }
+    .nav__toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav__toggle span {
+      width: 22px;
+      height: 2px;
+      background: var(--color-near-black);
+      border-radius: 2px;
+      transition: background 0.4s;
+    }
+    .nav.scrolled .nav__toggle span { background: var(--color-white); }
+
+    /* ═══════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-light-gray);
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* Decorative geometric element — top-right */
+    .hero__deco {
+      position: absolute;
+      top: -8%;
+      right: -6%;
+      width: clamp(300px, 45vw, 600px);
+      height: clamp(300px, 45vw, 600px);
+      border-radius: 50%;
+      background: conic-gradient(
+        from 180deg at 50% 50%,
+        rgba(0, 113, 227, 0.08) 0deg,
+        rgba(0, 185, 130, 0.06) 120deg,
+        rgba(0, 113, 227, 0.04) 240deg,
+        rgba(0, 185, 130, 0.08) 360deg
+      );
+      filter: blur(60px);
+      animation: decoRotate 30s linear infinite;
+    }
+    @keyframes decoRotate {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Decorative geometric element — bottom-left lines */
+    .hero__lines {
+      position: absolute;
+      bottom: 8%;
+      left: 5%;
+      width: clamp(120px, 18vw, 220px);
+      height: clamp(120px, 18vw, 220px);
+    }
+    .hero__lines::before,
+    .hero__lines::after {
+      content: '';
+      position: absolute;
+      border: 1px solid rgba(0, 113, 227, 0.12);
+      border-radius: 50%;
+      animation: pulseRing 6s ease-in-out infinite;
+    }
+    .hero__lines::before {
+      inset: 0;
+    }
+    .hero__lines::after {
+      inset: -25%;
+      animation-delay: 3s;
+    }
+    @keyframes pulseRing {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    /* Floating diamond shape */
+    .hero__diamond {
+      position: absolute;
+      top: 22%;
+      left: 10%;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(0,113,227,0.1), rgba(0,185,130,0.08));
+      border: 1px solid rgba(0,113,227,0.12);
+      transform: rotate(45deg);
+      animation: floatDiamond 8s ease-in-out infinite;
+    }
+    @keyframes floatDiamond {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(-20px); }
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 20px;
+    }
+    .hero__label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 24px;
+      opacity: 0.8;
+    }
+    .hero__title {
+      font-size: clamp(48px, 8vw, 96px);
+      font-weight: 600;
+      letter-spacing: -1px;
+      line-height: 1.02;
+      color: var(--color-near-black);
+      margin-bottom: 20px;
+    }
+    .hero__title span {
+      display: block;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero__subtitle {
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 300;
+      color: rgba(29, 30, 32, 0.6);
+      max-width: 520px;
+      margin: 0 auto 44px;
+      line-height: 1.7;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 40px;
+      border-radius: var(--radius-pill);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn--primary {
+      background: var(--color-accent);
+      color: var(--color-white);
+    }
+    .btn--primary:hover {
+      background: #0077ED;
+      box-shadow: 0 8px 30px rgba(0, 113, 227, 0.35);
+      transform: translateY(-2px);
+      color: var(--color-white);
+    }
+    .btn--white {
+      background: var(--color-white);
+      color: var(--color-accent);
+    }
+    .btn--white:hover {
+      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      color: var(--color-accent);
+    }
+
+    /* Scroll indicator */
+    .hero__scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.4;
+      animation: scrollBounce 2s ease-in-out infinite;
+    }
+    .hero__scroll span {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-near-black);
+    }
+    .hero__scroll::after {
+      content: '';
+      width: 1px;
+      height: 40px;
+      background: var(--color-near-black);
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ═══════════════════════════════════════════
+       PRODUCT SHOWCASE
+       ═══════════════════════════════════════════ */
+    .products {
+      background: var(--color-off-black);
+      padding: var(--section-pad) 0;
+      color: var(--color-white);
+    }
+    .products__header {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+    .products__label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 16px;
+    }
+    .products__title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      line-height: 1.1;
+    }
+    .products__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+    }
+    .product-card {
+      position: relative;
+      padding: clamp(32px, 3vw, 48px);
+      border-radius: var(--radius-card);
+      background: linear-gradient(
+        170deg,
+        rgba(255,255,255,0.04) 0%,
+        rgba(255,255,255,0.01) 100%
+      );
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      transition: border-color 0.4s, transform 0.4s;
+    }
+    .product-card:hover {
+      border-color: rgba(0, 113, 227, 0.3);
+      transform: translateY(-4px);
+    }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .product-card:hover::before { opacity: 1; }
+    .product-card__number {
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 600;
+      letter-spacing: -2px;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .product-card__name {
+      font-size: clamp(20px, 2.5vw, 28px);
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .product-card__name sup {
+      font-size: 0.55em;
+      color: var(--color-accent);
+      vertical-align: super;
+    }
+    .product-card__category {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 20px;
+    }
+    .product-card__desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .product-card__line {
+      width: 40px;
+      height: 2px;
+      background: var(--color-accent);
+      border-radius: 2px;
+      opacity: 0.5;
+      transition: width 0.4s, opacity 0.4s;
+    }
+    .product-card:hover .product-card__line {
+      width: 60px;
+      opacity: 1;
+    }
+
+    /* ═══════════════════════════════════════════
+       FEATURES
+       ═══════════════════════════════════════════ */
+    .features {
+      background: var(--color-off-white);
+      padding: var(--section-pad) 0;
+    }
+    .features__header {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+    .features__label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 16px;
+    }
+    .features__title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      color: var(--color-near-black);
+      line-height: 1.1;
+    }
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+    .feature {
+      padding: clamp(28px, 2.5vw, 40px);
+      border-radius: var(--radius-card);
+      background: var(--color-white);
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: transform 0.4s, box-shadow 0.4s;
+    }
+    .feature:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+    }
+    .feature__icon {
+      width: 52px;
+      height: 52px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: rgba(0, 113, 227, 0.06);
+    }
+    /* CSS-only geometric icons */
+    .feature__icon--invisible::before {
+      content: '';
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--color-accent);
+      opacity: 0.7;
+    }
+    .feature__icon--neural::before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background: var(--color-accent);
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      opacity: 0.7;
+    }
+    .feature__icon--ambient::before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--color-accent);
+      transform: rotate(45deg);
+      opacity: 0.7;
+    }
+    .feature__icon--privacy::before {
+      content: '';
+      width: 18px;
+      height: 22px;
+      border: 2px solid var(--color-accent);
+      border-radius: 50% 50% 4px 4px;
+      opacity: 0.7;
+    }
+    .feature__title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--color-near-black);
+      margin-bottom: 10px;
+    }
+    .feature__desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(29, 30, 32, 0.55);
+      line-height: 1.7;
+    }
+
+    /* ═══════════════════════════════════════════
+       ABOUT / VISION
+       ═══════════════════════════════════════════ */
+    .vision {
+      background: var(--color-off-black);
+      padding: var(--section-pad) 0;
+      color: var(--color-white);
+      text-align: center;
+    }
+    .vision__card {
+      position: relative;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: clamp(40px, 5vw, 80px);
+      border-radius: var(--radius-card);
+      background: rgba(255,255,255,0.02);
+    }
+    /* Animated gradient border */
+    .vision__card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: calc(var(--radius-card) + 1px);
+      background: conic-gradient(
+        from var(--angle, 0deg),
+        var(--color-accent),
+        var(--color-green),
+        var(--color-accent),
+        transparent,
+        var(--color-accent)
+      );
+      z-index: -1;
+      animation: borderSpin 8s linear infinite;
+      opacity: 0.35;
+    }
+    .vision__card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-card);
+      background: var(--color-off-black);
+      z-index: -1;
+    }
+    @keyframes borderSpin {
+      to { --angle: 360deg; }
+    }
+    /* Fallback for browsers without @property */
+    @supports not (background: conic-gradient(from 0deg, red, red)) {
+      .vision__card::before {
+        background: linear-gradient(135deg, var(--color-accent), var(--color-green));
+        opacity: 0.3;
+      }
+    }
+    @property --angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    .vision__quote {
+      font-size: clamp(24px, 4vw, 44px);
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+    .vision__quote em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .vision__text {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════
+       CTA
+       ═══════════════════════════════════════════ */
+    .cta {
+      background: var(--color-accent);
+      padding: var(--section-pad) 0;
+      text-align: center;
+      color: var(--color-white);
+    }
+    .cta__title {
+      font-size: clamp(28px, 4.5vw, 52px);
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      margin-bottom: 36px;
+    }
+    .cta__title small {
+      display: block;
+      font-size: 0.5em;
+      font-weight: 300;
+      opacity: 0.8;
+      margin-top: 8px;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════ */
+    .footer {
+      background: var(--color-off-black);
+      padding: 60px 0 40px;
+      color: var(--color-white);
+    }
+    .footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer__logo {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+    .footer__links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .footer__links a {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.45);
+      transition: color 0.3s;
+    }
+    .footer__links a:hover { color: var(--color-white); }
+    .footer__socials {
+      display: flex;
+      gap: 16px;
+    }
+    .footer__social {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .footer__social:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+    .footer__bottom {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+    }
+    .footer__copy {
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .products__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .products__grid .product-card:last-child {
+        grid-column: 1 / -1;
+        max-width: 480px;
+        margin: 0 auto;
+      }
+      .features__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .nav__links { display: none; }
+      .nav__toggle { display: flex; }
+      .nav__links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(15, 16, 18, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 24px;
+        gap: 20px;
+      }
+      .nav__links.open a { color: var(--color-white); opacity: 0.8; }
+      .hero__title { letter-spacing: -0.5px; }
+      .products__grid {
+        grid-template-columns: 1fr;
+      }
+      .products__grid .product-card:last-child {
+        max-width: none;
+      }
+      .features__grid {
+        grid-template-columns: 1fr;
+      }
+      .footer__inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .footer__links { flex-wrap: wrap; gap: 20px; }
+    }
+    @media (max-width: 480px) {
+      .hero__deco { display: none; }
+      .hero__diamond { display: none; }
+      .vision__quote { font-size: clamp(20px, 6vw, 32px); }
+      .cta__title { font-size: clamp(22px, 7vw, 36px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ NAVIGATION ═══════════ -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">AUREN</a>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#products">Products</a></li>
+        <li><a href="#features">Neural</a></li>
+        <li><a href="#vision">Programs</a></li>
+        <li><a href="#cta">Updates</a></li>
+      </ul>
+      <button class="nav__toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="hero" id="hero">
+    <div class="hero__deco"></div>
+    <div class="hero__diamond"></div>
+    <div class="hero__lines"></div>
+    <div class="hero__content">
+      <p class="hero__label reveal">AUREN TECHNOLOGIES</p>
+      <h1 class="hero__title reveal">
+        Beyond<br><span>Humanware</span>
+      </h1>
+      <p class="hero__subtitle reveal">Pro-Human, AI-Driven Invisible Computing</p>
+      <a href="#products" class="btn btn--primary reveal">Discover the Future &rarr;</a>
+    </div>
+    <div class="hero__scroll"><span>Scroll</span></div>
+  </section>
+
+  <!-- ═══════════ PRODUCTS ═══════════ -->
+  <section class="products" id="products">
+    <div class="container">
+      <div class="products__header reveal">
+        <p class="products__label">Product Line</p>
+        <h2 class="products__title">Engineered for the<br>Next Human Experience</h2>
+      </div>
+      <div class="products__grid">
+        <div class="product-card reveal">
+          <div class="product-card__number">01</div>
+          <h3 class="product-card__name">A<sup>1</sup> Sense</h3>
+          <p class="product-card__category">Environmental Awareness Wearable</p>
+          <p class="product-card__desc">Contextual perception beyond the five senses. Understands your environment before you do — air quality, electromagnetic fields, spatial acoustics, all invisible data translated into intuition.</p>
+          <div class="product-card__line"></div>
+        </div>
+        <div class="product-card reveal">
+          <div class="product-card__number">02</div>
+          <h3 class="product-card__name">B<sup>1</sup> Eye</h3>
+          <p class="product-card__category">Visual Augmentation Device</p>
+          <p class="product-card__desc">Seamless visual intelligence layered onto reality. Real-time object identification, thermal mapping, and AR information overlays — all processed on-device in under 4ms.</p>
+          <div class="product-card__line"></div>
+        </div>
+        <div class="product-card reveal">
+          <div class="product-card__number">03</div>
+          <h3 class="product-card__name">A<sup>1</sup> Neuro</h3>
+          <p class="product-card__category">Neural Interface</p>
+          <p class="product-card__desc">Non-invasive neural communication. Thought-to-action at the speed of intention. The first consumer-grade brain-computer interface designed for all-day comfort and absolute privacy.</p>
+          <div class="product-card__line"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FEATURES ═══════════ -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features__header reveal">
+        <p class="features__label">Core Technology</p>
+        <h2 class="features__title">The Future is Unseen</h2>
+      </div>
+      <div class="features__grid">
+        <div class="feature reveal">
+          <div class="feature__icon feature__icon--invisible"></div>
+          <h3 class="feature__title">Invisible Computing</h3>
+          <p class="feature__desc">Technology so integrated it disappears. No screens, no friction — just seamless augmentation of human capability.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature__icon feature__icon--neural"></div>
+          <h3 class="feature__title">Neural Sync</h3>
+          <p class="feature__desc">Bi-directional neural communication with sub-millisecond latency. Your thoughts become commands; data becomes intuition.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature__icon feature__icon--ambient"></div>
+          <h3 class="feature__title">Ambient Intelligence</h3>
+          <p class="feature__desc">Context-aware AI that learns, adapts, and anticipates. Not a chatbot — an environmental intelligence that flows with you.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature__icon feature__icon--privacy"></div>
+          <h3 class="feature__title">Privacy First</h3>
+          <p class="feature__desc">All neural data processed on-device. Zero cloud dependency for biometric information. Your mind remains yours — always.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ VISION ═══════════ -->
+  <section class="vision" id="vision">
+    <div class="container">
+      <div class="vision__card reveal">
+        <p class="products__label" style="margin-bottom:24px;">Our Vision</p>
+        <blockquote class="vision__quote">
+          We believe the next leap in human evolution isn't biological — it's <em>technological</em>. AUREN exists to dissolve the boundary between human cognition and artificial intelligence, making the invisible visible and the impossible intuitive.
+        </blockquote>
+        <p class="vision__text">Founded in 2024 by a collective of neuroscientists, hardware engineers, and human-centered designers. Backed by research from MIT, Stanford, and the Beijing Institute of Neuroscience.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ CTA ═══════════ -->
+  <section class="cta" id="cta">
+    <div class="container">
+      <h2 class="cta__title reveal">
+        Ready to超越人类极限?
+        <small>The next chapter of human capability starts here.</small>
+      </h2>
+      <a href="#" class="btn btn--white reveal">Join the Waitlist &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__logo">AUREN</div>
+        <ul class="footer__links">
+          <li><a href="#products">Products</a></li>
+          <li><a href="#vision">Programs</a></li>
+          <li><a href="#cta">Updates</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="footer__socials">
+          <a href="#" class="footer__social" aria-label="X/Twitter">𝕏</a>
+          <a href="#" class="footer__social" aria-label="LinkedIn">in</a>
+          <a href="#" class="footer__social" aria-label="GitHub">⌘</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2026 AUREN Technologies. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════ JAVASCRIPT ═══════════ -->
+  <script>
+    /* ── Nav scroll state ── */
+    const nav = document.getElementById('nav');
+    const onScroll = () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ── Mobile nav toggle ── */
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => links.classList.toggle('open'));
+
+    /* ── Close mobile nav on link click ── */
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => links.classList.remove('open'));
+    });
+
+    /* ── IntersectionObserver — reveal on scroll ── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          /* Stagger siblings */
+          const siblings = entry.target.parentElement.querySelectorAll('.reveal');
+          const idx = Array.from(siblings).indexOf(entry.target);
+          entry.target.style.transitionDelay = `${idx * 100}ms`;
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -60px 0px'
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* ── Smooth parallax hint on hero deco ── */
+    const deco = document.querySelector('.hero__deco');
+    if (deco && matchMedia('(pointer:fine)').matches) {
+      window.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 20;
+        const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        deco.style.transform = `translate(${x}px, ${y}px)`;
+      }, { passive: true });
+    }
+  </script>
+</body>
+</html>
