@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SynthWave — AI Music Production Studio</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05050a;--surface:#0c0c18;--surface2:#12122a;--surface3:#1a1a38;
+  --border:#252548;--text:#e8e8f8;--text2:#8888b0;--text3:#5555780;
+  --neon-pink:#ff2d78;--neon-cyan:#00f0ff;--neon-purple:#a855f7;
+  --neon-green:#00ff88;
+}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+/* Glow effects */
+@keyframes glow-pulse{0%,100%{opacity:0.4}50%{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes waveform{0%{height:8px}50%{height:32px}100%{height:8px}}
+@keyframes scan{0%{left:-100%}100%{left:200%}}
+@keyframes eq{0%,100%{height:4px}25%{height:20px}50%{height:10px}75%{height:28px}}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,10,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-size:1.3rem;font-weight:900;letter-spacing:-0.02em}
+.nav-logo span{background:linear-gradient(135deg,var(--neon-pink),var(--neon-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+.nav-links a:hover{color:var(--neon-cyan)}
+.nav-btn{padding:0.5rem 1.5rem;background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));color:#fff;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.3s}
+.nav-btn:hover{box-shadow:0 0 20px rgba(255,45,120,0.4);transform:translateY(-1px)}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 3rem;position:relative}
+.hero::before{content:'';position:absolute;top:20%;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(255,45,120,0.08) 0%,rgba(0,240,255,0.05) 40%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.01) 2px,rgba(255,255,255,0.01) 4px);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:0.5rem;padding:0.4rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:100px;font-size:0.8rem;color:var(--neon-cyan);margin-bottom:2rem;font-family:var(--font-mono)}
+.hero h1{font-size:4.5rem;font-weight:900;line-height:1;letter-spacing:-0.03em;margin-bottom:1.5rem}
+.hero h1 .gradient{background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple),var(--neon-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1 .outline{-webkit-text-stroke:2px var(--neon-cyan);-webkit-text-fill-color:transparent}
+.hero p{font-size:1.2rem;color:var(--text2);max-width:500px;margin:0 auto 2rem}
+.hero-btns{display:flex;gap:1rem;margin-bottom:3rem}
+.btn-neon{padding:0.8rem 2rem;background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.3s;box-shadow:0 0 30px rgba(255,45,120,0.3)}
+.btn-neon:hover{box-shadow:0 0 50px rgba(255,45,120,0.5);transform:translateY(-2px)}
+.btn-outline{padding:0.8rem 2rem;background:transparent;color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:1rem;font-weight:500;cursor:pointer;transition:all 0.3s}
+.btn-outline:hover{border-color:var(--neon-cyan);color:var(--neon-cyan);box-shadow:0 0 20px rgba(0,240,255,0.15)}
+
+/* Equalizer Animation */
+.eq-container{display:flex;align-items:flex-end;gap:3px;height:40px;margin-bottom:2rem}
+.eq-bar{width:4px;background:linear-gradient(to top,var(--neon-pink),var(--neon-cyan));border-radius:2px;animation:eq 1.2s ease-in-out infinite}
+.eq-bar:nth-child(1){animation-delay:0s}
+.eq-bar:nth-child(2){animation-delay:0.1s}
+.eq-bar:nth-child(3){animation-delay:0.2s}
+.eq-bar:nth-child(4){animation-delay:0.3s}
+.eq-bar:nth-child(5){animation-delay:0.4s}
+.eq-bar:nth-child(6){animation-delay:0.15s}
+.eq-bar:nth-child(7){animation-delay:0.25s}
+.eq-bar:nth-child(8){animation-delay:0.35s}
+.eq-bar:nth-child(9){animation-delay:0.05s}
+.eq-bar:nth-child(10){animation-delay:0.45s}
+.eq-bar:nth-child(11){animation-delay:0.12s}
+.eq-bar:nth-child(12){animation-delay:0.22s}
+.eq-bar:nth-child(13){animation-delay:0.32s}
+.eq-bar:nth-child(14){animation-delay:0.42s}
+.eq-bar:nth-child(15){animation-delay:0.08s}
+.eq-bar:nth-child(16){animation-delay:0.18s}
+
+/* DAW Preview */
+.daw-preview{max-width:1100px;margin:0 auto 5rem;padding:0 2rem}
+.daw-window{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 30px 100px rgba(0,0,0,0.6),0 0 60px rgba(255,45,120,0.05)}
+.daw-titlebar{display:flex;align-items:center;gap:0.5rem;padding:0.7rem 1rem;background:var(--surface2);border-bottom:1px solid var(--border)}
+.daw-dots{display:flex;gap:6px}
+.daw-dot{width:10px;height:10px;border-radius:50%}
+.daw-dot:nth-child(1){background:#ff5f57}.daw-dot:nth-child(2){background:#febc2e}.daw-dot:nth-child(3){background:#28c840}
+.daw-title{margin-left:1rem;font-size:0.75rem;color:var(--text3);font-family:var(--font-mono)}
+.daw-body{display:grid;grid-template-columns:200px 1fr 240px;min-height:380px}
+
+/* Track Panel */
+.track-panel{background:var(--surface2);border-right:1px solid var(--border);padding:0.8rem}
+.track-label{font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem;padding:0 0.3rem}
+.track{display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.5rem;border-radius:6px;margin-bottom:0.3rem;cursor:pointer;transition:all 0.2s}
+.track:hover{background:rgba(255,255,255,0.03)}
+.track.active{background:rgba(255,45,120,0.08);border:1px solid rgba(255,45,120,0.2)}
+.track-color{width:4px;height:24px;border-radius:2px}
+.track-name{font-size:0.75rem;font-weight:500;flex:1}
+.track-controls{display:flex;gap:0.3rem}
+.track-btn{width:20px;height:20px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.track-btn.active{background:var(--neon-pink);border-color:var(--neon-pink);color:#fff}
+
+/* Timeline */
+.timeline{padding:0.8rem;position:relative;overflow:hidden}
+.timeline-header{display:flex;align-items:center;gap:1rem;margin-bottom:0.8rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)}
+.time-ruler{display:flex;gap:2rem;font-size:0.6rem;color:var(--text3);font-family:var(--font-mono)}
+.transport{display:flex;align-items:center;gap:0.5rem;margin-left:auto}
+.transport-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.8rem;transition:all 0.2s}
+.transport-btn:hover{border-color:var(--neon-cyan);color:var(--neon-cyan)}
+.transport-btn.play{background:var(--neon-green);border-color:var(--neon-green);color:#000}
+.time-display{font-family:var(--font-mono);font-size:0.8rem;color:var(--neon-cyan);padding:0.3rem 0.6rem;background:var(--surface2);border:1px solid var(--border);border-radius:4px}
+.track-row{height:32px;margin-bottom:3px;position:relative;border-radius:4px;overflow:hidden}
+.track-row .clip{position:absolute;height:100%;border-radius:3px;top:0;display:flex;align-items:center;padding:0 0.5rem;font-size:0.6rem;font-weight:600;color:rgba(255,255,255,0.8)}
+.clip-1{left:5%;width:20%;background:linear-gradient(90deg,rgba(255,45,120,0.4),rgba(255,45,120,0.2))}
+.clip-2{left:30%;width:15%;background:linear-gradient(90deg,rgba(0,240,255,0.4),rgba(0,240,255,0.2))}
+.clip-3{left:5%;width:30%;background:linear-gradient(90deg,rgba(168,85,247,0.4),rgba(168,85,247,0.2))}
+.clip-4{left:25%;width:25%;background:linear-gradient(90deg,rgba(0,255,136,0.4),rgba(0,255,136,0.2))}
+.clip-5{left:55%;width:20%;background:linear-gradient(90deg,rgba(255,45,120,0.3),rgba(168,85,247,0.3))}
+.clip-6{left:10%;width:40%;background:linear-gradient(90deg,rgba(245,158,11,0.3),rgba(239,68,68,0.2))}
+.clip-7{left:60%;width:15%;background:linear-gradient(90deg,rgba(6,182,212,0.4),rgba(99,102,241,0.3))}
+.waveform-bg{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(255,255,255,0.03) 3px,rgba(255,255,255,0.03) 4px)}
+.playhead{position:absolute;top:0;left:25%;width:2px;height:100%;background:var(--neon-green);z-index:10;box-shadow:0 0 8px var(--neon-green)}
+
+/* Mixer Panel */
+.mixer-panel{background:var(--surface2);border-left:1px solid var(--border);padding:0.8rem}
+.mixer-label{font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.8rem}
+.mixer-channel{display:flex;flex-direction:column;align-items:center;gap:0.4rem;padding:0.5rem;background:rgba(0,0,0,0.2);border-radius:6px;margin-bottom:0.5rem}
+.mixer-name{font-size:0.6rem;color:var(--text3);writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:0.05em}
+.fader-track{width:6px;height:80px;background:var(--surface);border-radius:3px;position:relative}
+.fader-fill{position:absolute;bottom:0;width:100%;border-radius:3px}
+.fader-fill.f1{height:72%;background:linear-gradient(to top,var(--neon-pink),var(--neon-purple))}
+.fader-fill.f2{height:65%;background:linear-gradient(to top,var(--neon-cyan),var(--neon-purple))}
+.fader-fill.f3{height:80%;background:linear-gradient(to top,var(--neon-green),var(--neon-cyan))}
+.fader-fill.f4{height:58%;background:linear-gradient(to top,var(--neon-pink),var(--neon-cyan))}
+.fader-fill.f5{height:70%;background:linear-gradient(to top,#f59e0b,var(--neon-pink))}
+.fader-knob{width:16px;height:6px;background:var(--text);border-radius:2px;position:absolute;left:50%;transform:translateX(-50%)}
+.meter{display:flex;gap:2px;height:80px;align-items:flex-end}
+.meter-bar{width:3px;border-radius:1px}
+.meter-bar.m1{height:65%;background:var(--neon-green)}.meter-bar.m2{height:72%;background:var(--neon-green)}
+.mixer-btns{display:flex;gap:0.3rem}
+.mixer-btn{width:18px;height:18px;border-radius:3px;border:1px solid var(--border);background:transparent;font-size:0.5rem;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mixer-btn.mute{color:var(--neon-pink);border-color:rgba(255,45,120,0.3);background:rgba(255,45,120,0.1)}
+
+/* Features */
+.features{max-width:1100px;margin:0 auto 5rem;padding:0 2rem}
+.features-title{text-align:center;font-size:2.2rem;font-weight:900;margin-bottom:0.5rem;letter-spacing:-0.02em}
+.features-title span{background:linear-gradient(135deg,var(--neon-pink),var(--neon-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.features-sub{text-align:center;color:var(--text2);margin-bottom:3rem;font-size:1.05rem}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.feature{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:all 0.3s;position:relative;overflow:hidden}
+.feature::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--neon-pink),var(--neon-cyan));opacity:0;transition:opacity 0.3s}
+.feature:hover{border-color:rgba(255,45,120,0.3);transform:translateY(-4px)}
+.feature:hover::before{opacity:1}
+.feature-icon{font-size:1.5rem;margin-bottom:0.8rem}
+.feature h3{font-size:1rem;font-weight:700;margin-bottom:0.4rem}
+.feature p{font-size:0.85rem;color:var(--text2);line-height:1.5}
+
+/* Sound Packs */
+.packs{max-width:1100px;margin:0 auto 5rem;padding:0 2rem}
+.packs-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem}
+.packs-header h2{font-size:1.8rem;font-weight:900}
+.packs-header a{color:var(--neon-cyan);text-decoration:none;font-size:0.85rem}
+.packs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.pack{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all 0.3s;cursor:pointer}
+.pack:hover{border-color:var(--neon-pink);transform:translateY(-4px)}
+.pack-art{aspect-ratio:1;position:relative;overflow:hidden}
+.pack-art-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.pack-gradient-1{background:linear-gradient(135deg,#1a0a2e,#3d1a6e,#ff2d78)}
+.pack-gradient-2{background:linear-gradient(135deg,#0a1628,#0d3b66,#00f0ff)}
+.pack-gradient-3{background:linear-gradient(135deg,#1a0a0a,#6b1d1d,#ff6b35)}
+.pack-gradient-4{background:linear-gradient(135deg,#0a1a0a,#1a4a2a,#00ff88)}
+.pack-play{position:absolute;bottom:0.8rem;right:0.8rem;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:#fff;opacity:0;transition:all 0.3s}
+.pack:hover .pack-play{opacity:1}
+.pack-info{padding:0.8rem}
+.pack-info h4{font-size:0.85rem;font-weight:700;margin-bottom:0.2rem}
+.pack-info p{font-size:0.75rem;color:var(--text3)}
+.pack-meta{display:flex;gap:0.8rem;margin-top:0.4rem;font-size:0.7rem;color:var(--text3)}
+
+/* Pricing */
+.pricing{max-width:900px;margin:0 auto 5rem;padding:0 2rem;text-align:center}
+.pricing h2{font-size:2rem;font-weight:900;margin-bottom:0.5rem}
+.pricing>p{color:var(--text2);margin-bottom:2rem}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem;text-align:left;transition:all 0.3s;position:relative}
+.price-card.featured{border-color:var(--neon-pink);box-shadow:0 0 40px rgba(255,45,120,0.1)}
+.price-card.featured::before{content:'Popular';position:absolute;top:-10px;left:50%;transform:translateX(-50%);padding:0.2rem 0.8rem;background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));color:#fff;font-size:0.7rem;font-weight:600;border-radius:100px}
+.price-card h3{font-size:1rem;font-weight:700;margin-bottom:0.3rem;color:var(--text2)}
+.price-card .price{font-size:2.5rem;font-weight:900;margin-bottom:0.3rem}
+.price-card .price span{font-size:0.9rem;font-weight:400;color:var(--text3)}
+.price-card .desc{font-size:0.8rem;color:var(--text3);margin-bottom:1.5rem}
+.price-card ul{list-style:none;margin-bottom:1.5rem}
+.price-card li{font-size:0.85rem;color:var(--text2);padding:0.3rem 0;padding-left:1.5rem;position:relative}
+.price-card li::before{content:'✓';position:absolute;left:0;color:var(--neon-green);font-weight:700}
+.price-btn{width:100%;padding:0.6rem;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.price-btn.primary{background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));color:#fff;border:none}
+.price-btn.primary:hover{box-shadow:0 0 20px rgba(255,45,120,0.3)}
+.price-btn.outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.price-btn.outline:hover{border-color:var(--neon-cyan);color:var(--neon-cyan)}
+
+/* CTA */
+.cta{text-align:center;padding:4rem 2rem;margin-bottom:3rem;position:relative}
+.cta::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:300px;background:radial-gradient(circle,rgba(255,45,120,0.1) 0%,transparent 70%);pointer-events:none}
+.cta h2{font-size:2.2rem;font-weight:900;margin-bottom:0.5rem}
+.cta p{color:var(--text2);margin-bottom:1.5rem}
+
+/* Footer */
+.footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--text3);font-size:0.8rem}
+.footer a{color:var(--neon-cyan);text-decoration:none}
+
+@media(max-width:768px){
+  .hero h1{font-size:2.5rem}
+  .daw-body{grid-template-columns:1fr}
+  .track-panel,.mixer-panel{display:none}
+  .features-grid{grid-template-columns:1fr}
+  .packs-grid{grid-template-columns:repeat(2,1fr)}
+  .pricing-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo"><span>◆</span> SynthWave</div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#packs">Sound Packs</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#">Community</a></li>
+  </ul>
+  <button class="nav-btn">Open Studio</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">◆ v3.0 — AI-Powered Generation</div>
+  <h1>
+    <span class="gradient">Create music</span><br>
+    <span class="outline">beyond limits</span>
+  </h1>
+  <p>The browser-based DAW with AI co-pilot. Generate beats, melodies, and full arrangements from a text prompt.</p>
+  <div class="eq-container">
+    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+  </div>
+  <div class="hero-btns">
+    <button class="btn-neon">Launch Studio — Free</button>
+    <button class="btn-outline">Watch Demo</button>
+  </div>
+</section>
+
+<div class="daw-preview">
+  <div class="daw-window">
+    <div class="daw-titlebar">
+      <div class="daw-dots"><span class="daw-dot"></span><span class="daw-dot"></span><span class="daw-dot"></span></div>
+      <span class="daw-title">SynthWave Studio — untitled-project.swp</span>
+    </div>
+    <div class="daw-body">
+      <div class="track-panel">
+        <div class="track-label">Tracks</div>
+        <div class="track active">
+          <div class="track-color" style="background:var(--neon-pink)"></div>
+          <span class="track-name">Lead Synth</span>
+          <div class="track-controls"><button class="track-btn active">M</button><button class="track-btn">S</button></div>
+        </div>
+        <div class="track">
+          <div class="track-color" style="background:var(--neon-cyan)"></div>
+          <span class="track-name">Bass</span>
+          <div class="track-controls"><button class="track-btn">M</button><button class="track-btn">S</button></div>
+        </div>
+        <div class="track">
+          <div class="track-color" style="background:var(--neon-purple)"></div>
+          <span class="track-name">Drums</span>
+          <div class="track-controls"><button class="track-btn">M</button><button class="track-btn">S</button></div>
+        </div>
+        <div class="track">
+          <div class="track-color" style="background:var(--neon-green)"></div>
+          <span class="track-name">Pads</span>
+          <div class="track-controls"><button class="track-btn">M</button><button class="track-btn">S</button></div>
+        </div>
+        <div class="track">
+          <div class="track-color" style="background:#f59e0b"></div>
+          <span class="track-name">FX</span>
+          <div class="track-controls"><button class="track-btn">M</button><button class="track-btn">S</button></div>
+        </div>
+        <div class="track">
+          <div class="track-color" style="background:#ef4444"></div>
+          <span class="track-name">Vocals</span>
+          <div class="track-controls"><button class="track-btn">M</button><button class="track-btn">S</button></div>
+        </div>
+        <div class="track">
+          <div class="track-color" style="background:#3b82f6"></div>
+          <span class="track-name">Strings</span>
+          <div class="track-controls"><button class="track-btn">M</button><button class="track-btn">S</button></div>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-header">
+          <div class="time-ruler">
+            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span>
+          </div>
+          <div class="transport">
+            <button class="transport-btn">⏮</button>
+            <button class="transport-btn">⏹</button>
+            <button class="transport-btn play">▶</button>
+            <button class="transport-btn">⏺</button>
+            <span class="time-display">01:24:03</span>
+          </div>
+        </div>
+        <div class="track-row"><div class="waveform-bg"></div><div class="clip clip-1">Lead A</div><div class="clip clip-5">Lead B</div></div>
+        <div class="track-row"><div class="waveform-bg"></div><div class="clip clip-2">Bass</div></div>
+        <div class="track-row"><div class="waveform-bg"></div><div class="clip clip-3">Beat</div><div class="clip clip-7">Fill</div></div>
+        <div class="track-row"><div class="waveform-bg"></div><div class="clip clip-4">Pad</div></div>
+        <div class="track-row"><div class="waveform-bg"></div><div class="clip clip-6">Riser</div></div>
+        <div class="track-row"><div class="waveform-bg"></div><div class="clip clip-1">Verse</div><div class="clip clip-5">Chorus</div></div>
+        <div class="track-row"><div class="waveform-bg"></div><div class="clip clip-3">Stacc</div></div>
+        <div class="playhead"></div>
+      </div>
+      <div class="mixer-panel">
+        <div class="mixer-label">Mixer</div>
+        <div class="mixer-channel">
+          <div class="mixer-btns"><button class="mixer-btn mute">M</button><button class="mixer-btn">S</button></div>
+          <div class="fader-track"><div class="fader-fill f1"><div class="fader-knob" style="top:20%"></div></div></div>
+          <div class="meter"><div class="meter-bar m1"></div><div class="meter-bar m2"></div></div>
+          <span class="mixer-name">LEAD</span>
+        </div>
+        <div class="mixer-channel">
+          <div class="mixer-btns"><button class="mixer-btn">M</button><button class="mixer-btn">S</button></div>
+          <div class="fader-track"><div class="fader-fill f2"><div class="fader-knob" style="top:30%"></div></div></div>
+          <div class="meter"><div class="meter-bar m1"></div><div class="meter-bar m2"></div></div>
+          <span class="mixer-name">BASS</span>
+        </div>
+        <div class="mixer-channel">
+          <div class="mixer-btns"><button class="mixer-btn">M</button><button class="mixer-btn">S</button></div>
+          <div class="fader-track"><div class="fader-fill f3"><div class="fader-knob" style="top:15%"></div></div></div>
+          <div class="meter"><div class="meter-bar m1"></div><div class="meter-bar m2"></div></div>
+          <span class="mixer-name">DRUM</span>
+        </div>
+        <div class="mixer-channel">
+          <div class="mixer-btns"><button class="mixer-btn">M</button><button class="mixer-btn">S</button></div>
+          <div class="fader-track"><div class="fader-fill f4"><div class="fader-knob" style="top:35%"></div></div></div>
+          <div class="meter"><div class="meter-bar m1"></div><div class="meter-bar m2"></div></div>
+          <span class="mixer-name">PAD</span>
+        </div>
+        <div class="mixer-channel">
+          <div class="mixer-btns"><button class="mixer-btn">M</button><button class="mixer-btn">S</button></div>
+          <div class="fader-track"><div class="fader-fill f5"><div class="fader-knob" style="top:25%"></div></div></div>
+          <div class="meter"><div class="meter-bar m1"></div><div class="meter-bar m2"></div></div>
+          <span class="mixer-name">FX</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="features" id="features">
+  <h2 class="features-title">Built for the <span>future of music</span></h2>
+  <p class="features-sub">Professional tools powered by artificial intelligence</p>
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-icon">🤖</div>
+      <h3>AI Co-Pilot</h3>
+      <p>Describe your vision in text. AI generates chord progressions, melodies, and drum patterns instantly.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🎹</div>
+      <h3>2000+ Instruments</h3>
+      <p>From vintage synths to orchestral ensembles. All running in your browser with zero latency.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🎧</div>
+      <h3>Stem Separation</h3>
+      <p>Upload any track and instantly separate vocals, drums, bass, and other instruments.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">👥</div>
+      <h3>Real-time Collab</h3>
+      <p>Create with others in real-time. See cursors, chat, and produce together from anywhere.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔊</div>
+      <h3>Mastering Suite</h3>
+      <p>AI-powered mastering chain that analyzes your mix and applies professional-grade processing.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📡</div>
+      <h3>One-Click Release</h3>
+      <p>Distribute to Spotify, Apple Music, and 150+ platforms directly from the studio.</p>
+    </div>
+  </div>
+</section>
+
+<section class="packs" id="packs">
+  <div class="packs-header">
+    <h2>Featured Sound Packs</h2>
+    <a href="#">Browse all →</a>
+  </div>
+  <div class="packs-grid">
+    <div class="pack">
+      <div class="pack-art pack-gradient-1"><div class="pack-art-inner">🌌</div><div class="pack-play">▶</div></div>
+      <div class="pack-info">
+        <h4>Neon Dreams</h4>
+        <p>Retrowave & Synthwave</p>
+        <div class="pack-meta"><span>240 samples</span><span>24-bit WAV</span></div>
+      </div>
+    </div>
+    <div class="pack">
+      <div class="pack-art pack-gradient-2"><div class="pack-art-inner">🌊</div><div class="pack-play">▶</div></div>
+      <div class="pack-info">
+        <h4>Deep Ocean</h4>
+        <p>Ambient & Textures</p>
+        <div class="pack-meta"><span>180 samples</span><span>24-bit WAV</span></div>
+      </div>
+    </div>
+    <div class="pack">
+      <div class="pack-art pack-gradient-3"><div class="pack-art-inner">🔥</div><div class="pack-play">▶</div></div>
+      <div class="pack-info">
+        <h4>Fire Beats</h4>
+        <p>Hip-Hop & Trap</p>
+        <div class="pack-meta"><span>320 samples</span><span>24-bit WAV</span></div>
+      </div>
+    </div>
+    <div class="pack">
+      <div class="pack-art pack-gradient-4"><div class="pack-art-inner">🌿</div><div class="pack-play">▶</div></div>
+      <div class="pack-info">
+        <h4>Forest Glitch</h4>
+        <p>Organic & Experimental</p>
+        <div class="pack-meta"><span>150 samples</span><span>24-bit WAV</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <h2>Start creating today</h2>
+  <p>No credit card required. Upgrade when you're ready.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <h3>Free</h3>
+      <div class="price">$0<span>/mo</span></div>
+      <div class="desc">For exploring and learning</div>
+      <ul>
+        <li>8 tracks per project</li>
+        <li>500MB cloud storage</li>
+        <li>Basic instruments</li>
+        <li>MP3 export</li>
+      </ul>
+      <button class="price-btn outline">Get Started</button>
+    </div>
+    <div class="price-card featured">
+      <h3>Producer</h3>
+      <div class="price">$19<span>/mo</span></div>
+      <div class="desc">For serious creators</div>
+      <ul>
+        <li>Unlimited tracks</li>
+        <li>50GB cloud storage</li>
+        <li>AI Co-Pilot access</li>
+        <li>WAV/FLAC export</li>
+        <li>Stem separation</li>
+      </ul>
+      <button class="price-btn primary">Start Free Trial</button>
+    </div>
+    <div class="price-card">
+      <h3>Studio</h3>
+      <div class="price">$49<span>/mo</span></div>
+      <div class="desc">For professional studios</div>
+      <ul>
+        <li>Everything in Producer</li>
+        <li>Unlimited storage</li>
+        <li>Real-time collaboration</li>
+        <li>AI mastering suite</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="price-btn outline">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<div class="cta">
+  <h2>Your next hit starts here</h2>
+  <p>Join 200,000+ creators making music with SynthWave.</p>
+  <button class="btn-neon">Launch Studio — Free</button>
+</div>
+
+<footer class="footer">
+  <p>© 2026 SynthWave Audio Inc. | <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">API</a></p>
+</footer>
+
+</body>
+</html>

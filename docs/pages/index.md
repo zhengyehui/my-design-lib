@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 193 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 195 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1783,6 +1783,24 @@ const pages = [
     rating: 9.2,
     description: 'AI 可穿戴设备硬件创业公司落地页，Apple 级深浅交替六段式布局 + 品牌蓝强调色 + CSS conic-gradient 旋转边框动画 + 纯 CSS 几何图标 + 毛玻璃导航栏',
   },
+  {
+    id: 'invoice-platform',
+    title: 'BillFlow 智能发票平台',
+    category: 'app',
+    tags: ['仪表盘', '发票', 'SaaS', '暗色主题', '财务管理'],
+    colors: ['#0a0a12', '#6366f1', '#06b6d4'],
+    rating: 9.4,
+    description: '暗色 SaaS 发票管理仪表盘，侧边栏导航 + 统计卡片 + 发票状态表格 + 客户头像 + 毛玻璃产品预览 + 三栏定价',
+  },
+  {
+    id: 'synthwave-daw',
+    title: 'SynthWave AI 音乐制作工作室',
+    category: 'creative',
+    tags: ['音乐制作', 'DAW', 'AI', '暗色主题', '霓虹'],
+    colors: ['#05050a', '#ff2d78', '#00f0ff'],
+    rating: 9.5,
+    description: '赛博朋克风 AI 音乐制作工作室，CSS 等化器动画 + DAW 三栏界面预览（音轨+时间线+混音器）+ 音色包网格 + 霓虹渐变配色 + 三栏定价',
+  },
 ]
 
 const categories = [
@@ -1840,12 +1858,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 193 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 195 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="193 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="195 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1854,7 +1872,7 @@ content=\"My Design Lib 页面灵感画廊 — 193 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 193 个完整页面</span>
+      <span>📦 195 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
