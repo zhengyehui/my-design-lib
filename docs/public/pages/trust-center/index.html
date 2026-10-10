@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Trust Center — 安全与合规中心</title>
+<meta name="description" content="Aegis 信任中心：安全认证、合规文档、数据保护实践与系统状态的公开展示。安全透明，是我们对每一位客户的承诺。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Aegis Trust Center — 暗色安全科技风
+   基于 design tokens，页面专属变量以 tc- 前缀命名
+   ============================================================ */
+:root {
+  /* 页面专属色板 */
+  --tc-bg:            #0B1220;
+  --tc-bg-deep:       #070D18;
+  --tc-card:          #131B2B;
+  --tc-card-hover:    #182338;
+  --tc-line:          rgba(148, 163, 184, 0.14);
+  --tc-line-strong:   rgba(148, 163, 184, 0.28);
+  --tc-emerald:       #34D399;
+  --tc-emerald-dim:   rgba(52, 211, 153, 0.14);
+  --tc-emerald-glow:  rgba(52, 211, 153, 0.35);
+  --tc-amber:         #FBBF24;
+  --tc-amber-dim:     rgba(251, 191, 36, 0.14);
+  --tc-sky:           #38BDF8;
+  --tc-text:          #E6EDF6;
+  --tc-text-2:        #9FB0C4;
+  --tc-text-3:        #64748B;
+  --tc-mono:          var(--font-mono);
+  --tc-grid-line:     rgba(56, 189, 248, 0.055);
+  --tc-max:           1180px;
+
+  /* 覆盖令牌中的主色，让全局组件语言统一为「安全绿」 */
+  --color-primary:       #34D399;
+  --color-primary-light: #6EE7B7;
+  --color-primary-dark:  #10B981;
+  --color-success:       #34D399;
+  --color-warning:       #FBBF24;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--tc-bg);
+  color: var(--tc-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* 细网格背景纹理，铺满全页 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(var(--tc-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tc-grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 120% 90% at 50% 0%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 120% 90% at 50% 0%, #000 30%, transparent 100%);
+}
+
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--tc-max);
+  margin: 0 auto;
+  padding: 0 var(--space-8);
+  position: relative;
+  z-index: 1;
+}
+
+.mono {
+  font-family: var(--tc-mono);
+  letter-spacing: 0.04em;
+}
+
+/* 滚动入场 */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   顶部导航
+   ============================================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(11, 18, 32, 0.82);
+  border-bottom: 1px solid var(--tc-line);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  height: 68px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.brand-shield {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 10px var(--tc-emerald-glow));
+}
+.brand-name {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.brand-name span {
+  color: var(--tc-emerald);
+}
+.brand-tag {
+  font-family: var(--tc-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--tc-text-3);
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  margin-left: var(--space-2);
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.nav-links a {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--tc-text-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  transition: color var(--duration-fast) var(--ease-default),
+              background var(--duration-fast) var(--ease-default),
+              border-color var(--duration-fast) var(--ease-default);
+}
+.nav-links a:hover {
+  color: var(--tc-emerald);
+  background: var(--tc-emerald-dim);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  color: var(--tc-emerald);
+  background: var(--tc-emerald-dim);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-4);
+  white-space: nowrap;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tc-emerald);
+  box-shadow: 0 0 0 0 var(--tc-emerald-glow);
+  animation: pulse 2.2s infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5); }
+  70%  { box-shadow: 0 0 0 9px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero {
+  position: relative;
+  padding: var(--space-24) 0 var(--space-20);
+  overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -320px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 620px;
+  background: radial-gradient(ellipse at center,
+    rgba(52, 211, 153, 0.13) 0%,
+    rgba(56, 189, 248, 0.07) 42%,
+    transparent 72%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--tc-emerald);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  background: var(--tc-emerald-dim);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-5);
+  margin-bottom: var(--space-8);
+}
+.hero h1 {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  max-width: 18ch;
+  background: linear-gradient(120deg, #FFFFFF 20%, #B7C9DC 55%, var(--tc-emerald) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+  margin-top: var(--space-6);
+  font-size: var(--text-xl);
+  color: var(--tc-text-2);
+  max-width: 46ch;
+  line-height: var(--leading-relaxed);
+}
+.hero-sub strong {
+  color: var(--tc-text);
+  font-weight: var(--weight-semibold);
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  color: var(--tc-text-3);
+}
+.hero-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-full);
+  padding: 6px var(--space-4);
+}
+.hero-meta i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tc-emerald);
+  display: inline-block;
+}
+
+/* 关键指标卡 */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+  margin-top: var(--space-16);
+}
+.metric {
+  position: relative;
+  background: linear-gradient(160deg, var(--tc-card) 0%, rgba(19, 27, 43, 0.6) 100%);
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-6);
+  overflow: hidden;
+  transition: border-color var(--duration-normal) var(--ease-default),
+              transform var(--duration-normal) var(--ease-spring),
+              box-shadow var(--duration-normal) var(--ease-default);
+}
+.metric::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--tc-emerald), transparent);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-default);
+}
+.metric:hover {
+  border-color: rgba(52, 211, 153, 0.45);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -18px rgba(52, 211, 153, 0.35);
+}
+.metric:hover::after { opacity: 1; }
+.metric-value {
+  font-family: var(--tc-mono);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--tc-emerald);
+  letter-spacing: -0.01em;
+}
+.metric-label {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--tc-text);
+}
+.metric-desc {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--tc-text-3);
+  line-height: var(--leading-relaxed);
+}
+.metric-id {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-5);
+  font-family: var(--tc-mono);
+  font-size: 10px;
+  color: var(--tc-text-3);
+  opacity: 0.6;
+}
+
+/* ============================================================
+   区块通用
+   ============================================================ */
+.section {
+  padding: var(--space-20) 0;
+  position: relative;
+}
+.section-head {
+  max-width: 720px;
+  margin-bottom: var(--space-12);
+}
+.section-index {
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--tc-emerald);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.section-index::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--tc-emerald);
+}
+.section-title {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: var(--leading-tight);
+}
+.section-desc {
+  margin-top: var(--space-4);
+  color: var(--tc-text-2);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+}
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--tc-line-strong), transparent);
+}
+
+/* ============================================================
+   合规认证
+   ============================================================ */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+.cert-card {
+  background: var(--tc-card);
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: border-color var(--duration-normal) var(--ease-default),
+              background var(--duration-normal) var(--ease-default),
+              box-shadow var(--duration-normal) var(--ease-default);
+}
+.cert-card:hover {
+  border-color: rgba(52, 211, 153, 0.5);
+  background: var(--tc-card-hover);
+  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.18), 0 22px 44px -22px rgba(52, 211, 153, 0.3);
+}
+.cert-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.cert-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  background: var(--tc-emerald-dim);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.cert-badge svg { width: 24px; height: 24px; }
+.cert-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-emerald);
+  background: var(--tc-emerald-dim);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.cert-name {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+.cert-desc {
+  font-size: var(--text-sm);
+  color: var(--tc-text-2);
+  line-height: var(--leading-relaxed);
+  flex-grow: 1;
+}
+.cert-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-text-3);
+  border-top: 1px dashed var(--tc-line);
+  padding-top: var(--space-4);
+}
+.cert-foot b {
+  color: var(--tc-amber);
+  font-weight: var(--weight-medium);
+}
+
+/* ============================================================
+   安全实践
+   ============================================================ */
+.practice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+.practice {
+  position: relative;
+  background: linear-gradient(180deg, var(--tc-card) 0%, rgba(19, 27, 43, 0.45) 100%);
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  overflow: hidden;
+  transition: border-color var(--duration-normal) var(--ease-default),
+              transform var(--duration-normal) var(--ease-spring);
+}
+.practice:hover {
+  border-color: rgba(52, 211, 153, 0.45);
+  transform: translateY(-4px);
+}
+.practice:hover .practice-icon {
+  border-color: rgba(52, 211, 153, 0.55);
+  box-shadow: 0 0 24px rgba(52, 211, 153, 0.25);
+}
+.practice-no {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-6);
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  color: var(--tc-text-3);
+  opacity: 0.65;
+}
+.practice-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--tc-line-strong);
+  background: rgba(56, 189, 248, 0.07);
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--space-5);
+  transition: border-color var(--duration-normal) var(--ease-default),
+              box-shadow var(--duration-normal) var(--ease-default);
+}
+.practice-icon svg { width: 26px; height: 26px; }
+.practice h3 {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+}
+.practice p {
+  font-size: var(--text-sm);
+  color: var(--tc-text-2);
+  line-height: var(--leading-relaxed);
+}
+.practice-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+.tag {
+  font-family: var(--tc-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--tc-text-3);
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+}
+
+/* ============================================================
+   文档库
+   ============================================================ */
+.doc-list {
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: rgba(19, 27, 43, 0.55);
+}
+.doc-row {
+  display: grid;
+  grid-template-columns: 64px 1.6fr 1fr 0.8fr 0.8fr 130px;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--tc-line);
+  transition: background var(--duration-fast) var(--ease-default);
+}
+.doc-row:last-child { border-bottom: none; }
+.doc-row:hover { background: rgba(52, 211, 153, 0.05); }
+.doc-row:hover .doc-dl {
+  border-color: var(--tc-emerald);
+  color: var(--tc-emerald);
+  box-shadow: 0 0 18px rgba(52, 211, 153, 0.25);
+}
+.doc-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--tc-line-strong);
+  display: grid;
+  place-items: center;
+  font-family: var(--tc-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--tc-amber);
+  background: var(--tc-amber-dim);
+}
+.doc-name {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+}
+.doc-name small {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-normal);
+  color: var(--tc-text-3);
+}
+.doc-type {
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-sky);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.08);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  justify-self: start;
+}
+.doc-meta {
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-text-3);
+}
+.doc-meta b {
+  display: block;
+  color: var(--tc-text-2);
+  font-weight: var(--weight-medium);
+  margin-bottom: 2px;
+}
+.doc-dl {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  color: var(--tc-text-2);
+  border: 1px solid var(--tc-line-strong);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-5);
+  transition: all var(--duration-fast) var(--ease-default);
+}
+.doc-dl:hover {
+  background: var(--tc-emerald-dim);
+}
+
+/* ============================================================
+   子处理者表格
+   ============================================================ */
+.table-shell {
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: rgba(19, 27, 43, 0.55);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead th {
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--tc-text-3);
+  text-align: left;
+  padding: var(--space-5) var(--space-6);
+  background: rgba(56, 189, 248, 0.05);
+  border-bottom: 1px solid var(--tc-line);
+}
+tbody td {
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--tc-line);
+  font-size: var(--text-sm);
+  color: var(--tc-text-2);
+  vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr {
+  transition: background var(--duration-fast) var(--ease-default);
+}
+tbody tr:hover { background: rgba(52, 211, 153, 0.05); }
+.vendor {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-weight: var(--weight-semibold);
+  color: var(--tc-text);
+}
+.vendor-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--tc-line-strong);
+  display: grid;
+  place-items: center;
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tc-sky);
+  background: rgba(56, 189, 248, 0.08);
+}
+.region {
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-amber);
+  border: 1px solid rgba(251, 191, 36, 0.28);
+  background: var(--tc-amber-dim);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   系统状态
+   ============================================================ */
+.status-board {
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-lg);
+  background: rgba(19, 27, 43, 0.55);
+  overflow: hidden;
+}
+.status-row {
+  display: grid;
+  grid-template-columns: 190px 1fr 150px;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--tc-line);
+}
+.status-row:last-child { border-bottom: none; }
+.svc-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-weight: var(--weight-semibold);
+}
+.svc-name .dot { animation-duration: 2.6s; }
+.svc-name small {
+  display: block;
+  font-family: var(--tc-mono);
+  font-size: 10px;
+  color: var(--tc-text-3);
+  font-weight: var(--weight-normal);
+  margin-top: 2px;
+}
+/* 90 天 uptime 小方块条 */
+.uptime-bars {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 34px;
+}
+.uptime-bars i {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  border-radius: 1.5px;
+  background: var(--tc-emerald);
+  opacity: 0.82;
+  transition: opacity var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default);
+}
+.uptime-bars i:hover {
+  opacity: 1;
+  transform: scaleY(1.12);
+}
+.uptime-bars i.warn {
+  background: var(--tc-amber);
+  opacity: 0.95;
+}
+.uptime-legend {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--tc-mono);
+  font-size: 10px;
+  color: var(--tc-text-3);
+  margin-top: 6px;
+}
+.svc-status {
+  justify-self: end;
+  text-align: right;
+}
+.svc-status .ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-emerald);
+  background: var(--tc-emerald-dim);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+}
+.svc-status .pct {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--tc-mono);
+  font-size: var(--text-sm);
+  color: var(--tc-text-2);
+}
+.status-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  background: rgba(56, 189, 248, 0.05);
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  color: var(--tc-text-3);
+}
+.legend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.legend b {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.legend .g { background: var(--tc-emerald); }
+.legend .y { background: var(--tc-amber); }
+
+/* ============================================================
+   漏洞披露
+   ============================================================ */
+.disclosure {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.step {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: var(--space-5);
+  background: var(--tc-card);
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: border-color var(--duration-normal) var(--ease-default),
+              transform var(--duration-normal) var(--ease-spring);
+}
+.step:hover {
+  border-color: rgba(52, 211, 153, 0.45);
+  transform: translateX(6px);
+}
+.step-no {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  background: var(--tc-emerald-dim);
+  color: var(--tc-emerald);
+  font-family: var(--tc-mono);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+.step h4 {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+}
+.step p {
+  font-size: var(--text-sm);
+  color: var(--tc-text-2);
+  line-height: var(--leading-relaxed);
+}
+.step .sla {
+  display: inline-block;
+  margin-top: var(--space-3);
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-amber);
+}
+.contact-card {
+  background: linear-gradient(165deg, rgba(52, 211, 153, 0.1) 0%, rgba(19, 27, 43, 0.9) 60%);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  position: sticky;
+  top: 100px;
+}
+.contact-card h3 {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-4);
+}
+.contact-card p {
+  font-size: var(--text-sm);
+  color: var(--tc-text-2);
+  line-height: var(--leading-relaxed);
+}
+.mail-chip {
+  display: block;
+  margin: var(--space-6) 0;
+  font-family: var(--tc-mono);
+  font-size: var(--text-base);
+  color: var(--tc-emerald);
+  border: 1px dashed rgba(52, 211, 153, 0.5);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  text-align: center;
+  background: rgba(52, 211, 153, 0.07);
+  transition: all var(--duration-fast) var(--ease-default);
+}
+.mail-chip:hover {
+  background: var(--tc-emerald-dim);
+  box-shadow: 0 0 24px rgba(52, 211, 153, 0.25);
+}
+.safe-harbor {
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-text-3);
+  border-top: 1px solid var(--tc-line);
+  padding-top: var(--space-5);
+  line-height: var(--leading-relaxed);
+}
+
+/* ============================================================
+   FAQ 手风琴
+   ============================================================ */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+details.faq {
+  background: var(--tc-card);
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color var(--duration-normal) var(--ease-default);
+}
+details.faq[open] {
+  border-color: rgba(52, 211, 153, 0.45);
+}
+details.faq summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq summary:hover { color: var(--tc-emerald); }
+.faq-q-no {
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  color: var(--tc-text-3);
+  margin-right: var(--space-4);
+}
+.faq-chevron {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 1px solid var(--tc-line-strong);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  transition: all var(--duration-normal) var(--ease-default);
+}
+.faq-chevron::before,
+.faq-chevron::after {
+  content: "";
+  position: absolute;
+  background: var(--tc-text-2);
+  transition: all var(--duration-normal) var(--ease-default);
+}
+.faq-chevron::before { width: 12px; height: 2px; }
+.faq-chevron::after  { width: 2px; height: 12px; }
+details.faq[open] .faq-chevron {
+  border-color: rgba(52, 211, 153, 0.5);
+  background: var(--tc-emerald-dim);
+}
+details.faq[open] .faq-chevron::after { transform: rotate(90deg); opacity: 0; }
+details.faq[open] .faq-chevron::before { background: var(--tc-emerald); }
+.faq-body {
+  padding: 0 var(--space-6) var(--space-6) calc(var(--space-6) + 34px);
+  color: var(--tc-text-2);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+.faq-body .mono-note {
+  display: inline-block;
+  margin-top: var(--space-4);
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  color: var(--tc-sky);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  background: rgba(56, 189, 248, 0.07);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+}
+
+/* ============================================================
+   CTA
+   ============================================================ */
+.cta {
+  position: relative;
+  border: 1px solid rgba(52, 211, 153, 0.32);
+  border-radius: var(--radius-xl);
+  padding: var(--space-16) var(--space-10);
+  text-align: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 130% at 50% -30%, rgba(52, 211, 153, 0.16) 0%, transparent 62%),
+    linear-gradient(180deg, var(--tc-card) 0%, rgba(19, 27, 43, 0.7) 100%);
+}
+.cta h2 {
+  font-family: 'Space Grotesk', var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+}
+.cta p {
+  margin: var(--space-5) auto 0;
+  max-width: 52ch;
+  color: var(--tc-text-2);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+}
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-10);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-full);
+  padding: var(--space-4) var(--space-8);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-spring);
+}
+.btn-primary {
+  background: var(--tc-emerald);
+  color: #05221A;
+  box-shadow: 0 12px 30px -12px var(--tc-emerald-glow);
+}
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 44px -12px rgba(52, 211, 153, 0.55);
+}
+.btn-ghost {
+  border-color: var(--tc-line-strong);
+  color: var(--tc-text);
+  background: rgba(148, 163, 184, 0.06);
+}
+.btn-ghost:hover {
+  border-color: var(--tc-emerald);
+  color: var(--tc-emerald);
+  background: var(--tc-emerald-dim);
+  transform: translateY(-3px);
+}
+.cta-note {
+  margin-top: var(--space-8);
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  color: var(--tc-text-3);
+}
+
+/* ============================================================
+   页脚
+   ============================================================ */
+.footer {
+  border-top: 1px solid var(--tc-line);
+  background: var(--tc-bg-deep);
+  padding: var(--space-16) 0 var(--space-10);
+  margin-top: var(--space-20);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: var(--space-10);
+}
+.footer h4 {
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--tc-text-3);
+  margin-bottom: var(--space-5);
+}
+.footer p {
+  font-size: var(--text-sm);
+  color: var(--tc-text-2);
+  line-height: var(--leading-relaxed);
+}
+.pgp-block {
+  margin-top: var(--space-5);
+  font-family: var(--tc-mono);
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--tc-text-3);
+  border: 1px solid var(--tc-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  background: rgba(56, 189, 248, 0.045);
+  word-break: break-all;
+}
+.pgp-block b {
+  color: var(--tc-emerald);
+  font-weight: var(--weight-medium);
+}
+.footer-links li { margin-bottom: var(--space-3); }
+.footer-links a {
+  font-size: var(--text-sm);
+  color: var(--tc-text-2);
+  transition: color var(--duration-fast) var(--ease-default);
+}
+.footer-links a:hover { color: var(--tc-emerald); }
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-12);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--tc-line);
+  font-family: var(--tc-mono);
+  font-size: var(--text-xs);
+  color: var(--tc-text-3);
+}
+.footer-bottom .ok-mark {
+  color: var(--tc-emerald);
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 1024px) {
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .cert-grid { grid-template-columns: repeat(2, 1fr); }
+  .practice-grid { grid-template-columns: repeat(2, 1fr); }
+  .disclosure { grid-template-columns: 1fr; }
+  .contact-card { position: static; }
+  .doc-row {
+    grid-template-columns: 56px 1.5fr 1fr 120px;
+  }
+  .doc-row .doc-meta:nth-of-type(1) { display: none; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links a { padding: var(--space-2) var(--space-3); }
+}
+
+@media (max-width: 768px) {
+  .wrap { padding: 0 var(--space-5); }
+  .nav-inner { height: auto; padding: var(--space-4) 0; flex-wrap: wrap; }
+  .nav-links { order: 3; width: 100%; overflow-x: auto; padding-bottom: var(--space-2); }
+  .status-pill { font-size: 10px; padding: 6px 10px; }
+  .hero { padding: var(--space-16) 0 var(--space-12); }
+  .hero h1 { font-size: 2.35rem; }
+  .hero-sub { font-size: var(--text-lg); }
+  .metrics { grid-template-columns: 1fr; gap: var(--space-4); }
+  .cert-grid, .practice-grid { grid-template-columns: 1fr; }
+  .doc-row {
+    grid-template-columns: 1fr 1fr;
+    row-gap: var(--space-3);
+    padding: var(--space-5);
+  }
+  .doc-icon { display: none; }
+  .doc-name { grid-column: 1 / -1; }
+  .doc-dl { grid-column: 1 / -1; justify-self: stretch; justify-content: center; }
+  table { display: block; overflow-x: auto; white-space: nowrap; }
+  .status-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    padding: var(--space-5);
+  }
+  .svc-status { justify-self: start; text-align: left; }
+  .step { grid-template-columns: 44px 1fr; gap: var(--space-4); }
+  .step-no { width: 44px; height: 44px; font-size: var(--text-base); }
+  .cta { padding: var(--space-12) var(--space-6); }
+  .footer-grid { grid-template-columns: 1fr; }
+  .faq-body { padding-left: var(--space-6); }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     顶部导航
+     ============================================================ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="Aegis Trust Center 首页">
+      <svg class="brand-shield" viewBox="0 0 40 44" fill="none" aria-hidden="true">
+        <path d="M20 2 L36 8 V22 C36 32 29 39.5 20 42 C11 39.5 4 32 4 22 V8 Z"
+              stroke="#34D399" stroke-width="2.2" fill="rgba(52,211,153,0.12)"/>
+        <path d="M13 22 L18 27 L28 16" stroke="#34D399" stroke-width="2.6"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <span class="brand-name">Aegis<span>.</span></span>
+      <span class="brand-tag mono">Trust Center</span>
+    </a>
+    <nav class="nav-links" aria-label="页面内导航">
+      <a href="#certifications">认证</a>
+      <a href="#practices">实践</a>
+      <a href="#documents">文档</a>
+      <a href="#status">状态</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="status-pill" role="status">
+      <span class="dot" aria-hidden="true"></span>
+      <span>所有系统正常</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     Hero
+     ============================================================ -->
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow reveal">
+      <span>SECURITY · COMPLIANCE · TRANSPARENCY</span>
+    </div>
+    <h1 class="reveal">Trust is built in the open.</h1>
+    <p class="hero-sub reveal">
+      <strong>安全透明，是我们对每一位客户的承诺。</strong>
+      Aegis 将安全认证、数据处理实践与实时系统状态全部公开可见——
+      你无需提交工单，就能验证我们如何保护你的数据。
+    </p>
+    <div class="hero-meta reveal">
+      <span class="mono"><i></i>持续监控中 · 24/7/365</span>
+      <span class="mono"><i></i>最近一次独立审计：2026 年 3 月</span>
+      <span class="mono"><i></i>文档更新频率：每季度</span>
+    </div>
+
+    <div class="metrics">
+      <div class="metric reveal">
+        <div class="metric-id mono">M-01</div>
+        <div class="metric-value">99.99%</div>
+        <div class="metric-label">SLA 可用性承诺</div>
+        <div class="metric-desc">过去 12 个月实际达成 99.995%，合同层面提供服务积分赔付保障。</div>
+      </div>
+      <div class="metric reveal">
+        <div class="metric-id mono">M-02</div>
+        <div class="metric-value">&lt; 15 min</div>
+        <div class="metric-label">安全事件响应</div>
+        <div class="metric-desc">安全值班团队全天候轮转，P0 级事件平均确认时间 6 分 42 秒。</div>
+      </div>
+      <div class="metric reveal">
+        <div class="metric-id mono">M-03</div>
+        <div class="metric-value">256-bit</div>
+        <div class="metric-label">AES 静态数据加密</div>
+        <div class="metric-desc">传输层强制 TLS 1.3，密钥由 HSM 管理并自动轮换（90 天周期）。</div>
+      </div>
+      <div class="metric reveal">
+        <div class="metric-id mono">M-04</div>
+        <div class="metric-value">0 起</div>
+        <div class="metric-label">重大数据泄露记录</div>
+        <div class="metric-desc">自 2018 年公司成立以来保持零重大安全事故，全部事件公开披露。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============================================================
+     合规认证
+     ============================================================ -->
+<section class="section" id="certifications">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-index mono">01 / Certifications</div>
+      <h2 class="section-title">合规认证与审计报告</h2>
+      <p class="section-desc">
+        我们每年接受独立第三方审计，覆盖安全、可用性、保密性与隐私四大信任服务准则。
+        认证报告可在签署保密协议后获取全文。
+      </p>
+    </div>
+
+    <div class="cert-grid">
+      <!-- SOC 2 -->
+      <article class="cert-card reveal">
+        <div class="cert-top">
+          <div class="cert-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="1.8">
+              <path d="M12 2 L20 5.5 V11 C20 16.5 16.6 20.6 12 22 C7.4 20.6 4 16.5 4 11 V5.5 Z" stroke-linejoin="round"/>
+              <path d="M8.5 12 L11 14.5 L15.5 9.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="cert-status">已认证 ✓</span>
+        </div>
+        <h3 class="cert-name">SOC 2 Type II</h3>
+        <p class="cert-desc">
+          由独立注册会计师事务所对安全、可用性、处理完整性、保密性与隐私五项信任服务准则进行
+          持续性（12 个月观察期）审计，无例外事项。
+        </p>
+        <div class="cert-foot">
+          <span>有效期至 <b>2027-03-31</b></span>
+          <span>REPORT #SOC2-2603</span>
+        </div>
+      </article>
+
+      <!-- ISO 27001 -->
+      <article class="cert-card reveal">
+        <div class="cert-top">
+          <div class="cert-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="1.8">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 3 C8 7 8 17 12 21 M12 3 C16 7 16 17 12 21 M3.5 9 H20.5 M3.5 15 H20.5"/>
+            </svg>
+          </div>
+          <span class="cert-status">已认证 ✓</span>
+        </div>
+        <h3 class="cert-name">ISO/IEC 27001:2022</h3>
+        <p class="cert-desc">
+          信息安全管理体系（ISMS）通过国际标准化组织认证，覆盖 114 项控制措施，
+          含风险管理、访问控制、供应商安全与业务连续性。
+        </p>
+        <div class="cert-foot">
+          <span>有效期至 <b>2028-06-30</b></span>
+          <span>CERT #ISMS-8841-A</span>
+        </div>
+      </article>
+
+      <!-- GDPR -->
+      <article class="cert-card reveal">
+        <div class="cert-top">
+          <div class="cert-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="1.8">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M15 9.2 A4.2 4.2 0 1 0 15 14.8 M9 12 H15 M13.2 10.2 L15 12 L13.2 13.8"/>
+            </svg>
+          </div>
+          <span class="cert-status">已合规 ✓</span>
+        </div>
+        <h3 class="cert-name">GDPR</h3>
+        <p class="cert-desc">
+          欧盟《通用数据保护条例》全面合规：配备数据保护官（DPO）、支持数据主体权利请求、
+          提供标准合同条款（SCCs）与欧盟境内数据驻留选项。
+        </p>
+        <div class="cert-foot">
+          <span>持续合规 · <b>季度评估</b></span>
+          <span>DPO: privacy@aegis.example</span>
+        </div>
+      </article>
+
+      <!-- HIPAA -->
+      <article class="cert-card reveal">
+        <div class="cert-top">
+          <div class="cert-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="1.8">
+              <rect x="4" y="6" width="16" height="13" rx="2.5"/>
+              <path d="M12 9.5 V15.5 M9 12.5 H15" stroke-linecap="round"/>
+              <path d="M9 6 V4.5 A1.5 1.5 0 0 1 10.5 3 H13.5 A1.5 1.5 0 0 1 15 4.5 V6"/>
+            </svg>
+          </div>
+          <span class="cert-status">已认证 ✓</span>
+        </div>
+        <h3 class="cert-name">HIPAA</h3>
+        <p class="cert-desc">
+          面向医疗健康客户提供符合 HIPAA 安全规则与隐私规则的服务，
+          支持签署业务伙伴协议（BAA），受保护健康信息（PHI）全程加密隔离存储。
+        </p>
+        <div class="cert-foot">
+          <span>年度风险评估 <b>2026-01</b></span>
+          <span>BAA TEMPLATE v4.2</span>
+        </div>
+      </article>
+
+      <!-- PCI DSS -->
+      <article class="cert-card reveal">
+        <div class="cert-top">
+          <div class="cert-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="1.8">
+              <rect x="3" y="6" width="18" height="12" rx="2"/>
+              <path d="M3 10 H21" stroke-linecap="round"/>
+              <path d="M6.5 14.5 H10" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="cert-status">已认证 ✓</span>
+        </div>
+        <h3 class="cert-name">PCI DSS Level 1</h3>
+        <p class="cert-desc">
+          支付卡行业数据安全标准最高等级认证，由合格安全评估机构（QSA）年度现场评估。
+          信用卡数据由 Stripe 代收，Aegis 服务器不存储任何持卡人数据。
+        </p>
+        <div class="cert-foot">
+          <span>有效期至 <b>2027-08-31</b></span>
+          <span>AOC #PCI-L1-2210</span>
+        </div>
+      </article>
+
+      <!-- CCPA -->
+      <article class="cert-card reveal">
+        <div class="cert-top">
+          <div class="cert-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="1.8">
+              <path d="M7 4 H17 A2 2 0 0 1 19 6 V20 L12 16.5 L5 20 V6 A2 2 0 0 1 7 4 Z" stroke-linejoin="round"/>
+              <path d="M9 9.5 H15 M9 12.5 H13" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="cert-status">已合规 ✓</span>
+        </div>
+        <h3 class="cert-name">CCPA / CPRA</h3>
+        <p class="cert-desc">
+          加州消费者隐私法案合规：支持访问、删除、更正与退出出售个人信息的权利请求，
+          全站不出售任何用户数据，30 天内完成权利请求处理。
+        </p>
+        <div class="cert-foot">
+          <span>年度自查 <b>2026-02</b></span>
+          <span>REQUEST SLA: 30 天</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============================================================
+     安全实践
+     ============================================================ -->
+<section class="section" id="practices">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-index mono">02 / Security Practices</div>
+      <h2 class="section-title">纵深防御：六层安全实践</h2>
+      <p class="section-desc">
+        安全不是单点功能，而是贯穿代码、基础设施、流程与人的完整体系。
+        以下是我们日常运行中的核心防护机制。
+      </p>
+    </div>
+
+    <div class="practice-grid">
+      <article class="practice reveal">
+        <div class="practice-no mono">P-01</div>
+        <div class="practice-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="1.7">
+            <rect x="4" y="10" width="16" height="10" rx="2"/>
+            <path d="M8 10 V7 A4 4 0 0 1 16 7 V10" stroke-linecap="round"/>
+            <circle cx="12" cy="15" r="1.4" fill="#38BDF8" stroke="none"/>
+          </svg>
+        </div>
+        <h3>静态与传输加密</h3>
+        <p>
+          全部数据使用 AES-256-GCM 静态加密，密钥托管于云 HSM 并按 90 天周期自动轮换。
+          传输层强制 TLS 1.3，禁用弱密码套件，HSTS 预加载列表常驻。
+        </p>
+        <div class="practice-tags">
+          <span class="tag">AES-256-GCM</span>
+          <span class="tag">TLS 1.3</span>
+          <span class="tag">HSM KMS</span>
+        </div>
+      </article>
+
+      <article class="practice reveal">
+        <div class="practice-no mono">P-02</div>
+        <div class="practice-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="1.7">
+            <circle cx="9" cy="8" r="3.2"/>
+            <path d="M3.5 20 C3.5 16.4 6 14 9 14 C12 14 14.5 16.4 14.5 20" stroke-linecap="round"/>
+            <path d="M16 7 H21 M18.5 4.5 V9.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>基于角色的访问控制</h3>
+        <p>
+          RBAC + 最小权限原则，员工访问生产数据需申请临时提权并记录审计日志。
+          全员强制 SSO + 硬件安全密钥（FIDO2），权限每季度复核一次。
+        </p>
+        <div class="practice-tags">
+          <span class="tag">RBAC</span>
+          <span class="tag">FIDO2 MFA</span>
+          <span class="tag">季度复核</span>
+        </div>
+      </article>
+
+      <article class="practice reveal">
+        <div class="practice-no mono">P-03</div>
+        <div class="practice-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="1.7">
+            <circle cx="11" cy="11" r="6.5"/>
+            <path d="M15.8 15.8 L20.5 20.5" stroke-linecap="round"/>
+            <path d="M8.5 11 L10.5 13 L13.8 9.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>独立渗透测试</h3>
+        <p>
+          每季度聘请 CREST 认证的第三方安全公司执行黑盒 + 白盒渗透测试，
+          覆盖 Web、API、移动端与云基础设施。高危漏洞 48 小时内修复。
+        </p>
+        <div class="practice-tags">
+          <span class="tag">每季度</span>
+          <span class="tag">CREST 认证</span>
+          <span class="tag">48h 修复</span>
+        </div>
+      </article>
+
+      <article class="practice reveal">
+        <div class="practice-no mono">P-04</div>
+        <div class="practice-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="1.7">
+            <path d="M12 3 L19 6 V11 C19 15.6 16 19 12 21 C8 19 5 15.6 5 11 V6 Z" stroke-linejoin="round"/>
+            <path d="M12 8 V13" stroke-linecap="round"/>
+            <circle cx="12" cy="16" r="1.1" fill="#38BDF8" stroke="none"/>
+          </svg>
+        </div>
+        <h3>漏洞赏金计划</h3>
+        <p>
+          与 HackerOne 合作运营私有漏洞赏金计划，单个漏洞最高奖励 $25,000。
+          平均首次响应时间 4 小时，年度累计发放赏金超过 $180,000。
+        </p>
+        <div class="practice-tags">
+          <span class="tag">HackerOne</span>
+          <span class="tag">最高 $25K</span>
+          <span class="tag">4h 响应</span>
+        </div>
+      </article>
+
+      <article class="practice reveal">
+        <div class="practice-no mono">P-05</div>
+        <div class="practice-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="1.7">
+            <path d="M3 9 L12 4.5 L21 9 L12 13.5 Z" stroke-linejoin="round"/>
+            <path d="M6.5 11 V16 C6.5 17.8 9 19.5 12 19.5 C15 19.5 17.5 17.8 17.5 16 V11" stroke-linecap="round"/>
+            <path d="M21 9 V14" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>员工安全培训</h3>
+        <p>
+          入职首周完成安全与隐私基础培训，此后每季度进行钓鱼演练与专题培训。
+          过去 12 个月钓鱼演练点击率从 6.8% 降至 1.2%。
+        </p>
+        <div class="practice-tags">
+          <span class="tag">入职培训</span>
+          <span class="tag">季度钓鱼演练</span>
+          <span class="tag">点击率 1.2%</span>
+        </div>
+      </article>
+
+      <article class="practice reveal">
+        <div class="practice-no mono">P-06</div>
+        <div class="practice-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="1.7">
+            <ellipse cx="12" cy="6" rx="7.5" ry="3"/>
+            <path d="M4.5 6 V18 C4.5 19.7 7.9 21 12 21 C16.1 21 19.5 19.7 19.5 18 V6"/>
+            <path d="M4.5 12 C4.5 13.7 7.9 15 12 15 C16.1 15 19.5 13.7 19.5 12"/>
+          </svg>
+        </div>
+        <h3>数据驻留与备份</h3>
+        <p>
+          支持美国、欧盟、新加坡三大区域数据驻留，数据不出选定区域。
+          备份采用 3-2-1 策略：每 6 小时增量、每日全量，跨区复制，RPO &lt; 1 小时。
+        </p>
+        <div class="practice-tags">
+          <span class="tag">3-2-1 备份</span>
+          <span class="tag">RPO &lt; 1h</span>
+          <span class="tag">RTO &lt; 4h</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============================================================
+     文档库
+     ============================================================ -->
+<section class="section" id="documents">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-index mono">03 / Document Library</div>
+      <h2 class="section-title">合规文档库</h2>
+      <p class="section-desc">
+        以下文档免费提供下载；标记为「NDA」的报告需签署保密协议后获取。
+        所有文档均由安全团队维护并标注版本号，便于审计留痕。
+      </p>
+    </div>
+
+    <div class="doc-list reveal">
+      <div class="doc-row">
+        <div class="doc-icon mono">PDF</div>
+        <div class="doc-name">
+          安全白皮书 · Security Whitepaper
+          <small>架构总览、加密方案、身份管理、事件响应流程全文说明</small>
+        </div>
+        <span class="doc-type">白皮书</span>
+        <div class="doc-meta"><b>v6.3</b>2026-03-12</div>
+        <div class="doc-meta"><b>42 页</b>3.8 MB</div>
+        <a class="doc-dl mono" href="#">↓ 下载</a>
+      </div>
+
+      <div class="doc-row">
+        <div class="doc-icon mono">PDF</div>
+        <div class="doc-name">
+          数据处理协议 · Data Processing Addendum (DPA)
+          <small>GDPR 第 28 条要求的完整数据处理条款，含标准合同条款 SCCs</small>
+        </div>
+        <span class="doc-type">法律文件</span>
+        <div class="doc-meta"><b>v4.1</b>2026-02-28</div>
+        <div class="doc-meta"><b>18 页</b>1.2 MB</div>
+        <a class="doc-dl mono" href="#">↓ 下载</a>
+      </div>
+
+      <div class="doc-row">
+        <div class="doc-icon mono">PDF</div>
+        <div class="doc-name">
+          渗透测试摘要 · Penetration Test Summary
+          <small>2026 年 Q1 第三方渗透测试执行范围、方法论与修复结论</small>
+        </div>
+        <span class="doc-type">审计摘要</span>
+        <div class="doc-meta"><b>2026-Q1</b>2026-04-02</div>
+        <div class="doc-meta"><b>11 页</b>860 KB</div>
+        <a class="doc-dl mono" href="#">↓ 下载</a>
+      </div>
+
+      <div class="doc-row">
+        <div class="doc-icon mono">CSV</div>
+        <div class="doc-name">
+          子处理者清单 · Subprocessor Register
+          <small>全部第三方子处理者、数据用途与所在地区的实时清单</small>
+        </div>
+        <span class="doc-type">登记册</span>
+        <div class="doc-meta"><b>v2026.04</b>2026-04-08</div>
+        <div class="doc-meta"><b>23 行</b>46 KB</div>
+        <a class="doc-dl mono" href="#">↓ 下载</a>
+      </div>
+
+      <div class="doc-row">
+        <div class="doc-icon mono">PDF</div>
+        <div class="doc-name">
+          业务连续性计划 · Business Continuity Plan (BCP)
+          <small>灾难恢复策略、故障切换演练记录与 RTO / RPO 承诺明细</small>
+        </div>
+        <span class="doc-type">运营计划</span>
+        <div class="doc-meta"><b>v3.0</b>2026-01-20</div>
+        <div class="doc-meta"><b>27 页</b>2.1 MB</div>
+        <a class="doc-dl mono" href="#">↓ 下载</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============================================================
+     子处理者
+     ============================================================ -->
+<section class="section" id="subprocessors">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-index mono">04 / Subprocessors</div>
+      <h2 class="section-title">子处理者清单</h2>
+      <p class="section-desc">
+        我们仅与通过安全评估的基础设施与服务供应商合作。
+        新增或变更子处理者时，将提前 30 天通过邮件与本页面公告通知客户。
+      </p>
+    </div>
+
+    <div class="table-shell reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th>用途</th>
+            <th>地区</th>
+            <th>数据类型</th>
+            <th>认证</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="vendor"><span class="vendor-mark">AWS</span>Amazon Web Services</div></td>
+            <td>核心云基础设施、计算、对象存储与托管数据库</td>
+            <td><span class="region">us-east-1 · eu-central-1</span></td>
+            <td>客户业务数据、应用日志、备份副本</td>
+            <td class="mono">SOC 2 / ISO 27001</td>
+          </tr>
+          <tr>
+            <td><div class="vendor"><span class="vendor-mark">CF</span>Cloudflare</div></td>
+            <td>CDN 分发、DDoS 防护、边缘 WAF 与 DNS 解析</td>
+            <td><span class="region">全球边缘网络</span></td>
+            <td>IP 地址、请求元数据、缓存内容</td>
+            <td class="mono">SOC 2 / ISO 27001</td>
+          </tr>
+          <tr>
+            <td><div class="vendor"><span class="vendor-mark">ST</span>Stripe</div></td>
+            <td>订阅计费、支付处理与发票管理</td>
+            <td><span class="region">美国（PCI 区域）</span></td>
+            <td>账单联系人、支付令牌（不含卡号）</td>
+            <td class="mono">PCI DSS L1</td>
+          </tr>
+          <tr>
+            <td><div class="vendor"><span class="vendor-mark">DD</span>Datadog</div></td>
+            <td>可观测性平台：指标监控、APM 追踪与告警</td>
+            <td><span class="region">美国 · 德国</span></td>
+            <td>系统指标、匿名化应用日志、性能追踪</td>
+            <td class="mono">SOC 2 / ISO 27001</td>
+          </tr>
+          <tr>
+            <td><div class="vendor"><span class="vendor-mark">TW</span>Twilio</div></td>
+            <td>短信通知、双因素验证码与语音告警呼叫</td>
+            <td><span class="region">美国 · 爱尔兰</span></td>
+            <td>手机号码、消息正文、投递状态</td>
+            <td class="mono">SOC 2 / ISO 27001</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============================================================
+     系统状态
+     ============================================================ -->
+<section class="section" id="status">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-index mono">05 / System Status</div>
+      <h2 class="section-title">实时系统状态 · 过去 90 天</h2>
+      <p class="section-desc">
+        数据每 60 秒自动刷新一次。历史事件与维护窗口全部记录在公开状态页，
+        我们承诺在事件发生后 15 分钟内发布首次通报。
+      </p>
+    </div>
+
+    <div class="status-board reveal">
+      <!-- API -->
+      <div class="status-row">
+        <div class="svc-name">
+          <span class="dot"></span>
+          <div>Core API<small>api.aegis.example</small></div>
+        </div>
+        <div>
+          <div class="uptime-bars" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i class="warn"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="warn"></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="uptime-legend"><span>90 天前</span><span>今天</span></div>
+        </div>
+        <div class="svc-status">
+          <span class="ok"><span class="dot"></span>运行正常</span>
+          <span class="pct">99.992% uptime</span>
+        </div>
+      </div>
+
+      <!-- Web App -->
+      <div class="status-row">
+        <div class="svc-name">
+          <span class="dot"></span>
+          <div>Web Application<small>app.aegis.example</small></div>
+        </div>
+        <div>
+          <div class="uptime-bars" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i class="warn"></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="uptime-legend"><span>90 天前</span><span>今天</span></div>
+        </div>
+        <div class="svc-status">
+          <span class="ok"><span class="dot"></span>运行正常</span>
+          <span class="pct">99.997% uptime</span>
+        </div>
+      </div>
+
+      <!-- Database -->
+      <div class="status-row">
+        <div class="svc-name">
+          <span class="dot"></span>
+          <div>Primary Database<small>db-primary.cluster</small></div>
+        </div>
+        <div>
+          <div class="uptime-bars" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i class="warn"></i><i class="warn"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="uptime-legend"><span>90 天前</span><span>今天</span></div>
+        </div>
+        <div class="svc-status">
+          <span class="ok"><span class="dot"></span>运行正常</span>
+          <span class="pct">99.985% uptime</span>
+        </div>
+      </div>
+
+      <!-- CDN -->
+      <div class="status-row">
+        <div class="svc-name">
+          <span class="dot"></span>
+          <div>CDN &amp; Edge Network<small>edge.aegis.example</small></div>
+        </div>
+        <div>
+          <div class="uptime-bars" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="uptime-legend"><span>90 天前</span><span>今天</span></div>
+        </div>
+        <div class="svc-status">
+          <span class="ok"><span class="dot"></span>运行正常</span>
+          <span class="pct">100.000% uptime</span>
+        </div>
+      </div>
+
+      <!-- Webhooks -->
+      <div class="status-row">
+        <div class="svc-name">
+          <span class="dot"></span>
+          <div>Webhooks<small>hooks.aegis.example</small></div>
+        </div>
+        <div>
+          <div class="uptime-bars" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="warn"></i><i class="warn"></i>
+            <i class="warn"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="uptime-legend"><span>90 天前</span><span>今天</span></div>
+        </div>
+        <div class="svc-status">
+          <span class="ok"><span class="dot"></span>运行正常</span>
+          <span class="pct">99.978% uptime</span>
+        </div>
+      </div>
+
+      <div class="status-foot">
+        <div>
+          <span class="legend"><b class="g"></b> 正常（&lt; 100ms 延迟）</span>
+          &nbsp;&nbsp;
+          <span class="legend"><b class="y"></b> 降级维护 / 延迟升高</span>
+        </div>
+        <div>最后检查：2026-04-10 09:58 UTC · 每 60 秒刷新 · 数据来源 status.aegis.example</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============================================================
+     漏洞披露
+     ============================================================ -->
+<section class="section" id="disclosure">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-index mono">06 / Vulnerability Disclosure</div>
+      <h2 class="section-title">漏洞披露与赏金流程</h2>
+      <p class="section-desc">
+        我们欢迎安全研究员负责任地披露漏洞。以下流程适用于所有外部报告，
+        我们承诺不对此类善意研究采取法律行动。
+      </p>
+    </div>
+
+    <div class="disclosure">
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-no mono">01</div>
+          <div>
+            <h4>报告提交 · Report</h4>
+            <p>
+              将漏洞详情（复现步骤、影响范围、PoC 截图或视频）发送至安全邮箱。
+              请勿在公开渠道发布未修复漏洞的细节，也不要在测试中访问他人数据。
+            </p>
+            <span class="sla mono">SLA：4 小时内首次响应</span>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-no mono">02</div>
+          <div>
+            <h4>确认与定级 · Triage</h4>
+            <p>
+              安全团队复现并按 CVSS v3.1 评分定级（Critical / High / Medium / Low），
+              与报告者共享定级结论并给出初步修复方案与时间表。
+            </p>
+            <span class="sla mono">SLA：1 个工作日内完成定级</span>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-no mono">03</div>
+          <div>
+            <h4>修复与验证 · Remediation</h4>
+            <p>
+              Critical 级漏洞 48 小时内热修复，High 级 7 天内修复，其余纳入常规发布节奏。
+              修复上线后邀请报告者复测验证。
+            </p>
+            <span class="sla mono">SLA：Critical 48h / High 7d</span>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-no mono">04</div>
+          <div>
+            <h4>致谢与奖励 · Recognition</h4>
+            <p>
+              经报告者同意，我们在季度致谢名单中公开鸣谢（可匿名）。
+              有效漏洞发放 $500 – $25,000 赏金，重大发现额外授予「Aegis Security Champion」徽章。
+            </p>
+            <span class="sla mono">SLA：修复确认后 15 天内发放赏金</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="contact-card reveal">
+        <h3>安全联系渠道</h3>
+        <p>
+          无论你发现了漏洞、想索取审计报告，还是对我们的数据处理方式有疑问，
+          安全团队都会在一个工作日内回复。紧急安全事件请在邮件标题标注「P0」。
+        </p>
+        <a class="mail-chip mono" href="mailto:security@aegis.example">security@aegis.example</a>
+        <p style="margin-bottom: var(--space-5);">
+          PGP 加密通信推荐使用页脚公布的公钥指纹验证身份，防止中间人攻击。
+          漏洞报告可选加密发送，密钥 ID：<span class="mono" style="color: var(--tc-sky);">0xA3F2-91C4</span>
+        </p>
+        <div class="safe-harbor">
+          SAFE HARBOR POLICY<br>
+          遵循本政策的善意安全研究不受 DMCA 与计算机犯罪相关条款追诉。
+          我们不会起诉、也不会要求执法机构调查符合政策的研究行为。
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ============================================================
+     FAQ
+     ============================================================ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-index mono">07 / FAQ</div>
+      <h2 class="section-title">常见安全问题</h2>
+      <p class="section-desc">
+        以下是安全问卷与评估中最常被问到的问题。若这里没有你的答案，
+        欢迎直接联系安全团队获取针对你所在行业的定制说明。
+      </p>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq reveal" open>
+        <summary>
+          <span><span class="faq-q-no mono">Q1</span>我们的数据存储在哪个位置？可以选择数据驻留区域吗？</span>
+          <span class="faq-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-body">
+          Aegis 在三大区域运营独立的数据平面：<strong>美国（us-east-1）、欧盟（eu-central-1）、新加坡（ap-southeast-1）</strong>。
+          企业版客户可在开通时指定主数据区域，数据及其备份副本不会离开所选区域。
+          区域一经选定，迁移需通过工单申请并由安全团队执行，全程有审计日志留痕。
+          <span class="mono-note">DEFAULT: us-east-1 · 隔离级别: 租户级加密密钥</span>
+        </div>
+      </details>
+
+      <details class="faq reveal">
+        <summary>
+          <span><span class="faq-q-no mono">Q2</span>是否支持单点登录（SSO）与多因素认证（MFA）？</span>
+          <span class="faq-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-body">
+          支持。企业版支持 <strong>SAML 2.0 与 OIDC</strong> 两种单点登录协议，已验证集成 Okta、
+          Microsoft Entra ID（原 Azure AD）、Google Workspace、OneLogin 与 JumpCloud。
+          多因素认证支持 TOTP、WebAuthn/FIDO2 硬件密钥与推送验证；管理员可强制全组织启用 MFA，
+          并可基于设备信任与 IP 段配置条件访问策略。
+          <span class="mono-note">SESSION: 12h · 刷新令牌轮换 · SCIM 2.0 用户同步</span>
+        </div>
+      </details>
+
+      <details class="faq reveal">
+        <summary>
+          <span><span class="faq-q-no mono">Q3</span>子处理者发生变更时，我们会如何收到通知？</span>
+          <span class="faq-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-body">
+          在新增或更换任何涉及客户数据的子处理者之前，我们会<strong>至少提前 30 天</strong>
+          通过两种渠道通知：向账单联系人发送邮件公告，并在本页面「子处理者清单」区域同步更新。
+          通知包含新子处理者的名称、处理目的、数据类型与所在地区。
+          若你对变更持有异议，可在生效日前通过合同约定的流程提出，我们会协助迁移或终止相关数据处理。
+          <span class="mono-note">通知渠道: EMAIL + STATUS PAGE + RSS 订阅</span>
+        </div>
+      </details>
+
+      <details class="faq reveal">
+        <summary>
+          <span><span class="faq-q-no mono">Q4</span>合规审计的频率是多少？审计报告如何获取？</span>
+          <span class="faq-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-body">
+          SOC 2 Type II 为<strong>年度审计</strong>，观察期覆盖连续 12 个月；ISO 27001 每三年换证、
+          每年一次监督审核；PCI DSS 每年由 QSA 现场评估。此外我们每季度执行内部审计与独立渗透测试，
+          每月进行漏洞扫描与配置基线检查。
+          现有客户可签署保密协议后免费获取 SOC 2 Type II 全文报告与渗透测试摘要；
+          潜在客户可申请查看报告摘要与安全问卷（CAIQ / SIG Lite）。
+          <span class="mono-note">SOC2: 年度 · ISO: 年度监督 · Pentest: 季度 · 扫描: 每月</span>
+        </div>
+      </details>
+
+      <details class="faq reveal">
+        <summary>
+          <span><span class="faq-q-no mono">Q5</span>合同终止后，我的数据会被如何处理？</span>
+          <span class="faq-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-body">
+          合同终止后，你可以在 <strong>30 天宽限期</strong>内通过控制台或 API 导出全部数据
+          （开放格式：CSV / JSON / 原始附件）。宽限期结束后，我们会在 7 个自然日内
+          从生产系统删除主数据副本，并在 35 天内覆盖或销毁全部备份介质上的残留数据。
+          删除完成后，我们会出具书面数据删除证明（Certificate of Deletion）。
+          法律法规另有留存要求的数据（如计费记录）将按法定期限单独隔离保存。
+          <span class="mono-note">宽限期 30d · 生产删除 7d · 备份销毁 35d</span>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA
+     ============================================================ -->
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div class="section-index mono" style="justify-content: center;">Get In Touch</div>
+      <h2>需要更多安全信息？</h2>
+      <p>
+        无论是标准安全问卷、定制化合规评估，还是希望与我们的安全架构师进行技术交流，
+        Aegis 安全团队都随时待命。平均首次响应时间不到 4 小时。
+      </p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="mailto:security@aegis.example">
+          联系安全团队
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a class="btn btn-ghost" href="#documents">申请安全问卷</a>
+      </div>
+      <div class="cta-note">
+        SECURITY@AEGIS.EXAMPLE · PGP KEY 0xA3F2-91C4 · GPG FINGERPRINT 详见页脚
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============================================================
+     页脚
+     ============================================================ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>Aegis Security Team</h4>
+        <p>
+          Aegis 安全团队由 24 名全职安全工程师、合规专家与隐私法律顾问组成，
+          隶属首席信息安全官（CISO）办公室，独立于产品与工程汇报线。
+          我们相信：安全不是成本，而是产品的一部分。
+        </p>
+        <div class="pgp-block">
+          <b>PGP FINGERPRINT</b><br>
+          9F2A 7C41 D8E3 5B06 A1C8&nbsp; 4E7F 20B9 6D35 E8A4 1F7B<br>
+          KEY ID: 0xA3F2-91C4 · RSA 4096 · EXPIRES 2029-01-01
+        </div>
+      </div>
+      <div>
+        <h4>Trust Center</h4>
+        <ul class="footer-links">
+          <li><a href="#certifications">合规认证与审计报告</a></li>
+          <li><a href="#practices">安全实践白皮书</a></li>
+          <li><a href="#documents">文档下载库</a></li>
+          <li><a href="#subprocessors">子处理者清单</a></li>
+          <li><a href="#status">系统状态与历史事件</a></li>
+          <li><a href="#disclosure">漏洞披露计划</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:security@aegis.example">security@aegis.example</a></li>
+          <li><a href="mailto:privacy@aegis.example">privacy@aegis.example（DPO）</a></li>
+          <li><a href="mailto:legal@aegis.example">legal@aegis.example（法务）</a></li>
+          <li><a href="#faq">常见问题 FAQ</a></li>
+        </ul>
+        <div class="pgp-block" style="margin-top: var(--space-6);">
+          <b>EMERGENCY HOTLINE</b><br>
+          P0 安全事件 24/7 值班电话<br>
+          +1 (415) 555-0142 转 9
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2018–2026 AEGIS TECHNOLOGIES, INC. · ALL RIGHTS RESERVED</div>
+      <div>
+        最后更新：<span class="ok-mark">2026-04-10</span>
+        · 文档版本 v6.3
+        · 本页由 Aegis 安全团队维护
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* 滚动入场：IntersectionObserver */
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry, i) {
+      if (entry.isIntersecting) {
+        var el = entry.target;
+        setTimeout(function () { el.classList.add('visible'); }, (i % 6) * 90);
+        io.unobserve(el);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function (el) { io.observe(el); });
+})();
+
+/* FAQ 手风琴：同一时间仅展开一项 */
+(function () {
+  var items = document.querySelectorAll('details.faq');
+  items.forEach(function (item) {
+    item.addEventListener('toggle', function () {
+      if (!item.open) return;
+      items.forEach(function (other) {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

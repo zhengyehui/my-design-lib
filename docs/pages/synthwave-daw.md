@@ -32,3 +32,6 @@ pageDetail:
   prev:
     text: Pulse VR 沉浸式体验
     link: /pages/pulse-vr
+  next:
+    text: Verba 作家 & 文案作品集
+    link: /pages/writer-portfolio

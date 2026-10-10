@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verba — 作家 &amp; 品牌文案作品集</title>
+<meta name="description" content="Verba — 独立作家与品牌文案。品牌语调手册、创意文案、长文编辑与演讲稿写作。让文字有分量。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Verba — 作家 & 品牌文案作品集
+   编辑排版美学 · 精装文学杂志
+   ============================================================ */
+
+/* ── 页面专属变量 ─────────────────────────────────────── */
+:root {
+  /* 纸张与墨色 */
+  --paper:        #F7F3EC;
+  --paper-deep:   #EFE8DC;
+  --paper-shade:  #E6DCCC;
+  --ink:          #14110E;
+  --ink-soft:     #3D362E;
+  --ink-mute:     #7A6E60;
+  --ink-faint:    #B3A492;
+  --accent:       #C4552D;
+  --accent-deep:  #A63F1E;
+  --accent-tint:  rgba(196, 85, 45, 0.10);
+  --accent-glow:  rgba(196, 85, 45, 0.28);
+  --gold:         #B08D4F;
+
+  /* 字体 */
+  --font-serif:   'Fraunces', 'Songti SC', 'Noto Serif SC', Georgia, serif;
+  --font-body:    'Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-code:    'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+
+  /* 排版 */
+  --display-xl:   clamp(3.2rem, 9.2vw, 9.5rem);
+  --display-lg:   clamp(2.6rem, 6.5vw, 6rem);
+  --display-md:   clamp(2rem, 4vw, 3.6rem);
+  --body-lg:      clamp(1.05rem, 1.4vw, 1.35rem);
+  --body-md:      1.02rem;
+
+  /* 节奏 */
+  --gutter:       clamp(1.25rem, 5vw, 5.5rem);
+  --section-y:    clamp(5rem, 11vw, 10.5rem);
+  --rule:         1px solid rgba(20, 17, 14, 0.16);
+  --rule-soft:    1px solid rgba(20, 17, 14, 0.09);
+
+  /* 缓动 */
+  --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-editorial: cubic-bezier(0.65, 0, 0.15, 1);
+
+  /* 映射设计令牌（保持与全局系统一致） */
+  --color-primary:   var(--accent);
+  --font-display:    var(--font-serif);
+  --font-sans:       var(--font-body);
+  --font-mono:       var(--font-code);
+  --radius-lg:       2px;
+}
+
+/* ── 基础重置 ──────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--body-md);
+  line-height: 1.75;
+  letter-spacing: 0.012em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  /* 纸张纹理：极细噪点 */
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(196, 85, 45, 0.035), transparent 42%),
+    radial-gradient(circle at 82% 78%, rgba(176, 141, 79, 0.045), transparent 46%);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+/* ── 通用工具 ──────────────────────────────────────────── */
+.shell {
+  width: min(1440px, 100%);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.rule-top {
+  border-top: var(--rule);
+}
+
+.eyebrow {
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 2.25rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+.eyebrow--plain::before {
+  display: none;
+}
+
+.section-index {
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 1.6rem;
+  border-bottom: var(--rule);
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--display-md);
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  font-optical-sizing: auto;
+}
+
+.section-title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.section-note {
+  max-width: 24rem;
+  font-size: 0.92rem;
+  line-height: 1.85;
+  color: var(--ink-mute);
+  text-align: right;
+}
+
+/* 链接下划线展开 */
+.link-sweep {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.link-sweep::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.link-sweep:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* 滚动入场 */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 0.9s var(--ease-out);
+  will-change: opacity, transform;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal[data-delay="1"] { transition-delay: 0.10s; }
+.reveal[data-delay="2"] { transition-delay: 0.20s; }
+.reveal[data-delay="3"] { transition-delay: 0.30s; }
+.reveal[data-delay="4"] { transition-delay: 0.40s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ============================================================
+   1 · 顶部导航
+   ============================================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(247, 243, 236, 0.86);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: var(--rule-soft);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  height: 4.6rem;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+
+.brand-mark {
+  font-family: var(--font-serif);
+  font-size: 1.72rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-optical-sizing: auto;
+}
+
+.brand-mark span {
+  color: var(--accent);
+}
+
+.brand-tag {
+  font-family: var(--font-code);
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  border-left: 1px solid var(--ink-faint);
+  padding-left: 0.7rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.2rem, 2.6vw, 2.6rem);
+}
+
+.nav-link {
+  font-family: var(--font-code);
+  font-size: 0.74rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color 0.35s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent);
+}
+
+.nav-cta {
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 0.85rem 1.6rem;
+  border: 1px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+  transition: color 0.45s var(--ease-out), border-color 0.45s var(--ease-out);
+}
+
+.nav-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: translateY(101%);
+  transition: transform 0.5s var(--ease-out);
+}
+
+.nav-cta:hover::before {
+  transform: translateY(0);
+}
+
+.nav-cta:hover {
+  border-color: var(--accent);
+}
+
+.nav-cta span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   2 · Hero
+   ============================================================ */
+.hero {
+  position: relative;
+  padding-top: clamp(3.5rem, 8vw, 7rem);
+  padding-bottom: clamp(3rem, 6vw, 5.5rem);
+  overflow: hidden;
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.4rem;
+  border-bottom: var(--rule-soft);
+  margin-bottom: clamp(2.2rem, 5vw, 4rem);
+}
+
+.hero-issue {
+  font-family: var(--font-code);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.hero-issue strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: var(--display-xl);
+  font-weight: 500;
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  font-optical-sizing: auto;
+  max-width: 15ch;
+}
+
+.hero-title .line {
+  display: block;
+}
+
+.hero-title .italic {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--accent);
+}
+
+.hero-title .cn {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(1.65rem, 4.4vw, 4.25rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.18;
+  margin-top: clamp(1.1rem, 2.2vw, 2rem);
+  color: var(--ink);
+}
+
+.hero-title .cn .dot {
+  color: var(--accent);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+  margin-top: clamp(2.4rem, 5vw, 4.2rem);
+}
+
+.hero-lede {
+  font-size: var(--body-lg);
+  line-height: 1.95;
+  color: var(--ink-soft);
+  max-width: 38rem;
+}
+
+.hero-lede .drop {
+  font-family: var(--font-serif);
+  font-size: 3.2em;
+  float: left;
+  line-height: 0.82;
+  margin: 0.06em 0.12em 0 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.hero-lede strong {
+  font-weight: 600;
+  color: var(--ink);
+  box-shadow: inset 0 -0.42em 0 var(--accent-tint);
+}
+
+.hero-sign {
+  margin-top: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.hero-sign-mark {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.9rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.hero-sign-text {
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  line-height: 2;
+}
+
+/* 装饰性排版元素：竖排「文」字样张 */
+.hero-plate {
+  position: relative;
+  border: var(--rule);
+  background: linear-gradient(155deg, var(--paper-deep), var(--paper) 58%, var(--paper-shade));
+  padding: clamp(1.6rem, 2.6vw, 2.4rem);
+  min-height: 20rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hero-plate::before {
+  content: "「 文 」";
+  position: absolute;
+  top: 50%;
+  right: -0.24em;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-family: var(--font-serif);
+  font-size: clamp(3.4rem, 5.4vw, 5.4rem);
+  font-weight: 300;
+  letter-spacing: 0.32em;
+  color: rgba(20, 17, 14, 0.07);
+  pointer-events: none;
+}
+
+.hero-plate-label {
+  font-family: var(--font-code);
+  font-size: 0.66rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.hero-plate-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.28rem, 1.9vw, 1.72rem);
+  line-height: 1.52;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-plate-quote .accent {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.hero-plate-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: var(--rule-soft);
+  padding-top: 1.1rem;
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.hero-plate-glyph {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: var(--accent);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* 统计条 */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(20, 17, 14, 0.16);
+  border: var(--rule);
+  margin-top: clamp(3rem, 6vw, 5.5rem);
+}
+
+.stat {
+  background: var(--paper);
+  padding: clamp(1.5rem, 2.6vw, 2.35rem) clamp(1.3rem, 2.2vw, 2.1rem);
+  transition: background 0.5s var(--ease-out);
+}
+
+.stat:hover {
+  background: var(--paper-deep);
+}
+
+.stat-num {
+  font-family: var(--font-serif);
+  font-size: clamp(2.6rem, 4.6vw, 4.2rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 0.14em;
+}
+
+.stat-num .unit {
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.stat-label {
+  margin-top: 0.85rem;
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  line-height: 1.9;
+}
+
+/* ============================================================
+   3 · 精选作品（编号列表）
+   ============================================================ */
+.works {
+  padding-block: var(--section-y);
+}
+
+.works-list {
+  border-top: var(--rule);
+}
+
+.work {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) 15rem 6.5rem;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: clamp(1.9rem, 3.2vw, 2.9rem) clamp(0.6rem, 1.4vw, 1.4rem);
+  border-bottom: var(--rule);
+  position: relative;
+  transition:
+    background 0.55s var(--ease-out),
+    padding-left 0.55s var(--ease-out);
+}
+
+.work::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform 0.55s var(--ease-editorial);
+}
+
+.work:hover {
+  background: var(--accent-tint);
+  padding-left: clamp(1.4rem, 2.6vw, 2.6rem);
+}
+
+.work:hover::before {
+  transform: scaleY(1);
+  transform-origin: top center;
+}
+
+.work-num {
+  font-family: var(--font-code);
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink-faint);
+  transition: color 0.45s ease;
+}
+
+.work:hover .work-num {
+  color: var(--accent);
+}
+
+.work-main {
+  min-width: 0;
+}
+
+.work-name {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 3.4vw, 3.15rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  font-optical-sizing: auto;
+  transition: color 0.45s ease;
+}
+
+.work:hover .work-name {
+  color: var(--accent-deep);
+}
+
+.work-name .en {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-mute);
+  font-size: 0.62em;
+  letter-spacing: 0;
+  margin-left: 0.5em;
+}
+
+.work-summary {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    max-height 0.6s var(--ease-out),
+    opacity 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out),
+    margin-top 0.5s var(--ease-out);
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  max-width: 46rem;
+}
+
+.work:hover .work-summary {
+  max-height: 7.5rem;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 1.15rem;
+}
+
+.work-summary .hl {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.work-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  align-items: flex-start;
+}
+
+.work-tag {
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border: 1px solid rgba(20, 17, 14, 0.22);
+  padding: 0.42rem 0.85rem;
+  transition:
+    background 0.45s ease,
+    color 0.45s ease,
+    border-color 0.45s ease;
+}
+
+.work:hover .work-tag {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+.work-client {
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.work-year {
+  font-family: var(--font-code);
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  color: var(--ink-mute);
+  text-align: right;
+  transition: color 0.45s ease, letter-spacing 0.45s ease;
+}
+
+.work:hover .work-year {
+  color: var(--accent);
+  letter-spacing: 0.34em;
+}
+
+.works-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2.6rem;
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.works-foot a {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent-glow);
+  padding-bottom: 3px;
+  transition: border-color 0.4s ease, letter-spacing 0.4s ease;
+}
+
+.works-foot a:hover {
+  border-color: var(--accent);
+  letter-spacing: 0.32em;
+}
+
+/* ============================================================
+   4 · Marquee 引语滚动条
+   ============================================================ */
+.marquee {
+  background: var(--ink);
+  color: var(--paper);
+  padding-block: clamp(1.6rem, 3vw, 2.6rem);
+  overflow: hidden;
+  position: relative;
+  border-block: 1px solid var(--ink);
+}
+
+.marquee::before,
+.marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(3rem, 8vw, 8rem);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee::before {
+  left: 0;
+  background: linear-gradient(to right, var(--ink), transparent);
+}
+
+.marquee::after {
+  right: 0;
+  background: linear-gradient(to left, var(--ink), transparent);
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: marquee-slide 38s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.6rem, 3vw, 3rem);
+  padding-inline: clamp(1.6rem, 3vw, 3rem);
+  white-space: nowrap;
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 2.6vw, 2.35rem);
+  font-weight: 300;
+  letter-spacing: 0.015em;
+  font-style: italic;
+}
+
+.marquee-item .zh {
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.marquee-item .sep {
+  color: var(--accent);
+  font-style: normal;
+  font-family: var(--font-code);
+  font-size: 0.55em;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid var(--accent-glow);
+  padding: 0.42em 0.95em;
+  border-radius: 999px;
+}
+
+@keyframes marquee-slide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   5 · 服务
+   ============================================================ */
+.services {
+  padding-block: var(--section-y);
+  background:
+    linear-gradient(to bottom, var(--paper), var(--paper-deep) 22%, var(--paper-deep) 78%, var(--paper));
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(20, 17, 14, 0.16);
+  border: var(--rule);
+}
+
+.service {
+  background: var(--paper-deep);
+  padding: clamp(2rem, 3.6vw, 3.4rem);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.55s var(--ease-out);
+}
+
+.service::after {
+  content: attr(data-num);
+  position: absolute;
+  right: -0.06em;
+  bottom: -0.32em;
+  font-family: var(--font-serif);
+  font-size: clamp(7rem, 13vw, 12rem);
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(20, 17, 14, 0.05);
+  transition: color 0.55s var(--ease-out), transform 0.7s var(--ease-out);
+  pointer-events: none;
+}
+
+.service:hover {
+  background: var(--paper);
+}
+
+.service:hover::after {
+  color: var(--accent-glow);
+  transform: translate(-0.04em, -0.06em);
+}
+
+.service-num {
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.service-num::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(20, 17, 14, 0.16);
+}
+
+.service-name {
+  margin-top: 1.55rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.55rem, 2.3vw, 2.15rem);
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: -0.016em;
+}
+
+.service-name .en {
+  display: block;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.58em;
+  color: var(--ink-mute);
+  letter-spacing: 0.012em;
+  margin-top: 0.42em;
+}
+
+.service-desc {
+  margin-top: 1.25rem;
+  font-size: 0.965rem;
+  line-height: 1.95;
+  color: var(--ink-soft);
+  max-width: 32rem;
+  position: relative;
+  z-index: 1;
+}
+
+.service-list {
+  margin-top: 1.65rem;
+  border-top: var(--rule-soft);
+  position: relative;
+  z-index: 1;
+}
+
+.service-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.95rem;
+  padding-block: 0.72rem;
+  border-bottom: var(--rule-soft);
+  font-family: var(--font-code);
+  font-size: 0.745rem;
+  letter-spacing: 0.135em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color 0.4s ease, padding-left 0.4s var(--ease-out);
+}
+
+.service-list li:hover {
+  color: var(--accent);
+  padding-left: 0.55rem;
+}
+
+.service-list li .tick {
+  color: var(--accent);
+  font-size: 0.82rem;
+}
+
+.service-foot {
+  margin-top: 1.55rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  position: relative;
+  z-index: 1;
+}
+
+.service-foot .price {
+  color: var(--accent);
+}
+
+/* ============================================================
+   6 · 关于
+   ============================================================ */
+.about {
+  padding-block: var(--section-y);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 6.5rem);
+  align-items: start;
+}
+
+.about-copy .eyebrow {
+  margin-bottom: 1.9rem;
+}
+
+.about-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.15rem, 3.6vw, 3.35rem);
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: -0.022em;
+}
+
+.about-title em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--accent);
+}
+
+.about-body {
+  margin-top: 2.15rem;
+}
+
+.about-body p {
+  font-size: 1.02rem;
+  line-height: 2.12;
+  color: var(--ink-soft);
+  margin-bottom: 1.55rem;
+  max-width: 40rem;
+}
+
+.about-body p:first-of-type::first-letter {
+  font-family: var(--font-serif);
+  font-size: 3.55em;
+  float: left;
+  line-height: 0.78;
+  margin: 0.1em 0.12em 0 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.about-body .pull {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.42rem;
+  line-height: 1.72;
+  color: var(--ink);
+  border-left: 3px solid var(--accent);
+  padding-left: 1.55rem;
+  margin-block: 2.15rem;
+  letter-spacing: -0.008em;
+}
+
+.about-body strong {
+  font-weight: 600;
+  color: var(--ink);
+  box-shadow: inset 0 -0.42em 0 var(--accent-tint);
+}
+
+.about-sign {
+  margin-top: 2.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+}
+
+.about-sign-name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 2.1rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.about-sign-meta {
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  line-height: 2.1;
+  border-left: 1px solid var(--ink-faint);
+  padding-left: 1.35rem;
+}
+
+/* 右栏：品牌墙 + 奖项 */
+.about-side {
+  position: sticky;
+  top: 6.5rem;
+}
+
+.side-block {
+  border: var(--rule);
+  padding: clamp(1.65rem, 2.6vw, 2.35rem);
+  margin-bottom: 1.55rem;
+  background: var(--paper);
+}
+
+.side-block--dark {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.side-label {
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.side-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(20, 17, 14, 0.16);
+}
+
+.side-block--dark .side-label {
+  color: rgba(247, 243, 236, 0.55);
+}
+
+.side-block--dark .side-label::after {
+  background: rgba(247, 243, 236, 0.18);
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(20, 17, 14, 0.12);
+  border: var(--rule-soft);
+}
+
+.brand-cell {
+  background: var(--paper);
+  padding: 1.05rem 0.95rem;
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 0.028em;
+  color: var(--ink-soft);
+  text-align: center;
+  transition: background 0.45s ease, color 0.45s ease, letter-spacing 0.45s ease;
+}
+
+.brand-cell:hover {
+  background: var(--ink);
+  color: var(--paper);
+  letter-spacing: 0.075em;
+}
+
+.brand-cell .sub {
+  display: block;
+  font-family: var(--font-code);
+  font-size: 0.58rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 0.35rem;
+  transition: color 0.45s ease;
+}
+
+.brand-cell:hover .sub {
+  color: var(--accent);
+}
+
+.award {
+  display: flex;
+  align-items: baseline;
+  gap: 1.05rem;
+  padding-block: 0.92rem;
+  border-bottom: 1px solid rgba(247, 243, 236, 0.14);
+}
+
+.award:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.award-year {
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  min-width: 3.2rem;
+}
+
+.award-name {
+  font-family: var(--font-serif);
+  font-size: 1.06rem;
+  font-weight: 500;
+  letter-spacing: 0.012em;
+  line-height: 1.5;
+}
+
+.award-name .org {
+  display: block;
+  font-family: var(--font-code);
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(247, 243, 236, 0.5);
+  margin-top: 0.32rem;
+}
+
+/* ============================================================
+   7 · 客户评价
+   ============================================================ */
+.testimonial {
+  padding-block: var(--section-y);
+  background: var(--paper-deep);
+  border-block: var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial::before {
+  content: "“";
+  position: absolute;
+  top: -0.18em;
+  left: 0.02em;
+  font-family: var(--font-serif);
+  font-size: clamp(14rem, 26vw, 26rem);
+  line-height: 1;
+  color: rgba(196, 85, 45, 0.09);
+  pointer-events: none;
+}
+
+.testimonial-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 62rem;
+}
+
+.testimonial blockquote {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 3.5vw, 3.15rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.42;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+}
+
+.testimonial blockquote .accent {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.testimonial blockquote .zh {
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.035em;
+}
+
+.testimonial-foot {
+  margin-top: clamp(2.15rem, 4vw, 3.25rem);
+  display: flex;
+  align-items: center;
+  gap: 1.55rem;
+}
+
+.testimonial-avatar {
+  width: 4.35rem;
+  height: 4.35rem;
+  border: 1px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.55rem;
+  color: var(--accent);
+  background: var(--paper);
+  flex-shrink: 0;
+}
+
+.testimonial-who {
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  line-height: 2.15;
+}
+
+.testimonial-who strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.18rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.testimonial-rating {
+  margin-left: auto;
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: right;
+  line-height: 2.15;
+}
+
+/* ============================================================
+   8 · CTA
+   ============================================================ */
+.cta {
+  padding-block: clamp(6rem, 13vw, 12.5rem);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-frame {
+  position: absolute;
+  inset: clamp(1.4rem, 3.5vw, 3.25rem);
+  border: var(--rule);
+  pointer-events: none;
+}
+
+.cta-frame::before,
+.cta-frame::after {
+  content: "";
+  position: absolute;
+  width: 0.62rem;
+  height: 0.62rem;
+  border: 1px solid var(--accent);
+}
+
+.cta-frame::before {
+  top: -0.32rem;
+  left: -0.32rem;
+  border-right: none;
+  border-bottom: none;
+}
+
+.cta-frame::after {
+  bottom: -0.32rem;
+  right: -0.32rem;
+  border-left: none;
+  border-top: none;
+}
+
+.cta-kicker {
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 2.1rem;
+}
+
+.cta-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.65rem, 7.6vw, 7.4rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.032em;
+  font-optical-sizing: auto;
+}
+
+.cta-title em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--accent);
+}
+
+.cta-title .zh {
+  display: block;
+  margin-top: clamp(1.15rem, 2.2vw, 1.95rem);
+  font-size: clamp(1.18rem, 2.5vw, 2.15rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+}
+
+.cta-note {
+  margin: 2.25rem auto 0;
+  max-width: 34rem;
+  font-size: 1.02rem;
+  line-height: 2;
+  color: var(--ink-mute);
+}
+
+.cta-actions {
+  margin-top: clamp(2.65rem, 5vw, 3.85rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.35rem;
+  flex-wrap: wrap;
+}
+
+.btn-ink {
+  font-family: var(--font-code);
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 1.32rem 3.15rem;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.5s var(--ease-out), border-color 0.5s var(--ease-out);
+}
+
+.btn-ink::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: translateY(101%);
+  transition: transform 0.55s var(--ease-out);
+}
+
+.btn-ink:hover::before {
+  transform: translateY(0);
+}
+
+.btn-ink:hover {
+  border-color: var(--accent);
+}
+
+.btn-ink span {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.btn-ink .arrow {
+  transition: transform 0.45s var(--ease-out);
+}
+
+.btn-ink:hover .arrow {
+  transform: translateX(0.35rem);
+}
+
+.btn-ghost {
+  font-family: var(--font-code);
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid rgba(20, 17, 14, 0.28);
+  padding: 1.32rem 2.65rem;
+  transition: background 0.45s ease, color 0.45s ease, border-color 0.45s ease;
+}
+
+.btn-ghost:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.cta-mail {
+  margin-top: 2.35rem;
+  font-family: var(--font-code);
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.cta-mail a {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent-glow);
+  padding-bottom: 3px;
+  transition: border-color 0.4s ease;
+}
+
+.cta-mail a:hover {
+  border-color: var(--accent);
+}
+
+/* ============================================================
+   9 · 页脚
+   ============================================================ */
+.footer {
+  background: var(--ink);
+  color: var(--paper);
+  padding-top: clamp(3.5rem, 7vw, 6.5rem);
+  padding-bottom: 2.35rem;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+  gap: clamp(2.25rem, 5vw, 4.5rem);
+  padding-bottom: clamp(2.65rem, 5vw, 4.35rem);
+  border-bottom: 1px solid rgba(247, 243, 236, 0.15);
+}
+
+.footer-brand-mark {
+  font-family: var(--font-serif);
+  font-size: clamp(2.45rem, 4.6vw, 3.95rem);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1;
+}
+
+.footer-brand-mark span {
+  color: var(--accent);
+}
+
+.footer-brand p {
+  margin-top: 1.45rem;
+  max-width: 26rem;
+  font-size: 0.945rem;
+  line-height: 2;
+  color: rgba(247, 243, 236, 0.62);
+}
+
+.footer-col-label {
+  font-family: var(--font-code);
+  font-size: 0.66rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(247, 243, 236, 0.42);
+  margin-bottom: 1.35rem;
+}
+
+.footer-links li {
+  margin-bottom: 0.85rem;
+}
+
+.footer-links a {
+  font-family: var(--font-serif);
+  font-size: 1.12rem;
+  font-weight: 400;
+  letter-spacing: 0.022em;
+  color: rgba(247, 243, 236, 0.82);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  transition: color 0.4s ease, gap 0.4s var(--ease-out);
+}
+
+.footer-links a::before {
+  content: "→";
+  font-family: var(--font-code);
+  font-size: 0.72em;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-0.45rem);
+  transition: opacity 0.4s ease, transform 0.4s var(--ease-out);
+}
+
+.footer-links a:hover {
+  color: var(--paper);
+  gap: 0.95rem;
+}
+
+.footer-links a:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.footer-bottom {
+  padding-top: 1.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(247, 243, 236, 0.45);
+}
+
+.footer-bottom .heart {
+  color: var(--accent);
+}
+
+.footer-colophon {
+  letter-spacing: 0.28em;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .hero-plate {
+    min-height: 15rem;
+  }
+
+  .work {
+    grid-template-columns: 5.25rem minmax(0, 1fr) 12.5rem 5.25rem;
+    gap: 1.1rem;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+
+  .about-side {
+    position: static;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-inner {
+    height: 4.1rem;
+  }
+
+  .brand-tag {
+    display: none;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hero-title .cn {
+    letter-spacing: 0.035em;
+  }
+
+  .hero-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.15rem;
+  }
+
+  .section-note {
+    text-align: left;
+  }
+
+  .work {
+    grid-template-columns: 3.65rem minmax(0, 1fr);
+    grid-template-areas:
+      "num name"
+      "num meta"
+      "num year";
+    row-gap: 0.85rem;
+    padding-block: 1.85rem;
+  }
+
+  .work-num  { grid-area: num;  font-size: 1.05rem; }
+  .work-main { grid-area: name; }
+  .work-meta { grid-area: meta; flex-direction: row; flex-wrap: wrap; gap: 0.5rem; }
+  .work-year { grid-area: year; text-align: left; }
+
+  .work-summary {
+    max-height: none;
+    opacity: 1;
+    transform: none;
+    margin-top: 0.95rem;
+    font-size: 0.9rem;
+  }
+
+  .works-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .testimonial-foot {
+    flex-wrap: wrap;
+    gap: 1.15rem;
+  }
+
+  .testimonial-rating {
+    margin-left: 0;
+    text-align: left;
+    width: 100%;
+  }
+
+  .cta-actions {
+    flex-direction: column;
+  }
+
+  .btn-ink,
+  .btn-ghost {
+    width: 100%;
+    text-align: center;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 2.35rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .hero-lede .drop {
+    font-size: 2.75em;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     顶部导航
+     ============================================================ -->
+<header class="nav">
+  <div class="shell nav-inner">
+    <a class="brand" href="#top" aria-label="Verba 首页">
+      <span class="brand-mark">Ver<span>ba</span></span>
+      <span class="brand-tag">Writer &amp; Copywriter · Est. 2013</span>
+    </a>
+    <nav class="nav-links" aria-label="主导航">
+      <a class="nav-link link-sweep" href="#works">作品 Works</a>
+      <a class="nav-link link-sweep" href="#services">服务 Services</a>
+      <a class="nav-link link-sweep" href="#about">关于 About</a>
+      <a class="nav-link link-sweep" href="#contact">联系 Contact</a>
+    </nav>
+    <a class="nav-cta" href="#contact"><span>合作洽询</span></a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============================================================
+       Hero
+       ============================================================ -->
+  <section class="hero">
+    <div class="shell">
+      <div class="hero-top reveal">
+        <p class="hero-issue">Issue No.07 — <strong>Selected Writing 2013 → 2026</strong></p>
+        <p class="hero-issue">上海 Shanghai ⟡ 里斯本 Lisbon</p>
+      </div>
+
+      <h1 class="hero-title reveal" data-delay="1">
+        <span class="line">Words that</span>
+        <span class="line"><em class="italic">carry weight.</em></span>
+        <span class="cn">让文字有分量<span class="dot">。</span></span>
+      </h1>
+
+      <div class="hero-grid">
+        <div class="hero-lede-wrap reveal" data-delay="2">
+          <p class="hero-lede">
+            <span class="drop">我</span>是 Verba，一名独立作家与品牌文案。十二年间，我在<strong>杂志编辑部的深夜</strong>与<strong>品牌战略会议室</strong>之间往返，学会了一件事：真正的好文字不是更响亮的形容词，而是更准确的动词。我为讲求工艺的品牌写语调、写叙事、写那些愿意被慢慢读完的长句。
+          </p>
+          <div class="hero-sign">
+            <span class="hero-sign-mark">V.</span>
+            <p class="hero-sign-text">
+              独立作家 · 品牌叙事顾问<br>
+              前《远岸》杂志资深编辑 / 两部随笔集作者
+            </p>
+          </div>
+        </div>
+
+        <aside class="hero-plate reveal" data-delay="3">
+          <p class="hero-plate-label">Editor&rsquo;s Note — 编辑手记</p>
+          <p class="hero-plate-quote">
+            「读者不讨厌广告，<br>
+            他们讨厌<span class="accent">被低估</span>。<br>
+            写作的第一伦理，<br>
+            是把对方当作聪明人。」
+          </p>
+          <div class="hero-plate-foot">
+            <span>Vol. 07 / P.001</span>
+            <span class="hero-plate-glyph">文</span>
+            <span>Since MMXIII</span>
+          </div>
+        </aside>
+      </div>
+
+      <div class="hero-stats reveal" data-delay="4">
+        <div class="stat">
+          <p class="stat-num">12<span class="unit">年</span></p>
+          <p class="stat-label">写作经验<br>Years of Practice</p>
+        </div>
+        <div class="stat">
+          <p class="stat-num">80<span class="unit">+</span></p>
+          <p class="stat-label">品牌合作<br>Brand Partnerships</p>
+        </div>
+        <div class="stat">
+          <p class="stat-num">02<span class="unit">部</span></p>
+          <p class="stat-label">出版随笔集<br>Published Essay Collections</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       精选作品
+       ============================================================ -->
+  <section class="works rule-top" id="works">
+    <div class="shell">
+      <div class="section-head reveal">
+        <div>
+          <p class="section-index">Section 01 — Selected Works</p>
+          <h2 class="section-title">精选作品 <em>Portfolio</em></h2>
+        </div>
+        <p class="section-note">
+          五个我愿意反复讲述的项目。每个项目都是一次关于「如何说话」的实验——悬停查看写作笔记。
+        </p>
+      </div>
+
+      <div class="works-list">
+        <article class="work reveal">
+          <p class="work-num">01/</p>
+          <div class="work-main">
+            <h3 class="work-name">《潮汐之间》<span class="en">Between the Tides</span></h3>
+            <p class="work-summary">
+              为海洋科研公益平台 <span class="hl">Pelagos</span> 撰写的年度品牌叙事。以「潮汐」为核心隐喻，把海洋酸化数据翻译成可被感知的时间尺度；长文在上线首周被三家媒体全文转载，捐赠转化率提升 <span class="hl">37%</span>。
+            </p>
+          </div>
+          <div class="work-meta">
+            <span class="work-tag">品牌叙事</span>
+            <span class="work-client">Pelagos Ocean</span>
+          </div>
+          <p class="work-year">2025</p>
+        </article>
+
+        <article class="work reveal">
+          <p class="work-num">02/</p>
+          <div class="work-main">
+            <h3 class="work-name">极简护肤语调手册<span class="en">Aurelia Voice Book</span></h3>
+            <p class="work-summary">
+              为纯净护肤品牌 <span class="hl">Aurelia</span> 建立完整语言系统：<span class="hl">96 页</span>的语调手册，涵盖品牌词汇表、句式节奏指南、禁用表达清单与包装文案范式，让 12 个 SKU 的文案第一次听起来像同一个人在说话。
+            </p>
+          </div>
+          <div class="work-meta">
+            <span class="work-tag">品牌语调手册</span>
+            <span class="work-client">Aurelia Skincare</span>
+          </div>
+          <p class="work-year">2024</p>
+        </article>
+
+        <article class="work reveal">
+          <p class="work-num">03/</p>
+          <div class="work-main">
+            <h3 class="work-name">年度信：致不确定<span class="en">A Letter to Uncertainty</span></h3>
+            <p class="work-summary">
+              代笔人工智能公司 <span class="hl">Novus Labs</span> 创始人年度公开信。拒绝「颠覆」「赋能」的行业黑话，用一年里的三次失败作为叙事主干；发表后被 <span class="hl">36Kr</span> 与虎嗅头条转载，被称为「年度最诚实的公司信」。
+            </p>
+          </div>
+          <div class="work-meta">
+            <span class="work-tag">产品叙事</span>
+            <span class="work-client">Novus Labs</span>
+          </div>
+          <p class="work-year">2024</p>
+        </article>
+
+        <article class="work reveal">
+          <p class="work-num">04/</p>
+          <div class="work-main">
+            <h3 class="work-name">「慢一点，才喝得到」<span class="en">Slow is a Flavor</span></h3>
+            <p class="work-summary">
+              精品咖啡品牌 <span class="hl">Kettle &amp; Co.</span> 的全渠道创意文案。从杯身、门头到春季战役主视觉文案，用一条统一的线索——「等待」——把烘焙曲线变成情绪曲线；系列海报被收录进《2023 中国广告年鉴》。
+            </p>
+          </div>
+          <div class="work-meta">
+            <span class="work-tag">创意文案</span>
+            <span class="work-client">Kettle &amp; Co.</span>
+          </div>
+          <p class="work-year">2023</p>
+        </article>
+
+        <article class="work reveal">
+          <p class="work-num">05/</p>
+          <div class="work-main">
+            <h3 class="work-name">演讲：慢下来的勇气<span class="en">The Courage to Slow Down</span></h3>
+            <p class="work-summary">
+              为建筑师林知远撰写的 <span class="hl">TEDx</span> 演讲稿，从一块手工砖的烧制时间讲起，谈当代城市的速度暴力。全文 18 分钟，现场三次自发掌声，视频播放量超 <span class="hl">210 万</span>。
+            </p>
+          </div>
+          <div class="work-meta">
+            <span class="work-tag">演讲稿</span>
+            <span class="work-client">TEDx Shanghai</span>
+          </div>
+          <p class="work-year">2022</p>
+        </article>
+      </div>
+
+      <div class="works-foot reveal">
+        <p>Selected 05 / Archive 26 Projects</p>
+        <a href="#contact">索取完整作品集 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Marquee 引语
+       ============================================================ -->
+  <section class="marquee" aria-label="写作信条">
+    <div class="marquee-track">
+      <div class="marquee-item">
+        <span class="zh">文字是思想的建筑</span>
+        <span class="sep">Craft</span>
+        <span class="zh">好文案不推销，它共鸣</span>
+        <span class="sep">Resonance</span>
+        <span class="zh">删掉所有形容词，剩下的才是品牌</span>
+        <span class="sep">Substance</span>
+        <span class="zh">写给一个人，而不是一群人</span>
+        <span class="sep">Intimacy</span>
+      </div>
+      <div class="marquee-item" aria-hidden="true">
+        <span class="zh">文字是思想的建筑</span>
+        <span class="sep">Craft</span>
+        <span class="zh">好文案不推销，它共鸣</span>
+        <span class="sep">Resonance</span>
+        <span class="zh">删掉所有形容词，剩下的才是品牌</span>
+        <span class="sep">Substance</span>
+        <span class="zh">写给一个人，而不是一群人</span>
+        <span class="sep">Intimacy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       服务
+       ============================================================ -->
+  <section class="services" id="services">
+    <div class="shell">
+      <div class="section-head reveal">
+        <div>
+          <p class="section-index">Section 02 — What I Do</p>
+          <h2 class="section-title">服务 <em>Practice</em></h2>
+        </div>
+        <p class="section-note">
+          四条工作线，一种工作方式：先理解工艺，再选择词语。项目周期通常 3–10 周，每月只接两个深度合作。
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <article class="service reveal" data-num="01">
+          <p class="service-num">Service 01</p>
+          <h3 class="service-name">
+            品牌语调与叙事
+            <span class="en">Brand Voice &amp; Narrative</span>
+          </h3>
+          <p class="service-desc">
+            在写任何一句 slogan 之前，先把品牌当成一个人来理解：它如何开场、如何道别、什么时候沉默。我交付的不是一份漂亮的 PDF，而是一套团队真的会翻开使用的工作语言。
+          </p>
+          <ul class="service-list">
+            <li><span class="tick">＋</span>品牌语言审计与竞品语调扫描</li>
+            <li><span class="tick">＋</span>核心叙事框架与品牌故事长文</li>
+            <li><span class="tick">＋</span>语调手册（含词汇表与禁用表达）</li>
+            <li><span class="tick">＋</span>团队语调工作坊（半天 / 全天）</li>
+          </ul>
+          <div class="service-foot">
+            <span>周期 6–10 周</span>
+            <span class="price">From ¥68,000</span>
+          </div>
+        </article>
+
+        <article class="service reveal" data-num="02">
+          <p class="service-num">Service 02</p>
+          <h3 class="service-name">
+            创意文案与广告语
+            <span class="en">Campaign &amp; Copywriting</span>
+          </h3>
+          <p class="service-desc">
+            一句广告语的寿命可能比公司还长。我从产品里最真实的细节出发，写可以被重复、被引用、被印在包装袋上也不会脸红的句子。
+          </p>
+          <ul class="service-list">
+            <li><span class="tick">＋</span>品牌主张与年度 campaign 主题</li>
+            <li><span class="tick">＋</span>平面 / 视频脚本创意文案</li>
+            <li><span class="tick">＋</span>包装、终端与空间文案系统</li>
+            <li><span class="tick">＋</span>社交媒体内容支柱与样稿</li>
+          </ul>
+          <div class="service-foot">
+            <span>周期 3–6 周</span>
+            <span class="price">From ¥32,000</span>
+          </div>
+        </article>
+
+        <article class="service reveal" data-num="03">
+          <p class="service-num">Service 03</p>
+          <h3 class="service-name">
+            编辑与长文
+            <span class="en">Editorial &amp; Long-form</span>
+          </h3>
+          <p class="service-desc">
+            十二年编辑训练留下的最深习惯：尊重读者的时间。年度报告、创始人专栏、深度访谈与品牌白皮书——让长文读起来不累，让数据有体温。
+          </p>
+          <ul class="service-list">
+            <li><span class="tick">＋</span>年度信 / 创始人公开信代笔</li>
+            <li><span class="tick">＋</span>品牌白皮书与深度报道</li>
+            <li><span class="tick">＋</span>人物访谈与口述整理</li>
+            <li><span class="tick">＋</span>结构编辑与全稿润色</li>
+          </ul>
+          <div class="service-foot">
+            <span>周期 4–8 周</span>
+            <span class="price">From ¥24,000</span>
+          </div>
+        </article>
+
+        <article class="service reveal" data-num="04">
+          <p class="service-num">Service 04</p>
+          <h3 class="service-name">
+            演讲与脚本
+            <span class="en">Speech &amp; Script</span>
+          </h3>
+          <p class="service-desc">
+            演讲稿是写给耳朵的，不是写给眼睛的。我会陪你把故事讲出声，找到属于你的停顿、重音与幽默感——让舞台上的你听起来更像你自己。
+          </p>
+          <ul class="service-list">
+            <li><span class="tick">＋</span>TEDx / 行业大会演讲稿</li>
+            <li><span class="tick">＋</span>发布会与品牌故事脚本</li>
+            <li><span class="tick">＋</span>播客开场与旁白文稿</li>
+            <li><span class="tick">＋</span>现场排练与表达教练</li>
+          </ul>
+          <div class="service-foot">
+            <span>周期 3–5 周</span>
+            <span class="price">From ¥28,000</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       关于
+       ============================================================ -->
+  <section class="about rule-top" id="about">
+    <div class="shell">
+      <div class="section-head reveal">
+        <div>
+          <p class="section-index">Section 03 — The Person Behind</p>
+          <h2 class="section-title">关于 <em>Verba</em></h2>
+        </div>
+        <p class="section-note">
+          一个把写作当成手艺的人：慢、准、克制。相信品牌和人一样，值得被认真地介绍自己。
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-copy reveal">
+          <p class="eyebrow">自述 — In Her Own Words</p>
+          <h3 class="about-title">
+            我写过海、写过霜、写过深夜的算法，<br>
+            最终写的是<em>人的犹豫</em>。
+          </h3>
+          <div class="about-body">
+            <p>
+              我的职业起点是《远岸》杂志的编辑部。那三年我做的是最朴素的工作：把作者的稿子读三遍，删掉一半，再陪他们把剩下的一半写到最好。我学会了标点的重量，也学会了什么时候应该让一段空白说话。
+            </p>
+            <p class="pull">
+              「编辑不是把文章变短，而是把作者想说的话，还给他。」
+            </p>
+            <p>
+              2016 年离开编辑部之后，我开始以游牧的方式工作——在里斯本的老城区、清迈的山间、上海的老公寓里轮流住下。不同的时间流速改变了我写句子的方式：我开始相信<strong>慢品牌</strong>，相信那些花三年打磨一款产品的人，值得更好的语言，而不是更夸张的形容词。
+            </p>
+            <p>
+              今天的我服务于两类客户：讲求工艺的消费品牌，以及不想用黑话伪装自己的科技公司。工作方法始终没变——先待在你的产品里，和你的工程师、匠人、店员聊天，直到我能闻到那个行业的气味，然后才开始写第一句。我不写我不相信的东西，这是我唯一的筛选标准。
+            </p>
+            <p>
+              写作之外，我保持着每年一个非商业项目的速度：为乡村教师写口述史，为独立纪录片做旁白，为自己的随笔集写那些卖不了钱但必须存在的句子。它们提醒我，文字最初是用来做什么的。
+            </p>
+          </div>
+          <div class="about-sign">
+            <p class="about-sign-name">Verba Lin</p>
+            <p class="about-sign-meta">
+              林语之 · 独立作家<br>
+              《远岸》前资深编辑 · 2013 起执业
+            </p>
+          </div>
+        </div>
+
+        <aside class="about-side">
+          <div class="side-block reveal">
+            <p class="side-label">合作过的品牌 — Clients</p>
+            <div class="brand-grid">
+              <div class="brand-cell">Aurelia<span class="sub">Skincare</span></div>
+              <div class="brand-cell">Pelagos<span class="sub">Ocean Trust</span></div>
+              <div class="brand-cell">Kettle&amp;Co<span class="sub">Coffee Roasters</span></div>
+              <div class="brand-cell">Novus Labs<span class="sub">AI Research</span></div>
+              <div class="brand-cell">Mokuzai<span class="sub">Woodcraft</span></div>
+              <div class="brand-cell">北山茶室<span class="sub">Beishan Tea</span></div>
+              <div class="brand-cell">Fold Home<span class="sub">Furniture</span></div>
+              <div class="brand-cell">Meridian<span class="sub">Hospitality</span></div>
+            </div>
+          </div>
+
+          <div class="side-block side-block--dark reveal" data-delay="1">
+            <p class="side-label">奖项与收录 — Recognition</p>
+            <div class="award">
+              <span class="award-year">2025</span>
+              <p class="award-name">
+                铜铅笔 · 品牌文案类
+                <span class="org">The One Show / Merit</span>
+              </p>
+            </div>
+            <div class="award">
+              <span class="award-year">2024</span>
+              <p class="award-name">
+                D&amp;AD 入围 · Writing for Design
+                <span class="org">D&amp;AD Awards / Shortlist</span>
+              </p>
+            </div>
+            <div class="award">
+              <span class="award-year">2023</span>
+              <p class="award-name">
+                年度文案收录
+                <span class="org">China Advertising Annual</span>
+              </p>
+            </div>
+            <div class="award">
+              <span class="award-year">2022</span>
+              <p class="award-name">
+                华文时报年度专栏作者
+                <span class="org">The China Times / Columnist</span>
+              </p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       客户评价
+       ============================================================ -->
+  <section class="testimonial">
+    <div class="shell">
+      <div class="testimonial-inner reveal">
+        <p class="eyebrow eyebrow--plain" style="margin-bottom: 2.25rem;">Testimonial — 一句推荐</p>
+        <blockquote>
+          <span class="zh">「她交回来的不是文案，是我们公司终于能说出口的自我介绍。</span>
+          语调手册上线半年，客服投诉里<span class="accent">『冷冰冰』</span>这个词出现的次数归零。和 Verba 合作之后，我们才明白——<span class="zh">品牌语言不是包装，是承诺。」</span>
+        </blockquote>
+        <div class="testimonial-foot">
+          <div class="testimonial-avatar" aria-hidden="true">L.</div>
+          <p class="testimonial-who">
+            <strong>梁雪 / Liang Xue</strong>
+            Aurelia Skincare 联合创始人 · Chief Brand Officer
+          </p>
+          <p class="testimonial-rating">
+            合作周期 2023–2025<br>
+            Project · Voice System
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CTA
+       ============================================================ -->
+  <section class="cta" id="contact">
+    <div class="cta-frame" aria-hidden="true"></div>
+    <div class="shell">
+      <p class="cta-kicker reveal">Let&rsquo;s Work Together — 开始于一封邮件</p>
+      <h2 class="cta-title reveal" data-delay="1">
+        Your story deserves<br>
+        <em>better words.</em>
+        <span class="zh">你的故事，值得更好的措辞。</span>
+      </h2>
+      <p class="cta-note reveal" data-delay="2">
+        目前接受 2026 年第一季度的合作预约。告诉我你的品牌在做什么、卡在哪一句话上——我会在两个工作日内回信，附上一份初步的写作判断。
+      </p>
+      <div class="cta-actions reveal" data-delay="3">
+        <a class="btn-ink" href="mailto:hello@verba.studio">
+          <span>写信给我 <span class="arrow">→</span></span>
+        </a>
+        <a class="btn-ghost" href="#works">再看一遍作品</a>
+      </div>
+      <p class="cta-mail reveal" data-delay="4">
+        或直接写信 · <a href="mailto:hello@verba.studio">hello@verba.studio</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<!-- ============================================================
+     页脚
+     ============================================================ -->
+<footer class="footer">
+  <div class="shell">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <p class="footer-brand-mark">Ver<span>ba</span></p>
+        <p>
+          独立写作工作室，专注品牌语调、长文编辑与演讲叙事。每月只接两个深度合作项目，因为我们相信：写作需要留白，信任需要时间。
+        </p>
+      </div>
+      <div>
+        <p class="footer-col-label">导航 — Navigate</p>
+        <ul class="footer-links">
+          <li><a href="#works">精选作品</a></li>
+          <li><a href="#services">服务与报价</a></li>
+          <li><a href="#about">关于 Verba</a></li>
+          <li><a href="#contact">合作洽询</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-label">别处见 — Elsewhere</p>
+        <ul class="footer-links">
+          <li><a href="#top">微信公众号 · 慢句 Slow Sentence</a></li>
+          <li><a href="#top">小红书 @verba.writes</a></li>
+          <li><a href="#top">Medium @verba-essays</a></li>
+          <li><a href="#top">播客《字里行间》Host</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Verba Writing Studio · 保留所有权利 <span class="heart">✳</span></p>
+      <p class="footer-colophon">写于上海与里斯本之间 — Written between Shanghai &amp; Lisbon</p>
+      <p>Edition 07 / Set in Fraunces &amp; Inter</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* 滚动入场：IntersectionObserver（唯一脚本） */
+(function () {
+  var els = document.querySelectorAll('.reveal');
+
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('visible'); });
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -8% 0px'
+  });
+
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+</body>
+</html>
