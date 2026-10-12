@@ -1,0 +1,2380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CELESTE 星象馆 · 星辰之下，万物有序</title>
+<meta name="description" content="CELESTE 星象馆 —— 一座数字天文古籍馆。十二星座星盘、今日星象、行星过境与占星叙事，尽在星辰之下。" />
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Noto+Serif+SC:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   CELESTE 星象馆 — 午夜星图 · 独立样式
+   配色：午夜蓝 #0B1026 → 深紫 #1B1449 / 金 #D4AF37 / 香槟金 #E8C87E
+         柔紫 #8B7FD4 / 米白 #F2EDE3
+   ============================================================ */
+
+:root {
+  --midnight:   #0B1026;
+  --deep-violet:#1B1449;
+  --ink:        #070B1C;
+  --gold:       #D4AF37;
+  --champagne:  #E8C87E;
+  --soft-violet:#8B7FD4;
+  --cream:      #F2EDE3;
+  --cream-dim:  rgba(242, 237, 227, 0.62);
+  --cream-faint:rgba(242, 237, 227, 0.28);
+  --line-gold:  rgba(212, 175, 55, 0.28);
+  --line-soft:  rgba(242, 237, 227, 0.12);
+  --card-bg:    rgba(27, 20, 73, 0.42);
+  --card-bg-2:  rgba(11, 16, 38, 0.55);
+
+  --font-serif: 'Cormorant Garamond', 'Noto Serif SC', 'Songti SC', serif;
+  --font-han:   'Noto Serif SC', 'Songti SC', serif;
+
+  /* 使用设计令牌（含本地回退，双击直接打开也可完整渲染） */
+  --radius-lg:   var(--radius-lg, 16px);
+  --radius-md:   var(--radius-md, 10px);
+  --radius-full: var(--radius-full, 9999px);
+  --ease-x:      var(--ease-default, cubic-bezier(0.4, 0, 0.2, 1));
+  --dur:         var(--duration-normal, 250ms);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background:
+    radial-gradient(1200px 700px at 78% -8%, rgba(139, 127, 212, 0.22), transparent 62%),
+    radial-gradient(900px 620px at 12% 18%, rgba(212, 175, 55, 0.07), transparent 60%),
+    linear-gradient(178deg, #0B1026 0%, #131038 38%, #1B1449 72%, #120C33 100%);
+  background-attachment: fixed;
+  color: var(--cream);
+  font-family: var(--font-han);
+  font-weight: 300;
+  line-height: 1.9;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: rgba(212, 175, 55, 0.35); color: var(--cream); }
+
+/* ── 星空层：box-shadow 多点星 ─────────────────────────── */
+.starfield {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.stars, .stars-2, .stars-3 {
+  position: absolute;
+  top: 0; left: 0;
+  width: 2px; height: 2px;
+  border-radius: 50%;
+  background: transparent;
+}
+.stars {
+  box-shadow:
+    4vw  6vh 0 0 rgba(242,237,227,.85), 12vw 14vh 0 1px rgba(232,200,126,.7),
+    19vw  4vh 0 0 rgba(242,237,227,.55), 26vw 22vh 0 0 rgba(242,237,227,.8),
+    33vw  9vh 0 1px rgba(212,175,55,.6),  41vw 28vh 0 0 rgba(242,237,227,.5),
+    48vw 12vh 0 0 rgba(242,237,227,.9),  55vw 33vh 0 1px rgba(242,237,227,.45),
+    62vw  7vh 0 0 rgba(232,200,126,.75), 69vw 25vh 0 0 rgba(242,237,227,.65),
+    76vw 15vh 0 1px rgba(242,237,227,.8), 84vw 31vh 0 0 rgba(212,175,55,.55),
+    91vw  8vh 0 0 rgba(242,237,227,.6),  97vw 21vh 0 0 rgba(242,237,227,.85),
+    8vw  38vh 0 0 rgba(232,200,126,.6),  16vw 47vh 0 1px rgba(242,237,227,.5),
+    24vw 41vh 0 0 rgba(242,237,227,.75), 37vw 52vh 0 0 rgba(242,237,227,.45),
+    45vw 44vh 0 1px rgba(212,175,55,.65), 58vw 49vh 0 0 rgba(242,237,227,.7),
+    66vw 42vh 0 0 rgba(242,237,227,.5),  73vw 55vh 0 1px rgba(232,200,126,.6),
+    81vw 46vh 0 0 rgba(242,237,227,.8),  89vw 53vh 0 0 rgba(242,237,227,.55),
+    95vw 43vh 0 0 rgba(242,237,227,.7),  5vw  62vh 0 1px rgba(212,175,55,.5),
+    13vw 71vh 0 0 rgba(242,237,227,.65), 21vw 66vh 0 0 rgba(242,237,227,.45),
+    29vw 78vh 0 1px rgba(232,200,126,.7),36vw 63vh 0 0 rgba(242,237,227,.8),
+    44vw 74vh 0 0 rgba(242,237,227,.5),  52vw 67vh 0 0 rgba(242,237,227,.75),
+    61vw 81vh 0 1px rgba(212,175,55,.55),68vw 64vh 0 0 rgba(242,237,227,.6),
+    75vw 76vh 0 0 rgba(242,237,227,.85), 83vw 69vh 0 1px rgba(232,200,126,.55),
+    90vw 84vh 0 0 rgba(242,237,227,.5),  96vw 72vh 0 0 rgba(242,237,227,.7);
+  animation: twinkle 5.2s ease-in-out infinite;
+}
+.stars-2 {
+  box-shadow:
+    7vw 11vh 0 0 rgba(242,237,227,.4),  15vw 26vh 0 0 rgba(139,127,212,.5),
+    23vw  2vh 0 0 rgba(242,237,227,.35), 31vw 34vh 0 0 rgba(242,237,227,.5),
+    39vw 18vh 0 0 rgba(232,200,126,.45), 47vw 40vh 0 0 rgba(242,237,227,.3),
+    54vw 21vh 0 0 rgba(242,237,227,.55), 63vw 37vh 0 0 rgba(139,127,212,.4),
+    71vw 19vh 0 0 rgba(242,237,227,.35), 79vw 35vh 0 0 rgba(242,237,227,.5),
+    87vw 24vh 0 0 rgba(212,175,55,.4),  94vw 38vh 0 0 rgba(242,237,227,.35),
+    3vw  51vh 0 0 rgba(242,237,227,.5), 11vw 58vh 0 0 rgba(139,127,212,.45),
+    18vw 45vh 0 0 rgba(242,237,227,.3), 27vw 59vh 0 0 rgba(242,237,227,.5),
+    42vw 56vh 0 0 rgba(232,200,126,.4), 50vw 61vh 0 0 rgba(242,237,227,.35),
+    57vw 47vh 0 0 rgba(242,237,227,.55),65vw 60vh 0 0 rgba(139,127,212,.4),
+    78vw 51vh 0 0 rgba(242,237,227,.3), 86vw 62vh 0 0 rgba(242,237,227,.5),
+    93vw 56vh 0 0 rgba(212,175,55,.35), 6vw  86vh 0 0 rgba(242,237,227,.45),
+    25vw 91vh 0 0 rgba(242,237,227,.3), 38vw 88vh 0 0 rgba(139,127,212,.5),
+    56vw 93vh 0 0 rgba(242,237,227,.35),72vw 87vh 0 0 rgba(242,237,227,.5),
+    88vw 94vh 0 0 rgba(232,200,126,.4), 97vw 88vh 0 0 rgba(242,237,227,.3);
+  animation: twinkle 7.4s ease-in-out infinite reverse;
+}
+.stars-3 {
+  box-shadow:
+    2vw  18vh 0 1px rgba(232,200,126,.9), 28vw 12vh 0 1px rgba(242,237,227,.9),
+    51vw  5vh 0 1px rgba(212,175,55,.9),  74vw 29vh 0 1px rgba(242,237,227,.85),
+    92vw 13vh 0 1px rgba(232,200,126,.9), 35vw 71vh 0 1px rgba(242,237,227,.9),
+    60vw 83vh 0 1px rgba(212,175,55,.85), 12vw 92vh 0 1px rgba(242,237,227,.9),
+    82vw 61vh 0 1px rgba(242,237,227,.85), 47vw 47vh 0 1px rgba(232,200,126,.8);
+  animation: twinkle 3.6s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; }
+  38%      { opacity: 1; }
+  62%      { opacity: 0.55; }
+}
+
+/* 星云光晕 */
+.nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  opacity: 0.5;
+}
+.nebula-a {
+  width: 46vw; height: 46vw;
+  right: -14vw; top: -12vw;
+  background: radial-gradient(circle, rgba(139,127,212,0.22), transparent 68%);
+  animation: breath 11s var(--ease-x) infinite;
+}
+.nebula-b {
+  width: 38vw; height: 38vw;
+  left: -12vw; top: 42vh;
+  background: radial-gradient(circle, rgba(212,175,55,0.12), transparent 66%);
+  animation: breath 14s var(--ease-x) infinite reverse;
+}
+@keyframes breath {
+  0%, 100% { transform: scale(1);   opacity: 0.42; }
+  50%      { transform: scale(1.14); opacity: 0.72; }
+}
+
+/* ── 通用排版 ──────────────────────────────────────────── */
+.wrap { width: min(1180px, 92vw); margin: 0 auto; position: relative; z-index: 1; }
+
+.eyebrow {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.68rem;
+  letter-spacing: 0.52em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  opacity: 0.82;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9em;
+}
+.eyebrow::before {
+  content: "";
+  width: 34px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.eyebrow.center::after {
+  content: "";
+  width: 34px; height: 1px;
+  background: linear-gradient(270deg, transparent, var(--gold));
+}
+
+h2.section-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(2.1rem, 4.6vw, 3.65rem);
+  line-height: 1.22;
+  letter-spacing: 0.06em;
+  margin: 0.7rem 0 1.1rem;
+  color: var(--cream);
+}
+h2.section-title em {
+  font-style: italic;
+  color: var(--champagne);
+}
+.section-lead {
+  max-width: 44em;
+  color: var(--cream-dim);
+  font-size: 1.02rem;
+  letter-spacing: 0.04em;
+}
+section { position: relative; z-index: 1; padding: clamp(4.5rem, 9vw, 8.5rem) 0; }
+
+.rule-gold {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--line-gold) 18%, var(--line-gold) 82%, transparent);
+}
+
+/* ── 顶部导航 ──────────────────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-sticky, 200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem clamp(1.2rem, 4vw, 3.2rem);
+  background: linear-gradient(180deg, rgba(7, 11, 28, 0.82), rgba(7, 11, 28, 0));
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--cream);
+}
+.brand-mark {
+  font-family: var(--font-serif);
+  font-size: 1.42rem;
+  letter-spacing: 0.38em;
+  font-weight: 600;
+  color: var(--champagne);
+}
+.brand-sub {
+  font-size: 0.72rem;
+  letter-spacing: 0.42em;
+  color: var(--cream-faint);
+  text-transform: uppercase;
+}
+.nav-links {
+  display: flex;
+  gap: clamp(1rem, 2.6vw, 2.3rem);
+  list-style: none;
+}
+.nav-links a {
+  color: var(--cream-dim);
+  text-decoration: none;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  transition: color var(--dur) var(--ease-x);
+}
+.nav-links a:hover { color: var(--champagne); }
+.nav-cta {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--midnight);
+  background: linear-gradient(120deg, var(--gold), var(--champagne));
+  padding: 0.62rem 1.35rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: transform var(--dur) var(--ease-x), box-shadow var(--dur) var(--ease-x);
+}
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(212, 175, 55, 0.35);
+}
+
+/* ── HERO ──────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 9rem 0 5rem;
+  overflow: hidden;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(3rem, 8.2vw, 6.6rem);
+  line-height: 1.08;
+  letter-spacing: 0.055em;
+  margin: 1.6rem 0 1.7rem;
+  color: var(--cream);
+  text-shadow: 0 0 60px rgba(212, 175, 55, 0.18);
+}
+.hero-title .line-2 {
+  display: block;
+  background: linear-gradient(104deg, var(--champagne) 8%, var(--gold) 42%, var(--soft-violet) 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-style: italic;
+}
+.hero-sub {
+  max-width: 33em;
+  color: var(--cream-dim);
+  font-size: 1.06rem;
+  letter-spacing: 0.05em;
+  line-height: 2.05;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.15rem;
+  margin-top: 2.6rem;
+}
+.btn {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.76rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 1.05rem 2.4rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: transform var(--dur) var(--ease-x), box-shadow var(--dur) var(--ease-x), background var(--dur) var(--ease-x);
+  display: inline-block;
+}
+.btn-gold {
+  color: var(--midnight);
+  background: linear-gradient(120deg, var(--gold), var(--champagne) 70%, var(--gold));
+  box-shadow: 0 14px 40px rgba(212, 175, 55, 0.28);
+}
+.btn-gold:hover { transform: translateY(-3px); box-shadow: 0 22px 54px rgba(212, 175, 55, 0.42); }
+.btn-ghost {
+  color: var(--cream);
+  border: 1px solid var(--line-gold);
+  background: rgba(212, 175, 55, 0.05);
+}
+.btn-ghost:hover {
+  transform: translateY(-3px);
+  background: rgba(212, 175, 55, 0.14);
+  box-shadow: 0 18px 40px rgba(11, 16, 38, 0.5);
+}
+.hero-meta {
+  display: flex;
+  gap: 2.6rem;
+  margin-top: 3.4rem;
+  flex-wrap: wrap;
+}
+.hero-meta .stat-num {
+  font-family: var(--font-serif);
+  font-size: 2.15rem;
+  color: var(--champagne);
+  line-height: 1.1;
+}
+.hero-meta .stat-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  margin-top: 0.35rem;
+}
+
+/* HERO 天体装饰 */
+.celestial {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.moon-halo {
+  position: absolute;
+  width: 340px; height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 200, 126, 0.32), rgba(212, 175, 55, 0.1) 45%, transparent 70%);
+  animation: halo-breathe 7.5s ease-in-out infinite;
+}
+@keyframes halo-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.55; filter: blur(6px); }
+  50%      { transform: scale(1.22); opacity: 0.95; filter: blur(14px); }
+}
+.orbit-svg { width: min(460px, 82vw); height: auto; overflow: visible; }
+.orbit-rot-slow  { animation: spin 90s linear infinite;  transform-origin: 250px 250px; }
+.orbit-rot-fast  { animation: spin 46s linear infinite reverse; transform-origin: 250px 250px; }
+.orbit-rot-mid   { animation: spin 64s linear infinite;  transform-origin: 250px 250px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.float-slow { animation: floaty 9s ease-in-out infinite; }
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-16px); }
+}
+
+/* ── 星语飘带 ──────────────────────────────────────────── */
+.ribbon {
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  padding: 1.15rem 0;
+  overflow: hidden;
+  background: rgba(7, 11, 28, 0.35);
+}
+.ribbon-track {
+  display: flex;
+  gap: 3.2rem;
+  width: max-content;
+  animation: marquee 42s linear infinite;
+  white-space: nowrap;
+}
+.ribbon-track span {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  letter-spacing: 0.42em;
+  color: var(--cream-faint);
+}
+.ribbon-track .glow { color: var(--champagne); opacity: 0.9; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── 星盘区 ────────────────────────────────────────────── */
+.zodiac-layout {
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr;
+  gap: clamp(2rem, 5vw, 4.6rem);
+  align-items: center;
+  margin-top: 3.2rem;
+}
+.wheel-holder { position: relative; }
+.wheel-holder::before {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.13), transparent 65%);
+  border-radius: 50%;
+}
+.wheel { width: 100%; height: auto; overflow: visible; cursor: pointer; }
+.wheel-ring       { fill: none; stroke: var(--line-gold); stroke-width: 1; }
+.wheel-ring-faint { fill: none; stroke: rgba(242, 237, 227, 0.1); stroke-width: 1; }
+.wheel-dash       { fill: none; stroke: rgba(212, 175, 55, 0.35); stroke-width: 1; stroke-dasharray: 2 8; }
+.wheel-tick       { stroke: rgba(232, 200, 126, 0.4); stroke-width: 1; }
+.wheel-spoke      { stroke: rgba(242, 237, 227, 0.07); stroke-width: 1; }
+.wheel-glyph {
+  fill: var(--cream-dim);
+  font-family: var(--font-serif);
+  font-size: 30px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  cursor: pointer;
+  transition: fill var(--dur) var(--ease-x), transform var(--dur) var(--ease-x), filter var(--dur) var(--ease-x);
+}
+.wheel-glyph:hover {
+  fill: var(--champagne);
+  filter: drop-shadow(0 0 12px rgba(232, 200, 126, 0.75));
+}
+.zodiac-node.active .wheel-glyph {
+  fill: var(--gold);
+  filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.9));
+}
+.zodiac-node.active .node-dot { fill: var(--gold); opacity: 1; }
+.node-dot { fill: rgba(232, 200, 126, 0.4); opacity: 0.55; transition: all var(--dur) var(--ease-x); }
+.wheel-center-symbol {
+  fill: var(--champagne);
+  font-family: var(--font-serif);
+  font-size: 62px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  opacity: 0.9;
+}
+.wheel-center-caption {
+  fill: var(--cream-faint);
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 10px;
+  letter-spacing: 6px;
+  text-anchor: middle;
+}
+
+/* 运势卡片 */
+.fortune-card {
+  background: linear-gradient(165deg, var(--card-bg), var(--card-bg-2));
+  border: 1px solid var(--line-gold);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.8rem, 3.4vw, 2.9rem);
+  box-shadow: 0 30px 70px rgba(7, 11, 28, 0.55);
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.35s var(--ease-x), transform 0.35s var(--ease-x);
+}
+.fortune-card::after {
+  content: "";
+  position: absolute;
+  top: -70px; right: -70px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(232, 200, 126, 0.16), transparent 68%);
+  pointer-events: none;
+}
+.fortune-card.swapping { opacity: 0; transform: translateY(10px); }
+.fc-head {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 1.5rem;
+}
+.fc-glyph {
+  font-family: var(--font-serif);
+  font-size: 3.6rem;
+  line-height: 1;
+  color: var(--gold);
+  text-shadow: 0 0 26px rgba(212, 175, 55, 0.5);
+}
+.fc-name {
+  font-family: var(--font-serif);
+  font-size: 2.15rem;
+  letter-spacing: 0.16em;
+  line-height: 1.25;
+}
+.fc-en {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.68rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+.fc-date {
+  margin-left: auto;
+  text-align: right;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  color: var(--champagne);
+}
+.fc-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.15rem 1.6rem;
+  margin: 1.7rem 0 1.55rem;
+}
+.fc-meta .k {
+  font-size: 0.66rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+.fc-meta .v {
+  font-family: var(--font-serif);
+  font-size: 1.16rem;
+  letter-spacing: 0.12em;
+  color: var(--cream);
+  margin-top: 0.16rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.lucky-dot {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(242, 237, 227, 0.35);
+}
+.fc-fortune {
+  font-size: 1.02rem;
+  line-height: 2.15;
+  color: var(--cream-dim);
+  letter-spacing: 0.04em;
+  border-left: 2px solid var(--line-gold);
+  padding-left: 1.25rem;
+}
+.fc-bars { display: grid; gap: 0.85rem; margin-top: 1.85rem; }
+.bar-row { display: grid; grid-template-columns: 4.2em 1fr 2.8em; align-items: center; gap: 0.95rem; }
+.bar-label { font-size: 0.72rem; letter-spacing: 0.3em; color: var(--cream-faint); }
+.bar-track {
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: rgba(242, 237, 227, 0.1);
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--soft-violet), var(--gold), var(--champagne));
+  transition: width 0.6s var(--ease-x);
+}
+.bar-val {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  color: var(--champagne);
+  text-align: right;
+}
+
+/* ── 今日星象面板 ──────────────────────────────────────── */
+.sky-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.1rem, 2.4vw, 2rem);
+  margin-top: 3.4rem;
+}
+.sky-card {
+  background: linear-gradient(172deg, rgba(27, 20, 73, 0.5), rgba(11, 16, 38, 0.5));
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  padding: 2.35rem 2.1rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--dur) var(--ease-x), border-color var(--dur) var(--ease-x);
+}
+.sky-card:hover {
+  transform: translateY(-7px);
+  border-color: var(--line-gold);
+}
+.sky-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(420px 200px at 50% -10%, rgba(232, 200, 126, 0.12), transparent 70%);
+  pointer-events: none;
+}
+.sky-kicker {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.64rem;
+  letter-spacing: 0.46em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+.sky-title {
+  font-family: var(--font-serif);
+  font-size: 1.72rem;
+  letter-spacing: 0.14em;
+  margin: 0.75rem 0 0.35rem;
+}
+.sky-note {
+  font-size: 0.88rem;
+  color: var(--cream-dim);
+  letter-spacing: 0.05em;
+  line-height: 1.95;
+  margin-top: 1.1rem;
+}
+.moon-svg { width: 128px; height: 128px; margin: 1.25rem auto 0.4rem; display: block; }
+.moon-glow-disc { animation: breath 8s ease-in-out infinite; transform-origin: 64px 64px; }
+.phase-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: var(--cream-faint);
+  margin-top: 1.15rem;
+}
+.phase-line b { color: var(--champagne); font-weight: 500; }
+
+.mercury-symbol {
+  font-family: var(--font-serif);
+  font-size: 4.4rem;
+  color: var(--soft-violet);
+  line-height: 1.15;
+  text-shadow: 0 0 34px rgba(139, 127, 212, 0.55);
+}
+.retro-badge {
+  display: inline-block;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--midnight);
+  background: linear-gradient(120deg, var(--champagne), var(--gold));
+  padding: 0.34rem 1.05rem;
+  border-radius: var(--radius-full);
+  margin-top: 0.55rem;
+}
+
+/* 幸运指数环 */
+.ring-wrap {
+  width: 186px; height: 186px;
+  margin: 1.45rem auto 0.2rem;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from -90deg,
+    var(--champagne) 0%, var(--gold) 46%, var(--soft-violet) 78%,
+    rgba(242, 237, 227, 0.09) 82%, rgba(242, 237, 227, 0.09) 100%);
+  -webkit-mask: radial-gradient(circle, transparent 62%, #000 63%);
+  mask: radial-gradient(circle, transparent 62%, #000 63%);
+}
+.ring-inner {
+  position: absolute;
+  inset: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--line-soft);
+  display: grid;
+  place-items: center;
+}
+.ring-num {
+  font-family: var(--font-serif);
+  font-size: 3.15rem;
+  color: var(--champagne);
+  line-height: 1;
+}
+.ring-unit {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.62rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  margin-top: 0.28rem;
+}
+
+/* ── 四元素 ────────────────────────────────────────────── */
+.elements-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin-top: 3.4rem;
+}
+.element-card {
+  background: linear-gradient(178deg, rgba(27, 20, 73, 0.44), rgba(11, 16, 38, 0.52));
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  padding: 2.6rem 1.9rem 2.35rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.45s var(--ease-x), border-color 0.45s var(--ease-x), box-shadow 0.45s var(--ease-x);
+}
+.element-card:hover {
+  transform: translateY(-9px);
+  border-color: var(--line-gold);
+  box-shadow: 0 34px 70px rgba(7, 11, 28, 0.6);
+}
+.element-card::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: -46px;
+  width: 190px; height: 190px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--el-glow, rgba(212, 175, 55, 0.16)), transparent 68%);
+  pointer-events: none;
+}
+.el-icon { width: 84px; height: 84px; margin: 0 auto 1.35rem; display: block; }
+.el-icon .el-ring { animation: spin 34s linear infinite; transform-origin: 42px 42px; }
+.el-name {
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  letter-spacing: 0.28em;
+}
+.el-en {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.62rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  margin: 0.42rem 0 1.15rem;
+}
+.el-signs {
+  display: flex;
+  justify-content: center;
+  gap: 0.85rem;
+  font-family: var(--font-serif);
+  font-size: 1.42rem;
+  color: var(--champagne);
+  margin-bottom: 1.15rem;
+}
+.el-signs small {
+  display: block;
+  font-family: var(--font-han);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  color: var(--cream-faint);
+  margin-top: 0.15rem;
+}
+.el-desc {
+  font-size: 0.895rem;
+  line-height: 2.05;
+  color: var(--cream-dim);
+  letter-spacing: 0.04em;
+}
+
+/* ── 行星过境时间线 ────────────────────────────────────── */
+.timeline {
+  position: relative;
+  margin: 3.6rem auto 0;
+  max-width: 880px;
+  padding-left: 0;
+  list-style: none;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 108px; top: 6px; bottom: 6px;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--line-gold) 12%, var(--line-gold) 88%, transparent);
+}
+.tl-item {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 2.6rem;
+  padding: 1.55rem 0;
+  position: relative;
+}
+.tl-date {
+  text-align: right;
+  font-family: var(--font-serif);
+  font-size: 1.28rem;
+  letter-spacing: 0.12em;
+  color: var(--champagne);
+  line-height: 1.45;
+}
+.tl-date small {
+  display: block;
+  font-family: var(--font-han);
+  font-size: 0.68rem;
+  letter-spacing: 0.32em;
+  color: var(--cream-faint);
+}
+.tl-body { position: relative; padding-left: 1.15rem; }
+.tl-body::before {
+  content: "";
+  position: absolute;
+  left: -22px; top: 12px;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--midnight);
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 0 5px rgba(212, 175, 55, 0.12), 0 0 18px rgba(212, 175, 55, 0.55);
+}
+.tl-item.major .tl-body::before {
+  background: var(--gold);
+  box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.18), 0 0 26px rgba(212, 175, 55, 0.8);
+}
+.tl-title {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.42rem;
+}
+.tl-tag {
+  display: inline-block;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.6rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  border: 1px solid var(--line-gold);
+  border-radius: var(--radius-full);
+  padding: 0.22rem 0.85rem;
+  margin-bottom: 0.72rem;
+}
+.tl-desc {
+  font-size: 0.945rem;
+  color: var(--cream-dim);
+  letter-spacing: 0.045em;
+  line-height: 2.05;
+  max-width: 46em;
+}
+
+/* ── 编辑式叙事 ────────────────────────────────────────── */
+.editorial {
+  background:
+    radial-gradient(900px 520px at 82% 12%, rgba(139, 127, 212, 0.14), transparent 62%),
+    linear-gradient(180deg, rgba(7, 11, 28, 0.25), rgba(7, 11, 28, 0.5));
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.editorial-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+.drop-cap::first-letter {
+  font-family: var(--font-serif);
+  font-size: 4.6em;
+  float: left;
+  line-height: 0.82;
+  margin: 0.06em 0.14em 0 0;
+  color: var(--gold);
+  font-style: italic;
+  text-shadow: 0 0 34px rgba(212, 175, 55, 0.4);
+}
+.editorial p {
+  font-size: clamp(1.08rem, 1.7vw, 1.32rem);
+  line-height: 2.35;
+  letter-spacing: 0.055em;
+  color: var(--cream-dim);
+  text-align: left;
+  margin-bottom: 1.9rem;
+}
+.editorial .pull-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.65rem, 3.4vw, 2.55rem);
+  line-height: 1.72;
+  letter-spacing: 0.09em;
+  color: var(--cream);
+  margin: 3.1rem 0;
+  text-align: center;
+}
+.editorial .pull-quote span { color: var(--champagne); }
+.sign-off {
+  margin-top: 2.8rem;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  letter-spacing: 0.34em;
+  color: var(--cream-faint);
+}
+.sign-off b {
+  display: block;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.66rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  font-weight: 500;
+  margin-top: 0.55rem;
+}
+
+/* ── 订阅 CTA ──────────────────────────────────────────── */
+.subscribe-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line-gold);
+  border-radius: var(--radius-lg);
+  padding: clamp(2.6rem, 6vw, 5.2rem) clamp(1.8rem, 5vw, 5rem);
+  background:
+    radial-gradient(720px 380px at 88% 20%, rgba(212, 175, 55, 0.16), transparent 64%),
+    radial-gradient(600px 420px at 8% 90%, rgba(139, 127, 212, 0.22), transparent 62%),
+    linear-gradient(140deg, rgba(27, 20, 73, 0.72), rgba(11, 16, 38, 0.78));
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+.subscribe-card .constellation-deco {
+  position: absolute;
+  right: -60px; top: -60px;
+  width: 340px; height: 340px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.sub-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.05rem, 4.2vw, 3.15rem);
+  line-height: 1.32;
+  letter-spacing: 0.09em;
+  margin: 0.95rem 0 1.15rem;
+}
+.sub-title em { font-style: italic; color: var(--champagne); }
+.sub-desc {
+  color: var(--cream-dim);
+  font-size: 1.01rem;
+  letter-spacing: 0.05em;
+  max-width: 32em;
+}
+.sub-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+  position: relative;
+  z-index: 1;
+}
+.sub-form label {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.62rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+.sub-form input {
+  width: 100%;
+  background: rgba(242, 237, 227, 0.05);
+  border: 1px solid var(--line-gold);
+  border-radius: var(--radius-md);
+  padding: 1.02rem 1.35rem;
+  color: var(--cream);
+  font-family: var(--font-han);
+  font-size: 0.98rem;
+  letter-spacing: 0.08em;
+  outline: none;
+  transition: border-color var(--dur) var(--ease-x), box-shadow var(--dur) var(--ease-x);
+}
+.sub-form input::placeholder { color: var(--cream-faint); }
+.sub-form input:focus {
+  border-color: var(--champagne);
+  box-shadow: 0 0 0 4px rgba(232, 200, 126, 0.14);
+}
+.sub-btn {
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.74rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  padding: 1.12rem 2.2rem;
+  border-radius: var(--radius-full);
+  color: var(--midnight);
+  background: linear-gradient(120deg, var(--gold), var(--champagne) 62%, var(--gold));
+  transition: transform var(--dur) var(--ease-x), box-shadow var(--dur) var(--ease-x);
+}
+.sub-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 46px rgba(212, 175, 55, 0.42);
+}
+.sub-fine {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--cream-faint);
+  line-height: 1.95;
+}
+.sub-toast {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  letter-spacing: 0.18em;
+  color: var(--champagne);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.45s var(--ease-x);
+  min-height: 1.6em;
+}
+.sub-toast.show { opacity: 1; transform: translateY(0); }
+
+/* 占星师条 */
+.readers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2.2vw, 1.9rem);
+  margin-top: 2.6rem;
+}
+.reader {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  background: rgba(27, 20, 73, 0.4);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem 1.5rem;
+  transition: border-color var(--dur) var(--ease-x), transform var(--dur) var(--ease-x);
+}
+.reader:hover { border-color: var(--line-gold); transform: translateY(-4px); }
+.reader-avatar {
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  color: var(--champagne);
+  border: 1px solid var(--line-gold);
+  background: radial-gradient(circle at 32% 28%, rgba(232, 200, 126, 0.3), rgba(27, 20, 73, 0.9));
+}
+.reader-name { font-family: var(--font-serif); font-size: 1.22rem; letter-spacing: 0.16em; }
+.reader-role {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  margin-top: 0.18rem;
+}
+
+/* ── FOOTER ────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--line-soft);
+  padding: clamp(3.6rem, 7vw, 6rem) 0 2.4rem;
+  background: linear-gradient(180deg, rgba(7, 11, 28, 0.2), rgba(7, 11, 28, 0.72));
+  position: relative;
+  z-index: 1;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.15fr;
+  gap: clamp(1.8rem, 4vw, 3.6rem);
+}
+.footer-brand .brand-mark { font-size: 1.65rem; }
+.footer-tagline {
+  margin-top: 1.15rem;
+  color: var(--cream-dim);
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  max-width: 24em;
+}
+.footer-col h4 {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.66rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  font-weight: 500;
+  margin-bottom: 1.35rem;
+}
+.footer-col ul { list-style: none; display: grid; gap: 0.78rem; }
+.footer-col a {
+  color: var(--cream-dim);
+  text-decoration: none;
+  font-size: 0.92rem;
+  letter-spacing: 0.12em;
+  transition: color var(--dur) var(--ease-x), padding-left var(--dur) var(--ease-x);
+}
+.footer-col a:hover { color: var(--champagne); padding-left: 0.42rem; }
+.footer-note {
+  margin-top: clamp(2.6rem, 5vw, 4.2rem);
+  padding-top: 1.9rem;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  justify-content: space-between;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  color: var(--cream-faint);
+}
+.disclaimer {
+  max-width: 46em;
+  line-height: 2;
+}
+.disclaimer b {
+  color: var(--champagne);
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+.footer-glyphs {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  letter-spacing: 0.62em;
+  color: var(--cream-faint);
+  text-align: center;
+  margin: 2.6rem 0 1.2rem;
+  opacity: 0.75;
+}
+
+/* ── 星语回响 ──────────────────────────────────────────── */
+.quote-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2.2vw, 1.9rem);
+  margin-top: 3.4rem;
+}
+.quote-card {
+  background: linear-gradient(176deg, rgba(27, 20, 73, 0.46), rgba(11, 16, 38, 0.5));
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  padding: 2.55rem 2.15rem 2.25rem;
+  position: relative;
+  transition: transform 0.45s var(--ease-x), border-color 0.45s var(--ease-x);
+}
+.quote-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--line-gold);
+}
+.quote-mark {
+  font-family: var(--font-serif);
+  font-size: 3.6rem;
+  line-height: 0.6;
+  color: var(--gold);
+  opacity: 0.75;
+}
+.quote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.16rem;
+  line-height: 2.05;
+  letter-spacing: 0.07em;
+  color: var(--cream-dim);
+  margin: 1.35rem 0 1.75rem;
+}
+.quote-author {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 1.15rem;
+}
+.quote-glyph {
+  font-family: var(--font-serif);
+  font-size: 1.42rem;
+  color: var(--champagne);
+}
+.quote-name {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  letter-spacing: 0.22em;
+}
+.quote-sign {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.6rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+
+/* ── 今夜仪式 ──────────────────────────────────────────── */
+.ritual {
+  background: linear-gradient(180deg, rgba(7, 11, 28, 0.16), rgba(7, 11, 28, 0.42));
+  border-top: 1px solid var(--line-soft);
+}
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.1rem, 2.4vw, 2.1rem);
+  margin-top: 3.3rem;
+}
+.step {
+  padding: 2.55rem 2.15rem 2.45rem;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  background: rgba(27, 20, 73, 0.32);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.45s var(--ease-x), transform 0.45s var(--ease-x);
+}
+.step:hover {
+  border-color: var(--line-gold);
+  transform: translateY(-7px);
+}
+.step-num {
+  font-family: var(--font-serif);
+  font-size: 4.4rem;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(212, 175, 55, 0.55);
+  letter-spacing: 0.04em;
+}
+.step-kicker {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.62rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  margin: 1.15rem 0 0.45rem;
+}
+.step-title {
+  font-family: var(--font-serif);
+  font-size: 1.58rem;
+  letter-spacing: 0.16em;
+  margin-bottom: 0.72rem;
+}
+.step-desc {
+  font-size: 0.925rem;
+  line-height: 2.1;
+  letter-spacing: 0.05em;
+  color: var(--cream-dim);
+}
+.step-star {
+  position: absolute;
+  right: 1.55rem; top: 1.75rem;
+  color: var(--champagne);
+  opacity: 0.65;
+  font-size: 1.05rem;
+  animation: twinkle 4.2s ease-in-out infinite;
+}
+
+/* ── 入场动效 ──────────────────────────────────────────── */
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.9s var(--ease-x), transform 0.9s var(--ease-x);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+/* ── 响应式 ────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero-grid, .zodiac-layout, .subscribe-card { grid-template-columns: 1fr; }
+  .celestial { order: -1; margin-bottom: 2.4rem; }
+  .sky-panel { grid-template-columns: 1fr; }
+  .elements-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .readers { grid-template-columns: 1fr; }
+}
+@media (max-width: 680px) {
+  .nav-links { display: none; }
+  .elements-grid { grid-template-columns: 1fr; }
+  .fc-meta { grid-template-columns: 1fr; }
+  .timeline::before { left: 12px; }
+  .tl-item { grid-template-columns: 1fr; gap: 0.55rem; }
+  .tl-date { text-align: left; padding-left: 2.2rem; }
+  .tl-body { padding-left: 2.2rem; }
+  .tl-body::before { left: 7px; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: clamp(2.55rem, 11vw, 4rem); }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 星空背景层 ══════════ -->
+<div class="starfield" aria-hidden="true">
+  <div class="nebula nebula-a"></div>
+  <div class="nebula nebula-b"></div>
+  <div class="stars"></div>
+  <div class="stars-2"></div>
+  <div class="stars-3"></div>
+</div>
+
+<!-- ══════════ 导航 ══════════ -->
+<nav class="nav">
+  <a class="brand" href="#top">
+    <span class="brand-mark">CELESTE</span>
+    <span class="brand-sub">星象馆</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#zodiac">十二星盘</a></li>
+    <li><a href="#today">今日星象</a></li>
+    <li><a href="#elements">四元素</a></li>
+    <li><a href="#transits">行星过境</a></li>
+    <li><a href="#editorial">解读星辰</a></li>
+  </ul>
+  <a class="nav-cta" href="#subscribe">订阅星讯</a>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero" id="top" aria-label="首屏 · 星辰之下">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">CELESTE · EST. MMXXVI · 数字天文古籍馆</span>
+      <h1 class="hero-title">
+        星辰之下，
+        <span class="line-2">万物有序</span>
+      </h1>
+      <p class="hero-sub">
+        我们把三千年的观星手稿，译作你今夜的一盏灯。<br />
+        十二星盘、月相盈亏、行星过境——在这里，
+        天穹的秩序与人间的心事，第一次被同一套语法书写。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="#zodiac">开启我的星盘</a>
+        <a class="btn btn-ghost" href="#today">查看今夜星象</a>
+      </div>
+      <div class="hero-meta">
+        <div>
+          <div class="stat-num">12</div>
+          <div class="stat-label">星座宫位</div>
+        </div>
+        <div>
+          <div class="stat-num">7</div>
+          <div class="stat-label">古典行星</div>
+        </div>
+        <div>
+          <div class="stat-num">365</div>
+          <div class="stat-label">每日星象</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">宇宙好奇心</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SVG 月亮 / 星盘装饰 -->
+    <div class="celestial">
+      <div class="moon-halo" aria-hidden="true"></div>
+      <svg class="orbit-svg float-slow" viewBox="0 0 500 500" role="img" aria-label="月亮与星盘装饰图形">
+        <defs>
+          <radialGradient id="moonGrad" cx="38%" cy="32%" r="72%">
+            <stop offset="0%" stop-color="#F6E7B8" />
+            <stop offset="52%" stop-color="#E8C87E" />
+            <stop offset="100%" stop-color="#B98F2E" />
+          </radialGradient>
+          <radialGradient id="haloGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(232,200,126,0.5)" />
+            <stop offset="70%" stop-color="rgba(232,200,126,0.08)" />
+            <stop offset="100%" stop-color="rgba(232,200,126,0)" />
+          </radialGradient>
+          <linearGradient id="ringGold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.9" />
+            <stop offset="55%" stop-color="#8B7FD4" stop-opacity="0.5" />
+            <stop offset="100%" stop-color="#D4AF37" stop-opacity="0.15" />
+          </linearGradient>
+        </defs>
+
+        <circle cx="250" cy="250" r="190" fill="url(#haloGrad)" />
+
+        <!-- 外层刻度环 -->
+        <g class="orbit-rot-slow">
+          <circle cx="250" cy="250" r="216" fill="none" stroke="url(#ringGold)" stroke-width="1.2" />
+          <circle cx="250" cy="250" r="202" fill="none" stroke="rgba(212,175,55,0.32)" stroke-width="1" stroke-dasharray="2 10" />
+          <g stroke="rgba(232,200,126,0.55)" stroke-width="1">
+            <line x1="250" y1="34"  x2="250" y2="52" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(30 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(60 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(90 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(120 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(150 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(180 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(210 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(240 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(270 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(300 250 250)" />
+            <line x1="250" y1="34"  x2="250" y2="52" transform="rotate(330 250 250)" />
+          </g>
+          <!-- 轨道行星 -->
+          <circle cx="250" cy="40" r="6" fill="#E8C87E" />
+          <circle cx="250" cy="40" r="12" fill="rgba(232,200,126,0.25)" />
+        </g>
+
+        <!-- 中层星盘环 -->
+        <g class="orbit-rot-fast">
+          <circle cx="250" cy="250" r="158" fill="none" stroke="rgba(139,127,212,0.5)" stroke-width="1" />
+          <path d="M250 92 L 387 328 L 113 328 Z" fill="none" stroke="rgba(212,175,55,0.35)" stroke-width="1" />
+          <path d="M250 408 L 113 172 L 387 172 Z" fill="none" stroke="rgba(139,127,212,0.4)" stroke-width="1" />
+          <circle cx="250" cy="92"  r="4" fill="#D4AF37" />
+          <circle cx="387" cy="328" r="4" fill="#8B7FD4" />
+          <circle cx="113" cy="328" r="4" fill="#E8C87E" />
+        </g>
+
+        <g class="orbit-rot-mid">
+          <circle cx="250" cy="250" r="124" fill="none" stroke="rgba(212,175,55,0.22)" stroke-width="1" stroke-dasharray="1 7" />
+          <circle cx="250" cy="126" r="3.4" fill="#F2EDE3" />
+          <circle cx="374" cy="250" r="2.6" fill="#E8C87E" />
+          <circle cx="250" cy="374" r="3"  fill="#8B7FD4" />
+          <circle cx="126" cy="250" r="2.2" fill="#F2EDE3" />
+        </g>
+
+        <!-- 月球本体 -->
+        <circle cx="250" cy="250" r="88" fill="url(#moonGrad)" />
+        <g fill="rgba(185,143,46,0.34)">
+          <circle cx="222" cy="216" r="15" />
+          <circle cx="278" cy="234" r="10" />
+          <circle cx="238" cy="282" r="19" />
+          <circle cx="292" cy="284" r="8" />
+          <circle cx="205" cy="258" r="7" />
+          <circle cx="262" cy="196" r="6" />
+        </g>
+        <path d="M250 162 A88 88 0 0 1 250 338 A58 88 0 0 0 250 162 Z" fill="rgba(11,16,38,0.34)" />
+
+        <!-- 星芒 -->
+        <g stroke="rgba(242,237,227,0.7)" stroke-width="1">
+          <line x1="88"  y1="118" x2="88"  y2="146" />
+          <line x1="74"  y1="132" x2="102" y2="132" />
+          <line x1="418" y1="404" x2="418" y2="428" />
+          <line x1="406" y1="416" x2="430" y2="416" />
+          <line x1="432" y1="96"  x2="432" y2="116" />
+          <line x1="422" y1="106" x2="442" y2="106" />
+        </g>
+        <circle cx="88"  cy="132" r="2.6" fill="#E8C87E" />
+        <circle cx="418" cy="416" r="2.2" fill="#F2EDE3" />
+        <circle cx="432" cy="106" r="1.8" fill="#E8C87E" />
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 星语飘带 ══════════ -->
+<div class="ribbon" aria-hidden="true">
+  <div class="ribbon-track">
+    <span>AS ABOVE, SO BELOW</span><span class="glow">✦</span>
+    <span>♈ 白羊 · ♉ 金牛 · ♊ 双子 · ♋ 巨蟹</span><span class="glow">✦</span>
+    <span>月亮正在盈凸 · 光辉 68%</span><span class="glow">✦</span>
+    <span>♌ 狮子 · ♍ 处女 · ♎ 天秤 · ♏ 天蝎</span><span class="glow">✦</span>
+    <span>水星顺行 · 沟通复归有序</span><span class="glow">✦</span>
+    <span>♐ 射手 · ♑ 摩羯 · ♒ 水瓶 · ♓ 双鱼</span><span class="glow">✦</span>
+    <span>AS ABOVE, SO BELOW</span><span class="glow">✦</span>
+    <span>♈ 白羊 · ♉ 金牛 · ♊ 双子 · ♋ 巨蟹</span><span class="glow">✦</span>
+    <span>月亮正在盈凸 · 光辉 68%</span><span class="glow">✦</span>
+    <span>♌ 狮子 · ♍ 处女 · ♎ 天秤 · ♏ 天蝎</span><span class="glow">✦</span>
+    <span>水星顺行 · 沟通复归有序</span><span class="glow">✦</span>
+    <span>♐ 射手 · ♑ 摩羯 · ♒ 水瓶 · ♓ 双鱼</span><span class="glow">✦</span>
+  </div>
+</div>
+
+<!-- ══════════ 交互式十二星座星盘 ══════════ -->
+<section id="zodiac">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow center">Interactive Natal Wheel · 交互星盘</span>
+      <h2 class="section-title">转动你的<em>十二星盘</em></h2>
+      <p class="section-lead">
+        点击星盘上的任意星座符号，黄道十二宫将向你展开今日的天象手稿——
+        日期、元素、守护星、幸运色，以及一段专属于此刻的星语。
+      </p>
+    </div>
+
+    <div class="zodiac-layout">
+      <!-- SVG 星盘 -->
+      <div class="wheel-holder reveal">
+        <svg class="wheel" viewBox="0 0 600 600" role="group" aria-label="十二星座星盘">
+          <defs>
+            <radialGradient id="wheelCore" cx="50%" cy="42%" r="62%">
+              <stop offset="0%" stop-color="rgba(139,127,212,0.28)" />
+              <stop offset="70%" stop-color="rgba(27,20,73,0.18)" />
+              <stop offset="100%" stop-color="rgba(11,16,38,0)" />
+            </radialGradient>
+            <linearGradient id="wheelRingGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.75" />
+              <stop offset="50%" stop-color="#8B7FD4" stop-opacity="0.45" />
+              <stop offset="100%" stop-color="#D4AF37" stop-opacity="0.7" />
+            </linearGradient>
+          </defs>
+
+          <circle cx="300" cy="300" r="292" fill="url(#wheelCore)" />
+          <circle class="wheel-ring" cx="300" cy="300" r="284" stroke="url(#wheelRingGrad)" />
+          <circle class="wheel-dash" cx="300" cy="300" r="268" />
+          <circle class="wheel-ring" cx="300" cy="300" r="248" />
+          <circle class="wheel-ring-faint" cx="300" cy="300" r="212" />
+          <circle class="wheel-ring-faint" cx="300" cy="300" r="150" />
+          <circle class="wheel-ring-faint" cx="300" cy="300" r="92" />
+
+          <!-- 12 分度辐条 -->
+          <g>
+            <line class="wheel-spoke" x1="300" y1="52"  x2="300" y2="548" />
+            <line class="wheel-spoke" x1="300" y1="52"  x2="300" y2="548" transform="rotate(30 300 300)" />
+            <line class="wheel-spoke" x1="300" y1="52"  x2="300" y2="548" transform="rotate(60 300 300)" />
+            <line class="wheel-spoke" x1="300" y1="52"  x2="300" y2="548" transform="rotate(90 300 300)" />
+            <line class="wheel-spoke" x1="300" y1="52"  x2="300" y2="548" transform="rotate(120 300 300)" />
+            <line class="wheel-spoke" x1="300" y1="52"  x2="300" y2="548" transform="rotate(150 300 300)" />
+          </g>
+
+          <!-- 外圈刻度 -->
+          <g>
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(30 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(60 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(90 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(120 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(150 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(180 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(210 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(240 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(270 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(300 300 300)" />
+            <line class="wheel-tick" x1="300" y1="16" x2="300" y2="36" transform="rotate(330 300 300)" />
+          </g>
+
+          <!-- 星座符号（点击交互） -->
+          <g class="zodiac-node active" data-sign="aries"    tabindex="0" role="button" aria-label="白羊座">
+            <circle class="node-dot" cx="300" cy="70" r="3.4" />
+            <text class="wheel-glyph" x="300" y="52">♈</text>
+          </g>
+          <g class="zodiac-node" data-sign="taurus"   tabindex="0" role="button" aria-label="金牛座">
+            <circle class="node-dot" cx="415" cy="101" r="3.4" />
+            <text class="wheel-glyph" x="424" y="86">♉</text>
+          </g>
+          <g class="zodiac-node" data-sign="gemini"   tabindex="0" role="button" aria-label="双子座">
+            <circle class="node-dot" cx="499" cy="185" r="3.4" />
+            <text class="wheel-glyph" x="515" y="176">♊</text>
+          </g>
+          <g class="zodiac-node" data-sign="cancer"   tabindex="0" role="button" aria-label="巨蟹座">
+            <circle class="node-dot" cx="530" cy="300" r="3.4" />
+            <text class="wheel-glyph" x="548" y="302">♋</text>
+          </g>
+          <g class="zodiac-node" data-sign="leo"      tabindex="0" role="button" aria-label="狮子座">
+            <circle class="node-dot" cx="499" cy="415" r="3.4" />
+            <text class="wheel-glyph" x="515" y="426">♌</text>
+          </g>
+          <g class="zodiac-node" data-sign="virgo"    tabindex="0" role="button" aria-label="处女座">
+            <circle class="node-dot" cx="415" cy="499" r="3.4" />
+            <text class="wheel-glyph" x="424" y="516">♍</text>
+          </g>
+          <g class="zodiac-node" data-sign="libra"    tabindex="0" role="button" aria-label="天秤座">
+            <circle class="node-dot" cx="300" cy="530" r="3.4" />
+            <text class="wheel-glyph" x="300" y="550">♎</text>
+          </g>
+          <g class="zodiac-node" data-sign="scorpio"  tabindex="0" role="button" aria-label="天蝎座">
+            <circle class="node-dot" cx="185" cy="499" r="3.4" />
+            <text class="wheel-glyph" x="176" y="516">♏</text>
+          </g>
+          <g class="zodiac-node" data-sign="sagittarius" tabindex="0" role="button" aria-label="射手座">
+            <circle class="node-dot" cx="101" cy="415" r="3.4" />
+            <text class="wheel-glyph" x="85" y="426">♐</text>
+          </g>
+          <g class="zodiac-node" data-sign="capricorn" tabindex="0" role="button" aria-label="摩羯座">
+            <circle class="node-dot" cx="70" cy="300" r="3.4" />
+            <text class="wheel-glyph" x="52" y="302">♑</text>
+          </g>
+          <g class="zodiac-node" data-sign="aquarius" tabindex="0" role="button" aria-label="水瓶座">
+            <circle class="node-dot" cx="101" cy="185" r="3.4" />
+            <text class="wheel-glyph" x="85" y="176">♒</text>
+          </g>
+          <g class="zodiac-node" data-sign="pisces"   tabindex="0" role="button" aria-label="双鱼座">
+            <circle class="node-dot" cx="185" cy="101" r="3.4" />
+            <text class="wheel-glyph" x="176" y="86">♓</text>
+          </g>
+
+          <!-- 中心 -->
+          <text class="wheel-center-symbol" x="300" y="286">☾</text>
+          <text class="wheel-center-caption" x="300" y="336">CELESTE WHEEL</text>
+        </svg>
+      </div>
+
+      <!-- 运势卡片 -->
+      <div class="fortune-card reveal" id="fortuneCard">
+        <div class="fc-head">
+          <div class="fc-glyph" id="fcGlyph">♈</div>
+          <div>
+            <div class="fc-name" id="fcName">白羊座</div>
+            <div class="fc-en" id="fcEn">Aries · The Ram</div>
+          </div>
+          <div class="fc-date" id="fcDate">03.21 — 04.19</div>
+        </div>
+
+        <div class="fc-meta">
+          <div>
+            <div class="k">元素 / Element</div>
+            <div class="v" id="fcElement">火象 · Fire</div>
+          </div>
+          <div>
+            <div class="k">守护星 / Ruler</div>
+            <div class="v" id="fcRuler">火星 Mars</div>
+          </div>
+          <div>
+            <div class="k">幸运色 / Lucky Hue</div>
+            <div class="v"><span class="lucky-dot" id="fcDot" style="background:#C8452F"></span><span id="fcColor">绯红</span></div>
+          </div>
+          <div>
+            <div class="k">幸运数字 / Number</div>
+            <div class="v" id="fcNumber">9</div>
+          </div>
+        </div>
+
+        <p class="fc-fortune" id="fcFortune">
+          火星正行经你的事业宫位，一整天都像有风在背后推你。上午适合处理拖延已久的决定——别犹豫，第一直觉往往最准。傍晚注意语气，你的坦率可能被误读为锋利。留一点温柔给最亲近的人。
+        </p>
+
+        <div class="fc-bars">
+          <div class="bar-row">
+            <span class="bar-label">事业</span>
+            <div class="bar-track"><div class="bar-fill" id="barWork" style="width:88%"></div></div>
+            <span class="bar-val" id="valWork">88</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">爱情</span>
+            <div class="bar-track"><div class="bar-fill" id="barLove" style="width:72%"></div></div>
+            <span class="bar-val" id="valLove">72</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">财运</span>
+            <div class="bar-track"><div class="bar-fill" id="barWealth" style="width:65%"></div></div>
+            <span class="bar-val" id="valWealth">65</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule-gold" />
+
+<!-- ══════════ 今日星象面板 ══════════ -->
+<section id="today">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow center">Today's Sky · 今夜天象</span>
+      <h2 class="section-title">今夜，天穹<em>说了什么</em></h2>
+      <p class="section-lead">
+        每天清晨，我们把天文台的观测数据翻译成人话：月亮走到哪里、水星是否清醒、
+        今天的你该带着多少勇气出门。
+      </p>
+    </div>
+
+    <div class="sky-panel">
+      <!-- 月亮 -->
+      <article class="sky-card reveal">
+        <div class="sky-kicker">The Moon · 月相</div>
+        <h3 class="sky-title">盈凸月</h3>
+        <svg class="moon-svg" viewBox="0 0 128 128" role="img" aria-label="盈凸月相图">
+          <defs>
+            <mask id="phaseMask">
+              <rect x="0" y="0" width="128" height="128" fill="black" />
+              <circle cx="64" cy="64" r="46" fill="white" />
+              <ellipse cx="44" cy="64" rx="30" ry="46" fill="black" />
+            </mask>
+            <radialGradient id="moonDisc" cx="38%" cy="32%" r="72%">
+              <stop offset="0%" stop-color="#F6E7B8" />
+              <stop offset="100%" stop-color="#C9A24B" />
+            </radialGradient>
+          </defs>
+          <circle class="moon-glow-disc" cx="64" cy="64" r="58" fill="rgba(232,200,126,0.12)" />
+          <circle cx="64" cy="64" r="46" fill="rgba(242,237,227,0.07)" stroke="rgba(242,237,227,0.16)" />
+          <rect x="0" y="0" width="128" height="128" fill="url(#moonDisc)" mask="url(#phaseMask)" />
+          <g stroke="rgba(232,200,126,0.5)" stroke-width="1">
+            <line x1="64" y1="4" x2="64" y2="12" />
+            <line x1="64" y1="116" x2="64" y2="124" />
+            <line x1="4" y1="64" x2="12" y2="64" />
+            <line x1="116" y1="64" x2="124" y2="64" />
+          </g>
+        </svg>
+        <div class="phase-line">
+          <span>光辉 <b>68%</b></span>
+          <span>月龄 <b>11.4 日</b></span>
+          <span>星座 <b>水瓶座</b></span>
+        </div>
+        <p class="sky-note">
+          月亮在水瓶座游走，情绪需要一点空气。适合整理思绪、与有趣的人交换观点，
+          不适合钻牛角尖。给窗户开一条缝，让新的风吹进来。
+        </p>
+      </article>
+
+      <!-- 水星 -->
+      <article class="sky-card reveal">
+        <div class="sky-kicker">Mercury · 水星状态</div>
+        <h3 class="sky-title">顺行 · 清醒</h3>
+        <div class="mercury-symbol">☿</div>
+        <div class="retro-badge">Direct Motion · 顺行中</div>
+        <div class="phase-line" style="justify-content:center; gap:1.8rem;">
+          <span>落座 <b>天秤座 12°</b></span>
+          <span>速度 <b>+1.32°/日</b></span>
+        </div>
+        <p class="sky-note">
+          水星恢复清醒的第 9 天。合同、表白、重要邮件——被卡住的沟通正在解冻。
+          措辞仍宜优雅，天秤的水星不喜欢粗暴的表达。
+        </p>
+      </article>
+
+      <!-- 幸运指数 -->
+      <article class="sky-card reveal">
+        <div class="sky-kicker">Fortune Index · 今日幸运指数</div>
+        <h3 class="sky-title">综合运势</h3>
+        <div class="ring-wrap">
+          <div class="ring" aria-hidden="true"></div>
+          <div class="ring-inner">
+            <div>
+              <div class="ring-num">82</div>
+              <div class="ring-unit">Lucky</div>
+            </div>
+          </div>
+        </div>
+        <div class="phase-line" style="justify-content:center; gap:1.6rem;">
+          <span>幸运色 <b>香槟金</b></span>
+          <span>吉时 <b>21:00–23:00</b></span>
+        </div>
+        <p class="sky-note">
+          金星与木星形成柔和相位，今天很适合做"让自己变美"的决定：
+          换一个发型、买那束花、或者原谅一个人。
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<hr class="rule-gold" />
+
+<!-- ══════════ 四元素 ══════════ -->
+<section id="elements">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow center">Four Elements · 四元素图腾</span>
+      <h2 class="section-title">万物由<em>火土风水</em>构成</h2>
+      <p class="section-lead">
+        古希腊人相信，天穹之下的一切都由四种元素塑形。
+        你的太阳星座，不过是其中某一种元素，在人间的一次呼吸。
+      </p>
+    </div>
+
+    <div class="elements-grid">
+      <!-- 火 -->
+      <article class="element-card reveal" style="--el-glow: rgba(212,110,55,0.2)">
+        <svg class="el-icon" viewBox="0 0 84 84" role="img" aria-label="火元素图腾">
+          <circle class="el-ring" cx="42" cy="42" r="38" fill="none" stroke="rgba(212,110,55,0.45)" stroke-width="1" stroke-dasharray="3 8" />
+          <path d="M42 16 C52 30 60 38 60 50 A18 18 0 0 1 24 50 C24 38 32 30 42 16 Z"
+                fill="none" stroke="#E8955C" stroke-width="1.6" />
+          <path d="M42 34 C47 42 51 46 51 52 A9 9 0 0 1 33 52 C33 46 37 42 42 34 Z"
+                fill="rgba(232,149,92,0.35)" stroke="#E8C87E" stroke-width="1" />
+          <circle cx="42" cy="42" r="2.2" fill="#E8C87E" />
+        </svg>
+        <h3 class="el-name">火 象</h3>
+        <div class="el-en">Fire · 燃烧</div>
+        <div class="el-signs">
+          <div>♈<small>白羊</small></div>
+          <div>♌<small>狮子</small></div>
+          <div>♐<small>射手</small></div>
+        </div>
+        <p class="el-desc">
+          先行者，不问归途。火象以行动代替犹豫，
+          他们的热情是一团会传染的火焰——靠近他们，你会突然想去做那件拖延很久的事。
+        </p>
+      </article>
+
+      <!-- 土 -->
+      <article class="element-card reveal" style="--el-glow: rgba(125,160,110,0.18)">
+        <svg class="el-icon" viewBox="0 0 84 84" role="img" aria-label="土元素图腾">
+          <circle class="el-ring" cx="42" cy="42" r="38" fill="none" stroke="rgba(125,160,110,0.45)" stroke-width="1" stroke-dasharray="3 8" />
+          <path d="M42 18 L64 58 L20 58 Z" fill="none" stroke="#A8C08F" stroke-width="1.6" />
+          <path d="M30 58 L42 36 L54 58 Z" fill="rgba(168,192,143,0.28)" stroke="#E8C87E" stroke-width="1" />
+          <line x1="20" y1="66" x2="64" y2="66" stroke="#A8C08F" stroke-width="1.4" />
+          <circle cx="42" cy="42" r="2.2" fill="#E8C87E" />
+        </svg>
+        <h3 class="el-name">土 象</h3>
+        <div class="el-en">Earth · 扎根</div>
+        <div class="el-signs">
+          <div>♉<small>金牛</small></div>
+          <div>♍<small>处女</small></div>
+          <div>♑<small>摩羯</small></div>
+        </div>
+        <p class="el-desc">
+          建造者，把时间酿成价值。土象相信看得见摸得着的东西，
+          他们不许诺流星，只是一砖一瓦地，把梦想盖成可以住的房子。
+        </p>
+      </article>
+
+      <!-- 风 -->
+      <article class="element-card reveal" style="--el-glow: rgba(139,127,212,0.22)">
+        <svg class="el-icon" viewBox="0 0 84 84" role="img" aria-label="风元素图腾">
+          <circle class="el-ring" cx="42" cy="42" r="38" fill="none" stroke="rgba(139,127,212,0.5)" stroke-width="1" stroke-dasharray="3 8" />
+          <path d="M18 34 C30 26 46 26 54 32 C60 36 58 44 50 44" fill="none" stroke="#A99DE0" stroke-width="1.6" />
+          <path d="M18 46 C32 38 50 40 58 46 C63 50 60 58 52 57" fill="none" stroke="#E8C87E" stroke-width="1.3" />
+          <path d="M22 58 C32 53 44 54 50 58" fill="none" stroke="rgba(169,157,224,0.7)" stroke-width="1.1" />
+          <circle cx="42" cy="42" r="2.2" fill="#E8C87E" />
+        </svg>
+        <h3 class="el-name">风 象</h3>
+        <div class="el-en">Air · 流动</div>
+        <div class="el-signs">
+          <div>♊<small>双子</small></div>
+          <div>♎<small>天秤</small></div>
+          <div>♒<small>水瓶</small></div>
+        </div>
+        <p class="el-desc">
+          思想的信使，在高处呼吸。风象把对话变成艺术，
+          他们最擅长的魔法是：让一个原本固执的人，忽然愿意换个角度。
+        </p>
+      </article>
+
+      <!-- 水 -->
+      <article class="element-card reveal" style="--el-glow: rgba(95,140,190,0.2)">
+        <svg class="el-icon" viewBox="0 0 84 84" role="img" aria-label="水元素图腾">
+          <circle class="el-ring" cx="42" cy="42" r="38" fill="none" stroke="rgba(95,140,190,0.5)" stroke-width="1" stroke-dasharray="3 8" />
+          <path d="M42 18 C52 32 60 40 60 50 A18 18 0 0 1 24 50 C24 40 32 32 42 18 Z"
+                fill="rgba(95,140,190,0.22)" stroke="#7FA8D4" stroke-width="1.6" />
+          <path d="M28 48 C34 44 38 52 44 48 C50 44 54 52 58 48" fill="none" stroke="#E8C87E" stroke-width="1.2" />
+          <circle cx="42" cy="42" r="2.2" fill="#E8C87E" />
+        </svg>
+        <h3 class="el-name">水 象</h3>
+        <div class="el-en">Water · 感应</div>
+        <div class="el-signs">
+          <div>♋<small>巨蟹</small></div>
+          <div>♏<small>天蝎</small></div>
+          <div>♓<small>双鱼</small></div>
+        </div>
+        <p class="el-desc">
+          深潜者，记住每一滴眼泪的重量。水象用情绪理解世界，
+          他们不需要解释就能察觉你没说出口的那部分——那是最古老的温柔。
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<hr class="rule-gold" />
+
+<!-- ══════════ 星语回响 ══════════ -->
+<section id="voices">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow center">Voices · 星语回响</span>
+      <h2 class="section-title">来自<em>读者的星语</em></h2>
+      <p class="section-lead">
+        每个月，我们收到上千封信。有人在新月写下愿望，有人在水逆里学会耐心。
+        以下三段，是他们允许我们分享的、与星辰有关的瞬间。
+      </p>
+    </div>
+
+    <div class="quote-grid">
+      <article class="quote-card reveal">
+        <div class="quote-mark">“</div>
+        <p class="quote-text">
+          我不是来问运势的，我只是想知道——今晚的月亮，是不是也照着我爱的人。
+          CELESTE 的手稿里写着：月亮不需要许可，就已经同时照着你们了。
+        </p>
+        <div class="quote-author">
+          <span class="quote-glyph">♋</span>
+          <div>
+            <div class="quote-name">林 晚</div>
+            <div class="quote-sign">Cancer · 巨蟹座</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="quote-card reveal">
+        <div class="quote-mark">“</div>
+        <p class="quote-text">
+          水逆那两周我把辞职信改了七遍。等到水星顺行的那天早上，
+          我忽然明白：不是行星拦住了我，是我还没准备好。第八遍，我写完了。
+        </p>
+        <div class="quote-author">
+          <span class="quote-glyph">♑</span>
+          <div>
+            <div class="quote-name">周 屿</div>
+            <div class="quote-sign">Capricorn · 摩羯座</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="quote-card reveal">
+        <div class="quote-mark">“</div>
+        <p class="quote-text">
+          我把每周星象简报打印出来，夹在母亲的旧天文手册里。
+          她年轻时也看星，我们从未聊过这件事——现在，我们好像在用同一种语言写信。
+        </p>
+        <div class="quote-author">
+          <span class="quote-glyph">♓</span>
+          <div>
+            <div class="quote-name">苏 念</div>
+            <div class="quote-sign">Pisces · 双鱼座</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<hr class="rule-gold" />
+
+<!-- ══════════ 行星过境时间线 ══════════ -->
+<section id="transits">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow center">Planetary Transits · 本周过境</span>
+      <h2 class="section-title">行星正在<em>穿越谁的天空</em></h2>
+      <p class="section-lead">
+        本周天象手稿：五次值得记在日历边缘的过境。
+        它们不决定你的命运，只是悄悄调整了风的方向。
+      </p>
+    </div>
+
+    <ul class="timeline">
+      <li class="tl-item major reveal">
+        <div class="tl-date">10.13<small>周一</small></div>
+        <div class="tl-body">
+          <div class="tl-tag">Mercury Direct</div>
+          <h3 class="tl-title">水星顺行于天秤座</h3>
+          <p class="tl-desc">
+            沟通的迷雾散去，被推迟的对话、卡住的审批、说不清的误会，
+            都有了重新开始的缝隙。适合重启谈判、签回合同、把那条编辑了三次的消息发出去。
+          </p>
+        </div>
+      </li>
+
+      <li class="tl-item reveal">
+        <div class="tl-date">10.15<small>周三</small></div>
+        <div class="tl-body">
+          <div class="tl-tag">Venus → Scorpio</div>
+          <h3 class="tl-title">金星进入天蝎座</h3>
+          <p class="tl-desc">
+            爱情进入深水区，浅尝辄止的关系会感到压力，深刻的关系反而升温。
+            财务上警惕"情绪型消费"——买之前问一句：是想要，还是需要被安慰？
+          </p>
+        </div>
+      </li>
+
+      <li class="tl-item reveal">
+        <div class="tl-date">10.17<small>周五</small></div>
+        <div class="tl-body">
+          <div class="tl-tag">Mars Sextile Saturn</div>
+          <h3 class="tl-title">火星六分土星</h3>
+          <p class="tl-desc">
+            行动力与耐力罕见地握手。这是推进长期项目的黄金窗口：
+            开始那个计划、恢复健身、清理堆积如山的琐事——今天做的，会稳稳留下。
+          </p>
+        </div>
+      </li>
+
+      <li class="tl-item major reveal">
+        <div class="tl-date">10.18<small>周六</small></div>
+        <div class="tl-body">
+          <div class="tl-tag">New Moon in Libra</div>
+          <h3 class="tl-title">天秤座新月</h3>
+          <p class="tl-desc">
+            一整个月里最适合"设定意图"的夜晚。关于关系、关于平衡、关于把自己也放进优先级。
+            写下一句话，折起来，放在你每天都能看见的地方。
+          </p>
+        </div>
+      </li>
+
+      <li class="tl-item reveal">
+        <div class="tl-date">10.20<small>周日</small></div>
+        <div class="tl-body">
+          <div class="tl-tag">Sun → Scorpio</div>
+          <h3 class="tl-title">太阳进入天蝎座</h3>
+          <p class="tl-desc">
+            天蝎季开启，"重生"成为接下来四周的关键词。
+            直觉变强，表层的热闹失去吸引力——你会想认真处理那些一直回避的问题。
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════ 编辑式叙事 ══════════ -->
+<section class="editorial" id="editorial">
+  <div class="wrap">
+    <div class="editorial-inner reveal">
+      <span class="eyebrow center">Our Philosophy · 解读之道</span>
+      <h2 class="section-title">我们如何<em>解读星辰</em></h2>
+
+      <p class="drop-cap">
+        星象不是预言，而是一种古老的比喻。三千年前，巴比伦的祭司在泥板上刻下行星的位置；
+        今天，你在深夜打开这一页，想知道明天是否值得期待——这两件事之间，
+        隔着的不是迷信，而是人类从未停止过的、对秩序的渴望。
+      </p>
+
+      <div class="pull-quote">
+        「我们仰望星空，<span>不是为了预知未来</span>，<br />
+        而是为了确认——此刻的心事，<span>并不孤单</span>。」
+      </div>
+
+      <p>
+        在 CELESTE，我们拒绝把星辰写成判决书。没有"水逆毁一切"的恐吓，
+        没有"贵人必来"的廉价承诺。我们只做一件事：
+        把天文台冰冷的度数，翻译成你听得懂的句子。
+        月亮走到水瓶座，不意味着好运或厄运，只意味着——今天的情绪需要一点空气。
+      </p>
+
+      <p>
+        每一份星象手稿，都经过占星师与编辑的两次书写：
+        第一次写给宇宙，第二次写给你。我们相信，真正高级的占星，
+        读完之后不是依赖，而是更笃定的自由。
+      </p>
+
+      <div class="sign-off">
+        星辰不语，万物有声
+        <b>CELESTE Editorial · 星象馆编辑部</b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 今夜仪式 ══════════ -->
+<section class="ritual" id="ritual">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow center">Begin Tonight · 今夜仪式</span>
+      <h2 class="section-title">三步，开始你的<em>观星之夜</em></h2>
+      <p class="section-lead">
+        不需要天文望远镜，也不需要任何占星基础。
+        你只需要一杯热饮、一点安静，和一个愿意被照亮的问题。
+      </p>
+    </div>
+
+    <div class="steps-grid">
+      <article class="step reveal">
+        <div class="step-star">✦</div>
+        <div class="step-num">01</div>
+        <div class="step-kicker">Input · 输入坐标</div>
+        <h3 class="step-title">告诉我你的出生时刻</h3>
+        <p class="step-desc">
+          日期、时间与城市。哪怕只是模糊的"清晨"，
+          我们也能为你画出一张初稿星盘——星辰对宽容的人一向慷慨。
+        </p>
+      </article>
+
+      <article class="step reveal">
+        <div class="step-star">✦</div>
+        <div class="step-num">02</div>
+        <div class="step-kicker">Reading · 生成星盘</div>
+        <h3 class="step-title">让行星各归其位</h3>
+        <p class="step-desc">
+          本命盘会在几秒内绘制完成：太阳、月亮、上升，
+          以及那些悄悄塑造你性格的相位。所有解读均由占星师复核。
+        </p>
+      </article>
+
+      <article class="step reveal">
+        <div class="step-star">✦</div>
+        <div class="step-num">03</div>
+        <div class="step-kicker">Daily · 每日星语</div>
+        <h3 class="step-title">把星空过成日常</h3>
+        <p class="step-desc">
+          此后每天清晨，一条属于你的星语会准时抵达。
+          不断言未来，只提醒你：今天适合温柔，或者勇敢。
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<hr class="rule-gold" />
+
+<!-- ══════════ 订阅 CTA + 占星师 ══════════ -->
+<section id="subscribe">
+  <div class="wrap">
+    <div class="subscribe-card reveal">
+      <svg class="constellation-deco" viewBox="0 0 340 340" aria-hidden="true">
+        <g stroke="rgba(212,175,55,0.4)" stroke-width="1" fill="none">
+          <path d="M60 220 L110 150 L180 180 L230 100 L300 130" />
+          <path d="M110 150 L140 60 L230 100" />
+        </g>
+        <g fill="#E8C87E">
+          <circle cx="60" cy="220" r="3.4" />
+          <circle cx="110" cy="150" r="4.2" />
+          <circle cx="180" cy="180" r="3" />
+          <circle cx="230" cy="100" r="4.6" />
+          <circle cx="300" cy="130" r="3.2" />
+          <circle cx="140" cy="60" r="2.8" />
+        </g>
+        <g stroke="rgba(232,200,126,0.7)" stroke-width="0.9">
+          <line x1="230" y1="88" x2="230" y2="112" />
+          <line x1="218" y1="100" x2="242" y2="100" />
+          <line x1="110" y1="138" x2="110" y2="162" />
+          <line x1="98" y1="150" x2="122" y2="150" />
+        </g>
+      </svg>
+
+      <div>
+        <span class="eyebrow">Weekly Ephemeris · 每周星象简报</span>
+        <h2 class="sub-title">让星象，<em>每周一次</em><br />落在你的信箱里</h2>
+        <p class="sub-desc">
+          每周日夜里，我们会把下周的行星过境、月相提醒与三个可执行的小建议，
+          写成一封安静的信。没有占卜焦虑，只有星辰的秩序与编辑的体温。
+        </p>
+        <div class="readers">
+          <div class="reader">
+            <div class="reader-avatar">☾</div>
+            <div>
+              <div class="reader-name">陆见微</div>
+              <div class="reader-role">Chief Astrologer · 首席占星师</div>
+            </div>
+          </div>
+          <div class="reader">
+            <div class="reader-avatar">✦</div>
+            <div>
+              <div class="reader-name">苏星野</div>
+              <div class="reader-role">Natal Chart · 本命盘解读</div>
+            </div>
+          </div>
+          <div class="reader">
+            <div class="reader-avatar">♄</div>
+            <div>
+              <div class="reader-name">顾长夜</div>
+              <div class="reader-role">Transits · 行星过境研究</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form class="sub-form" id="subForm" novalidate>
+        <label for="subName">你的称呼</label>
+        <input id="subName" type="text" placeholder="例如：小星 / Stella" autocomplete="off" />
+        <label for="subEmail">邮箱地址</label>
+        <input id="subEmail" type="email" placeholder="you@constellation.earth" autocomplete="off" />
+        <label for="subSign">你的太阳星座</label>
+        <input id="subSign" type="text" placeholder="例如：双鱼座 ♓（选填）" autocomplete="off" />
+        <button class="sub-btn" type="submit">订阅每周星象简报</button>
+        <div class="sub-toast" id="subToast" role="status"></div>
+        <p class="sub-fine">
+          提交即表示你愿意每周收到一封来自星象馆的信。<br />
+          我们不分享你的坐标，随时可以退订——就像行星，总会离开。
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <span class="brand-mark">CELESTE</span>
+          <span class="brand-sub">星象馆</span>
+        </div>
+        <p class="footer-tagline">
+          一座数字天文古籍馆。我们把天穹的秩序，
+          译成你今夜的一盏灯——神秘，但从不故弄玄虚。
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>星盘 · Charts</h4>
+        <ul>
+          <li><a href="#zodiac">十二星座星盘</a></li>
+          <li><a href="#today">今日星象面板</a></li>
+          <li><a href="#transits">行星过境日历</a></li>
+          <li><a href="#elements">四元素图腾</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>星象馆 · About</h4>
+        <ul>
+          <li><a href="#editorial">我们的解读之道</a></li>
+          <li><a href="#subscribe">占星师团队</a></li>
+          <li><a href="#subscribe">每周星象简报</a></li>
+          <li><a href="#top">回到星空顶部</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>联络 · Contact</h4>
+        <ul>
+          <li><a href="#subscribe">hello@celeste.studio</a></li>
+          <li><a href="#subscribe">合作与授权</a></li>
+          <li><a href="#subscribe">线下沙龙 · 观星夜</a></li>
+          <li><a href="#subscribe">媒体资料下载</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-glyphs" aria-hidden="true">
+      ♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓
+    </div>
+
+    <div class="footer-note">
+      <div class="disclaimer">
+        <b>免责声明 · Disclaimer</b><br />
+        本站所有星象解读、运势文案与占星内容均为文化与娱乐性质的创作，
+        不构成医疗、法律、财务或任何专业建议。星辰提供的是视角，而非答案；
+        请把人生的重要决定，留给你自己的判断力。
+      </div>
+      <div>
+        © MMXXVI CELESTE 星象馆<br />
+        Designed under the midnight sky
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   CELESTE — 交互星盘 & 微交互（原生 JS，无任何外部依赖）
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* —— 十二星座数据 —— */
+  var ZODIAC = {
+    aries: {
+      glyph: '♈', name: '白羊座', en: 'Aries · The Ram', date: '03.21 — 04.19',
+      element: '火象 · Fire', ruler: '火星 Mars', color: '绯红', dot: '#C8452F', number: '9',
+      fortune: '火星正行经你的事业宫位，一整天都像有风在背后推你。上午适合处理拖延已久的决定——别犹豫，第一直觉往往最准。傍晚注意语气，你的坦率可能被误读为锋利。留一点温柔给最亲近的人。',
+      work: 88, love: 72, wealth: 65
+    },
+    taurus: {
+      glyph: '♉', name: '金牛座', en: 'Taurus · The Bull', date: '04.20 — 05.20',
+      element: '土象 · Earth', ruler: '金星 Venus', color: '祖母绿', dot: '#2E8B6E', number: '6',
+      fortune: '金星在你的价值宫洒下微光，你会突然对"值得"这件事有新的判断。财务上有小惊喜，但更想把钱花在让生活变美的事物上——允许自己。慢一点，你今天的时间感比平常更诚实。',
+      work: 74, love: 86, wealth: 82
+    },
+    gemini: {
+      glyph: '♊', name: '双子座', en: 'Gemini · The Twins', date: '05.21 — 06.21',
+      element: '风象 · Air', ruler: '水星 Mercury', color: '柠檬黄', dot: '#E8C84B', number: '5',
+      fortune: '水星与天王星成六分相，脑子里的点子像雨点一样落下来。随身带纸笔，那些看似荒诞的念头里藏着下一季度的灵感。注意：说得太多会稀释重点，留三分给自己。',
+      work: 90, love: 68, wealth: 71
+    },
+    cancer: {
+      glyph: '♋', name: '巨蟹座', en: 'Cancer · The Crab', date: '06.22 — 07.22',
+      element: '水象 · Water', ruler: '月亮 Moon', color: '银白', dot: '#C9CDD6', number: '2',
+      fortune: '月亮回到你的星座，情绪像潮水一样准时。今天的你格外能察觉房间里的气氛变化——善用这份敏感，别让它变成负担。适合整理旧物、给许久未联系的人发一条消息。',
+      work: 66, love: 92, wealth: 70
+    },
+    leo: {
+      glyph: '♌', name: '狮子座', en: 'Leo · The Lion', date: '07.23 — 08.22',
+      element: '火象 · Fire', ruler: '太阳 Sun', color: '琥珀金', dot: '#D9962F', number: '1',
+      fortune: '太阳与木星形成柔和的角度，你走到哪里都自带一小片聚光灯。适合提案、表达、被看见。唯一的提醒：掌声之后记得问一句"你还好吗"——你的关心比你的光芒更动人。',
+      work: 93, love: 80, wealth: 76
+    },
+    virgo: {
+      glyph: '♍', name: '处女座', en: 'Virgo · The Maiden', date: '08.23 — 09.22',
+      element: '土象 · Earth', ruler: '水星 Mercury', color: '鼠尾草绿', dot: '#8FA98B', number: '5',
+      fortune: '水星在你的沟通宫位顺行，混乱开始归位。今天适合把模糊的计划写成清单，你会发现自己其实早就知道答案。身体方面留意肩颈，别让紧绷偷走你的专注。',
+      work: 87, love: 70, wealth: 79
+    },
+    libra: {
+      glyph: '♎', name: '天秤座', en: 'Libra · The Scales', date: '09.23 — 10.23',
+      element: '风象 · Air', ruler: '金星 Venus', color: '玫瑰粉', dot: '#D98BA5', number: '6',
+      fortune: '金星回到你的命宫，魅力值几乎不需要努力。人际关系里出现一个温柔的转折点——可能是一句迟来的道歉，或一次久违的和解。记得：平衡不是把所有人都照顾好，也包括你自己。',
+      work: 78, love: 94, wealth: 73
+    },
+    scorpio: {
+      glyph: '♏', name: '天蝎座', en: 'Scorpio · The Scorpion', date: '10.24 — 11.22',
+      element: '水象 · Water', ruler: '冥王星 Pluto', color: '勃艮第红', dot: '#7E2436', number: '8',
+      fortune: '火星与冥王星共振，你的直觉锋利得像一把新磨的刀。适合处理需要深度与保密的事务，也适合结束一件悬而未决的事。嫉妒是今天的暗流，看见它，它就失去一半力量。',
+      work: 85, love: 88, wealth: 80
+    },
+    sagittarius: {
+      glyph: '♐', name: '射手座', en: 'Sagittarius · The Archer', date: '11.23 — 12.21',
+      element: '火象 · Fire', ruler: '木星 Jupiter', color: '紫罗兰', dot: '#8B5FBF', number: '3',
+      fortune: '木星在你的远行宫闪耀，身体或者灵魂总有一个想出发。适合学习新事物、计划一段旅程、和远方的朋友聊天。收敛一下跳跃的表达，今天有人在认真听你说话。',
+      work: 81, love: 75, wealth: 77
+    },
+    capricorn: {
+      glyph: '♑', name: '摩羯座', en: 'Capricorn · The Sea-Goat', date: '12.22 — 01.19',
+      element: '土象 · Earth', ruler: '土星 Saturn', color: '靛蓝', dot: '#2F4A8C', number: '8',
+      fortune: '土星与太阳形成稳定的角度，你今天的每一步都踩在实处。长期项目出现进展，可能来自一位年长者或权威的肯定。记得在日程里留白——效率之外，你也需要呼吸。',
+      work: 92, love: 66, wealth: 88
+    },
+    aquarius: {
+      glyph: '♒', name: '水瓶座', en: 'Aquarius · The Water-Bearer', date: '01.20 — 02.18',
+      element: '风象 · Air', ruler: '天王星 Uranus', color: '电光蓝', dot: '#4FA8D9', number: '4',
+      fortune: '天王星搅动你的社交宫，旧圈子与新面孔同时出现。一场看似偶然的对话可能改变你对某件事的看法。保持你一贯的独立，但别把"不同"当成拒绝靠近的借口。',
+      work: 83, love: 71, wealth: 74
+    },
+    pisces: {
+      glyph: '♓', name: '双鱼座', en: 'Pisces · The Fishes', date: '02.19 — 03.20',
+      element: '水象 · Water', ruler: '海王星 Neptune', color: '海泡绿', dot: '#5FBFA8', number: '7',
+      fortune: '海王星在你的命宫泛起柔光，想象力与共情力都处于高位。适合创作、冥想、做一场清醒的梦。边界感是今天的功课：可以温柔，不必把别人的情绪全部背在身上。',
+      work: 72, love: 90, wealth: 68
+    }
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  var card   = $('fortuneCard');
+  var nodes  = document.querySelectorAll('.zodiac-node');
+
+  function render(sign) {
+    var d = ZODIAC[sign];
+    if (!d || !card) { return; }
+
+    card.classList.add('swapping');
+
+    window.setTimeout(function () {
+      $('fcGlyph').textContent   = d.glyph;
+      $('fcName').textContent    = d.name;
+      $('fcEn').textContent      = d.en;
+      $('fcDate').textContent    = d.date;
+      $('fcElement').textContent = d.element;
+      $('fcRuler').textContent   = d.ruler;
+      $('fcColor').textContent   = d.color;
+      $('fcDot').style.background = d.dot;
+      $('fcNumber').textContent  = d.number;
+      $('fcFortune').textContent = d.fortune;
+
+      $('barWork').style.width   = d.work + '%';
+      $('barLove').style.width   = d.love + '%';
+      $('barWealth').style.width = d.wealth + '%';
+      $('valWork').textContent   = d.work;
+      $('valLove').textContent   = d.love;
+      $('valWealth').textContent = d.wealth;
+
+      card.classList.remove('swapping');
+    }, 220);
+  }
+
+  nodes.forEach(function (node) {
+    function activate() {
+      nodes.forEach(function (n) { n.classList.remove('active'); });
+      node.classList.add('active');
+      render(node.getAttribute('data-sign'));
+    }
+    node.addEventListener('click', activate);
+    node.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        activate();
+      }
+    });
+  });
+
+  /* —— 订阅表单（纯装饰） —— */
+  var form = $('subForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var toast = $('subToast');
+      var name  = ($('subName').value || '旅星人').trim();
+      toast.textContent = '✦ 已收到，' + name + '。下周日夜里，星辰会如约抵达。';
+      toast.classList.add('show');
+      form.reset();
+    });
+  }
+
+  /* —— 滚动入场 —— */
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+})();
+</script>
+
+</body>
+</html>

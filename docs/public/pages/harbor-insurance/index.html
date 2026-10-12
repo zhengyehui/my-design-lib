@@ -1,0 +1,3037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harbor 保险科技 — 保险，本该如此简单</title>
+<meta name="description" content="Harbor 保险科技：在线投保 90 秒完成，平均理赔 47 分钟到账。医疗险、重疾险、意外险、家财险、宠物险、旅行险，为 200 万+ 用户提供温暖而透明的保障。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Harbor InsurTech — 独立落地页样式
+   设计语言：深海军蓝 / 暖米白 / 珊瑚橙 / 青绿 / 金色细线
+   基于 design-lib tokens（自带 fallback，可独立运行）
+   ============================================================ */
+
+:root {
+  /* ── Harbor 品牌配色（覆盖 tokens 默认配色气质） ── */
+  --harbor-navy:        #0E2A47;
+  --harbor-navy-deep:   #081C31;
+  --harbor-navy-soft:   #1B3E63;
+  --harbor-cream:       #F7F2E9;
+  --harbor-cream-warm:  #FBF7F0;
+  --harbor-coral:       #E86F4E;
+  --harbor-coral-deep:  #D65B3A;
+  --harbor-teal:        #1FA88F;
+  --harbor-teal-deep:   #12866F;
+  --harbor-gold:        #C9A227;
+  --harbor-gold-soft:   #E7CE86;
+  --harbor-ink:         #12253C;
+  --harbor-slate:       #5B6B7F;
+  --harbor-mist:        #EDDFC9;
+
+  /* ── 品牌语义色（覆盖 tokens 主色，页面统一使用） ── */
+  --color-primary:       var(--harbor-coral);
+  --color-primary-dark:  var(--harbor-coral-deep);
+  --color-primary-ghost: rgba(232, 111, 78, 0.10);
+  --color-secondary:     var(--harbor-teal);
+  --color-success:       var(--harbor-teal);
+  --color-bg:            var(--harbor-cream);
+  --color-surface:       #FFFFFF;
+  --color-border:        #E4D8C3;
+  --color-text:          var(--harbor-ink);
+  --color-text-secondary: var(--harbor-slate);
+  --color-text-inverse:  #F7F2E9;
+
+  /* ── 字体（优先 tokens，fallback 自带） ── */
+  --font-sans:    'Noto Sans SC', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', 'Noto Serif SC', Georgia, serif;
+  --font-mono:    'Inter', 'SF Mono', monospace;
+
+  /* ── 圆角 / 阴影 / 节奏（引用 tokens，全部带 fallback） ── */
+  --r-sm:  var(--radius-sm, 6px);
+  --r-md:  var(--radius-md, 10px);
+  --r-lg:  var(--radius-lg, 16px);
+  --r-xl:  var(--radius-xl, 24px);
+  --r-full: var(--radius-full, 9999px);
+
+  --sh-sm: var(--shadow-sm, 0 1px 2px rgba(14, 42, 71, 0.06));
+  --sh-md: var(--shadow-md, 0 4px 10px -2px rgba(14, 42, 71, 0.10));
+  --sh-lg: var(--shadow-lg, 0 14px 30px -8px rgba(14, 42, 71, 0.14));
+  --sh-xl: var(--shadow-xl, 0 30px 60px -18px rgba(14, 42, 71, 0.22));
+
+  --ease:      var(--ease-default, cubic-bezier(0.4, 0, 0.2, 1));
+  --ease-spring: var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+  --dur-fast:   var(--duration-fast, 150ms);
+  --dur-normal: var(--duration-normal, 250ms);
+  --dur-slow:   var(--duration-slow, 400ms);
+}
+
+/* ── Reset & Base ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base, 1rem);
+  line-height: var(--leading-relaxed, 1.75);
+  color: var(--harbor-ink);
+  background: var(--harbor-cream);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+ul { list-style: none; }
+
+.container {
+  width: min(1180px, calc(100% - 3rem));
+  margin-inline: auto;
+}
+
+.section-pad { padding-block: clamp(4.5rem, 9vw, 7.5rem); }
+
+/* ── 排版基元 ─────────────────────────────────────────── */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--harbor-coral-deep);
+}
+.eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--harbor-gold), var(--harbor-coral));
+}
+.eyebrow.on-dark { color: var(--harbor-gold-soft); }
+.eyebrow.on-dark::before { background: linear-gradient(90deg, var(--harbor-gold-soft), rgba(231, 206, 134, 0.2)); }
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.95rem, 4.1vw, 3.15rem);
+  font-weight: 600;
+  line-height: var(--leading-tight, 1.25);
+  letter-spacing: -0.015em;
+  color: var(--harbor-navy);
+  margin-block: 1rem 1.15rem;
+}
+.section-title em {
+  font-style: italic;
+  color: var(--harbor-coral-deep);
+}
+.section-title.on-dark { color: var(--harbor-cream); }
+.section-title.on-dark em { color: var(--harbor-gold-soft); }
+
+.section-lead {
+  font-size: var(--text-lg, 1.125rem);
+  color: var(--harbor-slate);
+  max-width: 58ch;
+  line-height: 1.85;
+}
+.section-lead.on-dark { color: rgba(247, 242, 233, 0.72); }
+
+.section-head { max-width: 720px; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.section-head.center { margin-inline: auto; text-align: center; }
+.section-head.center .eyebrow { justify-content: center; }
+.section-head.center .section-lead { margin-inline: auto; }
+
+/* ── 按钮 ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.9rem;
+  border-radius: var(--r-full);
+  font-size: var(--text-base, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: transform var(--dur-normal) var(--ease-spring),
+              box-shadow var(--dur-normal) var(--ease),
+              background-color var(--dur-normal) var(--ease),
+              color var(--dur-normal) var(--ease);
+  white-space: nowrap;
+}
+.btn svg { width: 18px; height: 18px; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--harbor-coral) 0%, var(--harbor-coral-deep) 100%);
+  color: #FFF7F2;
+  box-shadow: 0 12px 28px -10px rgba(232, 111, 78, 0.55);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px -12px rgba(232, 111, 78, 0.6);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--harbor-navy);
+  border: 1.5px solid rgba(14, 42, 71, 0.16);
+  backdrop-filter: blur(6px);
+}
+.btn-ghost:hover {
+  transform: translateY(-3px);
+  border-color: var(--harbor-navy);
+  box-shadow: var(--sh-md);
+}
+
+.btn-outline-light {
+  border: 1.5px solid rgba(247, 242, 233, 0.35);
+  color: var(--harbor-cream);
+}
+.btn-outline-light:hover {
+  background: rgba(247, 242, 233, 0.12);
+  transform: translateY(-3px);
+  border-color: var(--harbor-gold-soft);
+}
+
+.btn-navy {
+  background: var(--harbor-navy);
+  color: var(--harbor-cream);
+}
+.btn-navy:hover { transform: translateY(-3px); box-shadow: var(--sh-lg); }
+
+/* ============================================================
+   1. 顶部 Sticky 导航
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky, 200);
+  background: rgba(247, 242, 233, 0.86);
+  backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid rgba(14, 42, 71, 0.08);
+  transition: box-shadow var(--dur-normal) var(--ease);
+}
+.site-header.scrolled { box-shadow: 0 10px 30px -18px rgba(14, 42, 71, 0.28); }
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 76px;
+  gap: 1.5rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-display);
+  font-size: 1.42rem;
+  font-weight: 700;
+  color: var(--harbor-navy);
+  letter-spacing: 0.01em;
+}
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  background: linear-gradient(150deg, var(--harbor-navy) 0%, var(--harbor-navy-soft) 100%);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 18px -8px rgba(14, 42, 71, 0.5);
+}
+.brand-mark svg { width: 22px; height: 22px; }
+.brand small {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--harbor-gold);
+  display: block;
+  margin-top: -2px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+}
+.nav-links a {
+  position: relative;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 500;
+  color: var(--harbor-slate);
+  padding-block: 0.4rem;
+  transition: color var(--dur-fast) var(--ease);
+}
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--harbor-coral);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-normal) var(--ease);
+}
+.nav-links a:hover { color: var(--harbor-navy); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-actions { display: flex; align-items: center; gap: 1rem; }
+.nav-login {
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 600;
+  color: var(--harbor-navy);
+}
+.nav-login:hover { color: var(--harbor-coral-deep); }
+.nav-cta {
+  padding: 0.68rem 1.45rem;
+  font-size: var(--text-sm, 0.875rem);
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+}
+.nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: var(--harbor-navy);
+  border-radius: 2px;
+  transition: transform var(--dur-normal) var(--ease), opacity var(--dur-fast);
+}
+
+/* ============================================================
+   2. Hero
+   ============================================================ */
+.hero {
+  position: relative;
+  padding-block: clamp(3.5rem, 7vw, 6.5rem) 0;
+  background:
+    radial-gradient(1100px 520px at 82% -10%, rgba(232, 111, 78, 0.13), transparent 62%),
+    radial-gradient(820px 480px at 8% 110%, rgba(31, 168, 143, 0.12), transparent 60%),
+    var(--harbor-cream);
+  overflow: hidden;
+}
+.hero::before {
+  /* 金色细线网格 */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201, 162, 39, 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 162, 39, 0.075) 1px, transparent 1px);
+  background-size: 58px 58px;
+  mask-image: radial-gradient(720px 520px at 72% 30%, #000 0%, transparent 78%);
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.52rem 1.15rem 0.52rem 0.62rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: var(--r-full);
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: 600;
+  color: var(--harbor-navy);
+  box-shadow: var(--sh-sm);
+}
+.hero-badge .pill {
+  padding: 0.18rem 0.72rem;
+  border-radius: var(--r-full);
+  background: linear-gradient(135deg, var(--harbor-coral), var(--harbor-coral-deep));
+  color: #FFF;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.65rem, 6vw, 4.7rem);
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.022em;
+  color: var(--harbor-navy);
+  margin-block: 1.55rem 1.35rem;
+}
+.hero h1 .accent {
+  position: relative;
+  font-style: italic;
+  color: var(--harbor-coral-deep);
+  white-space: nowrap;
+}
+.hero h1 .accent::after {
+  content: "";
+  position: absolute;
+  left: 2%;
+  bottom: 0.04em;
+  width: 96%;
+  height: 0.34em;
+  background: linear-gradient(90deg, rgba(232, 111, 78, 0.24), rgba(201, 162, 39, 0.3));
+  border-radius: var(--r-full);
+  z-index: -1;
+  transform: skewX(-12deg);
+}
+
+.hero-sub {
+  font-size: clamp(1.05rem, 1.6vw, 1.28rem);
+  line-height: 1.95;
+  color: var(--harbor-slate);
+  max-width: 52ch;
+  margin-bottom: 2.15rem;
+}
+.hero-sub strong { color: var(--harbor-navy); font-weight: 600; }
+
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.65rem; }
+
+.hero-note {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--harbor-slate);
+}
+.hero-note .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--harbor-teal);
+  box-shadow: 0 0 0 4px rgba(31, 168, 143, 0.18);
+  animation: pulse-dot 2.4s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(31, 168, 143, 0.16); }
+  50%      { box-shadow: 0 0 0 8px rgba(31, 168, 143, 0.04); }
+}
+
+/* ── Hero 主视觉：伞 + 浮动保单卡片 ── */
+.hero-visual {
+  position: relative;
+  min-height: 520px;
+}
+.visual-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(46px);
+  pointer-events: none;
+}
+.glow-orb.orb-a {
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(232, 111, 78, 0.32), transparent 68%);
+  top: 4%; right: 2%;
+}
+.glow-orb.orb-b {
+  width: 340px; height: 340px;
+  background: radial-gradient(circle, rgba(31, 168, 143, 0.3), transparent 68%);
+  bottom: 2%; left: -6%;
+}
+
+.hero-umbrella {
+  position: relative;
+  width: min(430px, 88%);
+  filter: drop-shadow(0 42px 55px rgba(14, 42, 71, 0.26));
+  animation: hero-float 7s ease-in-out infinite;
+}
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50%      { transform: translateY(-18px) rotate(1.2deg); }
+}
+
+.float-card {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 162, 39, 0.32);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-xl);
+  padding: 1rem 1.25rem;
+  animation: card-float 6s ease-in-out infinite;
+}
+.float-card .fc-top {
+  display: flex;
+  align-items: center;
+  gap: 0.62rem;
+  margin-bottom: 0.55rem;
+}
+.float-card .fc-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.float-card .fc-icon svg { width: 18px; height: 18px; }
+.float-card .fc-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--harbor-slate);
+  text-transform: uppercase;
+}
+.float-card .fc-value {
+  font-family: var(--font-display);
+  font-size: 1.32rem;
+  font-weight: 700;
+  color: var(--harbor-navy);
+  line-height: 1.2;
+}
+.float-card .fc-value small {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--harbor-teal-deep);
+  margin-left: 0.45rem;
+}
+.float-card .fc-bar {
+  height: 5px;
+  border-radius: var(--r-full);
+  background: rgba(14, 42, 71, 0.09);
+  margin-top: 0.65rem;
+  overflow: hidden;
+}
+.float-card .fc-bar i {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-full);
+  background: linear-gradient(90deg, var(--harbor-teal), var(--harbor-gold));
+}
+
+.fc-claim  { top: 6%; left: -10%; animation-delay: -1.4s; }
+.fc-policy  { bottom: 16%; right: -12%; animation-delay: -3s; }
+.fc-savings { top: 38%; right: -16%; animation-delay: -4.6s; padding: 0.85rem 1.15rem; }
+
+@keyframes card-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-13px); }
+}
+
+/* ── 统计条 ── */
+.hero-stats {
+  position: relative;
+  margin-top: clamp(2.8rem, 5vw, 4.2rem);
+  background: linear-gradient(128deg, var(--harbor-navy) 0%, var(--harbor-navy-soft) 78%, #24527F 100%);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  padding: clamp(1.85rem, 3.5vw, 2.65rem) clamp(1.5rem, 4vw, 3.5rem);
+  overflow: hidden;
+}
+.hero-stats::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 8%;
+  width: 84%; height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgba(231, 206, 134, 0.85), transparent);
+}
+.hero-stats::after {
+  content: "";
+  position: absolute;
+  right: -90px; top: -110px;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  border: 1px solid rgba(231, 206, 134, 0.18);
+}
+.stats-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.stat-item { text-align: center; padding-inline: 0.5rem; }
+.stat-item + .stat-item { border-left: 1px solid rgba(247, 242, 233, 0.14); }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 3.4vw, 2.65rem);
+  font-weight: 700;
+  color: var(--harbor-gold-soft);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.stat-num .unit {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(247, 242, 233, 0.85);
+  margin-left: 0.18rem;
+}
+.stat-label {
+  font-size: var(--text-sm, 0.875rem);
+  color: rgba(247, 242, 233, 0.68);
+  margin-top: 0.42rem;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   3. 信任栏
+   ============================================================ */
+.trust-bar {
+  background: var(--harbor-cream-warm);
+  border-bottom: 1px solid rgba(201, 162, 39, 0.22);
+  padding-block: 2.35rem;
+}
+.trust-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.15rem 2.6rem;
+}
+.trust-caption {
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--harbor-gold);
+}
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.62rem;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 600;
+  color: var(--harbor-navy);
+  opacity: 0.82;
+  transition: opacity var(--dur-normal) var(--ease), transform var(--dur-normal) var(--ease);
+}
+.trust-badge:hover { opacity: 1; transform: translateY(-2px); }
+.trust-badge .tb-ring {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(201, 162, 39, 0.55);
+  display: grid;
+  place-items: center;
+  color: var(--harbor-coral-deep);
+}
+.trust-badge .tb-ring svg { width: 17px; height: 17px; }
+.trust-badge small {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--harbor-slate);
+  letter-spacing: 0.04em;
+}
+
+/* ============================================================
+   4. 产品网格
+   ============================================================ */
+.products { background: var(--harbor-cream); position: relative; }
+.products::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.35), transparent);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.65rem;
+}
+
+.product-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid rgba(14, 42, 71, 0.08);
+  border-radius: var(--r-xl);
+  padding: 2.15rem 1.95rem 2.05rem;
+  overflow: hidden;
+  transition: transform var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease),
+              border-color var(--dur-slow) var(--ease);
+}
+.product-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: linear-gradient(90deg, var(--card-accent, var(--harbor-coral)), transparent 72%);
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease);
+}
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--sh-xl);
+  border-color: rgba(201, 162, 39, 0.4);
+}
+.product-card:hover::before { opacity: 1; }
+
+.product-card .p-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--r-lg);
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.35rem;
+  background: var(--icon-bg, rgba(232, 111, 78, 0.11));
+}
+.product-card .p-icon svg { width: 28px; height: 28px; stroke: var(--card-accent, var(--harbor-coral)); }
+
+.product-card h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl, 1.25rem);
+  font-weight: 600;
+  color: var(--harbor-navy);
+  margin-bottom: 0.55rem;
+}
+.product-card .p-tagline {
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--harbor-slate);
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+.p-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.52rem;
+  margin-bottom: 1.55rem;
+}
+.p-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.875rem;
+  color: var(--harbor-ink);
+}
+.p-features li::before {
+  content: "✓";
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: rgba(31, 168, 143, 0.13);
+  color: var(--harbor-teal-deep);
+  font-size: 0.62rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+.p-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.15rem;
+  border-top: 1px dashed rgba(14, 42, 71, 0.14);
+}
+.p-price {
+  font-family: var(--font-display);
+  font-size: 1.62rem;
+  font-weight: 700;
+  color: var(--harbor-navy);
+}
+.p-price .cur { font-size: 1rem; margin-right: 1px; }
+.p-price .per {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--harbor-slate);
+  margin-left: 3px;
+}
+.p-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.36rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--harbor-coral-deep);
+}
+.p-link svg { width: 15px; height: 15px; transition: transform var(--dur-normal) var(--ease); }
+.product-card:hover .p-link svg { transform: translateX(4px); }
+
+/* ============================================================
+   5. 保费计算器
+   ============================================================ */
+.calc-section {
+  position: relative;
+  background:
+    radial-gradient(900px 460px at 88% 12%, rgba(31, 168, 143, 0.16), transparent 60%),
+    linear-gradient(165deg, var(--harbor-navy) 0%, var(--harbor-navy-deep) 100%);
+  color: var(--harbor-cream);
+  overflow: hidden;
+}
+.calc-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(231, 206, 134, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(231, 206, 134, 0.06) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(760px 520px at 20% 50%, #000 0%, transparent 80%);
+}
+
+.calc-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(2.25rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.calc-form {
+  background: rgba(247, 242, 233, 0.05);
+  border: 1px solid rgba(231, 206, 134, 0.22);
+  border-radius: var(--r-xl);
+  padding: clamp(1.85rem, 3.5vw, 2.75rem);
+  backdrop-filter: blur(8px);
+}
+
+.calc-field + .calc-field { margin-top: 2.05rem; }
+.calc-field-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.05rem;
+}
+.calc-field-top label {
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(247, 242, 233, 0.82);
+}
+.calc-field-top output {
+  font-family: var(--font-display);
+  font-size: 1.42rem;
+  font-weight: 700;
+  color: var(--harbor-gold-soft);
+}
+.calc-field-top output small {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(247, 242, 233, 0.6);
+  margin-left: 2px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: var(--r-full);
+  background: linear-gradient(90deg, var(--harbor-coral) var(--fill, 40%), rgba(247, 242, 233, 0.16) var(--fill, 40%));
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--harbor-cream);
+  border: 3px solid var(--harbor-coral);
+  box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.5);
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.12); }
+input[type="range"]::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--harbor-cream);
+  border: 3px solid var(--harbor-coral);
+  cursor: pointer;
+}
+.range-marks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.72rem;
+  font-size: 0.72rem;
+  color: rgba(247, 242, 233, 0.48);
+  letter-spacing: 0.05em;
+}
+
+.calc-plan-row { display: flex; gap: 0.72rem; margin-top: 1.05rem; }
+.plan-chip {
+  flex: 1;
+  padding: 0.82rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1.5px solid rgba(247, 242, 233, 0.18);
+  background: rgba(247, 242, 233, 0.05);
+  color: rgba(247, 242, 233, 0.8);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all var(--dur-normal) var(--ease);
+}
+.plan-chip:hover { border-color: var(--harbor-gold-soft); color: var(--harbor-cream); }
+.plan-chip.active {
+  background: linear-gradient(135deg, var(--harbor-coral), var(--harbor-coral-deep));
+  border-color: transparent;
+  color: #FFF;
+  box-shadow: 0 12px 26px -10px rgba(232, 111, 78, 0.55);
+}
+
+.calc-result {
+  position: relative;
+  background: linear-gradient(160deg, var(--harbor-cream) 0%, var(--harbor-cream-warm) 100%);
+  border-radius: var(--r-xl);
+  padding: clamp(2.15rem, 4vw, 3.15rem);
+  color: var(--harbor-ink);
+  box-shadow: 0 44px 80px -30px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+.calc-result::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--harbor-coral), var(--harbor-gold), var(--harbor-teal));
+}
+.calc-result .cr-label {
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--harbor-gold);
+}
+.cr-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-block: 0.85rem 0.35rem;
+}
+.cr-price .cur {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--harbor-coral-deep);
+}
+.cr-price .num {
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 7vw, 4.85rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--harbor-navy);
+}
+.cr-price .per {
+  font-size: var(--text-base, 1rem);
+  font-weight: 600;
+  color: var(--harbor-slate);
+}
+.cr-hint {
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--harbor-slate);
+  margin-bottom: 1.75rem;
+}
+.cr-hint b { color: var(--harbor-teal-deep); }
+
+.cr-breakdown {
+  border-top: 1px dashed rgba(14, 42, 71, 0.18);
+  padding-top: 1.45rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.82rem;
+}
+.cr-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-sm, 0.875rem);
+}
+.cr-row .k { color: var(--harbor-slate); }
+.cr-row .v { font-weight: 700; color: var(--harbor-navy); }
+.cr-row .v.green { color: var(--harbor-teal-deep); }
+.cr-cta { margin-top: 1.85rem; width: 100%; }
+
+/* ============================================================
+   6. 理赔流程
+   ============================================================ */
+.claims { background: var(--harbor-cream-warm); }
+.claims-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.92fr;
+  gap: clamp(2.5rem, 6vw, 5.5rem);
+  align-items: center;
+}
+
+.steps { display: flex; flex-direction: column; gap: 0.65rem; }
+.step {
+  position: relative;
+  display: flex;
+  gap: 1.45rem;
+  padding: 1.75rem 1.85rem;
+  border-radius: var(--r-xl);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid transparent;
+  transition: all var(--dur-slow) var(--ease);
+}
+.step:hover {
+  background: var(--color-surface);
+  border-color: rgba(201, 162, 39, 0.42);
+  box-shadow: var(--sh-lg);
+  transform: translateX(8px);
+}
+.step-index {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-lg);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  font-weight: 700;
+  background: linear-gradient(150deg, var(--harbor-navy), var(--harbor-navy-soft));
+  color: var(--harbor-gold-soft);
+  box-shadow: 0 12px 24px -10px rgba(14, 42, 71, 0.4);
+}
+.step:nth-child(2) .step-index { background: linear-gradient(150deg, var(--harbor-coral), var(--harbor-coral-deep)); color: #FFF; }
+.step:nth-child(3) .step-index { background: linear-gradient(150deg, var(--harbor-teal), var(--harbor-teal-deep)); color: #FFF; }
+.step h3 {
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: var(--harbor-navy);
+  margin-bottom: 0.42rem;
+}
+.step p {
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--harbor-slate);
+  line-height: 1.85;
+}
+.step .step-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  margin-top: 0.72rem;
+  padding: 0.28rem 0.78rem;
+  border-radius: var(--r-full);
+  background: rgba(31, 168, 143, 0.1);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--harbor-teal-deep);
+  letter-spacing: 0.05em;
+}
+.step .step-meta.coral {
+  background: rgba(232, 111, 78, 0.12);
+  color: var(--harbor-coral-deep);
+}
+
+/* ── 手机理赔 mockup ── */
+.phone-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.phone-glow {
+  position: absolute;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 111, 78, 0.2), transparent 68%);
+  filter: blur(34px);
+}
+.phone {
+  position: relative;
+  width: 300px;
+  border-radius: 46px;
+  background: var(--harbor-navy);
+  padding: 13px;
+  box-shadow: 0 50px 90px -28px rgba(14, 42, 71, 0.5), 0 0 0 1.5px rgba(201, 162, 39, 0.35);
+  transform: rotate(2.6deg);
+  transition: transform var(--dur-slow) var(--ease);
+}
+.phone:hover { transform: rotate(0deg) translateY(-8px); }
+.phone-notch {
+  position: absolute;
+  top: 13px; left: 50%;
+  transform: translateX(-50%);
+  width: 108px; height: 24px;
+  background: var(--harbor-navy);
+  border-radius: 0 0 16px 16px;
+  z-index: 3;
+}
+.phone-screen {
+  border-radius: 34px;
+  background: linear-gradient(178deg, var(--harbor-cream-warm) 0%, var(--harbor-cream) 100%);
+  overflow: hidden;
+  padding: 2.55rem 1.25rem 1.45rem;
+  min-height: 540px;
+}
+.ps-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.15rem;
+}
+.ps-title {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--harbor-navy);
+}
+.ps-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, var(--harbor-coral), var(--harbor-gold));
+}
+.ps-status-card {
+  background: var(--color-surface);
+  border-radius: var(--r-lg);
+  padding: 1.05rem;
+  box-shadow: var(--sh-md);
+  margin-bottom: 0.95rem;
+}
+.ps-amount {
+  font-family: var(--font-display);
+  font-size: 1.72rem;
+  font-weight: 700;
+  color: var(--harbor-navy);
+  line-height: 1.2;
+}
+.ps-amount small {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--harbor-teal-deep);
+  background: rgba(31, 168, 143, 0.12);
+  padding: 0.16rem 0.58rem;
+  border-radius: var(--r-full);
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+.ps-sub {
+  font-size: 0.72rem;
+  color: var(--harbor-slate);
+  margin-top: 0.35rem;
+  letter-spacing: 0.03em;
+}
+.ps-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  margin-top: 0.92rem;
+}
+.ps-progress .node {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+.ps-progress .node.done { background: var(--harbor-teal); color: #FFF; }
+.ps-progress .node.now {
+  background: var(--harbor-coral);
+  color: #FFF;
+  box-shadow: 0 0 0 4px rgba(232, 111, 78, 0.22);
+}
+.ps-progress .node.todo { background: rgba(14, 42, 71, 0.1); color: var(--harbor-slate); }
+.ps-progress .bar {
+  flex: 1;
+  height: 3.5px;
+  border-radius: var(--r-full);
+  background: rgba(14, 42, 71, 0.1);
+  overflow: hidden;
+}
+.ps-progress .bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--harbor-teal), var(--harbor-coral));
+}
+.ps-doc {
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
+  background: var(--color-surface);
+  border-radius: var(--r-md);
+  padding: 0.72rem 0.85rem;
+  box-shadow: var(--sh-sm);
+  margin-bottom: 0.62rem;
+}
+.ps-doc .doc-ic {
+  width: 34px; height: 34px;
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ps-doc .doc-ic svg { width: 17px; height: 17px; }
+.ps-doc .doc-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--harbor-navy);
+}
+.ps-doc .doc-size {
+  font-size: 0.65rem;
+  color: var(--harbor-slate);
+}
+.ps-doc .doc-check {
+  margin-left: auto;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: rgba(31, 168, 143, 0.14);
+  color: var(--harbor-teal-deep);
+  font-size: 0.62rem;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+.ps-btn {
+  margin-top: 1.05rem;
+  width: 100%;
+  padding: 0.82rem;
+  border-radius: var(--r-full);
+  background: linear-gradient(135deg, var(--harbor-coral), var(--harbor-coral-deep));
+  color: #FFF;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 12px 22px -10px rgba(232, 111, 78, 0.55);
+}
+
+.phone-chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--color-surface);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: var(--r-full);
+  padding: 0.62rem 1.15rem;
+  box-shadow: var(--sh-lg);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--harbor-navy);
+  animation: card-float 5.4s ease-in-out infinite;
+}
+.phone-chip .tick {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.68rem;
+  color: #FFF;
+}
+.phone-chip.chip-a { top: 10%; left: -6%; }
+.phone-chip.chip-a .tick { background: var(--harbor-teal); }
+.phone-chip.chip-b { bottom: 12%; right: -8%; animation-delay: -2.6s; }
+.phone-chip.chip-b .tick { background: var(--harbor-coral); }
+
+/* ============================================================
+   7. 对比表
+   ============================================================ */
+.compare { background: var(--harbor-cream); }
+.compare-table-wrap {
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--sh-xl);
+  border: 1px solid rgba(14, 42, 71, 0.08);
+}
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+}
+.compare-table thead th {
+  padding: 1.65rem 1.75rem;
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 700;
+  text-align: left;
+  letter-spacing: 0.01em;
+}
+.compare-table thead th.col-harbor {
+  background: linear-gradient(150deg, var(--harbor-navy), var(--harbor-navy-soft));
+  color: var(--harbor-cream);
+  width: 31%;
+  position: relative;
+}
+.compare-table thead th.col-harbor .th-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--harbor-gold-soft);
+  margin-bottom: 0.32rem;
+}
+.compare-table thead th.col-trad {
+  background: var(--harbor-cream-warm);
+  color: var(--harbor-slate);
+}
+.compare-table thead th.col-item {
+  background: var(--harbor-cream-warm);
+  color: var(--harbor-slate);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.compare-table tbody td {
+  padding: 1.42rem 1.75rem;
+  font-size: 0.95rem;
+  border-top: 1px solid rgba(14, 42, 71, 0.07);
+  vertical-align: middle;
+}
+.compare-table tbody tr { transition: background var(--dur-normal) var(--ease); }
+.compare-table tbody tr:hover { background: rgba(232, 111, 78, 0.038); }
+.compare-table td.td-item {
+  font-weight: 600;
+  color: var(--harbor-navy);
+}
+.compare-table td.td-harbor {
+  background: rgba(31, 168, 143, 0.055);
+  font-weight: 700;
+  color: var(--harbor-navy);
+  position: relative;
+}
+.compare-table td.td-harbor .harbor-val {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.compare-table td.td-harbor .h-check {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--harbor-teal);
+  color: #FFF;
+  font-size: 0.68rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-weight: 800;
+}
+.compare-table td.td-trad {
+  color: var(--harbor-slate);
+}
+.compare-table td.td-trad .trad-val {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.compare-table td.td-trad .t-cross {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(14, 42, 71, 0.08);
+  color: var(--harbor-slate);
+  font-size: 0.68rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.compare-table tfoot td {
+  padding: 1.35rem 1.75rem;
+  background: var(--harbor-cream-warm);
+  font-size: 0.85rem;
+  color: var(--harbor-slate);
+  border-top: 1px solid rgba(201, 162, 39, 0.3);
+}
+
+/* ============================================================
+   8. 用户评价 + 数据墙
+   ============================================================ */
+.testimonials {
+  position: relative;
+  background:
+    radial-gradient(860px 420px at 12% 0%, rgba(232, 111, 78, 0.1), transparent 62%),
+    var(--harbor-cream-warm);
+}
+.t-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.65rem;
+}
+.t-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid rgba(14, 42, 71, 0.08);
+  border-radius: var(--r-xl);
+  padding: 2.25rem 1.95rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease);
+}
+.t-card:hover { transform: translateY(-7px); box-shadow: var(--sh-xl); }
+.t-quote-mark {
+  font-family: var(--font-display);
+  font-size: 3.65rem;
+  line-height: 0.7;
+  color: rgba(232, 111, 78, 0.24);
+  margin-bottom: 1.05rem;
+}
+.t-stars {
+  display: flex;
+  gap: 0.22rem;
+  margin-bottom: 1.05rem;
+  color: var(--harbor-gold);
+}
+.t-stars svg { width: 17px; height: 17px; }
+.t-card blockquote {
+  font-size: 0.98rem;
+  line-height: 1.95;
+  color: var(--harbor-ink);
+  flex: 1;
+}
+.t-card blockquote b {
+  background: linear-gradient(transparent 62%, rgba(231, 206, 134, 0.55) 62%);
+  font-weight: 600;
+  color: var(--harbor-navy);
+}
+.t-person {
+  display: flex;
+  align-items: center;
+  gap: 0.88rem;
+  margin-top: 1.75rem;
+  padding-top: 1.35rem;
+  border-top: 1px dashed rgba(14, 42, 71, 0.13);
+}
+.t-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #FFF;
+  flex-shrink: 0;
+}
+.t-person .t-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--harbor-navy);
+}
+.t-person .t-role {
+  font-size: 0.75rem;
+  color: var(--harbor-slate);
+}
+.t-person .t-policy {
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.68rem;
+  border-radius: var(--r-full);
+  background: rgba(31, 168, 143, 0.11);
+  color: var(--harbor-teal-deep);
+}
+
+/* ── 数据墙 ── */
+.data-wall {
+  margin-top: clamp(2.5rem, 5vw, 3.75rem);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.35rem;
+}
+.wall-cell {
+  position: relative;
+  border-radius: var(--r-lg);
+  padding: 1.85rem 1.55rem;
+  overflow: hidden;
+}
+.wall-cell:nth-child(1) { background: linear-gradient(150deg, var(--harbor-navy), var(--harbor-navy-soft)); }
+.wall-cell:nth-child(2) { background: linear-gradient(150deg, var(--harbor-coral), var(--harbor-coral-deep)); }
+.wall-cell:nth-child(3) { background: linear-gradient(150deg, var(--harbor-teal), var(--harbor-teal-deep)); }
+.wall-cell:nth-child(4) { background: linear-gradient(150deg, var(--harbor-gold), #B58E1D); }
+.wall-cell::after {
+  content: "";
+  position: absolute;
+  right: -34px; bottom: -40px;
+  width: 128px; height: 128px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+}
+.wall-num {
+  font-family: var(--font-display);
+  font-size: clamp(1.95rem, 3.4vw, 2.62rem);
+  font-weight: 700;
+  color: #FFF;
+  line-height: 1.12;
+}
+.wall-num .unit {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  opacity: 0.82;
+}
+.wall-label {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.82);
+  margin-top: 0.55rem;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   9. FAQ
+   ============================================================ */
+.faq { background: var(--harbor-cream); }
+.faq-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(2.5rem, 6vw, 5.5rem);
+  align-items: start;
+}
+.faq-aside .section-title { font-size: clamp(1.85rem, 3.4vw, 2.65rem); }
+.faq-help-card {
+  margin-top: 2.15rem;
+  background: var(--color-surface);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: var(--r-xl);
+  padding: 1.75rem;
+  box-shadow: var(--sh-md);
+}
+.faq-help-card h4 {
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  color: var(--harbor-navy);
+  margin-bottom: 0.55rem;
+}
+.faq-help-card p {
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--harbor-slate);
+  line-height: 1.85;
+  margin-bottom: 1.15rem;
+}
+.faq-help-card .help-links { display: flex; flex-direction: column; gap: 0.62rem; }
+.faq-help-card .help-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--harbor-coral-deep);
+}
+.faq-help-card .help-links a svg { width: 15px; height: 15px; }
+
+.faq-list { display: flex; flex-direction: column; gap: 0.95rem; }
+.faq-item {
+  background: var(--color-surface);
+  border: 1px solid rgba(14, 42, 71, 0.08);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: border-color var(--dur-normal) var(--ease), box-shadow var(--dur-normal) var(--ease);
+}
+.faq-item[open] {
+  border-color: rgba(201, 162, 39, 0.5);
+  box-shadow: var(--sh-lg);
+}
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.15rem;
+  padding: 1.42rem 1.65rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--harbor-navy);
+  transition: color var(--dur-fast) var(--ease);
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover { color: var(--harbor-coral-deep); }
+.faq-item summary .faq-ic {
+  flex-shrink: 0;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(14, 42, 71, 0.16);
+  display: grid;
+  place-items: center;
+  color: var(--harbor-navy);
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: transform var(--dur-normal) var(--ease-spring),
+              background-color var(--dur-normal) var(--ease),
+              border-color var(--dur-normal) var(--ease),
+              color var(--dur-normal) var(--ease);
+}
+.faq-item[open] summary .faq-ic {
+  transform: rotate(45deg);
+  background: var(--harbor-coral);
+  border-color: var(--harbor-coral);
+  color: #FFF;
+}
+.faq-body {
+  padding: 0 1.65rem 1.55rem;
+  font-size: 0.95rem;
+  line-height: 2;
+  color: var(--harbor-slate);
+}
+.faq-body b { color: var(--harbor-navy); font-weight: 600; }
+
+/* ============================================================
+   10. CTA 横幅 + Footer
+   ============================================================ */
+.cta-banner {
+  position: relative;
+  background: linear-gradient(122deg, var(--harbor-navy) 0%, var(--harbor-navy-soft) 62%, #2C5D8E 100%);
+  overflow: hidden;
+}
+.cta-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(560px 340px at 86% 24%, rgba(232, 111, 78, 0.32), transparent 65%),
+    radial-gradient(520px 320px at 8% 88%, rgba(31, 168, 143, 0.26), transparent 62%);
+}
+.cta-banner::after {
+  content: "";
+  position: absolute;
+  top: -1px; left: 10%;
+  width: 80%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--harbor-gold-soft), transparent);
+}
+.cta-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  align-items: center;
+  gap: 2.75rem;
+  padding-block: clamp(3.5rem, 7vw, 5.5rem);
+}
+.cta-banner h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.05rem, 4.4vw, 3.35rem);
+  font-weight: 600;
+  line-height: 1.22;
+  color: var(--harbor-cream);
+  letter-spacing: -0.015em;
+}
+.cta-banner h2 em { font-style: italic; color: var(--harbor-gold-soft); }
+.cta-banner p {
+  margin-top: 1.15rem;
+  font-size: var(--text-lg, 1.125rem);
+  color: rgba(247, 242, 233, 0.75);
+  line-height: 1.95;
+  max-width: 52ch;
+}
+.cta-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+  align-items: stretch;
+}
+.cta-actions .btn { justify-content: center; padding-block: 1.12rem; }
+.cta-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  color: rgba(247, 242, 233, 0.6);
+  letter-spacing: 0.04em;
+}
+.cta-trust svg { width: 15px; height: 15px; }
+
+/* ── Footer ── */
+.site-footer {
+  background: var(--harbor-navy-deep);
+  color: rgba(247, 242, 233, 0.72);
+  padding-block: clamp(3.25rem, 6vw, 4.75rem) 0;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr) 1.15fr;
+  gap: 2.5rem;
+  padding-bottom: 3.15rem;
+  border-bottom: 1px solid rgba(247, 242, 233, 0.1);
+}
+.footer-brand .brand { color: var(--harbor-cream); margin-bottom: 1.15rem; }
+.footer-brand .brand small { color: var(--harbor-gold-soft); }
+.footer-brand p {
+  font-size: var(--text-sm, 0.875rem);
+  line-height: 1.95;
+  max-width: 34ch;
+  margin-bottom: 1.35rem;
+}
+.footer-contact li {
+  display: flex;
+  align-items: center;
+  gap: 0.62rem;
+  font-size: 0.82rem;
+  margin-bottom: 0.55rem;
+}
+.footer-contact li svg { width: 15px; height: 15px; color: var(--harbor-gold-soft); flex-shrink: 0; }
+.footer-col h5 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--harbor-gold-soft);
+  margin-bottom: 1.35rem;
+}
+.footer-col li { margin-bottom: 0.78rem; }
+.footer-col a {
+  font-size: 0.88rem;
+  color: rgba(247, 242, 233, 0.68);
+  transition: color var(--dur-fast) var(--ease), padding-left var(--dur-normal) var(--ease);
+}
+.footer-col a:hover {
+  color: var(--harbor-cream);
+  padding-left: 5px;
+}
+
+.footer-newsletter p {
+  font-size: 0.82rem;
+  line-height: 1.85;
+  margin-bottom: 1.05rem;
+}
+.newsletter-form {
+  display: flex;
+  border-radius: var(--r-full);
+  overflow: hidden;
+  border: 1px solid rgba(247, 242, 233, 0.18);
+  background: rgba(247, 242, 233, 0.06);
+}
+.newsletter-form input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0.78rem 1.15rem;
+  color: var(--harbor-cream);
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+}
+.newsletter-form input::placeholder { color: rgba(247, 242, 233, 0.42); }
+.newsletter-form button {
+  padding: 0.78rem 1.35rem;
+  background: var(--harbor-coral);
+  color: #FFF;
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: background var(--dur-normal) var(--ease);
+}
+.newsletter-form button:hover { background: var(--harbor-coral-deep); }
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.15rem;
+  padding-block: 1.85rem;
+  font-size: 0.75rem;
+  line-height: 1.95;
+  color: rgba(247, 242, 233, 0.48);
+}
+.footer-legal .legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.35rem;
+}
+.footer-legal .legal-links a:hover { color: var(--harbor-gold-soft); }
+.footer-disclaimer {
+  padding-bottom: 2.25rem;
+  font-size: 0.72rem;
+  line-height: 1.95;
+  color: rgba(247, 242, 233, 0.38);
+  max-width: 92ch;
+}
+
+/* ============================================================
+   滚动入场动画（内容默认可见，JS 就绪后再启用隐藏态）
+   ============================================================ */
+.reveal {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.85s var(--ease-out, cubic-bezier(0, 0, 0.2, 1)),
+              transform 0.85s var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+html.js .reveal:not(.in-view) {
+  opacity: 0;
+  transform: translateY(28px);
+}
+html.js .reveal.in-view { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.12s; }
+.reveal-delay-2 { transition-delay: 0.24s; }
+.reveal-delay-3 { transition-delay: 0.36s; }
+.reveal-delay-4 { transition-delay: 0.48s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal:not(.in-view) { opacity: 1; transform: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 1080px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-visual { min-height: 470px; margin-top: 1.5rem; }
+  .fc-claim { left: 4%; }
+  .fc-policy { right: 2%; }
+  .fc-savings { right: 8%; }
+  .calc-grid, .claims-grid, .faq-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .footer-brand { grid-column: span 3; }
+  .footer-newsletter { grid-column: span 3; max-width: 460px; }
+  .t-grid { grid-template-columns: 1fr 1fr; }
+  .data-wall { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 860px) {
+  .nav-links, .nav-login { display: none; }
+  .nav-toggle { display: flex; }
+  .nav-links.open {
+    display: flex;
+    position: absolute;
+    top: 76px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0.45rem;
+    background: var(--harbor-cream);
+    padding: 1.35rem 1.5rem 1.85rem;
+    border-bottom: 1px solid rgba(14, 42, 71, 0.1);
+    box-shadow: var(--sh-lg);
+  }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .stat-item:nth-child(3) { border-left: none; }
+  .stat-item + .stat-item { border-left: 1px solid rgba(247, 242, 233, 0.14); }
+  .stat-item:nth-child(odd) { border-left: none; }
+  .product-grid { grid-template-columns: 1fr 1fr; }
+  .cta-inner { grid-template-columns: 1fr; }
+  .cta-actions { flex-direction: row; flex-wrap: wrap; }
+  .cta-actions .btn { flex: 1; min-width: 220px; }
+}
+
+@media (max-width: 620px) {
+  .product-grid, .t-grid { grid-template-columns: 1fr; }
+  .data-wall { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-brand, .footer-newsletter { grid-column: span 2; }
+  .float-card { transform: scale(0.85); }
+  .fc-savings { display: none; }
+  .compare-table thead th, .compare-table tbody td { padding: 1.05rem 1rem; font-size: 0.85rem; }
+  .hero-stats { border-radius: var(--r-lg) var(--r-lg) 0 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ================= 1. Sticky 导航 ================= -->
+<header class="site-header" id="siteHeader">
+  <div class="container nav-inner">
+    <a class="brand" href="#top" aria-label="Harbor 首页">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#E7CE86" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11.5 12 4l9 7.5"/><path d="M12 4v16"/><path d="M4 20h16"/>
+          <path d="M7.5 13.5a4.5 4.5 0 0 1 9 0"/>
+        </svg>
+      </span>
+      <span>Harbor<small>InsurTech</small></span>
+    </a>
+
+    <nav class="nav-links" id="navLinks" aria-label="主导航">
+      <a href="#products">保险产品</a>
+      <a href="#claims">理赔服务</a>
+      <a href="#compare">为什么选我们</a>
+      <a href="#stories">用户故事</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="nav-login" href="#calculator">登录</a>
+      <a class="btn btn-primary nav-cta" href="#calculator">
+        免费测算保费
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="展开菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ================= 2. Hero ================= -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="hero-badge reveal">
+          <span class="pill">NEW</span>
+          <span>「守护者 2026」重疾险全新升级 · 覆盖 120 种疾病</span>
+        </div>
+
+        <h1 class="reveal reveal-delay-1">
+          保险，<br>本该<span class="accent">如此简单</span>。
+        </h1>
+
+        <p class="hero-sub reveal reveal-delay-2">
+          Harbor 用科技重写保险体验：<strong>90 秒在线投保</strong>、材料拍照即传、
+          <strong>平均 47 分钟理赔到账</strong>。没有晦涩条款，没有推销电话，
+          只有一份写得明白、赔得痛快的保障。
+        </p>
+
+        <div class="hero-ctas reveal reveal-delay-3">
+          <a class="btn btn-primary" href="#calculator">
+            测算我的保费
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="#claims">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></svg>
+            看看理赔有多快
+          </a>
+        </div>
+
+        <p class="hero-note reveal reveal-delay-4">
+          <span class="dot" aria-hidden="true"></span>
+          今日已有 <strong style="color:var(--harbor-navy)">2,318 人</strong> 完成投保 · 首月可无理由全额退保
+        </p>
+      </div>
+
+      <!-- 主视觉 -->
+      <div class="hero-visual reveal reveal-delay-2" aria-hidden="true">
+        <div class="visual-stage">
+          <div class="glow-orb orb-a"></div>
+          <div class="glow-orb orb-b"></div>
+
+          <svg class="hero-umbrella" viewBox="0 0 440 470" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="canopy" x1="60" y1="40" x2="380" y2="260" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#16395E"/>
+                <stop offset="0.55" stop-color="#0E2A47"/>
+                <stop offset="1" stop-color="#08203A"/>
+              </linearGradient>
+              <linearGradient id="goldLine" x1="220" y1="30" x2="220" y2="270" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#E7CE86"/>
+                <stop offset="1" stop-color="#C9A227"/>
+              </linearGradient>
+              <linearGradient id="shieldGrad" x1="150" y1="250" x2="300" y2="430" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#E86F4E"/>
+                <stop offset="1" stop-color="#C94F2E"/>
+              </linearGradient>
+            </defs>
+
+            <!-- 伞面 -->
+            <path d="M30 210C30 210 78 78 220 78C362 78 410 210 410 210C368 186 336 186 302 210C268 186 236 186 220 210C204 186 172 186 138 210C104 186 72 186 30 210Z" fill="url(#canopy)"/>
+            <path d="M30 210C30 210 78 78 220 78C362 78 410 210 410 210" stroke="url(#goldLine)" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M220 78C186 128 152 176 138 210" stroke="#E7CE86" stroke-opacity="0.5" stroke-width="1.6"/>
+            <path d="M220 78C254 128 288 176 302 210" stroke="#E7CE86" stroke-opacity="0.5" stroke-width="1.6"/>
+            <path d="M220 78V210" stroke="#E7CE86" stroke-opacity="0.32" stroke-width="1.4"/>
+            <circle cx="220" cy="70" r="9" fill="#E7CE86"/>
+            <path d="M220 61V38" stroke="#E7CE86" stroke-width="4" stroke-linecap="round"/>
+            <path d="M220 38C220 38 202 30 202 20C202 12 210 8 218 8" stroke="#E7CE86" stroke-width="4" stroke-linecap="round"/>
+
+            <!-- 伞柄 -->
+            <path d="M220 210V388C220 414 198 430 176 430C154 430 136 414 136 392" stroke="url(#goldLine)" stroke-width="9" stroke-linecap="round"/>
+
+            <!-- 盾牌 -->
+            <path d="M300 258L372 288V342C372 388 340 420 300 436C260 420 228 388 228 342V288L300 258Z" fill="url(#shieldGrad)"/>
+            <path d="M300 258L372 288V342C372 388 340 420 300 436C260 420 228 388 228 342V288L300 258Z" stroke="#E7CE86" stroke-opacity="0.75" stroke-width="2"/>
+            <path d="M272 344L292 364L332 322" stroke="#FFF7F2" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- 雨滴 -->
+            <path d="M96 262C96 262 88 276 88 283C88 290 92 294 96 294C100 294 104 290 104 283C104 276 96 262 96 262Z" fill="#1FA88F" fill-opacity="0.55"/>
+            <path d="M358 176C358 176 351 188 351 194C351 200 354 203 358 203C362 203 365 200 365 194C365 188 358 176 358 176Z" fill="#1FA88F" fill-opacity="0.45"/>
+            <path d="M62 172C62 172 56 182 56 187C56 192 59 195 62 195C65 195 68 192 68 187C68 182 62 172 62 172Z" fill="#E86F4E" fill-opacity="0.5"/>
+          </svg>
+
+          <!-- 浮动卡片 1：理赔进度 -->
+          <div class="float-card fc-claim">
+            <div class="fc-top">
+              <span class="fc-icon" style="background:rgba(31,168,143,0.13)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#12866F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span class="fc-label">理赔已到账</span>
+            </div>
+            <div class="fc-value">¥ 12,860.00 <small>47 分钟</small></div>
+            <div class="fc-bar"><i style="width:100%"></i></div>
+          </div>
+
+          <!-- 浮动卡片 2：保单 -->
+          <div class="float-card fc-policy">
+            <div class="fc-top">
+              <span class="fc-icon" style="background:rgba(232,111,78,0.12)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#D65B3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </span>
+              <span class="fc-label">守护者重疾险</span>
+            </div>
+            <div class="fc-value">保额 ¥50 万</div>
+            <div class="fc-bar"><i style="width:72%"></i></div>
+          </div>
+
+          <!-- 浮动卡片 3：省了多少 -->
+          <div class="float-card fc-savings">
+            <div class="fc-value" style="font-size:1.05rem">今年省下 ¥2,174</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 统计条 -->
+    <div class="hero-stats reveal">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num">200<span class="unit">万+</span></div>
+          <div class="stat-label">累计服务用户</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">47<span class="unit">分钟</span></div>
+          <div class="stat-label">平均理赔到账时间</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">98<span class="unit">%</span></div>
+          <div class="stat-label">客户满意度（2025 年度）</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">96.4<span class="unit">%</span></div>
+          <div class="stat-label">理赔申请通过率</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. 信任栏 ================= -->
+<section class="trust-bar" aria-label="资质与合作">
+  <div class="container trust-inner">
+    <span class="trust-caption">值得托付的保障</span>
+
+    <span class="trust-badge">
+      <span class="tb-ring">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+      </span>
+      <span>国家金融监督管理总局备案<small>保险中介许可证 0082641</small></span>
+    </span>
+
+    <span class="trust-badge">
+      <span class="tb-ring">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h6M9 14h6"/></svg>
+      </span>
+      <span>瑞士再保险 / 慕尼黑再保险<small>联合再保承保支持</small></span>
+    </span>
+
+    <span class="trust-badge">
+      <span class="tb-ring">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+      </span>
+      <span>中诚信国际 A+ 评级<small>偿付能力充足率 286%</small></span>
+    </span>
+
+    <span class="trust-badge">
+      <span class="tb-ring">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      </span>
+      <span>ISO 27001 信息安全认证<small>全链路数据加密</small></span>
+    </span>
+  </div>
+</section>
+
+<!-- ================= 4. 保险产品 ================= -->
+<section class="products section-pad" id="products">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Products · 保障方案</span>
+      <h2 class="section-title">六张保单，守护<em>生活的每一面</em></h2>
+      <p class="section-lead">
+        每一款产品都由精算师与产品团队重新设计：条款压缩到一页纸能读完，
+        价格公开透明，理赔标准写在明处。
+      </p>
+    </div>
+
+    <div class="product-grid">
+      <!-- 医疗险 -->
+      <article class="product-card reveal" style="--card-accent:#1FA88F; --icon-bg:rgba(31,168,143,0.12)">
+        <div class="p-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 21C7 17.5 3 13.8 3 9.5A4.5 4.5 0 0 1 7.5 5c1.8 0 3.4 1 4.5 2.5C13.1 6 14.7 5 16.5 5A4.5 4.5 0 0 1 21 9.5c0 4.3-4 8-9 11.5z"/>
+            <path d="M9 12h2l1-2.5 1.5 5 1-2.5h2"/>
+          </svg>
+        </div>
+        <h3>「安心 e 生」医疗险</h3>
+        <p class="p-tagline">住院医疗 0 免赔额，社保内外 100% 报销，覆盖 214 种特药。</p>
+        <ul class="p-features">
+          <li>年度保额 600 万，质子重离子 100% 报销</li>
+          <li>全国 8,300+ 家二级以上医院直付</li>
+          <li>在线问诊 + 药品配送全年不限次</li>
+        </ul>
+        <div class="p-foot">
+          <div class="p-price"><span class="cur">¥</span>26<span class="per">/月起</span></div>
+          <a class="p-link" href="#calculator">查看方案
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- 重疾险 -->
+      <article class="product-card reveal reveal-delay-1" style="--card-accent:#E86F4E; --icon-bg:rgba(232,111,78,0.11)">
+        <div class="p-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v8M8 12h8"/>
+          </svg>
+        </div>
+        <h3>「守护者 2026」重疾险</h3>
+        <p class="p-tagline">120 种重疾 + 25 种中症 + 40 种轻症，多次赔付不分组。</p>
+        <ul class="p-features">
+          <li>保额 10 万–100 万自由选，保至 70 岁或终身</li>
+          <li>确诊即赔，最快 1 天完成审核放款</li>
+          <li>自带被保人豁免，轻症后免交后续保费</li>
+        </ul>
+        <div class="p-foot">
+          <div class="p-price"><span class="cur">¥</span>89<span class="per">/月起</span></div>
+          <a class="p-link" href="#calculator">查看方案
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- 意外险 -->
+      <article class="product-card reveal reveal-delay-2" style="--card-accent:#0E2A47; --icon-bg:rgba(14,42,71,0.09)">
+        <div class="p-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5z"/>
+          </svg>
+        </div>
+        <h3>「畅行无忧」意外险</h3>
+        <p class="p-tagline">涵盖交通意外、运动损伤、猫抓狗咬，猝死责任可选。</p>
+        <ul class="p-features">
+          <li>意外身故 / 伤残最高 100 万保额</li>
+          <li>意外医疗 0 免赔，含骨折津贴 ¥200/天</li>
+          <li>全球救援服务，境外就医可垫付</li>
+        </ul>
+        <div class="p-foot">
+          <div class="p-price"><span class="cur">¥</span>12<span class="per">/月起</span></div>
+          <a class="p-link" href="#calculator">查看方案
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- 家财险 -->
+      <article class="product-card reveal" style="--card-accent:#C9A227; --icon-bg:rgba(201,162,39,0.13)">
+        <div class="p-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>
+          </svg>
+        </div>
+        <h3>「暖巢守护」家财险</h3>
+        <p class="p-tagline">房屋主体 + 室内财产 + 水管爆裂第三者责任，一份保单护全家。</p>
+        <ul class="p-features">
+          <li>房屋主体最高 500 万，装修财产 30 万</li>
+          <li>水暖管爆裂、燃气泄漏等 12 类居家风险</li>
+          <li>附赠家电维修、开锁、疏通 6 次/年</li>
+        </ul>
+        <div class="p-foot">
+          <div class="p-price"><span class="cur">¥</span>18<span class="per">/月起</span></div>
+          <a class="p-link" href="#calculator">查看方案
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- 宠物险 -->
+      <article class="product-card reveal reveal-delay-1" style="--card-accent:#7C6BC4; --icon-bg:rgba(124,107,196,0.12)">
+        <div class="p-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="7" cy="8" r="2.2"/><circle cx="12" cy="6" r="2.2"/><circle cx="17" cy="8" r="2.2"/>
+            <path d="M12 11c-3 0-5.5 2.4-5.5 5C6.5 18.2 8.5 19 12 19s5.5-.8 5.5-3c0-2.6-2.5-5-5.5-5z"/>
+          </svg>
+        </div>
+        <h3>「毛孩子」宠物医疗险</h3>
+        <p class="p-tagline">猫狗看病最高报销 70%，定点医院直付，无需垫资。</p>
+        <ul class="p-features">
+          <li>年度保额 15 万，单次最高赔 8,000 元</li>
+          <li>覆盖 3,600+ 家合作宠物医院</li>
+          <li>含疫苗、体检、第三者责任保障</li>
+        </ul>
+        <div class="p-foot">
+          <div class="p-price"><span class="cur">¥</span>24<span class="per">/月起</span></div>
+          <a class="p-link" href="#calculator">查看方案
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- 旅行险 -->
+      <article class="product-card reveal reveal-delay-2" style="--card-accent:#2C7BC9; --icon-bg:rgba(44,123,201,0.11)">
+        <div class="p-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/>
+            <path d="M16 7h4M4 7h4"/>
+          </svg>
+        </div>
+        <h3>「远行家」旅行险</h3>
+        <p class="p-tagline">按天计费，航班延误 2 小时自动理赔，行李丢失秒赔。</p>
+        <ul class="p-features">
+          <li>境内 / 亚洲 / 全球三档，最低 ¥3/天</li>
+          <li>航班延误、行李延误、旅程取消全含</li>
+          <li>7×24 小时全球紧急救援热线</li>
+        </ul>
+        <div class="p-foot">
+          <div class="p-price"><span class="cur">¥</span>3<span class="per">/天起</span></div>
+          <a class="p-link" href="#calculator">查看方案
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. 保费计算器 ================= -->
+<section class="calc-section section-pad" id="calculator">
+  <div class="container">
+    <div class="calc-grid">
+      <div>
+        <div class="section-head reveal" style="margin-bottom:2.25rem">
+          <span class="eyebrow on-dark">Calculator · 保费测算</span>
+          <h2 class="section-title on-dark">三十秒，算清<em>你的保障成本</em></h2>
+          <p class="section-lead on-dark">
+            拖动滑块，实时看到保费变化。测算结果与最终投保价格一致，
+            没有隐藏费用，也没有「以最终核保为准」的套路。
+          </p>
+        </div>
+
+        <div class="calc-form reveal">
+          <!-- 年龄 -->
+          <div class="calc-field">
+            <div class="calc-field-top">
+              <label for="ageRange">被保人年龄</label>
+              <output id="ageOut" for="ageRange">32<small>岁</small></output>
+            </div>
+            <input type="range" id="ageRange" min="18" max="65" value="32" step="1"
+                   aria-label="被保人年龄">
+            <div class="range-marks"><span>18 岁</span><span>40 岁</span><span>65 岁</span></div>
+          </div>
+
+          <!-- 保额 -->
+          <div class="calc-field">
+            <div class="calc-field-top">
+              <label for="coverRange">重疾保额</label>
+              <output id="coverOut" for="coverRange">50<small>万</small></output>
+            </div>
+            <input type="range" id="coverRange" min="10" max="100" value="50" step="10"
+                   aria-label="重疾保额（万元）">
+            <div class="range-marks"><span>10 万</span><span>50 万</span><span>100 万</span></div>
+          </div>
+
+          <!-- 保障期限 -->
+          <div class="calc-field">
+            <div class="calc-field-top">
+              <label>保障期限</label>
+            </div>
+            <div class="calc-plan-row" id="termGroup" role="group" aria-label="保障期限">
+              <button class="plan-chip" data-term="30" type="button">保 30 年</button>
+              <button class="plan-chip active" data-term="70" type="button">保至 70 岁</button>
+              <button class="plan-chip" data-term="100" type="button">终身</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 结果 -->
+      <div class="calc-result reveal reveal-delay-1">
+        <div class="cr-label">Harbor 守护者 2026 · 月保费</div>
+        <div class="cr-price">
+          <span class="cur">¥</span>
+          <span class="num" id="priceNum">168</span>
+          <span class="per">/ 月</span>
+        </div>
+        <p class="cr-hint">
+          比同龄用户平均节省 <b>¥62/月</b> · 今天投保首月保费仅需 <b>¥1</b>
+        </p>
+
+        <div class="cr-breakdown">
+          <div class="cr-row">
+            <span class="k">保障方案</span>
+            <span class="v" id="planName">守护者 2026 · 保至 70 岁</span>
+          </div>
+          <div class="cr-row">
+            <span class="k">年度保费</span>
+            <span class="v" id="yearlyPrice">¥2,016</span>
+          </div>
+          <div class="cr-row">
+            <span class="k">保费豁免</span>
+            <span class="v green">已含轻症豁免</span>
+          </div>
+          <div class="cr-row">
+            <span class="k">缴费方式</span>
+            <span class="v">30 年缴 · 月缴无手续费</span>
+          </div>
+        </div>
+
+        <a class="btn btn-primary cr-cta" href="#cta">
+          立即锁定这个价格
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. 理赔流程 ================= -->
+<section class="claims section-pad" id="claims">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Claims · 极速理赔</span>
+      <h2 class="section-title">三步理赔，<em>钱比话先到</em></h2>
+      <p class="section-lead">
+        传统保险理赔平均需要 23 天，Harbor 把它压缩到 47 分钟。
+        不是魔法，是把每一处人工环节都重做了一遍。
+      </p>
+    </div>
+
+    <div class="claims-grid">
+      <!-- 时间线 -->
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-index">01</div>
+          <div>
+            <h3>在线报案 · 60 秒发起</h3>
+            <p>
+              在 Harbor App 或微信小程序点击「申请理赔」，填写出险信息即可。
+              智能表单会根据你的保单自动预填 70% 的内容，支持语音录入。
+            </p>
+            <span class="step-meta coral">平均耗时 58 秒</span>
+          </div>
+        </div>
+
+        <div class="step reveal reveal-delay-1">
+          <div class="step-index">02</div>
+          <div>
+            <h3>材料上传 · 拍照就行</h3>
+            <p>
+              病历、发票、费用清单拍照上传，OCR 自动识别归类并校验完整性。
+              材料不全？系统实时提示缺哪一张，不用再跑第二趟。
+            </p>
+            <span class="step-meta">OCR 识别准确率 99.2%</span>
+          </div>
+        </div>
+
+        <div class="step reveal reveal-delay-2">
+          <div class="step-index">03</div>
+          <div>
+            <h3>极速到账 · 最快 18 分钟</h3>
+            <p>
+              小额案件（5,000 元以下）系统自动审核，直付到银行卡或微信钱包；
+              大额案件由专属理赔官全程跟进，进度实时可见。
+            </p>
+            <span class="step-meta">5,000 元以下案件自动通过率 91%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 手机 mockup -->
+      <div class="phone-wrap reveal reveal-delay-1" aria-hidden="true">
+        <div class="phone-glow"></div>
+
+        <div class="phone-chip chip-a">
+          <span class="tick">✓</span>
+          材料审核通过
+        </div>
+        <div class="phone-chip chip-b">
+          <span class="tick">¥</span>
+          赔款已到账 47min
+        </div>
+
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-header">
+              <div class="ps-title">理赔进度</div>
+              <div class="ps-avatar"></div>
+            </div>
+
+            <div class="ps-status-card">
+              <div class="ps-amount">¥ 12,860.00<small>赔付中</small></div>
+              <div class="ps-sub">安心 e 生医疗险 · 住院医疗 · 案号 CLM-2026-04871</div>
+              <div class="ps-progress">
+                <span class="node done">✓</span>
+                <span class="bar"><i style="width:100%"></i></span>
+                <span class="node done">✓</span>
+                <span class="bar"><i style="width:100%"></i></span>
+                <span class="node now">3</span>
+                <span class="bar"><i style="width:32%"></i></span>
+                <span class="node todo">4</span>
+              </div>
+              <div class="ps-sub" style="margin-top:0.62rem">报案 → 材料审核 → <b style="color:var(--harbor-coral-deep)">赔款核算</b> → 到账</div>
+            </div>
+
+            <div class="ps-doc">
+              <span class="doc-ic" style="background:rgba(232,111,78,0.12)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#D65B3A" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              </span>
+              <div>
+                <div class="doc-name">出院小结.jpg</div>
+                <div class="doc-size">2.4 MB · OCR 已识别</div>
+              </div>
+              <span class="doc-check">✓</span>
+            </div>
+
+            <div class="ps-doc">
+              <span class="doc-ic" style="background:rgba(31,168,143,0.13)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#12866F" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14h8"/></svg>
+              </span>
+              <div>
+                <div class="doc-name">医疗费用发票.pdf</div>
+                <div class="doc-size">1.1 MB · 3 张发票</div>
+              </div>
+              <span class="doc-check">✓</span>
+            </div>
+
+            <div class="ps-doc">
+              <span class="doc-ic" style="background:rgba(201,162,39,0.14)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#B58E1D" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg>
+              </span>
+              <div>
+                <div class="doc-name">费用清单.jpg</div>
+                <div class="doc-size">860 KB · 自动归类</div>
+              </div>
+              <span class="doc-check">✓</span>
+            </div>
+
+            <div class="ps-btn">查看赔付明细</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. 对比表 ================= -->
+<section class="compare section-pad" id="compare">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Compare · 体验对比</span>
+      <h2 class="section-title">同一件事，<em>两种做法</em></h2>
+      <p class="section-lead">
+        我们把「买保险」这件事拆成了 7 个关键环节，
+        逐条对比 Harbor 与传统保险的真实差异。
+      </p>
+    </div>
+
+    <div class="compare-table-wrap reveal">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="col-item">对比维度</th>
+            <th class="col-harbor">
+              <span class="th-tag">● Harbor</span><br>
+              现代保险体验
+            </th>
+            <th class="col-trad">
+              传统保险
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-item">投保时长</td>
+            <td class="td-harbor">
+              <span class="harbor-val"><span class="h-check">✓</span>90 秒在线完成，电子保单即时生效</span>
+            </td>
+            <td class="td-trad">
+              <span class="trad-val"><span class="t-cross">✕</span>平均 3–7 天，需面签与纸质回执</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-item">理赔速度</td>
+            <td class="td-harbor">
+              <span class="harbor-val"><span class="h-check">✓</span>平均 47 分钟到账，小额案件秒赔</span>
+            </td>
+            <td class="td-trad">
+              <span class="trad-val"><span class="t-cross">✕</span>平均 23 天，需多次补交材料</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-item">材料要求</td>
+            <td class="td-harbor">
+              <span class="harbor-val"><span class="h-check">✓</span>拍照上传，OCR 自动识别归档</span>
+            </td>
+            <td class="td-trad">
+              <span class="trad-val"><span class="t-cross">✕</span>纸质原件邮寄，复印件盖章</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-item">条款透明度</td>
+            <td class="td-harbor">
+              <span class="harbor-val"><span class="h-check">✓</span>一页纸条款，不赔项全部明示</span>
+            </td>
+            <td class="td-trad">
+              <span class="trad-val"><span class="t-cross">✕</span>40+ 页合同，免责条款藏在附录</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-item">价格构成</td>
+            <td class="td-harbor">
+              <span class="harbor-val"><span class="h-check">✓</span>公开费率表，无渠道佣金加价</span>
+            </td>
+            <td class="td-trad">
+              <span class="trad-val"><span class="t-cross">✕</span>含 25%–40% 代理人佣金成本</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-item">退保体验</td>
+            <td class="td-harbor">
+              <span class="harbor-val"><span class="h-check">✓</span>App 一键退保，未满期按日退还</span>
+            </td>
+            <td class="td-trad">
+              <span class="trad-val"><span class="t-cross">✕</span>柜台办理，现金价值损失大</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-item">服务时间</td>
+            <td class="td-harbor">
+              <span class="harbor-val"><span class="h-check">✓</span>7×24 人工客服，平均响应 28 秒</span>
+            </td>
+            <td class="td-trad">
+              <span class="trad-val"><span class="t-cross">✕</span>工作日 9:00–18:00，排队转接</span>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">
+              * 数据来源：Harbor 平台 2025 年 1 月–12 月运营数据，与《中国保险行业发展报告 2025》行业均值对比。个体体验可能因案件复杂度不同而有所差异。
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 8. 用户评价 + 数据墙 ================= -->
+<section class="testimonials section-pad" id="stories">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Stories · 用户故事</span>
+      <h2 class="section-title">200 万人的<em>安心时刻</em></h2>
+      <p class="section-lead">
+        理赔不是数字，是孩子能继续上学、房子能修好、旅行不被耽误的真实生活。
+      </p>
+    </div>
+
+    <div class="t-grid">
+      <article class="t-card reveal">
+        <div class="t-quote-mark">“</div>
+        <div class="t-stars" aria-label="五星好评">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+        </div>
+        <blockquote>
+          妈妈住院手术花了 <b>8.6 万</b>，出院当天晚上我在医院走廊上传完材料，
+          <b>41 分钟后理赔款就到账了</b>。那一刻真的眼眶发热——以前总觉得保险是「交钱容易赔钱难」，
+          Harbor 把这句话改写了。
+        </blockquote>
+        <div class="t-person">
+          <div class="t-avatar" style="background:linear-gradient(140deg,#E86F4E,#C94F2E)">林</div>
+          <div>
+            <div class="t-name">林晓雯</div>
+            <div class="t-role">32 岁 · 杭州 · 互联网产品经理</div>
+          </div>
+          <span class="t-policy">安心 e 生</span>
+        </div>
+      </article>
+
+      <article class="t-card reveal reveal-delay-1">
+        <div class="t-quote-mark">“</div>
+        <div class="t-stars" aria-label="五星好评">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+        </div>
+        <blockquote>
+          作为自由摄影师，我常年在外面跑。「远行家」在冰岛遇上暴风雪航班取消，
+          <b>提交航班号就自动触发了延误理赔</b>，全程没打一个电话。
+          这种「不用求人」的感觉，比省多少钱更重要。
+        </blockquote>
+        <div class="t-person">
+          <div class="t-avatar" style="background:linear-gradient(140deg,#1FA88F,#12866F)">陈</div>
+          <div>
+            <div class="t-name">陈牧之</div>
+            <div class="t-role">28 岁 · 成都 · 自由摄影师</div>
+          </div>
+          <span class="t-policy">远行家</span>
+        </div>
+      </article>
+
+      <article class="t-card reveal reveal-delay-2">
+        <div class="t-quote-mark">“</div>
+        <div class="t-stars" aria-label="五星好评">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>
+        </div>
+        <blockquote>
+          给家里的柯基买了「毛孩子」，上个月误食异物手术花了 <b>6,200 元</b>，
+          定点医院直接结算，我<b>一分钱没垫</b>。
+          老婆说我给狗买保险比给自己买还积极——现在全家的保单都在 Harbor。
+        </blockquote>
+        <div class="t-person">
+          <div class="t-avatar" style="background:linear-gradient(140deg,#C9A227,#9C7C15)">周</div>
+          <div>
+            <div class="t-name">周立衡</div>
+            <div class="t-role">35 岁 · 上海 · 建筑设计师</div>
+          </div>
+          <span class="t-policy">毛孩子</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- 数据墙 -->
+    <div class="data-wall reveal">
+      <div class="wall-cell">
+        <div class="wall-num">2,146,832</div>
+        <div class="wall-label">份有效保单守护中</div>
+      </div>
+      <div class="wall-cell">
+        <div class="wall-num">18.7<span class="unit">亿元</span></div>
+        <div class="wall-label">累计赔付支出</div>
+      </div>
+      <div class="wall-cell">
+        <div class="wall-num">28<span class="unit">秒</span></div>
+        <div class="wall-label">人工客服平均响应</div>
+      </div>
+      <div class="wall-cell">
+        <div class="wall-num">4.9<span class="unit">/ 5.0</span></div>
+        <div class="wall-label">App Store 用户评分</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 9. FAQ ================= -->
+<section class="faq section-pad" id="faq">
+  <div class="container">
+    <div class="faq-grid">
+      <div class="faq-aside reveal">
+        <span class="eyebrow">FAQ · 常见问题</span>
+        <h2 class="section-title">你可能想问的<em>几件事</em></h2>
+        <p class="section-lead">
+          我们把客服热线里被问得最多的 6 个问题整理在这里。
+          如果还有疑问，真人客服随时在。
+        </p>
+
+        <div class="faq-help-card">
+          <h4>还有其他问题？</h4>
+          <p>
+            工作日 8:00–23:00、周末 9:00–21:00 提供真人在线服务，
+            平均 28 秒接入，不绕语音菜单。
+          </p>
+          <div class="help-links">
+            <a href="#cta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.4 2.1L8 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z"/></svg>
+              400-826-1988 · 电话客服
+            </a>
+            <a href="#cta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+              service@harbor-insure.cn · 邮件支持
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item reveal" open>
+          <summary>
+            Harbor 是保险公司吗？我的保单由谁承保？
+            <span class="faq-ic" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-body">
+            Harbor 是持牌保险经纪平台（保险中介许可证 0082641），保单由合作的
+            <b>太平洋财险、人保寿险、众安保险</b> 等正规承保公司签发，
+            并由 <b>瑞士再保险、慕尼黑再保险</b> 提供再保支持。
+            每一份保单都可以在承保公司官网及「中国保险万事通」平台查验证真。
+          </div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            「平均 47 分钟理赔到账」是真的吗？大额案件呢？
+            <span class="faq-ic" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-body">
+            47 分钟是 2025 年全年 <b>5,000 元以下小额案件</b>的平均到账时间（含审核与打款）。
+            5,000 元以上的案件因需要核对病历细节，平均处理时间为 1.8 个工作日；
+            涉及重大疾病或需要调查的案件最长不超过 30 天（行业监管要求），
+            期间理赔官会主动同步每一步进度。
+          </div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            有既往病史还能投保吗？会不会被拒赔？
+            <span class="faq-ic" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-body">
+            投保时需要如实填写健康告知。系统提供 <b>智能核保</b>，对常见的甲状腺结节、
+            乙肝携带、轻度脂肪肝等 320 种情况给出即时结论（标体 / 加费 / 除外 / 延期），
+            不留拒保记录。理赔时我们遵循「<b>应赔尽赔</b>」原则——
+            2025 年因健康告知问题产生的理赔纠纷仅占申请量的 0.3%。
+          </div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            保费会随年龄上涨吗？中途能退保吗？
+            <span class="faq-ic" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-body">
+            长期险（重疾险、寿险）采用<b>均衡费率</b>，投保时价格锁定，缴费期内不涨价；
+            一年期医疗险采用自然费率，续保时价格会随年龄调整，但我们会提前 30 天通知。
+            退保可在 App 一键操作：<b>首月无理由全额退</b>，长期险按合同现金价值退还，
+            未满期的短期险按日退还剩余保费。
+          </div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            我的数据安全吗？会被卖给第三方吗？
+            <span class="faq-ic" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-body">
+            Harbor 通过 <b>ISO 27001 信息安全管理体系认证</b>，所有个人数据全链路加密存储，
+            仅在理赔核赔必要范围内向承保公司共享。
+            我们<b>绝不向第三方出售用户数据</b>，营销短信可随时在 App 内一键退订。
+            你也可以随时申请导出或永久删除个人数据。
+          </div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            如何为父母或孩子投保？
+            <span class="faq-ic" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-body">
+            在投保页选择「为家人投保」，填写被保人信息即可，<b>投保人与被保人可以不同</b>。
+            为子女投保的「安心 e 生」支持出生 30 天起投；
+            为 50 岁以上父母投保会自动推荐防癌医疗与意外骨折保障组合。
+            一张保单可管理最多 8 位家庭成员，续保、理赔统一在「我的家庭」里处理。
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10. CTA 横幅 ================= -->
+<section class="cta-banner" id="cta">
+  <div class="container cta-inner">
+    <div class="reveal">
+      <h2>今天开始，<br>把安心<em>交给我们</em>。</h2>
+      <p>
+        首月保费 ¥1 体验全保障，无理由退保。2 分钟完成投保，
+        今晚零点开始，你和家人就多了一层看不见的守护。
+      </p>
+    </div>
+    <div class="cta-actions reveal reveal-delay-1">
+      <a class="btn btn-primary" href="#calculator">
+        立即测算保费
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a class="btn btn-outline-light" href="#faq">
+        预约顾问回电
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.4 2.1L8 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z"/></svg>
+      </a>
+      <div class="cta-trust">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        全链路加密 · 银保监会备案 · 不推销不骚扰
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= Footer ================= -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="#top">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#E7CE86" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 11.5 12 4l9 7.5"/><path d="M12 4v16"/><path d="M4 20h16"/><path d="M7.5 13.5a4.5 4.5 0 0 1 9 0"/>
+            </svg>
+          </span>
+          <span>Harbor<small>InsurTech</small></span>
+        </a>
+        <p>
+          Harbor 保险科技（上海）有限公司，成立于 2019 年。
+          用技术让保险回归保障本质——写得明白，买得放心，赔得痛快。
+        </p>
+        <ul class="footer-contact">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.4 2.1L8 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z"/></svg>
+            400-826-1988（7×24 小时）
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+            service@harbor-insure.cn
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            上海市浦东新区世纪大道 1128 号 25 层
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>保险产品</h5>
+        <ul>
+          <li><a href="#products">安心 e 生医疗险</a></li>
+          <li><a href="#products">守护者 2026 重疾险</a></li>
+          <li><a href="#products">畅行无忧意外险</a></li>
+          <li><a href="#products">暖巢守护家财险</a></li>
+          <li><a href="#products">毛孩子宠物医疗险</a></li>
+          <li><a href="#products">远行家旅行险</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>服务与支持</h5>
+        <ul>
+          <li><a href="#claims">在线理赔申请</a></li>
+          <li><a href="#claims">理赔进度查询</a></li>
+          <li><a href="#calculator">保费测算工具</a></li>
+          <li><a href="#faq">常见问题</a></li>
+          <li><a href="#cta">预约顾问回电</a></li>
+          <li><a href="#cta">企业团体保障</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>关于我们</h5>
+        <ul>
+          <li><a href="#stories">Harbor 的故事</a></li>
+          <li><a href="#compare">我们的承诺</a></li>
+          <li><a href="#cta">加入我们</a></li>
+          <li><a href="#cta">媒体报道</a></li>
+          <li><a href="#cta">合作伙伴</a></li>
+          <li><a href="#faq">隐私与数据保护</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-newsletter">
+        <h5 style="font-size:0.78rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--harbor-gold-soft); margin-bottom:1.35rem;">保障月刊</h5>
+        <p>
+          每月一封，聊聊理赔数据、新品上架和家庭保障规划。
+          没有推销，随时退订。
+        </p>
+        <form class="newsletter-form" id="newsletterForm" onsubmit="return false;">
+          <input type="email" placeholder="你的邮箱地址" aria-label="邮箱地址" required>
+          <button type="submit">订阅</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <div>
+        © 2026 Harbor 保险科技（上海）有限公司 · 沪ICP备 19042671 号-3 ·
+        保险中介许可证 0082641 · 增值电信业务经营许可证 沪B2-20201188
+      </div>
+      <div class="legal-links">
+        <a href="#faq">用户协议</a>
+        <a href="#faq">隐私政策</a>
+        <a href="#faq">信息披露</a>
+        <a href="#faq">投诉与争议处理</a>
+        <a href="#faq">反洗钱声明</a>
+      </div>
+    </div>
+
+    <p class="footer-disclaimer">
+      风险提示：本页面所有产品信息仅供理解参考，实际保障内容、责任免除、等待期、赔付标准等
+      以正式保险合同及条款为准。保险产品由合作保险公司承保，Harbor 保险科技作为持牌保险经纪机构，
+      不承担保险责任。请在投保前仔细阅读《保险条款》《投保须知》《健康告知》等法律文件。
+      保费测算结果基于所选参数的精算费率，最终价格以核保结论为准。全国统一客服热线：
+      400-826-1988；投诉受理邮箱：complaint@harbor-insure.cn。
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   极简原生 JS：导航、手风琴、保费计算器、滚动入场
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* 启用 reveal 隐藏态（仅 JS 就绪后，保证无 JS / 截图时内容可见） */
+  document.documentElement.classList.add('js');
+
+  /* ── Sticky 导航阴影 ── */
+  var header = document.getElementById('siteHeader');
+  function onScroll() {
+    if (window.scrollY > 12) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ── 移动端菜单 ── */
+  var toggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  if (toggle && navLinks) {
+    toggle.addEventListener('click', function () {
+      var open = navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    navLinks.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') {
+        navLinks.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  /* ── FAQ 手风琴：同时只展开一项 ── */
+  var faqItems = Array.prototype.slice.call(document.querySelectorAll('.faq-item'));
+  faqItems.forEach(function (item) {
+    item.addEventListener('toggle', function () {
+      if (item.open) {
+        faqItems.forEach(function (other) {
+          if (other !== item) other.open = false;
+        });
+      }
+    });
+  });
+
+  /* ── 保费计算器 ── */
+  var ageRange = document.getElementById('ageRange');
+  var coverRange = document.getElementById('coverRange');
+  var ageOut = document.getElementById('ageOut');
+  var coverOut = document.getElementById('coverOut');
+  var priceNum = document.getElementById('priceNum');
+  var yearlyPrice = document.getElementById('yearlyPrice');
+  var planName = document.getElementById('planName');
+  var termGroup = document.getElementById('termGroup');
+  var currentTerm = '70';
+  var displayedPrice = 0;
+
+  function paintRange(input) {
+    var min = parseFloat(input.min), max = parseFloat(input.max);
+    var pct = ((parseFloat(input.value) - min) / (max - min)) * 100;
+    input.style.setProperty('--fill', pct + '%');
+  }
+
+  function animatePrice(target) {
+    var start = displayedPrice;
+    var t0 = performance.now();
+    var dur = 380;
+    function step(now) {
+      var p = Math.min((now - t0) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      displayedPrice = Math.round(start + (target - start) * eased);
+      priceNum.textContent = displayedPrice.toLocaleString('zh-CN');
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function calcPremium() {
+    if (!ageRange || !coverRange) return;
+    var age = parseInt(ageRange.value, 10);
+    var cover = parseInt(coverRange.value, 10); // 单位：万元
+
+    /* 简化精算模型：年龄因子 + 保额因子 + 期限系数 */
+    var ageFactor = 1 + Math.pow(Math.max(age - 22, 0), 1.85) / 260;
+    var coverFactor = cover * 2.35;
+    var termFactor = currentTerm === '30' ? 0.62 : (currentTerm === '70' ? 1 : 1.42);
+    var base = coverFactor * ageFactor * termFactor;
+    var premium = Math.max(12, Math.round(base));
+
+    ageOut.innerHTML = age + '<small>岁</small>';
+    coverOut.innerHTML = cover + '<small>万</small>';
+    paintRange(ageRange);
+    paintRange(coverRange);
+
+    animatePrice(premium);
+    yearlyPrice.textContent = '¥' + (premium * 12).toLocaleString('zh-CN');
+    var termLabel = currentTerm === '30' ? '保 30 年' : (currentTerm === '70' ? '保至 70 岁' : '终身');
+    planName.textContent = '守护者 2026 · ' + termLabel;
+  }
+
+  if (ageRange && coverRange) {
+    ageRange.addEventListener('input', calcPremium);
+    coverRange.addEventListener('input', calcPremium);
+    if (termGroup) {
+      termGroup.addEventListener('click', function (e) {
+        var btn = e.target.closest('.plan-chip');
+        if (!btn) return;
+        termGroup.querySelectorAll('.plan-chip').forEach(function (c) { c.classList.remove('active'); });
+        btn.classList.add('active');
+        currentTerm = btn.getAttribute('data-term');
+        calcPremium();
+      });
+    }
+    displayedPrice = parseInt(priceNum.textContent.replace(/,/g, ''), 10) || 0;
+    calcPremium();
+  }
+
+  /* ── 滚动入场动画（IntersectionObserver） ── */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if ('IntersectionObserver' in window && revealEls.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+    /* 兜底：3 秒后强制全部显示，避免任何情况下内容被隐藏 */
+    setTimeout(function () {
+      revealEls.forEach(function (el) { el.classList.add('in-view'); });
+    }, 3000);
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('in-view'); });
+  }
+
+  /* ── 订阅表单（演示用） ── */
+  var newsForm = document.getElementById('newsletterForm');
+  if (newsForm) {
+    newsForm.addEventListener('submit', function () {
+      var btn = newsForm.querySelector('button');
+      btn.textContent = '已订阅 ✓';
+      btn.style.background = '#1FA88F';
+    });
+  }
+})();
+</script>
+</body>
+</html>

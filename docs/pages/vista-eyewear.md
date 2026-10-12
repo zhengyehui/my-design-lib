@@ -32,8 +32,8 @@ pageDetail:
     text: Verdant 城市垂直农场
     link: /pages/verdant-farms.html
   next:
-    text: Aegis Trust Center
-    link: /pages/trust-center.html
+    text: Harbor 保险科技落地页
+    link: /pages/harbor-insurance.html
 ---
 
 <PageDetail />

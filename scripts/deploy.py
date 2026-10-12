@@ -5,7 +5,7 @@ import paramiko
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect("192.168.124.17", port=11928, username="root", password="Weta@0928")
+ssh.connect("192.168.124.17", port=11928, username="root", password="Weta@0928", timeout=15)
 
 sftp = ssh.open_sftp()
 local_dist = os.path.expanduser('~/desktop/project/design-lib/docs/.vitepress/dist')

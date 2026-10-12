@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 199 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 201 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1837,6 +1837,24 @@ const pages = [
     rating: 9.4,
     description: '高端手工眼镜电商，6 款手绘 SVG 镜框线稿 + 脸型选型指南 JS 交互 tab + 镜片技术光路图解 + 玳瑁纹理 SVG pattern + Cormorant Garamond 衬线编辑排版',
   },
+  {
+    id: 'harbor-insurance',
+    title: 'Harbor 保险科技落地页',
+    category: 'landing',
+    tags: ['保险科技', '金融', '交互计算器', '信任设计', 'SVG'],
+    colors: ['#0E2A47', '#E86F4E', '#F7F2E9'],
+    rating: 9.3,
+    description: '现代 InsurTech 落地页，SVG 伞形主视觉 + 浮动保单卡片 + JS 交互式保费计算器（滑块实时精算）+ 三步理赔时间线与手机 mockup + 7 维度对比表 + 真实感数据细节',
+  },
+  {
+    id: 'celeste-zodiac',
+    title: 'CELESTE 星象馆 占星数字体验',
+    category: 'creative',
+    tags: ['占星', '星空', '交互星盘', '编辑排版', 'SVG'],
+    colors: ['#0B1026', '#D4AF37', '#1B1449'],
+    rating: 9.4,
+    description: '天文古籍气质占星体验页，三层 box-shadow 繁星星空 + 交互式 SVG 十二星盘（点击切换 12 星座运势卡）+ SVG mask 月相图 + 行星过境时间线 + 首字下沉编辑叙事 + 5 组 CSS 动画',
+  },
 ]
 
 const categories = [
@@ -1894,12 +1912,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 199 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 201 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="199 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="201 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1908,7 +1926,7 @@ content=\"My Design Lib 页面灵感画廊 — 199 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 199 个完整页面</span>
+      <span>📦 201 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
