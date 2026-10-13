@@ -32,8 +32,8 @@ pageDetail:
     text: Harbor 保险科技落地页
     link: /pages/harbor-insurance.html
   next:
-    text: Aegis Trust Center
-    link: /pages/trust-center.html
+    text: TERRA 窑火 陶艺工作室作品集
+    link: /pages/terra-ceramics.html
 ---
 
 <PageDetail />

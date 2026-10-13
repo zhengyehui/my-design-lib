@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 201 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 203 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1855,6 +1855,24 @@ const pages = [
     rating: 9.4,
     description: '天文古籍气质占星体验页，三层 box-shadow 繁星星空 + 交互式 SVG 十二星盘（点击切换 12 星座运势卡）+ SVG mask 月相图 + 行星过境时间线 + 首字下沉编辑叙事 + 5 组 CSS 动画',
   },
+  {
+    id: 'terra-ceramics',
+    title: 'TERRA 窑火 陶艺工作室作品集',
+    category: 'portfolio',
+    tags: ['陶艺', '侘寂', 'CSS 器物', '编辑目录', 'clip-path'],
+    colors: ['#F2EDE4', '#B4552D', '#1A1613'],
+    rating: 9.3,
+    description: '侘寂陶艺工作室作品集，编辑目录微标签体系 + 6 件纯 CSS 渐变器物（长颈瓶 / 茶叶罐 / 建盏 / 提梁壶 / 杯组 / 天目盘）+ mix-blend-mode Hero + clip-path 擦除悬停 + 四步成器时间线 + 展览反色列表',
+  },
+  {
+    id: 'dialogue-interviews',
+    title: 'DIALOGUE 对话录 深度人物访谈',
+    category: 'content',
+    tags: ['人物访谈', '瑞士排版', '微排版', '编辑设计', '问答'],
+    colors: ['#F2F2F4', '#0F1012', '#E4451F'],
+    rating: 9.3,
+    description: '瑞士极简人物访谈杂志页，01/02/03 编号章节 + 发丝分割线 + 胶囊体系 + 16 层 CSS 抽象肖像（mix-blend-mode 合成）+ Q&A 节选排版 + 对谈索引悬停反转 + 主题筛选 + 无限 ticker',
+  },
 ]
 
 const categories = [
@@ -1912,12 +1930,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 201 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 203 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="201 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="203 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1926,7 +1944,7 @@ content=\"My Design Lib 页面灵感画廊 — 201 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 201 个完整页面</span>
+      <span>📦 203 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
