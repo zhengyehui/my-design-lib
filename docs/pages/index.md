@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 203 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 205 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1873,6 +1873,24 @@ const pages = [
     rating: 9.3,
     description: '瑞士极简人物访谈杂志页，01/02/03 编号章节 + 发丝分割线 + 胶囊体系 + 16 层 CSS 抽象肖像（mix-blend-mode 合成）+ Q&A 节选排版 + 对谈索引悬停反转 + 主题筛选 + 无限 ticker',
   },
+  {
+    id: 'petit-lune-baby',
+    title: 'Petit Lune 有机母婴精品店',
+    category: 'ecommerce',
+    tags: ['有机母婴', '田园编辑', '双色系统', 'CSS 产品图', '编辑式版式'],
+    colors: ['#FCFBF6', '#45523E', '#EFF2E9'],
+    rating: 9.3,
+    description: '法式田园编辑部式有机母婴电商长页，墨绿一色贯穿奶油纸感底，6 件纯 CSS 渐变器物（连体衣/木摇铃/竹纤维包被/羊毛小兔/洗护瓶/安抚巾），scroll-snap 产品轮播 + 芥末荧光笔标题 + 月光通讯订阅，全平面无阴影胶囊按钮',
+  },
+  {
+    id: 'aperture-editor',
+    title: 'APERTURE 专业修图工作台',
+    category: 'app',
+    tags: ['修图工具', '暗色 UI', '三栏工作台', 'CSS 直方图', '胶片条'],
+    colors: ['#121016', '#FF6B35', '#58C7C2'],
+    rating: 9.3,
+    description: '暗色专业修图工作台 App 界面：三栏布局（CSS 图标工具轨 + before/after 拖动对比画布 + 直方图/滑杆参数面板）与底部胶片条，附蒙版精修、批量预设、快捷键表特写区，照片全为 CSS 渐变绘制',
+  },
 ]
 
 const categories = [
@@ -1930,12 +1948,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 203 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 205 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="203 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="205 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1944,7 +1962,7 @@ content=\"My Design Lib 页面灵感画廊 — 203 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 203 个完整页面</span>
+      <span>📦 205 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

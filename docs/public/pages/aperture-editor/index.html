@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APERTURE 专业修图工作台 · IMG_20261014_落日海崖.CR3</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ============================================================
+   APERTURE 专业修图工作台 —— 暗色专业创作工具设计语言
+   ============================================================ */
+:root{
+  --bg:#121016;
+  --panel:#1A1720;
+  --float:#221E2A;
+  --text:#EDE9F2;
+  --muted:#9A93A8;
+  --line:rgba(255,255,255,0.08);
+  --line-strong:rgba(255,255,255,0.14);
+  --accent:#FF6B35;
+  --accent-soft:rgba(255,107,53,0.16);
+  --cyan:#58C7C2;
+  --cyan-soft:rgba(88,199,194,0.14);
+  --sans:system-ui,'Helvetica Neue',Arial,'PingFang SC','Microsoft YaHei',sans-serif;
+  --mono:'SF Mono','JetBrains Mono',Menlo,Consolas,monospace;
+  --r-panel:12px;
+  --r-ctrl:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:13px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--accent);color:#121016}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.micro{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;
+}
+
+/* ========================= 顶部工具条 ========================= */
+.app{
+  display:flex;flex-direction:column;
+  min-height:100vh;
+}
+.topbar{
+  display:flex;align-items:center;gap:18px;
+  height:52px;padding:0 16px;
+  background:linear-gradient(180deg,#1D1926 0%,#17141E 100%);
+  border-bottom:1px solid var(--line);
+  position:relative;z-index:40;
+  box-shadow:0 1px 0 rgba(255,255,255,0.04) inset;
+}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.brand-mark{
+  width:26px;height:26px;border-radius:7px;
+  background:
+    radial-gradient(circle at 32% 30%, rgba(255,255,255,0.9) 0 10%, transparent 11%),
+    conic-gradient(from 210deg, #FF6B35, #FF9C6B, #58C7C2, #7A5CFF, #FF6B35);
+  box-shadow:0 0 0 1px rgba(255,255,255,0.12), 0 2px 10px rgba(255,107,53,0.35);
+  position:relative;
+}
+.brand-mark::after{
+  content:"";position:absolute;inset:7px;border-radius:50%;
+  background:var(--bg);
+  box-shadow:0 0 0 1.5px rgba(255,255,255,0.25);
+}
+.brand-name{font-size:14px;font-weight:700;letter-spacing:.22em}
+.brand-name span{color:var(--accent)}
+.top-menus{display:flex;gap:2px;margin-left:6px}
+.top-menus button{
+  background:none;border:none;color:var(--muted);
+  font-size:12px;font-family:var(--sans);
+  padding:5px 10px;border-radius:6px;cursor:pointer;
+  transition:all .2s;
+}
+.top-menus button:hover{background:rgba(255,255,255,0.06);color:var(--text)}
+.file-chip{
+  display:flex;align-items:center;gap:10px;
+  margin-left:auto;margin-right:auto;
+  background:rgba(255,255,255,0.045);
+  border:1px solid var(--line);
+  border-radius:9px;padding:5px 14px;
+}
+.file-chip .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 8px var(--cyan);
+}
+.file-name{font-family:var(--mono);font-size:12px;letter-spacing:.02em}
+.file-meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.top-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--sans);font-size:12px;font-weight:600;
+  padding:7px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line-strong);
+  background:rgba(255,255,255,0.05);color:var(--text);
+  transition:all .2s;
+}
+.btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.22)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{
+  background:linear-gradient(180deg,#FF7B47,#F2571F);
+  border-color:rgba(255,140,90,0.5);color:#1A0E06;
+  box-shadow:0 2px 14px rgba(255,107,53,0.35), 0 1px 0 rgba(255,255,255,0.25) inset;
+}
+.btn-primary:hover{background:linear-gradient(180deg,#FF8A5B,#FF6127)}
+.btn-icon{
+  width:32px;height:32px;padding:0;justify-content:center;
+  border-radius:8px;
+}
+.undo-ico{width:13px;height:13px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;border-radius:0 0 0 3px;transform:rotate(45deg)}
+.redo-ico{transform:scaleX(-1) rotate(45deg)}
+.export-ico{width:12px;height:12px;border:2px solid currentColor;border-radius:3px;position:relative}
+.export-ico::after{content:"";position:absolute;left:50%;top:-6px;width:2px;height:8px;background:currentColor;transform:translateX(-50%)}
+.compare-ico{width:13px;height:13px;border:2px solid currentColor;border-radius:3px;background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+
+/* ========================= 三栏主体 ========================= */
+.workspace{
+  flex:1;display:flex;
+  min-height:640px;
+  background:
+    radial-gradient(1200px 500px at 50% -10%, rgba(255,107,53,0.05), transparent 70%),
+    var(--bg);
+}
+
+/* ---------- 左侧工具轨 ---------- */
+.tool-rail{
+  width:64px;flex-shrink:0;
+  background:var(--panel);
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;
+  padding:14px 0;gap:6px;
+}
+.tool{
+  width:42px;height:42px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;
+  color:var(--muted);
+  border:1px solid transparent;
+  transition:all .2s;
+}
+.tool:hover{
+  color:var(--text);
+  background:rgba(255,255,255,0.07);
+  transform:scale(1.08);
+}
+.tool.active{
+  color:var(--accent);
+  background:var(--accent-soft);
+  border-color:rgba(255,107,53,0.45);
+  box-shadow:0 0 0 1px rgba(255,107,53,0.18), 0 4px 14px rgba(255,107,53,0.18);
+}
+.tool .tip{
+  position:absolute;left:calc(100% + 12px);top:50%;
+  transform:translateY(-50%) translateX(-6px);
+  background:var(--float);color:var(--text);
+  border:1px solid var(--line-strong);
+  padding:5px 11px;border-radius:8px;
+  font-size:11.5px;white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:all .2s;
+  box-shadow:0 8px 24px rgba(0,0,0,0.45);
+  z-index:60;
+}
+.tool .tip .k{
+  font-family:var(--mono);font-size:10px;color:var(--accent);
+  margin-left:7px;
+}
+.tool:hover .tip{opacity:1;transform:translateY(-50%) translateX(0)}
+.rail-sep{width:26px;height:1px;background:var(--line);margin:8px 0}
+/* —— CSS 图标 —— */
+.ico{width:19px;height:19px;position:relative;display:block}
+.ico-move::before,.ico-move::after{
+  content:"";position:absolute;background:currentColor;border-radius:1px;
+}
+.ico-move::before{left:50%;top:0;width:2px;height:100%;transform:translateX(-50%)}
+.ico-move::after{top:50%;left:0;height:2px;width:100%;transform:translateY(-50%)}
+.ico-move i{
+  position:absolute;width:6px;height:6px;border-top:2px solid currentColor;border-left:2px solid currentColor;
+}
+.ico-move i:nth-child(1){top:0;left:50%;transform:translateX(-50%) rotate(45deg)}
+.ico-move i:nth-child(2){bottom:0;left:50%;transform:translateX(-50%) rotate(225deg)}
+.ico-move i:nth-child(3){left:0;top:50%;transform:translateY(-50%) rotate(-45deg)}
+.ico-move i:nth-child(4){right:0;top:50%;transform:translateY(-50%) rotate(135deg)}
+.ico-crop::before{
+  content:"";position:absolute;left:2px;top:0;width:12px;height:12px;
+  border-left:2px solid currentColor;border-top:2px solid currentColor;
+}
+.ico-crop::after{
+  content:"";position:absolute;right:0;bottom:2px;width:12px;height:12px;
+  border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+}
+.ico-brush::before{
+  content:"";position:absolute;left:6px;top:0;width:7px;height:12px;
+  background:currentColor;border-radius:2px 2px 1px 1px;
+  transform:rotate(38deg);transform-origin:bottom center;
+}
+.ico-brush::after{
+  content:"";position:absolute;left:1px;bottom:1px;width:8px;height:8px;
+  background:currentColor;clip-path:polygon(100% 0,100% 100%,0 100%);
+}
+.ico-heal::before{
+  content:"";position:absolute;inset:2px;
+  border:2px solid currentColor;border-radius:6px;
+  transform:rotate(-40deg);
+}
+.ico-heal::after{
+  content:"";position:absolute;left:7px;top:1px;width:2px;height:17px;
+  background:currentColor;transform:rotate(-40deg);
+}
+.ico-grad::before{
+  content:"";position:absolute;inset:1px;border:1.5px solid currentColor;border-radius:4px;
+}
+.ico-grad::after{
+  content:"";position:absolute;left:4px;top:4px;right:4px;bottom:4px;border-radius:2px;
+  background:linear-gradient(90deg,currentColor 0%,transparent 95%);opacity:.85;
+}
+.ico-radial::before{
+  content:"";position:absolute;inset:1px;border:1.5px solid currentColor;border-radius:50%;
+}
+.ico-radial::after{
+  content:"";position:absolute;inset:5px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, currentColor 0%, transparent 75%);
+}
+.ico-liquefy::before{
+  content:"";position:absolute;left:3px;top:0;width:13px;height:19px;
+  border:2px solid currentColor;border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+  transform:rotate(8deg);
+}
+.ico-liquefy::after{
+  content:"";position:absolute;left:7px;top:4px;width:5px;height:5px;
+  border:1.5px solid currentColor;border-radius:50%;opacity:.8;
+}
+.ico-curve::before{
+  content:"";position:absolute;inset:1px;
+  border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+}
+.ico-curve::after{
+  content:"";position:absolute;left:3px;bottom:3px;width:14px;height:10px;
+  border-top:2px solid currentColor;border-radius:60% 20% 0 0;
+  transform:rotate(-24deg);
+}
+.ico-text{display:flex;align-items:center;justify-content:center}
+.ico-text::before{
+  content:"T";font-family:Georgia,serif;font-size:17px;font-weight:700;
+  color:currentColor;line-height:1;
+}
+.ico-hand::before{
+  content:"";position:absolute;left:4px;top:5px;width:12px;height:12px;
+  background:currentColor;
+  border-radius:5px 5px 4px 4px;
+}
+.ico-hand::after{
+  content:"";position:absolute;left:2px;top:1px;width:4px;height:11px;
+  border:1.6px solid currentColor;border-radius:3px;background:var(--panel);
+}
+.ico-zoom::before{
+  content:"";position:absolute;left:1px;top:1px;width:12px;height:12px;
+  border:2px solid currentColor;border-radius:50%;
+}
+.ico-zoom::after{
+  content:"";position:absolute;right:1px;bottom:1px;width:8px;height:2px;
+  background:currentColor;transform:rotate(45deg);transform-origin:right center;border-radius:1px;
+}
+
+/* ---------- 中央画布区 ---------- */
+.canvas-area{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;
+  background:
+    radial-gradient(900px 420px at 50% 0%, rgba(88,199,194,0.05), transparent 65%),
+    #0E0C12;
+  position:relative;
+}
+.canvas-toolbar{
+  display:flex;align-items:center;gap:14px;
+  height:42px;padding:0 18px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,0.02);
+}
+.canvas-toolbar .micro{margin-right:auto}
+.zoom-group{display:flex;align-items:center;gap:6px}
+.zoom-btn{
+  width:24px;height:24px;border-radius:6px;
+  border:1px solid var(--line);background:rgba(255,255,255,0.04);
+  color:var(--muted);cursor:pointer;font-size:13px;font-family:var(--mono);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.zoom-btn:hover{color:var(--text);border-color:var(--line-strong)}
+.zoom-val{font-family:var(--mono);font-size:11.5px;color:var(--cyan);width:46px;text-align:center}
+.seg{
+  display:flex;background:rgba(255,255,255,0.05);
+  border:1px solid var(--line);border-radius:8px;overflow:hidden;
+}
+.seg button{
+  background:none;border:none;color:var(--muted);
+  font-size:11px;font-family:var(--sans);padding:5px 11px;cursor:pointer;
+  transition:all .2s;
+}
+.seg button.on{background:var(--accent-soft);color:var(--accent)}
+.seg button:hover{color:var(--text)}
+
+.canvas-stage{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:34px;position:relative;min-height:420px;
+}
+.photo-frame{
+  position:relative;width:100%;max-width:820px;aspect-ratio:16/10;
+  border-radius:10px;overflow:hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.1),
+    0 30px 80px rgba(0,0,0,0.6),
+    0 0 90px rgba(255,107,53,0.07);
+}
+.photo{
+  position:absolute;inset:0;overflow:hidden;
+}
+/* —— 照片场景共享图层 —— */
+.ph-sky{position:absolute;inset:0}
+.ph-sun{
+  position:absolute;left:var(--sun-x,62%);top:var(--sun-y,38%);
+  width:var(--sun-s,120px);height:var(--sun-s,120px);
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle, var(--sun-c1,#FFE7B8) 0%, var(--sun-c2,#FF9E5E) 42%, transparent 72%);
+  filter:blur(2px);
+}
+.ph-haze{
+  position:absolute;left:0;right:0;top:30%;height:34%;
+  background:linear-gradient(180deg, transparent, var(--haze-c,rgba(255,150,90,0.4)) 55%, transparent);
+  mix-blend-mode:screen;filter:blur(6px);
+}
+.ph-ridge{
+  position:absolute;left:-4%;right:-4%;bottom:0;height:var(--ridge-h,42%);
+  clip-path:polygon(0 68%, 12% 46%, 24% 62%, 36% 30%, 48% 55%, 60% 22%, 72% 52%, 84% 36%, 100% 60%, 100% 100%, 0 100%);
+  background:linear-gradient(180deg, var(--ridge-c1,#3A2B4E) 0%, var(--ridge-c2,#1B1426) 82%);
+}
+.ph-ridge2{
+  position:absolute;left:-6%;right:-6%;bottom:0;height:calc(var(--ridge-h,42%) * 0.62);
+  clip-path:polygon(0 78%, 16% 52%, 30% 70%, 46% 40%, 62% 68%, 80% 44%, 100% 72%, 100% 100%, 0 100%);
+  background:linear-gradient(180deg, var(--ridge2-c1,#241A33) 0%, var(--ridge2-c2,#120D1B) 90%);
+}
+.ph-water{
+  position:absolute;left:0;right:0;bottom:0;height:var(--water-h,34%);
+  background:
+    linear-gradient(180deg, var(--water-c1,rgba(255,140,80,0.55)) 0%, var(--water-c2,#20142E) 78%);
+}
+.ph-water::before{
+  content:"";position:absolute;left:var(--sun-x,62%);top:0;bottom:0;width:22%;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg, rgba(255,190,130,0.55), transparent 82%);
+  filter:blur(7px);
+}
+.ph-water::after{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(180deg, transparent 0 6px, rgba(255,255,255,0.07) 6px 7px);
+  mask-image:linear-gradient(180deg, rgba(0,0,0,0.7), transparent 70%);
+  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,0.7), transparent 70%);
+}
+.ph-grain{
+  position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;
+  background-image:
+    radial-gradient(circle at 12% 22%, rgba(255,255,255,0.6) 0 0.6px, transparent 0.9px),
+    radial-gradient(circle at 68% 74%, rgba(255,255,255,0.5) 0 0.5px, transparent 0.8px),
+    radial-gradient(circle at 41% 51%, rgba(0,0,0,0.6) 0 0.6px, transparent 0.9px),
+    radial-gradient(circle at 86% 18%, rgba(255,255,255,0.5) 0 0.5px, transparent 0.8px);
+  background-size:37px 37px, 29px 29px, 43px 43px, 31px 31px;
+}
+.ph-vignette{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 105% at 50% 45%, transparent 58%, rgba(10,6,16,0.5) 100%);
+}
+
+/* —— 场景配色（filmstrip 缩略图共享） —— */
+.scene-1{--sky-t:#4A2E72;--sky-b:#FF8B4A;--sun-c1:#FFF3D2;--sun-c2:#FF9E5E;--haze-c:rgba(255,150,90,0.42);
+  --ridge-c1:#43294F;--ridge-c2:#1B1128;--ridge2-c1:#2A1B3B;--ridge2-c2:#130C1E;
+  --water-c1:rgba(255,140,80,0.6);--water-c2:#241238;--sun-x:63%;--sun-y:37%;--ridge-h:44%;--water-h:34%}
+.scene-2{--sky-t:#0E2C55;--sky-b:#7FB6E8;--sun-c1:#F4FAFF;--sun-c2:#B9DDF7;--haze-c:rgba(180,220,255,0.35);
+  --ridge-c1:#4E6FA0;--ridge-c2:#152238;--ridge2-c1:#2B4266;--ridge2-c2:#0D1626;
+  --water-c1:rgba(120,180,235,0.5);--water-c2:#12233C;--sun-x:28%;--sun-y:22%;--ridge-h:56%;--water-h:22%}
+.scene-3{--sky-t:#26124A;--sky-b:#E85E8C;--sun-c1:#FFD9E6;--sun-c2:#FF7FA6;--haze-c:rgba(232,94,140,0.4);
+  --ridge-c1:#4B1F52;--ridge-c2:#1A0B2C;--ridge2-c1:#331241;--ridge2-c2:#140822;
+  --water-c1:rgba(232,94,140,0.45);--water-c2:#2B0F3E;--sun-x:50%;--sun-y:30%;--ridge-h:50%;--water-h:28%}
+.scene-4{--sky-t:#0B2E28;--sky-b:#4FA97C;--sun-c1:#E8FFD9;--sun-c2:#A5E88F;--haze-c:rgba(120,220,150,0.3);
+  --ridge-c1:#1D4A38;--ridge-c2:#08201A;--ridge2-c1:#123526;--ridge2-c2:#061611;
+  --water-c1:rgba(110,210,160,0.4);--water-c2:#0A231C;--sun-x:38%;--sun-y:18%;--ridge-h:60%;--water-h:18%}
+.scene-5{--sky-t:#0B1030;--sky-b:#3B2E86;--sun-c1:#C9D4FF;--sun-c2:#7A6BFF;--haze-c:rgba(110,100,255,0.32);
+  --ridge-c1:#241E52;--ridge-c2:#0A0A22;--ridge2-c1:#181442;--ridge2-c2:#07071A;
+  --water-c1:rgba(90,90,240,0.42);--water-c2:#0B0C2C;--sun-x:72%;--sun-y:24%;--ridge-h:52%;--water-h:30%}
+.scene-6{--sky-t:#5B2A12;--sky-b:#FFB25E;--sun-c1:#FFF7E0;--sun-c2:#FFC272;--haze-c:rgba(255,180,110,0.42);
+  --ridge-c1:#8A4A22;--ridge-c2:#2E1408;--ridge2-c1:#5E2F14;--ridge2-c2:#200D05;
+  --water-c1:rgba(255,170,90,0.5);--water-c2:#331706;--sun-x:52%;--sun-y:34%;--ridge-h:40%;--water-h:36%}
+.scene-7{--sky-t:#123048;--sky-b:#58C7C2;--sun-c1:#E4FFFC;--sun-c2:#8FE8E2;--haze-c:rgba(88,199,194,0.38);
+  --ridge-c1:#1E4E5C;--ridge-c2:#0A2028;--ridge2-c1:#143642;--ridge2-c2:#07171D;
+  --water-c1:rgba(88,199,194,0.55);--water-c2:#0C2A32;--sun-x:30%;--sun-y:32%;--ridge-h:46%;--water-h:38%}
+
+.ph-sky{background:linear-gradient(180deg, var(--sky-t,#4A2E72) 0%, var(--sky-b,#FF8B4A) 100%)}
+
+/* before / after 对比 */
+.photo-after{z-index:3;clip-path:inset(0 0 0 var(--split,52%))}
+.photo-before{z-index:2;filter:saturate(.55) contrast(.82) brightness(.92)}
+.split-line{
+  position:absolute;top:0;bottom:0;left:var(--split,52%);
+  width:2px;background:rgba(255,255,255,0.9);
+  z-index:8;cursor:ew-resize;
+  box-shadow:0 0 12px rgba(0,0,0,0.55);
+}
+.split-handle{
+  position:absolute;top:50%;left:50%;
+  width:34px;height:34px;border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(26,23,32,0.92);
+  border:1.5px solid rgba(255,255,255,0.8);
+  display:flex;align-items:center;justify-content:center;gap:3px;
+  box-shadow:0 6px 22px rgba(0,0,0,0.5);
+}
+.split-handle::before,.split-handle::after{
+  content:"";width:0;height:0;border:5px solid transparent;
+}
+.split-handle::before{border-right-color:#EDE9F2;margin-right:2px}
+.split-handle::after{border-left-color:#EDE9F2}
+.split-label{
+  position:absolute;top:12px;z-index:9;
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  padding:3px 9px;border-radius:20px;
+  background:rgba(14,12,18,0.72);border:1px solid var(--line-strong);
+  color:var(--text);backdrop-filter:blur(6px);
+}
+.split-label.l{left:12px}
+.split-label.r{right:12px;color:var(--accent);border-color:rgba(255,107,53,0.4)}
+
+/* 画布浮层：快捷键提示卡 */
+.float-card{
+  position:absolute;right:22px;bottom:22px;z-index:12;
+  background:rgba(34,30,42,0.92);
+  border:1px solid var(--line-strong);border-radius:12px;
+  padding:13px 15px;width:212px;
+  box-shadow:0 18px 46px rgba(0,0,0,0.5);
+  backdrop-filter:blur(10px);
+}
+.float-card h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;font-weight:600}
+.float-row{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;padding:3px 0;color:var(--text)}
+.float-row kbd{
+  font-family:var(--mono);font-size:10px;
+  background:rgba(255,255,255,0.08);border:1px solid var(--line);
+  border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:var(--cyan);
+}
+.float-card .hide-card{
+  position:absolute;top:9px;right:11px;background:none;border:none;
+  color:var(--muted);cursor:pointer;font-size:13px;line-height:1;
+}
+
+/* ---------- 右侧参数面板 ---------- */
+.inspector{
+  width:296px;flex-shrink:0;
+  background:var(--panel);
+  border-left:1px solid var(--line);
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+.inspector::-webkit-scrollbar{width:8px}
+.inspector::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}
+.panel-tabs{
+  display:flex;border-bottom:1px solid var(--line);
+  position:sticky;top:0;background:var(--panel);z-index:5;
+}
+.panel-tabs button{
+  flex:1;background:none;border:none;color:var(--muted);
+  font-family:var(--sans);font-size:11.5px;font-weight:600;
+  padding:12px 0;cursor:pointer;position:relative;
+  transition:color .2s;
+}
+.panel-tabs button.on{color:var(--text)}
+.panel-tabs button.on::after{
+  content:"";position:absolute;left:22%;right:22%;bottom:-1px;height:2px;
+  background:var(--accent);border-radius:2px;
+}
+.panel-section{padding:15px 16px;border-bottom:1px solid var(--line)}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.panel-head h3{font-size:13px;font-weight:700;letter-spacing:.04em}
+.panel-head .reset{
+  background:none;border:none;color:var(--muted);
+  font-size:10.5px;cursor:pointer;font-family:var(--mono);
+  transition:color .2s;
+}
+.panel-head .reset:hover{color:var(--accent)}
+
+/* 直方图 */
+.histogram{
+  height:86px;display:flex;align-items:flex-end;gap:2px;
+  background:rgba(0,0,0,0.28);
+  border:1px solid var(--line);border-radius:8px;
+  padding:7px 8px;position:relative;overflow:hidden;
+}
+.histogram::before{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(90deg, transparent 24.6%, var(--line) 25%, transparent 25.4%),
+    linear-gradient(90deg, transparent 49.6%, var(--line) 50%, transparent 50.4%),
+    linear-gradient(90deg, transparent 74.6%, var(--line) 75%, transparent 75.4%);
+}
+.histogram i{
+  flex:1;border-radius:2px 2px 0 0;
+  background:linear-gradient(180deg, var(--cyan) 0%, rgba(88,199,194,0.25) 100%);
+  min-height:3px;
+  transition:height .5s ease;
+}
+.histogram i.hot{background:linear-gradient(180deg, var(--accent) 0%, rgba(255,107,53,0.3) 100%)}
+.hist-legend{
+  display:flex;justify-content:space-between;
+  font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:6px;
+}
+.hist-stats{display:flex;gap:8px;margin-top:9px}
+.hist-stat{
+  flex:1;background:rgba(255,255,255,0.035);
+  border:1px solid var(--line);border-radius:7px;
+  padding:6px 8px;
+}
+.hist-stat b{display:block;font-family:var(--mono);font-size:12px;color:var(--cyan);font-weight:600}
+.hist-stat span{font-size:9.5px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+
+/* 滑杆 */
+.slider-row{margin-bottom:13px}
+.slider-row:last-child{margin-bottom:2px}
+.slider-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.slider-top label{font-size:12px;color:var(--text)}
+.slider-top .val{
+  font-family:var(--mono);font-size:11px;color:var(--accent);
+  background:var(--accent-soft);padding:1px 7px;border-radius:5px;
+  min-width:56px;text-align:right;
+}
+.slider-wrap{position:relative;height:18px;display:flex;align-items:center}
+.slider-wrap::before{
+  content:"";position:absolute;left:0;right:0;height:3px;
+  background:rgba(255,255,255,0.09);border-radius:2px;
+}
+.slider-wrap::after{
+  content:"";position:absolute;left:0;width:var(--p,50%);height:3px;
+  background:linear-gradient(90deg, rgba(255,107,53,0.55), var(--accent));
+  border-radius:2px;pointer-events:none;
+}
+.slider-wrap.mid::after{
+  left:50%;width:calc((var(--p,50) - 50) * 1%);
+  min-width:0;
+}
+input[type="range"]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;background:transparent;position:relative;z-index:2;
+  height:18px;cursor:pointer;margin:0;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:13px;height:13px;border-radius:50%;
+  background:#F7F3FA;border:2px solid var(--accent);
+  box-shadow:0 2px 8px rgba(255,107,53,0.45);
+  transition:transform .15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.18)}
+input[type="range"]::-moz-range-thumb{
+  width:13px;height:13px;border-radius:50%;
+  background:#F7F3FA;border:2px solid var(--accent);
+  box-shadow:0 2px 8px rgba(255,107,53,0.45);
+}
+input[type="range"]::-moz-range-track{background:transparent;height:3px}
+
+/* 色彩曲线 */
+.curve-box{
+  height:118px;position:relative;
+  background:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px) 0 0/ 25% 25%,
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px) 0 0/ 25% 25%,
+    rgba(0,0,0,0.28);
+  border:1px solid var(--line);border-radius:8px;
+  overflow:hidden;
+}
+.curve-box svg{position:absolute;inset:0;width:100%;height:100%}
+.curve-channels{display:flex;gap:6px;margin-top:9px}
+.chan{
+  flex:1;text-align:center;font-family:var(--mono);font-size:10px;
+  padding:4px 0;border-radius:6px;cursor:pointer;
+  border:1px solid var(--line);color:var(--muted);
+  transition:all .2s;
+}
+.chan.on{border-color:rgba(255,107,53,0.5);color:var(--accent);background:var(--accent-soft)}
+.chan.c-cyan.on{border-color:rgba(88,199,194,0.5);color:var(--cyan);background:var(--cyan-soft)}
+
+/* 色卡 / HSL */
+.swatch-row{display:flex;gap:7px;margin-top:4px}
+.swatch{
+  flex:1;aspect-ratio:1;border-radius:8px;cursor:pointer;
+  border:1.5px solid transparent;
+  transition:all .2s;position:relative;
+}
+.swatch:hover{transform:translateY(-2px)}
+.swatch.on{border-color:#fff;box-shadow:0 0 0 2px var(--accent), 0 6px 16px rgba(0,0,0,0.35)}
+.swatch span{
+  position:absolute;left:0;right:0;bottom:-17px;text-align:center;
+  font-family:var(--mono);font-size:9px;color:var(--muted);
+}
+.hsl-line{display:flex;align-items:center;gap:9px;margin-bottom:11px}
+.hsl-line .hue-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.hsl-line label{font-size:11.5px;width:44px;color:var(--muted)}
+.hsl-line .slider-wrap{flex:1}
+
+/* 图层 / 历史 */
+.layer-item{
+  display:flex;align-items:center;gap:9px;
+  padding:8px 10px;border-radius:9px;
+  border:1px solid transparent;cursor:pointer;
+  transition:all .2s;margin-bottom:5px;
+}
+.layer-item:hover{background:rgba(255,255,255,0.05)}
+.layer-item.on{background:var(--accent-soft);border-color:rgba(255,107,53,0.32)}
+.layer-thumb{
+  width:34px;height:26px;border-radius:5px;flex-shrink:0;
+  border:1px solid var(--line);
+}
+.layer-item b{font-size:11.5px;font-weight:600;display:block}
+.layer-item small{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+.layer-item .eye{
+  margin-left:auto;width:14px;height:9px;border-radius:50%;
+  border:1.5px solid var(--muted);position:relative;opacity:.7;
+}
+.layer-item .eye::after{
+  content:"";position:absolute;inset:2.5px;border-radius:50%;background:var(--muted);
+}
+
+/* ---------- 底部 filmstrip ---------- */
+.filmstrip{
+  height:132px;flex-shrink:0;
+  background:var(--panel);
+  border-top:1px solid var(--line);
+  display:flex;flex-direction:column;
+  padding:10px 16px 12px;
+}
+.filmstrip-head{display:flex;align-items:center;gap:14px;margin-bottom:9px}
+.filmstrip-head .micro{margin-right:auto}
+.film-count{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.film-rail{
+  display:flex;gap:11px;overflow-x:auto;padding-bottom:4px;
+}
+.film-rail::-webkit-scrollbar{height:5px}
+.film-rail::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:3px}
+.film-item{
+  flex-shrink:0;cursor:pointer;
+  width:118px;
+  transition:transform .2s;
+}
+.film-item:hover{transform:translateY(-3px)}
+.film-thumb{
+  width:118px;height:66px;border-radius:7px;overflow:hidden;
+  position:relative;
+  border:2px solid transparent;
+  box-shadow:0 3px 10px rgba(0,0,0,0.35);
+}
+.film-item.on .film-thumb{
+  border-color:var(--accent);
+  box-shadow:0 0 0 1px rgba(255,107,53,0.45), 0 6px 18px rgba(255,107,53,0.3);
+}
+.film-item .fname{
+  display:block;font-family:var(--mono);font-size:9.5px;
+  color:var(--muted);margin-top:5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.film-item.on .fname{color:var(--accent)}
+.film-badge{
+  position:absolute;top:5px;right:5px;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;
+  background:rgba(12,10,16,0.78);color:var(--cyan);
+  padding:1.5px 6px;border-radius:20px;
+  border:1px solid rgba(88,199,194,0.35);
+}
+.film-badge.raw{color:var(--accent);border-color:rgba(255,107,53,0.4)}
+.film-mini{position:absolute;inset:0}
+.film-mini .ph-sun{--sun-s:34px}
+.film-mini .ph-water::before{display:none}
+
+/* ========================= 局部功能特写区 ========================= */
+.detail-wrap{
+  max-width:1160px;margin:0 auto;
+  padding:96px 32px 40px;
+}
+.detail-sec{margin-bottom:104px}
+.sec-head{max-width:720px;margin-bottom:42px}
+.sec-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:15px;
+}
+.sec-eyebrow::before{
+  content:"";width:26px;height:1px;background:var(--accent);
+}
+.sec-head h2{
+  font-size:32px;line-height:1.28;font-weight:700;letter-spacing:.015em;
+  margin-bottom:14px;
+}
+.sec-head h2 em{font-style:normal;color:var(--accent)}
+.sec-head p{color:var(--muted);font-size:14.5px;max-width:640px}
+
+/* 蒙版精修模块 */
+.mask-panel{
+  display:grid;grid-template-columns:288px 1fr;
+  background:var(--panel);
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  box-shadow:0 28px 70px rgba(0,0,0,0.4);
+}
+.mask-list{border-right:1px solid var(--line);padding:18px}
+.mask-list .micro{margin-bottom:13px;display:block}
+.mask-item{
+  display:flex;align-items:center;gap:11px;
+  padding:10px 11px;border-radius:10px;cursor:pointer;
+  border:1px solid transparent;transition:all .2s;margin-bottom:6px;
+}
+.mask-item:hover{background:rgba(255,255,255,0.05)}
+.mask-item.on{background:var(--accent-soft);border-color:rgba(255,107,53,0.35)}
+.mask-ico{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,0.05);
+  position:relative;overflow:hidden;
+}
+.mask-ico.m1{background:linear-gradient(135deg,#FF6B35,#B23A1B)}
+.mask-ico.m2{background:linear-gradient(180deg,#58C7C2,#23585B)}
+.mask-ico.m3{background:linear-gradient(135deg,#7A5CFF,#2A1B66)}
+.mask-ico.m4{background:radial-gradient(circle at 50% 45%, #FFD9A8 0%, #7A3E1D 72%)}
+.mask-ico.m5{background:linear-gradient(90deg,#EDE9F2 0%,#221E2A 100%)}
+.mask-item b{font-size:12px;display:block}
+.mask-item small{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+.mask-item .cnt{
+  margin-left:auto;font-family:var(--mono);font-size:9.5px;
+  color:var(--cyan);background:var(--cyan-soft);
+  padding:2px 7px;border-radius:20px;
+}
+.mask-detail{padding:22px 24px;display:flex;flex-direction:column;gap:18px}
+.mask-preview{
+  height:224px;border-radius:11px;position:relative;overflow:hidden;
+  border:1px solid var(--line);
+}
+.mask-overlay{
+  position:absolute;inset:0;
+  background:rgba(255,107,53,0.4);
+  clip-path:polygon(0 58%, 18% 42%, 34% 60%, 52% 34%, 70% 56%, 86% 40%, 100% 58%, 100% 100%, 0 100%);
+  mix-blend-mode:screen;
+}
+.mask-preview .badge{
+  position:absolute;left:12px;top:12px;
+  font-family:var(--mono);font-size:10px;
+  background:rgba(14,12,18,0.75);border:1px solid var(--line-strong);
+  padding:3px 9px;border-radius:20px;
+}
+.mask-props{display:grid;grid-template-columns:1fr 1fr;gap:12px 22px}
+.prop{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11.5px;padding:8px 11px;
+  background:rgba(255,255,255,0.035);
+  border:1px solid var(--line);border-radius:8px;
+}
+.prop .v{font-family:var(--mono);color:var(--cyan);font-size:11px}
+
+/* 批量预设 */
+.preset-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+}
+.preset-card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;overflow:hidden;
+  transition:all .25s;cursor:pointer;
+}
+.preset-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(255,107,53,0.4);
+  box-shadow:0 22px 50px rgba(0,0,0,0.42), 0 0 0 1px rgba(255,107,53,0.14);
+}
+.preset-thumb{height:118px;position:relative;overflow:hidden}
+.preset-body{padding:13px 14px}
+.preset-body b{font-size:12.5px;display:block;margin-bottom:3px}
+.preset-body small{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+.preset-tags{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap}
+.preset-tags span{
+  font-size:9.5px;letter-spacing:.05em;
+  color:var(--muted);border:1px solid var(--line);
+  padding:2px 8px;border-radius:20px;
+}
+.preset-tags span.hot{color:var(--accent);border-color:rgba(255,107,53,0.4);background:var(--accent-soft)}
+.preset-state{
+  position:absolute;top:9px;right:9px;
+  font-family:var(--mono);font-size:9px;
+  background:rgba(12,10,16,0.8);padding:2px 8px;border-radius:20px;
+  border:1px solid rgba(88,199,194,0.4);color:var(--cyan);
+}
+.preset-state.sync{color:var(--accent);border-color:rgba(255,107,53,0.45)}
+.batch-bar{
+  margin-top:22px;display:flex;align-items:center;gap:16px;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:13px;padding:15px 20px;
+}
+.batch-bar .progress{
+  flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden;
+}
+.batch-bar .progress i{
+  display:block;height:100%;width:68%;
+  background:linear-gradient(90deg, var(--accent), #FFA06B);
+  border-radius:3px;
+  box-shadow:0 0 12px rgba(255,107,53,0.5);
+}
+.batch-bar .mono{font-size:11px;color:var(--muted)}
+.batch-bar .mono b{color:var(--cyan);font-weight:600}
+
+/* 快捷键表 */
+.keys-panel{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;overflow:hidden;
+}
+.keys-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+}
+.key-col{padding:22px 26px;border-bottom:1px solid var(--line)}
+.key-col:nth-child(odd){border-right:1px solid var(--line)}
+.key-col:nth-last-child(-n+2){border-bottom:none}
+.key-col h4{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:13px;font-weight:600;
+}
+.key-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6.5px 0;border-bottom:1px dashed rgba(255,255,255,0.055);
+  font-size:12px;
+}
+.key-row:last-child{border-bottom:none}
+.key-row .k{
+  display:flex;gap:5px;
+}
+.key-row kbd{
+  font-family:var(--mono);font-size:10px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid var(--line-strong);border-bottom-width:2px;
+  border-radius:5px;padding:2px 7px;color:var(--text);
+  min-width:24px;text-align:center;
+}
+
+/* 导出预设弹窗 */
+.modal-mask{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(8,6,12,0.62);
+  backdrop-filter:blur(7px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;
+}
+.modal-mask.open{opacity:1;pointer-events:auto}
+.modal{
+  width:min(640px,92vw);
+  background:var(--float);
+  border:1px solid var(--line-strong);
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 40px 120px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.05);
+  transform:translateY(14px) scale(.98);
+  transition:transform .25s;
+}
+.modal-mask.open .modal{transform:translateY(0) scale(1)}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:17px 22px;border-bottom:1px solid var(--line);
+}
+.modal-head h3{font-size:15px;font-weight:700;letter-spacing:.03em}
+.modal-close{
+  background:none;border:none;color:var(--muted);
+  font-size:18px;cursor:pointer;line-height:1;transition:color .2s;
+}
+.modal-close:hover{color:var(--text)}
+.modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.export-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.export-opt{
+  border:1px solid var(--line);border-radius:10px;
+  padding:12px 14px;cursor:pointer;transition:all .2s;
+}
+.export-opt:hover{border-color:var(--line-strong)}
+.export-opt.on{border-color:rgba(255,107,53,0.55);background:var(--accent-soft)}
+.export-opt b{font-size:12px;display:block;margin-bottom:2px}
+.export-opt small{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+.export-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:.05em}
+.field .fake-input{
+  font-family:var(--mono);font-size:11.5px;
+  background:rgba(0,0,0,0.25);border:1px solid var(--line);
+  border-radius:8px;padding:9px 12px;color:var(--text);
+}
+.modal-foot{
+  display:flex;justify-content:flex-end;gap:10px;
+  padding:15px 22px;border-top:1px solid var(--line);
+  background:rgba(0,0,0,0.14);
+}
+
+/* ========================= 页脚 ========================= */
+.site-footer{
+  margin-top:60px;
+  border-top:1px solid var(--line);
+  background:linear-gradient(180deg, #15121B 0%, #100D15 100%);
+  padding:52px 32px 34px;
+}
+.footer-inner{
+  max-width:1160px;margin:0 auto;
+  display:flex;flex-wrap:wrap;gap:34px;justify-content:space-between;
+}
+.footer-brand{max-width:300px}
+.footer-brand .brand{margin-bottom:13px}
+.footer-brand p{color:var(--muted);font-size:12px;line-height:1.8}
+.footer-col h5{
+  font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;font-weight:600;
+}
+.footer-col a{
+  display:block;color:var(--text);opacity:.72;
+  font-size:12px;text-decoration:none;padding:3.5px 0;
+  transition:all .2s;
+}
+.footer-col a:hover{opacity:1;color:var(--accent);transform:translateX(3px)}
+.footer-bar{
+  max-width:1160px;margin:38px auto 0;
+  padding-top:20px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);
+}
+.footer-bar .ver{color:var(--cyan)}
+
+/* ========================= 响应式 ========================= */
+@media (max-width:1080px){
+  .workspace{flex-wrap:wrap}
+  .inspector{width:100%;border-left:none;border-top:1px solid var(--line)}
+  .tool-rail{flex-direction:row;width:100%;height:60px;padding:0 10px;overflow-x:auto}
+  .tool .tip{left:50%;top:calc(100% + 10px);transform:translate(-50%,-6px)}
+  .tool:hover .tip{transform:translate(-50%,0)}
+  .rail-sep{width:1px;height:26px;margin:0 8px}
+  .mask-panel{grid-template-columns:1fr}
+  .preset-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:680px){
+  .top-menus,.file-chip{display:none}
+  .keys-grid{grid-template-columns:1fr}
+  .key-col:nth-child(odd){border-right:none}
+  .preset-grid{grid-template-columns:1fr}
+  .sec-head h2{font-size:25px}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===================== 顶部工具条 ===================== -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-name">APER<span>TURE</span></div>
+    </div>
+    <nav class="top-menus">
+      <button>文件</button>
+      <button>编辑</button>
+      <button>图层</button>
+      <button>调整</button>
+      <button>滤镜</button>
+      <button>视图</button>
+      <button>窗口</button>
+    </nav>
+    <div class="file-chip">
+      <span class="dot"></span>
+      <span class="file-name" id="fileName">IMG_20261014_落日海崖.CR3</span>
+      <span class="file-meta">6000×4000 · 24.2MP · Adobe RGB</span>
+    </div>
+    <div class="top-actions">
+      <button class="btn btn-icon" title="撤销"><span class="undo-ico"></span></button>
+      <button class="btn btn-icon" title="重做"><span class="undo-ico redo-ico"></span></button>
+      <button class="btn"><span class="compare-ico"></span>对比</button>
+      <button class="btn btn-primary" id="exportBtn"><span class="export-ico"></span>导出</button>
+    </div>
+  </header>
+
+  <!-- ===================== 三栏工作区 ===================== -->
+  <main class="workspace">
+
+    <!-- ---------- 左侧工具轨 ---------- -->
+    <aside class="tool-rail">
+      <div class="tool active" data-tool="move">
+        <span class="ico ico-move"><i></i><i></i><i></i><i></i></span>
+        <span class="tip">移动 / 选区<span class="k">V</span></span>
+      </div>
+      <div class="tool" data-tool="crop">
+        <span class="ico ico-crop"></span>
+        <span class="tip">裁剪 / 拉直<span class="k">C</span></span>
+      </div>
+      <div class="tool" data-tool="brush">
+        <span class="ico ico-brush"></span>
+        <span class="tip">调整画笔<span class="k">K</span></span>
+      </div>
+      <div class="tool" data-tool="heal">
+        <span class="ico ico-heal"></span>
+        <span class="tip">污点修复<span class="k">Q</span></span>
+      </div>
+      <div class="rail-sep"></div>
+      <div class="tool" data-tool="grad">
+        <span class="ico ico-grad"></span>
+        <span class="tip">线性渐变滤镜<span class="k">G</span></span>
+      </div>
+      <div class="tool" data-tool="radial">
+        <span class="ico ico-radial"></span>
+        <span class="tip">径向滤镜<span class="k">R</span></span>
+      </div>
+      <div class="tool" data-tool="liquefy">
+        <span class="ico ico-liquefy"></span>
+        <span class="tip">液化塑形<span class="k">L</span></span>
+      </div>
+      <div class="tool" data-tool="curve">
+        <span class="ico ico-curve"></span>
+        <span class="tip">色调曲线<span class="k">M</span></span>
+      </div>
+      <div class="tool" data-tool="text">
+        <span class="ico ico-text"></span>
+        <span class="tip">文字 / 水印<span class="k">T</span></span>
+      </div>
+      <div class="rail-sep"></div>
+      <div class="tool" data-tool="hand">
+        <span class="ico ico-hand"></span>
+        <span class="tip">抓手平移<span class="k">H</span></span>
+      </div>
+      <div class="tool" data-tool="zoom">
+        <span class="ico ico-zoom"></span>
+        <span class="tip">缩放视图<span class="k">Z</span></span>
+      </div>
+    </aside>
+
+    <!-- ---------- 中央画布 ---------- -->
+    <section class="canvas-area">
+      <div class="canvas-toolbar">
+        <span class="micro">画布 · 软打样</span>
+        <div class="seg">
+          <button class="on">单视图</button>
+          <button>双联对比</button>
+          <button>网格审图</button>
+        </div>
+        <div class="zoom-group">
+          <button class="zoom-btn" id="zoomOut">−</button>
+          <span class="zoom-val mono" id="zoomVal">68.4%</span>
+          <button class="zoom-btn" id="zoomIn">+</button>
+        </div>
+        <div class="seg">
+          <button class="on">sRGB</button>
+          <button>Adobe RGB</button>
+          <button>P3</button>
+        </div>
+      </div>
+
+      <div class="canvas-stage">
+        <div class="photo-frame" id="photoFrame">
+          <!-- 原片 -->
+          <div class="photo photo-before scene-1" id="photoBefore">
+            <div class="ph-sky"></div>
+            <div class="ph-sun"></div>
+            <div class="ph-haze"></div>
+            <div class="ph-ridge"></div>
+            <div class="ph-ridge2"></div>
+            <div class="ph-water"></div>
+            <div class="ph-grain"></div>
+            <div class="ph-vignette"></div>
+          </div>
+          <!-- 调整后 -->
+          <div class="photo photo-after scene-1" id="photoAfter">
+            <div class="ph-sky"></div>
+            <div class="ph-sun"></div>
+            <div class="ph-haze"></div>
+            <div class="ph-ridge"></div>
+            <div class="ph-ridge2"></div>
+            <div class="ph-water"></div>
+            <div class="ph-grain"></div>
+            <div class="ph-vignette"></div>
+          </div>
+          <div class="split-label l">原片 · 相机直出</div>
+          <div class="split-label r">调整后 · 预设「熔金黄昏」</div>
+          <div class="split-line" id="splitLine">
+            <div class="split-handle"></div>
+          </div>
+        </div>
+
+        <!-- 画布浮层：快捷键提示卡 -->
+        <div class="float-card" id="floatCard">
+          <button class="hide-card" id="hideCard">✕</button>
+          <h4>快捷键速查</h4>
+          <div class="float-row"><span>切换对比视图</span><kbd>\</kbd></div>
+          <div class="float-row"><span>显示 / 隐藏面板</span><kbd>Tab</kbd></div>
+          <div class="float-row"><span>软打样预览</span><kbd>⌘⇧Y</kbd></div>
+          <div class="float-row"><span>新建调整图层</span><kbd>⌘⌥A</kbd></div>
+          <div class="float-row"><span>导出当前视图</span><kbd>⌘⇧E</kbd></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- 右侧参数面板 ---------- -->
+    <aside class="inspector">
+      <div class="panel-tabs">
+        <button class="on">显影</button>
+        <button>图层</button>
+        <button>元数据</button>
+      </div>
+
+      <!-- 直方图 -->
+      <div class="panel-section">
+        <div class="panel-head">
+          <h3>直方图</h3>
+          <button class="reset">R/G/B 通道</button>
+        </div>
+        <div class="histogram" id="histogram">
+          <i style="height:8%"></i><i style="height:14%"></i><i style="height:22%"></i>
+          <i style="height:35%"></i><i style="height:52%"></i><i style="height:71%"></i>
+          <i style="height:86%"></i><i style="height:96%"></i><i class="hot" style="height:100%"></i>
+          <i class="hot" style="height:93%"></i><i style="height:81%"></i><i style="height:66%"></i>
+          <i style="height:58%"></i><i style="height:63%"></i><i style="height:72%"></i>
+          <i style="height:64%"></i><i style="height:51%"></i><i style="height:39%"></i>
+          <i style="height:30%"></i><i style="height:23%"></i><i style="height:16%"></i>
+          <i style="height:11%"></i><i style="height:7%"></i><i style="height:4%"></i>
+        </div>
+        <div class="hist-legend">
+          <span>0 阴影</span><span>64</span><span>128 中间调</span><span>192</span><span>255 高光</span>
+        </div>
+        <div class="hist-stats">
+          <div class="hist-stat"><b>118</b><span>平均值</span></div>
+          <div class="hist-stat"><b>132</b><span>中值</span></div>
+          <div class="hist-stat"><b>48.7</b><span>标准差</span></div>
+          <div class="hist-stat"><b>0.4%</b><span>溢出像素</span></div>
+        </div>
+      </div>
+
+      <!-- 光线 -->
+      <div class="panel-section">
+        <div class="panel-head">
+          <h3>光线</h3>
+          <button class="reset">重置</button>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>曝光</label><span class="val mono" data-for="exposure">+0.35 EV</span></div>
+          <div class="slider-wrap" data-unit=" EV" data-dec="2" data-pre="1"><input type="range" id="exposure" min="-2" max="2" step="0.05" value="0.35"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>对比度</label><span class="val mono">+18</span></div>
+          <div class="slider-wrap"><input type="range" min="-50" max="50" step="1" value="18"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>高光</label><span class="val mono">−42</span></div>
+          <div class="slider-wrap"><input type="range" min="-100" max="100" step="1" value="-42"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>阴影</label><span class="val mono">+26</span></div>
+          <div class="slider-wrap"><input type="range" min="-100" max="100" step="1" value="26"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>白色色阶</label><span class="val mono">+8</span></div>
+          <div class="slider-wrap"><input type="range" min="-100" max="100" step="1" value="8"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>黑色色阶</label><span class="val mono">−12</span></div>
+          <div class="slider-wrap"><input type="range" min="-100" max="100" step="1" value="-12"></div>
+        </div>
+      </div>
+
+      <!-- 颜色 -->
+      <div class="panel-section">
+        <div class="panel-head">
+          <h3>颜色</h3>
+          <button class="reset">重置</button>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>色温</label><span class="val mono">+720 K</span></div>
+          <div class="slider-wrap"><input type="range" min="2000" max="10000" step="20" value="720"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>色调</label><span class="val mono">−6</span></div>
+          <div class="slider-wrap"><input type="range" min="-50" max="50" step="1" value="-6"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>自然饱和度</label><span class="val mono">+24</span></div>
+          <div class="slider-wrap"><input type="range" min="-100" max="100" step="1" value="24"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>饱和度</label><span class="val mono">+9</span></div>
+          <div class="slider-wrap"><input type="range" min="-100" max="100" step="1" value="9"></div>
+        </div>
+        <div class="swatch-row">
+          <div class="swatch on" style="background:linear-gradient(135deg,#FF6B35,#B23A1B)"><span>橙</span></div>
+          <div class="swatch" style="background:linear-gradient(135deg,#FFB25E,#C97B22)"><span>黄</span></div>
+          <div class="swatch" style="background:linear-gradient(135deg,#58C7C2,#22706E)"><span>青</span></div>
+          <div class="swatch" style="background:linear-gradient(135deg,#7A5CFF,#33217A)"><span>蓝</span></div>
+          <div class="swatch" style="background:linear-gradient(135deg,#E85E8C,#7A2447)"><span>洋红</span></div>
+        </div>
+      </div>
+
+      <!-- 色调曲线 -->
+      <div class="panel-section">
+        <div class="panel-head">
+          <h3>色调曲线</h3>
+          <button class="reset">参数 / 点曲线</button>
+        </div>
+        <div class="curve-box">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polyline points="0,100 18,84 38,58 58,36 78,18 100,4"
+              fill="none" stroke="#FF6B35" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+            <polyline points="0,100 25,76 50,52 75,28 100,8"
+              fill="none" stroke="rgba(237,233,242,0.28)" stroke-width="1" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/>
+            <circle cx="18" cy="84" r="1.8" fill="#FF6B35" stroke="#121016" stroke-width="0.8"/>
+            <circle cx="58" cy="36" r="1.8" fill="#FF6B35" stroke="#121016" stroke-width="0.8"/>
+            <circle cx="88" cy="11" r="1.8" fill="#58C7C2" stroke="#121016" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <div class="curve-channels">
+          <div class="chan on">RGB</div>
+          <div class="chan">R</div>
+          <div class="chan">G</div>
+          <div class="chan c-cyan on">B</div>
+        </div>
+      </div>
+
+      <!-- 细节 -->
+      <div class="panel-section">
+        <div class="panel-head">
+          <h3>细节</h3>
+          <button class="reset">重置</button>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>锐化 · 数量</label><span class="val mono">62</span></div>
+          <div class="slider-wrap"><input type="range" min="0" max="100" step="1" value="62"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>锐化 · 半径</label><span class="val mono">1.2 px</span></div>
+          <div class="slider-wrap"><input type="range" min="0.5" max="3" step="0.1" value="1.2"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>明度降噪</label><span class="val mono">18</span></div>
+          <div class="slider-wrap"><input type="range" min="0" max="100" step="1" value="18"></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-top"><label>颜色降噪</label><span class="val mono">24</span></div>
+          <div class="slider-wrap"><input type="range" min="0" max="100" step="1" value="24"></div>
+        </div>
+      </div>
+
+      <!-- 调整图层 -->
+      <div class="panel-section">
+        <div class="panel-head">
+          <h3>调整图层</h3>
+          <button class="reset">+ 新建</button>
+        </div>
+        <div class="layer-item on">
+          <div class="layer-thumb scene-1"></div>
+          <div><b>熔金黄昏 · 全局调色</b><small>曲线 + HSL · 100%</small></div>
+          <div class="eye"></div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-thumb scene-7"></div>
+          <div><b>天空渐变滤镜</b><small>线性渐变 · 72%</small></div>
+          <div class="eye"></div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-thumb scene-6"></div>
+          <div><b>海面反光强化</b><small>径向滤镜 · 45%</small></div>
+          <div class="eye"></div>
+        </div>
+        <div class="layer-item">
+          <div class="layer-thumb scene-5"></div>
+          <div><b>暗角 · 聚焦主体</b><small>晕影 · −28</small></div>
+          <div class="eye"></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ===================== 底部胶片条 ===================== -->
+  <section class="filmstrip">
+    <div class="filmstrip-head">
+      <span class="micro">胶片条 · 本次拍摄 2026-10-14 · 东极岛</span>
+      <span class="film-count">共 8 张 · 已选 1 张 · 4 张已标记</span>
+    </div>
+    <div class="film-rail" id="filmRail">
+      <div class="film-item on" data-scene="1" data-file="IMG_20261014_落日海崖.CR3">
+        <div class="film-thumb">
+          <div class="film-mini scene-1">
+            <div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div>
+          </div>
+          <span class="film-badge raw">RAW</span>
+        </div>
+        <span class="fname">IMG_20261014_落日海崖.CR3</span>
+      </div>
+      <div class="film-item" data-scene="2" data-file="IMG_20261014_晨雾雪峰.CR3">
+        <div class="film-thumb">
+          <div class="film-mini scene-2">
+            <div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div>
+          </div>
+          <span class="film-badge raw">RAW</span>
+        </div>
+        <span class="fname">IMG_20261014_晨雾雪峰.CR3</span>
+      </div>
+      <div class="film-item" data-scene="3" data-file="IMG_20261013_暮色人像.CR3">
+        <div class="film-thumb">
+          <div class="film-mini scene-3">
+            <div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div>
+          </div>
+          <span class="film-badge raw">RAW</span>
+        </div>
+        <span class="fname">IMG_20261013_暮色人像.CR3</span>
+      </div>
+      <div class="film-item" data-scene="4" data-file="IMG_20261013_苔原林谷.CR3">
+        <div class="film-thumb">
+          <div class="film-mini scene-4">
+            <div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div>
+          </div>
+          <span class="film-badge raw">RAW</span>
+        </div>
+        <span class="fname">IMG_20261013_苔原林谷.CR3</span>
+      </div>
+      <div class="film-item" data-scene="5" data-file="IMG_20261012_星夜港湾.CR3">
+        <div class="film-thumb">
+          <div class="film-mini scene-5">
+            <div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div>
+          </div>
+          <span class="film-badge">★ 3</span>
+        </div>
+        <span class="fname">IMG_20261012_星夜港湾.CR3</span>
+      </div>
+      <div class="film-item" data-scene="6" data-file="IMG_20261012_沙丘驼影.DNG">
+        <div class="film-thumb">
+          <div class="film-mini scene-6">
+            <div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div>
+          </div>
+          <span class="film-badge">★ 5</span>
+        </div>
+        <span class="fname">IMG_20261012_沙丘驼影.DNG</span>
+      </div>
+      <div class="film-item" data-scene="7" data-file="IMG_20261011_冰川泻湖.ARW">
+        <div class="film-thumb">
+          <div class="film-mini scene-7">
+            <div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div>
+          </div>
+          <span class="film-badge">★ 4</span>
+        </div>
+        <span class="fname">IMG_20261011_冰川泻湖.ARW</span>
+      </div>
+      <div class="film-item" data-scene="3" data-file="IMG_20261011_礁石长曝.CR3">
+        <div class="film-thumb">
+          <div class="film-mini scene-3">
+            <div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div>
+          </div>
+          <span class="film-badge">★ 2</span>
+        </div>
+        <span class="fname">IMG_20261011_礁石长曝.CR3</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===================== 局部功能特写区 ===================== -->
+<div class="detail-wrap">
+
+  <!-- 特写 1：蒙版精修 -->
+  <section class="detail-sec">
+    <div class="sec-head">
+      <div class="sec-eyebrow">Mask Studio · 蒙版精修</div>
+      <h2>用<em> AI 选区</em> 与画笔蒙版，把每一处光影都修到位</h2>
+      <p>APERTURE 内置主体识别与天空检测，一键生成可编辑蒙版；配合压感画笔、线性 / 径向渐变与亮度范围蒙版，实现分区曝光与局部色彩微调，全程非破坏性。</p>
+    </div>
+    <div class="mask-panel">
+      <div class="mask-list">
+        <span class="micro">蒙版堆栈 · 5 个</span>
+        <div class="mask-item on">
+          <div class="mask-ico m1"></div>
+          <div><b>主体 · 岩壁剪影</b><small>AI 选择 · 羽化 8px</small></div>
+          <span class="cnt">01</span>
+        </div>
+        <div class="mask-item">
+          <div class="mask-ico m2"></div>
+          <div><b>天空 · 渐变压暗</b><small>线性渐变 · 反转</small></div>
+          <span class="cnt">02</span>
+        </div>
+        <div class="mask-item">
+          <div class="mask-ico m3"></div>
+          <div><b>海面反光</b><small>径向滤镜 · 羽化 62%</small></div>
+          <span class="cnt">03</span>
+        </div>
+        <div class="mask-item">
+          <div class="mask-ico m4"></div>
+          <div><b>太阳高光保护</b><small>亮度范围 · 78–100</small></div>
+          <span class="cnt">04</span>
+        </div>
+        <div class="mask-item">
+          <div class="mask-ico m5"></div>
+          <div><b>手绘 · 前景提亮</b><small>画笔 · 流量 38%</small></div>
+          <span class="cnt">05</span>
+        </div>
+      </div>
+      <div class="mask-detail">
+        <div class="mask-preview">
+          <div class="film-mini scene-1" style="position:absolute;inset:0">
+            <div class="ph-sky"></div><div class="ph-sun"></div>
+            <div class="ph-ridge"></div><div class="ph-ridge2"></div>
+            <div class="ph-water"></div><div class="ph-vignette"></div>
+          </div>
+          <div class="mask-overlay"></div>
+          <div class="badge">蒙版 01 · 主体 · 叠加预览</div>
+        </div>
+        <div class="mask-props">
+          <div class="prop"><span>曝光</span><span class="v">+0.42 EV</span></div>
+          <div class="prop"><span>对比度</span><span class="v">+12</span></div>
+          <div class="prop"><span>色温偏移</span><span class="v">+340 K</span></div>
+          <div class="prop"><span>清晰度</span><span class="v">+18</span></div>
+          <div class="prop"><span>羽化</span><span class="v">8.0 px</span></div>
+          <div class="prop"><span>混合模式</span><span class="v">柔光</span></div>
+          <div class="prop"><span>流量</span><span class="v">72%</span></div>
+          <div class="prop"><span>蒙版密度</span><span class="v">86%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特写 2：批量预设 -->
+  <section class="detail-sec">
+    <div class="sec-head">
+      <div class="sec-eyebrow">Batch Presets · 批量预设</div>
+      <h2>一次调色，<em>整组照片</em> 保持统一影调</h2>
+      <p>把调色参数保存为预设，拖入整组拍摄素材即可批量套用；支持按镜头、ISO、拍摄时间智能匹配，并可将预设同步到移动端与云端团队空间。</p>
+    </div>
+    <div class="preset-grid">
+      <div class="preset-card">
+        <div class="preset-thumb">
+          <div class="film-mini scene-1"><div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div></div>
+          <span class="preset-state">已套用 12</span>
+        </div>
+        <div class="preset-body">
+          <b>熔金黄昏</b>
+          <small>曲线 + HSL · 色温 +720K</small>
+          <div class="preset-tags"><span class="hot">风光</span><span>暖调</span><span>高对比</span></div>
+        </div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-thumb">
+          <div class="film-mini scene-2"><div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div></div>
+          <span class="preset-state">已套用 8</span>
+        </div>
+        <div class="preset-body">
+          <b>冰蓝晨雾</b>
+          <small>去雾 + 冷调 · 阴影 +26</small>
+          <div class="preset-tags"><span>冷调</span><span>低饱和</span><span>通透</span></div>
+        </div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-thumb">
+          <div class="film-mini scene-3"><div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div></div>
+          <span class="preset-state sync">同步中 64%</span>
+        </div>
+        <div class="preset-body">
+          <b>胶片 · 暮色人像</b>
+          <small>颗粒 32 · 绿色调偏移</small>
+          <div class="preset-tags"><span class="hot">人像</span><span>胶片感</span><span>肤色保护</span></div>
+        </div>
+      </div>
+      <div class="preset-card">
+        <div class="preset-thumb">
+          <div class="film-mini scene-5"><div class="ph-sky"></div><div class="ph-sun"></div><div class="ph-ridge"></div><div class="ph-water"></div></div>
+          <span class="preset-state">已套用 21</span>
+        </div>
+        <div class="preset-body">
+          <b>深空夜景</b>
+          <small>降噪 +46 · 星点增强</small>
+          <div class="preset-tags"><span>夜景</span><span>星空</span><span>低照度</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="batch-bar">
+      <span class="micro">批量导出队列</span>
+      <div class="progress"><i></i></div>
+      <span class="mono">已完成 <b>34</b> / 50 张 · 预计剩余 <b>00:42</b></span>
+      <button class="btn">暂停</button>
+      <button class="btn btn-primary">导出全部</button>
+    </div>
+  </section>
+
+  <!-- 特写 3：快捷键 -->
+  <section class="detail-sec">
+    <div class="sec-head">
+      <div class="sec-eyebrow">Keyboard First · 快捷键</div>
+      <h2>为效率而生的<em>全键盘</em> 工作流</h2>
+      <p>专业修图讲究节奏。APERTURE 为高频操作设计了完整的快捷键体系，左手键盘右手压感笔，让修图像弹奏一样流畅。</p>
+    </div>
+    <div class="keys-panel">
+      <div class="keys-grid">
+        <div class="key-col">
+          <h4>工具切换</h4>
+          <div class="key-row"><span>移动 / 选区</span><span class="k"><kbd>V</kbd></span></div>
+          <div class="key-row"><span>裁剪 / 拉直</span><span class="k"><kbd>C</kbd></span></div>
+          <div class="key-row"><span>调整画笔</span><span class="k"><kbd>K</kbd></span></div>
+          <div class="key-row"><span>污点修复</span><span class="k"><kbd>Q</kbd></span></div>
+          <div class="key-row"><span>线性渐变滤镜</span><span class="k"><kbd>G</kbd></span></div>
+          <div class="key-row"><span>液化塑形</span><span class="k"><kbd>L</kbd></span></div>
+        </div>
+        <div class="key-col">
+          <h4>视图控制</h4>
+          <div class="key-row"><span>切换原片 / 效果对比</span><span class="k"><kbd>\</kbd></span></div>
+          <div class="key-row"><span>100% 实际像素</span><span class="k"><kbd>⌘</kbd><kbd>1</kbd></span></div>
+          <div class="key-row"><span>适应画布</span><span class="k"><kbd>⌘</kbd><kbd>0</kbd></span></div>
+          <div class="key-row"><span>显示网格线</span><span class="k"><kbd>⌘</kbd><kbd>'</kbd></span></div>
+          <div class="key-row"><span>软打样预览</span><span class="k"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>Y</kbd></span></div>
+          <div class="key-row"><span>隐藏 / 显示面板</span><span class="k"><kbd>Tab</kbd></span></div>
+        </div>
+        <div class="key-col">
+          <h4>调整参数</h4>
+          <div class="key-row"><span>曝光 +0.10 EV</span><span class="k"><kbd>↑</kbd></span></div>
+          <div class="key-row"><span>曝光 −0.10 EV</span><span class="k"><kbd>↓</kbd></span></div>
+          <div class="key-row"><span>高光修复 −10</span><span class="k"><kbd>⌥</kbd><kbd>H</kbd></span></div>
+          <div class="key-row"><span>阴影提升 +10</span><span class="k"><kbd>⌥</kbd><kbd>S</kbd></span></div>
+          <div class="key-row"><span>自动白平衡</span><span class="k"><kbd>W</kbd></span></div>
+          <div class="key-row"><span>复位全部调整</span><span class="k"><kbd>⌘</kbd><kbd>R</kbd></span></div>
+        </div>
+        <div class="key-col">
+          <h4>文件与输出</h4>
+          <div class="key-row"><span>导入 / 打开素材</span><span class="k"><kbd>⌘</kbd><kbd>O</kbd></span></div>
+          <div class="key-row"><span>导出当前视图</span><span class="k"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>E</kbd></span></div>
+          <div class="key-row"><span>批量导出队列</span><span class="k"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>E</kbd></span></div>
+          <div class="key-row"><span>添加星级标记</span><span class="k"><kbd>1</kbd>–<kbd>5</kbd></span></div>
+          <div class="key-row"><span>切换下一张 / 上一张</span><span class="k"><kbd>←</kbd><kbd>→</kbd></span></div>
+          <div class="key-row"><span>快速收藏</span><span class="k"><kbd>P</kbd></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===================== 导出预设弹窗 ===================== -->
+<div class="modal-mask" id="exportModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>导出 · IMG_20261014_落日海崖.CR3</h3>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="micro" style="margin-bottom:10px">导出预设</div>
+        <div class="export-list">
+          <div class="export-opt on">
+            <b>JPEG · 高质量打印</b>
+            <small>质量 92 · 300dpi · Adobe RGB</small>
+          </div>
+          <div class="export-opt">
+            <b>TIFF · 16bit 无损</b>
+            <small>LZW 压缩 · ProPhoto RGB</small>
+          </div>
+          <div class="export-opt">
+            <b>WebP · 网络优化</b>
+            <small>质量 82 · sRGB · 长边 2560px</small>
+          </div>
+          <div class="export-opt">
+            <b>DNG · 负片归档</b>
+            <small>嵌入原始 RAW · 含调整记录</small>
+          </div>
+        </div>
+      </div>
+      <div class="export-fields">
+        <div class="field">
+          <label>色彩空间</label>
+          <div class="fake-input">Adobe RGB (1998)</div>
+        </div>
+        <div class="field">
+          <label>输出尺寸</label>
+          <div class="fake-input">6000 × 4000 px · 100%</div>
+        </div>
+        <div class="field">
+          <label>文件命名</label>
+          <div class="fake-input">{名称}_{日期}_{预设}</div>
+        </div>
+        <div class="field">
+          <label>导出位置</label>
+          <div class="fake-input">~/Pictures/Aperture/2026-10-14/</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" id="modalCancel">取消</button>
+      <button class="btn">加入队列</button>
+      <button class="btn btn-primary">导出 1 张</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 页脚 ===================== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div class="brand-name">APER<span>TURE</span></div>
+      </div>
+      <p>APERTURE 是一套面向专业摄影师与修图师的桌面端显影工作台，支持 RAW 显影、分区蒙版调色、批量预设与色彩管理输出，全流程非破坏性。</p>
+    </div>
+    <div class="footer-col">
+      <h5>产品</h5>
+      <a href="#">显影工作台</a>
+      <a href="#">蒙版工作室</a>
+      <a href="#">批量输出队列</a>
+      <a href="#">镜头校正库</a>
+    </div>
+    <div class="footer-col">
+      <h5>资源</h5>
+      <a href="#">快捷键速查卡</a>
+      <a href="#">色彩管理白皮书</a>
+      <a href="#">预设社区</a>
+      <a href="#">RAW 支持列表</a>
+    </div>
+    <div class="footer-col">
+      <h5>支持</h5>
+      <a href="#">使用文档</a>
+      <a href="#">故障排查</a>
+      <a href="#">性能优化指南</a>
+      <a href="#">联系技术支持</a>
+    </div>
+  </div>
+  <div class="footer-bar">
+    <span>© 2026 Aperture Imaging Studio · 保留所有权利</span>
+    <span class="ver">APERTURE v4.2.1 · Build 20261014 · 中文（简体）</span>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   交互逻辑：滑杆 / 胶片条 / 对比拖动 / 工具轨 / 弹窗 / 缩放
+   ============================================================ */
+(function(){
+  'use strict';
+
+  /* ---------- 滑杆：数值显示 + 填充进度 ---------- */
+  var wraps = document.querySelectorAll('.slider-wrap');
+  wraps.forEach(function(wrap){
+    var input = wrap.querySelector('input[type="range"]');
+    if(!input) return;
+    function sync(){
+      var min = parseFloat(input.min), max = parseFloat(input.max);
+      var v = parseFloat(input.value);
+      var p = ((v - min) / (max - min)) * 100;
+      wrap.style.setProperty('--p', p + '%');
+      // 数值文本
+      var row = wrap.closest('.slider-row');
+      var valEl = row ? row.querySelector('.val') : null;
+      if(valEl){
+        var txt = valEl.textContent;
+        if(txt.indexOf('EV') > -1){
+          valEl.textContent = (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2) + ' EV';
+        }else if(txt.indexOf('K') > -1 && max > 500){
+          valEl.textContent = (v >= 0 ? '+' : '−') + Math.abs(Math.round(v)) + ' K';
+        }else if(txt.indexOf('px') > -1){
+          valEl.textContent = v.toFixed(1) + ' px';
+        }else{
+          valEl.textContent = (v >= 0 ? '+' : '−') + Math.abs(Math.round(v));
+        }
+      }
+    }
+    input.addEventListener('input', sync);
+    sync();
+  });
+
+  /* ---------- 画布滤镜预览（曝光滑杆联动） ---------- */
+  var exposure = document.getElementById('exposure');
+  var photoAfter = document.getElementById('photoAfter');
+  function applyFilter(){
+    if(!exposure || !photoAfter) return;
+    var ev = parseFloat(exposure.value);
+    var bright = 1 + ev * 0.18;
+    photoAfter.style.filter = 'brightness(' + bright.toFixed(3) + ') contrast(1.06) saturate(1.12)';
+  }
+  if(exposure){
+    exposure.addEventListener('input', applyFilter);
+    applyFilter();
+  }
+
+  /* ---------- 胶片条：切换画布场景 ---------- */
+  var rail = document.getElementById('filmRail');
+  var photoBefore = document.getElementById('photoBefore');
+  var fileName = document.getElementById('fileName');
+  if(rail){
+    rail.addEventListener('click', function(e){
+      var item = e.target.closest('.film-item');
+      if(!item) return;
+      rail.querySelectorAll('.film-item').forEach(function(el){
+        el.classList.remove('on');
+      });
+      item.classList.add('on');
+      var scene = item.getAttribute('data-scene');
+      [photoBefore, photoAfter].forEach(function(ph){
+        if(!ph) return;
+        ph.className = ph.className.replace(/scene-\d+/g, '').trim();
+        ph.classList.add('scene-' + scene);
+      });
+      if(fileName){
+        fileName.textContent = item.getAttribute('data-file');
+      }
+      // 重置对比分割线到中间，制造“重新显影”动效
+      var frame = document.getElementById('photoFrame');
+      if(frame){
+        frame.style.setProperty('--split', '52%');
+      }
+    });
+  }
+
+  /* ---------- before / after 拖动对比 ---------- */
+  var frame = document.getElementById('photoFrame');
+  var splitLine = document.getElementById('splitLine');
+  if(frame && splitLine){
+    var dragging = false;
+    function setSplit(clientX){
+      var rect = frame.getBoundingClientRect();
+      var p = ((clientX - rect.left) / rect.width) * 100;
+      p = Math.max(2, Math.min(98, p));
+      frame.style.setProperty('--split', p + '%');
+    }
+    splitLine.addEventListener('pointerdown', function(e){
+      dragging = true;
+      splitLine.setPointerCapture(e.pointerId);
+    });
+    window.addEventListener('pointermove', function(e){
+      if(dragging) setSplit(e.clientX);
+    });
+    window.addEventListener('pointerup', function(){
+      dragging = false;
+    });
+    // 点击画布任意位置也可移动分割线
+    frame.addEventListener('click', function(e){
+      setSplit(e.clientX);
+    });
+  }
+
+  /* ---------- 工具轨：激活态 ---------- */
+  document.querySelectorAll('.tool').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('.tool').forEach(function(el){
+        el.classList.remove('active');
+      });
+      t.classList.add('active');
+    });
+  });
+
+  /* ---------- 蒙版列表 / 图层 / 色卡：单选 ---------- */
+  function singleSelect(selector, cls){
+    document.querySelectorAll(selector).forEach(function(el){
+      el.addEventListener('click', function(){
+        el.parentNode.querySelectorAll(selector).forEach(function(sib){
+          sib.classList.remove(cls);
+        });
+        el.classList.add(cls);
+      });
+    });
+  }
+  singleSelect('.mask-item', 'on');
+  singleSelect('.layer-item', 'on');
+  singleSelect('.swatch', 'on');
+  singleSelect('.export-opt', 'on');
+  singleSelect('.chan', 'on');
+
+  /* ---------- 顶部分段控件 ---------- */
+  document.querySelectorAll('.seg').forEach(function(seg){
+    seg.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){
+        seg.querySelectorAll('button').forEach(function(x){
+          x.classList.remove('on');
+        });
+        b.classList.add('on');
+      });
+    });
+  });
+
+  /* ---------- 缩放 ---------- */
+  var zoomVal = document.getElementById('zoomVal');
+  var zoom = 68.4;
+  function renderZoom(){
+    if(zoomVal) zoomVal.textContent = zoom.toFixed(1) + '%';
+  }
+  var zin = document.getElementById('zoomIn');
+  var zout = document.getElementById('zoomOut');
+  if(zin) zin.addEventListener('click', function(){
+    zoom = Math.min(400, zoom * 1.25);
+    renderZoom();
+  });
+  if(zout) zout.addEventListener('click', function(){
+    zoom = Math.max(12.5, zoom / 1.25);
+    renderZoom();
+  });
+
+  /* ---------- 导出弹窗 ---------- */
+  var modal = document.getElementById('exportModal');
+  var exportBtn = document.getElementById('exportBtn');
+  function closeModal(){ if(modal) modal.classList.remove('open'); }
+  if(exportBtn && modal){
+    exportBtn.addEventListener('click', function(){ modal.classList.add('open'); });
+  }
+  var mClose = document.getElementById('modalClose');
+  var mCancel = document.getElementById('modalCancel');
+  if(mClose) mClose.addEventListener('click', closeModal);
+  if(mCancel) mCancel.addEventListener('click', closeModal);
+  if(modal){
+    modal.addEventListener('click', function(e){
+      if(e.target === modal) closeModal();
+    });
+  }
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeModal();
+  });
+
+  /* ---------- 快捷键浮层：可关闭 ---------- */
+  var hideCard = document.getElementById('hideCard');
+  var floatCard = document.getElementById('floatCard');
+  if(hideCard && floatCard){
+    hideCard.addEventListener('click', function(){
+      floatCard.style.display = 'none';
+    });
+  }
+
+  /* ---------- 直方图：轻微呼吸动效，模拟实时分析 ---------- */
+  var hist = document.getElementById('histogram');
+  if(hist && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var bars = hist.querySelectorAll('i');
+    var bases = [];
+    bars.forEach(function(b){ bases.push(parseFloat(b.style.height)); });
+    setInterval(function(){
+      bars.forEach(function(b, i){
+        var jitter = (Math.random() - 0.5) * 3.2;
+        b.style.height = Math.max(3, Math.min(100, bases[i] + jitter)) + '%';
+      });
+    }, 1600);
+  }
+})();
+</script>
+
+</body>
+</html>

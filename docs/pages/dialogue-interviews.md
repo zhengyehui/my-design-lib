@@ -33,8 +33,8 @@ pageDetail:
     text: TERRA 窑火 陶艺工作室作品集
     link: /pages/terra-ceramics.html
   next:
-    text: Aegis Trust Center 安全合规中心
-    link: /pages/trust-center.html
+    text: Petit Lune 有机母婴精品店
+    link: /pages/petit-lune-baby.html
 ---
 
 <PageDetail />

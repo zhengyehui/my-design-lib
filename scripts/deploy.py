@@ -5,12 +5,13 @@ import paramiko
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect("192.168.124.17", port=11928, username="root", password="Weta@0928", timeout=15)
+ssh.connect("192.168.124.17", port=11928, username="root", password="Weta@0928")
 
 sftp = ssh.open_sftp()
 local_dist = os.path.expanduser('~/desktop/project/design-lib/docs/.vitepress/dist')
 remote_base = '/var/www/design-lib/'
 
+# 只做 mkdir -p，不做任何删除操作
 ssh.exec_command(f'mkdir -p {remote_base}')
 
 uploaded = 0
