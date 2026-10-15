@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 205 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 207 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1890,6 +1890,24 @@ const pages = [
     colors: ['#121016', '#FF6B35', '#58C7C2'],
     rating: 9.3,
     description: '暗色专业修图工作台 App 界面：三栏布局（CSS 图标工具轨 + before/after 拖动对比画布 + 直方图/滑杆参数面板）与底部胶片条，附蒙版精修、批量预设、快捷键表特写区，照片全为 CSS 渐变绘制',
+  },
+  {
+    id: 'wedding-estate',
+    title: 'Verrière 婚礼庄园',
+    category: 'industry',
+    tags: ['婚礼场地', '庄园', '编辑排版', 'CSS 拱门', '时间轴'],
+    colors: ['#F7F3EC', '#4C5346', '#B08D57'],
+    rating: 9.4,
+    description: '法式庄园婚礼场地长页：奶油白底 + 鼠尾草绿 + 香槟金，Cormorant Garamond 衬线大字，Hero 中央 CSS 玻璃花房拱门（网格钢骨线），三空间卡片 + 婚礼当日五段时间轴 + 横向影像画廊 + 预约看场表单',
+  },
+  {
+    id: 'opera-season',
+    title: 'Orphée 歌剧院演出季',
+    category: 'creative',
+    tags: ['歌剧院', '演出季', '剧场', 'CSS 座位图', '跑马灯'],
+    colors: ['#0D0A10', '#6B1D2C', '#D9B878'],
+    rating: 9.3,
+    description: '歌剧院 2026 演出季官网：深墨紫黑 + 酒红幕布 + 香槟金高光，Hero 两侧 CSS 幕布褶皱 + 顶部闪烁灯泡，开幕大戏分栏 + 七场演出日历列表 + 三档季票 + CSS 手绘剧场座位图 + 剧目无限跑马灯',
   },
 ]
 

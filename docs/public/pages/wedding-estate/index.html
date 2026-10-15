@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verrière 婚礼庄园 · Maison de Verre</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #f7f3ec;
+  --cream-deep: #efe7db;
+  --ink: #24211c;
+  --ink-soft: #5c554a;
+  --sage: #7c8471;
+  --sage-deep: #4c5346;
+  --gold: #b08d57;
+  --gold-light: #d9c39c;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', var(--font-sans);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* ─── decorative rule ─── */
+.rule {
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+  margin: 2.5rem 0;
+}
+.rule::before, .rule::after {
+  content: ''; height: 1px; width: 72px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.rule::after { background: linear-gradient(90deg, var(--gold), transparent); }
+.rule .diamond {
+  width: 7px; height: 7px; background: var(--gold);
+  transform: rotate(45deg);
+}
+
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 400;
+}
+.display {
+  font-family: var(--serif);
+  font-weight: 300;
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+}
+.italic { font-style: italic; color: var(--sage-deep); }
+
+/* ─── NAV ─── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  padding: 1.5rem 3rem;
+  transition: background .5s ease, padding .5s ease, box-shadow .5s ease;
+}
+.nav.scrolled {
+  background: rgba(247,243,236,0.92);
+  backdrop-filter: blur(18px);
+  padding: 0.9rem 3rem;
+  box-shadow: 0 1px 0 rgba(176,141,87,0.18);
+}
+.nav-links { display: flex; gap: 2.2rem; }
+.nav-links a {
+  font-size: 0.76rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-soft); position: relative; padding-bottom: 3px;
+}
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 1px;
+  background: var(--gold); transition: width .35s ease;
+}
+.nav-links a:hover::after { width: 100%; }
+.nav-logo {
+  font-family: var(--serif); font-size: 1.55rem; letter-spacing: 0.16em;
+  text-transform: uppercase; text-align: center;
+}
+.nav-logo small {
+  display: block; font-family: var(--sans); font-size: 0.55rem;
+  letter-spacing: 0.5em; color: var(--gold); margin-top: 2px;
+}
+.nav-cta {
+  justify-self: end;
+  font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+  border: 1px solid var(--gold); color: var(--gold);
+  padding: 0.75rem 1.7rem; transition: all .4s ease;
+}
+.nav-cta:hover { background: var(--gold); color: var(--cream); }
+
+/* ─── HERO ─── */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 10rem 2rem 6rem;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(217,195,156,0.34), transparent 65%),
+    radial-gradient(ellipse 60% 55% at 12% 90%, rgba(124,132,113,0.18), transparent 70%),
+    radial-gradient(ellipse 55% 50% at 88% 82%, rgba(176,141,87,0.16), transparent 70%),
+    linear-gradient(180deg, #f9f5ee 0%, var(--cream) 60%, var(--cream-deep) 100%);
+}
+.hero-arch {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: min(620px, 74vw); height: 78vh;
+  border: 1px solid rgba(176,141,87,0.35);
+  border-bottom: none;
+  border-radius: 320px 320px 0 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.55), rgba(217,195,156,0.14)),
+    repeating-linear-gradient(90deg, rgba(176,141,87,0.11) 0 1px, transparent 1px 74px),
+    repeating-linear-gradient(0deg, rgba(176,141,87,0.08) 0 1px, transparent 1px 74px);
+  box-shadow: 0 -30px 90px rgba(176,141,87,0.14) inset;
+}
+.hero-arch::after {
+  content: ''; position: absolute; inset: 22px;
+  border: 1px solid rgba(176,141,87,0.22);
+  border-bottom: none; border-radius: 300px 300px 0 0;
+}
+.hero-content { position: relative; z-index: 2; max-width: 900px; }
+.hero h1 {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(3.2rem, 9vw, 8.2rem);
+  line-height: 0.95; letter-spacing: -0.02em; margin: 1.6rem 0 1.2rem;
+}
+.hero h1 em { font-style: italic; color: var(--sage-deep); }
+.hero-sub {
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(1.15rem, 2.3vw, 1.75rem); color: var(--ink-soft);
+  line-height: 1.55; max-width: 620px; margin: 0 auto;
+}
+.hero-meta {
+  display: flex; align-items: center; justify-content: center; gap: 1.6rem;
+  margin-top: 3.2rem; flex-wrap: wrap;
+}
+.hero-meta .chip {
+  font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-soft); padding: 0.75rem 1.55rem;
+  border: 1px solid rgba(176,141,87,0.42); border-radius: 999px;
+  background: rgba(255,255,255,0.5);
+}
+.hero-actions { margin-top: 2.8rem; display: flex; gap: 1.1rem; justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  padding: 1.15rem 2.5rem; font-size: 0.78rem; letter-spacing: 0.26em;
+  text-transform: uppercase; transition: all .45s cubic-bezier(.2,.7,.3,1);
+  cursor: pointer; border: 1px solid var(--ink);
+}
+.btn-solid { background: var(--ink); color: var(--cream); }
+.btn-solid:hover { background: var(--sage-deep); border-color: var(--sage-deep); transform: translateY(-3px); box-shadow: 0 18px 34px rgba(36,33,28,0.22); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: rgba(36,33,28,0.3); }
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+.scroll-cue {
+  position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
+  z-index: 3; font-size: 0.62rem; letter-spacing: 0.42em; text-transform: uppercase;
+  color: var(--ink-soft); display: flex; flex-direction: column; align-items: center; gap: 0.85rem;
+}
+.scroll-cue .line { width: 1px; height: 52px; background: linear-gradient(180deg, var(--gold), transparent); animation: drip 2.4s ease-in-out infinite; }
+@keyframes drip { 0%,100% { opacity:.35; transform: scaleY(.6); transform-origin: top; } 50% { opacity:1; transform: scaleY(1); } }
+
+/* ─── SECTIONS ─── */
+section { position: relative; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 3rem; }
+.section-pad { padding: 9rem 0; }
+
+.intro { background: var(--cream); }
+.intro-grid {
+  display: grid; grid-template-columns: 1fr 1.15fr; gap: 6rem; align-items: center;
+}
+.intro-quote {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: clamp(1.9rem, 3.4vw, 3.15rem); line-height: 1.28; color: var(--sage-deep);
+}
+.intro-quote .mark {
+  display: block; font-size: 5.5rem; line-height: 0.5; color: var(--gold);
+  margin-bottom: 1.4rem; font-style: normal;
+}
+.intro-body p { font-size: 1.02rem; line-height: 2; color: var(--ink-soft); margin-bottom: 1.5rem; }
+.intro-sign {
+  font-family: var(--serif); font-style: italic; font-size: 1.45rem; color: var(--ink); margin-top: 2.2rem;
+}
+.intro-sign small {
+  display: block; font-family: var(--sans); font-style: normal;
+  font-size: 0.68rem; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--gold); margin-top: 0.55rem;
+}
+
+/* ─── STATS ─── */
+.stats-band {
+  background: var(--sage-deep); color: var(--cream);
+  padding: 5.5rem 0; position: relative; overflow: hidden;
+}
+.stats-band::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 120% at 15% 50%, rgba(217,195,156,0.16), transparent 65%),
+              radial-gradient(ellipse 45% 110% at 88% 40%, rgba(176,141,87,0.2), transparent 65%);
+}
+.stats-grid {
+  position: relative; display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2rem; text-align: center;
+}
+.stat-num {
+  font-family: var(--serif); font-size: clamp(2.8rem, 5vw, 4.3rem);
+  font-weight: 300; color: var(--gold-light); line-height: 1;
+}
+.stat-label {
+  margin-top: 0.95rem; font-size: 0.7rem; letter-spacing: 0.32em;
+  text-transform: uppercase; color: rgba(247,243,236,0.72);
+}
+
+/* ─── ESTATE CARDS ─── */
+.estate { background: var(--cream-deep); }
+.section-head { text-align: center; max-width: 720px; margin: 0 auto 5.5rem; }
+.section-head h2 {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(2.5rem, 5vw, 4.4rem); line-height: 1.06; margin: 1.4rem 0 1.5rem;
+}
+.section-head p { font-size: 1.02rem; line-height: 1.95; color: var(--ink-soft); }
+
+.estate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.2rem; }
+.estate-card {
+  background: var(--cream); overflow: hidden;
+  border: 1px solid rgba(176,141,87,0.22);
+  transition: transform .6s cubic-bezier(.2,.7,.3,1), box-shadow .6s ease;
+}
+.estate-card:hover { transform: translateY(-12px); box-shadow: 0 32px 60px rgba(76,83,70,0.18); }
+.estate-visual {
+  height: 380px; position: relative; overflow: hidden;
+  transition: transform 1.1s cubic-bezier(.2,.7,.3,1);
+}
+.estate-card:hover .estate-visual { transform: scale(1.06); }
+.estate-visual.v1 {
+  background:
+    linear-gradient(155deg, rgba(36,33,28,0.1), rgba(36,33,28,0.42)),
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.6), transparent 42%),
+    linear-gradient(160deg, #cfd3c4 0%, #97a08a 48%, #5c6656 100%);
+}
+.estate-visual.v2 {
+  background:
+    linear-gradient(155deg, rgba(36,33,28,0.08), rgba(36,33,28,0.4)),
+    radial-gradient(circle at 72% 22%, rgba(255,236,214,0.75), transparent 44%),
+    linear-gradient(160deg, #e7cdb3 0%, #c99f7c 46%, #8c6444 100%);
+}
+.estate-visual.v3 {
+  background:
+    linear-gradient(155deg, rgba(36,33,28,0.08), rgba(36,33,28,0.46)),
+    radial-gradient(circle at 50% 18%, rgba(255,255,255,0.55), transparent 46%),
+    linear-gradient(160deg, #d8cfc2 0%, #a8988a 48%, #6b5c50 100%);
+}
+.estate-visual .tag {
+  position: absolute; top: 1.4rem; left: 1.4rem;
+  font-size: 0.62rem; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--cream); background: rgba(36,33,28,0.42);
+  backdrop-filter: blur(10px); padding: 0.55rem 1.1rem;
+}
+.estate-visual .frame {
+  position: absolute; inset: 1.15rem;
+  border: 1px solid rgba(247,243,236,0.42); pointer-events: none;
+}
+.estate-body { padding: 2.15rem 2.05rem 2.35rem; }
+.estate-body .num {
+  font-family: var(--serif); font-size: 0.95rem; color: var(--gold);
+  letter-spacing: 0.28em;
+}
+.estate-body h3 {
+  font-family: var(--serif); font-weight: 400; font-size: 1.92rem;
+  margin: 0.75rem 0 0.95rem; line-height: 1.18;
+}
+.estate-body p { font-size: 0.935rem; line-height: 1.92; color: var(--ink-soft); }
+.estate-body .more {
+  display: inline-flex; align-items: center; gap: 0.65rem; margin-top: 1.65rem;
+  font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold);
+}
+.estate-body .more span { transition: transform .4s ease; }
+.estate-card:hover .more span { transform: translateX(7px); }
+
+/* ─── TIMELINE ─── */
+.timeline-sec { background: var(--cream); }
+.timeline {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
+  border-top: 1px solid rgba(176,141,87,0.3);
+}
+.tl-item {
+  padding: 2.8rem 1.65rem 2.6rem; border-right: 1px solid rgba(176,141,87,0.22);
+  position: relative; transition: background .5s ease;
+}
+.tl-item:last-child { border-right: none; }
+.tl-item:hover { background: rgba(217,195,156,0.18); }
+.tl-item::before {
+  content: ''; position: absolute; top: -5px; left: 1.65rem;
+  width: 9px; height: 9px; background: var(--gold); transform: rotate(45deg);
+}
+.tl-time {
+  font-family: var(--serif); font-size: 1.85rem; color: var(--gold); font-weight: 400;
+}
+.tl-item h4 {
+  font-family: var(--serif); font-size: 1.32rem; font-weight: 500;
+  margin: 0.85rem 0 0.75rem;
+}
+.tl-item p { font-size: 0.855rem; line-height: 1.82; color: var(--ink-soft); }
+
+/* ─── GALLERY ─── */
+.gallery { background: var(--cream-deep); overflow: hidden; }
+.gal-track {
+  display: flex; gap: 1.55rem; padding: 0 3rem 1.2rem;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+}
+.gal-track::-webkit-scrollbar { height: 3px; }
+.gal-track::-webkit-scrollbar-thumb { background: var(--gold); }
+.gal-item {
+  flex: 0 0 320px; height: 440px; scroll-snap-align: start;
+  position: relative; overflow: hidden; border: 1px solid rgba(176,141,87,0.2);
+}
+.gal-item .frame { position: absolute; inset: 1rem; border: 1px solid rgba(247,243,236,0.4); z-index: 2; pointer-events: none; }
+.gal-item .cap {
+  position: absolute; left: 1.65rem; bottom: 1.65rem; z-index: 3;
+  color: var(--cream); font-family: var(--serif); font-style: italic; font-size: 1.25rem;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.35);
+}
+.g1 { background: linear-gradient(165deg,#e3d2b8,#a98461 60%,#6c4f36); }
+.g2 { background: linear-gradient(165deg,#c8cec0,#7d8a72 58%,#414c3c); }
+.g3 { background: linear-gradient(165deg,#e9dcd4,#b8968c 55%,#6f4c46); }
+.g4 { background: linear-gradient(165deg,#d5d8dd,#8d95a1 55%,#484f5c); }
+.g5 { background: linear-gradient(165deg,#f0e2c6,#cba771 58%,#7c5b31); }
+.g6 { background: linear-gradient(165deg,#d9cfd6,#98809c 55%,#54415c); }
+
+/* ─── TESTIMONIAL ─── */
+.testi { background: var(--sage-deep); color: var(--cream); text-align: center; position: relative; overflow: hidden; }
+.testi::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(217,195,156,0.2), transparent 70%);
+}
+.testi-inner { position: relative; max-width: 880px; margin: 0 auto; }
+.testi q {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: clamp(1.65rem, 3.3vw, 2.75rem); line-height: 1.48; display: block;
+  quotes: '“' '”';
+}
+.testi .who {
+  margin-top: 2.6rem; font-size: 0.72rem; letter-spacing: 0.36em;
+  text-transform: uppercase; color: var(--gold-light);
+}
+.testi .stars { margin-top: 1.35rem; color: var(--gold-light); letter-spacing: 0.55em; font-size: 1.05rem; }
+
+/* ─── RSVP ─── */
+.rsvp { background: var(--cream); }
+.rsvp-card {
+  display: grid; grid-template-columns: 1.05fr 1fr;
+  border: 1px solid rgba(176,141,87,0.32); background: var(--cream-deep);
+}
+.rsvp-visual {
+  padding: 4.5rem 3.6rem; color: var(--cream); position: relative; overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 70% at 20% 15%, rgba(217,195,156,0.32), transparent 65%),
+    linear-gradient(155deg, var(--sage-deep), #333b2e);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.rsvp-visual h3 {
+  font-family: var(--serif); font-weight: 300; font-size: clamp(2.15rem, 3.7vw, 3.25rem);
+  line-height: 1.12; margin: 1.25rem 0 1.55rem;
+}
+.rsvp-visual p { font-size: 0.975rem; line-height: 1.95; color: rgba(247,243,236,0.76); }
+.rsvp-contact { margin-top: 2.8rem; display: grid; gap: 0.9rem; }
+.rsvp-contact div { display: flex; gap: 1rem; align-items: baseline; font-size: 0.885rem; color: rgba(247,243,236,0.82); }
+.rsvp-contact .k { font-size: 0.66rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold-light); min-width: 92px; }
+.rsvp-form { padding: 4.2rem 3.4rem; background: var(--cream); }
+.field { margin-bottom: 1.55rem; }
+.field label {
+  display: block; font-size: 0.66rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--ink-soft); margin-bottom: 0.65rem;
+}
+.field input, .field select, .field textarea {
+  width: 100%; padding: 0.95rem 0.25rem; font-family: var(--sans);
+  font-size: 0.975rem; color: var(--ink); background: transparent;
+  border: none; border-bottom: 1px solid rgba(36,33,28,0.24);
+  outline: none; transition: border-color .35s ease;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-bottom-color: var(--gold); }
+.field textarea { resize: vertical; min-height: 78px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.65rem; }
+.rsvp-form .btn { width: 100%; justify-content: center; margin-top: 0.85rem; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--ink); color: rgba(247,243,236,0.7);
+  padding: 5.5rem 0 2.6rem;
+}
+.foot-grid {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3.2rem;
+  padding-bottom: 3.4rem; border-bottom: 1px solid rgba(247,243,236,0.14);
+}
+.foot-brand .logo {
+  font-family: var(--serif); font-size: 1.85rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--cream);
+}
+.foot-brand p { margin-top: 1.15rem; font-size: 0.9rem; line-height: 1.95; max-width: 300px; }
+.foot-col h5 {
+  font-size: 0.66rem; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--gold-light); margin-bottom: 1.45rem;
+}
+.foot-col a, .foot-col p { display: block; font-size: 0.9rem; line-height: 2.25; transition: color .3s ease; }
+.foot-col a:hover { color: var(--gold-light); }
+.foot-bottom {
+  padding-top: 2.35rem; display: flex; justify-content: space-between;
+  font-size: 0.76rem; letter-spacing: 0.14em; color: rgba(247,243,236,0.45); flex-wrap: wrap; gap: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .intro-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .estate-grid { grid-template-columns: 1fr 1fr; }
+  .timeline { grid-template-columns: repeat(2, 1fr); }
+  .tl-item { border-bottom: 1px solid rgba(176,141,87,0.22); }
+  .rsvp-card { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 3rem; }
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 680px) {
+  .nav { grid-template-columns: 1fr auto; padding: 1.15rem 1.5rem; }
+  .nav-links { display: none; }
+  .wrap { padding: 0 1.5rem; }
+  .section-pad { padding: 5.5rem 0; }
+  .estate-grid { grid-template-columns: 1fr; }
+  .timeline { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; gap: 0; }
+  .foot-grid { grid-template-columns: 1fr; gap: 2.2rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-links">
+    <a href="#estate">庄园</a>
+    <a href="#day">婚礼当日</a>
+    <a href="#gallery">影像</a>
+    <a href="#voices">故事</a>
+  </div>
+  <div class="nav-logo">Verrière<small>Maison de Verre</small></div>
+  <a class="nav-cta" href="#rsvp">预约看场</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-arch"></div>
+  <div class="hero-content">
+    <div class="eyebrow">Est. 1928 · 法国普罗旺斯</div>
+    <h1>一座玻璃花房<br>与你的<em>百年之约</em></h1>
+    <p class="hero-sub">在十八公顷的薰衣草坡地之间，<br>让光、藤蔓与誓言，共同写下唯一的那一天。</p>
+    <div class="hero-meta">
+      <div class="chip">仅接待 12 场 / 年</div>
+      <div class="chip">仪式 · 宴会 · 住宿一体</div>
+      <div class="chip">含 24 间庄园客房</div>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-solid" href="#rsvp">预约私人看场</a>
+      <a class="btn btn-ghost" href="#estate">浏览庄园</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><div class="line"></div></div>
+</header>
+
+<!-- INTRO -->
+<section class="intro section-pad">
+  <div class="wrap intro-grid">
+    <div class="intro-quote">
+      <span class="mark">“</span>
+      我们不办婚礼，<br>我们只是把一整天<br>还给相爱的人。
+    </div>
+    <div class="intro-body">
+      <div class="eyebrow">Our Philosophy</div>
+      <div class="rule"><div class="diamond"></div></div>
+      <p>Verrière 建于 1928 年，最初是一座为冬季培育玫瑰而生的玻璃花房。九十余年后，那些钢骨与玻璃依然撑着同一片天光，只是如今，它承载的是两个人的开始。</p>
+      <p>我们坚持一天只接待一场婚礼。没有并行的仪式，没有赶场的宾客——从清晨的花艺布置到深夜的最后一支舞，整个庄园只属于你们。管家、花艺师、主厨与摄影师组成的五人小组，会在婚礼前 90 天开始与你一同筹备。</p>
+      <div class="intro-sign">Camille &amp; the Verrière team
+        <small>庄园主理人 · 婚礼总监</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-band">
+  <div class="wrap stats-grid">
+    <div><div class="stat-num">18</div><div class="stat-label">公顷 私属坡地</div></div>
+    <div><div class="stat-num">12</div><div class="stat-label">每年仅接场次</div></div>
+    <div><div class="stat-num">24</div><div class="stat-label">间 庄园客房</div></div>
+    <div><div class="stat-num">96</div><div class="stat-label">年 玻璃花房</div></div>
+  </div>
+</section>
+
+<!-- ESTATE -->
+<section class="estate section-pad" id="estate">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The Estate</div>
+      <h2>三个空间，<br>三种被爱的方式</h2>
+      <p>从可开启屋顶的玻璃花房，到暮色里的玫瑰园，再到以橡木与烛光构筑的宴会厅——每一个空间都为不同的仪式感而生。</p>
+    </div>
+    <div class="estate-grid">
+      <article class="estate-card">
+        <div class="estate-visual v1"><div class="frame"></div><div class="tag">Cérémonie</div></div>
+        <div class="estate-body">
+          <div class="num">01</div>
+          <h3>玻璃花房<br>The Glasshouse</h3>
+          <p>320㎡ 全玻璃穹顶，钢骨结构建于 1928 年。屋顶可电动开启，晴天时仪式在天光下进行，落雨时则成为最动人的白噪音背景。可容纳 180 位宾客。</p>
+          <span class="more">了解空间 <span>→</span></span>
+        </div>
+      </article>
+      <article class="estate-card">
+        <div class="estate-visual v2"><div class="frame"></div><div class="tag">Jardin</div></div>
+        <div class="estate-body">
+          <div class="num">02</div>
+          <h3>暮色玫瑰园<br>Roseraie</h3>
+          <p>三千株古典玫瑰与攀援蔷薇围合的圆形草坪，中央是一座百年石砌喷泉。日落前一小时的光线被称为「黄金二十分钟」，是宣誓与合影的最佳时刻。</p>
+          <span class="more">了解空间 <span>→</span></span>
+        </div>
+      </article>
+      <article class="estate-card">
+        <div class="estate-visual v3"><div class="frame"></div><div class="tag">Réception</div></div>
+        <div class="estate-body">
+          <div class="num">03</div>
+          <h3>橡木宴会厅<br>La Grande Salle</h3>
+          <p>手工橡木横梁、石灰岩壁炉与可调光烛台吊灯。主厨 Mathieu 以普罗旺斯时令食材设计七道式菜单，佐以庄园自酿的桃红葡萄酒。</p>
+          <span class="more">了解空间 <span>→</span></span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-sec section-pad" id="day">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The Day</div>
+      <h2>那一天的<em class="italic">时间刻度</em></h2>
+      <p>我们把婚礼当天拆解为五个章节，每一段都有专属的场域、气味与音乐。你只需要存在，其余交给时间。</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">14:00</div>
+        <h4>抵达与准备</h4>
+        <p>宾客从林荫道步入庄园，侍者奉上冰镇桃红与柠檬马鞭草。新人在二楼化妆间完成最后的准备。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">16:30</div>
+        <h4>玻璃花房仪式</h4>
+        <p>屋顶缓缓开启，弦乐四重奏奏响入场曲。誓词、戒指与那个吻，都发生在天光之下。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">18:00</div>
+        <h4>玫瑰园鸡尾酒会</h4>
+        <p>黄金二十分钟。香槟塔、生蚝吧与现场竖琴，宾客在花香中交换祝福。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">20:00</div>
+        <h4>橡木厅晚宴</h4>
+        <p>七道式晚宴由主厨亲自主理，每一道都对应你们故事里的一年。烛光渐次点亮。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">23:00</div>
+        <h4>星空下第一支舞</h4>
+        <p>庭院升起篝火与灯串，乐队切换到爵士。夜深时，客房的窗一扇扇亮起。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery section-pad" id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Gallery</div>
+      <h2>光在这里<br>是唯一的主角</h2>
+      <p>横向滑动，浏览庄园四季的影像记录。所有照片均由自然光拍摄，未经人工布光。</p>
+    </div>
+  </div>
+  <div class="gal-track">
+    <div class="gal-item g1"><div class="frame"></div><div class="cap">清晨的玻璃花房</div></div>
+    <div class="gal-item g2"><div class="frame"></div><div class="cap">玫瑰园的黄昏</div></div>
+    <div class="gal-item g3"><div class="frame"></div><div class="cap">长桌晚宴</div></div>
+    <div class="gal-item g4"><div class="frame"></div><div class="cap">冬日的钢骨</div></div>
+    <div class="gal-item g5"><div class="frame"></div><div class="cap">桃红与柑橘</div></div>
+    <div class="gal-item g6"><div class="frame"></div><div class="cap">客房晨光</div></div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testi section-pad" id="voices">
+  <div class="wrap testi-inner">
+    <div class="eyebrow" style="color: var(--gold-light)">In Their Words</div>
+    <div class="rule" style="margin: 2.2rem 0 2.8rem"><div class="diamond" style="background: var(--gold-light)"></div></div>
+    <q>婚礼结束后的第三天，我先生才忽然说：原来我们那天没有一次看手机。<br>那一刻我才意识到，Verrière 给我们的不是一场婚礼，是一整天完整的彼此。</q>
+    <div class="stars">★ ★ ★ ★ ★</div>
+    <div class="who">Élodie &amp; Antoine · 2025 年 6 月</div>
+  </div>
+</section>
+
+<!-- RSVP -->
+<section class="rsvp section-pad" id="rsvp">
+  <div class="wrap">
+    <div class="rsvp-card">
+      <div class="rsvp-visual">
+        <div>
+          <div class="eyebrow" style="color: var(--gold-light)">Private Visit</div>
+          <h3>来庄园走一趟，<br>答案会自己出现。</h3>
+          <p>我们每周仅开放两个私人看场时段，每次约 90 分钟。你会见到管家与主厨，尝到当日甜点，也可以在玫瑰园里坐一会儿。</p>
+        </div>
+        <div class="rsvp-contact">
+          <div><span class="k">地址</span><span>Chemin des Lavandes, 84560 Ménerbes, France</span></div>
+          <div><span class="k">电话</span><span>+33 4 90 72 18 28</span></div>
+          <div><span class="k">邮箱</span><span>bonjour@maison-verriere.fr</span></div>
+          <div><span class="k">看场</span><span>周四 / 周六 · 需提前 14 天预约</span></div>
+        </div>
+      </div>
+      <form class="rsvp-form" onsubmit="event.preventDefault(); this.querySelector('.btn').textContent='已收到，我们将在 48 小时内回复 ✓';">
+        <div class="field-row">
+          <div class="field"><label>你的称呼</label><input type="text" placeholder="Camille" required></div>
+          <div class="field"><label>邮箱</label><input type="email" placeholder="you@email.com" required></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>预计婚期</label><input type="text" placeholder="2027 年 6 月"></div>
+          <div class="field"><label>宾客人数</label>
+            <select>
+              <option>40 人以内</option>
+              <option>40 – 80 人</option>
+              <option>80 – 120 人</option>
+              <option>120 – 180 人</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>想和我们说的话</label><textarea placeholder="你们的故事、期待的氛围，或任何问题……"></textarea></div>
+        <button class="btn btn-solid" type="submit">提交预约申请</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo">Verrière</div>
+        <p>Maison de Verre — 一座建于 1928 年的玻璃花房，与它周围的十八公顷坡地。每年只接待十二场婚礼。</p>
+      </div>
+      <div class="foot-col">
+        <h5>庄园</h5>
+        <a href="#estate">玻璃花房</a>
+        <a href="#estate">暮色玫瑰园</a>
+        <a href="#estate">橡木宴会厅</a>
+        <a href="#gallery">四季影像</a>
+      </div>
+      <div class="foot-col">
+        <h5>服务</h5>
+        <a href="#rsvp">私人看场</a>
+        <a href="#day">婚礼当日流程</a>
+        <a href="#rsvp">住宿与客房</a>
+        <a href="#rsvp">餐饮与酒水</a>
+      </div>
+      <div class="foot-col">
+        <h5>联系</h5>
+        <p>Chemin des Lavandes</p>
+        <p>84560 Ménerbes, France</p>
+        <p>+33 4 90 72 18 28</p>
+        <p>bonjour@maison-verriere.fr</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Maison de Verre. Tous droits réservés.</span>
+      <span>Instagram · Pinterest · Journal</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+</script>
+</body>
+</html>

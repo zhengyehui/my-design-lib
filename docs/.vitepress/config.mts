@@ -402,7 +402,8 @@ export default defineConfig({
             { text: 'Instrumenta 字体展示', link: '/pages/type-specimen' },
             { text: 'Pulse VR 沉浸式体验', link: '/pages/pulse-vr' },
             { text: 'SynthWave AI 音乐制作', link: '/pages/synthwave-daw' },
-            { text: 'CELESTE 星象馆', link: '/pages/celeste-zodiac' }
+            { text: 'CELESTE 星象馆', link: '/pages/celeste-zodiac' },
+            { text: 'Orphée 歌剧院演出季', link: '/pages/opera-season' }
           ]
         },
         {
@@ -472,7 +473,8 @@ export default defineConfig({
             { text: 'Lumina Dental 现代牙科诊所', link: '/pages/lumina-dental' },
             { text: 'Ocean Autonomy 海洋自主机器人', link: '/pages/ocean-autonomy' },
             { text: 'Pawlished 宠物美容沙龙', link: '/pages/pawlished-grooming' },
-            { text: 'Verdant 城市垂直农场', link: '/pages/verdant-farms' }
+            { text: 'Verdant 城市垂直农场', link: '/pages/verdant-farms' },
+            { text: 'Verrière 婚礼庄园', link: '/pages/wedding-estate' }
           ]
         }
       ]
