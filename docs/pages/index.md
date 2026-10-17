@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 207 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 209 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1909,6 +1909,24 @@ const pages = [
     rating: 9.3,
     description: '歌剧院 2026 演出季官网：深墨紫黑 + 酒红幕布 + 香槟金高光，Hero 两侧 CSS 幕布褶皱 + 顶部闪烁灯泡，开幕大戏分栏 + 七场演出日历列表 + 三档季票 + CSS 手绘剧场座位图 + 剧目无限跑马灯',
   },
+  {
+    id: 'kairos-dance',
+    title: 'KAIROS — Mira Solène 舞蹈编导作品集',
+    category: 'portfolio',
+    tags: ['作品集', '舞蹈', '当代舞', '编导'],
+    colors: ['#f4f1ea', '#141210', '#c73e2a', '#16120e'],
+    rating: 9.4,
+    description: '当代舞编导 Mira Solène 的编舞作品集——瑞士编辑排版、纸张肌理背景、舞台光束与舞者剪影 tile 画廊，CSS-only 悬停展开作品概念',
+  },
+  {
+    id: 'lingua-localization',
+    title: 'LinguaLink — 让产品说 108 种母语',
+    category: 'landing',
+    tags: ['SaaS', '本地化', '翻译', '出海'],
+    colors: ['#0a1628', '#0066ff', '#f5a623', '#ffffff'],
+    rating: 9.3,
+    description: '全球化本地化平台落地页——AI初译+母语译审+排版质检三轮闭环，108语种按地理区域分组的可视化网格与实时语言矩阵动画',
+  },
 ]
 
 const categories = [
@@ -1966,12 +1984,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 205 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 209 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="205 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="209 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1980,7 +1998,7 @@ content=\"My Design Lib 页面灵感画廊 — 205 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 205 个完整页面</span>
+      <span>📦 209 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

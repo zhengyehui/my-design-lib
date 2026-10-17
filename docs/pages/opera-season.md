@@ -33,8 +33,8 @@ pageDetail:
     text: 婚礼庄园
     link: /pages/wedding-estate.html
   next:
-    text: Verrière 婚礼庄园
-    link: /pages/wedding-estate.html
+    text: KAIROS 舞蹈编导作品集
+    link: /pages/kairos-dance.html
 ---
 
 <PageDetail />
