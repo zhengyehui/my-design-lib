@@ -27,6 +27,9 @@ pageDetail:
   prev:
     text: KAIROS 舞蹈编导作品集
     link: /pages/kairos-dance.html
+  next:
+    text: Lumen Research 年度白皮书
+    link: /pages/research-lab-whitepaper.html
 ---
 
 <PageDetail />

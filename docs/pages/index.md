@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 209 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 210 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1927,6 +1927,15 @@ const pages = [
     rating: 9.3,
     description: '全球化本地化平台落地页——AI初译+母语译审+排版质检三轮闭环，108语种按地理区域分组的可视化网格与实时语言矩阵动画',
   },
+  {
+    id: 'research-lab-whitepaper',
+    title: 'Lumen Research — 2025 年度前沿研究白皮书',
+    category: 'content',
+    tags: ['白皮书', '研究报告', '学术编辑', '年度报告'],
+    colors: ['#1a1a2e', '#DBC895', '#64748b', '#f1f5f9'],
+    rating: 9.3,
+    description: '研究实验室年度白皮书落地页——暗色全屏Hero+等宽编号章节+4色进度条标识+关键指标网格+团队卡片，Source Serif 4 + JetBrains Mono 双字体学术出版系统',
+  },
 ]
 
 const categories = [
@@ -1984,12 +1993,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 209 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 210 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="209 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="210 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -1998,7 +2007,7 @@ content=\"My Design Lib 页面灵感画廊 — 209 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 209 个完整页面</span>
+      <span>📦 210 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
