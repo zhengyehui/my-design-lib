@@ -28,6 +28,9 @@ pageDetail:
   prev:
     text: LinguaLink 全球本地化平台
     link: /pages/lingua-localization.html
+  next:
+    text: NORDHAUS 北欧设计家具商城
+    link: /pages/nordhaus-furniture.html
 ---
 
 <PageDetail />

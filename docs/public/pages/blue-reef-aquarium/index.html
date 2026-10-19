@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blue Reef 蓝湾海洋馆 — 潜入城市的深蓝梦境</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   Blue Reef 蓝湾海洋馆 — deep-sea immersive editorial
+   ============================================================ */
+:root { /* page-scoped palette overrides */
+  --deep-1: #04121F; --deep-2: #0A2A3E; --deep-3: #0E3B4F; --glow: #2DD4BF; --glow-soft: #7FF3E1; --sand: #E8F4F2; --muted: #9FBFC4; --bio-purple: #7C6BD6; --amber: #F5B971; --sp-1: var(--space-1, 0.25rem); --sp-2: var(--space-2, 0.5rem); --sp-3: var(--space-3, 1rem); --sp-4: var(--space-4, 1.5rem); --sp-5: var(--space-5, 2.5rem); --sp-6: var(--space-6, 4rem); --sp-7: var(--space-7, 6rem); --radius: 18px; --max-w: 1180px; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-sans); background: linear-gradient(180deg, var(--deep-1) 0%, var(--deep-2) 45%, var(--deep-3) 100%); color: var(--sand); line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+::selection { background: rgba(45, 212, 191, 0.35); color: var(--sand); }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+img { max-width: 100%; }
+.container { width: min(var(--max-w), 92%); margin: 0 auto; }
+
+/* ── mono section label ─────────────────────────────────── */
+.mono-label { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--glow); display: inline-block; margin-bottom: var(--sp-3); }
+
+/* ── scroll reveal (js-guard pattern) ───────────────────── */
+.reveal { transition: opacity .7s ease, transform .7s ease; }
+html.js .reveal:not(.in) { opacity: 0; transform: translateY(24px); }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header { position: fixed; inset: 0 0 auto 0; z-index: 100; padding: 14px 0; transition: background .4s ease, box-shadow .4s ease, padding .4s ease; }
+.site-header.scrolled { background: rgba(4, 18, 31, 0.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 rgba(45, 212, 191, 0.14); padding: 8px 0; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); }
+.wordmark { display: flex; align-items: baseline; gap: 10px; }
+.wordmark .mark { font-family: var(--font-mono); font-size: 1.02rem; letter-spacing: 0.28em; font-weight: 700; color: var(--sand); }
+.wordmark .mark em { font-style: normal; color: var(--glow); }
+.wordmark .cn { font-size: 0.82rem; letter-spacing: 0.35em; color: var(--muted); }
+.main-nav { display: flex; gap: var(--sp-5); }
+.main-nav a { font-size: 0.88rem; letter-spacing: 0.12em; color: var(--muted); position: relative; padding: 4px 0; transition: color .3s ease; }
+.main-nav a::after { content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 1px; background: var(--glow); transition: width .3s ease; }
+.main-nav a:hover { color: var(--glow-soft); }
+.main-nav a:hover::after { width: 100%; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 30px; border-radius: 999px; font-size: 0.92rem; font-weight: 600; letter-spacing: 0.1em; border: 1px solid transparent; cursor: pointer; transition: transform .3s ease, box-shadow .3s ease, background .3s ease, border-color .3s ease; }
+.btn-amber { background: linear-gradient(135deg, var(--amber), #E8A45C); color: #221503; box-shadow: 0 6px 24px rgba(245, 185, 113, 0.28); }
+.btn-amber:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(245, 185, 113, 0.42); }
+.btn-ghost { border-color: rgba(127, 243, 225, 0.45); color: var(--glow-soft); background: rgba(45, 212, 191, 0.06); }
+.btn-ghost:hover { transform: translateY(-2px); border-color: var(--glow); background: rgba(45, 212, 191, 0.14); box-shadow: 0 10px 30px rgba(45, 212, 191, 0.18); }
+.btn-sm { padding: 9px 22px; font-size: 0.82rem; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; background:
+    radial-gradient(1100px 620px at 78% 12%, rgba(45, 212, 191, 0.12), transparent 60%),
+    radial-gradient(900px 520px at 18% 82%, rgba(124, 107, 214, 0.10), transparent 62%),
+    linear-gradient(180deg, var(--deep-1) 0%, var(--deep-2) 68%, var(--deep-3) 100%); }
+
+/* caustics hint — overlapping radial gradients, subtle motion */
+.hero-caustics { position: absolute; inset: 0; background:
+    radial-gradient(420px 220px at 22% 30%, rgba(127, 243, 225, 0.07), transparent 70%),
+    radial-gradient(520px 260px at 72% 58%, rgba(45, 212, 191, 0.06), transparent 72%),
+    radial-gradient(360px 200px at 48% 84%, rgba(124, 107, 214, 0.05), transparent 70%); background-size: 130% 130%, 120% 120%, 140% 140%; animation: causticsDrift 22s ease-in-out infinite alternate; pointer-events: none; }
+@keyframes causticsDrift {0% { background-position: 0% 0%, 100% 0%, 50% 100%; }
+50% { background-position: 30% 20%, 70% 30%, 30% 70%; }
+100% { background-position: 60% 40%, 40% 60%, 70% 30%; }
+}
+
+/* light rays */
+.rays { position: absolute; inset: -12% -10%; pointer-events: none; overflow: hidden; }
+.ray { position: absolute; top: -18%; width: 120px; height: 150%; background: linear-gradient(180deg,
+    rgba(127, 243, 225, 0.16) 0%,
+    rgba(45, 212, 191, 0.07) 42%,
+    transparent 78%); filter: blur(14px); transform-origin: 50% 0%; }
+.ray-1 { left: 12%; transform: rotate(14deg); animation: raySway 13s ease-in-out infinite alternate; }
+.ray-2 { left: 34%; width: 84px; transform: rotate(9deg); animation: raySway 17s ease-in-out infinite alternate-reverse; opacity: .8; }
+.ray-3 { left: 58%; width: 150px; transform: rotate(17deg); animation: raySway 19s ease-in-out infinite alternate; opacity: .7; }
+.ray-4 { left: 80%; width: 96px; transform: rotate(11deg); animation: raySway 15s ease-in-out infinite alternate-reverse; opacity: .85; }
+@keyframes raySway {0% { transform: rotate(8deg)  translateX(-24px); opacity: .55; }
+50% { opacity: .95; }
+100% { transform: rotate(19deg) translateX(30px); opacity: .65; }
+}
+
+/* jellyfish */
+.jellyfish { position: absolute; pointer-events: none; animation: jellyFloat linear infinite; will-change: transform; }
+.jelly-dome { position: relative; border-radius: 50% 50% 42% 42% / 62% 62% 38% 38%; background:
+    radial-gradient(ellipse at 38% 30%, rgba(232, 244, 242, 0.55), rgba(127, 243, 225, 0.22) 42%, rgba(45, 212, 191, 0.10) 70%, transparent 100%); box-shadow:
+    inset 0 -10px 22px rgba(127, 243, 225, 0.18),
+    0 0 34px rgba(45, 212, 191, 0.22); }
+.jelly-dome::after { content: ''; position: absolute; left: 18%; top: 14%; width: 34%; height: 22%; border-radius: 50%; background: radial-gradient(ellipse, rgba(255, 255, 255, 0.5), transparent 75%); filter: blur(2px); }
+.jelly-tendrils { position: absolute; top: 82%; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
+.tendril { width: 2px; border-radius: 0 0 3px 3px; background: linear-gradient(180deg, rgba(127, 243, 225, 0.55), rgba(124, 107, 214, 0.30) 55%, transparent); animation: tendrilSway 4.6s ease-in-out infinite alternate; }
+.tendril:nth-child(1) { height: 62px; animation-delay: 0s; }
+.tendril:nth-child(2) { height: 84px; animation-delay: .7s; }
+.tendril:nth-child(3) { height: 54px; animation-delay: 1.3s; }
+.tendril:nth-child(4) { height: 74px; animation-delay: 2s; }
+.tendril:nth-child(5) { height: 46px; animation-delay: 2.6s; }
+@keyframes tendrilSway {0% { transform: rotate(-7deg) translateY(0); }
+100% { transform: rotate(8deg) translateY(6px); }
+}
+@keyframes jellyFloat {0% { transform: translateY(0) rotate(-3deg); }
+50% { transform: translateY(-46px) rotate(3deg); }
+100% { transform: translateY(0) rotate(-3deg); }
+}
+/* jelly variants — sizes / depths */
+.jelly-a { top: 16%; right: 10%; width: 150px; animation-duration: 15s; opacity: .92; }
+.jelly-a .jelly-dome { width: 150px; height: 96px; }
+.jelly-b { top: 54%; right: 30%; width: 92px; animation-duration: 11s; animation-delay: -3s; opacity: .7; }
+.jelly-b .jelly-dome { width: 92px; height: 58px; }
+.jelly-c { top: 30%; left: 7%; width: 66px; animation-duration: 18s; animation-delay: -7s; opacity: .55; }
+.jelly-c .jelly-dome { width: 66px; height: 42px; }
+.jelly-d { bottom: 12%; left: 22%; width: 116px; animation-duration: 13s; animation-delay: -5s; opacity: .8; }
+.jelly-d .jelly-dome { width: 116px; height: 72px; background:
+    radial-gradient(ellipse at 40% 30%, rgba(232, 244, 242, 0.42), rgba(124, 107, 214, 0.26) 48%, rgba(124, 107, 214, 0.10) 74%, transparent 100%); box-shadow: inset 0 -8px 20px rgba(124, 107, 214, 0.22), 0 0 30px rgba(124, 107, 214, 0.20); }
+.jelly-e { top: 68%; right: 6%; width: 54px; animation-duration: 16s; animation-delay: -9s; opacity: .5; }
+.jelly-e .jelly-dome { width: 54px; height: 34px; }
+
+/* rising bubbles */
+.bubbles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.bubble { position: absolute; bottom: -60px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.75), rgba(127, 243, 225, 0.22) 55%, rgba(45, 212, 191, 0.08) 78%, transparent 100%); border: 1px solid rgba(127, 243, 225, 0.18); animation: bubbleRise linear infinite; }
+@keyframes bubbleRise {0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+8% { opacity: .85; }
+55% { transform: translateY(-52vh) translateX(26px) scale(1.05); }
+100% { transform: translateY(-108vh) translateX(-14px) scale(.9); opacity: 0; }
+}
+.bubble:nth-child(1) { left: 8%; width: 12px; height: 12px; animation-duration: 12s; animation-delay: 0s; }
+.bubble:nth-child(2) { left: 17%; width: 7px; height: 7px; animation-duration: 16s; animation-delay: 2.4s; }
+.bubble:nth-child(3) { left: 26%; width: 16px; height: 16px; animation-duration: 11s; animation-delay: 5s; }
+.bubble:nth-child(4) { left: 38%; width: 9px; height: 9px; animation-duration: 18s; animation-delay: 1.2s; }
+.bubble:nth-child(5) { left: 47%; width: 13px; height: 13px; animation-duration: 13s; animation-delay: 6.5s; }
+.bubble:nth-child(6) { left: 56%; width: 6px; height: 6px; animation-duration: 20s; animation-delay: 3.6s; }
+.bubble:nth-child(7) { left: 65%; width: 18px; height: 18px; animation-duration: 10s; animation-delay: 8s; }
+.bubble:nth-child(8) { left: 73%; width: 8px; height: 8px; animation-duration: 15s; animation-delay: 0.8s; }
+.bubble:nth-child(9) { left: 82%; width: 11px; height: 11px; animation-duration: 14s; animation-delay: 4.4s; }
+.bubble:nth-child(10) { left: 91%; width: 7px; height: 7px; animation-duration: 17s; animation-delay: 7.2s; }
+.bubble:nth-child(11) { left: 32%; width: 10px; height: 10px; animation-duration: 19s; animation-delay: 9.6s; }
+.bubble:nth-child(12) { left: 60%; width: 14px; height: 14px; animation-duration: 12s; animation-delay: 11s; }
+.hero-inner { position: relative; z-index: 3; padding: 150px 0 110px; }
+.hero h1 { font-family: var(--font-display), var(--font-sans); font-size: clamp(3.4rem, 9.5vw, 7.2rem); line-height: 0.92; letter-spacing: -0.035em; font-weight: 700; max-width: 15ch; margin-bottom: var(--sp-5); text-shadow: 0 8px 60px rgba(4, 18, 31, 0.55); }
+.hero h1 .accent { background: linear-gradient(115deg, var(--glow-soft) 0%, var(--glow) 55%, var(--bio-purple) 110%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .subcopy { max-width: 52ch; font-size: 1.12rem; color: var(--muted); margin-bottom: var(--sp-6); }
+.hero-ctas { display: flex; gap: var(--sp-3); flex-wrap: wrap; margin-bottom: var(--sp-7); }
+.hero-stats { display: flex; gap: var(--sp-6); flex-wrap: wrap; border-top: 1px solid rgba(127, 243, 225, 0.16); padding-top: var(--sp-4); max-width: 720px; }
+.hero-stats .stat { display: flex; flex-direction: column; gap: 2px; }
+.hero-stats .num { font-family: var(--font-mono); font-size: 1.55rem; color: var(--glow-soft); letter-spacing: 0.02em; }
+.hero-stats .lbl { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; }
+.hero-scroll-hint { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 3; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.32em; color: var(--muted); text-transform: uppercase; animation: hintBob 2.6s ease-in-out infinite; }
+@keyframes hintBob {0%, 100% { transform: translateX(-50%) translateY(0); opacity: .55; }
+50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+}
+
+/* ============================================================
+   WAVE DIVIDERS
+   ============================================================ */
+.wave-divider { display: block; width: 100%; height: 90px; margin: -1px 0; position: relative; z-index: 2; }
+.wave-divider path { fill: var(--deep-1); }
+.wave-divider.w-light path { fill: rgba(232, 244, 242, 0.035); }
+
+/* ============================================================
+   SECTIONS — shared
+   ============================================================ */
+.section { position: relative; padding: var(--sp-7) 0; }
+.section-head { max-width: 620px; margin-bottom: var(--sp-6); }
+.section-head h2 { font-family: var(--font-display), var(--font-sans); font-size: clamp(2.1rem, 4.6vw, 3.4rem); line-height: 1.04; letter-spacing: -0.02em; font-weight: 700; margin-bottom: var(--sp-3); }
+.section-head p { color: var(--muted); font-size: 1.02rem; }
+
+/* ============================================================
+   01 — 展馆 EXHIBITS
+   ============================================================ */
+.exhibit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+.exhibit-card { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(127, 243, 225, 0.12); background: rgba(10, 42, 62, 0.55); transition: transform .45s ease, box-shadow .45s ease, border-color .45s ease; }
+.exhibit-card:hover { transform: translateY(-8px); border-color: rgba(127, 243, 225, 0.42); box-shadow: 0 26px 60px rgba(4, 18, 31, 0.6), 0 0 46px rgba(45, 212, 191, 0.16); }
+.exhibit-scene { position: relative; height: 220px; overflow: hidden; }
+
+/* scene 1 — 深海奇境: deep gradient + light shaft + glowing orb */
+.scene-deep { background:
+    radial-gradient(300px 170px at 70% 22%, rgba(127, 243, 225, 0.16), transparent 70%),
+    linear-gradient(180deg, #04121F 0%, #0A2A3E 70%, #082234 100%); }
+.scene-deep .shaft { position: absolute; top: -20%; left: 55%; width: 60px; height: 150%; background: linear-gradient(180deg, rgba(127, 243, 225, 0.30), transparent 80%); filter: blur(8px); transform: rotate(16deg); }
+.scene-deep .orb { position: absolute; right: 18%; bottom: 18%; width: 74px; height: 74px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, rgba(232, 244, 242, 0.8), rgba(45, 212, 191, 0.35) 55%, rgba(45, 212, 191, 0.08) 80%, transparent); box-shadow: 0 0 42px rgba(45, 212, 191, 0.35); }
+.scene-deep .ridge { position: absolute; left: -6%; bottom: -12%; width: 112%; height: 46%; background: linear-gradient(180deg, #062032, #04121F); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+
+/* scene 2 — 水母剧场: purple glow + mini jelly shapes */
+.scene-jelly { background:
+    radial-gradient(260px 200px at 30% 40%, rgba(124, 107, 214, 0.30), transparent 70%),
+    radial-gradient(220px 160px at 74% 62%, rgba(45, 212, 191, 0.16), transparent 72%),
+    linear-gradient(180deg, #0A2036 0%, #0E3B4F 100%); }
+.scene-jelly .mini-jelly { position: absolute; border-radius: 50% 50% 44% 44% / 62% 62% 38% 38%; background: radial-gradient(ellipse at 38% 30%, rgba(232, 244, 242, 0.5), rgba(124, 107, 214, 0.32) 55%, transparent); box-shadow: 0 0 26px rgba(124, 107, 214, 0.35); animation: jellyFloat 8s ease-in-out infinite; }
+.scene-jelly .mj-1 { width: 70px; height: 44px; left: 18%; top: 26%; }
+.scene-jelly .mj-2 { width: 44px; height: 28px; right: 22%; top: 48%; animation-delay: -3s; opacity: .8; }
+.scene-jelly .mj-3 { width: 30px; height: 19px; left: 46%; top: 64%; animation-delay: -5s; opacity: .6; }
+.scene-jelly .stage { position: absolute; bottom: 0; width: 100%; height: 34%; background: linear-gradient(180deg, transparent, rgba(4, 18, 31, 0.85)); }
+
+/* scene 3 — 触摸浅滩: warm-ish shallow water, sand bar, ripples */
+.scene-touch { background:
+    radial-gradient(300px 140px at 50% 10%, rgba(127, 243, 225, 0.22), transparent 70%),
+    linear-gradient(180deg, #0E3B4F 0%, #155E70 55%, #1B6E7E 100%); }
+.scene-touch .sand-bar { position: absolute; bottom: -18%; left: -10%; width: 120%; height: 56%; background: linear-gradient(180deg, rgba(232, 196, 150, 0.35), rgba(232, 196, 150, 0.10)); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+.scene-touch .ripple { position: absolute; left: 50%; top: 52%; border: 1px solid rgba(127, 243, 225, 0.35); border-radius: 50%; transform: translate(-50%, -50%); }
+.scene-touch .r1 { width: 90px; height: 34px; }
+.scene-touch .r2 { width: 150px; height: 56px; opacity: .55; }
+.scene-touch .r3 { width: 220px; height: 84px; opacity: .3; }
+.scene-touch .star { position: absolute; width: 34px; height: 34px; background: radial-gradient(circle, rgba(232, 196, 150, 0.65), transparent 72%); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); right: 20%; bottom: 24%; }
+.exhibit-body { padding: var(--sp-4) var(--sp-4) var(--sp-5); }
+.exhibit-body .no { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.22em; color: var(--glow); }
+.exhibit-body h3 { font-size: 1.42rem; letter-spacing: 0.04em; margin: 10px 0 12px; }
+.exhibit-body p { color: var(--muted); font-size: 0.94rem; margin-bottom: var(--sp-4); }
+.card-link { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.22em; color: var(--glow-soft); text-transform: uppercase; }
+.card-link::after { content: ' →'; transition: margin .3s ease; }
+.exhibit-card:hover .card-link::after { margin-left: 6px; }
+
+/* ============================================================
+   02 — 海洋物种 MARINE LIFE STRIP
+   ============================================================ */
+.life-section { background:
+    radial-gradient(900px 400px at 82% 30%, rgba(45, 212, 191, 0.07), transparent 65%),
+    linear-gradient(180deg, rgba(4, 18, 31, 0.0), rgba(4, 18, 31, 0.55) 30%, rgba(4, 18, 31, 0.0)); }
+.life-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-3); }
+.life-item { text-align: center; padding: var(--sp-5) var(--sp-2) var(--sp-4); border: 1px solid rgba(127, 243, 225, 0.10); border-radius: 16px; background: rgba(14, 59, 79, 0.28); transition: border-color .4s ease, background .4s ease, transform .4s ease; }
+.life-item:hover { border-color: rgba(127, 243, 225, 0.36); background: rgba(14, 59, 79, 0.5); transform: translateY(-5px); }
+.life-art { position: relative; width: 110px; height: 110px; margin: 0 auto var(--sp-4); }
+/* jellyfish silhouette */
+.art-jelly .dome { position: absolute; left: 50%; top: 16%; transform: translateX(-50%); width: 72px; height: 48px; border-radius: 50% 50% 42% 42% / 62% 62% 38% 38%; background: radial-gradient(ellipse at 38% 30%, rgba(232, 244, 242, 0.6), rgba(124, 107, 214, 0.35) 60%, transparent); box-shadow: 0 0 26px rgba(124, 107, 214, 0.4); }
+.art-jelly .tent { position: absolute; left: 50%; top: 52%; width: 2px; height: 38px; background: linear-gradient(180deg, rgba(124, 107, 214, 0.6), transparent); transform-origin: top; }
+.art-jelly .t1 { transform: translateX(-50%) translateX(-16px) rotate(-8deg); }
+.art-jelly .t2 { transform: translateX(-50%) rotate(2deg); height: 44px; }
+.art-jelly .t3 { transform: translateX(-50%) translateX(16px) rotate(9deg); }
+/* turtle silhouette */
+.art-turtle .shell { position: absolute; left: 50%; top: 34%; transform: translateX(-50%); width: 68px; height: 46px; border-radius: 50%; background: radial-gradient(ellipse at 40% 32%, rgba(127, 243, 225, 0.55), rgba(45, 212, 191, 0.22) 70%, transparent); }
+.art-turtle .head { position: absolute; right: 10%; top: 42%; width: 22px; height: 17px; border-radius: 50%; background: rgba(127, 243, 225, 0.5); }
+.art-turtle .flip { position: absolute; width: 30px; height: 14px; border-radius: 50%; background: rgba(45, 212, 191, 0.32); }
+.art-turtle .f1 { left: 12%; top: 34%; transform: rotate(-28deg); }
+.art-turtle .f2 { left: 16%; top: 62%; transform: rotate(22deg); }
+.art-turtle .f3 { right: 18%; top: 62%; transform: rotate(-18deg); }
+/* manta silhouette */
+.art-manta .body { position: absolute; left: 50%; top: 40%; transform: translateX(-50%); width: 88px; height: 36px; background: radial-gradient(ellipse at 50% 30%, rgba(127, 243, 225, 0.5), rgba(45, 212, 191, 0.16) 75%, transparent); clip-path: polygon(50% 0%, 88% 42%, 100% 100%, 74% 66%, 50% 82%, 26% 66%, 0% 100%, 12% 42%); }
+.art-manta .tail { position: absolute; left: 50%; top: 66%; width: 2px; height: 32px; background: linear-gradient(180deg, rgba(127, 243, 225, 0.5), transparent); transform: translateX(-50%); }
+/* coral silhouette */
+.art-coral .branch { position: absolute; bottom: 18%; width: 12px; border-radius: 8px 8px 0 0; background: linear-gradient(180deg, rgba(245, 185, 113, 0.5), rgba(245, 185, 113, 0.12)); }
+.art-coral .b1 { left: 30%; height: 52px; }
+.art-coral .b2 { left: 46%; height: 72px; }
+.art-coral .b3 { left: 62%; height: 40px; }
+.art-coral .b4 { left: 40%; height: 34px; width: 8px; }
+.art-coral .dot { position: absolute; width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle, rgba(127, 243, 225, 0.4), transparent 72%); }
+.art-coral .d1 { left: 22%; top: 20%; }
+.art-coral .d2 { right: 18%; top: 30%; width: 18px; height: 18px; }
+/* seahorse silhouette */
+.art-seahorse .head { position: absolute; left: 50%; top: 14%; transform: translateX(-50%); width: 26px; height: 26px; border-radius: 50% 50% 40% 40%; background: radial-gradient(circle at 36% 30%, rgba(127, 243, 225, 0.6), rgba(45, 212, 191, 0.22)); }
+.art-seahorse .snout { position: absolute; left: calc(50% + 14px); top: 22%; width: 16px; height: 7px; border-radius: 4px; background: rgba(127, 243, 225, 0.5); }
+.art-seahorse .torso { position: absolute; left: 50%; top: 34%; transform: translateX(-50%); width: 22px; height: 46px; border-radius: 12px 12px 40% 40%; background: linear-gradient(180deg, rgba(127, 243, 225, 0.55), rgba(45, 212, 191, 0.15)); }
+.art-seahorse .tail { position: absolute; left: 50%; top: 72%; transform: translateX(-50%); width: 16px; height: 16px; border: 3px solid rgba(45, 212, 191, 0.4); border-top-color: transparent; border-radius: 50%; }
+.life-item h4 { font-size: 1.04rem; letter-spacing: 0.12em; margin-bottom: 6px; }
+.life-item .latin { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.16em; color: var(--muted); text-transform: uppercase; }
+
+/* ============================================================
+   03 — 今日剧场 SCHEDULE
+   ============================================================ */
+.schedule-table { width: 100%; border-collapse: collapse; }
+.schedule-table thead th { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--glow); text-align: left; padding: 0 var(--sp-3) var(--sp-3); border-bottom: 1px solid rgba(127, 243, 225, 0.28); font-weight: 500; }
+.schedule-table tbody td { padding: var(--sp-4) var(--sp-3); border-bottom: 1px solid rgba(127, 243, 225, 0.10); font-size: 0.98rem; color: var(--sand); transition: background .3s ease; }
+.schedule-table tbody tr:hover td { background: rgba(45, 212, 191, 0.05); }
+.schedule-table .time { font-family: var(--font-mono); color: var(--glow-soft); font-size: 1.06rem; letter-spacing: 0.08em; width: 130px; }
+.schedule-table .prog { font-weight: 600; letter-spacing: 0.06em; }
+.schedule-table .place { color: var(--muted); }
+.schedule-table .tag { display: inline-block; font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.18em; padding: 3px 12px; border-radius: 999px; border: 1px solid rgba(127, 243, 225, 0.3); color: var(--glow-soft); text-transform: uppercase; }
+.schedule-table .tag.hot { border-color: rgba(245, 185, 113, 0.5); color: var(--amber); }
+
+/* ============================================================
+   04 — 票价 TICKETS
+   ============================================================ */
+.ticket-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); align-items: stretch; }
+.ticket-card { position: relative; border-radius: var(--radius); border: 1px solid rgba(127, 243, 225, 0.14); background: linear-gradient(170deg, rgba(14, 59, 79, 0.6), rgba(4, 18, 31, 0.7)); padding: var(--sp-5) var(--sp-4) var(--sp-5); display: flex; flex-direction: column; transition: transform .45s ease, box-shadow .45s ease, border-color .45s ease; }
+.ticket-card:hover { transform: translateY(-7px); box-shadow: 0 24px 56px rgba(4, 18, 31, 0.55); border-color: rgba(127, 243, 225, 0.36); }
+.ticket-card.recommended { border-color: rgba(245, 185, 113, 0.55); background: linear-gradient(170deg, rgba(245, 185, 113, 0.12), rgba(14, 59, 79, 0.65)); box-shadow: 0 20px 60px rgba(245, 185, 113, 0.14); }
+.ticket-card.recommended:hover { box-shadow: 0 28px 70px rgba(245, 185, 113, 0.24); border-color: rgba(245, 185, 113, 0.8); }
+.badge-rec { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.24em; padding: 5px 18px; border-radius: 999px; background: linear-gradient(135deg, var(--amber), #E8A45C); color: #221503; text-transform: uppercase; font-weight: 700; }
+.ticket-card .t-name { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--glow); margin-bottom: var(--sp-3); }
+.ticket-card .t-price { font-family: var(--font-display), var(--font-sans); font-size: 3.1rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1; margin-bottom: var(--sp-2); }
+.ticket-card .t-price small { font-size: 1.1rem; color: var(--muted); font-weight: 400; }
+.ticket-card.recommended .t-price { color: var(--amber); }
+.ticket-card .t-desc { color: var(--muted); font-size: 0.92rem; margin-bottom: var(--sp-4); padding-bottom: var(--sp-4); border-bottom: 1px solid rgba(127, 243, 225, 0.12); }
+.ticket-card ul { flex: 1; margin-bottom: var(--sp-5); }
+.ticket-card ul li { position: relative; padding-left: 24px; margin-bottom: 12px; font-size: 0.92rem; color: var(--sand); }
+.ticket-card ul li::before { content: ''; position: absolute; left: 0; top: 8px; width: 12px; height: 6px; border-left: 2px solid var(--glow); border-bottom: 2px solid var(--glow); transform: rotate(-45deg); }
+.ticket-card.recommended ul li::before { border-color: var(--amber); }
+
+/* ============================================================
+   05 — 守护深蓝 CONSERVATION
+   ============================================================ */
+.conserve { background:
+    radial-gradient(800px 380px at 20% 40%, rgba(45, 212, 191, 0.08), transparent 65%),
+    radial-gradient(700px 320px at 85% 70%, rgba(124, 107, 214, 0.07), transparent 68%),
+    linear-gradient(180deg, rgba(4, 18, 31, 0.4), rgba(4, 18, 31, 0.72)); }
+.conserve-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--sp-7); align-items: center; }
+.conserve-copy h2 { font-family: var(--font-display), var(--font-sans); font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: var(--sp-4); }
+.conserve-copy p { color: var(--muted); max-width: 46ch; margin-bottom: var(--sp-5); }
+.conserve-stats { display: grid; gap: var(--sp-4); }
+.c-stat { border-left: 2px solid rgba(45, 212, 191, 0.5); padding-left: var(--sp-4); }
+.c-stat .num { font-family: var(--font-display), var(--font-sans); font-size: 2.9rem; font-weight: 700; line-height: 1.05; color: var(--glow-soft); letter-spacing: -0.01em; }
+.c-stat .num .unit { font-size: 1.35rem; color: var(--glow); }
+.c-stat .lbl { color: var(--muted); font-size: 0.92rem; letter-spacing: 0.08em; }
+
+/* ============================================================
+   06 — 参观信息 VISITOR INFO
+   ============================================================ */
+.info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); }
+.info-card { border: 1px solid rgba(127, 243, 225, 0.12); border-radius: 14px; padding: var(--sp-4); background: rgba(10, 42, 62, 0.35); transition: border-color .4s ease, background .4s ease; }
+.info-card:hover { border-color: rgba(127, 243, 225, 0.34); background: rgba(10, 42, 62, 0.6); }
+.info-card .ico { width: 38px; height: 38px; border-radius: 10px; background: rgba(45, 212, 191, 0.12); border: 1px solid rgba(127, 243, 225, 0.24); display: flex; align-items: center; justify-content: center; margin-bottom: var(--sp-3); color: var(--glow-soft); }
+.info-card .ico svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.info-card h4 { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--glow); margin-bottom: 10px; }
+.info-card p { font-size: 0.92rem; color: var(--sand); line-height: 1.8; }
+.info-card p span { display: block; color: var(--muted); font-size: 0.84rem; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer { position: relative; background: linear-gradient(180deg, rgba(4, 18, 31, 0.0), rgba(2, 10, 18, 0.95) 30%); padding: var(--sp-7) 0 var(--sp-5); overflow: hidden; }
+.footer-glow { position: absolute; left: 50%; bottom: -180px; transform: translateX(-50%); width: 760px; height: 320px; background: radial-gradient(ellipse, rgba(45, 212, 191, 0.10), transparent 70%); pointer-events: none; }
+.footer-top { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: var(--sp-5); padding-bottom: var(--sp-5); border-bottom: 1px solid rgba(127, 243, 225, 0.12); position: relative; }
+.footer-brand .mark { font-family: var(--font-mono); font-size: 1.1rem; letter-spacing: 0.3em; font-weight: 700; }
+.footer-brand .mark em { font-style: normal; color: var(--glow); }
+.footer-brand p { color: var(--muted); font-size: 0.92rem; max-width: 34ch; margin-top: var(--sp-3); }
+.footer-col h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--glow); margin-bottom: var(--sp-4); font-weight: 500; }
+.footer-col a { display: block; color: var(--muted); font-size: 0.92rem; margin-bottom: 12px; transition: color .3s ease, transform .3s ease; }
+.footer-col a:hover { color: var(--glow-soft); transform: translateX(4px); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-3); flex-wrap: wrap; padding-top: var(--sp-4); position: relative; }
+.footer-bottom p { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.16em; color: var(--muted); }
+.footer-bottom .wave-mini { width: 120px; height: 18px; opacity: .5; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 980px) {.exhibit-grid { grid-template-columns: 1fr; }
+.life-strip { grid-template-columns: repeat(3, 1fr); }
+.ticket-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+.conserve-grid { grid-template-columns: 1fr; gap: var(--sp-5); }
+.info-grid { grid-template-columns: repeat(2, 1fr); }
+.footer-top { grid-template-columns: 1fr 1fr; }
+.main-nav { display: none; }
+}
+@media (max-width: 560px) {.life-strip { grid-template-columns: repeat(2, 1fr); }
+.info-grid { grid-template-columns: 1fr; }
+.footer-top { grid-template-columns: 1fr; }
+.hero h1 { font-size: 3.1rem; }
+.hero-stats { gap: var(--sp-4); }
+.schedule-table .time { width: 84px; font-size: .92rem; }
+.schedule-table tbody td { padding: var(--sp-3) var(--sp-2); font-size: .88rem; }
+.schedule-table thead th { padding: 0 var(--sp-2) var(--sp-2); }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ HEADER ══════════════════════ -->
+<header class="site-header" id="siteHeader">
+  <div class="container header-inner">
+    <a class="wordmark" href="#top">
+      <span class="mark">BLUE<em>REEF</em></span>
+      <span class="cn">蓝湾海洋馆</span>
+    </a>
+    <nav class="main-nav">
+      <a href="#exhibits">展馆</a>
+      <a href="#life">动物</a>
+      <a href="#theater">教育</a>
+      <a href="#visit">参观</a>
+    </nav>
+    <a class="btn btn-amber btn-sm" href="#tickets">购票</a>
+  </div>
+</header>
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section class="hero" id="top">
+  <!-- caustics -->
+  <div class="hero-caustics"></div>
+
+  <!-- light rays -->
+  <div class="rays" aria-hidden="true">
+    <div class="ray ray-1"></div>
+    <div class="ray ray-2"></div>
+    <div class="ray ray-3"></div>
+    <div class="ray ray-4"></div>
+  </div>
+
+  <!-- jellyfish -->
+  <div class="jellyfish jelly-a" aria-hidden="true">
+    <div class="jelly-dome"></div>
+    <div class="jelly-tendrils">
+      <div class="tendril"></div><div class="tendril"></div><div class="tendril"></div><div class="tendril"></div><div class="tendril"></div>
+    </div>
+  </div>
+  <div class="jellyfish jelly-b" aria-hidden="true">
+    <div class="jelly-dome"></div>
+    <div class="jelly-tendrils">
+      <div class="tendril"></div><div class="tendril"></div><div class="tendril"></div>
+    </div>
+  </div>
+  <div class="jellyfish jelly-c" aria-hidden="true">
+    <div class="jelly-dome"></div>
+    <div class="jelly-tendrils">
+      <div class="tendril"></div><div class="tendril"></div><div class="tendril"></div>
+    </div>
+  </div>
+  <div class="jellyfish jelly-d" aria-hidden="true">
+    <div class="jelly-dome"></div>
+    <div class="jelly-tendrils">
+      <div class="tendril"></div><div class="tendril"></div><div class="tendril"></div><div class="tendril"></div>
+    </div>
+  </div>
+  <div class="jellyfish jelly-e" aria-hidden="true">
+    <div class="jelly-dome"></div>
+    <div class="jelly-tendrils">
+      <div class="tendril"></div><div class="tendril"></div>
+    </div>
+  </div>
+
+  <!-- bubbles -->
+  <div class="bubbles" aria-hidden="true">
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+  </div>
+
+  <div class="container hero-inner">
+    <span class="mono-label">[ 00 — BLUE REEF · 深海奇境入口 ]</span>
+    <h1>潜入<span class="accent">城市的<br>深蓝梦境</span></h1>
+    <p class="subcopy">
+      在城市的心脏，穿过一道海浪之门 —— 光柱穿透幽蓝，水母如星辰般漂浮。
+      蓝湾海洋馆以 200 余个海洋物种、三大沉浸式展区与每日剧场，
+      邀你与深海温柔相遇。
+    </p>
+    <div class="hero-ctas">
+      <a class="btn btn-amber" href="#tickets">购票入场</a>
+      <a class="btn btn-ghost" href="#exhibits">探索展馆</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="num">3</span><span class="lbl">大展区</span></div>
+      <div class="stat"><span class="num">200+</span><span class="lbl">海洋物种</span></div>
+      <div class="stat"><span class="num">4</span><span class="lbl">每日喂食秀</span></div>
+      <div class="stat"><span class="num">365</span><span class="lbl">天全年开放</span></div>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">Scroll · 向下潜行</div>
+</section>
+
+<!-- wave divider -->
+<svg class="wave-divider" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,48 C240,96 480,4 720,32 C960,60 1200,92 1440,40 L1440,90 L0,90 Z"></path>
+</svg>
+
+<!-- ══════════════════════ 01 展馆 ══════════════════════ -->
+<section class="section" id="exhibits">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="mono-label">[ 01 — 展馆 ]</span>
+      <h2>三片海域<br>三种深蓝叙事</h2>
+      <p>从万米深渊到浅滩潮池，每一座展馆都是一次完整的情绪旅程 —— 光、暗、静、动，皆为海洋的语言。</p>
+    </div>
+
+    <div class="exhibit-grid">
+      <!-- 深海奇境 -->
+      <article class="exhibit-card reveal">
+        <div class="exhibit-scene scene-deep">
+          <div class="shaft"></div>
+          <div class="orb"></div>
+          <div class="ridge"></div>
+        </div>
+        <div class="exhibit-body">
+          <span class="no">[ 01 — 深海奇境 ]</span>
+          <h3>深海奇境</h3>
+          <p>360° 环幕深渊隧道，巨型蝠鲼自头顶掠过，生物荧光在黑暗中明灭如星群。深海，从不寂静。</p>
+          <a class="card-link" href="#visit">了解更多</a>
+        </div>
+      </article>
+
+      <!-- 水母剧场 -->
+      <article class="exhibit-card reveal">
+        <div class="exhibit-scene scene-jelly">
+          <div class="mini-jelly mj-1"></div>
+          <div class="mini-jelly mj-2"></div>
+          <div class="mini-jelly mj-3"></div>
+          <div class="stage"></div>
+        </div>
+        <div class="exhibit-body">
+          <span class="no">[ 02 — 水母剧场 ]</span>
+          <h3>水母剧场</h3>
+          <p>穹顶投影之下，数千只水母随光影编舞缓慢呼吸。紫色与青色的荧光交织，一场关于漂浮的沉浸演出。</p>
+          <a class="card-link" href="#visit">了解更多</a>
+        </div>
+      </article>
+
+      <!-- 触摸浅滩 -->
+      <article class="exhibit-card reveal">
+        <div class="exhibit-scene scene-touch">
+          <div class="sand-bar"></div>
+          <div class="ripple r1"></div>
+          <div class="ripple r2"></div>
+          <div class="ripple r3"></div>
+          <div class="star"></div>
+        </div>
+        <div class="exhibit-body">
+          <span class="no">[ 03 — 触摸浅滩 ]</span>
+          <h3>触摸浅滩</h3>
+          <p>可触碰的潮池世界：海星、海参、鳐鱼自指间滑过。专业讲解员全程陪伴，孩子与大人都能重新学会好奇。</p>
+          <a class="card-link" href="#visit">了解更多</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- soft wave -->
+<svg class="wave-divider w-light" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,60 C180,20 420,88 720,52 C1020,16 1260,80 1440,44 L1440,90 L0,90 Z"></path>
+</svg>
+
+<!-- ══════════════════════ 02 海洋物种 ══════════════════════ -->
+<section class="section life-section" id="life">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="mono-label">[ 02 — 海洋物种 ]</span>
+      <h2>与深蓝居民<br>面对面</h2>
+      <p>每一位居民都有自己的名字、性格与故事。它们是海洋的信使，也是我们守护的对象。</p>
+    </div>
+
+    <div class="life-strip">
+      <div class="life-item reveal">
+        <div class="life-art art-jelly">
+          <div class="dome"></div>
+          <div class="tent t1"></div>
+          <div class="tent t2"></div>
+          <div class="tent t3"></div>
+        </div>
+        <h4>水母</h4>
+        <p class="latin">Aurelia aurita</p>
+      </div>
+
+      <div class="life-item reveal">
+        <div class="life-art art-turtle">
+          <div class="shell"></div>
+          <div class="head"></div>
+          <div class="flip f1"></div>
+          <div class="flip f2"></div>
+          <div class="flip f3"></div>
+        </div>
+        <h4>海龟</h4>
+        <p class="latin">Chelonia mydas</p>
+      </div>
+
+      <div class="life-item reveal">
+        <div class="life-art art-manta">
+          <div class="body"></div>
+          <div class="tail"></div>
+        </div>
+        <h4>蝠鲼</h4>
+        <p class="latin">Mobula birostris</p>
+      </div>
+
+      <div class="life-item reveal">
+        <div class="life-art art-coral">
+          <div class="branch b1"></div>
+          <div class="branch b2"></div>
+          <div class="branch b3"></div>
+          <div class="branch b4"></div>
+          <div class="dot d1"></div>
+          <div class="dot d2"></div>
+        </div>
+        <h4>珊瑚</h4>
+        <p class="latin">Acropora spp.</p>
+      </div>
+
+      <div class="life-item reveal">
+        <div class="life-art art-seahorse">
+          <div class="head"></div>
+          <div class="snout"></div>
+          <div class="torso"></div>
+          <div class="tail"></div>
+        </div>
+        <h4>海马</h4>
+        <p class="latin">Hippocampus kuda</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 03 今日剧场 ══════════════════════ -->
+<section class="section" id="theater">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="mono-label">[ 03 — 今日剧场 ]</span>
+      <h2>今天的海洋<br>正在上演</h2>
+      <p>喂食、讲解、护理、夜宿 —— 每一场活动都由海洋生物学家与驯养师共同编排。</p>
+    </div>
+
+    <table class="schedule-table reveal">
+      <thead>
+        <tr>
+          <th>时间</th>
+          <th>项目</th>
+          <th>地点</th>
+          <th>类型</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="time">10:30</td>
+          <td class="prog">鲨鱼喂食秀</td>
+          <td class="place">深海奇境 · 深渊隧道</td>
+          <td><span class="tag hot">热门</span></td>
+        </tr>
+        <tr>
+          <td class="time">11:30</td>
+          <td class="prog">珊瑚礁生态讲解</td>
+          <td class="place">触摸浅滩 · 潮池区</td>
+          <td><span class="tag">讲解</span></td>
+        </tr>
+        <tr>
+          <td class="time">13:00</td>
+          <td class="prog">水母喂食解说</td>
+          <td class="place">水母剧场 · 穹顶厅</td>
+          <td><span class="tag hot">热门</span></td>
+        </tr>
+        <tr>
+          <td class="time">15:30</td>
+          <td class="prog">海龟护理讲座</td>
+          <td class="place">海洋医院 · 观摩廊</td>
+          <td><span class="tag">教育</span></td>
+        </tr>
+        <tr>
+          <td class="time">17:00</td>
+          <td class="prog">蝠鲼喂食潜水秀</td>
+          <td class="place">深海奇境 · 大洋池</td>
+          <td><span class="tag">喂食</span></td>
+        </tr>
+        <tr>
+          <td class="time">19:00</td>
+          <td class="prog">夜宿海洋馆 · 星夜巡馆</td>
+          <td class="place">全馆 · 集合于大厅</td>
+          <td><span class="tag hot">限定</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- soft wave -->
+<svg class="wave-divider w-light" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,36 C300,84 520,10 780,48 C1040,86 1260,18 1440,56 L1440,90 L0,90 Z"></path>
+</svg>
+
+<!-- ══════════════════════ 04 票价 ══════════════════════ -->
+<section class="section" id="tickets">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="mono-label">[ 04 — 票务 ]</span>
+      <h2>选一张票<br>开启深蓝旅程</h2>
+      <p>所有票种均含三大展区通览与当日剧场入场。夜场与年卡另享专属权益。</p>
+    </div>
+
+    <div class="ticket-grid">
+      <!-- 日场票 -->
+      <div class="ticket-card reveal">
+        <div class="t-name">Day Pass · 日场票</div>
+        <div class="t-price">¥168 <small>/ 人</small></div>
+        <p class="t-desc">09:00 – 17:00 入馆，适合首次探访的家庭与旅行者。</p>
+        <ul>
+          <li>三大展区全览</li>
+          <li>当日全部喂食秀</li>
+          <li>触摸浅滩体验 1 次</li>
+          <li>电子导览手册</li>
+        </ul>
+        <a class="btn btn-ghost" href="#visit">选择日场</a>
+      </div>
+
+      <!-- 夜场票（推荐） -->
+      <div class="ticket-card recommended reveal">
+        <div class="badge-rec">推荐 · Recommended</div>
+        <div class="t-name">Night Pass · 夜场票</div>
+        <div class="t-price">¥228 <small>/ 人</small></div>
+        <p class="t-desc">17:00 – 22:00 入馆，水母剧场夜光演出 + 星夜巡馆。</p>
+        <ul>
+          <li>日场全部权益</li>
+          <li>水母剧场夜光专场</li>
+          <li>深海奇境夜潜光影秀</li>
+          <li>限定夜光纪念徽章</li>
+          <li>海洋主题特饮 1 杯</li>
+        </ul>
+        <a class="btn btn-amber" href="#visit">购买夜场票</a>
+      </div>
+
+      <!-- 年卡 -->
+      <div class="ticket-card reveal">
+        <div class="t-name">Annual · 年卡</div>
+        <div class="t-price">¥688 <small>/ 年</small></div>
+        <p class="t-desc">365 天不限次入馆，把海洋馆变成你的城市客厅。</p>
+        <ul>
+          <li>全年不限次入馆</li>
+          <li>剧场活动优先预约</li>
+          <li>馆内消费 9 折</li>
+          <li>专属保育员见面会</li>
+          <li>生日月双人同行礼遇</li>
+        </ul>
+        <a class="btn btn-ghost" href="#visit">办理年卡</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 05 守护深蓝 ══════════════════════ -->
+<section class="section conserve" id="conserve">
+  <div class="container conserve-grid">
+    <div class="conserve-copy reveal">
+      <span class="mono-label">[ 05 — 守护深蓝 ]</span>
+      <h2>我们不只展示海洋<br>我们守护它</h2>
+      <p>
+        蓝湾海洋馆是城市里的一扇窗，更是一座海洋救助站。
+        每售出一张票，都有 1% 直接投入海洋保育基金 ——
+        因为深蓝梦境的延续，取决于我们此刻的选择。
+      </p>
+      <a class="btn btn-ghost" href="#visit">加入志愿者计划</a>
+    </div>
+
+    <div class="conserve-stats">
+      <div class="c-stat reveal">
+        <div class="num">92<span class="unit">%</span></div>
+        <div class="lbl">受伤海龟康复放归率</div>
+      </div>
+      <div class="c-stat reveal">
+        <div class="num">4000<span class="unit">+</span></div>
+        <div class="lbl">累计海洋保育志愿者</div>
+      </div>
+      <div class="c-stat reveal">
+        <div class="num">12 <span class="unit">个</span></div>
+        <div class="lbl">进行中的海洋保护项目</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 06 参观信息 ══════════════════════ -->
+<section class="section" id="visit">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="mono-label">[ 06 — 参观信息 ]</span>
+      <h2>出发之前<br>先看这里</h2>
+      <p>实用信息一网打尽，让你的深蓝之旅从容不迫。</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card reveal">
+        <div class="ico">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <h4>开放时间</h4>
+        <p>
+          日场 09:00 – 17:00
+          <span>夜场 17:00 – 22:00（周五至周日）</span>
+          <span>最后入场：闭馆前 60 分钟</span>
+        </p>
+      </div>
+
+      <div class="info-card reveal">
+        <div class="ico">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        </div>
+        <h4>地址</h4>
+        <p>
+          蓝湾区海韵大道 88 号
+          <span>蓝湾海洋馆 · 游客中心</span>
+          <span>邮编 200082</span>
+        </p>
+      </div>
+
+      <div class="info-card reveal">
+        <div class="ico">
+          <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M4 11h16M8 20l-1 2M16 20l1 2"/><circle cx="8.5" cy="13.5" r="1"/><circle cx="15.5" cy="13.5" r="1"/></svg>
+        </div>
+        <h4>交通</h4>
+        <p>
+          地铁 7 号线「海洋公园站」B 口
+          <span>公交 58 / 112 / 320 路直达</span>
+          <span>馆区地下停车场 800 车位</span>
+        </p>
+      </div>
+
+      <div class="info-card reveal">
+        <div class="ico">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5M15 14.5c2.7.2 4.7 2 4.7 4.5"/></svg>
+        </div>
+        <h4>团体预约</h4>
+        <p>
+          20 人以上享 8.5 折
+          <span>学校 / 机构定制研学课程</span>
+          <span>预约专线 400-880-2026</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-glow" aria-hidden="true"></div>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="mark">BLUE<em>REEF</em></div>
+        <p>蓝湾海洋馆 —— 城市里的深蓝梦境。展示、救助、教育，让每一次相遇都成为守护的开始。</p>
+      </div>
+      <div class="footer-col">
+        <h5>探索</h5>
+        <a href="#exhibits">展馆导览</a>
+        <a href="#life">海洋物种</a>
+        <a href="#theater">今日剧场</a>
+        <a href="#tickets">票务信息</a>
+      </div>
+      <div class="footer-col">
+        <h5>学习</h5>
+        <a href="#conserve">海洋保育</a>
+        <a href="#theater">研学课程</a>
+        <a href="#visit">志愿者计划</a>
+        <a href="#visit">科普讲座</a>
+      </div>
+      <div class="footer-col">
+        <h5>联系</h5>
+        <a href="#visit">400-880-2026</a>
+        <a href="#visit">hello@blue-reef.example</a>
+        <a href="#visit">团体预约</a>
+        <a href="#visit">媒体合作</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 BLUE REEF 蓝湾海洋馆 · 保留所有权利</p>
+      <svg class="wave-mini" viewBox="0 0 120 18" aria-hidden="true">
+        <path d="M0,10 C20,2 40,18 60,10 C80,2 100,18 120,10" stroke="#2DD4BF" stroke-width="1.4" fill="none" opacity="0.7"/>
+      </svg>
+      <p>DESIGNED FOR THE DEEP BLUE</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  /* ── header transparent → solid ── */
+  var header = document.getElementById('siteHeader');
+  function onScroll() {
+    if (window.scrollY > 40) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ── scroll reveal: IntersectionObserver with fallback ── */
+  var revealEls = document.querySelectorAll('.reveal');
+
+  function revealAll() {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+    revealEls.forEach(function (el) { io.observe(el); });
+
+    /* safety net: anything still hidden after 3s gets revealed */
+    setTimeout(function () {
+      revealEls.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('in');
+      });
+    }, 3000);
+  } else {
+    revealAll();
+  }
+})();
+</script>
+
+</body>
+</html>
