@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 212 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 214 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1954,6 +1954,24 @@ const pages = [
     rating: 9.2,
     description: '深海海洋馆沉浸式官网——纯CSS水母漂浮+气泡上升+倾斜光柱+波浪分割线+剧场时刻表+票价卡片+守护深蓝公益数据，深海军蓝渐变+发光青生物荧光美学',
   },
+  {
+    id: 'inkwave-manga',
+    title: 'INKWAVE 数字漫画出版平台',
+    category: 'creative',
+    tags: ['漫画出版', '创作平台', '暗色霓虹', '日式美学'],
+    colors: ['#0b0b12', '#ff2e6d', '#19e3ff', '#ffd23f'],
+    rating: 8.9,
+    description: '数字漫画出版平台官网——纯CSS漫画封面+对话气泡拟声词阅读器模拟+竖排日文+速度线分镜格+作品库筛选榜单+出版流程时间线，墨黑底+霓虹粉青二次元夜色美学',
+  },
+  {
+    id: 'sparkfund-crowdfunding',
+    title: 'SparkFund 创意众筹平台',
+    category: 'landing',
+    tags: ['众筹平台', '渐变暗色', '玻璃拟态', '创意募资'],
+    colors: ['#0b0722', '#ff7a2f', '#7c4dff', '#2ee6d6'],
+    rating: 8.8,
+    description: '创意众筹平台落地页——火焰渐变标题+3D倾斜项目卡+玻璃拟态悬浮卡+进度环动态填充+项目筛选网格+4步流程连线+FAQ手风琴，深紫夜空+火焰渐变"创意被点亮"美学',
+  },
 ]
 
 const categories = [
@@ -2011,12 +2029,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 212 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 214 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="212 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="214 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -2025,7 +2043,7 @@ content=\"My Design Lib 页面灵感画廊 — 212 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 212 个完整页面</span>
+      <span>📦 214 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

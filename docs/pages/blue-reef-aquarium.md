@@ -29,6 +29,9 @@ pageDetail:
   prev:
     text: NORDHAUS 北欧设计家具商城
     link: /pages/nordhaus-furniture.html
+  next:
+    text: INKWAVE 数字漫画出版平台
+    link: /pages/inkwave-manga.html
 ---
 
 <PageDetail />

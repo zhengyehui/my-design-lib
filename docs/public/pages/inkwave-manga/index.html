@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INKWAVE 数字漫画出版平台 — 让每一格都掀起浪潮</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<meta name="description" content="INKWAVE 是面向日式漫画与图像小说创作者的数字出版与阅读平台。投稿、连载、分发、变现，一站完成。">
+<style>
+/* ============================================================
+   INKWAVE — Manga Publishing Platform
+   Pure HTML/CSS + minimal JS. Single-file, offline ready.
+   ============================================================ */
+:root{
+  --ink:#0b0b12;
+  --ink-2:#12121d;
+  --ink-3:#1a1a2b;
+  --paper:#f6f1e7;
+  --paper-2:#efe6d4;
+  --neon:#ff2e6d;
+  --neon-soft:#ff6f9c;
+  --cyan:#19e3ff;
+  --yellow:#ffd23f;
+  --violet:#8b5cf6;
+  --line:rgba(246,241,231,.14);
+  --line-strong:rgba(246,241,231,.3);
+  --text:#f6f1e7;
+  --muted:#a9a4bd;
+  --font-display:"Arial Black","Helvetica Neue",Impact,"Hiragino Sans","Microsoft YaHei",sans-serif;
+  --font-body:"Helvetica Neue",Arial,"Hiragino Sans","Microsoft YaHei",sans-serif;
+  --font-mono:"SF Mono","Consolas","Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  background:var(--ink);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--neon);color:#fff}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* ---------- Halftone & texture utilities ---------- */
+.halftone{
+  background-image:radial-gradient(rgba(246,241,231,.18) 1.2px, transparent 1.3px);
+  background-size:10px 10px;
+}
+.halftone-dark{
+  background-image:radial-gradient(rgba(11,11,18,.28) 1.4px, transparent 1.5px);
+  background-size:9px 9px;
+}
+.speedlines{
+  background:repeating-conic-gradient(from 0deg at 50% 50%,
+    rgba(246,241,231,.07) 0deg 1.2deg, transparent 1.2deg 6deg);
+}
+
+/* ---------- Scroll reveal ---------- */
+html.js .reveal:not(.in){opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+html.js .reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}.reveal.d4{transition-delay:.4s}
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 40px;
+  background:rgba(11,11,18,.72);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  transition:padding .3s ease,background .3s ease;
+}
+.nav.scrolled{padding:10px 40px;background:rgba(11,11,18,.92)}
+.logo{display:flex;align-items:center;gap:12px;font-family:var(--font-display);letter-spacing:.06em}
+.logo-mark{
+  width:42px;height:42px;position:relative;flex:none;
+  background:var(--neon);border-radius:8px;overflow:hidden;
+  box-shadow:4px 4px 0 var(--cyan);
+}
+.logo-mark::before{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(135deg,transparent 45%,#fff 45%,#fff 55%,transparent 55%),
+    linear-gradient(45deg,transparent 45%,rgba(255,255,255,.5) 45%,rgba(255,255,255,.5) 55%,transparent 55%);
+}
+.logo-mark::after{
+  content:"波";position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--font-display);font-size:22px;color:#fff;
+  text-shadow:2px 2px 0 rgba(11,11,18,.55);
+}
+.logo-text{font-size:22px}
+.logo-text small{display:block;font-family:var(--font-mono);font-size:9px;letter-spacing:.34em;color:var(--cyan);font-weight:400}
+.nav-links{display:flex;align-items:center;gap:30px;font-size:14px;letter-spacing:.04em}
+.nav-links a{position:relative;padding:6px 2px;color:var(--muted);transition:color .25s}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:0;height:2px;width:0;
+  background:var(--neon);transition:width .3s ease;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{
+  padding:11px 24px;background:var(--neon);color:#fff;font-weight:800;font-size:14px;
+  letter-spacing:.06em;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.nav-cta:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--cyan)}
+.burger{display:none;flex-direction:column;gap:5px}
+.burger span{width:26px;height:2.5px;background:var(--text);transition:.3s}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;
+  padding:150px 40px 80px;overflow:hidden;
+  background:
+    radial-gradient(1100px 600px at 82% 12%, rgba(255,46,109,.20), transparent 62%),
+    radial-gradient(900px 560px at 12% 88%, rgba(25,227,255,.14), transparent 60%),
+    var(--ink);
+}
+.hero-lines{
+  position:absolute;inset:-30%;pointer-events:none;opacity:.65;
+  background:repeating-conic-gradient(from 0deg at 68% 30%,
+    rgba(246,241,231,.055) 0deg 1deg, transparent 1deg 5deg);
+  animation:spin 90s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-halftone{
+  position:absolute;right:-140px;top:-120px;width:640px;height:640px;border-radius:50%;
+  background-image:radial-gradient(rgba(255,46,109,.5) 2px, transparent 2.4px);
+  background-size:16px 16px;opacity:.35;pointer-events:none;
+}
+.hero-vertical{
+  position:absolute;right:56px;top:50%;transform:translateY(-50%);
+  writing-mode:vertical-rl;font-family:var(--font-display);
+  font-size:clamp(44px,7vw,96px);letter-spacing:.18em;
+  color:transparent;-webkit-text-stroke:1.5px rgba(246,241,231,.16);
+  user-select:none;pointer-events:none;line-height:1;
+}
+.hero-inner{
+  position:relative;z-index:2;max-width:1280px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center;
+}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.32em;
+  color:var(--cyan);border:1px solid rgba(25,227,255,.4);
+  padding:8px 16px;margin-bottom:26px;background:rgba(25,227,255,.07);
+}
+.hero-kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);animation:pulse 1.6s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.hero h1{
+  font-family:var(--font-display);
+  font-size:clamp(52px,8.4vw,124px);
+  line-height:.92;letter-spacing:-.015em;text-transform:uppercase;
+  margin-bottom:28px;
+}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line span{display:inline-block;transform:translateY(110%);animation:riseUp .9s cubic-bezier(.19,1,.22,1) forwards}
+.hero h1 .line:nth-child(2) span{animation-delay:.12s}
+.hero h1 .line:nth-child(3) span{animation-delay:.24s}
+@keyframes riseUp{to{transform:none}}
+.hero h1 .accent{
+  color:var(--neon);
+  text-shadow:5px 5px 0 rgba(25,227,255,.55);
+}
+.hero h1 .outline{color:transparent;-webkit-text-stroke:2px var(--paper)}
+.hero-sub{
+  font-size:clamp(16px,1.5vw,20px);color:var(--muted);max-width:560px;
+  margin-bottom:38px;line-height:1.85;
+}
+.hero-sub b{color:var(--text);font-weight:700}
+.hero-actions{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.btn{
+  position:relative;display:inline-flex;align-items:center;gap:12px;
+  padding:18px 36px;font-weight:800;font-size:15px;letter-spacing:.08em;
+  transition:transform .22s ease,box-shadow .22s ease,background .22s ease,color .22s ease;
+  clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);
+}
+.btn-primary{background:var(--neon);color:#fff;box-shadow:7px 7px 0 rgba(25,227,255,.85)}
+.btn-primary:hover{transform:translate(-3px,-3px);box-shadow:11px 11px 0 rgba(25,227,255,.85)}
+.btn-ghost{border:2px solid var(--line-strong);color:var(--text)}
+.btn-ghost:hover{border-color:var(--yellow);color:var(--yellow);transform:translate(-3px,-3px);box-shadow:7px 7px 0 rgba(255,210,63,.35)}
+.btn .arrow{font-family:var(--font-mono);font-size:18px;transition:transform .25s}
+.btn:hover .arrow{transform:translateX(5px)}
+.hero-stats{
+  display:flex;gap:38px;margin-top:52px;flex-wrap:wrap;
+  border-top:1px solid var(--line);padding-top:28px;
+}
+.hero-stats .stat b{
+  display:block;font-family:var(--font-display);font-size:clamp(26px,3vw,40px);
+  color:var(--yellow);line-height:1;
+}
+.hero-stats .stat span{font-size:12.5px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+
+/* Hero manga stack */
+.hero-visual{position:relative;height:560px}
+.manga-card{
+  position:absolute;width:270px;height:390px;border-radius:6px;overflow:hidden;
+  border:3px solid var(--paper);
+  box-shadow:14px 14px 0 rgba(11,11,18,.65), 0 30px 60px rgba(0,0,0,.5);
+  transition:transform .5s cubic-bezier(.2,.7,.2,1);
+}
+.manga-card:hover{transform:translateY(-12px) rotate(0deg) scale(1.03)!important;z-index:9}
+.manga-card .cover{position:absolute;inset:0}
+.manga-card .cover::after{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(11,11,18,.35) 1.5px, transparent 1.7px);
+  background-size:8px 8px;mix-blend-mode:multiply;
+}
+.manga-card .tag{
+  position:absolute;top:14px;left:-34px;transform:rotate(-45deg);
+  background:var(--neon);color:#fff;font-family:var(--font-mono);font-size:10px;
+  letter-spacing:.22em;padding:6px 42px;z-index:3;
+}
+.manga-card .meta{
+  position:absolute;left:0;right:0;bottom:0;z-index:3;padding:18px 16px 14px;
+  background:linear-gradient(transparent, rgba(11,11,18,.92) 42%);
+}
+.manga-card .meta h4{font-family:var(--font-display);font-size:19px;letter-spacing:.03em;line-height:1.15}
+.manga-card .meta p{font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;color:var(--cyan);margin-top:5px}
+.card-a{top:8%;left:2%;transform:rotate(-7deg);animation:float1 7s ease-in-out infinite}
+.card-b{top:26%;left:34%;transform:rotate(3deg);z-index:2;animation:float2 8s ease-in-out infinite}
+.card-c{top:2%;right:-4%;transform:rotate(8deg);animation:float3 9s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:rotate(-7deg) translateY(0)}50%{transform:rotate(-7deg) translateY(-16px)}}
+@keyframes float2{0%,100%{transform:rotate(3deg) translateY(0)}50%{transform:rotate(3deg) translateY(14px)}}
+@keyframes float3{0%,100%{transform:rotate(8deg) translateY(0)}50%{transform:rotate(8deg) translateY(-12px)}}
+/* Cover artworks (pure CSS) */
+.cover-1{background:
+  radial-gradient(circle at 30% 26%, #ffd23f 0 12%, transparent 13%),
+  linear-gradient(160deg,#ff2e6d 0%,#8b1e4f 44%,#12121d 100%);}
+.cover-1::before{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(115deg, transparent 0 26px, rgba(255,255,255,.14) 26px 29px);}
+.cover-2{background:
+  radial-gradient(circle at 72% 22%, rgba(25,227,255,.9) 0 16%, transparent 17%),
+  linear-gradient(200deg,#12213f 0%,#19e3ff55 45%,#0b0b12 100%);}
+.cover-2::before{content:"";position:absolute;inset:0;
+  background:repeating-conic-gradient(from 20deg at 72% 22%, rgba(246,241,231,.16) 0 2deg, transparent 2deg 9deg);}
+.cover-3{background:
+  linear-gradient(135deg,#ffd23f 0%,#ff8c2e 38%,#ff2e6d 100%);}
+.cover-3::before{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(11,11,18,.5) 3px, transparent 3.5px);
+  background-size:18px 18px;}
+
+/* ============ MARQUEE ============ */
+.marquee{
+  background:var(--neon);color:#fff;overflow:hidden;padding:16px 0;
+  border-top:3px solid var(--paper);border-bottom:3px solid var(--paper);
+  transform:rotate(-1.4deg) scale(1.02);margin:0 -12px;position:relative;z-index:5;
+}
+.marquee-track{display:flex;gap:0;width:max-content;animation:scrollX 26s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track span{
+  font-family:var(--font-display);font-size:21px;letter-spacing:.14em;
+  padding:0 30px;white-space:nowrap;text-transform:uppercase;
+  display:flex;align-items:center;gap:30px;
+}
+.marquee-track span i{font-style:normal;color:var(--yellow);font-size:15px}
+@keyframes scrollX{to{transform:translateX(-50%)}}
+
+/* ============ SECTION SHELL ============ */
+.section{position:relative;padding:110px 40px}
+.section-inner{max-width:1280px;margin:0 auto}
+.sec-head{margin-bottom:64px;position:relative}
+.sec-eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.34em;
+  color:var(--neon);text-transform:uppercase;margin-bottom:18px;
+}
+.sec-eyebrow::before{content:"";width:36px;height:2px;background:var(--neon)}
+.sec-title{
+  font-family:var(--font-display);text-transform:uppercase;
+  font-size:clamp(38px,5.4vw,72px);line-height:.98;letter-spacing:-.01em;
+}
+.sec-title .stroke{color:transparent;-webkit-text-stroke:2px var(--paper)}
+.sec-title .pink{color:var(--neon)}
+.sec-desc{color:var(--muted);max-width:640px;margin-top:22px;font-size:17px;line-height:1.9}
+
+/* ============ FEATURES (panel grid) ============ */
+.features{background:var(--ink-2)}
+.features::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(rgba(246,241,231,.07) 1.3px, transparent 1.5px);
+  background-size:22px 22px;
+}
+.panel-grid{
+  display:grid;grid-template-columns:repeat(12,1fr);gap:22px;position:relative;z-index:2;
+}
+.panel{
+  position:relative;padding:38px 32px;overflow:hidden;
+  background:var(--ink-3);border:2px solid var(--line-strong);
+  transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease;
+}
+.panel:hover{transform:translate(-5px,-5px);border-color:var(--neon);box-shadow:10px 10px 0 rgba(255,46,109,.35)}
+.panel .num{
+  font-family:var(--font-display);font-size:60px;line-height:1;
+  color:transparent;-webkit-text-stroke:1.5px rgba(246,241,231,.28);
+  position:absolute;top:18px;right:22px;
+}
+.panel .icon{
+  width:58px;height:58px;display:grid;place-items:center;margin-bottom:22px;
+  background:var(--neon);color:#fff;font-size:26px;
+  clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
+}
+.panel h3{font-family:var(--font-display);font-size:22px;letter-spacing:.03em;margin-bottom:12px;text-transform:uppercase}
+.panel p{color:var(--muted);font-size:15px;line-height:1.9}
+.panel .jp{
+  position:absolute;bottom:10px;right:16px;font-family:var(--font-display);
+  font-size:44px;color:rgba(246,241,231,.06);line-height:1;pointer-events:none;
+}
+.panel.wide{grid-column:span 6}
+.panel.normal{grid-column:span 4}
+.panel.half{grid-column:span 6}
+.panel.featured{
+  background:linear-gradient(135deg, rgba(255,46,109,.16), rgba(25,227,255,.10)), var(--ink-3);
+  border-color:var(--neon);
+}
+.panel.featured .icon{background:var(--yellow);color:var(--ink)}
+
+/* ============ READER SHOWCASE ============ */
+.showcase{background:var(--ink);overflow:hidden}
+.showcase-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.reader-frame{
+  position:relative;background:var(--paper);border-radius:14px;overflow:hidden;
+  border:4px solid var(--paper);
+  box-shadow:18px 18px 0 rgba(255,46,109,.9), 0 40px 80px rgba(0,0,0,.55);
+}
+.reader-topbar{
+  display:flex;align-items:center;gap:10px;padding:13px 18px;
+  background:var(--ink-2);border-bottom:2px solid var(--ink);
+}
+.reader-topbar .dots{display:flex;gap:7px}
+.reader-topbar .dots i{width:11px;height:11px;border-radius:50%;display:block}
+.reader-topbar .dots i:nth-child(1){background:#ff5f57}
+.reader-topbar .dots i:nth-child(2){background:#ffbd2e}
+.reader-topbar .dots i:nth-child(3){background:#28ca42}
+.reader-topbar .url{
+  flex:1;text-align:center;font-family:var(--font-mono);font-size:11px;
+  letter-spacing:.14em;color:var(--muted);
+}
+.reader-body{
+  background:var(--paper-2);padding:22px;display:grid;
+  grid-template-columns:1fr 1fr;grid-template-rows:1.25fr .9fr;gap:14px;
+  min-height:430px;position:relative;
+}
+.mpanel{
+  position:relative;overflow:hidden;border:3px solid var(--ink);
+  background:#fff;
+}
+.mpanel .bubble{
+  position:absolute;background:#fff;border:3px solid var(--ink);border-radius:50%;
+  padding:12px 18px;font-size:12.5px;font-weight:700;color:var(--ink);text-align:center;
+  line-height:1.45;z-index:3;
+}
+.mpanel .bubble::after{
+  content:"";position:absolute;width:14px;height:14px;background:#fff;
+  border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);
+  transform:rotate(45deg);
+}
+.mp-1{background:
+  radial-gradient(circle at 68% 30%, #ffd23f 0 14%, transparent 15%),
+  repeating-conic-gradient(from 0deg at 68% 30%, rgba(11,11,18,.20) 0 1.5deg, transparent 1.5deg 8deg),
+  linear-gradient(160deg,#ff9db6,#ff2e6d);}
+.mp-1 .bubble{top:14px;left:12px;}
+.mp-1 .bubble::after{bottom:-9px;left:34%;}
+.mp-2{background:
+  repeating-linear-gradient(105deg, transparent 0 16px, rgba(11,11,18,.16) 16px 18px),
+  linear-gradient(200deg,#9be8ff,#19a8e3);}
+.mp-2 .bubble{bottom:16px;right:12px;}
+.mp-2 .bubble::after{top:-9px;right:30%;}
+.mp-3{grid-column:span 2;background:
+  radial-gradient(circle at 22% 42%, rgba(255,255,255,.9) 0 8%, transparent 9%),
+  repeating-conic-gradient(from 12deg at 22% 42%, rgba(11,11,18,.18) 0 1.2deg, transparent 1.2deg 6deg),
+  linear-gradient(90deg,#2b2140,#6b3fa0 55%,#ff2e6d);}
+.mp-3 .bubble{top:20px;right:22px;max-width:200px;}
+.mp-3 .bubble::after{bottom:-9px;left:26%;}
+.reader-hud{
+  position:absolute;left:22px;right:22px;bottom:14px;z-index:6;
+  display:flex;align-items:center;gap:14px;
+}
+.reader-hud .bar{flex:1;height:6px;background:rgba(11,11,18,.18);border-radius:99px;overflow:hidden}
+.reader-hud .bar i{display:block;height:100%;width:62%;background:var(--neon);border-radius:99px}
+.reader-hud span{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--ink);font-weight:700}
+.sfx{
+  position:absolute;font-family:var(--font-display);color:var(--ink);
+  font-size:30px;letter-spacing:.06em;transform:rotate(-12deg);
+  text-shadow:3px 3px 0 rgba(255,255,255,.8);z-index:4;pointer-events:none;
+}
+.sfx-1{top:44%;left:46%;font-size:40px;transform:rotate(-18deg)}
+.showcase-copy .feat-list{margin-top:34px;display:grid;gap:16px}
+.feat-item{
+  display:flex;gap:18px;align-items:flex-start;padding:18px 20px;
+  border:1.5px solid var(--line);background:rgba(246,241,231,.03);
+  transition:border-color .3s,background .3s,transform .3s;
+}
+.feat-item:hover{border-color:var(--cyan);background:rgba(25,227,255,.07);transform:translateX(8px)}
+.feat-item .check{
+  flex:none;width:30px;height:30px;display:grid;place-items:center;
+  background:var(--cyan);color:var(--ink);font-weight:900;font-size:15px;
+  clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);
+}
+.feat-item h4{font-size:16.5px;font-weight:800;letter-spacing:.03em;margin-bottom:4px}
+.feat-item p{color:var(--muted);font-size:14px;line-height:1.75}
+
+/* ============ WORKS / LIBRARY ============ */
+.works{background:var(--paper);color:var(--ink)}
+.works .sec-eyebrow{color:#c11349}
+.works .sec-eyebrow::before{background:#c11349}
+.works .sec-title .stroke{-webkit-text-stroke:2px var(--ink)}
+.works .sec-desc{color:#5b5566}
+.tabs{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:46px}
+.tab{
+  padding:12px 26px;font-family:var(--font-mono);font-size:12.5px;letter-spacing:.2em;
+  text-transform:uppercase;border:2px solid var(--ink);background:transparent;color:var(--ink);
+  transition:all .25s ease;
+}
+.tab:hover{background:var(--ink);color:var(--paper)}
+.tab.active{background:var(--neon);border-color:var(--neon);color:#fff;box-shadow:5px 5px 0 var(--ink)}
+.works-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+.work{
+  position:relative;background:#fff;border:3px solid var(--ink);overflow:hidden;
+  transition:transform .35s ease,box-shadow .35s ease;
+}
+.work:hover{transform:translate(-6px,-6px);box-shadow:12px 12px 0 var(--ink)}
+.work-art{position:relative;height:280px;overflow:hidden}
+.work-art::after{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(11,11,18,.3) 1.4px, transparent 1.6px);
+  background-size:8px 8px;mix-blend-mode:multiply;
+}
+.work-art .badge{
+  position:absolute;top:12px;right:12px;z-index:3;
+  background:var(--ink);color:var(--paper);font-family:var(--font-mono);
+  font-size:10px;letter-spacing:.18em;padding:6px 12px;
+}
+.wa-1{background:linear-gradient(150deg,#ff2e6d,#6b1030 70%,#1a1a2b),
+  repeating-linear-gradient(115deg, transparent 0 20px, rgba(255,255,255,.12) 20px 23px);}
+.wa-1{background:
+  repeating-linear-gradient(115deg, transparent 0 20px, rgba(255,255,255,.12) 20px 23px),
+  linear-gradient(150deg,#ff2e6d,#6b1030 70%,#1a1a2b);}
+.wa-2{background:
+  radial-gradient(circle at 50% 30%, #ffd23f 0 18%, transparent 19%),
+  repeating-conic-gradient(from 0deg at 50% 30%, rgba(11,11,18,.22) 0 1.5deg, transparent 1.5deg 7deg),
+  linear-gradient(180deg,#241a44,#0b0b12);}
+.wa-3{background:
+  repeating-linear-gradient(45deg, transparent 0 14px, rgba(11,11,18,.14) 14px 17px),
+  linear-gradient(160deg,#19e3ff,#0e5f8b 65%,#0b2233);}
+.wa-4{background:
+  radial-gradient(circle at 26% 68%, rgba(255,255,255,.85) 0 10%, transparent 11%),
+  linear-gradient(200deg,#ffd23f,#ff8c2e 52%,#c11349);}
+.wa-5{background:
+  repeating-conic-gradient(from 30deg at 78% 22%, rgba(246,241,231,.2) 0 1.6deg, transparent 1.6deg 8deg),
+  linear-gradient(140deg,#8b5cf6,#2b2140);}
+.wa-6{background:
+  repeating-linear-gradient(90deg, transparent 0 12px, rgba(11,11,18,.16) 12px 14px),
+  linear-gradient(190deg,#28ca42,#0b4d24);}
+.wa-7{background:
+  radial-gradient(circle at 50% 50%, #ff2e6d 0 12%, transparent 13%),
+  repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,.14) 0 1deg, transparent 1deg 5deg),
+  linear-gradient(160deg,#12121d,#2b2140);}
+.wa-8{background:
+  repeating-linear-gradient(135deg, transparent 0 18px, rgba(11,11,18,.18) 18px 21px),
+  linear-gradient(160deg,#ff6f9c,#8b1e4f);}
+.work-info{padding:18px 18px 22px;border-top:3px solid var(--ink)}
+.work-info h4{font-family:var(--font-display);font-size:18px;letter-spacing:.03em;line-height:1.25}
+.work-info .row{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.work-info .genre{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.2em;color:#c11349;text-transform:uppercase}
+.work-info .rating{font-family:var(--font-mono);font-size:12px;font-weight:700}
+.work-info .rating i{font-style:normal;color:var(--neon)}
+.work-bar{height:6px;background:#e5ddcf;position:relative;overflow:hidden}
+.work-bar i{position:absolute;inset:0;width:var(--p,60%);background:var(--neon)}
+
+/* ============ PROCESS / TIMELINE ============ */
+.process{background:var(--ink-2);position:relative;overflow:hidden}
+.process::before{
+  content:"";position:absolute;inset:0;opacity:.6;pointer-events:none;
+  background:repeating-conic-gradient(from 0deg at 82% 18%, rgba(25,227,255,.06) 0 1deg, transparent 1deg 6deg);
+}
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:26px;z-index:2}
+.timeline::before{
+  content:"";position:absolute;top:46px;left:6%;right:6%;height:3px;
+  background:linear-gradient(90deg,var(--neon),var(--cyan),var(--yellow),var(--violet));
+}
+.tl-step{position:relative;padding-top:0}
+.tl-dot{
+  width:92px;height:92px;display:grid;place-items:center;margin-bottom:26px;
+  background:var(--ink);border:3px solid var(--neon);border-radius:50%;
+  font-family:var(--font-display);font-size:28px;color:var(--neon);
+  box-shadow:0 0 0 8px var(--ink-2), 0 0 34px rgba(255,46,109,.35);
+  position:relative;z-index:2;
+}
+.tl-step:nth-child(2) .tl-dot{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 0 8px var(--ink-2),0 0 34px rgba(25,227,255,.35)}
+.tl-step:nth-child(3) .tl-dot{border-color:var(--yellow);color:var(--yellow);box-shadow:0 0 0 8px var(--ink-2),0 0 34px rgba(255,210,63,.35)}
+.tl-step:nth-child(4) .tl-dot{border-color:var(--violet);color:var(--violet);box-shadow:0 0 0 8px var(--ink-2),0 0 34px rgba(139,92,246,.35)}
+.tl-step h3{font-family:var(--font-display);font-size:20px;letter-spacing:.04em;margin-bottom:12px;text-transform:uppercase}
+.tl-step p{color:var(--muted);font-size:14.5px;line-height:1.85}
+.tl-step .jp-label{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.3em;color:var(--cyan);
+  display:block;margin-bottom:10px;text-transform:uppercase;
+}
+
+/* ============ STATS BAND ============ */
+.band{
+  position:relative;padding:86px 40px;overflow:hidden;
+  background:linear-gradient(120deg,var(--neon) 0%,#c11349 48%,var(--violet) 100%);
+  border-top:4px solid var(--paper);border-bottom:4px solid var(--paper);
+}
+.band .speedlines{
+  position:absolute;inset:-40%;opacity:.5;
+  background:repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,.16) 0 1deg, transparent 1deg 7deg);
+}
+.band-grid{
+  position:relative;z-index:2;max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:30px;text-align:center;
+}
+.band-item b{
+  display:block;font-family:var(--font-display);font-size:clamp(42px,5.6vw,80px);
+  line-height:1;color:#fff;text-shadow:5px 5px 0 rgba(11,11,18,.35);
+}
+.band-item span{
+  display:block;margin-top:12px;font-family:var(--font-mono);font-size:12px;
+  letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.85);
+}
+
+/* ============ TESTIMONIALS ============ */
+.voices{background:var(--ink)}
+.voice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.voice{
+  position:relative;padding:36px 30px 30px;background:var(--ink-3);
+  border:2px solid var(--line-strong);
+  transition:transform .35s ease,border-color .35s ease;
+}
+.voice:hover{transform:translateY(-10px);border-color:var(--yellow)}
+.voice::before{
+  content:"“";position:absolute;top:-6px;left:18px;
+  font-family:var(--font-display);font-size:110px;line-height:1;color:var(--neon);opacity:.5;
+}
+.voice p{position:relative;z-index:2;font-size:15.5px;line-height:2;color:var(--paper);margin-bottom:26px}
+.voice .who{display:flex;align-items:center;gap:14px}
+.voice .avatar{
+  width:52px;height:52px;flex:none;border-radius:50%;overflow:hidden;
+  border:2.5px solid var(--neon);position:relative;
+}
+.av-1{background:radial-gradient(circle at 34% 30%,#ffd23f 0 16%,transparent 17%),linear-gradient(150deg,#ff2e6d,#6b1030)}
+.av-2{background:radial-gradient(circle at 62% 30%,rgba(255,255,255,.8) 0 14%,transparent 15%),linear-gradient(150deg,#19e3ff,#0e5f8b)}
+.av-3{background:radial-gradient(circle at 44% 34%,rgba(255,255,255,.75) 0 13%,transparent 14%),linear-gradient(150deg,#8b5cf6,#2b2140)}
+.voice .who b{display:block;font-size:15px;letter-spacing:.03em}
+.voice .who span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.22em;color:var(--cyan);text-transform:uppercase}
+.voice .stars{position:absolute;top:26px;right:24px;color:var(--yellow);font-size:13px;letter-spacing:3px}
+
+/* ============ PRICING ============ */
+.pricing{background:var(--paper);color:var(--ink)}
+.pricing .sec-eyebrow{color:#c11349}
+.pricing .sec-eyebrow::before{background:#c11349}
+.pricing .sec-title .stroke{-webkit-text-stroke:2px var(--ink)}
+.pricing .sec-desc{color:#5b5566}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;align-items:stretch}
+.price-card{
+  position:relative;background:#fff;border:3px solid var(--ink);padding:42px 34px;
+  display:flex;flex-direction:column;
+  transition:transform .35s ease,box-shadow .35s ease;
+}
+.price-card:hover{transform:translate(-6px,-6px);box-shadow:12px 12px 0 var(--ink)}
+.price-card.hot{
+  background:var(--ink);color:var(--paper);border-color:var(--neon);
+  box-shadow:12px 12px 0 var(--neon);
+}
+.price-card.hot:hover{box-shadow:18px 18px 0 var(--neon)}
+.price-card .flag{
+  position:absolute;top:-3px;right:-3px;background:var(--neon);color:#fff;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.24em;padding:8px 16px;
+}
+.price-card h3{font-family:var(--font-display);font-size:22px;letter-spacing:.08em;text-transform:uppercase}
+.price-card .jp-sub{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.28em;color:#c11349;margin-top:6px;text-transform:uppercase}
+.price-card.hot .jp-sub{color:var(--cyan)}
+.price-card .amount{margin:26px 0 8px;display:flex;align-items:baseline;gap:8px}
+.price-card .amount b{font-family:var(--font-display);font-size:56px;line-height:1}
+.price-card .amount span{font-family:var(--font-mono);font-size:12px;letter-spacing:.18em;opacity:.65}
+.price-card .note{font-size:13px;opacity:.62;margin-bottom:26px}
+.price-card ul{list-style:none;display:grid;gap:13px;margin-bottom:34px;flex:1}
+.price-card li{display:flex;gap:11px;font-size:14.5px;line-height:1.6}
+.price-card li::before{content:"◆";color:var(--neon);font-size:11px;line-height:1.9;flex:none}
+.price-card .btn{width:100%;justify-content:center}
+.btn-dark{background:var(--ink);color:var(--paper)}
+.btn-dark:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--neon)}
+.btn-hot{background:var(--neon);color:#fff}
+.btn-hot:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--cyan)}
+
+/* ============ FAQ ============ */
+.faq{background:var(--ink-2)}
+.faq-wrap{max-width:880px;margin:0 auto;display:grid;gap:16px}
+.faq-item{border:2px solid var(--line-strong);background:var(--ink-3);overflow:hidden}
+.faq-q{
+  width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;
+  padding:24px 28px;text-align:left;font-size:17px;font-weight:800;letter-spacing:.02em;
+  transition:background .25s,color .25s;
+}
+.faq-q:hover{color:var(--neon)}
+.faq-q .mark{
+  flex:none;width:32px;height:32px;display:grid;place-items:center;
+  border:2px solid var(--neon);color:var(--neon);font-family:var(--font-mono);
+  font-size:18px;transition:transform .35s ease;
+}
+.faq-item.open .faq-q{background:var(--neon);color:#fff}
+.faq-item.open .mark{transform:rotate(45deg);border-color:#fff;color:#fff}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.2,.7,.2,1)}
+.faq-a p{padding:22px 28px 28px;color:var(--muted);font-size:15px;line-height:2}
+
+/* ============ CTA ============ */
+.cta{
+  position:relative;padding:130px 40px;overflow:hidden;text-align:center;
+  background:
+    radial-gradient(900px 480px at 50% 120%, rgba(255,46,109,.35), transparent 65%),
+    var(--ink);
+}
+.cta .speedlines{
+  position:absolute;inset:-30%;opacity:.8;
+  background:repeating-conic-gradient(from 0deg at 50% 46%, rgba(246,241,231,.07) 0 1deg, transparent 1deg 5deg);
+}
+.cta-inner{position:relative;z-index:2;max-width:900px;margin:0 auto}
+.cta h2{
+  font-family:var(--font-display);text-transform:uppercase;
+  font-size:clamp(42px,7vw,96px);line-height:.95;letter-spacing:-.01em;margin-bottom:26px;
+}
+.cta h2 .pink{color:var(--neon);text-shadow:5px 5px 0 rgba(25,227,255,.5)}
+.cta p{color:var(--muted);font-size:18px;line-height:1.9;max-width:620px;margin:0 auto 44px}
+.cta-actions{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.cta-note{margin-top:30px;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.26em;color:var(--muted);text-transform:uppercase}
+
+/* ============ FOOTER ============ */
+.footer{background:#07070c;border-top:2px solid var(--line);padding:80px 40px 36px}
+.footer-inner{max-width:1280px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:44px;padding-bottom:56px;border-bottom:1px solid var(--line)}
+.footer-brand p{color:var(--muted);font-size:14px;line-height:1.95;max-width:320px;margin-top:20px}
+.footer-social{display:flex;gap:12px;margin-top:26px}
+.footer-social a{
+  width:42px;height:42px;display:grid;place-items:center;
+  border:1.5px solid var(--line-strong);font-family:var(--font-mono);font-size:11px;
+  letter-spacing:.06em;color:var(--muted);transition:all .25s;
+}
+.footer-social a:hover{border-color:var(--neon);background:var(--neon);color:#fff;transform:translateY(-4px)}
+.footer-col h5{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:22px;
+}
+.footer-col a{display:block;color:var(--muted);font-size:14px;padding:7px 0;transition:color .22s,transform .22s}
+.footer-col a:hover{color:var(--neon);transform:translateX(6px)}
+.footer-bottom{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+  padding-top:32px;font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;
+  color:var(--muted);text-transform:uppercase;
+}
+.footer-bottom .jp{font-family:var(--font-display);letter-spacing:.3em;color:rgba(246,241,231,.22)}
+
+/* ============ BACK TO TOP ============ */
+.totop{
+  position:fixed;right:28px;bottom:28px;z-index:90;
+  width:52px;height:52px;display:grid;place-items:center;
+  background:var(--neon);color:#fff;font-family:var(--font-mono);font-size:18px;
+  opacity:0;pointer-events:none;transform:translateY(16px);
+  transition:opacity .3s,transform .3s;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+}
+.totop.show{opacity:1;pointer-events:auto;transform:none}
+.totop:hover{background:var(--cyan);color:var(--ink)}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1080px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-visual{height:440px;margin-top:20px}
+  .showcase-grid{grid-template-columns:1fr}
+  .works-grid{grid-template-columns:repeat(2,1fr)}
+  .timeline{grid-template-columns:repeat(2,1fr)}
+  .timeline::before{display:none}
+  .voice-grid{grid-template-columns:1fr}
+  .price-grid{grid-template-columns:1fr}
+  .panel.wide,.panel.normal,.panel.half{grid-column:span 12}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:720px){
+  .nav{padding:14px 20px}
+  .nav-links{
+    position:fixed;inset:0 0 0 auto;width:min(78vw,320px);
+    background:rgba(11,11,18,.97);flex-direction:column;justify-content:center;
+    transform:translateX(100%);transition:transform .4s cubic-bezier(.2,.7,.2,1);
+    padding:40px;border-left:2px solid var(--neon);
+  }
+  .nav-links.open{transform:none}
+  .burger{display:flex;z-index:110}
+  .nav-cta{display:none}
+  .hero{padding:130px 20px 60px}
+  .hero-vertical{display:none}
+  .section{padding:80px 20px}
+  .band{padding:64px 20px}
+  .band-grid{grid-template-columns:1fr 1fr}
+  .works-grid{grid-template-columns:1fr}
+  .timeline{grid-template-columns:1fr}
+  .footer{padding:60px 20px 28px}
+  .footer-top{grid-template-columns:1fr}
+  .reader-body{grid-template-columns:1fr;grid-template-rows:auto}
+  .mp-3{grid-column:span 1}
+}
+</style>
+</head>
+<body>
+<!-- ================= NAV ================= -->
+<nav class="nav" id="nav">
+  <a class="logo" href="#top">
+    <span class="logo-mark"></span>
+    <span class="logo-text">INKWAVE<small>MANGA PUBLISHING</small></span>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="#features">平台能力</a>
+    <a href="#reader">阅读体验</a>
+    <a href="#works">作品库</a>
+    <a href="#process">出版流程</a>
+    <a href="#pricing">创作者方案</a>
+    <a href="#faq">常见问题</a>
+  </div>
+  <a class="nav-cta" href="#cta">开始连载</a>
+  <button class="burger" id="burger" aria-label="菜单"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="hero-lines"></div>
+  <div class="hero-halftone"></div>
+  <div class="hero-vertical">漫画出版</div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="hero-kicker"><span class="dot"></span>DIGITAL MANGA PUBLISHING · 数字漫画出版平台</div>
+      <h1>
+        <span class="line"><span>让每一格</span></span>
+        <span class="line"><span class="accent">掀起浪潮</span></span>
+        <span class="line"><span class="outline">MAKE WAVES.</span></span>
+      </h1>
+      <p class="hero-sub">
+        INKWAVE 为日式漫画与图像小说创作者打造从<strong>投稿、连载、分发到变现</strong>的完整链路。
+        竖条阅读引擎、全球多语分发、透明分成——你的故事，值得被世界读到。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#cta">免费开始创作 <span class="arrow">→</span></a>
+        <a class="btn btn-ghost" href="#reader">体验阅读器 <span class="arrow">▸</span></a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>48,000+</b><span>连载作品</span></div>
+        <div class="stat"><b>2.6 亿</b><span>月阅读量</span></div>
+        <div class="stat"><b>72 国</b><span>同步发行</span></div>
+        <div class="stat"><b>92%</b><span>创作者分成</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="manga-card card-a">
+        <div class="cover cover-1"></div>
+        <div class="tag">TOP 1</div>
+        <div class="meta"><h4>赤刃编年史</h4><p>ACTION / WEEKLY</p></div>
+      </div>
+      <div class="manga-card card-b">
+        <div class="cover cover-2"></div>
+        <div class="tag">NEW</div>
+        <div class="meta"><h4>星屑骑士团</h4><p>FANTASY / BIWEEKLY</p></div>
+      </div>
+      <div class="manga-card card-c">
+        <div class="cover cover-3"></div>
+        <div class="tag">HOT</div>
+        <div class="meta"><h4>放学后异闻录</h4><p>MYSTERY / DAILY</p></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= MARQUEE ================= -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>周更连载 <i>✦</i> 竖条阅读 <i>✦</i> 全球分发 <i>✦</i> 透明分成 <i>✦</i> 多语字幕 <i>✦</i> IP 孵化 <i>✦</i> 纸质出版对接 <i>✦</i> 动画化通道 <i>✦</i></span>
+    <span>周更连载 <i>✦</i> 竖条阅读 <i>✦</i> 全球分发 <i>✦</i> 透明分成 <i>✦</i> 多语字幕 <i>✦</i> IP 孵化 <i>✦</i> 纸质出版对接 <i>✦</i> 动画化通道 <i>✦</i></span>
+  </div>
+</div>
+<!-- ================= FEATURES ================= -->
+<section class="section features" id="features">
+  <div class="section-inner">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Platform · 平台能力</div>
+      <h2 class="sec-title">为漫画而生的<br><span class="stroke">出版</span><span class="pink">基础设施</span></h2>
+      <p class="sec-desc">从分镜上传到全球上架，INKWAVE 把传统出版数月的流程压缩到数天。创作者只需要专注讲故事。</p>
+    </div>
+    <div class="panel-grid">
+      <div class="panel featured wide reveal">
+        <div class="num">01</div>
+        <div class="icon">✎</div>
+        <h3>智能投稿工作台</h3>
+        <p>拖拽式分镜排版、跨页检测、网点与对话气泡模板库。支持 PSD / CSP / Clip Studio 工程直传，自动切格并对齐竖条阅读流。</p>
+        <div class="jp">作画</div>
+      </div>
+      <div class="panel normal reveal d1">
+        <div class="num">02</div>
+        <div class="icon">◈</div>
+        <h3>竖条阅读引擎</h3>
+        <p>为长条漫画（Webtoon）优化的阅读内核，智能分镜滚动、断点续读、离线缓存。</p>
+        <div class="jp">読</div>
+      </div>
+      <div class="panel normal reveal">
+        <div class="num">03</div>
+        <div class="icon">◎</div>
+        <h3>多语本地化</h3>
+        <p>中 / 日 / 英 / 西 / 泰 五语字幕流水线，人工审校 + AI 辅助术语表，译文自动嵌入气泡。</p>
+        <div class="jp">訳</div>
+      </div>
+      <div class="panel normal reveal d1">
+        <div class="num">04</div>
+        <div class="icon">▤</div>
+        <h3>数据看板</h3>
+        <p>逐话留存曲线、读者地域热力、付费转化漏斗。哪一格让人弃读，看得清清楚楚。</p>
+        <div class="jp">数</div>
+      </div>
+      <div class="panel normal reveal d2">
+        <div class="num">05</div>
+        <div class="icon">¥</div>
+        <h3>多元变现</h3>
+        <p>章节付费、会员畅读、广告分成、打赏与周边商城。92% 收入归创作者，月度透明结算。</p>
+        <div class="jp">金</div>
+      </div>
+      <div class="panel half reveal">
+        <div class="num">06</div>
+        <div class="icon">★</div>
+        <h3>IP 孵化与跨界开发</h3>
+        <p>人气作品直通动画化、广播剧、游戏改编与纸质出版合作方。INKWAVE 法务团队全程护航版权登记与授权谈判。</p>
+        <div class="jp">版権</div>
+      </div>
+      <div class="panel half reveal d1">
+        <div class="num">07</div>
+        <div class="icon">⛨</div>
+        <h3>创作安全与维权</h3>
+        <p>全站数字水印、盗版站点自动巡检、DMCA 一键下架。你的笔名与作品，受技术与法律双重守护。</p>
+        <div class="jp">守</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= READER SHOWCASE ================= -->
+<section class="section showcase" id="reader">
+  <div class="section-inner">
+    <div class="showcase-grid">
+      <div class="reader-frame reveal">
+        <div class="reader-topbar">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <div class="url">inkwave.manga / read / akabane-chronicles / ch.47</div>
+        </div>
+        <div class="reader-body">
+          <div class="mpanel mp-1">
+            <div class="bubble">「这一刀，<br>是替他们斩的！」</div>
+          </div>
+          <div class="mpanel mp-2">
+            <div class="bubble">糟了——<br>他什么时候出的刀？！</div>
+          </div>
+          <div class="mpanel mp-3">
+            <div class="bubble">第 47 话 · 终幕<br>「浪潮将至」</div>
+          </div>
+          <div class="sfx sfx-1">ドォォン!!</div>
+          <div class="reader-hud">
+            <span>CH.47</span>
+            <div class="bar"><i></i></div>
+            <span>62%</span>
+          </div>
+        </div>
+      </div>
+      <div class="showcase-copy">
+        <div class="sec-head reveal d1" style="margin-bottom:0">
+          <div class="sec-eyebrow">Reader · 阅读体验</div>
+          <h2 class="sec-title">像看漫画一样<br><span class="pink">自然</span>的<span class="stroke">数字阅读</span></h2>
+          <p class="sec-desc">INKWAVE 阅读器围绕日式漫画的叙事节奏设计——分格、跨页、留白与拟声词，都被完整保留。</p>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item reveal d1">
+            <div class="check">✓</div>
+            <div><h4>智能分镜流</h4><p>自动识别跨页与不规则分格，在手机竖屏与桌面横屏间无缝重排。</p></div>
+          </div>
+          <div class="feat-item reveal d2">
+            <div class="check">✓</div>
+            <div><h4>沉浸拟声模式</h4><p>拟声词随滚动触发轻微震动与音效开关，还原纸面张力（可自由关闭）。</p></div>
+          </div>
+          <div class="feat-item reveal d3">
+            <div class="check">✓</div>
+            <div><h4>社区弹注</h4><p>逐格留言与伏笔标注，作者可置顶彩蛋解说，让追更变成一场共读。</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WORKS ================= -->
+<section class="section works" id="works">
+  <div class="section-inner">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Library · 作品库</div>
+      <h2 class="sec-title">本周<span class="stroke">人气</span><span class="pink">连载榜</span></h2>
+      <p class="sec-desc">从热血战斗到静谧日常，超过 48,000 部作品在 INKWAVE 上持续更新。以下为编辑部精选。</p>
+    </div>
+    <div class="tabs reveal" id="tabs">
+      <button class="tab active" data-filter="all">全部</button>
+      <button class="tab" data-filter="action">热血战斗</button>
+      <button class="tab" data-filter="fantasy">奇幻冒险</button>
+      <button class="tab" data-filter="daily">日常治愈</button>
+      <button class="tab" data-filter="mystery">悬疑推理</button>
+    </div>
+    <div class="works-grid" id="worksGrid">
+      <div class="work reveal" data-genre="action">
+        <div class="work-art wa-1"><div class="badge">NO.1</div></div>
+        <div class="work-info">
+          <h4>赤刃编年史</h4>
+          <div class="row"><span class="genre">Action · 周更</span><span class="rating"><i>★</i> 9.8</span></div>
+        </div>
+        <div class="work-bar"><i style="--p:96%"></i></div>
+      </div>
+      <div class="work reveal d1" data-genre="fantasy">
+        <div class="work-art wa-2"><div class="badge">NO.2</div></div>
+        <div class="work-info">
+          <h4>星屑骑士团</h4>
+          <div class="row"><span class="genre">Fantasy · 隔周</span><span class="rating"><i>★</i> 9.6</span></div>
+        </div>
+        <div class="work-bar"><i style="--p:91%"></i></div>
+      </div>
+      <div class="work reveal d2" data-genre="mystery">
+        <div class="work-art wa-3"><div class="badge">NO.3</div></div>
+        <div class="work-info">
+          <h4>放学后异闻录</h4>
+          <div class="row"><span class="genre">Mystery · 日更</span><span class="rating"><i>★</i> 9.5</span></div>
+        </div>
+        <div class="work-bar"><i style="--p:88%"></i></div>
+      </div>
+      <div class="work reveal d3" data-genre="daily">
+        <div class="work-art wa-4"><div class="badge">编辑推荐</div></div>
+        <div class="work-info">
+          <h4>夏日汽水社</h4>
+          <div class="row"><span class="genre">Daily · 周更</span><span class="rating"><i>★</i> 9.4</span></div>
+        </div>
+        <div class="work-bar"><i style="--p:85%"></i></div>
+      </div>
+      <div class="work reveal" data-genre="fantasy">
+        <div class="work-art wa-5"><div class="badge">新作</div></div>
+        <div class="work-info">
+          <h4>月下机关都市</h4>
+          <div class="row"><span class="genre">Fantasy · 周更</span><span class="rating"><i>★</i> 9.3</span></div>
+        </div>
+        <div class="work-bar"><i style="--p:82%"></i></div>
+      </div>
+      <div class="work reveal d1" data-genre="daily">
+        <div class="work-art wa-6"><div class="badge">治愈系</div></div>
+        <div class="work-info">
+          <h4>森之食堂纪行</h4>
+          <div class="row"><span class="genre">Daily · 双周</span><span class="rating"><i>★</i> 9.2</span></div>
+        </div>
+        <div class="work-bar"><i style="--p:79%"></i></div>
+      </div>
+      <div class="work reveal d2" data-genre="action">
+        <div class="work-art wa-7"><div class="badge">热血</div></div>
+        <div class="work-info">
+          <h4>零式格斗祭</h4>
+          <div class="row"><span class="genre">Action · 周更</span><span class="rating"><i>★</i> 9.1</span></div>
+        </div>
+        <div class="work-bar"><i style="--p:76%"></i></div>
+      </div>
+      <div class="work reveal d3" data-genre="mystery">
+        <div class="work-art wa-8"><div class="badge">完结</div></div>
+        <div class="work-info">
+          <h4>第十三封信</h4>
+          <div class="row"><span class="genre">Mystery · 全 6 卷</span><span class="rating"><i>★</i> 9.7</span></div>
+        </div>
+        <div class="work-bar"><i style="--p:93%"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROCESS ================= -->
+<section class="section process" id="process">
+  <div class="section-inner">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Process · 出版流程</div>
+      <h2 class="sec-title">四步开启你的<span class="pink">连载</span></h2>
+      <p class="sec-desc">没有繁琐的编辑部门槛。上传第一话，最快 72 小时内即可面向全球读者开载。</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-step reveal">
+        <div class="tl-dot">01</div>
+        <span class="jp-label">STEP ONE · 投稿</span>
+        <h3>上传作品</h3>
+        <p>拖入分镜文件，选择连载制（日更 / 周更 / 隔周）。工作台自动完成切格、排版与封面生成。</p>
+      </div>
+      <div class="tl-step reveal d1">
+        <div class="tl-dot">02</div>
+        <span class="jp-label">STEP TWO · 审校</span>
+        <h3>编辑陪跑</h3>
+        <p>专属责任编辑 48 小时内反馈，从剧情节奏到分镜密度给出建议。通过后一键签署数字出版协议。</p>
+      </div>
+      <div class="tl-step reveal d2">
+        <div class="tl-dot">03</div>
+        <span class="jp-label">STEP THREE · 上架</span>
+        <h3>全球发行</h3>
+        <p>同步推送至 INKWAVE App、Web 站与合作渠道，五语字幕版本按市场节奏分批上线。</p>
+      </div>
+      <div class="tl-step reveal d3">
+        <div class="tl-dot">04</div>
+        <span class="jp-label">STEP FOUR · 变现</span>
+        <h3>成长与变现</h3>
+        <p>数据看板指导更新节奏，付费、打赏与 IP 授权多元收入。月度结算，92% 归你。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS BAND ================= -->
+<section class="band">
+  <div class="speedlines"></div>
+  <div class="band-grid">
+    <div class="band-item reveal"><b data-count="48000" data-suffix="+">0</b><span>连载作品</span></div>
+    <div class="band-item reveal d1"><b data-count="260" data-suffix="M">0</b><span>月阅读量</span></div>
+    <div class="band-item reveal d2"><b data-count="72" data-suffix="">0</b><span>发行国家</span></div>
+    <div class="band-item reveal d3"><b data-count="92" data-suffix="%">0</b><span>创作者分成</span></div>
+  </div>
+</section>
+
+<!-- ================= VOICES ================= -->
+<section class="section voices">
+  <div class="section-inner">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Voices · 创作者说</div>
+      <h2 class="sec-title">他们的<span class="stroke">故事</span>，<br>正在<span class="pink">被世界读到</span></h2>
+    </div>
+    <div class="voice-grid">
+      <div class="voice reveal">
+        <div class="stars">★★★★★</div>
+        <p>从同人志摊主到全职漫画家，INKWAVE 的数据看板让我第一次看清读者在哪一格流失。调整分镜后，第 12 话留存率涨了 23%。</p>
+        <div class="who">
+          <div class="avatar av-1"></div>
+          <div><b>七濑 凛</b><span>《赤刃编年史》作者</span></div>
+        </div>
+      </div>
+      <div class="voice reveal d1">
+        <div class="stars">★★★★★</div>
+        <p>五语字幕同步上线这件事，以前想都不敢想。我的泰国读者群现在比本土还活跃，编辑部的本地化团队真的懂漫画语感。</p>
+        <div class="who">
+          <div class="avatar av-2"></div>
+          <div><b>陈墨白</b><span>《星屑骑士团》主笔</span></div>
+        </div>
+      </div>
+      <div class="voice reveal d2">
+        <div class="stars">★★★★★</div>
+        <p>92% 分成、月度透明结算，加上版权登记全程代办——INKWAVE 让我这种单人作者也能安心把作品当事业来做。</p>
+        <div class="who">
+          <div class="avatar av-3"></div>
+          <div><b>Ángela Ruiz</b><span>《第十三封信》作者</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="section pricing" id="pricing">
+  <div class="section-inner">
+    <div class="sec-head reveal">
+      <div class="sec-eyebrow">Plans · 创作者方案</div>
+      <h2 class="sec-title">选择适合你的<span class="pink">创作节奏</span></h2>
+      <p class="sec-desc">所有方案均含 92% 收入分成与完整版权归属。随时升级或降级，无违约金。</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card reveal">
+        <h3>Starter</h3>
+        <div class="jp-sub">新人连载 · 起步</div>
+        <div class="amount"><b>¥0</b><span>/ 永久免费</span></div>
+        <p class="note">适合首部作品试水与同人转正作者</p>
+        <ul>
+          <li>每月可发布 4 话内容</li>
+          <li>基础竖条阅读器 + 移动端分发</li>
+          <li>章节付费与打赏变现</li>
+          <li>社区读者互动（弹注 / 留言）</li>
+          <li>标准数据看板</li>
+        </ul>
+        <a class="btn btn-dark" href="#cta">免费开始 <span class="arrow">→</span></a>
+      </div>
+      <div class="price-card hot reveal d1">
+        <div class="flag">最受欢迎</div>
+        <h3>Pro</h3>
+        <div class="jp-sub">职业连载 · 进阶</div>
+        <div class="amount"><b>¥199</b><span>/ 月</span></div>
+        <p class="note">适合稳定周更、追求增长的职业漫画家</p>
+        <ul>
+          <li>无限话数发布 + 优先推荐位</li>
+          <li>五语字幕本地化流水线（每月 8 话额度）</li>
+          <li>会员畅读池 + 广告分成</li>
+          <li>高级数据看板（逐格留存 / 转化漏斗）</li>
+          <li>专属责任编辑月度陪跑</li>
+          <li>盗版巡检与一键维权</li>
+        </ul>
+        <a class="btn btn-hot" href="#cta">立即升级 <span class="arrow">→</span></a>
+      </div>
+      <div class="price-card reveal d2">
+        <h3>Studio</h3>
+        <div class="jp-sub">工作室 · 定制</div>
+        <div class="amount"><b>定制</b><span>/ 年框协议</span></div>
+        <p class="note">适合多人工作室、经纪与出版机构</p>
+        <ul>
+          <li>多作品 / 多作者工作台管理</li>
+          <li>无限本地化额度 + 独立译审团队</li>
+          <li>IP 授权与动画化对接通道</li>
+          <li>纸质出版与海外发行合作</li>
+          <li>专属客户成功经理 + SLA 保障</li>
+        </ul>
+        <a class="btn btn-dark" href="#cta">联系我们 <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="section faq" id="faq">
+  <div class="section-inner">
+    <div class="sec-head reveal" style="text-align:center">
+      <div class="sec-eyebrow" style="justify-content:center">FAQ · 常见问题</div>
+      <h2 class="sec-title">你可能想问</h2>
+    </div>
+    <div class="faq-wrap">
+      <div class="faq-item reveal">
+        <button class="faq-q">作品的版权归谁？<span class="mark">+</span></button>
+        <div class="faq-a"><p>100% 归创作者所有。INKWAVE 仅获得在约定期限内的数字发行授权，你可以随时下架或转投其他渠道（纸质 / 海外独家协议除外）。我们还提供免费的版权登记代办服务。</p></div>
+      </div>
+      <div class="faq-item reveal d1">
+        <button class="faq-q">没有完稿可以先投稿吗？<span class="mark">+</span></button>
+        <div class="faq-a"><p>可以。上传 3 话样稿 + 故事大纲即可进入编辑陪跑流程。许多人气连载都是在连载过程中逐步打磨画风与故事线的，我们更看重叙事潜力。</p></div>
+      </div>
+      <div class="faq-item reveal d2">
+        <button class="faq-q">收入如何结算？<span class="mark">+</span></button>
+        <div class="faq-a"><p>每月 10 日结算上一自然月收入，支持银行卡、PayPal 与本地化支付渠道。结算明细精确到每一话、每一种收入类型（付费 / 会员 / 广告 / 打赏 / 授权），可在数据看板实时查看。</p></div>
+      </div>
+      <div class="faq-item reveal d3">
+        <button class="faq-q">支持哪些漫画格式？<span class="mark">+</span></button>
+        <div class="faq-a"><p>支持 PSD、Clip Studio Paint（CSP）、SAI、PNG / JPG 序列与 PDF。长条漫画（Webtoon）与传统页漫（Tankobon）均可，工作台会自动适配竖条阅读流。</p></div>
+      </div>
+      <div class="faq-item reveal d4">
+        <button class="faq-q">海外发行需要额外付费吗？<span class="mark">+</span></button>
+        <div class="faq-a"><p>Pro 方案已包含每月 8 话的五语本地化额度，超出部分按话计费。Studio 方案为无限额度。发行本身不额外收费，海外收入同样按 92% 分成。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="cta" id="cta">
+  <div class="speedlines"></div>
+  <div class="cta-inner">
+    <div class="reveal">
+      <h2>你的下一格，<br><span class="pink">就是浪潮的起点</span></h2>
+      <p>加入 48,000+ 位漫画家与图像小说作者，让故事在 72 个国家被读到。免费注册，无需信用卡。</p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="#top">免费开始创作 <span class="arrow">→</span></a>
+        <a class="btn btn-ghost" href="#pricing">查看创作者方案 <span class="arrow">▸</span></a>
+      </div>
+      <div class="cta-note">INKWAVE · 漫画出版 · 让每一格都掀起浪潮</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="logo" href="#top">
+          <span class="logo-mark"></span>
+          <span class="logo-text">INKWAVE<small>MANGA PUBLISHING</small></span>
+        </a>
+        <p>INKWAVE 数字漫画出版平台——为日式漫画与图像小说创作者提供从投稿、连载、分发到 IP 变现的一站式基础设施。</p>
+        <div class="footer-social">
+          <a href="#" aria-label="X">X</a>
+          <a href="#" aria-label="YouTube">YT</a>
+          <a href="#" aria-label="Pixiv">PX</a>
+          <a href="#" aria-label="Weibo">WB</a>
+          <a href="#" aria-label="Discord">DC</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>平台</h5>
+        <a href="#features">平台能力</a>
+        <a href="#reader">阅读体验</a>
+        <a href="#works">作品库</a>
+        <a href="#process">出版流程</a>
+        <a href="#pricing">创作者方案</a>
+      </div>
+      <div class="footer-col">
+        <h5>创作者</h5>
+        <a href="#cta">投稿指南</a>
+        <a href="#cta">编辑陪跑计划</a>
+        <a href="#cta">本地化服务</a>
+        <a href="#cta">版权与维权</a>
+        <a href="#cta">结算与税务</a>
+      </div>
+      <div class="footer-col">
+        <h5>关于</h5>
+        <a href="#">团队介绍</a>
+        <a href="#">合作与授权</a>
+        <a href="#">媒体资料</a>
+        <a href="#">加入我们</a>
+        <a href="#faq">常见问题</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 INKWAVE DIGITAL PUBLISHING · ALL RIGHTS RESERVED</div>
+      <div class="jp">インクウェーブ · 波紋を起こせ</div>
+    </div>
+  </div>
+</footer>
+
+<button class="totop" id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+/* ---------- Nav scroll state ---------- */
+const nav = document.getElementById('nav');
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+  toTop.classList.toggle('show', y > 700);
+}, { passive: true });
+toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ---------- Mobile menu ---------- */
+const burger = document.getElementById('burger');
+const navLinks = document.getElementById('navLinks');
+burger.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  burger.classList.toggle('active');
+});
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  navLinks.classList.remove('open');
+  burger.classList.remove('active');
+}));
+
+/* ---------- Scroll reveal ---------- */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      if (e.target.dataset.count !== undefined) animateCount(e.target);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ---------- Count-up animation ---------- */
+function animateCount(el) {
+  const target = parseFloat(el.dataset.count);
+  const suffix = el.dataset.suffix || '';
+  const dur = 1600;
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = Math.floor(target * ease);
+    el.textContent = (val >= 1000 ? val.toLocaleString('en-US') : val) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+document.querySelectorAll('.band-item b[data-count]').forEach(el => io.observe(el));
+
+/* ---------- Works filter tabs ---------- */
+const tabs = document.getElementById('tabs');
+const works = document.querySelectorAll('#worksGrid .work');
+tabs.addEventListener('click', (e) => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  tabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const filter = btn.dataset.filter;
+  works.forEach((w, i) => {
+    const match = filter === 'all' || w.dataset.genre === filter;
+    w.style.transition = 'opacity .35s ease, transform .35s ease';
+    if (match) {
+      w.style.display = '';
+      requestAnimationFrame(() => {
+        w.style.opacity = '1';
+        w.style.transform = 'none';
+      });
+    } else {
+      w.style.opacity = '0';
+      w.style.transform = 'scale(.92)';
+      setTimeout(() => { if (!(filter === 'all' || w.dataset.genre === filter)) w.style.display = 'none'; }, 320);
+    }
+  });
+});
+
+/* ---------- FAQ accordion ---------- */
+document.querySelectorAll('.faq-item').forEach(item => {
+  const q = item.querySelector('.faq-q');
+  const a = item.querySelector('.faq-a');
+  q.addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(other => {
+      other.classList.remove('open');
+      other.querySelector('.faq-a').style.maxHeight = '0';
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      a.style.maxHeight = a.scrollHeight + 'px';
+    }
+  });
+});
+
+/* ---------- Hero card subtle parallax ---------- */
+const heroVisual = document.querySelector('.hero-visual');
+if (heroVisual && window.matchMedia('(pointer:fine)').matches) {
+  document.querySelector('.hero').addEventListener('mousemove', (e) => {
+    const r = heroVisual.getBoundingClientRect();
+    const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+    const dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+    heroVisual.querySelectorAll('.manga-card').forEach((c, i) => {
+      const f = (i + 1) * 8;
+      c.style.marginLeft = (dx * f) + 'px';
+      c.style.marginTop = (dy * f) + 'px';
+    });
+  });
+}
+</script>
+
+</body>
+</html>

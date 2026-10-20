@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SparkFund 创意众筹平台 · 让大胆的想法被点亮</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<meta name="description" content="SparkFund 是面向创作者的创意众筹平台，帮助独立设计师、科技极客与艺术创作者募集第一笔启动资金。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SparkFund — 创意众筹平台
+   单文件静态页面 / 纯 HTML + CSS + 少量 JS
+   ============================================================ */
+:root{
+  --bg:#0b0722;
+  --bg-2:#120c31;
+  --bg-soft:#171042;
+  --ink:#f5f3ff;
+  --ink-dim:#b9b2d9;
+  --ink-mute:#8b83b3;
+  --violet:#7c4dff;
+  --violet-2:#a78bfa;
+  --pink:#ff3d6e;
+  --orange:#ff7a2f;
+  --amber:#ffb020;
+  --cyan:#2ee6d6;
+  --lime:#c8f542;
+  --line:rgba(167,139,250,.18);
+  --card:rgba(255,255,255,.045);
+  --card-hover:rgba(255,255,255,.08);
+  --radius:22px;
+  --shadow:0 30px 70px -30px rgba(6,2,25,.9);
+  --grad-fire:linear-gradient(120deg,#ff7a2f 0%,#ff3d6e 55%,#a54dff 100%);
+  --grad-cool:linear-gradient(120deg,#2ee6d6 0%,#7c4dff 100%);
+  --font-cn:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --font-en:"Sora","Noto Sans SC",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-cn);
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.75;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--pink);color:#fff}
+
+/* ---------- 背景氛围 ---------- */
+.bg-fx{position:fixed;inset:0;z-index:-2;overflow:hidden;background:
+  radial-gradient(1200px 700px at 85% -10%, rgba(124,77,255,.28), transparent 60%),
+  radial-gradient(900px 600px at -10% 20%, rgba(255,61,110,.18), transparent 55%),
+  radial-gradient(1000px 800px at 50% 120%, rgba(46,230,214,.14), transparent 60%),
+  var(--bg);}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;animation:float 18s ease-in-out infinite}
+.blob.b1{width:520px;height:520px;top:-160px;left:-120px;background:radial-gradient(circle,#7c4dff,transparent 70%)}
+.blob.b2{width:620px;height:620px;top:20%;right:-220px;background:radial-gradient(circle,#ff3d6e,transparent 70%);animation-delay:-6s}
+.blob.b3{width:560px;height:560px;bottom:-220px;left:30%;background:radial-gradient(circle,#2ee6d6,transparent 70%);animation-delay:-11s}
+@keyframes float{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  33%{transform:translate3d(40px,-50px,0) scale(1.08)}
+  66%{transform:translate3d(-35px,35px,0) scale(.95)}
+}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");}
+
+/* ---------- 通用 ---------- */
+.wrap{width:min(1200px,92vw);margin-inline:auto}
+.section{padding:110px 0;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:.6em;font-family:var(--font-en);font-size:.76rem;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--violet-2);
+  border:1px solid var(--line);border-radius:999px;padding:.55em 1.2em;background:rgba(124,77,255,.1)}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime)}
+h2.title{font-family:var(--font-en);font-size:clamp(2rem,4.4vw,3.4rem);line-height:1.18;font-weight:800;
+  letter-spacing:-.02em;margin:22px 0 16px}
+.title .grad{background:var(--grad-fire);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--ink-dim);font-size:1.08rem;max-width:62ch}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;margin-bottom:56px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.7em;font-weight:700;
+  padding:1.02em 2.1em;border-radius:999px;font-size:1rem;transition:.35s cubic-bezier(.2,.8,.2,1);
+  position:relative;overflow:hidden;white-space:nowrap}
+.btn-fire{background:var(--grad-fire);color:#fff;box-shadow:0 18px 42px -14px rgba(255,80,90,.65)}
+.btn-fire:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 26px 60px -14px rgba(255,80,90,.8)}
+.btn-ghost{border:1px solid var(--line);color:var(--ink);background:rgba(255,255,255,.04)}
+.btn-ghost:hover{background:rgba(255,255,255,.11);transform:translateY(-3px)}
+.btn .arrow{transition:transform .35s}
+.btn:hover .arrow{transform:translateX(5px)}
+
+html.js .reveal:not(.in){opacity:0;transform:translateY(38px);transition:opacity .85s ease,transform .85s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- 导航 ---------- */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:.4s}
+header.nav.scrolled{background:rgba(11,7,34,.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);box-shadow:0 18px 50px -30px rgba(0,0,0,.9)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:20px 0}
+.logo{display:flex;align-items:center;gap:12px;font-family:var(--font-en);font-weight:800;font-size:1.32rem;letter-spacing:-.01em}
+.logo-mark{width:42px;height:42px;border-radius:13px;background:var(--grad-fire);display:grid;place-items:center;
+  box-shadow:0 12px 30px -10px rgba(255,90,90,.7);position:relative;overflow:hidden}
+.logo-mark svg{width:22px;height:22px}
+.logo-mark::after{content:"";position:absolute;inset:0;background:linear-gradient(140deg,rgba(255,255,255,.45),transparent 55%)}
+.logo small{display:block;font-family:var(--font-cn);font-size:.66rem;letter-spacing:.32em;color:var(--ink-mute);font-weight:400;line-height:1}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{padding:.62em 1.15em;border-radius:999px;font-size:.95rem;color:var(--ink-dim);transition:.3s;position:relative}
+.nav-links a:hover{color:var(--ink);background:rgba(255,255,255,.07)}
+.nav-cta{display:flex;align-items:center;gap:14px}
+.nav-cta .btn{padding:.78em 1.6em;font-size:.92rem}
+.burger{display:none;width:46px;height:46px;border-radius:14px;border:1px solid var(--line);
+  place-items:center;background:rgba(255,255,255,.05)}
+.burger span{display:block;width:20px;height:2px;background:var(--ink);margin:3px auto;transition:.3s}
+.burger.open span:nth-child(1){transform:translateY(5px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
+.mobile-menu{display:none;flex-direction:column;gap:6px;padding:0 0 22px}
+.mobile-menu a{padding:.9em 1.2em;border-radius:14px;background:rgba(255,255,255,.05);color:var(--ink-dim)}
+
+/* ---------- Hero ---------- */
+.hero{padding:190px 0 90px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
+.hero h1{font-family:var(--font-en);font-size:clamp(2.65rem,5.9vw,4.85rem);line-height:1.08;
+  font-weight:800;letter-spacing:-.035em;margin:26px 0 24px}
+.hero h1 .line2{display:block;background:var(--grad-fire);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 14px 34px rgba(255,80,110,.32))}
+.hero p.sub{font-size:1.16rem;color:var(--ink-dim);max-width:52ch;margin-bottom:36px}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:46px}
+.hero-stats{display:flex;gap:38px;flex-wrap:wrap;padding-top:32px;border-top:1px solid var(--line)}
+.hero-stats .num{font-family:var(--font-en);font-size:2.15rem;font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(120deg,#fff,#c3b6ff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.15}
+.hero-stats .lbl{font-size:.86rem;color:var(--ink-mute);letter-spacing:.06em}
+
+/* Hero 视觉 */
+.hero-visual{position:relative;perspective:1400px}
+.showcase{position:relative;border-radius:30px;overflow:hidden;border:1px solid var(--line);
+  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02));
+  box-shadow:var(--shadow);transform:rotateY(-9deg) rotateX(5deg);transition:transform .6s ease}
+.hero-visual:hover .showcase{transform:rotateY(-3deg) rotateX(2deg) translateY(-6px)}
+.showcase-cover{height:270px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#2b1560,#7c2a5e 55%,#ff7a2f)}
+.showcase-cover::before{content:"";position:absolute;inset:0;
+  background:
+   radial-gradient(220px 220px at 78% 30%, rgba(255,214,102,.75), transparent 65%),
+   radial-gradient(300px 190px at 18% 82%, rgba(46,230,214,.55), transparent 68%),
+   repeating-linear-gradient(115deg, rgba(255,255,255,.09) 0 2px, transparent 2px 26px)}
+.showcase-cover .orb{position:absolute;border-radius:50%;filter:blur(2px)}
+.showcase-cover .orb.o1{width:120px;height:120px;left:14%;top:20%;background:radial-gradient(circle at 32% 30%,#fff6d8,#ff9c3d 55%,#c9425f);box-shadow:0 24px 60px rgba(255,150,60,.55);animation:bob 7s ease-in-out infinite}
+.showcase-cover .orb.o2{width:64px;height:64px;right:16%;bottom:16%;background:radial-gradient(circle at 32% 30%,#d9fff9,#2ee6d6 60%,#1175a8);box-shadow:0 18px 40px rgba(46,230,214,.5);animation:bob 9s ease-in-out infinite reverse}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(8deg)}}
+.cover-tag{position:absolute;top:18px;left:18px;display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-size:.72rem;font-weight:700;letter-spacing:.08em;padding:.42em 1em;border-radius:999px;
+  background:rgba(10,6,30,.62);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.16)}
+.tag.hot{background:var(--grad-fire);border-color:transparent}
+.showcase-body{padding:26px 28px 30px;background:rgba(14,9,40,.72);backdrop-filter:blur(16px)}
+.showcase-body h3{font-size:1.42rem;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.showcase-body p{color:var(--ink-dim);font-size:.95rem;margin-bottom:20px}
+.progress{height:11px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;position:relative}
+.progress .bar{height:100%;width:0;border-radius:999px;background:var(--grad-fire);
+  transition:width 1.6s cubic-bezier(.2,.8,.2,1);position:relative;overflow:hidden}
+.progress .bar::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.55) 50%,transparent 80%);
+  transform:translateX(-100%);animation:shine 2.6s infinite}
+@keyframes shine{to{transform:translateX(100%)}}
+.progress.cool .bar{background:var(--grad-cool)}
+.meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:16px;flex-wrap:wrap;gap:10px}
+.meta-row .money{font-family:var(--font-en);font-weight:700;font-size:1.06rem}
+.meta-row .money span{color:var(--ink-mute);font-size:.82rem;font-weight:400}
+.meta-row .pct{font-family:var(--font-en);font-weight:800;font-size:1.28rem;color:var(--lime)}
+.float-card{position:absolute;border-radius:18px;padding:15px 19px;background:rgba(22,14,56,.82);
+  backdrop-filter:blur(18px);border:1px solid var(--line);box-shadow:0 26px 60px -24px rgba(0,0,0,.85);
+  animation:bob 8s ease-in-out infinite}
+.float-card.fc1{top:-26px;right:-12px;animation-delay:-2s}
+.float-card.fc2{bottom:-30px;left:-26px;animation-delay:-5s}
+.float-card .fc-num{font-family:var(--font-en);font-size:1.32rem;font-weight:800;line-height:1.2}
+.float-card .fc-lbl{font-size:.76rem;color:var(--ink-mute);letter-spacing:.08em}
+.spark{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--amber);
+  box-shadow:0 0 18px 5px rgba(255,176,32,.6);animation:twinkle 4s ease-in-out infinite}
+.spark.s1{top:8%;left:44%}.spark.s2{top:62%;right:6%;animation-delay:1.4s;background:var(--cyan);box-shadow:0 0 18px 5px rgba(46,230,214,.55)}
+.spark.s3{bottom:12%;left:10%;animation-delay:2.6s;background:var(--pink);box-shadow:0 0 18px 5px rgba(255,61,110,.55)}
+@keyframes twinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.25)}}
+
+/* ---------- 跑马灯 ---------- */
+.marquee{overflow:hidden;padding:22px 0;border-block:1px solid var(--line);
+  background:rgba(255,255,255,.028);--speed:32s}
+.marquee-track{display:flex;gap:56px;width:max-content;animation:scroll var(--speed) linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-item{display:flex;align-items:center;gap:12px;font-family:var(--font-en);font-weight:700;
+  font-size:1.12rem;letter-spacing:.02em;color:rgba(255,255,255,.62);white-space:nowrap}
+.marquee-item i{width:9px;height:9px;border-radius:50%;background:var(--grad-fire);display:inline-block}
+.marquee-item:nth-child(3n) i{background:var(--grad-cool)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* ---------- 精选项目大卡 ---------- */
+.featured{display:grid;grid-template-columns:1.15fr 1fr;gap:0;border-radius:32px;overflow:hidden;
+  border:1px solid var(--line);background:rgba(255,255,255,.045);box-shadow:var(--shadow)}
+.featured-art{position:relative;min-height:480px;overflow:hidden;
+  background:linear-gradient(150deg,#141b4d 0%,#3b1f7e 45%,#c2387c 100%)}
+.featured-art::before{content:"";position:absolute;inset:0;
+  background:
+   radial-gradient(320px 320px at 72% 26%, rgba(255,196,87,.85), transparent 62%),
+   radial-gradient(360px 260px at 16% 88%, rgba(46,230,214,.5), transparent 66%),
+   repeating-conic-gradient(from 45deg at 60% 45%, rgba(255,255,255,.07) 0 12deg, transparent 12deg 26deg)}
+.featured-art .device{position:absolute;left:50%;top:52%;width:270px;height:340px;transform:translate(-50%,-50%) rotate(-7deg);
+  border-radius:28px;background:linear-gradient(160deg,#201447,#4c2585);border:1px solid rgba(255,255,255,.24);
+  box-shadow:0 50px 110px -30px rgba(0,0,0,.8);overflow:hidden}
+.device .screen{position:absolute;inset:12px;border-radius:18px;background:linear-gradient(160deg,#120a33,#2c1668);
+  overflow:hidden}
+.device .screen::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(120px 90px at 30% 26%, rgba(255,176,32,.85), transparent 65%),
+  radial-gradient(150px 110px at 74% 72%, rgba(255,61,110,.7), transparent 68%)}
+.device .screen .lines{position:absolute;left:18px;right:18px;bottom:20px;display:grid;gap:10px}
+.device .screen .lines i{height:9px;border-radius:999px;background:rgba(255,255,255,.28);display:block}
+.device .screen .lines i:nth-child(2){width:64%}
+.device .screen .lines i:nth-child(3){width:38%;background:var(--grad-fire)}
+.featured-art .badge-float{position:absolute;top:32px;left:32px;font-family:var(--font-en);font-size:.74rem;
+  letter-spacing:.24em;text-transform:uppercase;padding:.6em 1.2em;border-radius:999px;
+  background:rgba(10,6,30,.55);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.22)}
+.featured-art .backers{position:absolute;bottom:30px;left:32px;display:flex;align-items:center;gap:12px}
+.avatars{display:flex}
+.avatars span{width:38px;height:38px;border-radius:50%;border:2px solid #1a1044;margin-left:-11px;
+  display:grid;place-items:center;font-size:.82rem;font-weight:700;color:#fff}
+.avatars span:first-child{margin-left:0}
+.avatars .a1{background:linear-gradient(135deg,#ff7a2f,#ff3d6e)}
+.avatars .a2{background:linear-gradient(135deg,#2ee6d6,#3d7bff)}
+.avatars .a3{background:linear-gradient(135deg,#c8f542,#22b07a)}
+.avatars .a4{background:linear-gradient(135deg,#a78bfa,#ff3d6e)}
+.avatars .more{background:rgba(255,255,255,.16);font-family:var(--font-en)}
+.featured-body{padding:52px 52px 48px;display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.015))}
+.featured-body h3{font-size:clamp(1.65rem,2.6vw,2.25rem);line-height:1.3;font-weight:800;letter-spacing:-.02em;margin:18px 0 14px}
+.featured-body p.desc{color:var(--ink-dim);margin-bottom:28px;font-size:1.02rem}
+.chips{display:flex;gap:9px;flex-wrap:wrap}
+.chip{font-size:.78rem;padding:.42em 1.05em;border-radius:999px;border:1px solid var(--line);
+  background:rgba(124,77,255,.12);color:var(--violet-2);letter-spacing:.05em}
+.featured-numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:30px 0 30px}
+.featured-numbers .fn{padding:16px 18px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.featured-numbers .fn b{display:block;font-family:var(--font-en);font-size:1.52rem;font-weight:800;letter-spacing:-.02em}
+.featured-numbers .fn small{color:var(--ink-mute);font-size:.8rem;letter-spacing:.06em}
+
+/* ---------- 分类 ---------- */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.cat{position:relative;padding:30px 26px 26px;border-radius:20px;border:1px solid var(--line);
+  background:var(--card);overflow:hidden;transition:.45s cubic-bezier(.2,.8,.2,1);cursor:pointer}
+.cat::before{content:"";position:absolute;inset:0;opacity:0;transition:.45s;
+  background:radial-gradient(320px 200px at 20% 0%, rgba(255,122,47,.28), transparent 70%)}
+.cat:hover{transform:translateY(-8px);border-color:rgba(255,122,47,.5);background:var(--card-hover)}
+.cat:hover::before{opacity:1}
+.cat .ico{width:56px;height:56px;border-radius:17px;display:grid;place-items:center;font-size:1.55rem;
+  margin-bottom:18px;background:rgba(124,77,255,.18);border:1px solid var(--line);position:relative;z-index:1}
+.cat:nth-child(2) .ico{background:rgba(255,61,110,.18)}
+.cat:nth-child(3) .ico{background:rgba(46,230,214,.16)}
+.cat:nth-child(4) .ico{background:rgba(255,176,32,.18)}
+.cat:nth-child(5) .ico{background:rgba(200,245,66,.14)}
+.cat:nth-child(6) .ico{background:rgba(167,139,250,.2)}
+.cat h4{font-size:1.12rem;font-weight:700;margin-bottom:5px;position:relative;z-index:1}
+.cat p{font-size:.86rem;color:var(--ink-mute);position:relative;z-index:1}
+.cat .count{position:absolute;top:22px;right:22px;font-family:var(--font-en);font-size:.78rem;
+  color:var(--ink-mute);letter-spacing:.08em;z-index:1}
+
+/* ---------- 项目卡片 ---------- */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px}
+.filter-btn{padding:.68em 1.5em;border-radius:999px;font-size:.92rem;font-weight:600;
+  border:1px solid var(--line);color:var(--ink-dim);background:rgba(255,255,255,.03);transition:.32s}
+.filter-btn:hover{color:var(--ink);border-color:rgba(167,139,250,.5)}
+.filter-btn.active{background:var(--grad-fire);color:#fff;border-color:transparent;
+  box-shadow:0 16px 36px -14px rgba(255,80,90,.6)}
+.project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:26px}
+.pcard{border-radius:24px;overflow:hidden;border:1px solid var(--line);background:rgba(255,255,255,.045);
+  transition:.5s cubic-bezier(.2,.8,.2,1);position:relative;display:flex;flex-direction:column}
+.pcard:hover{transform:translateY(-10px);border-color:rgba(255,122,47,.45);
+  box-shadow:0 40px 80px -32px rgba(255,90,90,.4)}
+.pcard.hide{display:none}
+.pcover{height:206px;position:relative;overflow:hidden}
+.pcover .art{position:absolute;inset:0;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.pcard:hover .pcover .art{transform:scale(1.09)}
+.art-1{background:linear-gradient(135deg,#1d2f7a,#6a2bd6 55%,#ff4d8d)}
+.art-2{background:linear-gradient(135deg,#0e4f57,#1f9e8a 55%,#c8f542)}
+.art-3{background:linear-gradient(135deg,#5b1836,#c2387c 55%,#ffb020)}
+.art-4{background:linear-gradient(135deg,#241452,#7c4dff 55%,#2ee6d6)}
+.art-5{background:linear-gradient(135deg,#7a2a12,#ff7a2f 55%,#ffd25e)}
+.art-6{background:linear-gradient(135deg,#12324f,#2e7fd6 55%,#7ef0d2)}
+.pcover .art::after{content:"";position:absolute;inset:0;
+  background:
+   radial-gradient(150px 150px at 76% 26%, rgba(255,255,255,.4), transparent 62%),
+   repeating-linear-gradient(125deg, rgba(255,255,255,.1) 0 2px, transparent 2px 22px)}
+.pcover .glyph{position:absolute;inset:0;display:grid;place-items:center;font-size:3.6rem;
+  filter:drop-shadow(0 18px 30px rgba(0,0,0,.4));z-index:1;transition:transform .8s}
+.pcard:hover .pcover .glyph{transform:scale(1.16) rotate(-6deg)}
+.pcover .cat-tag{position:absolute;top:15px;left:15px;z-index:2}
+.pcover .days{position:absolute;top:15px;right:15px;z-index:2;font-family:var(--font-en);font-size:.76rem;
+  font-weight:700;letter-spacing:.06em;padding:.45em 1em;border-radius:999px;
+  background:rgba(10,6,30,.62);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18)}
+.pcover .days.urgent{background:rgba(255,61,110,.9);border-color:transparent}
+.pbody{padding:24px 24px 26px;display:flex;flex-direction:column;flex:1}
+.pbody h3{font-size:1.16rem;font-weight:700;line-height:1.5;letter-spacing:-.01em;margin-bottom:8px}
+.pbody p{font-size:.9rem;color:var(--ink-mute);margin-bottom:18px;flex:1}
+.pbody .author{display:flex;align-items:center;gap:9px;font-size:.83rem;color:var(--ink-dim);margin-bottom:16px}
+.pbody .author .ava{width:27px;height:27px;border-radius:50%;background:var(--grad-cool);display:grid;
+  place-items:center;font-size:.68rem;font-weight:700;color:#0b0722}
+.pbody .author .verify{color:var(--cyan);font-size:.78rem}
+.pstats{display:flex;justify-content:space-between;align-items:baseline;margin-top:15px;gap:8px}
+.pstats .raised{font-family:var(--font-en);font-weight:700;font-size:.99rem}
+.pstats .pct{font-family:var(--font-en);font-weight:800;font-size:1.05rem;color:var(--lime)}
+.pstats .backers{font-size:.82rem;color:var(--ink-mute);font-family:var(--font-en)}
+.grid-cta{text-align:center;margin-top:56px}
+
+/* ---------- 流程 ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;position:relative}
+.steps::before{content:"";position:absolute;top:52px;left:8%;right:8%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,122,47,.55),rgba(124,77,255,.55),transparent)}
+.step{position:relative;padding:34px 26px 30px;border-radius:22px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.015));transition:.45s}
+.step:hover{transform:translateY(-8px);border-color:rgba(255,176,32,.45)}
+.step .n{width:58px;height:58px;border-radius:19px;display:grid;place-items:center;font-family:var(--font-en);
+  font-size:1.32rem;font-weight:800;background:var(--grad-fire);color:#fff;margin-bottom:20px;
+  box-shadow:0 18px 40px -16px rgba(255,90,90,.7);position:relative;z-index:1}
+.step:nth-child(2) .n{background:linear-gradient(135deg,#ff7a2f,#ffb020)}
+.step:nth-child(3) .n{background:linear-gradient(135deg,#7c4dff,#2ee6d6)}
+.step:nth-child(4) .n{background:linear-gradient(135deg,#2ee6d6,#c8f542);color:#0b0722}
+.step h4{font-size:1.12rem;font-weight:700;margin-bottom:8px}
+.step p{font-size:.9rem;color:var(--ink-mute)}
+
+/* ---------- 数据带 ---------- */
+.statband{border-radius:30px;padding:66px 40px;border:1px solid var(--line);position:relative;overflow:hidden;
+  background:linear-gradient(120deg,rgba(124,77,255,.2),rgba(255,61,110,.16) 55%,rgba(46,230,214,.14))}
+.statband::before{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 60px)}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;position:relative}
+.stat-item{text-align:center}
+.stat-item .value{font-family:var(--font-en);font-size:clamp(2.2rem,4.2vw,3.4rem);font-weight:800;
+  letter-spacing:-.03em;line-height:1.1;
+  background:linear-gradient(120deg,#fff 20%,#ffd9a8 55%,#a8fff2 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-item .label{color:rgba(255,255,255,.72);font-size:.95rem;letter-spacing:.08em;margin-top:8px}
+
+/* ---------- 卖点 ---------- */
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.fcard{padding:38px 32px 34px;border-radius:24px;border:1px solid var(--line);background:var(--card);
+  position:relative;overflow:hidden;transition:.45s}
+.fcard::after{content:"";position:absolute;left:0;right:0;top:0;height:3px;
+  background:var(--grad-fire);transform:scaleX(0);transform-origin:left;transition:.5s}
+.fcard:hover{transform:translateY(-8px);background:var(--card-hover);border-color:rgba(167,139,250,.45)}
+.fcard:hover::after{transform:scaleX(1)}
+.fcard .ficon{width:62px;height:62px;border-radius:19px;display:grid;place-items:center;font-size:1.7rem;
+  margin-bottom:22px;background:rgba(124,77,255,.18);border:1px solid var(--line)}
+.fcard:nth-child(2) .ficon{background:rgba(255,61,110,.18)}
+.fcard:nth-child(3) .ficon{background:rgba(46,230,214,.16)}
+.fcard:nth-child(4) .ficon{background:rgba(255,176,32,.18)}
+.fcard:nth-child(5) .ficon{background:rgba(200,245,66,.15)}
+.fcard:nth-child(6) .ficon{background:rgba(167,139,250,.22)}
+.fcard h4{font-size:1.22rem;font-weight:700;margin-bottom:10px;letter-spacing:-.01em}
+.fcard p{color:var(--ink-mute);font-size:.94rem}
+
+/* ---------- 创作者说 ---------- */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.quote{padding:38px 32px 32px;border-radius:24px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.015));position:relative;transition:.45s}
+.quote:hover{transform:translateY(-8px) rotate(-.6deg);border-color:rgba(255,122,47,.45)}
+.quote .mark{font-family:Georgia,serif;font-size:4.6rem;line-height:.7;color:rgba(255,122,47,.55);margin-bottom:16px;display:block}
+.quote p{color:var(--ink-dim);font-size:1rem;margin-bottom:26px}
+.quote .who{display:flex;align-items:center;gap:13px}
+.quote .who .ava{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;
+  font-weight:700;font-size:.95rem;color:#fff}
+.quote .who .ava.g1{background:linear-gradient(135deg,#ff7a2f,#ff3d6e)}
+.quote .who .ava.g2{background:linear-gradient(135deg,#2ee6d6,#3d7bff)}
+.quote .who .ava.g3{background:linear-gradient(135deg,#c8f542,#22b07a)}
+.quote .who b{display:block;font-size:.98rem}
+.quote .who small{color:var(--ink-mute);font-size:.82rem}
+
+/* ---------- FAQ ---------- */
+.faq-wrap{max-width:880px;margin-inline:auto}
+.faq{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.04);
+  margin-bottom:14px;overflow:hidden;transition:.4s}
+.faq.open{background:rgba(255,255,255,.075);border-color:rgba(255,122,47,.42)}
+.faq summary{list-style:none;cursor:pointer;padding:24px 28px;display:flex;align-items:center;
+  justify-content:space-between;gap:20px;font-size:1.08rem;font-weight:600;transition:.3s}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--orange)}
+.faq .plus{width:34px;height:34px;flex:none;border-radius:11px;border:1px solid var(--line);
+  display:grid;place-items:center;position:relative;transition:.4s}
+.faq .plus::before,.faq .plus::after{content:"";position:absolute;background:var(--ink);border-radius:2px;transition:.4s}
+.faq .plus::before{width:13px;height:2px}
+.faq .plus::after{width:2px;height:13px}
+.faq.open .plus{background:var(--grad-fire);border-color:transparent;transform:rotate(135deg)}
+.faq .ans{padding:0 28px 26px;color:var(--ink-dim);font-size:.98rem;line-height:1.9}
+
+/* ---------- CTA ---------- */
+.cta{position:relative;border-radius:34px;overflow:hidden;padding:88px 6vw;text-align:center;
+  background:linear-gradient(120deg,#2a0f4d,#7c1f5f 48%,#ff7a2f)}
+.cta::before{content:"";position:absolute;inset:0;
+  background:
+   radial-gradient(420px 320px at 20% 18%, rgba(255,214,102,.5), transparent 62%),
+   radial-gradient(520px 380px at 84% 88%, rgba(46,230,214,.4), transparent 64%),
+   repeating-linear-gradient(120deg, rgba(255,255,255,.07) 0 2px, transparent 2px 30px)}
+.cta > *{position:relative}
+.cta h2{font-family:var(--font-en);font-size:clamp(2.15rem,5vw,3.65rem);font-weight:800;
+  letter-spacing:-.03em;line-height:1.16;margin-bottom:20px;color:#fff}
+.cta p{color:rgba(255,255,255,.86);font-size:1.13rem;max-width:56ch;margin:0 auto 38px}
+.cta .btn-white{background:#fff;color:#20104a;box-shadow:0 22px 50px -18px rgba(0,0,0,.55)}
+.cta .btn-white:hover{transform:translateY(-4px) scale(1.02)}
+.cta .btn-glass{border:1px solid rgba(255,255,255,.45);color:#fff;background:rgba(255,255,255,.12)}
+.cta .btn-glass:hover{background:rgba(255,255,255,.24);transform:translateY(-4px)}
+.cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.cta .note{margin-top:26px;font-size:.86rem;color:rgba(255,255,255,.72);letter-spacing:.06em}
+
+/* ---------- Footer ---------- */
+footer{margin-top:110px;border-top:1px solid var(--line);background:rgba(9,5,28,.72);
+  backdrop-filter:blur(14px);position:relative}
+.foot-grid{display:grid;grid-template-columns:1.55fr 1fr 1fr 1.35fr;gap:44px;padding:76px 0 54px}
+.foot-brand p{color:var(--ink-mute);font-size:.94rem;margin:18px 0 24px;max-width:34ch}
+.socials{display:flex;gap:11px}
+.socials a{width:43px;height:43px;border-radius:13px;display:grid;place-items:center;
+  border:1px solid var(--line);background:rgba(255,255,255,.04);transition:.35s;font-size:.95rem}
+.socials a:hover{transform:translateY(-5px);background:var(--grad-fire);border-color:transparent}
+.foot-col h5{font-family:var(--font-en);font-size:.82rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-mute);margin-bottom:22px}
+.foot-col a{display:block;color:var(--ink-dim);font-size:.95rem;padding:6px 0;transition:.3s;width:fit-content}
+.foot-col a:hover{color:var(--orange);transform:translateX(6px)}
+.newsletter{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.newsletter input{flex:1;min-width:190px;padding:.95em 1.25em;border-radius:14px;border:1px solid var(--line);
+  background:rgba(255,255,255,.06);color:var(--ink);font-family:inherit;font-size:.93rem;outline:none;transition:.3s}
+.newsletter input:focus{border-color:rgba(255,122,47,.65);box-shadow:0 0 0 4px rgba(255,122,47,.16)}
+.newsletter button{padding:.95em 1.7em;border-radius:14px;background:var(--grad-fire);color:#fff;font-weight:700;transition:.32s}
+.newsletter button:hover{transform:translateY(-3px);box-shadow:0 18px 40px -14px rgba(255,80,90,.7)}
+.foot-note{padding:22px 0 34px;border-top:1px solid var(--line);display:flex;justify-content:space-between;
+  gap:18px;flex-wrap:wrap;color:var(--ink-mute);font-size:.85rem;letter-spacing:.05em}
+.foot-note .links{display:flex;gap:22px;flex-wrap:wrap}
+.foot-note a:hover{color:var(--orange)}
+
+/* ---------- 返回顶部 ---------- */
+.totop{position:fixed;right:26px;bottom:26px;width:52px;height:52px;border-radius:17px;z-index:90;
+  background:var(--grad-fire);display:grid;place-items:center;color:#fff;font-size:1.15rem;
+  box-shadow:0 20px 46px -16px rgba(255,80,90,.75);opacity:0;visibility:hidden;transform:translateY(18px);transition:.4s}
+.totop.show{opacity:1;visibility:visible;transform:none}
+.totop:hover{transform:translateY(-5px)}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1080px){
+  .hero-grid{grid-template-columns:1fr;gap:78px}
+  .hero-visual{max-width:620px;margin-inline:auto;width:100%}
+  .featured{grid-template-columns:1fr}
+  .featured-art{min-height:380px}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .steps::before{display:none}
+  .feature-grid,.quotes{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:38px}
+}
+@media (max-width:820px){
+  .nav-links,.nav-cta .btn-ghost{display:none}
+  .burger{display:grid}
+  .section{padding:82px 0}
+  .hero{padding:150px 0 70px}
+  .stat-grid{grid-template-columns:repeat(2,1fr);gap:34px}
+  .featured-body{padding:38px 30px 34px}
+}
+@media (max-width:620px){
+  .feature-grid,.quotes,.steps{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr}
+  .hero-stats{gap:26px}
+  .float-card.fc1{right:-4px;top:-18px}
+  .float-card.fc2{left:-6px;bottom:-18px}
+  .cta{padding:64px 26px;border-radius:26px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-fx">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+<div class="grain"></div>
+
+<!-- ================= 导航 ================= -->
+<header class="nav" id="topNav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13.5H11L9.5 22 19.5 9.5H13L13 2Z" fill="#fff"/></svg>
+        </span>
+        <span>SparkFund<small>创 意 众 筹</small></span>
+      </a>
+      <nav class="nav-links">
+        <a href="#discover">发现项目</a>
+        <a href="#categories">分类</a>
+        <a href="#how">如何运作</a>
+        <a href="#why">为什么选我们</a>
+        <a href="#faq">常见问题</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="#cta" class="btn btn-ghost">登录</a>
+        <a href="#cta" class="btn btn-fire">发起项目</a>
+        <button class="burger" id="burger" aria-label="菜单"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#discover">发现项目</a>
+      <a href="#categories">分类</a>
+      <a href="#how">如何运作</a>
+      <a href="#why">为什么选我们</a>
+      <a href="#faq">常见问题</a>
+      <a href="#cta">发起项目 →</a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= Hero ================= -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="dot"></span>已有 12,480 个创意在这里点亮</span>
+        <h1>
+          让每一个大胆的想法
+          <span class="line2">都有被点亮的机会</span>
+        </h1>
+        <p class="sub">
+          SparkFund 是为独立创作者打造的创意众筹平台。从一台桌面机械键盘到一部独立动画短片——
+          用真实的支持者社区，把你的灵感变成可以触摸的作品。
+        </p>
+        <div class="hero-actions">
+          <a href="#discover" class="btn btn-fire">探索热门项目 <span class="arrow">→</span></a>
+          <a href="#how" class="btn btn-ghost">▷ 了解众筹流程</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="num">¥ 8.6<span style="font-size:1.15rem">亿</span></div>
+            <div class="lbl">累计募集金额</div>
+          </div>
+          <div>
+            <div class="num">320<span style="font-size:1.15rem">万+</span></div>
+            <div class="lbl">活跃支持者</div>
+          </div>
+          <div>
+            <div class="num">78.4<span style="font-size:1.15rem">%</span></div>
+            <div class="lbl">项目成功率</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="showcase">
+          <div class="showcase-cover">
+            <div class="orb o1"></div>
+            <div class="orb o2"></div>
+            <div class="cover-tag">
+              <span class="tag hot">🔥 编辑精选</span>
+              <span class="tag">科技 · 智能硬件</span>
+            </div>
+          </div>
+          <div class="showcase-body">
+            <h3>Lumen X — 会呼吸的模块化氛围灯</h3>
+            <p>磁吸拼接 · 情绪感应调光 · 开源固件，让你的桌面随心流动。</p>
+            <div class="progress"><div class="bar" data-progress="87"></div></div>
+            <div class="meta-row">
+              <div class="money">¥ 1,742,600 <span>/ 目标 ¥ 200,000</span></div>
+              <div class="pct">871%</div>
+            </div>
+          </div>
+        </div>
+        <div class="float-card fc1">
+          <div class="fc-num" style="color:var(--lime)">+2,940</div>
+          <div class="fc-lbl">今日新增支持者</div>
+        </div>
+        <div class="float-card fc2">
+          <div class="fc-num">48:12:06</div>
+          <div class="fc-lbl">距早鸟价结束</div>
+        </div>
+        <div class="spark s1"></div>
+        <div class="spark s2"></div>
+        <div class="spark s3"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 跑马灯 ================= -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="marquee-item"><i></i>智能硬件</div>
+    <div class="marquee-item"><i></i>独立游戏</div>
+    <div class="marquee-item"><i></i>设计好物</div>
+    <div class="marquee-item"><i></i>影视动画</div>
+    <div class="marquee-item"><i></i>音乐专辑</div>
+    <div class="marquee-item"><i></i>桌游卡牌</div>
+    <div class="marquee-item"><i></i>出版漫画</div>
+    <div class="marquee-item"><i></i>可持续环保</div>
+    <div class="marquee-item"><i></i>社区空间</div>
+    <div class="marquee-item"><i></i>前沿科技</div>
+  </div>
+</div>
+
+<!-- ================= 精选项目 ================= -->
+<section class="section" id="discover">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>本周之星</span>
+        <h2 class="title">正在被世界看见的<span class="grad">大胆提案</span></h2>
+        <p class="lead">我们的编辑团队每天从数千个新项目中，挑选出最有火花的那一个。</p>
+      </div>
+      <a href="#projects" class="btn btn-ghost">查看全部项目 <span class="arrow">→</span></a>
+    </div>
+
+    <div class="featured reveal">
+      <div class="featured-art">
+        <div class="badge-float">Project of the Week</div>
+        <div class="device"><div class="screen"><div class="lines"><i></i><i></i><i></i></div></div></div>
+        <div class="backers">
+          <div class="avatars">
+            <span class="a1">林</span><span class="a2">K</span><span class="a3">M</span><span class="a4">周</span>
+            <span class="more">+8.2k</span>
+          </div>
+          <div style="font-size:.85rem;color:rgba(255,255,255,.82)">8,214 位支持者已加入</div>
+        </div>
+      </div>
+      <div class="featured-body">
+        <div class="chips">
+          <span class="chip">科技</span><span class="chip">可持续设计</span><span class="chip">早鸟 5 折</span>
+        </div>
+        <h3>NovaPad：把纸质笔记的情绪，<br>带回数字世界</h3>
+        <p class="desc">
+          一款采用电子墨水与压力感应手写笔的极简创作平板。30 天续航、无通知打扰、
+          开源导出格式——为深度思考者而生。
+        </p>
+        <div class="progress cool"><div class="bar" data-progress="64"></div></div>
+        <div class="featured-numbers">
+          <div class="fn"><b>¥ 3,214,880</b><small>已募集（目标 128%）</small></div>
+          <div class="fn"><b>19 天</b><small>剩余时间</small></div>
+          <div class="fn"><b>4.9 ★</b><small>创作者信誉评分</small></div>
+        </div>
+        <div class="hero-actions" style="margin-bottom:0">
+          <a href="#cta" class="btn btn-fire">支持这个项目 <span class="arrow">→</span></a>
+          <a href="#how" class="btn btn-ghost">了解回报档位</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 分类 ================= -->
+<section class="section" id="categories" style="padding-top:20px">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>探索灵感宇宙</span>
+        <h2 class="title">按你热爱的<span class="grad">领域</span>去发现</h2>
+      </div>
+      <p class="lead" style="max-width:38ch">10 大创意赛道，43 个细分标签，让同频的人更快找到彼此。</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat reveal"><span class="count">2,140</span><div class="ico">🎮</div><h4>游戏与桌游</h4><p>独立游戏 · 卡牌 · 模型</p></div>
+      <div class="cat reveal"><span class="count">1,826</span><div class="ico">🛠️</div><h4>科技硬件</h4><p>智能设备 · 极客工具</p></div>
+      <div class="cat reveal"><span class="count">1,493</span><div class="ico">🎨</div><h4>设计创意</h4><p>家居 · 文具 · 时装</p></div>
+      <div class="cat reveal"><span class="count">1,102</span><div class="ico">🎬</div><h4>影视动画</h4><p>短片 · 纪录片 · 特摄</p></div>
+      <div class="cat reveal"><span class="count">968</span><div class="ico">📚</div><h4>出版漫画</h4><p>独立出版 · 绘本 · Zine</p></div>
+      <div class="cat reveal"><span class="count">874</span><div class="ico">🎵</div><h4>音乐演出</h4><p>专辑 · 黑胶 · 巡演</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 项目列表 ================= -->
+<section class="section" id="projects" style="padding-top:30px">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>正在募集</span>
+        <h2 class="title">此刻，<span class="grad">就差你一份支持</span></h2>
+        <p class="lead">这些项目已接近目标金额，你的加入可能是最后的临门一脚。</p>
+      </div>
+    </div>
+
+    <div class="filter-bar reveal" id="filterBar">
+      <button class="filter-btn active" data-filter="all">全部项目</button>
+      <button class="filter-btn" data-filter="tech">科技硬件</button>
+      <button class="filter-btn" data-filter="design">设计好物</button>
+      <button class="filter-btn" data-filter="art">影视艺术</button>
+      <button class="filter-btn" data-filter="game">游戏桌游</button>
+    </div>
+
+    <div class="project-grid" id="projectGrid">
+
+      <article class="pcard reveal" data-cat="tech">
+        <div class="pcover">
+          <div class="art art-1"></div><div class="glyph">⌨️</div>
+          <span class="tag hot cat-tag">科技硬件</span>
+          <span class="days urgent">剩 3 天</span>
+        </div>
+        <div class="pbody">
+          <h3>Mecca68 — 客制化机械键盘的「甜点」之作</h3>
+          <p>Gasket 结构 · 阳极氧化外壳 · 三模连接，千元内体验客制化手感。</p>
+          <div class="author"><span class="ava">陆</span>陆屿工作室 <span class="verify">✓ 已认证创作者</span></div>
+          <div class="progress"><div class="bar" data-progress="94"></div></div>
+          <div class="pstats">
+            <div class="raised">¥ 946,200 <span style="color:var(--ink-mute);font-size:.8rem">/ 100万</span></div>
+            <div class="pct">94%</div>
+          </div>
+          <div class="pstats" style="margin-top:6px">
+            <div class="backers">👥 3,182 位支持者</div>
+            <div class="backers">⏳ 众筹中</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pcard reveal" data-cat="design">
+        <div class="pcover">
+          <div class="art art-2"></div><div class="glyph">🌿</div>
+          <span class="tag hot cat-tag">设计好物</span>
+          <span class="days">剩 12 天</span>
+        </div>
+        <div class="pbody">
+          <h3>Terra Lamp：用菌丝体材料生长出来的灯</h3>
+          <p>零塑料、可堆肥、每一只纹理都独一无二的桌面光源。</p>
+          <div class="author"><span class="ava">S</span>Studio Moss <span class="verify">✓ 已认证创作者</span></div>
+          <div class="progress cool"><div class="bar" data-progress="76"></div></div>
+          <div class="pstats">
+            <div class="raised">¥ 382,400 <span style="color:var(--ink-mute);font-size:.8rem">/ 50万</span></div>
+            <div class="pct">76%</div>
+          </div>
+          <div class="pstats" style="margin-top:6px">
+            <div class="backers">👥 1,205 位支持者</div>
+            <div class="backers">🌱 环保项目</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pcard reveal" data-cat="game">
+        <div class="pcover">
+          <div class="art art-3"></div><div class="glyph">🎲</div>
+          <span class="tag hot cat-tag">游戏桌游</span>
+          <span class="days">剩 21 天</span>
+        </div>
+        <div class="pbody">
+          <h3>山海旅人：一款水墨风合作冒险桌游</h3>
+          <p>2–5 人协作探索，《山海经》异兽图鉴 + 沉浸式剧情分支。</p>
+          <div class="author"><span class="ava">阿</span>阿柴造物 <span class="verify">✓ 已认证创作者</span></div>
+          <div class="progress"><div class="bar" data-progress="88"></div></div>
+          <div class="pstats">
+            <div class="raised">¥ 1,324,900 <span style="color:var(--ink-mute);font-size:.8rem">/ 150万</span></div>
+            <div class="pct">88%</div>
+          </div>
+          <div class="pstats" style="margin-top:6px">
+            <div class="backers">👥 6,431 位支持者</div>
+            <div class="backers">📦 含限定周边</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pcard reveal" data-cat="art">
+        <div class="pcover">
+          <div class="art art-4"></div><div class="glyph">🎞️</div>
+          <span class="tag hot cat-tag">影视艺术</span>
+          <span class="days">剩 8 天</span>
+        </div>
+        <div class="pbody">
+          <h3>《回声之城》：独立动画短片计划</h3>
+          <p>三位年轻动画人，用手绘 3600 帧讲述一座会记忆的城市。</p>
+          <div class="author"><span class="ava">回</span>回声小组 <span class="verify">✓ 已认证创作者</span></div>
+          <div class="progress"><div class="bar" data-progress="62"></div></div>
+          <div class="pstats">
+            <div class="raised">¥ 248,700 <span style="color:var(--ink-mute);font-size:.8rem">/ 40万</span></div>
+            <div class="pct">62%</div>
+          </div>
+          <div class="pstats" style="margin-top:6px">
+            <div class="backers">👥 2,077 位支持者</div>
+            <div class="backers">🎬 幕后纪录片</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pcard reveal" data-cat="tech">
+        <div class="pcover">
+          <div class="art art-5"></div><div class="glyph">⌚</div>
+          <span class="tag hot cat-tag">科技硬件</span>
+          <span class="days">剩 16 天</span>
+        </div>
+        <div class="pbody">
+          <h3>Orbit S — 只做三件事的极简智能手表</h3>
+          <p>时间、健康、通知。没有 App 商店，没有信息流，只有专注。</p>
+          <div class="author"><span class="ava">O</span>Orbit Lab <span class="verify">✓ 已认证创作者</span></div>
+          <div class="progress cool"><div class="bar" data-progress="71"></div></div>
+          <div class="pstats">
+            <div class="raised">¥ 712,300 <span style="color:var(--ink-mute);font-size:.8rem">/ 100万</span></div>
+            <div class="pct">71%</div>
+          </div>
+          <div class="pstats" style="margin-top:6px">
+            <div class="backers">👥 2,864 位支持者</div>
+            <div class="backers">🔋 21 天续航</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pcard reveal" data-cat="design">
+        <div class="pcover">
+          <div class="art art-6"></div><div class="glyph">☕</div>
+          <span class="tag hot cat-tag">设计好物</span>
+          <span class="days">剩 5 天</span>
+        </div>
+        <div class="pbody">
+          <h3>Daily Pour：一只懂手冲节奏的智能壶</h3>
+          <p>温控精度 ±0.5℃，注水曲线记录，让每一杯都稳定如一。</p>
+          <div class="author"><span class="ava">日</span>日常器物所 <span class="verify">✓ 已认证创作者</span></div>
+          <div class="progress"><div class="bar" data-progress="83"></div></div>
+          <div class="pstats">
+            <div class="raised">¥ 539,800 <span style="color:var(--ink-mute);font-size:.8rem">/ 65万</span></div>
+            <div class="pct">83%</div>
+          </div>
+          <div class="pstats" style="margin-top:6px">
+            <div class="backers">👥 1,932 位支持者</div>
+            <div class="backers">⏱ 早鸟即将结束</div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="grid-cta reveal">
+      <a href="#cta" class="btn btn-fire">浏览全部 1,284 个项目 <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+<!-- ================= 流程 ================= -->
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="section-head reveal" style="justify-content:center;text-align:center;flex-direction:column;align-items:center">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>简单四步</span>
+        <h2 class="title">从灵感到达成，<span class="grad">只隔四步</span></h2>
+        <p class="lead" style="margin-inline:auto">无论你是第一次发起众筹的创作者，还是想支持好点子的玩家，流程都简单透明。</p>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="n">01</div>
+        <h4>提交你的创意</h4>
+        <p>填写项目故事、设定目标金额与回报档位，上传一段 60 秒的介绍视频即可。</p>
+      </div>
+      <div class="step reveal">
+        <div class="n">02</div>
+        <h4>通过平台审核</h4>
+        <p>48 小时内完成真实性与可行性审核，专属顾问帮你优化页面与定价策略。</p>
+      </div>
+      <div class="step reveal">
+        <div class="n">03</div>
+        <h4>募集社区支持</h4>
+        <p>借助站内推荐、社群裂变与早鸟机制，30 天内触达最匹配的早期支持者。</p>
+      </div>
+      <div class="step reveal">
+        <div class="n">04</div>
+        <h4>交付并持续成长</h4>
+        <p>达成目标后分批放款，平台提供履约工具与复购商城，把支持者变成长期粉丝。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 数据带 ================= -->
+<section class="section" style="padding-top:20px">
+  <div class="wrap">
+    <div class="statband reveal">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="value"><span class="counter" data-target="12480">0</span></div>
+          <div class="label">已成功发起的项目</div>
+        </div>
+        <div class="stat-item">
+          <div class="value">¥<span class="counter" data-target="862">0</span>M</div>
+          <div class="label">累计募集资金</div>
+        </div>
+        <div class="stat-item">
+          <div class="value"><span class="counter" data-target="320">0</span>万</div>
+          <div class="label">全球活跃支持者</div>
+        </div>
+        <div class="stat-item">
+          <div class="value"><span class="counter" data-target="96">0</span>%</div>
+          <div class="label">创作者满意度</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 为什么选择 ================= -->
+<section class="section" id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>为什么选择 SparkFund</span>
+        <h2 class="title">不只是筹钱，<span class="grad">更是找到第一批信徒</span></h2>
+        <p class="lead">我们把 9 年的众筹经验，浓缩成创作者真正需要的工具与保障。</p>
+      </div>
+    </div>
+    <div class="feature-grid">
+      <div class="fcard reveal">
+        <div class="ficon">🛡️</div>
+        <h4>全有或全无保障</h4>
+        <p>未达目标 100% 自动全额退款，支持者零风险，创作者无交付压力。</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">🚀</div>
+        <h4>智能流量分发</h4>
+        <p>基于兴趣图谱的推荐算法，让对的项目在对的人面前出现，平均曝光提升 3.4 倍。</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">💳</div>
+        <h4>透明低费率</h4>
+        <p>平台仅收 5% 成功费，无隐藏费用、无上架费，资金流向全程可查。</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">📦</div>
+        <h4>履约一站式</h4>
+        <p>对接 200+ 供应链与物流伙伴，从打样到发货，在同一个后台完成。</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">💬</div>
+        <h4>社区共建机制</h4>
+        <p>支持者可参与投票、内测与更新互动，把「买家」变成「共创者」。</p>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">🌍</div>
+        <h4>全球多币种结算</h4>
+        <p>支持 38 种货币与跨境收款，7 个工作日内到账，汇率实时透明。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 创作者说 ================= -->
+<section class="section" style="padding-top:20px">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>创作者说</span>
+        <h2 class="title">他们在这里，<span class="grad">被看见</span></h2>
+      </div>
+      <a href="#cta" class="btn btn-ghost">阅读更多故事 <span class="arrow">→</span></a>
+    </div>
+    <div class="quotes">
+      <div class="quote reveal">
+        <span class="mark">“</span>
+        <p>上线 72 小时就突破了目标金额的 400%。SparkFund 的社区不是来「买东西」的，他们真的理解我们在做什么。</p>
+        <div class="who">
+          <span class="ava g1">陈</span>
+          <div><b>陈知遥</b><small>NovaPad 创始人 · 筹得 ¥321 万</small></div>
+        </div>
+      </div>
+      <div class="quote reveal">
+        <span class="mark">“</span>
+        <p>作为第一次做硬件的小团队，履约后台帮我们省下了至少两个月的踩坑时间，顾问几乎随时在线。</p>
+        <div class="who">
+          <span class="ava g2">K</span>
+          <div><b>Kevin Zhao</b><small>Orbit Lab 联合创始人 · 筹得 ¥71 万</small></div>
+        </div>
+      </div>
+      <div class="quote reveal">
+        <span class="mark">“</span>
+        <p>最惊喜的是支持者群里自发产生的二创内容，众筹结束半年后，我们还能源源不断收到改进建议。</p>
+        <div class="who">
+          <span class="ava g3">苏</span>
+          <div><b>苏茉</b><small>回声小组导演 · 筹得 ¥24 万</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="section-head reveal" style="flex-direction:column;align-items:center;text-align:center;justify-content:center">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>常见问题</span>
+        <h2 class="title">你可能想问的<span class="grad">几件事</span></h2>
+      </div>
+    </div>
+    <div class="faq-wrap">
+      <details class="faq reveal" open>
+        <summary>发起项目需要哪些条件？<span class="plus"></span></summary>
+        <div class="ans">只要你年满 18 周岁、拥有可验证的身份信息，并能清晰描述项目的目标与交付计划，就可以提交申请。我们欢迎从学生团队到成熟工作室的所有创作者，审核主要看项目的可行性与真实性，而非团队规模。</div>
+      </details>
+      <details class="faq reveal">
+        <summary>如果项目没有达到目标金额会怎样？<span class="plus"></span></summary>
+        <div class="ans">SparkFund 采用「全有或全无」机制：若在截止时间前未达成 100% 目标金额，所有支持款项将原路退回给支持者，创作者不承担任何费用。这既保护了支持者，也避免创作者在资金不足的情况下被迫开工。</div>
+      </details>
+      <details class="faq reveal">
+        <summary>平台如何收费？<span class="plus"></span></summary>
+        <div class="ans">发起项目完全免费。仅当项目成功募集后收取 5% 的平台服务费，另加第三方支付通道约 2–3% 的手续费。没有上架费、没有推广捆绑，所有费用在项目后台实时可查。</div>
+      </details>
+      <details class="faq reveal">
+        <summary>资金什么时候可以到账？<span class="plus"></span></summary>
+        <div class="ans">项目成功后，资金将按 50% / 40% / 10% 分三个阶段放款：成功后 7 个工作日内、首批发货确认后、全部履约完成后。分阶段机制既保证创作者有启动资金，也保障支持者的回报按时交付。</div>
+      </details>
+      <details class="faq reveal">
+        <summary>支持者可以退款吗？<span class="plus"></span></summary>
+        <div class="ans">在项目募集期内可随时无条件取消支持。募集成功后，若创作者未在承诺时间内履约或项目取消，支持者可通过平台保障计划申请全额退款。我们同时提供 30 天回报品质量问题赔付。</div>
+      </details>
+      <details class="faq reveal">
+        <summary>平台会帮助推广我的项目吗？<span class="plus"></span></summary>
+        <div class="ans">会。所有通过审核的项目都会进入智能推荐池；优质项目还将获得首页精选、编辑专栏、社交媒体联动与社群直播等免费资源位。数据显示，获得编辑推荐的项目平均达成率高出 47%。</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="section" id="cta" style="padding-bottom:40px">
+  <div class="wrap">
+    <div class="cta reveal">
+      <h2>准备好，让世界为你的<br>创意买单了吗？</h2>
+      <p>现在提交项目，即可获得 1 对 1 顾问的免费上线诊断，以及首月 0 平台费的早鸟资格。</p>
+      <div class="cta-actions">
+        <a href="#" class="btn btn-white">免费发起项目 <span class="arrow">→</span></a>
+        <a href="#discover" class="btn btn-glass">先逛逛热门项目</a>
+      </div>
+      <div class="note">已有账号？<a href="#" style="text-decoration:underline;color:#fff">登录 SparkFund →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Footer ================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13.5H11L9.5 22 19.5 9.5H13L13 2Z" fill="#fff"/></svg>
+          </span>
+          <span>SparkFund<small>创 意 众 筹</small></span>
+        </a>
+        <p>为独立创作者提供从募资、履约到社区成长的一站式平台。让每一个大胆的想法，都有被点亮的机会。</p>
+        <div class="socials">
+          <a href="#" aria-label="微博">微</a>
+          <a href="#" aria-label="B站">B</a>
+          <a href="#" aria-label="微信">信</a>
+          <a href="#" aria-label="小红书">书</a>
+          <a href="#" aria-label="X">✦</a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h5>Discover</h5>
+        <a href="#discover">热门项目</a>
+        <a href="#categories">项目分类</a>
+        <a href="#projects">即将结束</a>
+        <a href="#projects">编辑精选</a>
+        <a href="#discover">成功案例</a>
+      </div>
+      <div class="foot-col">
+        <h5>Creators</h5>
+        <a href="#how">发起项目</a>
+        <a href="#how">创作者手册</a>
+        <a href="#why">费用与结算</a>
+        <a href="#faq">履约工具</a>
+        <a href="#faq">帮助中心</a>
+      </div>
+      <div class="foot-col">
+        <h5>Newsletter</h5>
+        <p style="color:var(--ink-mute);font-size:.92rem">每周精选 5 个最有趣的项目，直接送到你的邮箱。</p>
+        <form class="newsletter" id="newsForm">
+          <input type="email" placeholder="你的邮箱地址" aria-label="邮箱" required>
+          <button type="submit">订阅</button>
+        </form>
+        <div id="newsMsg" style="font-size:.84rem;color:var(--lime);margin-top:12px;display:none">✓ 订阅成功！下周见 ✨</div>
+      </div>
+    </div>
+    <div class="foot-note">
+      <div>© 2026 SparkFund 创意众筹平台 · 本页面为设计演示作品</div>
+      <div class="links">
+        <a href="#">服务条款</a>
+        <a href="#">隐私政策</a>
+        <a href="#">Cookie 设置</a>
+        <a href="#">联系我们</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="#top" class="totop" id="toTop" aria-label="返回顶部">↑</a>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- 导航滚动状态 & 移动菜单 ---------- */
+  var nav = document.getElementById('topNav');
+  var burger = document.getElementById('burger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  var toTop = document.getElementById('toTop');
+
+  function onScroll(){
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    nav.classList.toggle('scrolled', y > 30);
+    toTop.classList.toggle('show', y > 600);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  burger.addEventListener('click', function(){
+    var open = burger.classList.toggle('open');
+    mobileMenu.style.display = open ? 'flex' : 'none';
+  });
+  mobileMenu.addEventListener('click', function(e){
+    if(e.target.tagName === 'A'){
+      burger.classList.remove('open');
+      mobileMenu.style.display = 'none';
+    }
+  });
+
+  /* ---------- 进入视口动画 ---------- */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en, i){
+        if(en.isIntersecting){
+          var el = en.target;
+          setTimeout(function(){ el.classList.add('in'); }, (i % 6) * 90);
+          io.unobserve(el);
+        }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }else{
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- 进度条动画 ---------- */
+  var bars = Array.prototype.slice.call(document.querySelectorAll('.bar[data-progress]'));
+  function fillBar(bar){
+    if(bar.dataset.done) return;
+    bar.dataset.done = '1';
+    bar.style.width = Math.min(100, parseFloat(bar.getAttribute('data-progress'))) + '%';
+  }
+  if('IntersectionObserver' in window){
+    var bio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ fillBar(en.target); bio.unobserve(en.target); }
+      });
+    }, {threshold:.35});
+    bars.forEach(function(b){ bio.observe(b); });
+  }else{
+    bars.forEach(fillBar);
+  }
+
+  /* ---------- 数字滚动 ---------- */
+  var counters = Array.prototype.slice.call(document.querySelectorAll('.counter'));
+  function animateCounter(el){
+    if(el.dataset.done) return;
+    el.dataset.done = '1';
+    var target = parseFloat(el.getAttribute('data-target')) || 0;
+    var dur = 1800, start = null;
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min(1, (ts - start) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = target * eased;
+      el.textContent = target >= 1000
+        ? Math.floor(val).toLocaleString('en-US')
+        : (target % 1 ? val.toFixed(1) : Math.floor(val));
+      if(p < 1) requestAnimationFrame(step);
+      else el.textContent = target >= 1000 ? target.toLocaleString('en-US') : target;
+    }
+    requestAnimationFrame(step);
+  }
+  if('IntersectionObserver' in window){
+    var cio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ animateCounter(en.target); cio.unobserve(en.target); }
+      });
+    }, {threshold:.5});
+    counters.forEach(function(c){ cio.observe(c); });
+  }else{
+    counters.forEach(animateCounter);
+  }
+
+  /* ---------- 项目筛选 ---------- */
+  var filterBar = document.getElementById('filterBar');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#projectGrid .pcard'));
+  if(filterBar){
+    filterBar.addEventListener('click', function(e){
+      var btn = e.target.closest('.filter-btn');
+      if(!btn) return;
+      filterBar.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-filter');
+      cards.forEach(function(card){
+        var match = (f === 'all' || card.getAttribute('data-cat') === f);
+        card.classList.toggle('hide', !match);
+        if(match){
+          card.style.animation = 'none';
+          /* 强制重排以重启动画 */
+          void card.offsetWidth;
+          card.style.opacity = 0;
+          card.style.transform = 'translateY(22px)';
+          setTimeout(function(){
+            card.style.transition = 'opacity .5s ease, transform .5s cubic-bezier(.2,.8,.2,1)';
+            card.style.opacity = 1;
+            card.style.transform = 'none';
+          }, 20);
+        }
+      });
+    });
+  }
+
+  /* ---------- FAQ 手风琴（互斥展开） ---------- */
+  var faqs = Array.prototype.slice.call(document.querySelectorAll('.faq'));
+  faqs.forEach(function(d){
+    d.addEventListener('toggle', function(){
+      if(d.open){
+        faqs.forEach(function(o){ if(o !== d) o.open = false; });
+      }
+    });
+  });
+
+  /* ---------- 跑马灯内容复制（无缝循环） ---------- */
+  var track = document.getElementById('marqueeTrack');
+  if(track){
+    track.innerHTML += track.innerHTML;
+  }
+
+  /* ---------- Newsletter 提交 ---------- */
+  var newsForm = document.getElementById('newsForm');
+  if(newsForm){
+    newsForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var msg = document.getElementById('newsMsg');
+      if(msg){ msg.style.display = 'block'; }
+      newsForm.reset();
+    });
+  }
+
+  /* ---------- 返回顶部 ---------- */
+  toTop.addEventListener('click', function(e){
+    e.preventDefault();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  /* ---------- Hero 视差（轻微） ---------- */
+  var visual = document.querySelector('.hero-visual');
+  if(visual && window.matchMedia('(pointer:fine)').matches){
+    document.querySelector('.hero').addEventListener('mousemove', function(e){
+      var r = this.getBoundingClientRect();
+      var dx = (e.clientX - r.left) / r.width - .5;
+      var dy = (e.clientY - r.top) / r.height - .5;
+      visual.style.transform = 'translate3d(' + (dx * 14) + 'px,' + (dy * 12) + 'px,0)';
+    });
+  }
+})();
+</script>
+</body>
+</html>
