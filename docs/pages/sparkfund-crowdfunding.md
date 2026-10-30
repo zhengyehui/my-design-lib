@@ -29,6 +29,9 @@ pageDetail:
   prev:
     text: INKWAVE 数字漫画出版平台
     link: /pages/inkwave-manga.html
+  next:
+    text: Orbit Meet 视频会议协作空间
+    link: /pages/orbit-meet.html
 ---
 
 <PageDetail />

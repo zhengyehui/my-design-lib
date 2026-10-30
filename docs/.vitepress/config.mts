@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，214 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，216 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -71,7 +71,7 @@ export default defineConfig({
     // Open Graph（社交分享）
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 214 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 216 个完整页面，纯 HTML+CSS，零依赖。' }],
     ['meta', { property: 'og:url', content: 'http://101.37.166.208:11930' }],
     ['meta', { property: 'og:site_name', content: 'My Design Lib' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -79,14 +79,14 @@ export default defineConfig({
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 214 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 216 个完整页面，纯 HTML+CSS，零依赖。' }],
 
     // Schema.org 结构化数据
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "My Design Lib",
-"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 214 个完整页面",
+"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 216 个完整页面",
       "url": "http://101.37.166.208:11930",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
@@ -101,7 +101,7 @@ export default defineConfig({
 
     // AI 爬虫友好
     ['meta', { name: 'ai-content-type', content: 'design-library' }],
-    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，214个完整页面模板，Design Tokens。可直接复制使用。' }],
+    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，216个完整页面模板，Design Tokens。可直接复制使用。' }],
 
     ['link', { rel: 'stylesheet', href: '/tokens/tokens.css' }],
     ...componentCSS.map(name => [
@@ -333,7 +333,8 @@ export default defineConfig({
             { text: 'Mosaic 数字资产管理', link: '/pages/mosaic-assets' },
             { text: 'CineVault 电影流媒体', link: '/pages/cinevault' },
             { text: 'BillFlow 智能发票平台', link: '/pages/invoice-platform' },
-            { text: 'APERTURE 专业修图工作台', link: '/pages/aperture-editor' }
+            { text: 'APERTURE 专业修图工作台', link: '/pages/aperture-editor' },
+            { text: 'Orbit Meet 视频会议', link: '/pages/orbit-meet' }
           ]
         },
         {
@@ -444,7 +445,8 @@ export default defineConfig({
             { text: 'StatusPulse 服务状态页', link: '/pages/status-page' },
             { text: 'Aegis Trust Center 安全合规中心', link: '/pages/trust-center' },
             { text: 'DIALOGUE 对话录 人物访谈', link: '/pages/dialogue-interviews' },
-            { text: 'Lumen Research 年度白皮书', link: '/pages/research-lab-whitepaper' }
+            { text: 'Lumen Research 年度白皮书', link: '/pages/research-lab-whitepaper' },
+            { text: '北光纪行 摄影田野日志', link: '/pages/northlight-journal' }
           ]
         },
         {

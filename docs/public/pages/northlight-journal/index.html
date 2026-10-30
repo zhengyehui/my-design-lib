@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>北光纪行 WILDLIGHT JOURNAL — 旅行摄影师的田野日志</title>
+  <meta name="description" content="北光纪行 WILDLIGHT JOURNAL：一本旅行摄影师的田野日志，记录冰岛、挪威、法罗群岛、格陵兰与北海道的光、冰与潮汐。">
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <script>document.documentElement.classList.add('js')</script>
+  <style>
+    /* ============================================================
+       北光纪行 WILDLIGHT JOURNAL
+       白色编辑部风格 · 田野日志单页
+       页面专属变量优先，tokens.css 提供排版与节奏基线
+       ============================================================ */
+    :root {
+      /* 页面身份色板 —— 纸与墨 */
+      --paper: #FFFFFF;
+      --ink: #000000;
+
+      /* 每则条目的签名色 */
+      --accent: #F74805;
+      --accent-01: #F74805;
+      --accent-02: #EE1451;
+      --accent-03: #54A705;
+      --accent-04: #EB0D72;
+      --accent-05: #F74805;
+
+      /* 排版 —— 单一 grotesque，全站 700 */
+      --grotesk: 'Helvetica Neue', Helvetica, Inter, Arial,
+                 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+
+      /* 节奏与缓动（引用 tokens.css，缺失时回退） */
+      --space-2:  var(--space-2,  0.5rem);
+      --space-4:  var(--space-4,  1rem);
+      --space-6:  var(--space-6,  1.5rem);
+      --space-10: var(--space-10, 2.5rem);
+      --space-16: var(--space-16, 4rem);
+      --space-24: var(--space-24, 6rem);
+      --weight-bold: var(--weight-bold, 700);
+      --ease:  var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+      --dur-s: var(--duration-slow, 400ms);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--grotesk);
+      font-weight: var(--weight-bold);
+      font-size: var(--text-lg, 18px);
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    .wrap {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--space-10);
+    }
+
+    /* 排版基元 ------------------------------------------------ */
+    .micro {
+      font-size: 10px;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+      font-weight: var(--weight-bold);
+    }
+    .display {
+      font-size: clamp(38px, 6.2vw, 58px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      font-weight: var(--weight-bold);
+    }
+    .rule {
+      border: 0;
+      border-top: 1px solid var(--ink);
+      width: 100%;
+    }
+
+    /* ============================================================
+       报头 Masthead
+       ============================================================ */
+    .masthead {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-6);
+      padding: 22px 0 18px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      font-size: var(--text-lg, 18px);
+      letter-spacing: -0.02em;
+    }
+    .brand .mark { font-size: var(--text-lg, 18px); }
+    .brand .micro { opacity: 0.9; }
+    .nav {
+      display: flex;
+      gap: 28px;
+      font-size: var(--text-lg, 18px);
+    }
+    .nav a { transition: color 160ms var(--ease); }
+    .nav a:hover { color: var(--accent); }
+
+    /* ============================================================
+       卷首 Hero
+       ============================================================ */
+    .hero { padding: 116px 0 0; }
+    .hero .kicker {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 44px;
+    }
+    .hero h1 { max-width: 15ch; }
+    .hero .lede {
+      max-width: 47ch;
+      margin-top: 42px;
+      font-size: var(--text-lg, 18px);
+      line-height: 1.5;
+    }
+
+    /* 图注 —— 一行加粗：地点 — 田野笔记一句话，日期 */
+    .caption {
+      margin-top: 16px;
+      font-size: var(--text-lg, 18px);
+      letter-spacing: -0.02em;
+      max-width: 62ch;
+    }
+    .caption .place { color: var(--accent); }
+
+    /* ============================================================
+       照片 —— 纯 CSS 风景画
+       ============================================================ */
+    .photo { margin: 0; }
+    .art {
+      position: relative;
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      background: #dfe7ea;
+      isolation: isolate;
+    }
+    .art > span { position: absolute; display: none; }
+    .art .sky,
+    .art .ridge,
+    .art .water,
+    .art .grain { display: block; }
+    .art .ridge { left: -2%; right: -2%; }
+    .art .water { left: 0; right: 0; bottom: 0; }
+    .art .grain {
+      inset: 0;
+      z-index: 9;
+      opacity: 0.15;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    }
+
+    /* 一 · 冰岛：杰古沙龙冰河湖的极昼暮光 ---------------------- */
+    .art--lagoon .sky {
+      background:
+        radial-gradient(120% 80% at 72% 8%, rgba(122, 236, 186, 0.22), transparent 62%),
+        linear-gradient(180deg, #06131f 0%, #0b2536 26%, #14455a 48%, #3c7d84 68%, #83b1a8 82%, #cfded2 94%, #e7eee3 100%);
+    }
+    .art--lagoon .glow {
+      display: block; inset: 0;
+      background: radial-gradient(70% 48% at 34% 14%, rgba(112, 240, 190, 0.25), transparent 70%);
+      mix-blend-mode: screen;
+    }
+    .art--lagoon .band {
+      display: block;
+      left: -25%; width: 150%; height: 44%;
+      filter: blur(15px);
+      mix-blend-mode: screen;
+    }
+    .art--lagoon .band-a {
+      top: -8%;
+      background: linear-gradient(100deg, transparent 8%, rgba(122, 236, 186, 0.55) 38%, rgba(94, 190, 214, 0.25) 55%, transparent 74%);
+      transform: rotate(-7deg);
+      opacity: 0.55;
+    }
+    .art--lagoon .band-b {
+      top: 8%;
+      background: linear-gradient(80deg, transparent 15%, rgba(163, 140, 255, 0.35) 34%, rgba(96, 224, 186, 0.32) 52%, transparent 76%);
+      transform: rotate(5deg);
+      opacity: 0.42;
+    }
+    .art--lagoon .ridge-far {
+      bottom: 36%; height: 24%;
+      background: linear-gradient(180deg, #16394b, #102c3c);
+      clip-path: polygon(0 100%, 0 66%, 8% 44%, 17% 60%, 26% 30%, 37% 56%, 47% 32%, 58% 60%, 68% 34%, 79% 58%, 89% 40%, 100% 64%, 100% 100%);
+    }
+    .art--lagoon .ridge-near {
+      bottom: 35%; height: 15%;
+      background: linear-gradient(180deg, #0b2130, #06141d);
+      clip-path: polygon(0 100%, 0 58%, 11% 32%, 23% 60%, 35% 42%, 50% 68%, 63% 40%, 76% 64%, 88% 44%, 100% 68%, 100% 100%);
+    }
+    .art--lagoon .water {
+      height: 37%;
+      background: linear-gradient(180deg, #d3e2d7 0%, #79a4a6 10%, #2c5b6b 34%, #12303f 72%, #081c27 100%);
+    }
+    .art--lagoon .water::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 7px);
+    }
+    .art--lagoon .drift {
+      display: block;
+      background: linear-gradient(180deg, #eef6f2, #b9d2d2 55%, #8fb3ba);
+      box-shadow: 0 8px 20px rgba(6, 24, 34, 0.35);
+    }
+    .art--lagoon .d1 {
+      width: 22%; height: 12%; left: 12%; bottom: 15%;
+      border-radius: 48% 52% 55% 45% / 65% 60% 40% 35%;
+    }
+    .art--lagoon .d2 {
+      width: 14%; height: 9%; right: 17%; bottom: 23%;
+      border-radius: 55% 45% 40% 60% / 60% 55% 45% 40%;
+    }
+    .art--lagoon .d3 {
+      width: 9%; height: 6%; left: 44%; bottom: 29%;
+      border-radius: 50% 50% 46% 54% / 60% 58% 42% 40%;
+      opacity: 0.92;
+    }
+
+    /* 二 · 黑沙滩上的极光 -------------------------------------- */
+    .art--blacksand .sky {
+      background: linear-gradient(180deg, #02050d 0%, #071021 30%, #0c1c31 55%, #14263c 76%, #26333f 92%, #333c45 100%);
+    }
+    .art--blacksand .glow {
+      display: block; inset: 0;
+      background: radial-gradient(60% 50% at 40% 16%, rgba(88, 232, 168, 0.2), transparent 70%);
+      mix-blend-mode: screen;
+    }
+    .art--blacksand .band { display: block; mix-blend-mode: screen; }
+    .art--blacksand .band-a {
+      left: -20%; width: 140%; top: 2%; height: 38%;
+      background: linear-gradient(102deg, transparent 12%, rgba(86, 232, 164, 0.5) 30%, rgba(120, 236, 190, 0.28) 46%, rgba(120, 180, 255, 0.16) 60%, transparent 78%);
+      filter: blur(16px);
+      transform: rotate(-6deg);
+      opacity: 0.85;
+    }
+    .art--blacksand .band-b {
+      left: -15%; width: 130%; top: 10%; height: 30%;
+      background: linear-gradient(84deg, transparent 18%, rgba(150, 120, 255, 0.32) 36%, rgba(96, 222, 190, 0.28) 54%, transparent 76%);
+      filter: blur(20px);
+      transform: rotate(4deg);
+      opacity: 0.6;
+    }
+    .art--blacksand .spark {
+      display: block; inset: 0 0 46% 0;
+      background-image:
+        radial-gradient(1.6px 1.6px at 10% 12%, rgba(255, 255, 255, 0.85), transparent 60%),
+        radial-gradient(1.2px 1.2px at 26% 6%, rgba(255, 255, 255, 0.7), transparent 60%),
+        radial-gradient(1.4px 1.4px at 42% 16%, rgba(255, 255, 255, 0.65), transparent 60%),
+        radial-gradient(1px 1px at 58% 8%, rgba(255, 255, 255, 0.6), transparent 60%),
+        radial-gradient(1.6px 1.6px at 74% 14%, rgba(255, 255, 255, 0.75), transparent 60%),
+        radial-gradient(1.2px 1.2px at 90% 9%, rgba(255, 255, 255, 0.6), transparent 60%),
+        radial-gradient(1px 1px at 18% 24%, rgba(255, 255, 255, 0.5), transparent 60%),
+        radial-gradient(1.2px 1.2px at 66% 26%, rgba(255, 255, 255, 0.5), transparent 60%);
+    }
+    .art--blacksand .ridge-far {
+      bottom: 22%; height: 34%;
+      background: #060b13;
+      clip-path: polygon(0 100%, 0 52%, 14% 38%, 30% 56%, 44% 46%, 58% 62%, 72% 52%, 86% 66%, 100% 58%, 100% 100%);
+    }
+    .art--blacksand .ridge-near {
+      bottom: 22%; height: 56%;
+      background: linear-gradient(180deg, #0a1220, #04070d 70%);
+      clip-path: polygon(0 100%, 0 74%, 9% 58%, 16% 66%, 27% 30%, 34% 44%, 41% 14%, 49% 40%, 57% 22%, 68% 56%, 76% 44%, 86% 64%, 94% 52%, 100% 68%, 100% 100%);
+    }
+    .art--blacksand .water {
+      height: 24%;
+      background: linear-gradient(180deg, #232b36 0%, #12161e 42%, #090c12 100%);
+    }
+    .art--blacksand .water::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(72deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 12px);
+    }
+
+    /* 三 · 罗弗敦：午夜太阳与红色渔屋 -------------------------- */
+    .art--lofoten .sky {
+      background: linear-gradient(180deg, #091227 0%, #1b2c50 30%, #46607f 56%, #8aa2b3 74%, #c8d2d2 88%, #e3e5e0 100%);
+    }
+    .art--lofoten .glow {
+      display: block; inset: 0;
+      background: radial-gradient(46% 30% at 66% 84%, rgba(255, 196, 138, 0.5), transparent 70%);
+      mix-blend-mode: screen;
+    }
+    .art--lofoten .ridge-far {
+      bottom: 26%; height: 34%;
+      background: linear-gradient(180deg, #77909f, #51697c);
+      clip-path: polygon(0 100%, 0 62%, 10% 30%, 20% 58%, 32% 16%, 44% 54%, 55% 26%, 66% 58%, 78% 34%, 88% 60%, 100% 42%, 100% 100%);
+    }
+    .art--lofoten .ridge-near {
+      bottom: 24%; height: 46%;
+      background: linear-gradient(180deg, #16263c, #0a1524 72%);
+      clip-path: polygon(0 100%, 0 70%, 8% 34%, 15% 52%, 24% 8%, 33% 46%, 42% 20%, 52% 56%, 62% 30%, 72% 62%, 82% 38%, 92% 66%, 100% 50%, 100% 100%);
+    }
+    .art--lofoten .water {
+      height: 26%;
+      background: linear-gradient(180deg, #b9c6c6 0%, #486072 12%, #1d3145 48%, #0d1c2b 100%);
+    }
+    .art--lofoten .water::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 58%, rgba(255, 196, 138, 0.2) 66%, rgba(255, 196, 138, 0.3) 70%, rgba(255, 196, 138, 0.16) 74%, transparent 82%);
+      filter: blur(3px);
+    }
+    .art--lofoten .hut {
+      display: block;
+      width: 6.5%; height: 7%; left: 21%; bottom: 15%;
+      background: linear-gradient(180deg, #c23a22, #8f2816);
+      border-radius: 2px;
+    }
+    .art--lofoten .hut::before {
+      content: ''; position: absolute;
+      left: -12%; right: -12%; top: -58%; height: 62%;
+      background: #2a1b16;
+      clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    }
+    .art--lofoten .hut::after {
+      content: ''; position: absolute;
+      left: 22%; top: 32%; width: 24%; height: 26%;
+      background: #ffd48a;
+      box-shadow: 0 0 12px 4px rgba(255, 196, 120, 0.55);
+    }
+
+    /* 四 · 法罗：Gásadalur 的悬崖与瀑布 ------------------------ */
+    .art--gasadalur .sky {
+      background: linear-gradient(180deg, #aab9c2 0%, #c6d1d5 34%, #dde4e4 58%, #e9ece7 72%, #d3dcd8 100%);
+    }
+    .art--gasadalur .glow {
+      display: block; inset: 36% 0 26% 0;
+      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.75) 45%, rgba(255, 255, 255, 0.2) 80%, transparent);
+      filter: blur(6px);
+    }
+    .art--gasadalur .ridge-far {
+      bottom: 30%; height: 40%;
+      background: linear-gradient(180deg, #6d8378, #4a6157);
+      clip-path: polygon(0 100%, 0 40%, 12% 22%, 26% 34%, 38% 26%, 48% 44%, 58% 38%, 70% 48%, 82% 42%, 92% 52%, 100% 46%, 100% 100%);
+    }
+    .art--gasadalur .ridge-near {
+      bottom: 16%; height: 60%;
+      background: linear-gradient(180deg, #35603f 0%, #274c32 42%, #1c3224 78%);
+      clip-path: polygon(0 100%, 0 74%, 10% 58%, 22% 50%, 34% 34%, 48% 16%, 62% 8%, 78% 22%, 90% 16%, 100% 30%, 100% 100%);
+    }
+    .art--gasadalur .fall {
+      display: block;
+      width: 1.3%; height: 40%; left: 38%; top: 32%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.5) 70%, rgba(255, 255, 255, 0.08));
+      filter: blur(1.6px);
+    }
+    .art--gasadalur .fall::after {
+      content: ''; position: absolute;
+      left: 280%; top: 8%; width: 70%; height: 78%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.12));
+      filter: blur(1.6px);
+    }
+    .art--gasadalur .water {
+      height: 18%;
+      background: linear-gradient(180deg, #3c5a60, #22383f 70%);
+    }
+    .art--gasadalur .water::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 6px);
+    }
+
+    /* 五 · 格陵兰：伊卢利萨特的午夜太阳 ------------------------ */
+    .art--ilulissat .sky {
+      background: linear-gradient(180deg, #2f3a63 0%, #6e6490 22%, #b47f8b 42%, #e59a7e 60%, #f5bf92 74%, #fae0bd 88%, #f7ecd6 100%);
+    }
+    .art--ilulissat .glow {
+      display: block; inset: 0;
+      background: radial-gradient(60% 42% at 48% 62%, rgba(255, 214, 150, 0.5), transparent 70%);
+      mix-blend-mode: screen;
+    }
+    .art--ilulissat .sun {
+      display: block;
+      width: 10%; height: 15%; left: 45%; top: 56%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff7e4 0%, #ffe3ab 58%, rgba(255, 215, 150, 0.35) 78%, rgba(255, 205, 140, 0) 100%);
+      box-shadow: 0 0 90px 36px rgba(255, 190, 120, 0.5);
+    }
+    .art--ilulissat .ridge-far {
+      bottom: 34%; height: 12%;
+      background: linear-gradient(180deg, #4e4a6b, #3a3a5c);
+      clip-path: polygon(0 100%, 0 58%, 12% 38%, 26% 52%, 40% 34%, 55% 50%, 70% 36%, 84% 52%, 100% 42%, 100% 100%);
+    }
+    .art--ilulissat .water {
+      height: 36%;
+      background: linear-gradient(180deg, #f6e3c2 0%, #cf9582 12%, #7d6f8c 44%, #454b74 78%, #2c3557 100%);
+    }
+    .art--ilulissat .water::after {
+      content: ''; position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, transparent 34%, rgba(255, 226, 178, 0.26) 47%, rgba(255, 226, 178, 0.4) 52%, rgba(255, 226, 178, 0.2) 58%, transparent 70%),
+        repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0 2px, transparent 2px 9px);
+    }
+    .art--ilulissat .drift {
+      display: block;
+      background: linear-gradient(180deg, #fdf3e6, #e6d6c8 55%, #c2b6bd);
+    }
+    .art--ilulissat .d1 {
+      width: 30%; height: 26%; left: 8%; bottom: 25%;
+      clip-path: polygon(6% 100%, 14% 52%, 26% 34%, 40% 42%, 52% 18%, 68% 36%, 82% 28%, 94% 58%, 100% 100%);
+    }
+    .art--ilulissat .d2 {
+      width: 22%; height: 20%; right: 10%; bottom: 29%;
+      background: linear-gradient(180deg, #fbf0e4, #d9c8c6 60%, #b3a8b6);
+      clip-path: polygon(8% 100%, 18% 46%, 34% 30%, 52% 44%, 66% 22%, 84% 46%, 96% 100%);
+    }
+    .art--ilulissat .d3 {
+      width: 12%; height: 11%; left: 46%; bottom: 35%;
+      background: linear-gradient(180deg, #fdf5ea, #d6c6c4);
+      clip-path: polygon(10% 100%, 26% 40%, 48% 24%, 70% 44%, 88% 36%, 100% 100%);
+      opacity: 0.95;
+    }
+
+    /* 六 · 知床：流冰靠岸的冷海 -------------------------------- */
+    .art--shiretoko .sky {
+      background:
+        radial-gradient(60% 40% at 50% 88%, rgba(250, 214, 208, 0.8), transparent 70%),
+        linear-gradient(180deg, #b7c6cf 0%, #cfd9dc 32%, #e6e8e6 58%, #f2e9e6 78%, #f7efec 100%);
+    }
+    .art--shiretoko .ridge-far {
+      bottom: 42%; height: 18%;
+      background: linear-gradient(180deg, #93a3ae, #77889a);
+      clip-path: polygon(0 100%, 0 64%, 14% 38%, 30% 56%, 46% 32%, 62% 52%, 78% 34%, 92% 56%, 100% 46%, 100% 100%);
+      opacity: 0.85;
+    }
+    .art--shiretoko .ridge-near {
+      bottom: 40%; height: 12%;
+      background: linear-gradient(180deg, #6c7f92, #56697f);
+      clip-path: polygon(0 100%, 0 58%, 18% 34%, 36% 56%, 55% 38%, 72% 58%, 88% 42%, 100% 60%, 100% 100%);
+    }
+    .art--shiretoko .water {
+      height: 42%;
+      background: linear-gradient(180deg, #7fa0ac 0%, #5a7f8f 26%, #3c5f70 62%, #2a4757 100%);
+    }
+    .art--shiretoko .water::after {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 16% 7% at 12% 24%, #f4f8f8, transparent 72%),
+        radial-gradient(ellipse 11% 5% at 33% 44%, #eef4f5, transparent 72%),
+        radial-gradient(ellipse 20% 8% at 58% 20%, #f6fafa, transparent 74%),
+        radial-gradient(ellipse 9% 4% at 78% 40%, #e9f1f2, transparent 72%),
+        radial-gradient(ellipse 14% 6% at 88% 16%, #f2f7f7, transparent 72%),
+        radial-gradient(ellipse 12% 5% at 46% 66%, #e6eef0, transparent 72%),
+        radial-gradient(ellipse 18% 7% at 22% 78%, #eff5f5, transparent 74%),
+        radial-gradient(ellipse 10% 4% at 68% 82%, #e2ecee, transparent 72%);
+    }
+    .art--shiretoko .drift {
+      display: block;
+      background: linear-gradient(180deg, #fbfefe, #d7e5e6);
+      box-shadow: 0 10px 24px rgba(30, 60, 80, 0.18);
+    }
+    .art--shiretoko .d1 {
+      width: 26%; height: 10%; left: 30%; bottom: 21%;
+      border-radius: 46% 54% 48% 52% / 70% 66% 34% 30%;
+    }
+    .art--shiretoko .d2 {
+      width: 14%; height: 6.5%; right: 16%; bottom: 31%;
+      background: linear-gradient(180deg, #fdfefe, #cfe0e2);
+      border-radius: 52% 48% 55% 45% / 72% 68% 32% 28%;
+    }
+
+    /* 七 · 斯卡夫塔山：冰舌与蓝色裂隙 -------------------------- */
+    .art--glacier .sky {
+      background: linear-gradient(180deg, #b9ccd8 0%, #d4dfe4 36%, #e9eef0 58%, #f2f2ee 74%, #dfe4df 100%);
+    }
+    .art--glacier .glow {
+      display: block; inset: 0;
+      background: radial-gradient(50% 34% at 30% 20%, rgba(255, 255, 255, 0.8), transparent 70%);
+    }
+    .art--glacier .ridge-far {
+      bottom: 34%; height: 30%;
+      background: linear-gradient(180deg, #5b6773, #3c4753);
+      clip-path: polygon(0 100%, 0 56%, 12% 26%, 26% 50%, 40% 18%, 56% 48%, 70% 28%, 84% 52%, 100% 36%, 100% 100%);
+    }
+    .art--glacier .ridge-near {
+      bottom: 18%; height: 34%;
+      background: linear-gradient(180deg, #dceaf1 0%, #a9cbe0 38%, #7fb0cc 72%, #5f93b2 100%);
+      clip-path: polygon(0 100%, 0 42%, 16% 30%, 34% 22%, 52% 30%, 68% 44%, 82% 58%, 100% 72%, 100% 100%);
+    }
+    .art--glacier .spark {
+      display: block;
+      width: 5%; height: 22%; left: 40%; bottom: 30%;
+      background: linear-gradient(180deg, rgba(72, 150, 214, 0), rgba(64, 142, 210, 0.85) 40%, rgba(64, 142, 210, 0.15));
+      filter: blur(3px);
+      transform: rotate(8deg);
+      border-radius: 40%;
+    }
+    .art--glacier .spark::after {
+      content: ''; position: absolute;
+      left: 190%; top: 18%; width: 80%; height: 74%;
+      background: linear-gradient(180deg, rgba(72, 150, 214, 0), rgba(90, 160, 216, 0.6) 46%, rgba(90, 160, 216, 0.1));
+      filter: blur(3px);
+      transform: rotate(-12deg);
+    }
+    .art--glacier .water {
+      height: 20%;
+      background: linear-gradient(180deg, #6d7681 0%, #4c5560 46%, #343c46 100%);
+    }
+    .art--glacier .water::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(96deg, rgba(255, 255, 255, 0.08) 0 2px, transparent 2px 16px);
+    }
+
+    /* ============================================================
+       索引 —— 巨大的条目目录，悬停显影
+       ============================================================ */
+    .index { padding: 176px 0 0; }
+    .index-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-6);
+      border-top: 1px solid var(--ink);
+      padding-top: 16px;
+      margin-bottom: 64px;
+    }
+    .index-head h2 { max-width: 18ch; }
+
+    .entry-list { max-width: 660px; }
+    .entry {
+      position: relative;
+      padding: 30px 0 34px;
+      border-top: 1px solid var(--ink);
+    }
+    .entry:last-child { border-bottom: 1px solid var(--ink); }
+    .entry a { display: block; }
+    .entry .row {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+    }
+    .entry .num {
+      color: var(--entry-accent, var(--accent));
+      letter-spacing: -0.02em;
+      flex: none;
+    }
+    .entry .place {
+      color: var(--entry-accent, var(--accent));
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+    }
+    .entry .sub {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 18px;
+    }
+    .entry .sub .note { max-width: 34ch; }
+    .entry .go {
+      color: var(--entry-accent, var(--accent));
+      transition: opacity 160ms var(--ease);
+      opacity: 0;
+    }
+    .entry:hover .go,
+    .entry.is-active .go { opacity: 1; }
+
+    .entry-photo {
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 56px);
+      width: min(430px, 32vw);
+      transform: translateY(-50%) scale(0.985);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 320ms var(--ease), transform 320ms var(--ease), visibility 320ms var(--ease);
+    }
+    /* 纯 CSS 悬停显影：悬停条目 → 显示本条照片；移入列表 → 收起默认照片 */
+    .entry:hover .entry-photo,
+    .entry.is-active .entry-photo {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(-50%) scale(1);
+    }
+    .entry-list:hover .entry:first-child .entry-photo:not(:hover) {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-50%) scale(0.985);
+    }
+    .entry-list:hover .entry:hover .entry-photo {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(-50%) scale(1);
+    }
+    .entry:first-child .entry-photo {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(-50%) scale(1);
+    }
+
+    /* ============================================================
+       影像与田野笔记
+       ============================================================ */
+    .essay { padding: 40px 0 0; }
+    .section-mark {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-6);
+      border-top: 1px solid var(--ink);
+      padding-top: 16px;
+      margin-top: 176px;
+    }
+
+    .frame { margin: 96px 0 0; }
+    .frame--left { max-width: 820px; margin-right: auto; }
+    .frame--right { max-width: 700px; margin-left: auto; }
+    .frame--mid { max-width: 760px; margin-left: auto; margin-right: auto; }
+    .frame .caption .place { color: var(--frame-accent, var(--accent)); }
+
+    .note {
+      margin: 128px 0 0;
+      max-width: 620px;
+    }
+    .note--right { margin-left: auto; }
+    .note .rule { margin-bottom: 14px; }
+    .note .date { display: block; margin-bottom: 22px; }
+    .note p { line-height: 1.55; }
+
+    .quote {
+      margin: 176px 0 0;
+      max-width: 24ch;
+    }
+    .quote blockquote { max-width: 22ch; }
+    .quote .attr { display: block; margin-top: 30px; }
+
+    /* ============================================================
+       行程数据
+       ============================================================ */
+    .fieldkit { margin: 176px 0 0; }
+    .fieldkit .rule { margin-bottom: 16px; }
+    .fieldkit .kit-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-6);
+      margin-bottom: 56px;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 72px;
+    }
+    .stat b {
+      display: block;
+      font-size: var(--text-3xl, 30px);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-weight: var(--weight-bold);
+    }
+    .stat .micro { display: block; margin-top: 12px; }
+
+    /* ============================================================
+       页脚 · 微型导航
+       ============================================================ */
+    .footer {
+      margin-top: 176px;
+      border-top: 1px solid var(--ink);
+      padding: 18px 0 84px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .way {
+      display: flex;
+      gap: 36px;
+      flex-wrap: wrap;
+    }
+    .way a { transition: color 160ms var(--ease); }
+    .way a:hover { color: var(--accent); }
+
+    /* ============================================================
+       滚动入场 —— 严格用 html.js 守卫，无 JS 时全部可见
+       ============================================================ */
+    .reveal {
+      transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+      will-change: opacity, transform;
+    }
+    html.js .reveal:not(.in) {
+      opacity: 0;
+      transform: translateY(26px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; }
+      html.js .reveal:not(.in) { opacity: 1; transform: none; }
+      .entry-photo { transition: none; }
+    }
+
+    /* ============================================================
+       自适应
+       ============================================================ */
+    @media (max-width: 1100px) {
+      .entry-list { max-width: 100%; }
+      .entry-photo {
+        position: static;
+        width: 100%;
+        max-width: 520px;
+        margin-top: 22px;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+      }
+      .entry:hover .entry-photo,
+      .entry.is-active .entry-photo,
+      .entry:first-child .entry-photo {
+        transform: none;
+      }
+      .entry-list:hover .entry:first-child .entry-photo:not(:hover) {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+      }
+    }
+    @media (max-width: 720px) {
+      .wrap { padding: 0 var(--space-6); }
+      .masthead {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .nav { gap: 20px; }
+      .hero { padding-top: 72px; }
+      .index,
+      .section-mark { margin-top: 0; }
+      .index { padding-top: 120px; }
+      .section-mark { margin-top: 120px; }
+      .frame,
+      .note,
+      .quote,
+      .fieldkit,
+      .footer { margin-top: 104px; }
+      .frame--left,
+      .frame--right,
+      .frame--mid { max-width: 100%; }
+      .stats { gap: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 报头 -->
+  <header class="wrap masthead">
+    <a class="brand" href="#top">
+      <span class="mark">北光纪行</span>
+      <span class="micro">WILDLIGHT JOURNAL</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#contents">目录</a>
+      <a href="#about">关于</a>
+      <a href="#subscribe">订阅</a>
+      <a href="#rss">RSS</a>
+    </nav>
+  </header>
+
+  <main class="wrap" id="top">
+
+    <!-- 卷首 -->
+    <section class="hero">
+      <div class="kicker reveal">
+        <span class="micro">田野日志 · 第七卷</span>
+        <span class="micro">2025.06.12 — 07.05</span>
+        <span class="micro">北大西洋边缘 · 北纬 60°—69°</span>
+      </div>
+      <h1 class="display reveal">在极北之地，<br>记录光的形状</h1>
+      <p class="lede reveal">六月到七月，我沿着北大西洋的边缘走了 4,180 公里——从冰岛的冰河湖到格陵兰的峡湾。极昼里的太阳不肯落下去，我把 6 卷胶片一张一张按在这些不肯熄灭的光上。</p>
+
+      <figure class="photo reveal" style="margin-top: 80px; max-width: 1080px;">
+        <div class="art art--lagoon" role="img" aria-label="冰岛杰古沙龙冰河湖：绿色极光横过青蓝暮色，深色山脊压在水面上，浮冰漂在湖中">
+          <span class="sky"></span>
+          <span class="sun"></span>
+          <span class="glow"></span>
+          <span class="band band-a"></span>
+          <span class="band band-b"></span>
+          <span class="ridge ridge-far"></span>
+          <span class="ridge ridge-near"></span>
+          <span class="water"></span>
+          <span class="drift d1"></span>
+          <span class="drift d2"></span>
+          <span class="drift d3"></span>
+          <span class="fall"></span>
+          <span class="hut"></span>
+          <span class="spark"></span>
+          <span class="grain"></span>
+        </div>
+        <figcaption class="caption"><span class="place">冰岛 · 杰古沙龙冰河湖</span> — 抵达第三天，冰舌退缩线比去年又远了 400 米，2025.06.14</figcaption>
+      </figure>
+    </section>
+
+    <!-- 目录 · 五则田野笔记 -->
+    <section class="index" id="contents">
+      <div class="index-head reveal">
+        <h2 class="display">五次北行，<br>五种光</h2>
+        <span class="micro">目录 / Contents — 悬停查看照片</span>
+      </div>
+
+      <ul class="entry-list">
+        <li class="entry reveal" style="--entry-accent: var(--accent-01);">
+          <a href="#entry-01">
+            <div class="row">
+              <span class="num">01/</span>
+              <span class="place">冰岛 · 杰古沙龙冰河湖</span>
+            </div>
+            <div class="sub">
+              <span class="note">冰舌、退缩线，与凌晨两点不肯熄灭的天光</span>
+              <span class="micro">2025.06.14 — 06.18</span>
+              <span class="go micro">阅读这一则 →</span>
+            </div>
+          </a>
+          <figure class="entry-photo photo">
+            <div class="art art--lagoon" role="img" aria-label="冰岛冰河湖的暮色与浮冰">
+              <span class="sky"></span><span class="sun"></span><span class="glow"></span>
+              <span class="band band-a"></span><span class="band band-b"></span>
+              <span class="ridge ridge-far"></span><span class="ridge ridge-near"></span>
+              <span class="water"></span>
+              <span class="drift d1"></span><span class="drift d2"></span><span class="drift d3"></span>
+              <span class="fall"></span><span class="hut"></span><span class="spark"></span><span class="grain"></span>
+            </div>
+          </figure>
+        </li>
+
+        <li class="entry reveal" style="--entry-accent: var(--accent-02);">
+          <a href="#entry-02">
+            <div class="row">
+              <span class="num">02/</span>
+              <span class="place">挪威 · 罗弗敦群岛</span>
+            </div>
+            <div class="sub">
+              <span class="note">午夜太阳下的黑色海面与一盏红色渔屋的窗</span>
+              <span class="micro">2025.06.21 — 06.25</span>
+              <span class="go micro">阅读这一则 →</span>
+            </div>
+          </a>
+          <figure class="entry-photo photo">
+            <div class="art art--lofoten" role="img" aria-label="挪威罗弗敦：午夜太阳把海面照亮，陡峭山影下有一座红色渔屋">
+              <span class="sky"></span><span class="sun"></span><span class="glow"></span>
+              <span class="band band-a"></span><span class="band band-b"></span>
+              <span class="ridge ridge-far"></span><span class="ridge ridge-near"></span>
+              <span class="water"></span>
+              <span class="drift d1"></span><span class="drift d2"></span><span class="drift d3"></span>
+              <span class="fall"></span><span class="hut"></span><span class="spark"></span><span class="grain"></span>
+            </div>
+          </figure>
+        </li>
+
+        <li class="entry reveal" style="--entry-accent: var(--accent-03);">
+          <a href="#entry-03">
+            <div class="row">
+              <span class="num">03/</span>
+              <span class="place">法罗群岛 · Gásadalur</span>
+            </div>
+            <div class="sub">
+              <span class="note">穆拉福斯瀑布、海雾，与被风折成两段的彩虹</span>
+              <span class="micro">2025.06.29 — 07.01</span>
+              <span class="go micro">阅读这一则 →</span>
+            </div>
+          </a>
+          <figure class="entry-photo photo">
+            <div class="art art--gasadalur" role="img" aria-label="法罗群岛：绿色悬崖落入灰色海面，一道瀑布从崖壁垂下">
+              <span class="sky"></span><span class="sun"></span><span class="glow"></span>
+              <span class="band band-a"></span><span class="band band-b"></span>
+              <span class="ridge ridge-far"></span><span class="ridge ridge-near"></span>
+              <span class="water"></span>
+              <span class="drift d1"></span><span class="drift d2"></span><span class="drift d3"></span>
+              <span class="fall"></span><span class="hut"></span><span class="spark"></span><span class="grain"></span>
+            </div>
+          </figure>
+        </li>
+
+        <li class="entry reveal" style="--entry-accent: var(--accent-04);">
+          <a href="#entry-04">
+            <div class="row">
+              <span class="num">04/</span>
+              <span class="place">格陵兰 · 伊卢利萨特</span>
+            </div>
+            <div class="sub">
+              <span class="note">冰山峡湾里，被午夜的太阳拉得比船还长的影子</span>
+              <span class="micro">2025.07.02 — 07.05</span>
+              <span class="go micro">阅读这一则 →</span>
+            </div>
+          </a>
+          <figure class="entry-photo photo">
+            <div class="art art--ilulissat" role="img" aria-label="格陵兰伊卢利萨特：午夜太阳悬在橙粉色天空，冰山漂在峡湾里">
+              <span class="sky"></span><span class="sun"></span><span class="glow"></span>
+              <span class="band band-a"></span><span class="band band-b"></span>
+              <span class="ridge ridge-far"></span><span class="ridge ridge-near"></span>
+              <span class="water"></span>
+              <span class="drift d1"></span><span class="drift d2"></span><span class="drift d3"></span>
+              <span class="fall"></span><span class="hut"></span><span class="spark"></span><span class="grain"></span>
+            </div>
+          </figure>
+        </li>
+
+        <li class="entry reveal" style="--entry-accent: var(--accent-05);">
+          <a href="#entry-05">
+            <div class="row">
+              <span class="num">05/</span>
+              <span class="place">北海道 · 知床半岛</span>
+            </div>
+            <div class="sub">
+              <span class="note">流冰靠岸的第九天，海面上的碎冰互相敲门</span>
+              <span class="micro">2025.02.11 — 02.14</span>
+              <span class="go micro">阅读这一则 →</span>
+            </div>
+          </a>
+          <figure class="entry-photo photo">
+            <div class="art art--shiretoko" role="img" aria-label="北海道知床：淡粉色天光下，流冰覆盖了冷色的海面">
+              <span class="sky"></span><span class="sun"></span><span class="glow"></span>
+              <span class="band band-a"></span><span class="band band-b"></span>
+              <span class="ridge ridge-far"></span><span class="ridge ridge-near"></span>
+              <span class="water"></span>
+              <span class="drift d1"></span><span class="drift d2"></span><span class="drift d3"></span>
+              <span class="fall"></span><span class="hut"></span><span class="spark"></span><span class="grain"></span>
+            </div>
+          </figure>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 影像与田野笔记 -->
+    <section class="essay" id="entry-01">
+      <div class="section-mark reveal">
+        <h2 class="micro">田野影像 / Field photographs</h2>
+        <span class="micro">四帧 · 胶片与数码各半</span>
+      </div>
+
+      <figure class="photo frame frame--left reveal" style="--frame-accent: var(--accent-02);">
+        <div class="art art--blacksand" role="img" aria-label="挪威罗弗敦：绿色极光横过星夜，锯齿状的黑色山峰剪影压在湿润的黑沙滩上">
+          <span class="sky"></span><span class="sun"></span><span class="glow"></span>
+          <span class="band band-a"></span><span class="band band-b"></span>
+          <span class="ridge ridge-far"></span><span class="ridge ridge-near"></span>
+          <span class="water"></span>
+          <span class="drift d1"></span><span class="drift d2"></span><span class="drift d3"></span>
+          <span class="fall"></span><span class="hut"></span><span class="spark"></span><span class="grain"></span>
+        </div>
+        <figcaption class="caption"><span class="place">挪威 · 罗弗敦群岛</span> — 午夜的天光不肯退去，海面像一块被反复擦亮的铅，2025.06.21</figcaption>
+      </figure>
+
+      <div class="note reveal">
+        <hr class="rule">
+        <span class="date micro">2025.06.17 · 冰岛南岸 · 记于车内</span>
+        <p>凌晨一点四十，天还亮着。云压得很低，但没有下雨。冰河湖的水面几乎没有波纹，浮冰以肉眼难以察觉的速度向海口漂。我在三脚架旁站了两个小时，只按了四次快门——光一直在变，但没有一次是我想等的那种。回程时风向转了，带来冰川特有的、石灰与铁锈混在一起的气味。</p>
+      </div>
+
+      <figure class="photo frame frame--right reveal" style="--frame-accent: var(--accent-03);">
+        <div class="art art--gasadalur" role="img" aria-label="法罗群岛 Gásadalur：阴天里绿色悬崖垂下一道白色瀑布，海雾横在崖腰">
+          <span class="sky"></span><span class="sun"></span><span class="glow"></span>
+          <span class="band band-a"></span><span class="band band-b"></span>
+          <span class="ridge ridge-far"></span><span class="ridge ridge-near"></span>
+          <span class="water"></span>
+          <span class="drift d1"></span><span class="drift d2"></span><span class="drift d3"></span>
+          <span class="fall"></span><span class="hut"></span><span class="spark"></span><span class="grain"></span>
+        </div>
+        <figcaption class="caption"><span class="place">法罗群岛 · Gásadalur</span> — 穆拉福斯瀑布的水汽升到半空就散了，风把彩虹折成两段，2025.06.29</figcaption>
+      </figure>
+
+      <div class="note note--right reveal">
+        <hr class="rule">
+        <span class="date micro">2025.06.30 · Gásadalur 村口 · 只有十七户人家</span>
+        <p>雨停在下午四点，又在四点二十重新下起来。这里的天气像有人在反复掀一块灰布。羊走在悬崖边，比我离边缘更近。我等瀑布上方那道彩虹等了两个小时，它出现时只有半截，另外半截被风压进了海里。村里唯一开门的咖啡馆五点关门，老板说：光不对的时候，就别拍了，先喝点热的。</p>
+      </div>
+
+      <div class="quote reveal">
+        <blockquote class="display">风从冰舌上吹过来，带着一万年前的空气。</blockquote>
+        <span class="attr micro">2025.06.14 · 杰古沙龙冰河湖 · 田野笔记摘录</span>
+      </div>
+
+      <figure class="photo frame frame--left reveal" style="--frame-accent: var(--accent-04);">
+        <div class="art art--ilulissat" role="img" aria-label="格陵兰伊卢利萨特：午夜太阳贴近水面，冰山的影子横在峡湾上">
+          <span class="sky"></span><span class="sun"></span><span class="glow"></span>
+          <span class="band band-a"></span><span class="band band-b"></span>
+          <span class="ridge ridge-far"></span><span class="ridge ridge-near"></span>
+          <span class="water"></span>
+          <span class="drift d1"></span><span class="drift d2"></span><span class="drift d3"></span>
+          <span class="fall"></span><span class="hut"></span><span class="spark"></span><span class="grain"></span>
+        </div>
+        <figcaption class="caption"><span class="place">格陵兰 · 伊卢利萨特</span> — 午夜的太阳贴着冰山走，影子在峡湾里拉得比船还长，2025.07.05</figcaption>
+      </figure>
+
+      <div class="note reveal">
+        <hr class="rule">
+        <span class="date micro">2025.07.02 · 迪斯科湾 · 潮水最低的一夜</span>
+        <p>潮水在夜里退到最低，冰山搁浅在浅滩上，发出低沉的、像叹息一样的声音。向导说那是冰在融化时内部气泡破裂的回响。早上四点，太阳刚好挂在峡湾口，把每一块浮冰的边缘都描成金色。我换上最后一卷胶片，把光圈缩到 16，等一艘小船从冰缝里划出来。它没有出现，但等待本身就是这张照片。</p>
+      </div>
+
+      <figure class="photo frame frame--right reveal" style="--frame-accent: var(--accent-01);">
+        <div class="art art--glacier" role="img" aria-label="冰岛斯卡夫塔山：灰白天光下，蓝色的冰舌从山谷倾下，末端裂开一道深蓝的冰隙">
+          <span class="sky"></span><span class="sun"></span><span class="glow"></span>
+          <span class="band band-a"></span><span class="band band-b"></span>
+          <span class="ridge ridge-far"></span><span class="ridge ridge-near"></span>
+          <span class="water"></span>
+          <span class="drift d1"></span><span class="drift d2"></span><span class="drift d3"></span>
+          <span class="fall"></span><span class="hut"></span><span class="spark"></span><span class="grain"></span>
+        </div>
+        <figcaption class="caption"><span class="place">冰岛 · 斯卡夫塔山</span> — 冰舌的末端裂开一道蓝，深得像有人在冰里点了一盏灯，2025.06.18</figcaption>
+      </figure>
+    </section>
+
+    <!-- 行程数据 -->
+    <section class="fieldkit" id="about">
+      <hr class="rule">
+      <div class="kit-head reveal">
+        <h2 class="micro">此次行程 / Field data</h2>
+        <span class="micro">器材：旁轴一台 · 35mm 定焦 · 6 卷 Portra 400</span>
+      </div>
+      <ul class="stats reveal">
+        <li class="stat"><b>23 天</b><span class="micro">在路上</span></li>
+        <li class="stat"><b>4,180 张</b><span class="micro">底片与文件</span></li>
+        <li class="stat"><b>6 卷</b><span class="micro">胶片</span></li>
+        <li class="stat"><b>−14°C</b><span class="micro">最低气温</span></li>
+        <li class="stat"><b>69°N</b><span class="micro">最北到达</span></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- 页脚 · 微型寻路 -->
+  <footer class="wrap footer" id="subscribe">
+    <nav class="way" aria-label="篇目寻路">
+      <a href="#prev">上一篇：撒哈拉的夜空</a>
+      <a href="#contents">返回目录</a>
+      <a href="#next">下一篇：巴塔哥尼亚的风</a>
+    </nav>
+    <span class="micro" id="rss">© 2026 北光纪行 · 所有影像与文字均为田野记录</span>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* 滚动入场：无 IntersectionObserver 时全量兜底加 .in */
+      var revealEls = document.querySelectorAll('.reveal');
+      var showAll = function () {
+        for (var i = 0; i < revealEls.length; i++) {
+          revealEls[i].classList.add('in');
+        }
+      };
+
+      if (!('IntersectionObserver' in window)) {
+        showAll();
+      } else {
+        var observer = new IntersectionObserver(function (entries) {
+          for (var j = 0; j < entries.length; j++) {
+            if (entries[j].isIntersecting) {
+              entries[j].target.classList.add('in');
+              observer.unobserve(entries[j].target);
+            }
+          }
+        }, { rootMargin: '0px 0px -6% 0px', threshold: 0.06 });
+
+        for (var k = 0; k < revealEls.length; k++) {
+          observer.observe(revealEls[k]);
+        }
+
+        /* 兜底：若 2.5 秒后仍有未入场元素（异常环境），全部显示 */
+        window.setTimeout(showAll, 2500);
+      }
+
+      /* 索引悬停增强：CSS :hover 已可工作，这里补充键盘与触控焦点态 */
+      var entries = document.querySelectorAll('.entry');
+      var activate = function (target) {
+        for (var m = 0; m < entries.length; m++) {
+          if (entries[m] === target) {
+            entries[m].classList.add('is-active');
+          } else {
+            entries[m].classList.remove('is-active');
+          }
+        }
+      };
+      for (var n = 0; n < entries.length; n++) {
+        entries[n].addEventListener('mouseenter', function (event) {
+          activate(event.currentTarget);
+        });
+        entries[n].addEventListener('focusin', function (event) {
+          activate(event.currentTarget);
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
