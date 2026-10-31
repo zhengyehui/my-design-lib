@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 216 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 218 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -1990,6 +1990,24 @@ const pages = [
     rating: 8.9,
     description: '旅行摄影师田野日志图辑随笔——大字目录悬停换图+3:2左右交替图辑+发丝线田野笔记+大号引言+行程数据带+篇目寻路，纯白底+全粗体Helvetica+条目专属强调色的编辑目录美学',
   },
+  {
+    id: 'enigma-chamber',
+    title: 'Enigma Chamber 沉浸式密室逃脱',
+    category: 'creative',
+    tags: ['暗色剧场', 'VCR 复古', '场馆预约'],
+    colors: ['#000000', '#ffffff', '#ff3b30'],
+    rating: 8.8,
+    description: '密室逃脱场馆官网——VCR/CRT 监控美学：纯黑白舞台+扫描线颗粒+跑马灯+巨型频道数字+反色悬停+战绩榜单+场次预约，全大写等宽字体的剧场式沉浸体验',
+  },
+  {
+    id: 'altitude-expedition',
+    title: 'ALTITUDE — Elias Vent 山岳探险家作品集',
+    category: 'portfolio',
+    tags: ['联系表网格', '胶片编号', '远征档案'],
+    colors: ['#f5f3f0', '#0c0c0c', '#c1272d'],
+    rating: 8.9,
+    description: '山岳探险家作品集——联系表式编辑排版：暖纸底+800字重大写+胶片编号图注+5列网格巨留白+纯CSS山峦剪影影像+发丝线远征年表，cubic-bezier(.77,0,.175,1)签名缓动语言',
+  },
 ]
 
 const categories = [
@@ -2047,12 +2065,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 216 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 218 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="216 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="218 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -2061,7 +2079,7 @@ content=\"My Design Lib 页面灵感画廊 — 216 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 216 个完整页面</span>
+      <span>📦 218 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

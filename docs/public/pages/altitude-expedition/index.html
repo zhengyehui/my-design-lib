@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALTITUDE — Elias Vent 山岳探险家作品集</title>
+<meta name="description" content="ELIAS VENT — 职业登山家与高山探险者作品集。14 座 8000 米峰顶、47 次远征、6 条新线路。远征档案、年表、理念与联系。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   ALTITUDE — ELIAS VENT 山岳探险家作品集
+   Editorial contact-sheet archive. Warm paper, near-black ink,
+   CSS-only abstract mountain photography.
+   ============================================================ */
+
+:root{
+  --paper:#F5F3F0;
+  --ink:#0C0C0C;
+  --ink-60:rgba(12,12,12,.6);
+  --ink-40:rgba(12,12,12,.4);
+  --ink-14:rgba(12,12,12,.14);
+  --red:#C1272D;
+  --cubic:cubic-bezier(.77,0,.175,1);
+  --t-fast:.49s;
+  --t-slow:.79s;
+  --font:'Helvetica Neue', Helvetica, Inter, Arial, sans-serif;
+  --u:.4rem;
+  --gutter:clamp(20px,4vw,64px);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  line-height:1.25;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+::selection{background:var(--ink);color:var(--paper)}
+
+img,svg{display:block;max-width:100%}
+
+a{color:inherit;text-decoration:none}
+
+.wrap{
+  width:100%;
+  max-width:1440px;
+  margin:0 auto;
+  padding-left:var(--gutter);
+  padding-right:var(--gutter);
+}
+
+/* ---------- type scale ---------- */
+h1{font-size:clamp(36px,5.5vw,82px);line-height:.92;letter-spacing:.01em}
+h2{font-size:clamp(28px,4.2vw,60px);line-height:.95;letter-spacing:.015em}
+h3{font-size:clamp(21px,3.4vw,44px);line-height:1.02}
+.micro{
+  font-size:11px;
+  line-height:1.6;
+  letter-spacing:.14em;
+  font-weight:800;
+  color:var(--ink);
+}
+.micro.dim{color:var(--ink-60)}
+.body-cn{
+  font-size:clamp(14px,1.15vw,17px);
+  line-height:1.9;
+  letter-spacing:.06em;
+  color:var(--ink);
+  max-width:62ch;
+}
+.body-cn.dim{color:var(--ink-60)}
+
+.hairline{
+  border:0;
+  border-top:1px solid var(--ink-14);
+  width:100%;
+  margin:0;
+}
+
+/* ---------- reveal (guarded by html.js) ---------- */
+html.js .reveal:not(.in){
+  opacity:0;
+  transform:translateY(28px);
+}
+html.js .reveal{
+  transition:opacity var(--t-slow) var(--cubic), transform var(--t-slow) var(--cubic);
+}
+html.js .reveal.in{
+  opacity:1;
+  transform:translateY(0);
+}
+html.js .reveal.d1{transition-delay:.09s}
+html.js .reveal.d2{transition-delay:.18s}
+html.js .reveal.d3{transition-delay:.27s}
+html.js .reveal.d4{transition-delay:.36s}
+
+/* ---------- pill links ---------- */
+.pill{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:calc(var(--u)*2);
+  padding:calc(var(--u)*3.25) calc(var(--u)*7);
+  border:1px solid var(--ink-40);
+  background:transparent;
+  color:var(--ink);
+  font-family:var(--font);
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  cursor:pointer;
+  overflow:hidden;
+  transition:border-color var(--t-fast) var(--cubic), color var(--t-fast) var(--cubic);
+}
+.pill::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:var(--ink);
+  transform:scale(1);
+  transition:transform var(--t-fast) var(--cubic), opacity var(--t-fast) var(--cubic);
+  opacity:0;
+  z-index:-1;
+}
+.pill:hover{border-color:var(--ink)}
+.pill:hover::before{transform:scale(.95);opacity:.06}
+.pill:active::before{transform:scale(.9);opacity:.12}
+.pill .arw{transition:transform var(--t-fast) var(--cubic)}
+.pill:hover .arw{transform:translateX(6px)}
+.pill--red{border-color:rgba(193,39,45,.55);color:var(--red)}
+.pill--red:hover{border-color:var(--red)}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(245,243,240,.92);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-14);
+}
+.topbar__in{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:calc(var(--u)*4);
+  padding-top:calc(var(--u)*4.5);
+  padding-bottom:calc(var(--u)*4.5);
+}
+.topbar__mark{font-size:12px;letter-spacing:.22em}
+.topbar__nav{display:flex;gap:calc(var(--u)*6);flex-wrap:wrap}
+.topbar__nav a{
+  position:relative;
+  font-size:11px;
+  letter-spacing:.14em;
+  color:var(--ink-60);
+  transition:color var(--t-fast) var(--cubic);
+}
+.topbar__nav a::after{
+  content:"";
+  position:absolute;
+  left:0;bottom:-6px;
+  width:100%;height:1px;
+  background:var(--ink);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform var(--t-fast) var(--cubic);
+}
+.topbar__nav a:hover{color:var(--ink)}
+.topbar__nav a:hover::after{transform:scaleX(1)}
+.topbar__status{display:flex;align-items:center;gap:calc(var(--u)*2)}
+.dot{
+  width:6px;height:6px;
+  background:var(--red);
+  border-radius:50%;
+  display:inline-block;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;
+  padding-top:calc(var(--u)*26);
+  padding-bottom:calc(var(--u)*38);
+}
+.hero__kicker{
+  display:flex;
+  flex-wrap:wrap;
+  gap:calc(var(--u)*2) calc(var(--u)*8);
+  margin-bottom:calc(var(--u)*12);
+}
+.hero h1{
+  font-size:clamp(52px,11.2vw,168px);
+  line-height:.86;
+  letter-spacing:-.005em;
+}
+.hero h1 .thin{display:block}
+.hero__rule{margin:calc(var(--u)*10) 0 calc(var(--u)*8)}
+.hero__manifesto{
+  font-size:clamp(17px,2.1vw,28px);
+  line-height:1.5;
+  letter-spacing:.05em;
+  max-width:30ch;
+}
+.hero__row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:calc(var(--u)*10);
+  flex-wrap:wrap;
+  margin-top:calc(var(--u)*12);
+}
+.hero__cta{display:flex;gap:calc(var(--u)*4);flex-wrap:wrap}
+
+/* small CSS mountain-frame motif */
+.hero__motif{
+  width:min(320px,42vw);
+  aspect-ratio:4/5;
+  border:1px solid var(--ink);
+  padding:calc(var(--u)*2);
+  flex:none;
+}
+.hero__motif .scene{height:100%}
+
+/* ============================================================
+   CSS MOUNTAIN SCENES (photo stand-ins)
+   ============================================================ */
+.scene{
+  position:relative;
+  width:100%;
+  aspect-ratio:4/5;
+  overflow:hidden;
+  background:linear-gradient(180deg,var(--sky-a,#F5F3F0) 0%,var(--sky-b,#D9CFC4) 100%);
+}
+.scene .lyr{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.scene .l1{
+  background:var(--r1,#D9CFC4);
+  clip-path:polygon(0 100%, 0 62%, 12% 50%, 26% 58%, 38% 40%, 52% 55%, 66% 36%, 80% 52%, 92% 42%, 100% 54%, 100% 100%);
+}
+.scene .l2{
+  background:var(--r2,#B9A895);
+  clip-path:polygon(0 100%, 0 76%, 10% 66%, 24% 74%, 36% 58%, 50% 70%, 64% 52%, 78% 68%, 90% 60%, 100% 72%, 100% 100%);
+}
+.scene .l3{
+  background:var(--r3,#0C0C0C);
+  clip-path:polygon(0 100%, 0 88%, 14% 80%, 30% 88%, 44% 76%, 58% 86%, 72% 72%, 86% 84%, 100% 78%, 100% 100%);
+}
+.scene .snow{
+  position:absolute;
+  inset:0;
+  background:rgba(245,243,240,.85);
+  clip-path:polygon(38% 40%, 44% 47%, 41% 50%, 34% 46%);
+}
+.scene .sun{
+  position:absolute;
+  top:12%;right:14%;
+  width:14%;
+  aspect-ratio:1;
+  border-radius:50%;
+  background:var(--sun,rgba(245,243,240,.55));
+}
+.scene .grain{
+  position:absolute;
+  inset:0;
+  background-image:repeating-linear-gradient(0deg,rgba(12,12,12,.045) 0 1px,transparent 1px 3px);
+  mix-blend-mode:multiply;
+}
+
+/* scene colour variants */
+.sc-1{--sky-a:#F5F3F0;--sky-b:#D9CFC4;--r1:#D9CFC4;--r2:#B9A895;--r3:#0C0C0C}
+.sc-2{--sky-a:#0C0C0C;--sky-b:#3A4A5A;--r1:#5A6B7C;--r2:#2C3946;--r3:#0C0C0C;--sun:rgba(245,243,240,.28)}
+.sc-3{--sky-a:#E8D5C4;--sky-b:#B98B6E;--r1:#C79B7E;--r2:#8A5F49;--r3:#2B1A12;--sun:rgba(245,243,240,.7)}
+.sc-4{--sky-a:#EDE7DF;--sky-b:#AEB9BE;--r1:#B7C2C8;--r2:#7C8B95;--r3:#262E33;--sun:rgba(245,243,240,.5)}
+.sc-5{--sky-a:#3A4A5A;--sky-b:#0C0C0C;--r1:#46586A;--r2:#222D38;--r3:#0C0C0C;--sun:rgba(193,39,45,.5)}
+.sc-6{--sky-a:#F5F3F0;--sky-b:#C9B9A4;--r1:#D2BEA6;--r2:#9E7F62;--r3:#1F1712;--sun:rgba(255,240,220,.8)}
+.sc-7{--sky-a:#DCE4E8;--sky-b:#8FA3AF;--r1:#9FB2BD;--r2:#5F7684;--r3:#16212A}
+.sc-8{--sky-a:#F0E2D2;--sky-b:#C98F63;--r1:#D9A277;--r2:#96603C;--r3:#221209;--sun:rgba(255,236,210,.75)}
+.sc-9{--sky-a:#0C0C0C;--sky-b:#25313C;--r1:#3D4E5C;--r2:#1C2731;--r3:#0C0C0C;--sun:rgba(245,243,240,.22)}
+.sc-10{--sky-a:#F5F3F0;--sky-b:#DDD2C2;--r1:#E2D5C3;--r2:#B49B7D;--r3:#3A2C1E;--sun:rgba(255,244,225,.85)}
+
+/* ============================================================
+   STATS STRIP
+   ============================================================ */
+.stats{
+  padding-top:calc(var(--u)*20);
+  padding-bottom:calc(var(--u)*20);
+}
+.stats__grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+.stat{
+  padding:calc(var(--u)*6) calc(var(--u)*5) calc(var(--u)*6) 0;
+  border-left:1px solid var(--ink-14);
+  padding-left:calc(var(--u)*6);
+}
+.stat:first-child{border-left:0;padding-left:0}
+.stat__num{
+  font-size:clamp(38px,6.2vw,92px);
+  line-height:.9;
+  letter-spacing:-.01em;
+}
+.stat__num sup{
+  font-size:.32em;
+  vertical-align:super;
+  letter-spacing:.12em;
+  margin-left:.25em;
+}
+.stat__label{margin-top:calc(var(--u)*4)}
+.stat--flag .stat__num{color:var(--red)}
+
+/* ============================================================
+   SECTION HEADS
+   ============================================================ */
+.sec{padding-top:calc(var(--u)*34);padding-bottom:calc(var(--u)*34)}
+.sec__head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:calc(var(--u)*6);
+  flex-wrap:wrap;
+  margin-bottom:calc(var(--u)*16);
+}
+.sec__no{
+  font-size:11px;
+  letter-spacing:.22em;
+  color:var(--ink-40);
+}
+.sec__title small{
+  display:block;
+  font-size:11px;
+  letter-spacing:.22em;
+  color:var(--ink-60);
+  margin-bottom:calc(var(--u)*3.5);
+}
+
+/* ============================================================
+   EXPEDITION ARCHIVE — contact sheet
+   ============================================================ */
+.sheet{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  column-gap:76px;
+  row-gap:158px;
+}
+.frame{position:relative;display:block}
+.frame__art{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--ink);
+}
+.frame__art .scene{
+  transition:transform var(--t-slow) var(--cubic), opacity var(--t-fast) var(--cubic);
+}
+.frame:hover .frame__art .scene{
+  transform:scale(1.045);
+  opacity:.92;
+}
+.frame__cap{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:calc(var(--u)*3);
+  margin-top:calc(var(--u)*3.5);
+  flex-wrap:wrap;
+}
+.frame__name{
+  font-size:11px;
+  letter-spacing:.13em;
+  position:relative;
+  padding-bottom:3px;
+  overflow-wrap:anywhere;
+}
+.frame__name::after{
+  content:"";
+  position:absolute;
+  left:0;bottom:0;
+  width:100%;height:1px;
+  background:var(--ink);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform var(--t-fast) var(--cubic);
+}
+.frame:hover .frame__name::after{transform:scaleX(1)}
+.frame__meta{
+  font-size:11px;
+  letter-spacing:.13em;
+  color:var(--ink-40);
+  white-space:nowrap;
+}
+.frame__cn{
+  margin-top:calc(var(--u)*2);
+  font-size:12px;
+  letter-spacing:.12em;
+  color:var(--ink-60);
+  line-height:1.7;
+}
+.frame--wide{grid-column:span 2}
+.frame--wide .scene{aspect-ratio:16/10}
+.frame__flag{
+  position:absolute;
+  top:calc(var(--u)*3);
+  left:calc(var(--u)*3);
+  z-index:2;
+  font-size:10px;
+  letter-spacing:.16em;
+  color:var(--red);
+  border:1px solid var(--red);
+  padding:calc(var(--u)*1) calc(var(--u)*2.5);
+  background:rgba(245,243,240,.7);
+}
+
+/* ============================================================
+   INDEX — expedition chronology
+   ============================================================ */
+.index__legend{
+  display:grid;
+  grid-template-columns:1.1fr 2fr 1.6fr 1.4fr;
+  gap:calc(var(--u)*4);
+  padding-bottom:calc(var(--u)*4);
+}
+.row{
+  display:grid;
+  grid-template-columns:1.1fr 2fr 1.6fr 1.4fr;
+  gap:calc(var(--u)*4);
+  align-items:baseline;
+  padding:calc(var(--u)*6.5) 0;
+  border-top:1px solid var(--ink-14);
+  transition:transform var(--t-fast) var(--cubic), background-color var(--t-fast) var(--cubic);
+}
+.row:last-of-type{border-bottom:1px solid var(--ink-14)}
+.row:hover{transform:translateX(10px)}
+.row__y{font-size:clamp(18px,1.9vw,26px);letter-spacing:.02em}
+.row__peak{font-size:clamp(18px,1.9vw,26px)}
+.row__peak .alt{
+  display:block;
+  font-size:11px;
+  letter-spacing:.14em;
+  color:var(--ink-40);
+  margin-top:calc(var(--u)*1.5);
+}
+.row__range{font-size:12px;letter-spacing:.14em;color:var(--ink-60)}
+.row__st{
+  font-size:11px;
+  letter-spacing:.16em;
+  display:flex;
+  align-items:center;
+  gap:calc(var(--u)*2);
+}
+.row__st::before{
+  content:"";
+  width:7px;height:7px;
+  border:1px solid var(--ink);
+  display:inline-block;
+  flex:none;
+}
+.row__st.s-done::before{background:var(--ink)}
+.row__st.s-new::before{background:transparent}
+.row__st.s-open::before{border-color:var(--red);background:transparent}
+.row__st.s-open{color:var(--red)}
+
+/* ============================================================
+   QUOTE
+   ============================================================ */
+.quote{
+  padding-top:calc(var(--u)*40);
+  padding-bottom:calc(var(--u)*40);
+  text-align:center;
+}
+.quote blockquote{
+  font-style:italic;
+  font-size:clamp(24px,4.4vw,58px);
+  line-height:1.32;
+  letter-spacing:.015em;
+  max-width:22ch;
+  margin:0 auto;
+  text-transform:uppercase;
+}
+.quote blockquote .mark{color:var(--red);font-style:normal}
+.quote figcaption{
+  margin-top:calc(var(--u)*12);
+  font-size:11px;
+  letter-spacing:.22em;
+  color:var(--ink-60);
+}
+.quote figcaption strong{color:var(--ink);font-weight:800}
+
+/* ============================================================
+   CONTACT + FOOTER
+   ============================================================ */
+.contact__grid{
+  display:grid;
+  grid-template-columns:1.3fr 1fr;
+  gap:calc(var(--u)*20);
+  align-items:start;
+}
+.contact h3{margin-bottom:calc(var(--u)*8);max-width:16ch}
+.contact__pills{
+  display:flex;
+  gap:calc(var(--u)*4);
+  flex-wrap:wrap;
+  margin-top:calc(var(--u)*10);
+}
+.press{border-top:1px solid var(--ink-14)}
+.press__item{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:calc(var(--u)*4);
+  padding:calc(var(--u)*5) 0;
+  border-bottom:1px solid var(--ink-14);
+  transition:transform var(--t-fast) var(--cubic);
+}
+.press__item:hover{transform:translateX(8px)}
+.press__t{font-size:13px;letter-spacing:.12em}
+.press__y{font-size:11px;letter-spacing:.16em;color:var(--ink-40);white-space:nowrap}
+
+.footer{
+  border-top:1px solid var(--ink);
+  margin-top:calc(var(--u)*36);
+  padding-top:calc(var(--u)*12);
+  padding-bottom:calc(var(--u)*12);
+}
+.footer__grid{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:calc(var(--u)*8);
+  flex-wrap:wrap;
+}
+.footer__wordmark{
+  font-size:clamp(38px,8.6vw,128px);
+  line-height:.82;
+  letter-spacing:-.005em;
+}
+.footer__meta{
+  display:flex;
+  flex-direction:column;
+  gap:calc(var(--u)*2);
+  align-items:flex-end;
+  text-align:right;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1180px){
+  .sheet{grid-template-columns:repeat(3,1fr);column-gap:48px;row-gap:110px}
+  .frame--wide{grid-column:span 2}
+}
+@media (max-width:860px){
+  .stats__grid{grid-template-columns:repeat(2,1fr)}
+  .stat{border-left:0;padding-left:0;border-top:1px solid var(--ink-14);padding-top:calc(var(--u)*8)}
+  .stat:nth-child(2){border-top:1px solid var(--ink-14)}
+  .stat:nth-child(-n+2){border-top:0}
+  .stat:nth-child(even){padding-left:calc(var(--u)*5);border-left:1px solid var(--ink-14)}
+  .sheet{grid-template-columns:repeat(2,1fr);column-gap:32px;row-gap:88px}
+  .contact__grid{grid-template-columns:1fr;gap:calc(var(--u)*16)}
+  .index__legend,.row{grid-template-columns:.8fr 1.8fr 1.2fr}
+  .row__range{display:none}
+  .topbar__nav{display:none}
+}
+@media (max-width:560px){
+  .sheet{grid-template-columns:1fr;row-gap:72px}
+  .frame--wide{grid-column:span 1}
+  .frame--wide .scene{aspect-ratio:4/5}
+  .index__legend{display:none}
+  .row{grid-template-columns:1fr;gap:calc(var(--u)*2);padding:calc(var(--u)*6) 0}
+  .row:hover{transform:translateX(6px)}
+  .footer__meta{align-items:flex-start;text-align:left}
+  .hero__motif{width:min(240px,64vw)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.001s !important;animation-duration:.001s !important}
+  html.js .reveal:not(.in){opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ TOP BAR ============================ -->
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <a class="topbar__mark" href="#top">ALTITUDE · ELIAS VENT</a>
+    <nav class="topbar__nav" aria-label="主导航">
+      <a href="#archive">远征档案</a>
+      <a href="#index">远征年表</a>
+      <a href="#quote">理念</a>
+      <a href="#contact">联系</a>
+    </nav>
+    <div class="topbar__status">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="micro dim">ARCHIVE / 1998–2026</span>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero__kicker reveal">
+        <span class="micro">ALTITUDE ARCHIVE</span>
+        <span class="micro">1998–2026</span>
+        <span class="micro">47 EXPEDITIONS</span>
+        <span class="micro">6 FIRST ASCENTS</span>
+      </div>
+
+      <h1 class="reveal d1"><span class="thin">ELIAS</span><span class="thin">VENT</span></h1>
+
+      <hr class="hairline hero__rule reveal d2">
+
+      <div class="hero__row">
+        <div>
+          <p class="hero__manifesto reveal d2">山不为人类而存在，<br>而我为山而来。</p>
+          <div class="hero__cta reveal d3" style="margin-top:calc(var(--u)*12)">
+            <a class="pill" href="#archive">查看档案 <span class="arw">→</span></a>
+            <a class="pill" href="#contact">联系 <span class="arw">→</span></a>
+          </div>
+        </div>
+
+        <div class="hero__motif reveal d4" aria-hidden="true">
+          <div class="scene sc-2">
+            <div class="sun"></div>
+            <div class="lyr l1"></div>
+            <div class="lyr l2"></div>
+            <div class="snow"></div>
+            <div class="lyr l3"></div>
+            <div class="grain"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal d4" style="margin-top:calc(var(--u)*22);display:flex;justify-content:space-between;gap:calc(var(--u)*6);flex-wrap:wrap">
+        <span class="micro dim">N 35°52′ — 高山摄影师 / 登山向导 / 远征领队</span>
+        <span class="micro dim">SCROLL — 向下浏览档案 ↓</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ STATS ============================ -->
+  <section class="stats" aria-label="关键数据">
+    <div class="wrap">
+      <hr class="hairline reveal">
+      <div class="stats__grid">
+        <div class="stat reveal">
+          <div class="stat__num">14<sup>×</sup></div>
+          <div class="stat__label micro dim">8000M 峰顶</div>
+        </div>
+        <div class="stat reveal d1">
+          <div class="stat__num">47</div>
+          <div class="stat__label micro dim">次远征</div>
+        </div>
+        <div class="stat stat--flag reveal d2">
+          <div class="stat__num">6</div>
+          <div class="stat__label micro dim">条新线路</div>
+        </div>
+        <div class="stat reveal d3">
+          <div class="stat__num">1120</div>
+          <div class="stat__label micro dim">天海拔 5000M 以上</div>
+        </div>
+      </div>
+      <hr class="hairline reveal">
+    </div>
+  </section>
+
+  <!-- ============================ ARCHIVE ============================ -->
+  <section class="sec" id="archive">
+    <div class="wrap">
+      <div class="sec__head">
+        <h2 class="sec__title reveal"><small>01 / EXPEDITION ARCHIVE</small>远征档案</h2>
+        <p class="sec__no reveal d1">CONTACT SHEET — 10 SELECTED FRAMES / 2019–2025</p>
+      </div>
+
+      <div class="sheet">
+
+        <!-- 01 -->
+        <figure class="frame reveal">
+          <div class="frame__art">
+            <div class="scene sc-1">
+              <div class="sun"></div>
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="snow"></div><div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">25-07_K2_8611</span>
+            <span class="frame__meta">PKG</span>
+          </figcaption>
+          <p class="frame__cn">乔戈里峰南壁 · 瓶颈段上方的晨光，风速 62 km/h</p>
+        </figure>
+
+        <!-- 02 -->
+        <figure class="frame reveal d1">
+          <div class="frame__art">
+            <div class="scene sc-2">
+              <div class="sun"></div>
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">24-07_K2_8611</span>
+            <span class="frame__meta">NIGHT</span>
+          </figcaption>
+          <p class="frame__cn">凌晨三点的出发，头灯与星轨之间只剩呼吸</p>
+        </figure>
+
+        <!-- 03 -->
+        <figure class="frame reveal d2">
+          <div class="frame__art">
+            <div class="scene sc-3">
+              <div class="sun"></div>
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="snow"></div><div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">24-05_PATAGONIA_042</span>
+            <span class="frame__meta">TORRE</span>
+          </figcaption>
+          <p class="frame__cn">巴塔哥尼亚 · 托雷峰群，等了十七天的天气窗口</p>
+        </figure>
+
+        <!-- 04 -->
+        <figure class="frame reveal d3">
+          <div class="frame__art">
+            <div class="scene sc-4">
+              <div class="sun"></div>
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">23-09_MANASLU_1120</span>
+            <span class="frame__meta">C3</span>
+          </figcaption>
+          <p class="frame__cn">马纳斯鲁 · 三号营以上的冰川裂缝区，绳距 900 米</p>
+        </figure>
+
+        <!-- 05 -->
+        <figure class="frame reveal d4">
+          <div class="frame__art">
+            <div class="scene sc-5">
+              <div class="sun"></div>
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">22-06_DENALI_6190</span>
+            <span class="frame__meta">16K</span>
+          </figcaption>
+          <p class="frame__cn">德纳里 · 十六号营地的极夜蓝，零下 41 度</p>
+        </figure>
+
+        <!-- 06 -->
+        <figure class="frame reveal">
+          <div class="frame__art">
+            <div class="scene sc-6">
+              <div class="sun"></div>
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="snow"></div><div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">22-10_DHAULAGIRI_8167</span>
+            <span class="frame__meta">NE</span>
+          </figcaption>
+          <p class="frame__cn">道拉吉里 · 东北脊新线路的第一段岩雪混合地形</p>
+        </figure>
+
+        <!-- 07 -->
+        <figure class="frame reveal d1">
+          <div class="frame__art">
+            <div class="scene sc-7">
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">21-05_LOTSE_8516</span>
+            <span class="frame__meta">FACE</span>
+          </figcaption>
+          <p class="frame__cn">洛子峰 · 南壁中央槽，雪崩气浪扫过的清晨</p>
+        </figure>
+
+        <!-- 08 wide -->
+        <figure class="frame frame--wide reveal d2">
+          <div class="frame__art">
+            <div class="scene sc-8">
+              <div class="sun"></div>
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="snow"></div><div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">20-11_ANDES_338</span>
+            <span class="frame__meta">TRAV</span>
+          </figcaption>
+          <p class="frame__cn">安第斯 · 阿空加瓜西壁横切，海拔 6200 米的落日把整条山脊染成铜色</p>
+        </figure>
+
+        <!-- 09 -->
+        <figure class="frame reveal d3">
+          <div class="frame__art">
+            <div class="frame__art-flag"></div>
+            <div class="scene sc-9">
+              <div class="sun"></div>
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">19-07_GASHERBRUM_8080</span>
+            <span class="frame__meta">BI</span>
+          </figcaption>
+          <p class="frame__cn">加舒尔布鲁木 II · 无氧登顶后的下撤，全程 26 小时</p>
+        </figure>
+
+        <!-- 10 -->
+        <figure class="frame reveal d4">
+          <div class="frame__art">
+            <div class="frame__flag">NEW ROUTE</div>
+            <div class="scene sc-10">
+              <div class="sun"></div>
+              <div class="lyr l1"></div><div class="lyr l2"></div>
+              <div class="snow"></div><div class="lyr l3"></div><div class="grain"></div>
+            </div>
+          </div>
+          <figcaption class="frame__cap">
+            <span class="frame__name">18-09_MAKALU_8485</span>
+            <span class="frame__meta">NF</span>
+          </figcaption>
+          <p class="frame__cn">马卡鲁 · 北壁新线路「白风」，开辟历时 21 天</p>
+        </figure>
+
+      </div>
+
+      <div class="reveal" style="margin-top:calc(var(--u)*30);display:flex;justify-content:space-between;align-items:center;gap:calc(var(--u)*6);flex-wrap:wrap">
+        <p class="body-cn dim">档案共收录 1 482 帧胶片与 317 小时影像资料，此处仅呈现其中十帧。完整素材可用于出版与展览授权。</p>
+        <a class="pill" href="#contact">索取完整目录 <span class="arw">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ INDEX ============================ -->
+  <section class="sec" id="index">
+    <div class="wrap">
+      <div class="sec__head">
+        <h2 class="sec__title reveal"><small>02 / INDEX</small>远征年表</h2>
+        <p class="sec__no reveal d1">1998–2026 / SELECTED ASCENTS</p>
+      </div>
+
+      <div class="index__legend reveal">
+        <span class="micro dim">YEAR</span>
+        <span class="micro dim">PEAK / ALTITUDE</span>
+        <span class="micro dim">RANGE</span>
+        <span class="micro dim">STATUS</span>
+      </div>
+
+      <div class="index reveal">
+        <div class="row">
+          <div class="row__y">2025</div>
+          <div class="row__peak">乔戈里峰 K2<span class="alt">8611M — 无氧 · 西脊</span></div>
+          <div class="row__range">喀喇昆仑 · 巴基斯坦</div>
+          <div class="row__st s-new">新线路</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2024</div>
+          <div class="row__peak">托雷峰<span class="alt">3128M — 阿尔卑斯式 · 确定线路</span></div>
+          <div class="row__range">巴塔哥尼亚 · 智利</div>
+          <div class="row__st s-done">已登顶</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2023</div>
+          <div class="row__peak">马纳斯鲁<span class="alt">8163M — 东北壁 · 冬季</span></div>
+          <div class="row__range">喜马拉雅 · 尼泊尔</div>
+          <div class="row__st s-done">已登顶</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2022</div>
+          <div class="row__peak">道拉吉里<span class="alt">8167M — 东北脊</span></div>
+          <div class="row__range">喜马拉雅 · 尼泊尔</div>
+          <div class="row__st s-new">新线路</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2022</div>
+          <div class="row__peak">德纳里<span class="alt">6190M — 南壁 · 单人</span></div>
+          <div class="row__range">阿拉斯加山脉 · 美国</div>
+          <div class="row__st s-done">已登顶</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2021</div>
+          <div class="row__peak">洛子峰<span class="alt">8516M — 南壁中央槽</span></div>
+          <div class="row__range">喜马拉雅 · 尼泊尔</div>
+          <div class="row__st s-open">未竟</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2020</div>
+          <div class="row__peak">阿空加瓜<span class="alt">6961M — 西壁横切</span></div>
+          <div class="row__range">安第斯 · 阿根廷</div>
+          <div class="row__st s-new">新线路</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2019</div>
+          <div class="row__peak">加舒尔布鲁木 II<span class="alt">8035M — 无氧</span></div>
+          <div class="row__range">喀喇昆仑 · 巴基斯坦</div>
+          <div class="row__st s-done">已登顶</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2018</div>
+          <div class="row__peak">马卡鲁<span class="alt">8485M — 北壁「白风」</span></div>
+          <div class="row__range">喜马拉雅 · 尼泊尔</div>
+          <div class="row__st s-new">新线路</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2016</div>
+          <div class="row__peak">珠穆朗玛峰<span class="alt">8849M — 西北脊 · 第七次</span></div>
+          <div class="row__range">喜马拉雅 · 中国/尼泊尔</div>
+          <div class="row__st s-done">已登顶</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2013</div>
+          <div class="row__peak">安纳普尔纳<span class="alt">8091M — 南壁</span></div>
+          <div class="row__range">喜马拉雅 · 尼泊尔</div>
+          <div class="row__st s-open">未竟</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2009</div>
+          <div class="row__peak">布洛阿特峰<span class="alt">8051M — 西脊</span></div>
+          <div class="row__range">喀喇昆仑 · 巴基斯坦</div>
+          <div class="row__st s-done">已登顶</div>
+        </div>
+        <div class="row">
+          <div class="row__y">2003</div>
+          <div class="row__peak">希夏邦马<span class="alt">8027M — 中央峰</span></div>
+          <div class="row__range">喜马拉雅 · 中国西藏</div>
+          <div class="row__st s-done">已登顶</div>
+        </div>
+        <div class="row">
+          <div class="row__y">1998</div>
+          <div class="row__peak">勃朗峰<span class="alt">4809M — 首次独立带队</span></div>
+          <div class="row__range">阿尔卑斯 · 法国/意大利</div>
+          <div class="row__st s-done">已登顶</div>
+        </div>
+      </div>
+
+      <p class="body-cn dim reveal" style="margin-top:calc(var(--u)*12)">「未竟」并非失败——它只是山在那一年保留了自己的答案。安纳普尔纳南壁与洛子中央槽仍在我的地图上，以虚线标注。</p>
+    </div>
+  </section>
+
+  <!-- ============================ QUOTE ============================ -->
+  <section class="quote" id="quote">
+    <div class="wrap">
+      <hr class="hairline reveal" style="margin-bottom:calc(var(--u)*24)">
+      <figure>
+        <blockquote class="reveal">
+          <span class="mark">「</span>我们并非征服山峰，<br>只是被允许<br>短暂地站在那里。<span class="mark">」</span>
+        </blockquote>
+        <figcaption class="reveal d2">
+          <strong>ELIAS VENT</strong> — 《高处的沉默》，2021 年于加德满都
+        </figcaption>
+      </figure>
+      <hr class="hairline reveal d3" style="margin-top:calc(var(--u)*24)">
+    </div>
+  </section>
+
+  <!-- ============================ CONTACT ============================ -->
+  <section class="sec contact" id="contact">
+    <div class="wrap">
+      <div class="sec__head">
+        <h2 class="sec__title reveal"><small>03 / CONTACT</small>联系</h2>
+        <p class="sec__no reveal d1">BASE — 因特拉肯 / 加德满都</p>
+      </div>
+
+      <div class="contact__grid">
+        <div class="reveal">
+          <h3>每一次远征<br>都始于一封邮件。</h3>
+          <p class="body-cn">合作、影像授权、远征咨询与演讲邀约，请直接来信。攀登季（4–5 月 / 9–10 月）期间回复可能延迟，我更习惯在山下一次读完所有信件，再逐封回。</p>
+          <div class="contact__pills">
+            <a class="pill" href="mailto:archive@eliasvent.example">邮件 <span class="arw">→</span></a>
+            <a class="pill" href="#contact">Instagram <span class="arw">→</span></a>
+            <a class="pill pill--red" href="#contact">预约演讲 <span class="arw">→</span></a>
+          </div>
+        </div>
+
+        <div class="reveal d2">
+          <p class="micro dim" style="margin-bottom:calc(var(--u)*5)">PRESS / 出版与媒体</p>
+          <div class="press">
+            <div class="press__item">
+              <span class="press__t">《山野》杂志 专栏作者</span>
+              <span class="press__y">2019 — 至今</span>
+            </div>
+            <div class="press__item">
+              <span class="press__t">《高处的沉默》个人影像集</span>
+              <span class="press__y">2021</span>
+            </div>
+            <div class="press__item">
+              <span class="press__t">国家地理中文版 特约供稿</span>
+              <span class="press__y">2018 / 2023</span>
+            </div>
+            <div class="press__item">
+              <span class="press__t">班夫山地电影节 入围短片《白风》</span>
+              <span class="press__y">2019</span>
+            </div>
+            <div class="press__item">
+              <span class="press__t">TED×Kathmandu 主题演讲</span>
+              <span class="press__y">2022</span>
+            </div>
+            <div class="press__item">
+              <span class="press__t">《登山者年鉴》年度人物</span>
+              <span class="press__y">2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__wordmark reveal">ELIAS<br>VENT</div>
+      <div class="footer__meta reveal d1">
+        <span class="micro dim">ALTITUDE ARCHIVE © 1998–2026</span>
+        <span class="micro dim">本站所有影像均为胶片档案数字化 · 禁止未授权使用</span>
+        <span class="micro dim">DESIGNED LIKE A CONTACT SHEET — PRINTED ON WARM PAPER</span>
+      </div>
+    </div>
+    <hr class="hairline" style="margin:calc(var(--u)*10) 0 calc(var(--u)*5)">
+    <div style="display:flex;justify-content:space-between;gap:calc(var(--u)*6);flex-wrap:wrap">
+      <span class="micro dim">N 46°41′ E 7°52′ — INTERLAKEN</span>
+      <span class="micro dim">MADE WITH HTML + CSS + 12 LINES OF JS</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Reveal on scroll — with full fallback when IntersectionObserver is absent */
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+</body>
+</html>

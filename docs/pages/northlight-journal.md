@@ -28,6 +28,9 @@ pageDetail:
   prev:
     text: Orbit Meet 视频会议协作空间
     link: /pages/orbit-meet.html
+  next:
+    text: Enigma Chamber 沉浸式密室逃脱
+    link: /pages/enigma-chamber.html
 ---
 
 <PageDetail />

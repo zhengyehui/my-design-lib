@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enigma Chamber 密室逃脱</title>
+<meta name="description" content="ENIGMA CHAMBER 密室逃脱 — 沉浸式解谜体验。四个频道，四场噩梦。解谜，否则永远留下。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   ENIGMA CHAMBER — CRT / VHS SURVEILLANCE AESTHETIC
+   pure #000 background · pure #FFF UI · single accent #FF3B30
+   ============================================================ */
+
+:root{
+  --black:#000000;
+  --white:#FFFFFF;
+  --red:#FF3B30;
+  --line:rgba(255,255,255,0.25);
+  --line-dim:rgba(255,255,255,0.12);
+  --dim:rgba(255,255,255,0.55);
+  --mono:'VCR OSD Mono','Courier New',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+
+html{background:var(--black);}
+body{
+  margin:0;
+  background:var(--black);
+  color:var(--white);
+  font-family:var(--mono);
+  text-transform:uppercase;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+}
+
+a{color:inherit;text-decoration:none;}
+h1,h2,h3,h4,p,ul,ol,figure,table{margin:0;padding:0;}
+ul,ol{list-style:none;}
+table{border-collapse:collapse;width:100%;}
+
+/* ---------- SCANLINE + GRAIN OVERLAY (fixed, full viewport) ---------- */
+.fx-scanlines{
+  position:fixed;
+  inset:0;
+  z-index:9000;
+  pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.06) 0px,
+    rgba(255,255,255,0.06) 1px,
+    rgba(0,0,0,0) 1px,
+    rgba(0,0,0,0) 3px
+  );
+}
+.fx-grain{
+  position:fixed;
+  inset:-2rem;
+  z-index:9001;
+  pointer-events:none;
+  opacity:0.11;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.fx-vignette{
+  position:fixed;
+  inset:0;
+  z-index:8999;
+  pointer-events:none;
+  background:radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
+}
+
+/* ---------- FIXED HUD BAR ---------- */
+.hud{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:8000;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px 18px;
+  padding:8px 14px;
+  font-size:10px;
+  letter-spacing:0.18em;
+  color:var(--dim);
+  background:rgba(0,0,0,0.82);
+  border-bottom:1px solid var(--line-dim);
+  line-height:1.3;
+}
+.hud strong{color:var(--white);font-weight:400;}
+.hud .rec{
+  color:var(--red);
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  animation:blink 1.15s steps(1,end) infinite;
+}
+.hud .rec .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--red);
+  display:inline-block;
+}
+@keyframes blink{
+  0%,55%{opacity:1;}
+  56%,100%{opacity:0.12;}
+}
+
+/* ---------- CRT FRAME + CORNER TICKS ---------- */
+.frame{
+  position:relative;
+  border:1px solid var(--line);
+}
+.frame::before,
+.frame::after{
+  content:"";
+  position:absolute;
+  width:14px;height:14px;
+  pointer-events:none;
+}
+.frame::before{
+  top:-1px;left:-1px;
+  border-top:2px solid var(--white);
+  border-left:2px solid var(--white);
+}
+.frame::after{
+  bottom:-1px;right:-1px;
+  border-bottom:2px solid var(--white);
+  border-right:2px solid var(--white);
+}
+
+/* ---------- MARQUEE TICKER ---------- */
+.ticker{
+  overflow:hidden;
+  width:100%;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:var(--black);
+  padding:10px 0;
+}
+.ticker-track{
+  display:flex;
+  width:max-content;
+  white-space:nowrap;
+  animation:marquee 34s linear infinite;
+}
+.ticker-track span{
+  display:inline-block;
+  padding-right:2.5rem;
+  font-size:13px;
+  letter-spacing:0.32em;
+  color:var(--white);
+}
+.ticker.rev .ticker-track{animation-duration:46s;}
+.ticker.small .ticker-track span{font-size:10px;letter-spacing:0.28em;color:var(--dim);}
+@keyframes marquee{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+
+/* ---------- MICRO LABELS ---------- */
+.micro{
+  font-size:10px;
+  letter-spacing:0.24em;
+  color:var(--dim);
+  line-height:1.7;
+}
+.micro b{color:var(--white);font-weight:400;}
+.tag-red{color:var(--red);}
+.hairline{height:1px;background:var(--line-dim);width:100%;}
+
+/* ---------- SECTION SHELL ---------- */
+.section{
+  position:relative;
+  padding:96px 6vw 110px;
+  max-width:1500px;
+  margin:0 auto;
+}
+.section-head{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:14px 30px;
+  margin-bottom:18px;
+}
+.section-title{
+  font-size:clamp(1.6rem,4.6vw,3.2rem);
+  letter-spacing:0.14em;
+  font-weight:400;
+  line-height:1.1;
+}
+.section-sub{
+  font-size:11px;
+  letter-spacing:0.3em;
+  color:var(--dim);
+}
+.section-rule{
+  margin:26px 0 56px;
+  height:1px;
+  background:var(--line);
+  position:relative;
+}
+.section-rule::before{
+  content:"";
+  position:absolute;
+  left:0;top:-2px;
+  width:70px;height:5px;
+  background:var(--white);
+}
+
+/* ============================================================
+   1. HERO — FULL VIEWPORT CHANNEL SCREEN
+   ============================================================ */
+.hero{
+  min-height:100vh;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  position:relative;
+  padding:86px 5vw 0;
+  overflow:hidden;
+}
+.hero-corners{
+  position:absolute;
+  inset:86px 5vw 20px;
+  pointer-events:none;
+}
+.hero-corners span{
+  position:absolute;
+  width:26px;height:26px;
+}
+.hero-corners span:nth-child(1){top:0;left:0;border-top:2px solid var(--white);border-left:2px solid var(--white);}
+.hero-corners span:nth-child(2){top:0;right:0;border-top:2px solid var(--white);border-right:2px solid var(--white);}
+.hero-corners span:nth-child(3){bottom:0;left:0;border-bottom:2px solid var(--white);border-left:2px solid var(--white);}
+.hero-corners span:nth-child(4){bottom:0;right:0;border-bottom:2px solid var(--white);border-right:2px solid var(--white);}
+
+.hero-top{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:10px 24px;
+}
+.hero-center{
+  padding:2vh 0 3vh;
+  text-align:center;
+}
+.wordmark{
+  font-size:clamp(2.2rem,8.4vw,7.6rem);
+  letter-spacing:0.12em;
+  line-height:1.02;
+  font-weight:400;
+  white-space:nowrap;
+}
+.wordmark .ghost{
+  -webkit-text-stroke:1px var(--white);
+  color:transparent;
+}
+.hero-sub{
+  margin-top:22px;
+  font-size:clamp(0.75rem,1.9vw,1.15rem);
+  letter-spacing:0.52em;
+  color:var(--white);
+}
+.hero-channels{
+  margin:4vh 0 2vh;
+  font-size:clamp(1.9rem,8vw,9.5rem);
+  letter-spacing:0.02em;
+  line-height:1;
+  white-space:nowrap;
+  color:var(--white);
+  opacity:0.92;
+}
+.hero-channels .sep{
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,0.4);
+}
+.hero-cta-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  justify-content:center;
+  align-items:center;
+  margin-top:3.4vh;
+}
+
+/* ---------- BUTTON — HARSH INVERSION ---------- */
+.btn{
+  display:inline-block;
+  border:1px solid var(--white);
+  background:transparent;
+  color:var(--white);
+  font-family:var(--mono);
+  text-transform:uppercase;
+  font-size:13px;
+  letter-spacing:0.34em;
+  padding:18px 44px;
+  cursor:pointer;
+  transition:background 0.12s steps(2,end), color 0.12s steps(2,end);
+}
+.btn:hover,.btn:focus-visible{
+  background:var(--white);
+  color:var(--black);
+  outline:none;
+}
+.btn.ghost{
+  border-color:var(--line);
+  color:var(--dim);
+}
+.btn.ghost:hover{background:var(--white);color:var(--black);border-color:var(--white);}
+
+.hero-bottom{
+  padding-bottom:22px;
+}
+.hero-readout{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:8px 24px;
+  margin-bottom:16px;
+}
+
+/* ============================================================
+   2. ROOM CHANNELS — CRT CARDS
+   ============================================================ */
+.rooms{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:34px;
+}
+.room-card{
+  position:relative;
+  border:1px solid var(--line);
+  padding:30px 30px 26px;
+  overflow:hidden;
+  transition:border-color 0.15s linear;
+  background:var(--black);
+}
+.room-card::before{
+  /* scanline sheet — shifts on hover */
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.05) 0px,
+    rgba(255,255,255,0.05) 1px,
+    rgba(0,0,0,0) 1px,
+    rgba(0,0,0,0) 5px
+  );
+  background-position:0 0;
+  transition:background-position 0.35s linear;
+}
+.room-card:hover{
+  border-color:var(--white);
+}
+.room-card:hover::before{
+  background-position:0 -22px;
+}
+.room-card .corner{
+  position:absolute;
+  width:12px;height:12px;
+}
+.room-card .corner.tl{top:-1px;left:-1px;border-top:2px solid var(--white);border-left:2px solid var(--white);}
+.room-card .corner.br{bottom:-1px;right:-1px;border-bottom:2px solid var(--white);border-right:2px solid var(--white);}
+
+.room-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.room-code{
+  font-size:clamp(5.2rem,13vw,11.5rem);
+  line-height:0.86;
+  letter-spacing:0.02em;
+  color:transparent;
+  -webkit-text-stroke:1.5px var(--white);
+  transition:color 0.12s steps(2,end);
+}
+.room-card:hover .room-code{
+  color:var(--white);
+  -webkit-text-stroke:1.5px var(--white);
+}
+.room-genre{
+  text-align:right;
+  font-size:10px;
+  letter-spacing:0.26em;
+  color:var(--dim);
+  line-height:1.9;
+  padding-top:6px;
+}
+.room-title{
+  margin-top:20px;
+  font-size:clamp(1.5rem,3.4vw,2.35rem);
+  letter-spacing:0.22em;
+  font-weight:400;
+}
+.room-title-en{
+  margin-top:6px;
+  font-size:11px;
+  letter-spacing:0.42em;
+  color:var(--dim);
+}
+.room-premise{
+  margin:20px 0 26px;
+  font-size:12.5px;
+  line-height:2.1;
+  letter-spacing:0.14em;
+  color:rgba(255,255,255,0.78);
+  text-transform:none;
+}
+.room-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  border-top:1px solid var(--line-dim);
+}
+.room-stats div{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px 2px;
+  font-size:11px;
+  letter-spacing:0.22em;
+  border-bottom:1px solid var(--line-dim);
+}
+.room-stats div:nth-child(odd){padding-right:18px;}
+.room-stats div:nth-child(even){padding-left:18px;border-left:1px solid var(--line-dim);}
+.room-stats span:first-child{color:var(--dim);}
+.room-stats span:last-child{color:var(--white);}
+.diff-bar{letter-spacing:0.18em;}
+
+/* ---------- STATS STRIP ---------- */
+.stat-strip{
+  margin-top:70px;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  border:1px solid var(--line);
+}
+.stat-strip > div{
+  padding:26px 22px;
+  border-left:1px solid var(--line-dim);
+}
+.stat-strip > div:first-child{border-left:none;}
+.stat-strip .num{
+  font-size:clamp(1.7rem,3.6vw,2.9rem);
+  letter-spacing:0.1em;
+  line-height:1.1;
+}
+.stat-strip .lbl{
+  margin-top:10px;
+  font-size:10px;
+  letter-spacing:0.26em;
+  color:var(--dim);
+}
+
+/* ============================================================
+   3. SIGNAL LOG — STEPS
+   ============================================================ */
+.steps{border-top:1px solid var(--line);}
+.step{
+  display:grid;
+  grid-template-columns:minmax(120px,0.8fr) 1.6fr 1.2fr;
+  gap:24px 40px;
+  align-items:start;
+  padding:46px 0;
+  border-bottom:1px solid var(--line-dim);
+}
+.step-num{
+  font-size:clamp(3.4rem,8vw,6.6rem);
+  line-height:0.9;
+  color:transparent;
+  -webkit-text-stroke:1.4px var(--white);
+}
+.step-name{
+  font-size:clamp(1.15rem,2.6vw,1.85rem);
+  letter-spacing:0.26em;
+  font-weight:400;
+}
+.step-name small{
+  display:block;
+  margin-top:9px;
+  font-size:10px;
+  letter-spacing:0.42em;
+  color:var(--dim);
+}
+.step-desc{
+  font-size:12.5px;
+  line-height:2.15;
+  letter-spacing:0.13em;
+  color:rgba(255,255,255,0.75);
+  text-transform:none;
+}
+.step-meta{
+  margin-top:14px;
+  font-size:10px;
+  letter-spacing:0.26em;
+  color:var(--dim);
+}
+
+/* ============================================================
+   4. HALL OF FAME — LEADERBOARD
+   ============================================================ */
+.board-wrap{
+  border:1px solid var(--line);
+  padding:6px;
+  overflow-x:auto;
+}
+.board{
+  min-width:640px;
+  font-size:12px;
+  letter-spacing:0.18em;
+}
+.board th{
+  text-align:left;
+  font-weight:400;
+  color:var(--dim);
+  font-size:10px;
+  letter-spacing:0.32em;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+.board td{
+  padding:15px 18px;
+  border-bottom:1px solid var(--line-dim);
+  white-space:nowrap;
+}
+.board tbody tr:last-child td{border-bottom:none;}
+.board .rank{color:var(--dim);}
+.board .time{color:var(--white);letter-spacing:0.24em;}
+.board tbody tr{
+  transition:background 0.12s steps(2,end), color 0.12s steps(2,end);
+}
+.board tbody tr:hover{
+  background:var(--white);
+  color:var(--black);
+}
+.board tbody tr:hover .rank,
+.board tbody tr:hover .time,
+.board tbody tr:hover td{color:var(--black);}
+.board tr.top{
+  background:var(--white);
+  color:var(--black);
+}
+.board tr.top .rank,
+.board tr.top .time,
+.board tr.top td{color:var(--black);}
+.board .flag{
+  color:var(--red);
+  font-size:10px;
+  letter-spacing:0.3em;
+}
+.board tr.top:hover .flag{color:var(--red);}
+
+/* ============================================================
+   5. BOOKING — PRICES + SLOTS
+   ============================================================ */
+.prices{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:30px;
+  margin-bottom:70px;
+}
+.price-card{
+  border:1px solid var(--line);
+  padding:34px 28px 30px;
+  position:relative;
+  transition:border-color 0.15s linear, background 0.12s steps(2,end), color 0.12s steps(2,end);
+}
+.price-card:hover{
+  border-color:var(--white);
+  background:var(--white);
+  color:var(--black);
+}
+.price-card:hover .micro,
+.price-card:hover .price-num .unit{color:rgba(0,0,0,0.6);}
+.price-card:hover .btn{
+  border-color:var(--black);
+  color:var(--black);
+}
+.price-card:hover .btn:hover{
+  background:var(--black);
+  color:var(--white);
+}
+.price-tier{
+  font-size:11px;
+  letter-spacing:0.36em;
+  color:var(--dim);
+}
+.price-num{
+  margin:26px 0 6px;
+  font-size:clamp(2.4rem,5.2vw,3.9rem);
+  line-height:1;
+  letter-spacing:0.04em;
+}
+.price-num .unit{
+  font-size:0.36em;
+  letter-spacing:0.3em;
+  color:var(--dim);
+}
+.price-note{
+  font-size:11px;
+  line-height:2;
+  letter-spacing:0.16em;
+  color:rgba(255,255,255,0.6);
+  text-transform:none;
+  margin:18px 0 30px;
+  min-height:66px;
+}
+
+.slots-head{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:10px 24px;
+  margin-bottom:22px;
+}
+.slots{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(112px,1fr));
+  gap:10px;
+  margin-bottom:56px;
+}
+.slot{
+  border:1px solid var(--line);
+  padding:16px 6px;
+  text-align:center;
+  font-size:12px;
+  letter-spacing:0.22em;
+  color:var(--white);
+  cursor:pointer;
+  transition:background 0.1s steps(2,end), color 0.1s steps(2,end), border-color 0.1s linear;
+}
+.slot:hover{
+  background:var(--white);
+  color:var(--black);
+  border-color:var(--white);
+}
+.slot.off{
+  color:rgba(255,255,255,0.25);
+  border-color:var(--line-dim);
+  cursor:not-allowed;
+  text-decoration:line-through;
+}
+.slot.off:hover{
+  background:transparent;
+  color:rgba(255,255,255,0.25);
+  border-color:var(--line-dim);
+}
+.booking-cta{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:20px 34px;
+  border:1px solid var(--line);
+  padding:38px 34px;
+}
+.booking-cta .line{
+  font-size:12px;
+  letter-spacing:0.24em;
+  color:var(--dim);
+  line-height:2;
+}
+
+/* ============================================================
+   6. FOOTER
+   ============================================================ */
+.footer{
+  border-top:1px solid var(--line);
+  padding:70px 6vw 0;
+}
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr;
+  gap:40px;
+  max-width:1500px;
+  margin:0 auto 56px;
+}
+.footer h4{
+  font-size:11px;
+  letter-spacing:0.36em;
+  color:var(--white);
+  font-weight:400;
+  margin-bottom:18px;
+}
+.footer .legal{
+  font-size:9.5px;
+  line-height:1.35;
+  letter-spacing:0.16em;
+  color:rgba(255,255,255,0.42);
+  text-transform:uppercase;
+  max-width:520px;
+}
+.footer .legal a{
+  color:rgba(255,255,255,0.7);
+  border-bottom:1px solid var(--line-dim);
+}
+.footer .legal a:hover{background:var(--white);color:var(--black);border-color:var(--white);}
+.footer .addr{
+  font-size:11px;
+  letter-spacing:0.2em;
+  line-height:2.2;
+  color:rgba(255,255,255,0.75);
+}
+.footer-word{
+  max-width:1500px;
+  margin:0 auto;
+  padding-bottom:10px;
+  font-size:clamp(1.3rem,5.4vw,4.1rem);
+  letter-spacing:0.06em;
+  line-height:1;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,0.32);
+  white-space:nowrap;
+}
+.footer-bottom{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:8px 24px;
+  max-width:1500px;
+  margin:0 auto;
+  padding:20px 0 26px;
+  border-top:1px solid var(--line-dim);
+}
+
+/* ============================================================
+   REVEAL — GUARDED BY html.js  (never hides content without JS)
+   ============================================================ */
+.reveal{transition:opacity 0.75s ease, transform 0.75s ease;}
+html.js .reveal:not(.in){
+  opacity:0;
+  transform:translateY(30px);
+}
+
+/* ============================================================
+   RESPONSIVE — keep everything inside the viewport
+   ============================================================ */
+@media (max-width:980px){
+  .rooms{grid-template-columns:1fr;}
+  .prices{grid-template-columns:1fr;}
+  .stat-strip{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .stat-strip > div:nth-child(3){border-left:none;}
+  .stat-strip > div:nth-child(1),.stat-strip > div:nth-child(2){border-bottom:1px solid var(--line-dim);}
+  .step{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+}
+@media (max-width:640px){
+  .hud{font-size:9px;letter-spacing:0.14em;}
+  .section{padding:70px 6vw 84px;}
+  .wordmark{letter-spacing:0.06em;}
+  .hero-sub{letter-spacing:0.3em;}
+  .room-stats{grid-template-columns:1fr;}
+  .room-stats div:nth-child(even){padding-left:2px;border-left:none;}
+  .room-stats div:nth-child(odd){padding-right:2px;}
+  .stat-strip{grid-template-columns:1fr;}
+  .stat-strip > div{border-left:none;border-bottom:1px solid var(--line-dim);}
+  .stat-strip > div:last-child{border-bottom:none;}
+  .booking-cta{padding:26px 20px;}
+  .btn{padding:15px 28px;font-size:11px;letter-spacing:0.26em;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .ticker-track{animation:none;}
+  .hud .rec{animation:none;}
+  .reveal{transition:none;}
+  html.js .reveal:not(.in){opacity:1;transform:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- FX OVERLAYS -->
+<div class="fx-vignette" aria-hidden="true"></div>
+<div class="fx-scanlines" aria-hidden="true"></div>
+<div class="fx-grain" aria-hidden="true"></div>
+
+<!-- FIXED HUD -->
+<div class="hud" role="status">
+  <div><strong>ENIGMA CHAMBER</strong>&nbsp;// VHS-01 · 沉浸式密室逃脱</div>
+  <div class="rec"><span class="dot"></span>REC</div>
+  <div>SIGNAL:&nbsp;<strong>LOCKED</strong>&nbsp;· 频道扫描中 · <span id="hud-clock">--:--:--</span></div>
+</div>
+
+<!-- ============================================================
+     1. HERO
+     ============================================================ -->
+<header class="hero" id="top">
+  <div class="hero-corners" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+  <div class="hero-top">
+    <div class="micro">CH.00 / 主信号源 / <b>LIVE FEED</b><br>TRANSMISSION 24.7 GHZ · 干扰 0.02%</div>
+    <div class="micro" style="text-align:right;">REC ● <b id="rec-clock">2026/01/01 00:00:00</b><br>剩余信号时长 <b>48:00</b></div>
+  </div>
+
+  <div class="hero-center">
+    <h1 class="wordmark reveal in">ENIGMA <span class="ghost">CHAMBER</span></h1>
+    <p class="hero-sub reveal in">密室逃脱 · 沉浸式解谜体验</p>
+
+    <div class="hero-channels reveal in" aria-hidden="true">
+      01<span class="sep"> / </span>02<span class="sep"> / </span>03<span class="sep"> / </span>04
+    </div>
+
+    <div class="hero-cta-row">
+      <a class="btn" href="#booking">进入频道 ENTER</a>
+      <a class="btn ghost" href="#rooms">浏览房间频道 ↓</a>
+    </div>
+    <p class="micro" style="margin-top:26px;">
+      4 条频道 · 21% 最低逃脱率 · 平均解谜用时 <b>47:36</b> · 信号一旦开启，倒计时不会为任何人暂停
+    </p>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-readout micro">
+      <span>MODE: 沉浸式实景 / 多线机关 / 全感官叙事</span>
+      <span>LOCATION: 上海 · 静安 / <b>31.2274° N 121.4458° E</b></span>
+      <span class="tag-red">WARNING: 超时即锁定</span>
+    </div>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>SOLVE OR REMAIN LOCKED · 解谜否则永远留下 · SIGNAL LOCKED · 倒计时已经开始 · NO REFUND AFTER ENTRY · 进入后不予退场 ·&nbsp;</span>
+        <span>SOLVE OR REMAIN LOCKED · 解谜否则永远留下 · SIGNAL LOCKED · 倒计时已经开始 · NO REFUND AFTER ENTRY · 进入后不予退场 ·&nbsp;</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     2. ROOM CHANNELS
+     ============================================================ -->
+<main>
+<section class="section" id="rooms">
+  <div class="section-head">
+    <h2 class="section-title reveal">房间频道 / ROOM CHANNELS</h2>
+    <div class="section-sub reveal">SELECT A CHANNEL · 04 ACTIVE SIGNALS</div>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="rooms">
+
+    <article class="room-card reveal">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <div class="room-top">
+        <div class="room-code">01</div>
+        <div class="room-genre">
+          GENRE / 恐怖 HORROR<br>
+          STATUS / <span class="tag-red">SIGNAL UNSTABLE</span><br>
+          CH.01 · 60 MIN
+        </div>
+      </div>
+      <h3 class="room-title">禁闭病院</h3>
+      <div class="room-title-en">WARD ZERO — 病区零号</div>
+      <p class="room-premise">废弃隔离病区的值班记录缺失了 72 小时。你们是获准进入的最后一批调查员——走廊尽头的病房从不上锁，但从来没有人从里面走出来。</p>
+      <div class="room-stats">
+        <div><span>难度 DIFFICULTY</span><span class="diff-bar">4 / 5</span></div>
+        <div><span>逃脱率 ESCAPE</span><span>38%</span></div>
+        <div><span>人数 PLAYERS</span><span>4 — 6 人</span></div>
+        <div><span>时长 DURATION</span><span>60 MIN</span></div>
+      </div>
+    </article>
+
+    <article class="room-card reveal">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <div class="room-top">
+        <div class="room-code">02</div>
+        <div class="room-genre">
+          GENRE / 科幻 SCI-FI<br>
+          STATUS / <b>SIGNAL STABLE</b><br>
+          CH.02 · 75 MIN
+        </div>
+      </div>
+      <h3 class="room-title">深空回响</h3>
+      <div class="room-title-en">DEEP SPACE ECHO — 中继站 K-7</div>
+      <p class="room-premise">木星轨道上的深空中继站失联第 14 天，舱内氧气循环仍在运转，航行日志却显示全员早已登上返航艇。那么，是谁在维护这座站？</p>
+      <div class="room-stats">
+        <div><span>难度 DIFFICULTY</span><span class="diff-bar">3 / 5</span></div>
+        <div><span>逃脱率 ESCAPE</span><span>52%</span></div>
+        <div><span>人数 PLAYERS</span><span>3 — 5 人</span></div>
+        <div><span>时长 DURATION</span><span>75 MIN</span></div>
+      </div>
+    </article>
+
+    <article class="room-card reveal">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <div class="room-top">
+        <div class="room-code">03</div>
+        <div class="room-genre">
+          GENRE / 动作 ACTION<br>
+          STATUS / <span class="tag-red">HIGH RISK · 高危频道</span><br>
+          CH.03 · 90 MIN
+        </div>
+      </div>
+      <h3 class="room-title">九龙城寨</h3>
+      <div class="room-title-en">KOWLOON GRID — 拆迁前夜</div>
+      <p class="room-premise">拆迁前夜的城寨地下，两箱黑账、三方势力、四条出口——只有一条能带你们活着离开。倒计时归零时，整片城区会连同秘密一起被推平。</p>
+      <div class="room-stats">
+        <div><span>难度 DIFFICULTY</span><span class="diff-bar">5 / 5</span></div>
+        <div><span>逃脱率 ESCAPE</span><span class="tag-red">21%</span></div>
+        <div><span>人数 PLAYERS</span><span>5 — 8 人</span></div>
+        <div><span>时长 DURATION</span><span>90 MIN</span></div>
+      </div>
+    </article>
+
+    <article class="room-card reveal">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <div class="room-top">
+        <div class="room-code">04</div>
+        <div class="room-genre">
+          GENRE / 剧情 STORY<br>
+          STATUS / <b>CHRONO DRIFT</b><br>
+          CH.04 · 75 MIN
+        </div>
+      </div>
+      <h3 class="room-title">时间裂隙</h3>
+      <div class="room-title-en">FRACTURE OF TIME — 钟表匠工作室</div>
+      <p class="room-premise">老钟表匠失踪前留下的工作室里，所有指针都在倒着走。你们必须在第 60 分钟之前，把被人偷走的那一小时放回原处——否则时间会把你们一起带走。</p>
+      <div class="room-stats">
+        <div><span>难度 DIFFICULTY</span><span class="diff-bar">4 / 5</span></div>
+        <div><span>逃脱率 ESCAPE</span><span>34%</span></div>
+        <div><span>人数 PLAYERS</span><span>4 — 6 人</span></div>
+        <div><span>时长 DURATION</span><span>75 MIN</span></div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="stat-strip reveal">
+    <div>
+      <div class="num">04</div>
+      <div class="lbl">条频道 / ACTIVE CHANNELS</div>
+    </div>
+    <div>
+      <div class="num">21%</div>
+      <div class="lbl">最低逃脱率 / LOWEST ESCAPE RATE</div>
+    </div>
+    <div>
+      <div class="num">12,847</div>
+      <div class="lbl">累计挑战小队 / TEAMS LOGGED</div>
+    </div>
+    <div>
+      <div class="num">47:36</div>
+      <div class="lbl">平均解谜用时 / AVG SOLVE TIME</div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker rev" aria-hidden="true">
+  <div class="ticker-track">
+    <span>CH.01 禁闭病院 · CH.02 深空回响 · CH.03 九龙城寨 · CH.04 时间裂隙 · FOUR CHANNELS · FOUR NIGHTMARES · 四个频道，四场噩梦 ·&nbsp;</span>
+    <span>CH.01 禁闭病院 · CH.02 深空回响 · CH.03 九龙城寨 · CH.04 时间裂隙 · FOUR CHANNELS · FOUR NIGHTMARES · 四个频道，四场噩梦 ·&nbsp;</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     3. SIGNAL LOG
+     ============================================================ -->
+<section class="section" id="log">
+  <div class="section-head">
+    <h2 class="section-title reveal">通关流程 / SIGNAL LOG</h2>
+    <div class="section-sub reveal">04 STEPS · 从预约到逃脱 / BOOK → ESCAPE</div>
+  </div>
+  <div class="section-rule"></div>
+
+  <ol class="steps">
+    <li class="step reveal">
+      <div class="step-num">01</div>
+      <div>
+        <h3 class="step-name">预约频道<small>BOOK THE CHANNEL</small></h3>
+        <div class="step-meta">耗时约 2 分钟 · 在线锁定名额</div>
+      </div>
+      <p class="step-desc">在预约页面选择房间频道、场次与人数，锁定名额后系统会回传一条确认信号（短信 + 订单码）。凭订单码在开场前 15 分钟抵达前台，逾期 15 分钟频道将被释放给候补队伍。</p>
+    </li>
+    <li class="step reveal">
+      <div class="step-num">02</div>
+      <div>
+        <h3 class="step-name">现场校准<small>ON-SITE CALIBRATION</small></h3>
+        <div class="step-meta">耗时约 15 分钟 · 寄存 + 安全协议</div>
+      </div>
+      <p class="step-desc">寄存手机、手表与随身物品，讲解安全协议：每条频道都配备紧急退出按钮与全程语音监控，任何不适可立即中止。随后由场控为你们接入频道，校准对讲机信号。</p>
+    </li>
+    <li class="step reveal">
+      <div class="step-num">03</div>
+      <div>
+        <h3 class="step-name">进入密室<small>ENTER THE CHAMBER</small></h3>
+        <div class="step-meta">灯光熄灭 · 倒计时启动</div>
+      </div>
+      <p class="step-desc">铁门在身后合拢，灯光熄灭，倒计时开始。你们与外界的唯一联系，只剩墙上的监控屏幕和耳边的电流噪音。机关、谜题与叙事将同时展开——每一步都可能触发新的剧情分支。</p>
+    </li>
+    <li class="step reveal">
+      <div class="step-num">04</div>
+      <div>
+        <h3 class="step-name">限时解谜<small>SOLVE OR REMAIN LOCKED</small></h3>
+        <div class="step-meta">60 — 90 分钟 · 3 次免费提示</div>
+      </div>
+      <p class="step-desc">在时限内破解层层机关，拼出完整真相。卡关时可通过对讲机向场控索取提示（含 3 次免费提示）。超时即锁定，本场档案封存，直到下一批挑战者推开门——你们的名字会被写在墙上。</p>
+    </li>
+  </ol>
+</section>
+
+<!-- ============================================================
+     4. HALL OF FAME
+     ============================================================ -->
+<section class="section" id="hall">
+  <div class="section-head">
+    <h2 class="section-title reveal">战绩大厅 / HALL OF FAME</h2>
+    <div class="section-sub reveal">TOP ESCAPE RECORDS · 数据更新于 2026.10.30</div>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="board-wrap reveal">
+    <table class="board">
+      <thead>
+        <tr>
+          <th>RANK / 排名</th>
+          <th>TEAM / 小队</th>
+          <th>CHANNEL / 频道</th>
+          <th>TIME / 用时</th>
+          <th>DATE / 日期</th>
+          <th>NOTE / 备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="top">
+          <td class="rank">01</td>
+          <td>午夜录像带</td>
+          <td>CH.01 禁闭病院</td>
+          <td class="time">32:41</td>
+          <td>2026.10.17</td>
+          <td class="flag">★ 全站纪录 / NO HINTS</td>
+        </tr>
+        <tr>
+          <td class="rank">02</td>
+          <td>不睡觉的猫头鹰</td>
+          <td>CH.04 时间裂隙</td>
+          <td class="time">36:08</td>
+          <td>2026.10.24</td>
+          <td>1 次提示</td>
+        </tr>
+        <tr>
+          <td class="rank">03</td>
+          <td>静安区第七小队</td>
+          <td>CH.02 深空回响</td>
+          <td class="time">38:52</td>
+          <td>2026.09.28</td>
+          <td>0 次提示</td>
+        </tr>
+        <tr>
+          <td class="rank">04</td>
+          <td>三点半俱乐部</td>
+          <td>CH.01 禁闭病院</td>
+          <td class="time">41:27</td>
+          <td>2026.10.11</td>
+          <td>2 次提示</td>
+        </tr>
+        <tr>
+          <td class="rank">05</td>
+          <td>九龙大排档</td>
+          <td>CH.03 九龙城寨</td>
+          <td class="time">44:03</td>
+          <td>2026.10.03</td>
+          <td>1 次提示 · 高危频道最快</td>
+        </tr>
+        <tr>
+          <td class="rank">06</td>
+          <td>咖啡因过量</td>
+          <td>CH.02 深空回响</td>
+          <td class="time">45:19</td>
+          <td>2026.09.19</td>
+          <td>0 次提示</td>
+        </tr>
+        <tr>
+          <td class="rank">07</td>
+          <td>逃出 996</td>
+          <td>CH.04 时间裂隙</td>
+          <td class="time">47:55</td>
+          <td>2026.10.08</td>
+          <td>3 次提示</td>
+        </tr>
+        <tr>
+          <td class="rank">08</td>
+          <td>城寨拆迁办</td>
+          <td>CH.03 九龙城寨</td>
+          <td class="time">51:26</td>
+          <td>2026.09.12</td>
+          <td>2 次提示</td>
+        </tr>
+        <tr>
+          <td class="rank">09</td>
+          <td>摸鱼敢死队</td>
+          <td>CH.01 禁闭病院</td>
+          <td class="time">53:10</td>
+          <td>2026.08.30</td>
+          <td>3 次提示</td>
+        </tr>
+        <tr>
+          <td class="rank">10</td>
+          <td>时差党</td>
+          <td>CH.04 时间裂隙</td>
+          <td class="time">56:42</td>
+          <td>2026.10.21</td>
+          <td>2 次提示</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="micro reveal" style="margin-top:22px;">
+    * 用时自进入密室起计 · 提示次数不影响上榜资格 · 同一频道以最快单场成绩为准 · 刷新纪录者可获得 <b>「频道幽灵」</b> 终身 8 折通行令
+  </p>
+</section>
+
+<!-- ============================================================
+     5. BOOKING
+     ============================================================ -->
+<section class="section" id="booking">
+  <div class="section-head">
+    <h2 class="section-title reveal">预约频道 / BOOKING</h2>
+    <div class="section-sub reveal">SELECT TIER · SELECT SLOT · 锁定你的场次</div>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="prices">
+    <div class="price-card reveal">
+      <div class="price-tier">TIER 01 / 平日场 WEEKDAY</div>
+      <div class="price-num">¥128<span class="unit"> / 人</span></div>
+      <p class="price-note">周一至周四 10:00 — 18:00 入场。适合学生小队与初次挑战者，含 3 次免费提示与全程场控支持。</p>
+      <a class="btn" href="#slots">选择场次</a>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-tier">TIER 02 / 周末场 WEEKEND</div>
+      <div class="price-num">¥158<span class="unit"> / 人</span></div>
+      <p class="price-note">周五至周日及法定节假日全时段。黄金场次最快售罄，建议提前 3 天锁定频道，含通关合影与战绩上墙。</p>
+      <a class="btn" href="#slots">选择场次</a>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-tier">TIER 03 / 包场 PRIVATE</div>
+      <div class="price-num">¥688<span class="unit"> / 间</span></div>
+      <p class="price-note">任意频道全场次包场，最多 8 人成行。可定制开场剧情、专属 NPC 与生日 / 团建彩蛋，需提前 5 天预约。</p>
+      <a class="btn" href="#slots">咨询包场</a>
+    </div>
+  </div>
+
+  <div class="slots-head" id="slots">
+    <div class="micro">TIME SLOTS / 每日场次 · <b>10:00 — 24:00</b> · 整点开场 · 单场 60 — 90 分钟</div>
+    <div class="micro">灰色场次 = <span class="tag-red">已被锁定 LOCKED</span></div>
+  </div>
+
+  <div class="slots reveal">
+    <div class="slot">10:00</div>
+    <div class="slot">11:00</div>
+    <div class="slot off">12:00</div>
+    <div class="slot">13:00</div>
+    <div class="slot">14:00</div>
+    <div class="slot">15:00</div>
+    <div class="slot off">16:00</div>
+    <div class="slot">17:00</div>
+    <div class="slot">18:00</div>
+    <div class="slot">19:00</div>
+    <div class="slot off">20:00</div>
+    <div class="slot">21:00</div>
+    <div class="slot">22:00</div>
+    <div class="slot">23:00</div>
+    <div class="slot">24:00</div>
+  </div>
+
+  <div class="booking-cta reveal">
+    <div class="line">
+      预约热线 <b>021-6288-0401</b> · 每日 10:00 — 24:00<br>
+      4 人起订 · 开场前 24 小时可免费改期一次 · 开场后不予退款
+    </div>
+    <a class="btn" href="#top">立即预约 LOCK IN</a>
+    <a class="btn ghost" href="#log">再看一遍流程</a>
+  </div>
+</section>
+
+<div class="ticker small" aria-hidden="true">
+  <div class="ticker-track">
+    <span>预约热线 021-6288-0401 · 上海市静安区常德路 1088 号 B1 · OPEN 10:00 — 24:00 · 4 人起订 · 提前 15 分钟到场 · SOLVE OR REMAIN LOCKED ·&nbsp;</span>
+    <span>预约热线 021-6288-0401 · 上海市静安区常德路 1088 号 B1 · OPEN 10:00 — 24:00 · 4 人起订 · 提前 15 分钟到场 · SOLVE OR REMAIN LOCKED ·&nbsp;</span>
+  </div>
+</div>
+</main>
+
+<!-- ============================================================
+     6. FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="reveal">
+      <h4>LEGAL / 法务信息</h4>
+      <p class="legal">
+        TERMS OF SERVICE 服务条款：入场即代表您同意场馆安全协议与影像采集条款。本场馆为沉浸式实景娱乐场所，部分频道含黑暗环境、突发音效、闪烁光源与狭窄空间，请根据自身状况选择频道。心脏病、癫痫、幽闭恐惧症、孕期人士及酒后人士谢绝入场。未成年人须由监护人陪同。场馆内禁止触碰标记为危险的装置、禁止携带食物饮品与摄影设备进入密室区域。因违反安全协议造成的一切后果由参与者自行承担。门票一经售出，开场前 24 小时可免费改期一次，开场后不予退款。<br><br>
+        PRIVACY 隐私政策：我们仅收集预约所需的姓名、手机号与订单信息，用于场次安排、安全通知与战绩记录，不向第三方出售或共享。监控影像仅用于安全用途与剪辑花絮（经书面授权后），保存 30 天后自动销毁。您可随时通过邮箱请求删除个人数据与战绩记录。<br><br>
+        © 2026 ENIGMA CHAMBER 密室逃脱 · ALL SIGNALS RESERVED · 未经许可，禁止盗录、转播或以任何形式复制本频道内容 · <a href="#top">TERMS</a> · <a href="#top">PRIVACY</a> · <a href="#top">CONTACT</a>
+      </p>
+    </div>
+    <div class="reveal">
+      <h4>VENUE / 场馆地址</h4>
+      <div class="addr">
+        ENIGMA CHAMBER 密室逃脱<br>
+        上海市静安区常德路 1088 号 B1<br>
+        (虚构地址 · FICTIONAL ADDRESS)<br>
+        METRO / 地铁 7 号线 昌平路站 2 号口 步行 320M<br>
+        OPEN / 每日 10:00 — 24:00 全年无休<br>
+        TEL / 021-6288-0401
+      </div>
+    </div>
+    <div class="reveal">
+      <h4>COORDINATES / 坐标</h4>
+      <div class="addr">
+        LAT / 纬度 31.2274° N<br>
+        LON / 经度 121.4458° E<br>
+        ALT / 深度 −12M · B1 LEVEL<br>
+        SIGNAL / 24.7 GHZ · <span class="tag-red">REC ●</span><br>
+        CHAMBER STATUS / 04 CHANNELS ACTIVE
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-word" aria-hidden="true">ENIGMA CHAMBER 密室逃脱</div>
+
+  <div class="ticker small" aria-hidden="true">
+    <div class="ticker-track">
+      <span>END OF TRANSMISSION · 信号终止 · THANK YOU FOR WATCHING · 感谢收看 · ENIGMA CHAMBER 2026 ·&nbsp;</span>
+      <span>END OF TRANSMISSION · 信号终止 · THANK YOU FOR WATCHING · 感谢收看 · ENIGMA CHAMBER 2026 ·&nbsp;</span>
+    </div>
+  </div>
+
+  <div class="footer-bottom micro">
+    <span>© 2026 ENIGMA CHAMBER · 沉浸式密室逃脱 · ALL RIGHTS RESERVED</span>
+    <span>DESIGN / VHS-CRT SURVEILLANCE UI · NO EXTERNAL ASSETS</span>
+    <span><a href="#top">BACK TO TOP ↑</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---- reveal on scroll (guarded by html.js in CSS) ---- */
+  var reveals = document.querySelectorAll('.reveal');
+  function showAll() {
+    for (var i = 0; i < reveals.length; i++) reveals[i].classList.add('in');
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    for (var j = 0; j < reveals.length; j++) io.observe(reveals[j]);
+  } else {
+    /* fallback: no IntersectionObserver → reveal everything */
+    showAll();
+  }
+  window.addEventListener('load', function () {
+    /* safety net: anything still hidden after 2.5s gets revealed */
+    setTimeout(showAll, 2500);
+  });
+
+  /* ---- live clock labels (HUD + hero timestamp) ---- */
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function tick() {
+    var d = new Date();
+    var t = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    var full = d.getFullYear() + '/' + pad(d.getMonth() + 1) + '/' + pad(d.getDate()) + ' ' + t;
+    var hud = document.getElementById('hud-clock');
+    var rec = document.getElementById('rec-clock');
+    if (hud) hud.textContent = t;
+    if (rec) rec.textContent = full;
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ---- time-slot chips: toggle selection (visual only) ---- */
+  document.querySelectorAll('.slot:not(.off)').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      document.querySelectorAll('.slot.sel').forEach(function (s) {
+        if (s !== chip) s.classList.remove('sel');
+      });
+      chip.classList.toggle('sel');
+      chip.style.background = chip.classList.contains('sel') ? '#FFFFFF' : '';
+      chip.style.color = chip.classList.contains('sel') ? '#000000' : '';
+    });
+  });
+})();
+</script>
+</body>
+</html>
