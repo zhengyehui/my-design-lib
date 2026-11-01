@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASTRAL — 星空观测台 · Stargazing Companion</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --as-space:#05081a;
+    --as-space-2:#0a1026;
+    --as-panel:#0d1530;
+    --as-panel-2:#121c3d;
+    --as-line:rgba(124,111,240,.18);
+    --as-line-strong:rgba(124,111,240,.38);
+    --as-violet:#7c6ff0;
+    --as-violet-light:#9d93f7;
+    --as-cyan:#22d3ee;
+    --as-gold:#f5c451;
+    --as-rose:#f472b6;
+    --as-text:#e9edff;
+    --as-text-2:#a7b0d4;
+    --as-text-3:#6b76a3;
+    --as-radius:18px;
+    --as-glow:0 0 40px rgba(124,111,240,.25);
+  }
+  html{font-size:16px;scroll-behavior:smooth}
+  body{
+    font-family:'Inter',var(--font-sans);
+    background:var(--as-space);
+    color:var(--as-text);
+    line-height:var(--leading-normal);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:rgba(124,111,240,.45);color:#fff}
+
+  /* ── Starfield ─────────────────────────── */
+  #starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .aurora{
+    position:fixed;top:-30vh;left:50%;transform:translateX(-50%);
+    width:120vw;height:80vh;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(45% 50% at 30% 40%, rgba(124,111,240,.16), transparent 70%),
+      radial-gradient(40% 45% at 72% 30%, rgba(34,211,238,.10), transparent 70%),
+      radial-gradient(35% 40% at 55% 65%, rgba(244,114,182,.07), transparent 70%);
+    filter:blur(10px);
+  }
+
+  /* ── Nav ───────────────────────────────── */
+  .nav{
+    position:sticky;top:0;z-index:var(--z-sticky);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    background:rgba(5,8,26,.72);
+    border-bottom:1px solid var(--as-line);
+  }
+  .nav-inner{
+    max-width:1240px;margin:0 auto;padding:var(--space-4) var(--space-8);
+    display:flex;align-items:center;gap:var(--space-10);
+  }
+  .logo{
+    display:flex;align-items:center;gap:var(--space-3);
+    font-family:'Space Grotesk',var(--font-display);
+    font-size:var(--text-xl);font-weight:700;letter-spacing:.16em;
+    color:var(--as-text);text-decoration:none;
+  }
+  .logo-star{
+    width:30px;height:30px;border-radius:50%;flex:none;
+    background:radial-gradient(circle at 32% 30%, #fff 0 12%, var(--as-violet) 45%, #2b2470 100%);
+    box-shadow:0 0 18px rgba(124,111,240,.8);
+  }
+  .nav-links{display:flex;gap:var(--space-8);margin-left:var(--space-6)}
+  .nav-links a{
+    color:var(--as-text-2);text-decoration:none;font-size:var(--text-sm);font-weight:500;
+    letter-spacing:.04em;transition:color var(--duration-fast) var(--ease-default);
+    position:relative;
+  }
+  .nav-links a:hover{color:var(--as-text)}
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:-6px;width:0;height:2px;
+    background:var(--as-violet);transition:width var(--duration-normal) var(--ease-spring);
+  }
+  .nav-links a:hover::after{width:100%}
+  .nav-cta{margin-left:auto;display:flex;align-items:center;gap:var(--space-4)}
+  .live-chip{
+    display:flex;align-items:center;gap:var(--space-2);
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);
+    color:var(--as-cyan);border:1px solid rgba(34,211,238,.3);
+    padding:6px 14px;border-radius:var(--radius-full);background:rgba(34,211,238,.06);
+  }
+  .live-dot{width:7px;height:7px;border-radius:50%;background:var(--as-cyan);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);
+    padding:12px 26px;border-radius:var(--radius-full);font-size:var(--text-sm);
+    font-weight:600;text-decoration:none;cursor:pointer;border:none;
+    transition:all var(--duration-normal) var(--ease-spring);
+  }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--as-violet), var(--color-primary-dark));
+    color:#fff;box-shadow:0 8px 28px rgba(124,111,240,.4);
+  }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(124,111,240,.55)}
+  .btn-ghost{
+    background:rgba(255,255,255,.04);color:var(--as-text);
+    border:1px solid var(--as-line-strong);
+  }
+  .btn-ghost:hover{background:rgba(124,111,240,.14);transform:translateY(-3px)}
+
+  /* ── Hero ──────────────────────────────── */
+  .hero{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:var(--space-24) var(--space-8) var(--space-16)}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:var(--space-3);
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);
+    letter-spacing:.22em;text-transform:uppercase;color:var(--as-violet-light);
+    border:1px solid var(--as-line-strong);border-radius:var(--radius-full);
+    padding:8px 18px;background:rgba(124,111,240,.08);
+  }
+  .hero h1{
+    font-family:'Space Grotesk',var(--font-display);
+    font-size:clamp(2.8rem, 7vw, 5.4rem);
+    line-height:1.02;font-weight:700;letter-spacing:-.02em;
+    margin:var(--space-8) 0 var(--space-6);max-width:16ch;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(120deg, var(--as-cyan), var(--as-violet-light) 55%, var(--as-rose));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lede{
+    font-size:var(--text-lg);color:var(--as-text-2);max-width:52ch;
+    line-height:var(--leading-relaxed);
+  }
+  .hero-actions{display:flex;gap:var(--space-4);margin-top:var(--space-10);flex-wrap:wrap}
+
+  /* tonight strip */
+  .tonight{
+    margin-top:var(--space-16);
+    display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4);
+  }
+  .stat{
+    position:relative;overflow:hidden;
+    background:linear-gradient(160deg, var(--as-panel), rgba(13,21,48,.4));
+    border:1px solid var(--as-line);border-radius:var(--as-radius);
+    padding:var(--space-6) var(--space-6) var(--space-5);
+    transition:all var(--duration-normal) var(--ease-default);
+  }
+  .stat:hover{border-color:var(--as-line-strong);transform:translateY(-4px);box-shadow:var(--as-glow)}
+  .stat-label{
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);
+    letter-spacing:.18em;text-transform:uppercase;color:var(--as-text-3);
+  }
+  .stat-value{
+    font-family:'Space Grotesk',var(--font-display);
+    font-size:var(--text-3xl);font-weight:700;margin-top:var(--space-2);
+    letter-spacing:-.01em;
+  }
+  .stat-sub{font-size:var(--text-xs);color:var(--as-text-2);margin-top:var(--space-1)}
+  .stat .bar{
+    height:4px;border-radius:var(--radius-full);background:rgba(255,255,255,.07);
+    margin-top:var(--space-4);overflow:hidden;
+  }
+  .stat .bar i{display:block;height:100%;border-radius:inherit;
+    background:linear-gradient(90deg, var(--as-violet), var(--as-cyan))}
+
+  /* ── Section chrome ────────────────────── */
+  section.block{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:var(--space-20) var(--space-8)}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-8);margin-bottom:var(--space-12)}
+  .sec-tag{
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);
+    letter-spacing:.24em;text-transform:uppercase;color:var(--as-cyan);
+    display:flex;align-items:center;gap:var(--space-3);
+  }
+  .sec-tag::before{content:'';width:28px;height:1px;background:var(--as-cyan)}
+  .sec-head h2{
+    font-family:'Space Grotesk',var(--font-display);
+    font-size:clamp(1.9rem, 3.6vw, 2.9rem);font-weight:700;
+    letter-spacing:-.015em;margin-top:var(--space-4);line-height:1.12;
+  }
+  .sec-head p{color:var(--as-text-2);max-width:44ch;font-size:var(--text-base)}
+
+  /* ── Highlights ────────────────────────── */
+  .highlights{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:var(--space-5)}
+  .hl-card{
+    position:relative;border-radius:var(--as-radius);overflow:hidden;
+    border:1px solid var(--as-line);padding:var(--space-8);
+    background:var(--as-panel);
+    transition:all var(--duration-normal) var(--ease-default);
+    min-height:290px;display:flex;flex-direction:column;justify-content:flex-end;
+    text-decoration:none;color:inherit;
+  }
+  .hl-card:hover{transform:translateY(-6px);border-color:var(--as-line-strong);box-shadow:var(--as-glow)}
+  .hl-card .planet{
+    position:absolute;top:-46px;right:-46px;width:180px;height:180px;border-radius:50%;
+    opacity:.9;transition:transform var(--duration-slow) var(--ease-spring);
+  }
+  .hl-card:hover .planet{transform:scale(1.12) rotate(8deg)}
+  .planet.saturn{
+    background:radial-gradient(circle at 34% 30%, #ffe9b8, #d9a441 55%, #7a5219);
+    box-shadow:0 0 60px rgba(245,196,81,.35);
+  }
+  .planet.saturn::after{
+    content:'';position:absolute;inset:-22px -60px;border-radius:50%;
+    border:10px solid rgba(245,196,81,.35);transform:rotate(-18deg) scaleY(.32);
+  }
+  .planet.nebula{
+    background:radial-gradient(circle at 40% 35%, #c4b5fd, #7c6ff0 45%, #312e81 85%);
+    box-shadow:0 0 60px rgba(124,111,240,.4);
+  }
+  .planet.comet{
+    background:radial-gradient(circle at 38% 30%, #a5f3fc, #22d3ee 50%, #0e7490 90%);
+    box-shadow:0 0 60px rgba(34,211,238,.35);
+  }
+  .hl-card .when{
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);
+    letter-spacing:.14em;color:var(--as-gold);text-transform:uppercase;
+  }
+  .hl-card h3{
+    font-family:'Space Grotesk',var(--font-display);font-size:var(--text-2xl);
+    font-weight:700;margin:var(--space-2) 0 var(--space-2);letter-spacing:-.01em;
+  }
+  .hl-card .meta{font-size:var(--text-sm);color:var(--as-text-2)}
+  .hl-card .row{display:flex;gap:var(--space-2);margin-top:var(--space-4);flex-wrap:wrap}
+  .pill{
+    font-family:'JetBrains Mono',var(--font-mono);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;padding:5px 12px;border-radius:var(--radius-full);
+    border:1px solid var(--as-line-strong);color:var(--as-text-2);
+    background:rgba(124,111,240,.1);
+  }
+
+  /* ── Sky map ───────────────────────────── */
+  .skygrid{display:grid;grid-template-columns:1.55fr 1fr;gap:var(--space-5)}
+  .sky-card{
+    background:linear-gradient(170deg, #0c1330 0%, #070c22 100%);
+    border:1px solid var(--as-line);border-radius:var(--as-radius);
+    overflow:hidden;position:relative;
+  }
+  .sky-card .card-top{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:var(--space-5) var(--space-6);border-bottom:1px solid var(--as-line);
+  }
+  .sky-card .card-top .t{
+    font-family:'Space Grotesk',var(--font-display);font-weight:600;font-size:var(--text-lg);
+    display:flex;align-items:center;gap:var(--space-3);
+  }
+  .compass{
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);
+    color:var(--as-text-3);letter-spacing:.22em;
+  }
+  .sky-svg{display:block;width:100%;height:420px}
+  .star-node{cursor:pointer;transition:all var(--duration-fast) var(--ease-default)}
+  .star-node:hover{filter:drop-shadow(0 0 8px var(--as-cyan))}
+  .obj-list{padding:var(--space-6)}
+  .obj{
+    padding:var(--space-5) 0;border-bottom:1px solid var(--as-line);
+  }
+  .obj:last-child{border-bottom:none}
+  .obj .top{display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-3)}
+  .obj .name{font-weight:600;font-size:var(--text-base)}
+  .obj .mag{
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);color:var(--as-cyan);
+  }
+  .obj .desc{font-size:var(--text-xs);color:var(--as-text-3);margin-top:2px}
+  .altbar{height:5px;border-radius:var(--radius-full);background:rgba(255,255,255,.06);margin-top:var(--space-3);overflow:hidden}
+  .altbar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--as-violet),var(--as-cyan))}
+  .obj .foot{display:flex;justify-content:space-between;margin-top:var(--space-2);
+    font-family:'JetBrains Mono',var(--font-mono);font-size:10px;color:var(--as-text-3);letter-spacing:.1em}
+
+  /* ── Sessions timeline ─────────────────── */
+  .sessions{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-5)}
+  .sess{
+    border:1px solid var(--as-line);border-radius:var(--as-radius);
+    background:var(--as-panel);padding:var(--space-6);
+    transition:all var(--duration-normal) var(--ease-default);position:relative;overflow:hidden;
+  }
+  .sess::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(180deg,var(--as-violet),transparent);
+  }
+  .sess:hover{transform:translateY(-5px);border-color:var(--as-line-strong);background:var(--as-panel-2)}
+  .sess .date{
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);
+    letter-spacing:.2em;color:var(--as-violet-light);text-transform:uppercase;
+  }
+  .sess h4{font-family:'Space Grotesk',var(--font-display);font-size:var(--text-lg);margin:var(--space-3) 0 var(--space-2)}
+  .sess p{font-size:var(--text-sm);color:var(--as-text-2);line-height:var(--leading-relaxed)}
+  .sess .loc{
+    margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px dashed var(--as-line);
+    font-size:var(--text-xs);color:var(--as-text-3);display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',var(--font-mono);letter-spacing:.08em;
+  }
+
+  /* ── Log table ─────────────────────────── */
+  .filters{display:flex;gap:var(--space-3);flex-wrap:wrap;margin-bottom:var(--space-6)}
+  .chip{
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);letter-spacing:.14em;
+    text-transform:uppercase;padding:9px 20px;border-radius:var(--radius-full);cursor:pointer;
+    border:1px solid var(--as-line);background:transparent;color:var(--as-text-2);
+    transition:all var(--duration-fast) var(--ease-default);
+  }
+  .chip:hover{border-color:var(--as-line-strong);color:var(--as-text)}
+  .chip.active{background:var(--as-violet);border-color:var(--as-violet);color:#fff;box-shadow:0 6px 22px rgba(124,111,240,.4)}
+  .log-table{
+    border:1px solid var(--as-line);border-radius:var(--as-radius);overflow:hidden;
+    background:var(--as-panel);
+  }
+  .log-row{
+    display:grid;grid-template-columns:110px 1.4fr 1fr 130px 120px;gap:var(--space-4);
+    padding:var(--space-5) var(--space-6);align-items:center;
+    border-bottom:1px solid var(--as-line);
+    transition:background var(--duration-fast) var(--ease-default);
+  }
+  .log-row:last-child{border-bottom:none}
+  .log-row:hover{background:rgba(124,111,240,.07)}
+  .log-row.head{
+    background:rgba(255,255,255,.025);
+    font-family:'JetBrains Mono',var(--font-mono);font-size:10px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--as-text-3);
+  }
+  .log-row .id{font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);color:var(--as-cyan)}
+  .log-row .obj-name{font-weight:600}
+  .log-row .obj-name small{display:block;font-weight:400;color:var(--as-text-3);font-size:var(--text-xs);margin-top:2px}
+  .log-row .type{font-size:var(--text-xs)}
+  .log-row .score{display:flex;align-items:center;gap:var(--space-3);font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs)}
+  .score-bar{width:54px;height:4px;border-radius:var(--radius-full);background:rgba(255,255,255,.08);overflow:hidden}
+  .score-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--as-gold),var(--as-rose))}
+
+  /* ── CTA ───────────────────────────────── */
+  .cta{
+    position:relative;z-index:1;max-width:1240px;margin:var(--space-12) auto var(--space-20);
+    padding:var(--space-20) var(--space-16);border-radius:28px;overflow:hidden;
+    background:
+      radial-gradient(70% 120% at 20% 0%, rgba(124,111,240,.32), transparent 60%),
+      radial-gradient(60% 110% at 85% 100%, rgba(34,211,238,.20), transparent 60%),
+      linear-gradient(150deg, #131c42, #0a1026);
+    border:1px solid var(--as-line-strong);
+    text-align:center;
+  }
+  .cta h2{
+    font-family:'Space Grotesk',var(--font-display);
+    font-size:clamp(2rem, 4.6vw, 3.4rem);font-weight:700;letter-spacing:-.02em;
+    line-height:1.1;max-width:20ch;margin:0 auto var(--space-6);
+  }
+  .cta p{color:var(--as-text-2);max-width:52ch;margin:0 auto var(--space-10)}
+  .cta .hero-actions{justify-content:center}
+
+  /* ── Footer ────────────────────────────── */
+  footer{position:relative;z-index:1;border-top:1px solid var(--as-line);background:rgba(7,10,26,.7)}
+  .foot-inner{
+    max-width:1240px;margin:0 auto;padding:var(--space-16) var(--space-8) var(--space-10);
+    display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:var(--space-10);
+  }
+  .foot-inner h5{
+    font-family:'JetBrains Mono',var(--font-mono);font-size:var(--text-xs);
+    letter-spacing:.22em;text-transform:uppercase;color:var(--as-text-3);margin-bottom:var(--space-5);
+  }
+  .foot-inner a{display:block;color:var(--as-text-2);text-decoration:none;font-size:var(--text-sm);
+    padding:5px 0;transition:color var(--duration-fast) var(--ease-default)}
+  .foot-inner a:hover{color:var(--as-cyan)}
+  .foot-bottom{
+    max-width:1240px;margin:0 auto;padding:var(--space-6) var(--space-8) var(--space-10);
+    display:flex;justify-content:space-between;align-items:center;
+    border-top:1px solid var(--as-line);color:var(--as-text-3);font-size:var(--text-xs);
+    font-family:'JetBrains Mono',var(--font-mono);letter-spacing:.12em;
+  }
+
+  /* ── Responsive ────────────────────────── */
+  @media (max-width:1024px){
+    .tonight{grid-template-columns:repeat(2,1fr)}
+    .highlights{grid-template-columns:1fr}
+    .skygrid{grid-template-columns:1fr}
+    .sessions{grid-template-columns:repeat(2,1fr)}
+    .foot-inner{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:720px){
+    .nav-links{display:none}
+    .hero{padding-top:var(--space-16)}
+    .tonight{grid-template-columns:1fr 1fr}
+    .sessions{grid-template-columns:1fr}
+    .log-row{grid-template-columns:1fr 1fr;row-gap:var(--space-2)}
+    .log-row.head{display:none}
+    .cta{padding:var(--space-12) var(--space-6);margin-left:var(--space-4);margin-right:var(--space-4)}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="aurora"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#"><span class="logo-star"></span>ASTRAL</a>
+    <div class="nav-links">
+      <a href="#tonight">今夜</a>
+      <a href="#skymap">星图</a>
+      <a href="#sessions">观测计划</a>
+      <a href="#log">观测日志</a>
+    </div>
+    <div class="nav-cta">
+      <span class="live-chip"><span class="live-dot"></span>SKY FEED · LIVE</span>
+      <a class="btn btn-primary" href="#cta">开启今夜星图</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <span class="eyebrow">✦ Observation Companion · v2.4</span>
+  <h1>把夜空<span class="grad">读成一张地图</span></h1>
+  <p class="lede">ASTRAL 是为业余观星者打造的观测台 —— 实时星体高度、暗夜质量预报、观测会话规划与完整日志。少一点翻找，多一点仰望。</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="#skymap">浏览今夜星图 →</a>
+    <a class="btn btn-ghost" href="#log">查看观测日志</a>
+  </div>
+
+  <div class="tonight" id="tonight">
+    <div class="stat">
+      <div class="stat-label">Moon Phase</div>
+      <div class="stat-value">34%</div>
+      <div class="stat-sub">蛾眉月 · 22:40 落下</div>
+      <div class="bar"><i style="width:34%"></i></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Seeing</div>
+      <div class="stat-value">4 / 5</div>
+      <div class="stat-sub">大气稳定 · 适合行星观测</div>
+      <div class="bar"><i style="width:80%"></i></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Bortle Class</div>
+      <div class="stat-value">3</div>
+      <div class="stat-sub">乡村天空 · 银河清晰可见</div>
+      <div class="bar"><i style="width:72%"></i></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Astro Dark</div>
+      <div class="stat-value">19:58</div>
+      <div class="stat-sub">天文暮光结束 · 至 05:12</div>
+      <div class="bar"><i style="width:91%"></i></div>
+    </div>
+  </div>
+</header>
+
+<!-- HIGHLIGHTS -->
+<section class="block">
+  <div class="sec-head">
+    <div>
+      <div class="sec-tag">Tonight's Highlights</div>
+      <h2>今夜值得抬头的三件事</h2>
+    </div>
+    <p>基于你的坐标与设备自动筛选 —— 只列出此刻真正可见、值得观测的目标。</p>
+  </div>
+  <div class="highlights">
+    <a class="hl-card" href="#skymap">
+      <div class="planet saturn"></div>
+      <div class="when">21:14 · 东南方 · 高度 42°</div>
+      <h3>土星 · 环面开启</h3>
+      <div class="meta">环面倾角 9.2°，200mm 以上口径可分辨卡西尼缝。冲日后第 11 天，亮度 +0.6。</div>
+      <div class="row"><span class="pill">Planet</span><span class="pill">Best 21:00–23:30</span><span class="pill">Mag +0.6</span></div>
+    </a>
+    <a class="hl-card" href="#skymap">
+      <div class="planet nebula"></div>
+      <div class="when">22:05 · 头顶偏西</div>
+      <h3>仙女座星系 M31</h3>
+      <div class="meta">高度 68°，双筒即可一睹旋臂核心。</div>
+      <div class="row"><span class="pill">Galaxy</span><span class="pill">Bino ✓</span></div>
+    </a>
+    <a class="hl-card" href="#log">
+      <div class="planet comet"></div>
+      <div class="when">后半夜 · 全天</div>
+      <h3>猎户座流星雨极大</h3>
+      <div class="meta">ZHR ≈ 22，辐射点 02:00 后升至最佳高度。</div>
+      <div class="row"><span class="pill">Meteor</span><span class="pill">ZHR 22</span></div>
+    </a>
+  </div>
+</section>
+
+<!-- SKY MAP -->
+<section class="block" id="skymap">
+  <div class="sec-head">
+    <div>
+      <div class="sec-tag">Live Sky Map</div>
+      <h2>此刻的星空，一屏掌握</h2>
+    </div>
+    <p>星座连线、天体高度与可见窗口实时联动。悬停星体查看观测参数。</p>
+  </div>
+  <div class="skygrid">
+    <div class="sky-card">
+      <div class="card-top">
+        <div class="t">✦ 星图 · 北京 2026-11-01 21:40</div>
+        <div class="compass">N · NE · E · SE · S</div>
+      </div>
+      <svg class="sky-svg" viewBox="0 0 720 420" preserveAspectRatio="xMidYMid slice" aria-label="星图">
+        <defs>
+          <radialGradient id="skyg" cx="50%" cy="110%" r="110%">
+            <stop offset="0%" stop-color="#141f4a"/>
+            <stop offset="55%" stop-color="#0a1130"/>
+            <stop offset="100%" stop-color="#05081a"/>
+          </radialGradient>
+          <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="35%" stop-color="#c7d2fe"/>
+            <stop offset="100%" stop-color="rgba(124,111,240,0)"/>
+          </radialGradient>
+        </defs>
+        <rect width="720" height="420" fill="url(#skyg)"/>
+        <!-- horizon arc -->
+        <path d="M0 356 Q 360 292 720 356" stroke="rgba(124,111,240,.35)" stroke-width="1.5" fill="none" stroke-dasharray="3 7"/>
+        <!-- Orion -->
+        <g stroke="rgba(34,211,238,.55)" stroke-width="1.4" fill="none">
+          <path d="M330 120 L352 178 L382 182 L400 232 L368 286 L338 240 L312 196 Z"/>
+          <path d="M352 178 L368 286"/>
+          <path d="M382 182 L338 240"/>
+          <path d="M352 178 L312 196"/>
+          <path d="M382 182 L400 232"/>
+        </g>
+        <!-- Cassiopeia -->
+        <g stroke="rgba(244,114,182,.5)" stroke-width="1.3" fill="none">
+          <path d="M120 78 L152 106 L188 82 L222 112 L252 88"/>
+        </g>
+        <!-- Lyra-ish -->
+        <g stroke="rgba(245,196,81,.5)" stroke-width="1.3" fill="none">
+          <path d="M560 92 L596 128 L628 118 L642 160 L596 176 Z"/>
+          <path d="M596 128 L596 176"/>
+        </g>
+        <!-- stars -->
+        <g>
+          <circle class="star-node" cx="330" cy="120" r="4.5" fill="url(#glow)"/>
+          <circle class="star-node" cx="352" cy="178" r="3" fill="#c7d2fe"/>
+          <circle class="star-node" cx="382" cy="182" r="3" fill="#c7d2fe"/>
+          <circle class="star-node" cx="400" cy="232" r="4" fill="url(#glow)"/>
+          <circle class="star-node" cx="368" cy="286" r="3.4" fill="#a5b4fc"/>
+          <circle class="star-node" cx="338" cy="240" r="3" fill="#a5b4fc"/>
+          <circle class="star-node" cx="312" cy="196" r="3" fill="#a5b4fc"/>
+          <circle class="star-node" cx="120" cy="78" r="3.2" fill="#f9a8d4"/>
+          <circle class="star-node" cx="152" cy="106" r="2.6" fill="#f9a8d4"/>
+          <circle class="star-node" cx="188" cy="82" r="3.2" fill="#f9a8d4"/>
+          <circle class="star-node" cx="222" cy="112" r="2.6" fill="#f9a8d4"/>
+          <circle class="star-node" cx="252" cy="88" r="3" fill="#f9a8d4"/>
+          <circle class="star-node" cx="560" cy="92" r="4.2" fill="url(#glow)"/>
+          <circle class="star-node" cx="596" cy="128" r="3" fill="#fde68a"/>
+          <circle class="star-node" cx="628" cy="118" r="2.6" fill="#fde68a"/>
+          <circle class="star-node" cx="642" cy="160" r="3" fill="#fde68a"/>
+          <circle class="star-node" cx="596" cy="176" r="2.8" fill="#fde68a"/>
+          <circle class="star-node" cx="470" cy="316" r="2.4" fill="#e9edff"/>
+          <circle class="star-node" cx="240" cy="330" r="2.2" fill="#e9edff"/>
+          <circle class="star-node" cx="640" cy="300" r="2.2" fill="#e9edff"/>
+          <circle class="star-node" cx="80" cy="220" r="2.4" fill="#e9edff"/>
+          <circle class="star-node" cx="680" cy="212" r="2" fill="#e9edff"/>
+        </g>
+        <!-- labels -->
+        <g font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2" fill="rgba(233,237,255,.55)">
+          <text x="330" y="104">ORION</text>
+          <text x="120" y="64">CASSIOPEIA</text>
+          <text x="560" y="76">LYRA</text>
+          <text x="24" y="392">SW</text>
+          <text x="352" y="392">S</text>
+          <text x="672" y="392">SE</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="sky-card">
+      <div class="card-top">
+        <div class="t">目标高度 · Above Horizon</div>
+        <div class="compass">ALT</div>
+      </div>
+      <div class="obj-list">
+        <div class="obj">
+          <div class="top"><span class="name">M42 猎户座大星云</span><span class="mag">mag 4.0</span></div>
+          <div class="desc">发射星云 · 视直径 65′ · 最佳窗口 23:10 起</div>
+          <div class="altbar"><i style="width:88%"></i></div>
+          <div class="foot"><span>ALT 71°</span><span>RISE 20:44</span></div>
+        </div>
+        <div class="obj">
+          <div class="top"><span class="name">木星 + 伽利略卫星</span><span class="mag">mag −2.5</span></div>
+          <div class="desc">行星 · 云带可见 · 03:20 大红斑过境</div>
+          <div class="altbar"><i style="width:64%"></i></div>
+          <div class="foot"><span>ALT 52°</span><span>RISE 21:58</span></div>
+        </div>
+        <div class="obj">
+          <div class="top"><span class="name">M31 仙女座星系</span><span class="mag">mag 3.4</span></div>
+          <div class="desc">旋涡星系 · 视直径 178′ · 双筒友好</div>
+          <div class="altbar"><i style="width:79%"></i></div>
+          <div class="foot"><span>ALT 64°</span><span>SET 02:36</span></div>
+        </div>
+        <div class="obj">
+          <div class="top"><span class="name">NGC 869/884 双星团</span><span class="mag">mag 4.3</span></div>
+          <div class="desc">疏散星团 · 广域目视极佳</div>
+          <div class="altbar"><i style="width:47%"></i></div>
+          <div class="foot"><span>ALT 38°</span><span>RISE 19:22</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SESSIONS -->
+<section class="block" id="sessions">
+  <div class="sec-head">
+    <div>
+      <div class="sec-tag">Session Planner</div>
+      <h2>观测会话，按周规划</h2>
+    </div>
+    <p>结合月相、天气与目标可见窗口，ASTRAL 会为每个夜晚生成观测清单。</p>
+  </div>
+  <div class="sessions">
+    <div class="sess">
+      <div class="date">NOV 01 · SAT</div>
+      <h4>猎户座流星雨守夜</h4>
+      <p>全夜观测 · 辐射点 02:00 后过中天。准备广角镜头与热饮，避开月光东侧。</p>
+      <div class="loc"><span>灵山 · BORTLE 3</span><span>19:30–04:00</span></div>
+    </div>
+    <div class="sess">
+      <div class="date">NOV 03 · MON</div>
+      <h4>行星专场 · 土星与木星</h4>
+      <p>高倍目视 + 行星相机叠加。视宁度预报 4/5，值得上 250mm 口径。</p>
+      <div class="loc"><span>自家阳台 · BORTLE 6</span><span>21:00–23:30</span></div>
+    </div>
+    <div class="sess">
+      <div class="date">NOV 08 · SAT</div>
+      <h4>深空摄影 · M31 马赛克</h4>
+      <p>三面板拼接，每面板 60×120s。新月前两夜，天光背景最低。</p>
+      <div class="loc"><span>喇叭沟门 · BORTLE 2</span><span>20:00–03:00</span></div>
+    </div>
+    <div class="sess">
+      <div class="date">NOV 14 · FRI</div>
+      <h4>公众观星开放夜</h4>
+      <p>携带 10" 多布森，目标清单：M31、M45、土星、月面撞击坑链。</p>
+      <div class="loc"><span>奥森公园 · BORTLE 7</span><span>19:00–22:00</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LOG -->
+<section class="block" id="log">
+  <div class="sec-head">
+    <div>
+      <div class="sec-tag">Observation Log</div>
+      <h2>每一次抬头，都留有记录</h2>
+    </div>
+    <p>结构化观测日志：目标、设备、视宁度、速写与笔记，支持导出 OAL/CSV。</p>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="chip active" data-f="all">全部</button>
+    <button class="chip" data-f="planet">行星</button>
+    <button class="chip" data-f="galaxy">星系</button>
+    <button class="chip" data-f="nebula">星云</button>
+    <button class="chip" data-f="cluster">星团</button>
+    <button class="chip" data-f="lunar">月面</button>
+  </div>
+
+  <div class="log-table" id="logTable">
+    <div class="log-row head">
+      <div>ID</div><div>目标</div><div>类型</div><div>观测评分</div><div>日期</div>
+    </div>
+    <div class="log-row" data-type="planet">
+      <div class="id">OBS-2411</div>
+      <div class="obj-name">土星 Saturn<small>250mm f/5 · 220× · 淡黄色环面，卡西尼缝断续可见</small></div>
+      <div class="type"><span class="pill">Planet</span></div>
+      <div class="score"><span class="score-bar"><i style="width:92%"></i></span>9.2</div>
+      <div class="id">10-30</div>
+    </div>
+    <div class="log-row" data-type="nebula">
+      <div class="id">OBS-2408</div>
+      <div class="obj-name">M57 环状星云<small>200mm f/6 · 180× · 明显甜甜圈状，中央恒星疑似可见</small></div>
+      <div class="type"><span class="pill">Nebula</span></div>
+      <div class="score"><span class="score-bar"><i style="width:84%"></i></span>8.4</div>
+      <div class="id">10-24</div>
+    </div>
+    <div class="log-row" data-type="galaxy">
+      <div class="id">OBS-2401</div>
+      <div class="obj-name">M31 仙女座星系<small>双筒 10×50 · 椭圆形光斑，暗边缘融入天光</small></div>
+      <div class="type"><span class="pill">Galaxy</span></div>
+      <div class="score"><span class="score-bar"><i style="width:78%"></i></span>7.8</div>
+      <div class="id">10-18</div>
+    </div>
+    <div class="log-row" data-type="cluster">
+      <div class="id">OBS-2396</div>
+      <div class="obj-name">M13 武仙座球状星团<small>200mm f/6 · 150× · 边缘可分解为星点，核心致密</small></div>
+      <div class="type"><span class="pill">Cluster</span></div>
+      <div class="score"><span class="score-bar"><i style="width:88%"></i></span>8.8</div>
+      <div class="id">10-11</div>
+    </div>
+    <div class="log-row" data-type="lunar">
+      <div class="id">OBS-2390</div>
+      <div class="obj-name">月面 · 阿尔卑斯大裂谷<small>120mm f/8 · 200× · 沟谷笔直如刀刻，阴影层次丰富</small></div>
+      <div class="type"><span class="pill">Lunar</span></div>
+      <div class="score"><span class="score-bar"><i style="width:90%"></i></span>9.0</div>
+      <div class="id">10-05</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <h2>今晚的夜空，已经为你排好清单</h2>
+  <p>免费开始 · 支持 iOS / Android / Web · 与你的望远镜蓝牙联动，自动记录每一次指向。</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="#">下载 ASTRAL</a>
+    <a class="btn btn-ghost" href="#skymap">先看今夜星图</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div>
+      <a class="logo" href="#" style="margin-bottom:var(--space-5)"><span class="logo-star"></span>ASTRAL</a>
+      <p style="color:var(--as-text-2);font-size:var(--text-sm);max-width:34ch;line-height:var(--leading-relaxed)">
+        为仰望者打造的观测台。让天文观测从「找目标」变成「享受夜晚」。
+      </p>
+    </div>
+    <div>
+      <h5>Product</h5>
+      <a href="#skymap">实时星图</a>
+      <a href="#sessions">会话规划</a>
+      <a href="#log">观测日志</a>
+      <a href="#">设备联动</a>
+    </div>
+    <div>
+      <h5>Explore</h5>
+      <a href="#">今夜可见</a>
+      <a href="#">深空目录</a>
+      <a href="#">流星雨日历</a>
+      <a href="#">暗夜地图</a>
+    </div>
+    <div>
+      <h5>Community</h5>
+      <a href="#">观测者社区</a>
+      <a href="#">公开数据 API</a>
+      <a href="#">天文台合作</a>
+      <a href="#">更新日志</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 ASTRAL OBSERVATORY</span>
+    <span>LAT 39.90 N · LON 116.40 E · UTC+8</span>
+  </div>
+</footer>
+
+<script>
+  /* ── Starfield canvas ─────────────────── */
+  const cvs = document.getElementById('starfield');
+  const ctx = cvs.getContext('2d');
+  let stars = [], shooting = null, W = 0, H = 0;
+
+  function resize(){
+    W = cvs.width = window.innerWidth;
+    H = cvs.height = window.innerHeight;
+    const count = Math.min(240, Math.floor(W * H / 6500));
+    stars = Array.from({length: count}, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.5 + .3,
+      a: Math.random(),
+      s: Math.random() * .012 + .003
+    }));
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function tick(){
+    ctx.clearRect(0, 0, W, H);
+    for (const st of stars){
+      st.a += st.s;
+      const alpha = .25 + Math.abs(Math.sin(st.a)) * .65;
+      ctx.beginPath();
+      ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(214, 222, 255, ${alpha})`;
+      ctx.fill();
+    }
+    /* occasional shooting star */
+    if (!shooting && Math.random() < .004){
+      shooting = {x: Math.random() * W * .8, y: Math.random() * H * .4, len: 0, v: 9 + Math.random() * 7};
+    }
+    if (shooting){
+      shooting.x += shooting.v;
+      shooting.y += shooting.v * .42;
+      shooting.len = Math.min(shooting.len + 2.2, 110);
+      const g = ctx.createLinearGradient(
+        shooting.x, shooting.y,
+        shooting.x - shooting.len, shooting.y - shooting.len * .42
+      );
+      g.addColorStop(0, 'rgba(255,255,255,.9)');
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.strokeStyle = g;
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(shooting.x, shooting.y);
+      ctx.lineTo(shooting.x - shooting.len, shooting.y - shooting.len * .42);
+      ctx.stroke();
+      if (shooting.x > W + 130 || shooting.y > H + 80) shooting = null;
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  /* ── Log filters ─────────────────────── */
+  const chips = document.querySelectorAll('#filters .chip');
+  const rows = document.querySelectorAll('#logTable .log-row[data-type]');
+  chips.forEach(chip => chip.addEventListener('click', () => {
+    chips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    const f = chip.dataset.f;
+    rows.forEach(r => {
+      const show = f === 'all' || r.dataset.type === f;
+      r.style.display = show ? '' : 'none';
+    });
+  }));
+</script>
+</body>
+</html>

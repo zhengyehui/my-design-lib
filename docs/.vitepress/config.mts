@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，218 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，220 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -71,7 +71,7 @@ export default defineConfig({
     // Open Graph（社交分享）
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 218 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 220 个完整页面，纯 HTML+CSS，零依赖。' }],
     ['meta', { property: 'og:url', content: 'http://101.37.166.208:11930' }],
     ['meta', { property: 'og:site_name', content: 'My Design Lib' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -79,14 +79,14 @@ export default defineConfig({
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 218 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 220 个完整页面，纯 HTML+CSS，零依赖。' }],
 
     // Schema.org 结构化数据
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "My Design Lib",
-"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 218 个完整页面",
+"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 220 个完整页面",
       "url": "http://101.37.166.208:11930",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
@@ -335,7 +335,8 @@ export default defineConfig({
             { text: 'CineVault 电影流媒体', link: '/pages/cinevault' },
             { text: 'BillFlow 智能发票平台', link: '/pages/invoice-platform' },
             { text: 'APERTURE 专业修图工作台', link: '/pages/aperture-editor' },
-            { text: 'Orbit Meet 视频会议', link: '/pages/orbit-meet' }
+            { text: 'Orbit Meet 视频会议', link: '/pages/orbit-meet' },
+            { text: 'ASTRAL 星空观测台', link: '/pages/astral-observatory' }
           ]
         },
         {
@@ -483,6 +484,7 @@ export default defineConfig({
             { text: 'Lumina Dental 现代牙科诊所', link: '/pages/lumina-dental' },
             { text: 'Ocean Autonomy 海洋自主机器人', link: '/pages/ocean-autonomy' },
             { text: 'Pawlished 宠物美容沙龙', link: '/pages/pawlished-grooming' },
+            { text: 'Willow Veterinary 动物医院', link: '/pages/willow-vet' },
             { text: 'Verdant 城市垂直农场', link: '/pages/verdant-farms' },
             { text: 'Verrière 婚礼庄园', link: '/pages/wedding-estate' },
             { text: 'Blue Reef 蓝湾海洋馆', link: '/pages/blue-reef-aquarium' }
