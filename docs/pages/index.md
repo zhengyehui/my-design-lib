@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 220 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 223 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -2025,6 +2025,33 @@ const pages = [
     colors: ['#faf5ec', '#22493a', '#d97757'],
     rating: 9.0,
     description: '宠物医院官网——奶油米+森林绿暖色治愈系：纯 CSS 摇尾宠物插画+浮动信息卡+服务跑马灯+三步就诊流程+医生团队卡+家长口碑引言+24h 急诊横幅，Fraunces 衬线的温柔行业垂直页',
+  },
+  {
+    id: 'harmonia-instruments',
+    title: 'HARMONIA 乐器工坊 — 手工乐器电商',
+    category: 'ecommerce',
+    tags: ['电商', '乐器', '编辑风', '手工工坊'],
+    colors: ['#f5efe6', '#7b2d26', '#c8963e'],
+    rating: 9.1,
+    description: '手工乐器电商——奶油纸色+酒红+琥珀金的暖调唱片行美学：内联 SVG 乐器剪影（吉他/小提琴/钢琴/小号）+Hero 黑胶 SVG 渐变面板+关键词 Marquee+编号乐器网格+乐谱五线谱工艺故事+深色单品聚焦规格表+乐手评价+到店试奏双栏',
+  },
+  {
+    id: 'marcel-hair-studio',
+    title: 'MARCEL 高定美发沙龙 — 服务品牌落地页',
+    category: 'landing',
+    tags: ['落地页', '美发', '服务品牌', '高定沙龙'],
+    colors: ['#faf6f0', '#1c1917', '#b08d57'],
+    rating: 9.1,
+    description: '高定美发沙龙落地页——暖白+铜金沙龙美学：杂志封面感 Hero（拱形画框+SVG 发丝侧影+浮动徽章）+编号服务菜单表+造型师团队三卡+不规则网格 Lookbook+深色数据条+三档会员卡+渐变预约面板',
+  },
+  {
+    id: 'chef-portfolio',
+    title: 'FEU — 主厨 Adrien Moreau 火焰料理作品集',
+    category: 'portfolio',
+    tags: ['作品集', '主厨', '餐饮', '编辑风'],
+    colors: ['#f7f2e9', '#c84a24', '#17110b'],
+    rating: 9.1,
+    description: '米其林二星主厨个人品牌作品集——炭火暖调：超大衬线"火候/The Art of Fire"混排描边 Hero+旋转双环炭烧盘+食材 Marquee+三条理念描边大编号+招牌四味渐变餐盘卡+炉台履历时间线+深色主厨宣言与统计+媒体评价+私宴日程行式排版',
   },
 ]
 

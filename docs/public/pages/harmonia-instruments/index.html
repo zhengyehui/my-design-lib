@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARMONIA 乐器工坊 — 手工乐器，木头会记得每一双手的温度</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ── HARMONIA · 暖调模拟唱片行美学 ──────────────────────────
+   奶油纸色 + 深棕/酒红 + 琥珀金 · 衬线大标题 · 黑胶与乐谱图形
+   ───────────────────────────────────────────────────────── */
+:root{
+  --color-bg:        #F5EFE6;
+  --color-bg-subtle: #EFE7D9;
+  --color-bg-muted:  #E8DCC8;
+  --color-surface:   #FBF7F0;
+  --color-border:    #D9CBB5;
+  --color-border-hover: #C2AE8E;
+  --color-text:        #2B1D14;
+  --color-text-secondary: #6B5847;
+  --color-text-muted:  #A08B72;
+  --color-primary:     #7B2D26;
+  --color-primary-dark: #5E1F1A;
+  --color-secondary:   #C8963E;
+  --font-display: 'Songti SC', 'Noto Serif SC', 'Source Han Serif SC', 'Georgia', 'Times New Roman', serif;
+  --font-sans:    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'SF Mono', 'JetBrains Mono', 'Courier New', monospace;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--color-bg);
+  color:var(--color-text);
+  font-family:var(--font-sans);
+  font-size:16px;
+  line-height:1.75;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+/* 纸张颗粒纹理 */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button{font-family:inherit;cursor:pointer}
+
+/* ── 入场动画（html.js 守卫） ── */
+.reveal{transition:opacity .8s var(--ease-default, ease), transform .8s var(--ease-default, ease)}
+html.js .reveal:not(.in){opacity:0;transform:translateY(30px)}
+html.js .reveal.in{opacity:1;transform:none}
+
+/* ── 通用排版 ── */
+.wrap{width:min(1200px, calc(100% - 48px));margin-inline:auto}
+.kicker{
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--color-secondary);display:flex;align-items:center;gap:14px;
+}
+.kicker::before{content:"";width:36px;height:1px;background:var(--color-secondary)}
+.sec-title{
+  font-family:var(--font-display);font-weight:700;line-height:1.2;
+  font-size:clamp(1.9rem, 3.6vw, 2.9rem);letter-spacing:.02em;margin:.55em 0 .3em;
+}
+.sec-title em{font-style:italic;color:var(--color-primary)}
+.sec-sub{color:var(--color-text-secondary);max-width:56ch;font-size:.98rem}
+.sec-head{margin-bottom:56px}
+.num-label{
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.22em;color:var(--color-text-muted);
+}
+.hairline{height:1px;background:var(--color-border);border:0}
+
+.btn{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:16px 34px;border:1px solid var(--color-text);background:var(--color-text);color:var(--color-bg);
+  font-size:.82rem;letter-spacing:.22em;text-transform:uppercase;font-family:var(--font-mono);
+  border-radius:var(--radius-sm);transition:all .3s var(--ease-default, ease);
+}
+.btn:hover{background:var(--color-primary);border-color:var(--color-primary);transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--color-text);border-color:var(--color-text)}
+.btn-ghost:hover{background:var(--color-text);color:var(--color-bg)}
+.btn .arr{transition:transform .3s var(--ease-default, ease)}
+.btn:hover .arr{transform:translateX(5px)}
+
+/* ── 顶部导航 ── */
+header.nav{
+  position:sticky;top:0;z-index:var(--z-sticky, 200);
+  background:color-mix(in srgb, var(--color-bg) 88%, transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--color-border);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;height:76px}
+.logo{display:flex;align-items:baseline;gap:12px}
+.logo-mark{
+  font-family:var(--font-display);font-size:1.55rem;font-weight:700;letter-spacing:.16em;color:var(--color-text);
+}
+.logo-mark span{color:var(--color-primary)}
+.logo-sub{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.32em;color:var(--color-text-muted);text-transform:uppercase}
+.nav-links{display:flex;gap:36px}
+.nav-links a{
+  font-size:.86rem;letter-spacing:.14em;color:var(--color-text-secondary);position:relative;padding:6px 0;
+  transition:color .25s var(--ease-default, ease);
+}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--color-primary);
+  transition:width .3s var(--ease-default, ease);
+}
+.nav-links a:hover{color:var(--color-primary)}
+.nav-links a:hover::after{width:100%}
+.bag{
+  display:flex;align-items:center;gap:9px;border:1px solid var(--color-border);
+  padding:9px 18px;border-radius:var(--radius-full, 999px);font-size:.8rem;letter-spacing:.12em;
+  transition:all .25s var(--ease-default, ease);
+}
+.bag:hover{border-color:var(--color-primary);color:var(--color-primary)}
+.bag .cnt{
+  background:var(--color-primary);color:#F5EFE6;font-family:var(--font-mono);font-size:.66rem;
+  width:19px;height:19px;border-radius:50%;display:grid;place-items:center;
+}
+.nav-toggle{display:none;background:none;border:0;font-size:1.5rem;color:var(--color-text)}
+
+/* ── Hero ── */
+.hero{position:relative;padding:96px 0 84px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:72px;align-items:center}
+.hero h1{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(2.7rem, 5.6vw, 4.6rem);line-height:1.16;letter-spacing:.015em;margin:26px 0;
+}
+.hero h1 .accent{color:var(--color-primary);font-style:italic}
+.hero .lede{color:var(--color-text-secondary);font-size:1.06rem;max-width:46ch;margin-bottom:38px}
+.hero-meta{display:flex;align-items:flex-end;gap:40px;flex-wrap:wrap}
+.price-tag{display:flex;flex-direction:column;gap:4px}
+.price-tag .p-label{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.24em;color:var(--color-text-muted);text-transform:uppercase}
+.price-tag .p-val{font-family:var(--font-display);font-size:2.15rem;color:var(--color-primary);line-height:1}
+.price-tag .p-val small{font-size:.9rem;color:var(--color-text-muted);letter-spacing:.12em;margin-left:8px;font-family:var(--font-mono)}
+.hero-visual{position:relative}
+.hero-panel{
+  position:relative;aspect-ratio:4/4.6;border:1px solid var(--color-border);
+  background:
+    radial-gradient(120% 90% at 82% 12%, rgba(200,150,62,.28), transparent 55%),
+    radial-gradient(100% 80% at 12% 90%, rgba(123,45,38,.22), transparent 60%),
+    linear-gradient(160deg, #EAD9BC 0%, #D8BE96 46%, #B98F5F 100%);
+  border-radius:var(--radius-md);overflow:hidden;
+}
+.hero-panel .guitar{position:absolute;inset:0;margin:auto;width:74%;height:auto;filter:drop-shadow(0 26px 42px rgba(43,29,20,.32))}
+.hero-badge{
+  position:absolute;right:-14px;top:26px;background:var(--color-primary);color:#F5EFE6;
+  font-family:var(--font-mono);font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;
+  padding:10px 18px;border-radius:var(--radius-sm);writing-mode:vertical-rl;
+}
+.hero-plate{
+  position:absolute;left:-26px;bottom:34px;background:var(--color-surface);border:1px solid var(--color-border);
+  padding:18px 22px;border-radius:var(--radius-sm);box-shadow:0 18px 36px rgba(43,29,20,.12);
+}
+.hero-plate .t{font-family:var(--font-display);font-size:1.02rem;font-weight:700}
+.hero-plate .d{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.18em;color:var(--color-text-muted);text-transform:uppercase;margin-top:4px}
+.vinyl{
+  position:absolute;width:150px;height:150px;right:-52px;bottom:-52px;opacity:.85;pointer-events:none;
+}
+
+/* ── 滚动字幕带 ── */
+.marquee{border-block:1px solid var(--color-border);background:var(--color-bg-subtle);overflow:hidden;padding:15px 0}
+.marquee-track{display:flex;gap:0;width:max-content;animation:mq 34s linear infinite}
+.marquee-track span{
+  font-family:var(--font-mono);font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--color-text-muted);padding-inline:26px;white-space:nowrap;
+}
+.marquee-track span b{color:var(--color-primary);font-weight:400}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ── 精选系列 ── */
+.collection{padding:110px 0 30px}
+.grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:2px;background:var(--color-border);border:1px solid var(--color-border)}
+.card{
+  background:var(--color-surface);padding:34px 30px 30px;position:relative;
+  transition:background .35s var(--ease-default, ease), transform .35s var(--ease-default, ease);
+}
+.card:hover{background:#FFFDF8;z-index:2;transform:translateY(-4px);box-shadow:0 24px 48px rgba(43,29,20,.12)}
+.card .c-num{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.22em;color:var(--color-text-muted)}
+.card .c-tag{
+  position:absolute;top:30px;right:28px;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--color-secondary);border:1px solid var(--color-border);
+  padding:4px 10px;border-radius:var(--radius-full, 999px);
+}
+.card .c-visual{
+  aspect-ratio:1/.82;margin:22px 0 24px;border-radius:var(--radius-sm);position:relative;overflow:hidden;
+  display:grid;place-items:center;
+}
+.card .c-visual svg{width:58%;height:auto;opacity:.9;transition:transform .5s var(--ease-default, ease)}
+.card:hover .c-visual svg{transform:scale(1.07) rotate(-1.5deg)}
+.cv-1{background:linear-gradient(150deg,#E9D3AB,#C8963E)}
+.cv-2{background:linear-gradient(150deg,#D9C3A5,#8A5B33)}
+.cv-3{background:linear-gradient(150deg,#E3C8B4,#7B2D26)}
+.cv-4{background:linear-gradient(150deg,#DCCDAF,#A67C52)}
+.cv-5{background:linear-gradient(150deg,#C9B49A,#4A3222)}
+.cv-6{background:linear-gradient(150deg,#E8D6B0,#B8862F)}
+.card h3{font-family:var(--font-display);font-size:1.28rem;font-weight:700;letter-spacing:.02em}
+.card .c-mat{font-size:.82rem;color:var(--color-text-secondary);margin:8px 0 20px}
+.card .c-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--color-border);padding-top:18px}
+.card .c-price{font-family:var(--font-display);font-size:1.22rem;color:var(--color-primary)}
+.card .c-buy{
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--color-text);border-bottom:1px solid var(--color-secondary);padding-bottom:3px;
+  transition:color .25s var(--ease-default, ease);
+}
+.card:hover .c-buy{color:var(--color-primary)}
+
+/* ── 工艺故事 ── */
+.craft{padding:110px 0}
+.craft-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:80px;align-items:start}
+.craft-sticky{position:sticky;top:120px}
+.craft-figure{
+  margin-top:36px;aspect-ratio:4/3;border:1px solid var(--color-border);border-radius:var(--radius-md);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 22px, rgba(43,29,20,.09) 22px 23px),
+    linear-gradient(140deg,#E6D2AE,#B98F5F 60%,#7B2D26);
+  position:relative;overflow:hidden;
+}
+.craft-figure .notes{position:absolute;inset:0;width:100%;height:100%;opacity:.75}
+.step{display:grid;grid-template-columns:96px 1fr;gap:26px;padding:38px 0;border-top:1px solid var(--color-border)}
+.step:last-child{border-bottom:1px solid var(--color-border)}
+.step .s-num{
+  font-family:var(--font-display);font-size:2.45rem;line-height:1;color:transparent;
+  -webkit-text-stroke:1px var(--color-secondary);
+}
+.step h3{font-family:var(--font-display);font-size:1.32rem;font-weight:700;margin-bottom:10px}
+.step h3 .en{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.26em;color:var(--color-text-muted);text-transform:uppercase;display:block;margin-top:7px;font-weight:400}
+.step p{color:var(--color-text-secondary);font-size:.95rem}
+
+/* ── 单品聚焦 ── */
+.spotlight{background:var(--color-text);color:#F1E9DC;padding:118px 0;position:relative;overflow:hidden}
+.spotlight::before{
+  content:"";position:absolute;inset:0;opacity:.12;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.spotlight .wrap{position:relative;z-index:2}
+.spot-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:80px;align-items:center}
+.spot-stage{
+  aspect-ratio:1/1.05;border:1px solid rgba(241,233,220,.18);border-radius:var(--radius-md);
+  background:
+    radial-gradient(90% 70% at 50% 18%, rgba(200,150,62,.34), transparent 62%),
+    radial-gradient(120% 90% at 50% 110%, rgba(123,45,38,.5), transparent 66%),
+    linear-gradient(175deg,#3A2A1C,#241811);
+  position:relative;display:grid;place-items:center;overflow:hidden;
+}
+.spot-stage .violin{width:62%;height:auto;filter:drop-shadow(0 34px 50px rgba(0,0,0,.5))}
+.spot-stage .ring{
+  position:absolute;width:78%;aspect-ratio:1;border:1px dashed rgba(200,150,62,.4);border-radius:50%;
+}
+.spot-stage .ring2{width:92%;border-style:solid;border-color:rgba(241,233,220,.1)}
+.spot-stage .corner{
+  position:absolute;font-family:var(--font-mono);font-size:.64rem;letter-spacing:.26em;color:rgba(241,233,220,.5);
+  text-transform:uppercase;
+}
+.corner.tl{top:20px;left:22px}.corner.br{bottom:20px;right:22px}
+.spotlight .kicker{color:#D9B36C}
+.spotlight .kicker::before{background:#D9B36C}
+.spotlight .sec-title{color:#F5EFE6}
+.spotlight .sec-title em{color:#D9B36C}
+.spot-desc{color:rgba(241,233,220,.72);margin:18px 0 30px;font-size:.98rem}
+.spec{width:100%;border-collapse:collapse;margin-bottom:34px}
+.spec tr{border-top:1px solid rgba(241,233,220,.16)}
+.spec tr:last-child{border-bottom:1px solid rgba(241,233,220,.16)}
+.spec th{
+  text-align:left;font-weight:400;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(241,233,220,.52);padding:13px 0;width:36%;
+}
+.spec td{padding:13px 0;font-size:.92rem;color:#F1E9DC}
+.spot-buy{display:flex;align-items:center;gap:32px;flex-wrap:wrap}
+.spot-price{font-family:var(--font-display);font-size:2.35rem;color:#D9B36C;line-height:1}
+.spot-price small{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.22em;color:rgba(241,233,220,.5);display:block;margin-top:8px}
+.btn-gold{background:#D9B36C;border-color:#D9B36C;color:#2B1D14}
+.btn-gold:hover{background:#F5EFE6;border-color:#F5EFE6;color:#2B1D14}
+.btn-outline-light{background:transparent;border-color:rgba(241,233,220,.4);color:#F1E9DC}
+.btn-outline-light:hover{background:#F1E9DC;color:#2B1D14;border-color:#F1E9DC}
+
+/* ── 评价 ── */
+.voices{padding:112px 0}
+.voices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:58px}
+.quote{
+  border:1px solid var(--color-border);background:var(--color-surface);border-radius:var(--radius-md);
+  padding:38px 32px;display:flex;flex-direction:column;gap:22px;
+  transition:transform .35s var(--ease-default, ease), box-shadow .35s var(--ease-default, ease);
+}
+.quote:hover{transform:translateY(-5px);box-shadow:0 22px 44px rgba(43,29,20,.1)}
+.quote .q-mark{font-family:var(--font-display);font-size:3.4rem;line-height:.6;color:var(--color-secondary)}
+.quote p{font-family:var(--font-display);font-size:1.06rem;line-height:1.85;flex:1}
+.quote .who{display:flex;align-items:center;gap:14px;border-top:1px solid var(--color-border);padding-top:18px}
+.avatar{
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--font-display);font-size:1.05rem;color:#F5EFE6;flex:none;
+}
+.quote .who .n{font-size:.92rem;font-weight:600}
+.quote .who .r{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--color-text-muted)}
+
+/* ── 试奏 + Newsletter ── */
+.visit{padding:0 0 112px}
+.visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;border:1px solid var(--color-border);background:var(--color-border)}
+.visit-col{background:var(--color-surface);padding:64px 56px}
+.visit-col.dark{background:var(--color-bg-subtle)}
+.visit h3{font-family:var(--font-display);font-size:1.72rem;font-weight:700;margin:14px 0 14px}
+.visit p{color:var(--color-text-secondary);font-size:.95rem;margin-bottom:30px}
+.visit .facts{display:flex;flex-direction:column;gap:12px;margin-bottom:34px}
+.visit .facts li{display:flex;gap:16px;align-items:baseline;font-size:.92rem}
+.visit .facts .fk{
+  font-family:var(--font-mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--color-secondary);min-width:88px;
+}
+.form{display:flex;gap:0;border:1px solid var(--color-text);border-radius:var(--radius-sm);overflow:hidden;background:var(--color-bg)}
+.form input{
+  flex:1;min-width:0;border:0;background:transparent;padding:16px 20px;font-family:var(--font-sans);
+  font-size:.92rem;color:var(--color-text);outline:none;
+}
+.form input::placeholder{color:var(--color-text-muted)}
+.form button{
+  border:0;background:var(--color-primary);color:#F5EFE6;padding:16px 30px;
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;
+  transition:background .25s var(--ease-default, ease);white-space:nowrap;
+}
+.form button:hover{background:var(--color-primary-dark)}
+.form-note{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.14em;color:var(--color-text-muted);margin-top:14px}
+
+/* ── 页脚 ── */
+footer{background:var(--color-text);color:rgba(241,233,220,.78);padding:84px 0 0;position:relative;overflow:hidden}
+.f-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:56px;padding-bottom:64px}
+.f-logo{font-family:var(--font-display);font-size:1.65rem;letter-spacing:.16em;color:#F5EFE6;margin-bottom:6px}
+.f-logo span{color:#D9B36C}
+.f-tag{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(241,233,220,.42);margin-bottom:22px}
+.f-desc{font-size:.88rem;line-height:1.9;max-width:32ch;color:rgba(241,233,220,.6)}
+footer h4{
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;
+  color:#D9B36C;margin-bottom:22px;font-weight:400;
+}
+footer li{margin-bottom:11px;font-size:.88rem}
+footer li a{color:rgba(241,233,220,.68);transition:color .25s var(--ease-default, ease)}
+footer li a:hover{color:#F5EFE6}
+.f-pay{display:flex;flex-wrap:wrap;gap:8px}
+.f-pay span{
+  font-family:var(--font-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid rgba(241,233,220,.2);padding:6px 12px;border-radius:var(--radius-sm);
+  color:rgba(241,233,220,.58);
+}
+.f-bottom{
+  border-top:1px solid rgba(241,233,220,.14);padding:26px 0;
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(241,233,220,.42);
+}
+.f-social{display:flex;gap:18px}
+.f-social a{transition:color .25s var(--ease-default, ease)}
+.f-social a:hover{color:#D9B36C}
+
+/* ── 响应式 ── */
+@media (max-width: 1024px){
+  .hero-grid,.craft-grid,.spot-grid{grid-template-columns:1fr;gap:52px}
+  .craft-sticky{position:static}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .voices-grid{grid-template-columns:1fr 1fr}
+  .f-grid{grid-template-columns:1fr 1fr;gap:40px}
+}
+@media (max-width: 720px){
+  .wrap{width:calc(100% - 36px)}
+  .nav-links{display:none}
+  .hero{padding:60px 0 56px}
+  .hero-plate{left:0}
+  .vinyl{width:110px;right:-30px;bottom:-30px}
+  .grid,.voices-grid,.visit-grid{grid-template-columns:1fr}
+  .visit-col{padding:44px 30px}
+  .step{grid-template-columns:64px 1fr;gap:18px}
+  .f-grid{grid-template-columns:1fr}
+  .hero-meta{gap:26px}
+  .spot-buy{gap:22px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  html.js .reveal:not(.in){opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- SVG 图形素材库 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="sym-guitar" viewBox="0 0 200 420">
+      <rect x="92" y="18" width="16" height="188" rx="5" fill="#3B2617"/>
+      <rect x="84" y="6" width="32" height="26" rx="6" fill="#2B1D14"/>
+      <circle cx="100" cy="26" r="4" fill="#C8963E"/><circle cx="100" cy="44" r="4" fill="#C8963E"/>
+      <path d="M100 196c-46 0-88 40-88 98 0 46 26 78 62 92 10 4 12 14 12 26 0 14 4 24 14 24s14-10 14-24c0-12 2-22 12-26 36-14 62-46 62-92 0-58-42-98-88-98z" fill="#8A5B33"/>
+      <path d="M100 208c-38 0-72 33-72 84 0 38 22 66 52 78 8 3 10 11 10 21 0 11 3 19 10 19s10-8 10-19c0-10 2-18 10-21 30-12 52-40 52-78 0-51-34-84-72-84z" fill="#A9743F"/>
+      <circle cx="100" cy="300" r="30" fill="#3B2617"/>
+      <circle cx="100" cy="300" r="18" fill="#2B1D14"/>
+      <rect x="70" y="368" width="60" height="12" rx="4" fill="#3B2617"/>
+      <line x1="93" y1="22" x2="93" y2="374" stroke="#F5EFE6" stroke-opacity=".5" stroke-width="1"/>
+      <line x1="100" y1="22" x2="100" y2="374" stroke="#F5EFE6" stroke-opacity=".5" stroke-width="1"/>
+      <line x1="107" y1="22" x2="107" y2="374" stroke="#F5EFE6" stroke-opacity=".5" stroke-width="1"/>
+    </symbol>
+    <symbol id="sym-violin" viewBox="0 0 200 420">
+      <rect x="93" y="14" width="14" height="180" rx="5" fill="#3B2617"/>
+      <path d="M82 8c-8 0-12 8-6 14l6 6 24 2 4-8-4-12c-2-2-8-2-12-2z" fill="#2B1D14"/>
+      <path d="M100 190c-34 0-52 22-52 44 0 14 12 24 18 32-8 8-24 18-24 42 0 34 26 58 58 58s58-24 58-58c0-24-16-34-24-42 6-8 18-18 18-32 0-22-18-44-52-44z" fill="#9C4A2E"/>
+      <path d="M100 202c-27 0-41 17-41 35 0 11 9 19 14 26-6 7-19 15-19 35 0 28 21 47 46 47s46-19 46-47c0-20-13-28-19-35 5-7 14-15 14-26 0-18-14-35-41-35z" fill="#B85E38"/>
+      <path d="M76 252c-8 8-8 20 0 28M124 252c8 8 8 20 0 28" stroke="#3B2617" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <rect x="92" y="300" width="16" height="44" rx="4" fill="#3B2617"/>
+      <line x1="95" y1="20" x2="88" y2="344" stroke="#F5EFE6" stroke-opacity=".55" stroke-width="1"/>
+      <line x1="105" y1="20" x2="112" y2="344" stroke="#F5EFE6" stroke-opacity=".55" stroke-width="1"/>
+    </symbol>
+    <symbol id="sym-piano" viewBox="0 0 240 300">
+      <rect x="16" y="40" width="208" height="120" rx="8" fill="#2B1D14"/>
+      <rect x="30" y="58" width="180" height="84" rx="4" fill="#3B2617"/>
+      <g fill="#F1E9DC">
+        <rect x="38" y="180" width="22" height="86" rx="3"/><rect x="63" y="180" width="22" height="86" rx="3"/>
+        <rect x="88" y="180" width="22" height="86" rx="3"/><rect x="113" y="180" width="22" height="86" rx="3"/>
+        <rect x="138" y="180" width="22" height="86" rx="3"/><rect x="163" y="180" width="22" height="86" rx="3"/>
+        <rect x="188" y="180" width="22" height="86" rx="3"/>
+      </g>
+      <g fill="#2B1D14">
+        <rect x="53" y="180" width="13" height="52" rx="2"/><rect x="78" y="180" width="13" height="52" rx="2"/>
+        <rect x="128" y="180" width="13" height="52" rx="2"/><rect x="153" y="180" width="13" height="52" rx="2"/>
+        <rect x="178" y="180" width="13" height="52" rx="2"/>
+      </g>
+      <rect x="16" y="164" width="208" height="14" rx="4" fill="#C8963E"/>
+    </symbol>
+    <symbol id="sym-horn" viewBox="0 0 260 220">
+      <path d="M30 120c0-30 24-54 54-54h84" stroke="#C8963E" stroke-width="16" fill="none" stroke-linecap="round"/>
+      <path d="M30 120v34c0 24 20 44 44 44h72" stroke="#C8963E" stroke-width="16" fill="none" stroke-linecap="round"/>
+      <path d="M168 34c34 0 62 30 62 66s-28 66-62 66-62-30-62-66 28-66 62-66z" fill="#B8862F"/>
+      <path d="M168 52c24 0 44 22 44 48s-20 48-44 48-44-22-44-48 20-48 44-48z" fill="#D9B36C"/>
+      <circle cx="82" cy="70" r="9" fill="#8A5B33"/><circle cx="82" cy="100" r="9" fill="#8A5B33"/><circle cx="82" cy="130" r="9" fill="#8A5B33"/>
+      <rect x="20" y="108" width="16" height="26" rx="5" fill="#8A5B33"/>
+    </symbol>
+    <symbol id="sym-uke" viewBox="0 0 160 360">
+      <rect x="73" y="14" width="12" height="150" rx="5" fill="#3B2617"/>
+      <rect x="66" y="4" width="26" height="22" rx="5" fill="#2B1D14"/>
+      <path d="M80 160c-32 0-56 28-56 66 0 30 18 52 42 62 6 3 8 10 8 18 0 11 2 18 8 18s8-7 8-18c0-8 2-15 8-18 24-10 42-32 42-62 0-38-24-66-56-66z" fill="#B8862F"/>
+      <circle cx="80" cy="232" r="20" fill="#3B2617"/>
+      <line x1="75" y1="18" x2="72" y2="304" stroke="#F5EFE6" stroke-opacity=".5" stroke-width="1"/>
+      <line x1="85" y1="18" x2="88" y2="304" stroke="#F5EFE6" stroke-opacity=".5" stroke-width="1"/>
+    </symbol>
+    <symbol id="sym-cello" viewBox="0 0 200 440">
+      <rect x="92" y="10" width="16" height="180" rx="5" fill="#3B2617"/>
+      <path d="M100 186c-38 0-58 24-58 48 0 16 13 27 20 36-9 9-27 20-27 46 0 38 29 64 65 64s65-26 65-64c0-26-18-37-27-46 7-9 20-20 20-36 0-24-20-48-58-48z" fill="#6E3A22"/>
+      <path d="M100 198c-29 0-45 18-45 37 0 12 10 21 15 28-7 8-21 17-21 39 0 31 23 53 51 53s51-22 51-53c0-22-14-31-21-39 5-7 15-16 15-28 0-19-16-37-45-37z" fill="#8A4A2C"/>
+      <rect x="93" y="330" width="14" height="70" rx="4" fill="#3B2617"/>
+      <circle cx="93" cy="410" r="7" fill="#2B1D14"/><circle cx="107" cy="410" r="7" fill="#2B1D14"/>
+      <line x1="95" y1="16" x2="88" y2="400" stroke="#F5EFE6" stroke-opacity=".5" stroke-width="1"/>
+      <line x1="105" y1="16" x2="112" y2="400" stroke="#F5EFE6" stroke-opacity=".5" stroke-width="1"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- 顶部导航 -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top">
+      <div>
+        <div class="logo-mark">HARMO<span>NIA</span></div>
+        <div class="logo-sub">Instrument Atelier · Est. 1987</div>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="#collection">弦乐</a>
+      <a href="#collection">键盘</a>
+      <a href="#collection">管乐</a>
+      <a href="#collection">配件</a>
+      <a href="#craft">工坊</a>
+    </nav>
+    <a class="bag" href="#visit">购物袋 <span class="cnt">2</span></a>
+    <button class="nav-toggle" aria-label="菜单">☰</button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy reveal">
+      <div class="kicker">Flagship No.19 · 旗舰手工吉他</div>
+      <h1>木头会记得，<br>每一双手的<em class="accent">温度</em>。</h1>
+      <p class="lede">
+        HARMONIA「共鸣 No.19」全单古典吉他——三十年陈化阿尔卑斯云杉面板，
+        巴西玫瑰木背侧，由制琴师陆敬声历时十四个月手工开料、塑形、调音。
+        每一道漆，都以传统法式漆手工涂抹三十六层。
+      </p>
+      <div class="hero-meta">
+        <div class="price-tag">
+          <span class="p-label">Price · 含税定价</span>
+          <span class="p-val">¥68,000<small>限量 19 把</small></span>
+        </div>
+        <a class="btn" href="#spotlight">预约试奏 <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#craft">工艺之旅</a>
+      </div>
+    </div>
+    <div class="hero-visual reveal">
+      <div class="hero-panel">
+        <svg class="guitar"><use href="#sym-guitar"/></svg>
+        <div class="hero-badge">Handmade · 手工制作</div>
+      </div>
+      <div class="hero-plate">
+        <div class="t">共鸣 No.19 · Resonance</div>
+        <div class="d">Spruce / Brazilian Rosewood</div>
+      </div>
+      <svg class="vinyl" viewBox="0 0 160 160" aria-hidden="true">
+        <circle cx="80" cy="80" r="78" fill="#2B1D14"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#4A3222" stroke-width="1"/>
+        <circle cx="80" cy="80" r="44" fill="none" stroke="#4A3222" stroke-width="1"/>
+        <circle cx="80" cy="80" r="28" fill="#7B2D26"/>
+        <circle cx="80" cy="80" r="5" fill="#F5EFE6"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- 字幕带 -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Handcrafted · <b>手工制作</b></span><span>Tone Woods · <b>陈化木材</b></span>
+    <span>French Polish · <b>法式漆</b></span><span>Since 1987 · <b>上海</b></span>
+    <span>Limited Edition · <b>限量编号</b></span><span>Setup by Hand · <b>手工整音</b></span>
+    <span>Handcrafted · <b>手工制作</b></span><span>Tone Woods · <b>陈化木材</b></span>
+    <span>French Polish · <b>法式漆</b></span><span>Since 1987 · <b>上海</b></span>
+    <span>Limited Edition · <b>限量编号</b></span><span>Setup by Hand · <b>手工整音</b></span>
+  </div>
+</div>
+
+<!-- 精选系列 -->
+<section class="collection" id="collection">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Selected Collection · 精选系列</div>
+      <h2 class="sec-title">六件被时间<em>打磨</em>的乐器</h2>
+      <p class="sec-sub">从古典吉他到手工小号，每一件都在工坊里被编号、被聆听、被亲手交付。</p>
+    </div>
+    <div class="grid">
+      <article class="card reveal">
+        <div class="c-num">HA-01</div><div class="c-tag">古典</div>
+        <div class="c-visual cv-1"><svg><use href="#sym-guitar"/></svg></div>
+        <h3>云杉面板古典吉他</h3>
+        <p class="c-mat">阿尔卑斯云杉面板 · 印度玫瑰木背侧 · 雪松琴颈</p>
+        <div class="c-foot"><span class="c-price">¥18,800</span><a class="c-buy" href="#visit">加入购物袋</a></div>
+      </article>
+      <article class="card reveal">
+        <div class="c-num">HA-02</div><div class="c-tag">民谣</div>
+        <div class="c-visual cv-2"><svg><use href="#sym-guitar"/></svg></div>
+        <h3>阿迪朗达克云杉民谣吉他</h3>
+        <p class="c-mat">阿迪朗达克云杉面板 · 胡桃木背侧 · 乌木指板</p>
+        <div class="c-foot"><span class="c-price">¥26,500</span><a class="c-buy" href="#visit">加入购物袋</a></div>
+      </article>
+      <article class="card reveal">
+        <div class="c-num">HA-03</div><div class="c-tag">弦乐</div>
+        <div class="c-visual cv-3"><svg><use href="#sym-violin"/></svg></div>
+        <h3>波黑枫木小提琴 4/4</h3>
+        <p class="c-mat">波黑枫木背板 · 阿尔卑斯云杉面板 · 手工油性漆</p>
+        <div class="c-foot"><span class="c-price">¥42,000</span><a class="c-buy" href="#visit">加入购物袋</a></div>
+      </article>
+      <article class="card reveal">
+        <div class="c-num">HA-04</div><div class="c-tag">键盘</div>
+        <div class="c-visual cv-5"><svg><use href="#sym-piano"/></svg></div>
+        <h3>手工立式钢琴 · 桃花芯木饰面</h3>
+        <p class="c-mat">德国 Röslau 琴弦 · 云杉音板 · 手工整音 88 键</p>
+        <div class="c-foot"><span class="c-price">¥168,000</span><a class="c-buy" href="#visit">加入购物袋</a></div>
+      </article>
+      <article class="card reveal">
+        <div class="c-num">HA-05</div><div class="c-tag">管乐</div>
+        <div class="c-visual cv-6"><svg><use href="#sym-horn"/></svg></div>
+        <h3>锡口铜管小号 · 复古拉丝</h3>
+        <p class="c-mat">黄铜主体 · 手工锤打喇叭口 · Monel 活塞</p>
+        <div class="c-foot"><span class="c-price">¥33,600</span><a class="c-buy" href="#visit">加入购物袋</a></div>
+      </article>
+      <article class="card reveal">
+        <div class="c-num">HA-06</div><div class="c-tag">轻弦</div>
+        <div class="c-visual cv-4"><svg><use href="#sym-uke"/></svg></div>
+        <h3>相思木尤克里里 · 21 寸</h3>
+        <p class="c-mat">夏威夷相思木 · 桃花芯琴颈 · 骨质弦枕</p>
+        <div class="c-foot"><span class="c-price">¥4,800</span><a class="c-buy" href="#visit">加入购物袋</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 工艺故事 -->
+<section class="craft" id="craft">
+  <div class="wrap craft-grid">
+    <div class="craft-sticky reveal">
+      <div class="kicker">The Atelier · 工艺故事</div>
+      <h2 class="sec-title">一把琴的诞生，<br>要经过<em>三千小时</em>。</h2>
+      <p class="sec-sub">
+        在 HARMONIA 工坊，没有流水线，只有一张工作台、一位制琴师，
+        和一堆在阁楼里静静躺了十年的木料。我们相信乐器不是被制造出来的，
+        而是被慢慢「养」出来的。
+      </p>
+      <div class="craft-figure">
+        <svg class="notes" viewBox="0 0 400 300" aria-hidden="true">
+          <g stroke="#2B1D14" stroke-opacity=".5" stroke-width="1">
+            <line x1="30" y1="70" x2="370" y2="70"/><line x1="30" y1="92" x2="370" y2="92"/>
+            <line x1="30" y1="114" x2="370" y2="114"/><line x1="30" y1="136" x2="370" y2="136"/>
+            <line x1="30" y1="158" x2="370" y2="158"/>
+          </g>
+          <g fill="#2B1D14" fill-opacity=".72">
+            <ellipse cx="86" cy="136" rx="13" ry="9" transform="rotate(-18 86 136)"/><rect x="97" y="82" width="3.5" height="55" />
+            <ellipse cx="168" cy="114" rx="13" ry="9" transform="rotate(-18 168 114)"/><rect x="179" y="58" width="3.5" height="57" />
+            <ellipse cx="252" cy="92" rx="13" ry="9" transform="rotate(-18 252 92)"/><rect x="263" y="36" width="3.5" height="57" />
+            <ellipse cx="330" cy="158" rx="13" ry="9" transform="rotate(-18 330 158)"/><rect x="341" y="104" width="3.5" height="55" />
+          </g>
+          <path d="M99 82 Q 180 40 263 36" stroke="#7B2D26" stroke-width="2" fill="none" stroke-dasharray="5 5"/>
+        </svg>
+      </div>
+    </div>
+    <div class="craft-steps">
+      <div class="step reveal">
+        <div class="s-num">01</div>
+        <div>
+          <h3>选材与陈化<span class="en">Seasoning the Tone Woods</span></h3>
+          <p>面板只取海拔 1400 米以上的阿尔卑斯云杉，砍伐后在恒湿阁楼自然陈化八至十五年。木料会先被敲击、聆听，只有共振达标的才会留下——大约每三十块里，只有一块合格。</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="s-num">02</div>
+        <div>
+          <h3>手工塑形与音梁<span class="en">Carving &amp; Voicing</span></h3>
+          <p>面板厚度精确到 0.1 毫米，全凭制琴师的刨刀与拇指判断。音梁一根一根手工削制、逐次试装，为的是让低音温暖、高音明亮，在同一块木头上达成和解。</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="s-num">03</div>
+        <div>
+          <h3>涂装与整音<span class="en">French Polish &amp; Final Setup</span></h3>
+          <p>传统法式漆以棉球手工涂抹三十六层，每层之间静置一夜。成品在工坊的试音室里悬挂七天，由三位乐手轮流演奏验收，通过后才刻上编号，交付到你手中。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 单品聚焦 -->
+<section class="spotlight" id="spotlight">
+  <div class="wrap spot-grid">
+    <div class="spot-stage reveal">
+      <div class="ring"></div><div class="ring ring2"></div>
+      <span class="corner tl">Model HA-03 / 440Hz</span>
+      <span class="corner br">Bosnian Maple · 2024</span>
+      <svg class="violin"><use href="#sym-violin"/></svg>
+    </div>
+    <div class="reveal">
+      <div class="kicker">Product Focus · 单品聚焦</div>
+      <h2 class="sec-title">HA-03 波黑枫木<em>小提琴</em></h2>
+      <p class="spot-desc">
+        取材自波黑战前老枫木，背板虎纹如火焰般流动。由制琴师沈鹿鸣仿斯特拉迪瓦里「弥赛亚」弧度手工雕刻，
+        音色通透而饱满，适合从巴赫无伴奏到现代协奏曲的全谱系演奏。
+      </p>
+      <table class="spec">
+        <tr><th>面板 Top</th><td>阿尔卑斯云杉 · 自然陈化 12 年</td></tr>
+        <tr><th>背侧板 Back</th><td>波黑枫木 · 火焰纹 AAA 级</td></tr>
+        <tr><th>指板 Fingerboard</th><td>非洲乌木 · 手工弧度打磨</td></tr>
+        <tr><th>漆面 Finish</th><td>手工油性漆 · 仿古琥珀色</td></tr>
+        <tr><th>弦长 Scale</th><td>328 mm · 标准 4/4</td></tr>
+        <tr><th>配件 Fittings</th><td>黄杨木弦轴 + Aubert 琴桥</td></tr>
+        <tr><th>净重 Weight</th><td>386 g</td></tr>
+      </table>
+      <div class="spot-buy">
+        <div class="spot-price">¥42,000<small>含手工琴盒与终身调校</small></div>
+        <a class="btn btn-gold" href="#visit">立即购买 <span class="arr">→</span></a>
+        <a class="btn btn-outline-light" href="#visit">预约试奏</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 乐手评价 -->
+<section class="voices" id="voices">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Voices · 乐手的话</div>
+      <h2 class="sec-title">被演奏，是乐器<em>唯一的宿命</em></h2>
+      <p class="sec-sub">来自演奏家、制作人与音乐教师的真实反馈——他们在舞台上、录音棚里、琴房中与 HARMONIA 相处。</p>
+    </div>
+    <div class="voices-grid">
+      <figure class="quote reveal">
+        <div class="q-mark">“</div>
+        <p>共鸣 No.19 的低音像陈年威士忌一样厚，高音却依然清亮。第一次在音乐厅用它演奏《阿尔罕布拉宫的回忆》，返场时我忍不住又加演了一首。</p>
+        <figcaption class="who">
+          <div class="avatar" style="background:#7B2D26">林</div>
+          <div><div class="n">林砚</div><div class="r">Classical Guitarist</div></div>
+        </figcaption>
+      </figure>
+      <figure class="quote reveal">
+        <div class="q-mark">“</div>
+        <p>录音棚挑琴最苛刻，动态要稳、底噪要低。HA-03 是我近两年唯一一支不需要后期 EQ 大动的小提琴，干声就已经很好听。</p>
+        <figcaption class="who">
+          <div class="avatar" style="background:#C8963E">陈</div>
+          <div><div class="n">陈序</div><div class="r">Studio Music Producer</div></div>
+        </figcaption>
+      </figure>
+      <figure class="quote reveal">
+        <div class="q-mark">“</div>
+        <p>给学生挑琴时我会带他们来工坊试奏。HARMONIA 的人从不催单，只是安静地把琴递过来——这种对乐器的尊重，学生能感受到。</p>
+        <figcaption class="who">
+          <div class="avatar" style="background:#8A5B33">苏</div>
+          <div><div class="n">苏黎</div><div class="r">Music School Director</div></div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 试奏 + Newsletter -->
+<section class="visit" id="visit">
+  <div class="wrap">
+    <div class="visit-grid reveal">
+      <div class="visit-col">
+        <div class="kicker">Visit Us · 到店试奏</div>
+        <h3>把琴抱在怀里，<br>才算真正认识它。</h3>
+        <p>我们为每位客人保留 60 分钟独立试音室，配备恒温恒湿与音乐厅级声学处理。无需购买，欢迎纯粹来听。</p>
+        <ul class="facts">
+          <li><span class="fk">Address</span><span>上海市静安区巨鹿路 889 号 · HARMONIA 工坊</span></li>
+          <li><span class="fk">Hours</span><span>周二至周日 11:00 – 20:00（周一闭坊保养）</span></li>
+          <li><span class="fk">Booking</span><span>021-6288 1987 · 需提前 1 日预约</span></li>
+        </ul>
+        <a class="btn" href="#top">预约试奏时段 <span class="arr">→</span></a>
+      </div>
+      <div class="visit-col dark">
+        <div class="kicker">Newsletter · 工坊来信</div>
+        <h3>每月一封，<br>关于木头与声音的信。</h3>
+        <p>新琴到店、限量编号释出、制琴师手记与保养指南——只写给愿意慢下来的人。</p>
+        <form class="form" onsubmit="return false;">
+          <input type="email" placeholder="你的邮箱地址" aria-label="邮箱地址">
+          <button type="submit">订阅来信</button>
+        </form>
+        <div class="form-note">我们尊重你的收件箱 · 随时可一键退订</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <div class="f-logo">HARMO<span>NIA</span></div>
+        <div class="f-tag">Instrument Atelier · Since 1987</div>
+        <p class="f-desc">一间坚持手工制琴的工坊，一家让乐器被听见的唱片行。弦乐、键盘、管乐与配件，皆经编号与调校后交付。</p>
+      </div>
+      <div>
+        <h4>门店 Showroom</h4>
+        <ul>
+          <li>上海市静安区巨鹿路 889 号</li>
+          <li>周二至周日 11:00 – 20:00</li>
+          <li>周一闭坊保养</li>
+          <li><a href="#top">021-6288 1987</a></li>
+          <li><a href="#top">hello@harmonia.atelier</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>探索 Explore</h4>
+        <ul>
+          <li><a href="#collection">弦乐系列</a></li>
+          <li><a href="#collection">键盘系列</a></li>
+          <li><a href="#collection">管乐与配件</a></li>
+          <li><a href="#craft">工坊工艺之旅</a></li>
+          <li><a href="#visit">保养与调校服务</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>关注 Follow</h4>
+        <ul>
+          <li><a href="#top">微信公众号 · HARMONIA工坊</a></li>
+          <li><a href="#top">微博 @HARMONIA乐器工坊</a></li>
+          <li><a href="#top">小红书 · harmonia_atelier</a></li>
+          <li><a href="#top">Instagram · @harmonia.atelier</a></li>
+        </ul>
+        <h4 style="margin-top:30px">支付 Payment</h4>
+        <div class="f-pay">
+          <span>Visa</span><span>Mastercard</span><span>银联</span>
+          <span>支付宝</span><span>微信支付</span><span>Apple Pay</span>
+        </div>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <div>© 2026 HARMONIA Instrument Atelier · 沪 ICP 备 1987 号</div>
+      <div class="f-social">
+        <a href="#top">WeChat</a><a href="#top">Weibo</a><a href="#top">Xiaohongshu</a><a href="#top">Instagram</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  els.forEach(function(el, i){
+    el.style.transitionDelay = ((i % 4) * 0.09) + 's';
+    io.observe(el);
+  });
+})();
+</script>
+</body>
+</html>

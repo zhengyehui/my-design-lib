@@ -261,7 +261,8 @@ export default defineConfig({
             { text: 'AUREN 硬件科技产品', link: '/pages/augen-tech-landing' },
             { text: 'Harbor 保险科技', link: '/pages/harbor-insurance' },
             { text: 'LinguaLink 全球本地化平台', link: '/pages/lingua-localization' },
-            { text: 'SparkFund 创意众筹平台', link: '/pages/sparkfund-crowdfunding' }
+            { text: 'SparkFund 创意众筹平台', link: '/pages/sparkfund-crowdfunding' },
+            { text: 'MARCEL 高定美发沙龙', link: '/pages/marcel-hair-studio' }
           ]
         },
         {
@@ -298,7 +299,8 @@ export default defineConfig({
             { text: 'Verba 作家 & 文案作品集', link: '/pages/writer-portfolio' },
             { text: 'TERRA 窑火 陶艺工作室', link: '/pages/terra-ceramics' },
             { text: 'KAIROS 舞蹈编导作品集', link: '/pages/kairos-dance' },
-            { text: 'ALTITUDE 山岳探险家作品集', link: '/pages/altitude-expedition' }
+            { text: 'ALTITUDE 山岳探险家作品集', link: '/pages/altitude-expedition' },
+            { text: 'FEU 主厨火焰料理作品集', link: '/pages/chef-portfolio' }
           ]
         },
         {
@@ -373,7 +375,8 @@ export default defineConfig({
             { text: 'Maison Boulangerie 法式面包店', link: '/pages/maison-boulangerie' },
             { text: 'VISTA 视光眼镜工坊', link: '/pages/vista-eyewear' },
             { text: 'Petit Lune 有机母婴精品', link: '/pages/petit-lune-baby' },
-            { text: 'NORDHAUS 北欧设计家具商城', link: '/pages/nordhaus-furniture' }
+            { text: 'NORDHAUS 北欧设计家具商城', link: '/pages/nordhaus-furniture' },
+            { text: 'HARMONIA 手工乐器工坊', link: '/pages/harmonia-instruments' }
           ]
         },
         {
