@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DATUM — Anaïs Mercier 数据叙事 &amp; 信息设计作品集</title>
+<meta name="description" content="DATUM — 信息设计师 Anaïs Mercier 的数据叙事作品集。公共数据可视化、编辑图表、交互式报道与数据档案，8 个精选项目索引。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   DATUM — 数据叙事 & 信息设计作品集
+   受 harryjatkins.com（编号项目索引 + 模式切换）、
+   simonrogers.info（排版复读）、cathydolle.com（全屏悬停预览）
+   启发：编辑排版 × 实验室图纸 × 数据图形
+   ============================================================ */
+
+:root{
+  --paper:#FAFAF7;
+  --paper-2:#F1F0EA;
+  --ink:#111110;
+  --ink-60:rgba(17,17,16,.6);
+  --ink-40:rgba(17,17,16,.4);
+  --ink-14:rgba(17,17,16,.14);
+  --ink-08:rgba(17,17,16,.08);
+  --accent:var(--color-primary,#6366f1);
+  --accent-2:var(--color-secondary,#06b6d4);
+  --hot:#E4572E;
+  --grid:rgba(17,17,16,.07);
+  --font:'Helvetica Neue',Helvetica,Inter,Arial,sans-serif;
+  --mono:var(--font-mono,'JetBrains Mono','SF Mono',monospace);
+  --gutter:clamp(20px,4vw,64px);
+  --cubic:cubic-bezier(.77,0,.175,1);
+}
+:root[data-theme="dark"]{
+  --paper:#101012;
+  --paper-2:#17171A;
+  --ink:#F2F1EC;
+  --ink-60:rgba(242,241,236,.62);
+  --ink-40:rgba(242,241,236,.42);
+  --ink-14:rgba(242,241,236,.16);
+  --ink-08:rgba(242,241,236,.09);
+  --grid:rgba(242,241,236,.08);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:var(--leading-normal,1.5);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--accent);color:#fff}
+a{color:inherit;text-decoration:none}
+
+/* 图纸网格背景 */
+.grid-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 120% 90% at 50% 0%,#000 40%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 120% 90% at 50% 0%,#000 40%,transparent 100%);
+}
+
+/* ── HUD 顶栏 ───────────────────────────────── */
+.hud{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px var(--gutter);
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-60);
+  background:color-mix(in srgb,var(--paper) 82%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--ink-14);
+}
+.hud .brand{color:var(--ink);font-weight:700;letter-spacing:.14em;font-size:12px}
+.hud .brand sup{color:var(--accent);font-size:8px}
+.hud nav{display:flex;gap:22px}
+.hud nav a{position:relative;padding:2px 0;transition:color .3s}
+.hud nav a::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--accent);transition:width .35s var(--cubic)}
+.hud nav a:hover{color:var(--ink)}
+.hud nav a:hover::after{width:100%}
+.hud .modes{display:flex;gap:8px;align-items:center}
+.mode-btn{
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  border:1px solid var(--ink-14);background:transparent;color:var(--ink-60);
+  padding:5px 10px;border-radius:99px;cursor:pointer;transition:all .3s;
+}
+.mode-btn:hover{border-color:var(--ink);color:var(--ink)}
+.mode-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+@media(max-width:820px){.hud nav{display:none}}
+
+/* ── HERO ───────────────────────────────────── */
+.hero{
+  position:relative;z-index:1;
+  padding:calc(96px + 6vh) var(--gutter) 0;
+  min-height:92vh;display:flex;flex-direction:column;justify-content:space-between;
+}
+.hero-kicker{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-40);display:flex;gap:16px;align-items:center;flex-wrap:wrap;
+}
+.hero-kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);
+  animation:blink 2.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+.wordmark{
+  font-size:clamp(72px,17vw,268px);
+  font-weight:800;letter-spacing:-.045em;line-height:.88;
+  margin:2vh 0 0;position:relative;
+}
+.wordmark .ghost{
+  -webkit-text-stroke:1.5px var(--ink-40);color:transparent;
+}
+.wordmark .period{color:var(--accent)}
+
+.hero-sub{
+  display:grid;grid-template-columns:1.2fr 1fr;gap:var(--gutter);
+  align-items:end;padding:4vh 0 3vh;border-bottom:1px solid var(--ink-14);
+}
+.hero-sub .lede{
+  font-size:clamp(17px,1.6vw,23px);line-height:1.55;max-width:34em;color:var(--ink-60);
+}
+.hero-sub .lede strong{color:var(--ink);font-weight:600}
+.hero-meta{
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-40);display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;
+}
+.hero-meta b{display:block;font-size:22px;letter-spacing:-.01em;color:var(--ink);
+  font-family:var(--font);font-weight:700;margin-bottom:2px;text-transform:none}
+@media(max-width:820px){.hero-sub{grid-template-columns:1fr}}
+
+/* HERO 实时折线图 */
+.hero-chart{
+  position:absolute;right:var(--gutter);top:120px;width:min(42vw,560px);height:300px;
+  opacity:.9;pointer-events:none;
+}
+.hero-chart .axis{stroke:var(--ink-14);stroke-width:1}
+.hero-chart .line{
+  fill:none;stroke:var(--accent);stroke-width:2.5;
+  stroke-dasharray:1400;stroke-dashoffset:1400;
+  animation:draw 2.8s var(--cubic) .3s forwards;
+}
+.hero-chart .line2{
+  fill:none;stroke:var(--hot);stroke-width:1.5;stroke-dasharray:4 5;
+  stroke-dashoffset:900;animation:draw 3.2s var(--cubic) .6s forwards;
+}
+.hero-chart .area{fill:var(--accent);opacity:.08}
+.hero-chart circle{fill:var(--paper);stroke:var(--accent);stroke-width:2}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media(max-width:1100px){.hero-chart{opacity:.25}}
+
+/* ── Marquee ───────────────────────────────── */
+.marquee{
+  border-bottom:1px solid var(--ink-14);
+  overflow:hidden;white-space:nowrap;position:relative;z-index:1;
+  padding:16px 0;font-family:var(--mono);font-size:12px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-40);
+  background:var(--paper-2);
+}
+.marquee-track{display:inline-flex;gap:0;animation:slide 36s linear infinite}
+.marquee-track span{padding:0 28px}
+.marquee-track .sep{color:var(--accent)}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── 区块通用 ───────────────────────────────── */
+section{position:relative;z-index:1;padding:clamp(64px,9vh,120px) var(--gutter)}
+.sec-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  border-top:2px solid var(--ink);padding-top:18px;margin-bottom:42px;gap:24px;flex-wrap:wrap;
+}
+.sec-head h2{
+  font-size:clamp(28px,4vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1;
+}
+.sec-head .idx{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--ink-40);text-transform:uppercase}
+
+/* ── 项目索引（Harry Atkins 式编号目录） ───── */
+.works{position:relative}
+.work-row{
+  display:grid;grid-template-columns:72px 1.5fr 1fr 88px 44px;
+  gap:20px;align-items:center;
+  padding:26px 8px;border-bottom:1px solid var(--ink-14);
+  cursor:pointer;transition:background .35s,padding-left .35s var(--cubic);
+  position:relative;
+}
+.work-row:first-child{border-top:1px solid var(--ink-14)}
+.work-row:hover{background:var(--ink-08);padding-left:22px}
+.work-row .no{
+  font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.1em;
+}
+.work-row .name{
+  font-size:clamp(20px,2.6vw,34px);font-weight:700;letter-spacing:-.02em;line-height:1.12;
+}
+.work-row .name em{
+  font-style:normal;font-size:.55em;color:var(--ink-40);font-weight:500;
+  margin-left:12px;letter-spacing:.02em;
+}
+.work-row .kind{font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-60)}
+.work-row .year{font-family:var(--mono);font-size:12px;color:var(--ink-40);text-align:right}
+.work-row .arrow{
+  width:34px;height:34px;border:1px solid var(--ink-14);border-radius:50%;
+  display:grid;place-items:center;font-size:14px;color:var(--ink-40);
+  transition:all .35s var(--cubic);
+}
+.work-row:hover .arrow{background:var(--accent);border-color:var(--accent);color:#fff;transform:rotate(45deg)}
+.work-row.open .arrow{transform:rotate(90deg);background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+/* 展开详情 */
+.work-detail{
+  display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--cubic);
+  border-bottom:1px solid var(--ink-14);
+}
+.work-detail.open{grid-template-rows:1fr}
+.work-detail-inner{overflow:hidden}
+.work-detail-body{
+  display:grid;grid-template-columns:72px 1.2fr 1fr;gap:20px;
+  padding:8px 8px 36px;
+}
+.work-detail-body .spacer{}
+.work-detail-body p{color:var(--ink-60);font-size:15px;line-height:1.75;max-width:52ch}
+.work-detail-body .facts{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-40);
+  display:grid;gap:10px;align-content:start;text-transform:uppercase;
+}
+.work-detail-body .facts b{color:var(--ink);display:block;font-size:12px;letter-spacing:.04em}
+.mini-viz{margin-top:18px}
+@media(max-width:820px){
+  .work-row{grid-template-columns:48px 1fr 40px;gap:12px}
+  .work-row .kind,.work-row .year{display:none}
+  .work-detail-body{grid-template-columns:1fr}
+}
+
+/* 悬停浮动预览（Cathy Dolle 式全屏预览的轻量版） */
+.hover-preview{
+  position:fixed;z-index:60;width:300px;height:210px;
+  border:1px solid var(--ink-14);background:var(--paper-2);
+  pointer-events:none;opacity:0;transform:scale(.94) translateY(8px);
+  transition:opacity .3s,transform .3s var(--cubic);
+  box-shadow:0 24px 60px rgba(0,0,0,.14);overflow:hidden;
+}
+.hover-preview.show{opacity:1;transform:scale(1) translateY(0)}
+.hover-preview .pv-label{
+  position:absolute;left:12px;bottom:10px;font-family:var(--mono);
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-40);
+}
+@media(max-width:1100px){.hover-preview{display:none}}
+
+/* ── 特写案例 ───────────────────────────────── */
+.feature{
+  background:var(--ink);color:var(--paper);
+  margin:0 calc(var(--gutter) * -1);
+  padding:clamp(64px,9vh,110px) var(--gutter);
+  position:relative;overflow:hidden;
+}
+:root[data-theme="dark"] .feature{background:#060607}
+.feature .sec-head{border-color:var(--paper)}
+.feature .sec-head .idx{color:rgba(250,250,247,.45)}
+.feature-grid{display:grid;grid-template-columns:1fr 1.35fr;gap:clamp(28px,5vw,72px);align-items:center}
+@media(max-width:960px){.feature-grid{grid-template-columns:1fr}}
+.feature h3{font-size:clamp(26px,3.4vw,44px);font-weight:800;letter-spacing:-.025em;line-height:1.08;margin-bottom:18px}
+.feature p{color:rgba(250,250,247,.66);font-size:15.5px;line-height:1.8;max-width:50ch}
+.feature .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.feature .tags span{
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid rgba(250,250,247,.22);border-radius:99px;padding:6px 13px;color:rgba(250,250,247,.7);
+}
+.heat-panel{
+  background:rgba(250,250,247,.04);border:1px solid rgba(250,250,247,.12);
+  padding:26px;border-radius:4px;
+}
+.heat-title{
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(250,250,247,.5);display:flex;justify-content:space-between;margin-bottom:18px;
+}
+.heat-grid{display:grid;grid-template-columns:repeat(24,1fr);gap:4px}
+.heat-grid i{
+  aspect-ratio:1;border-radius:2px;display:block;
+  animation:heatIn .8s var(--cubic) both;
+}
+@keyframes heatIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+.heat-legend{
+  display:flex;align-items:center;gap:8px;margin-top:18px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:rgba(250,250,247,.5);
+}
+.heat-legend .sw{width:22px;height:8px;border-radius:2px}
+
+/* ── 流程 ───────────────────────────────────── */
+.process{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--ink-14);border:1px solid var(--ink-14)}
+@media(max-width:900px){.process{grid-template-columns:1fr 1fr}}
+.process .step{background:var(--paper);padding:30px 26px 40px;position:relative;transition:background .35s}
+.process .step:hover{background:var(--paper-2)}
+.process .step .n{
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--accent);
+}
+.process .step h4{font-size:20px;font-weight:700;letter-spacing:-.015em;margin:14px 0 10px}
+.process .step p{font-size:13.5px;color:var(--ink-60);line-height:1.7}
+.process .step .bar{position:absolute;left:0;top:0;height:3px;width:0;background:var(--accent);transition:width .5s var(--cubic)}
+.process .step:hover .bar{width:100%}
+
+/* ── About ─────────────────────────────────── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,80px)}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr}}
+.about-grid .big-quote{
+  font-size:clamp(24px,3vw,38px);font-weight:700;letter-spacing:-.025em;line-height:1.28;
+}
+.about-grid .big-quote span{color:var(--accent)}
+.about-copy p{color:var(--ink-60);font-size:15px;line-height:1.85;margin-bottom:16px;max-width:52ch}
+.awards{margin-top:34px;border-top:1px solid var(--ink-14)}
+.awards li{
+  list-style:none;display:flex;justify-content:space-between;gap:18px;
+  padding:13px 2px;border-bottom:1px solid var(--ink-14);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--ink-60);
+}
+.awards li b{color:var(--ink);font-weight:600}
+
+/* 客户 marquee */
+.clients{
+  margin-top:12px;padding:20px 0;border-top:1px solid var(--ink-14);border-bottom:1px solid var(--ink-14);
+  overflow:hidden;white-space:nowrap;
+}
+.clients-track{display:inline-flex;animation:slide 42s linear infinite}
+.clients-track span{
+  padding:0 30px;font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--ink-40);
+}
+.clients-track .sep{color:var(--accent);font-weight:400}
+
+/* ── 联系 ───────────────────────────────────── */
+.contact{background:var(--paper-2);margin:0 calc(var(--gutter) * -1);padding:clamp(64px,9vh,110px) var(--gutter)}
+.contact .mail{
+  display:inline-block;font-size:clamp(30px,6vw,84px);font-weight:800;letter-spacing:-.035em;
+  line-height:1.02;position:relative;
+}
+.contact .mail::after{
+  content:'';position:absolute;left:0;bottom:2px;width:100%;height:3px;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;
+  transition:transform .5s var(--cubic);
+}
+.contact .mail:hover::after{transform:scaleX(1)}
+.contact-meta{
+  display:flex;gap:40px;flex-wrap:wrap;margin-top:38px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-40);
+}
+.contact-meta a:hover{color:var(--accent)}
+
+footer{
+  padding:26px var(--gutter);border-top:1px solid var(--ink-14);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-40);
+}
+
+/* ── 滚动入场（JS 守卫） ────────────────────── */
+html.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--cubic),transform .8s var(--cubic)}
+html.js .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<div class="grid-bg" aria-hidden="true"></div>
+
+<header class="hud">
+  <div class="brand">DATUM<sup>®</sup></div>
+  <nav>
+    <a href="#works">Index</a>
+    <a href="#feature">Feature</a>
+    <a href="#process">Process</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="modes">
+    <button class="mode-btn active" id="modeMono">Mono</button>
+    <button class="mode-btn" id="modeDark">Dark</button>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div>
+    <div class="hero-kicker">
+      <span class="dot"></span>
+      <span>Information Design Practice</span>
+      <span>·</span>
+      <span>Paris / Remote</span>
+      <span>·</span>
+      <span>Est. 2017</span>
+    </div>
+    <h1 class="wordmark">DAT<span class="ghost">UM</span><span class="period">.</span></h1>
+    <svg class="hero-chart" viewBox="0 0 560 300" aria-hidden="true">
+      <line class="axis" x1="0" y1="299" x2="560" y2="299"/>
+      <line class="axis" x1="0" y1="200" x2="560" y2="200"/>
+      <line class="axis" x1="0" y1="100" x2="560" y2="100"/>
+      <path class="area" d="M0,262 L46,240 L93,248 L140,196 L186,214 L233,150 L280,168 L326,110 L373,132 L420,72 L466,96 L513,42 L560,58 L560,300 L0,300 Z"/>
+      <polyline class="line" points="0,262 46,240 93,248 140,196 186,214 233,150 280,168 326,110 373,132 420,72 466,96 513,42 560,58"/>
+      <polyline class="line2" points="0,278 46,270 93,252 140,258 186,228 233,236 280,198 326,210 373,176 420,184 466,150 513,162 560,120"/>
+      <circle cx="513" cy="42" r="5"/>
+    </svg>
+  </div>
+
+  <div class="hero-sub">
+    <p class="lede">
+      <strong>Anaïs Mercier</strong> — 信息设计师与数据叙事者。
+      把枯燥的公共数据翻译成<strong>可以被记住的图形</strong>：
+      气候档案、城市预算、公共卫生、选举地图。
+      每一张图表都是一次编辑判断。
+    </p>
+    <div class="hero-meta">
+      <div><b>84</b>数据项目</div>
+      <div><b>1.2M</b>数据点已可视化</div>
+      <div><b>12</b>国际奖项</div>
+      <div><b>37</b>合作媒体与机构</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Data Storytelling</span><span class="sep">◆</span>
+    <span>Editorial Graphics</span><span class="sep">◆</span>
+    <span>Scrollytelling</span><span class="sep">◆</span>
+    <span>Cartography</span><span class="sep">◆</span>
+    <span>Public Data Archives</span><span class="sep">◆</span>
+    <span>Visual Explainers</span><span class="sep">◆</span>
+    <span>Data Storytelling</span><span class="sep">◆</span>
+    <span>Editorial Graphics</span><span class="sep">◆</span>
+    <span>Scrollytelling</span><span class="sep">◆</span>
+    <span>Cartography</span><span class="sep">◆</span>
+    <span>Public Data Archives</span><span class="sep">◆</span>
+    <span>Visual Explainers</span><span class="sep">◆</span>
+  </div>
+</div>
+
+<!-- ═══ WORKS INDEX ═══ -->
+<section id="works">
+  <div class="sec-head reveal">
+    <h2>Selected Works</h2>
+    <div class="idx">01 — Index / 2019 → 2025</div>
+  </div>
+
+  <div class="works">
+    <!-- 01 -->
+    <div class="work-row reveal" data-pv="bars" data-label="Heat Archive — 柱状图">
+      <div class="no">01/</div>
+      <div class="name">热浪档案 1991—2025<em>Le Monde 数据部</em></div>
+      <div class="kind">Editorial Graphic</div>
+      <div class="year">2025</div>
+      <div class="arrow">↗</div>
+    </div>
+    <div class="work-detail">
+      <div class="work-detail-inner"><div class="work-detail-body">
+        <div class="spacer"></div>
+        <p>为《Le Monde》数据部制作的 34 年城市高温档案：将 12 座欧洲城市的逐日气温编织成一幅可滚动阅读的图谱。报道上线首周被 210 家媒体转载，成为编辑部年度阅读量最高的交互专题。</p>
+        <div class="facts">
+          <div><b>角色</b>数据设计 / 前端图形</div>
+          <div><b>技术</b>D3.js · Canvas · Svelte</div>
+          <div><b>数据量</b>148,000+ 逐日观测</div>
+          <div><b>荣誉</b>Information is Beautiful 金奖</div>
+        </div>
+      </div></div>
+    </div>
+    <!-- 02 -->
+    <div class="work-row reveal" data-pv="donut" data-label="City Budget — 环形图">
+      <div class="no">02/</div>
+      <div class="name">一座城市的一欧元<em>巴黎市政公开数据</em></div>
+      <div class="kind">Public Data / Explainer</div>
+      <div class="year">2024</div>
+      <div class="arrow">↗</div>
+    </div>
+    <div class="work-detail">
+      <div class="work-detail-inner"><div class="work-detail-body">
+        <div class="spacer"></div>
+        <p>把 184 页的市政预算 PDF 解构成「一欧元去哪了」的可交互拆解：每一枚硬币的流向都被可视化为可点击的环形图。被法国 32 所中学采纳为公民教育教材。</p>
+        <div class="facts">
+          <div><b>角色</b>信息设计 / 叙事结构</div>
+          <div><b>技术</b>SVG · Observable · 设计系统</div>
+          <div><b>数据量</b>4,700 条预算科目</div>
+          <div><b>荣誉</b>Kantar Information Award 入围</div>
+        </div>
+      </div></div>
+    </div>
+    <!-- 03 -->
+    <div class="work-row reveal" data-pv="scatter" data-label="Air & Schools — 散点图">
+      <div class="no">03/</div>
+      <div class="name">呼吸的教室<em>公共卫生调查报道</em></div>
+      <div class="kind">Scrollytelling</div>
+      <div class="year">2024</div>
+      <div class="arrow">↗</div>
+    </div>
+    <div class="work-detail">
+      <div class="work-detail-inner"><div class="work-detail-body">
+        <div class="spacer"></div>
+        <p>与调查记者合作的空气质量 × 学校分布专题：2,140 所学校的 PM2.5 暴露水平散点地图，滚动推进叙事，直接推动 3 个学区启动空气净化改造计划。</p>
+        <div class="facts">
+          <div><b>角色</b>数据可视化 / 地图</div>
+          <div><b>技术</b>Mapbox · D3 · WebGL</div>
+          <div><b>数据量</b>2,140 校 × 36 个月</div>
+          <div><b>影响</b>3 个学区政策变更</div>
+        </div>
+      </div></div>
+    </div>
+    <!-- 04 -->
+    <div class="work-row reveal" data-pv="stream" data-label="Migration Streams — 河流图">
+      <div class="no">04/</div>
+      <div class="name">迁徙的河流 1960—2020<em>联合国移民署</em></div>
+      <div class="kind">Interactive Archive</div>
+      <div class="year">2023</div>
+      <div class="arrow">↗</div>
+    </div>
+    <div class="work-detail">
+      <div class="work-detail-inner"><div class="work-detail-body">
+        <div class="spacer"></div>
+        <p>60 年全球迁徙数据的河流图档案，可按大洲、年代、动因筛选。以「河流」隐喻取代「箭头」，让人口流动的规模感先于政治判断抵达读者。展出于日内瓦 IOM 数字展览。</p>
+        <div class="facts">
+          <div><b>角色</b>概念 / 图形系统</div>
+          <div><b>技术</b>Canvas · 自研流图布局</div>
+          <div><b>数据量</b>22,000 条迁徙走廊</div>
+          <div><b>展出</b>IOM Geneva 数字展</div>
+        </div>
+      </div></div>
+    </div>
+    <!-- 05 -->
+    <div class="work-row reveal" data-pv="dots" data-label="Election Night — 点阵图">
+      <div class="no">05/</div>
+      <div class="name">选举之夜实时图组<em>France Télévisions</em></div>
+      <div class="kind">Live Data Graphics</div>
+      <div class="year">2022</div>
+      <div class="arrow">↗</div>
+    </div>
+    <div class="work-detail">
+      <div class="work-detail-inner"><div class="work-detail-body">
+        <div class="spacer"></div>
+        <p>为电视直播设计的实时选举图形系统：一套模板同时覆盖 5 个频道、竖屏与横屏。开票夜更新 1,800 万次数据仍保持 60fps 的图形响应。</p>
+        <div class="facts">
+          <div><b>角色</b>动态图形系统设计</div>
+          <div><b>技术</b>实时数据管线 · After Effects</div>
+          <div><b>规模</b>5 频道 × 3 版式</div>
+          <div><b>观众</b>直播峰值 940 万</div>
+        </div>
+      </div></div>
+    </div>
+    <!-- 06 -->
+    <div class="work-row reveal" data-pv="heat" data-label="Sleepless City — 热力图">
+      <div class="no">06/</div>
+      <div class="name">不眠之城 · 噪音地图<em>城市研究报告</em></div>
+      <div class="kind">Cartography</div>
+      <div class="year">2021</div>
+      <div class="arrow">↗</div>
+    </div>
+    <div class="work-detail">
+      <div class="work-detail-inner"><div class="work-detail-body">
+        <div class="spacer"></div>
+        <p>基于 4 万个传感器读数绘制的城市噪音昼夜热力图，「谁在制造噪音、谁在承受噪音」的空间公平性分析，被写入城市规划白皮书附录。</p>
+        <div class="facts">
+          <div><b>角色</b>制图 / 数据分析</div>
+          <div><b>技术</b>QGIS · Python · D3</div>
+          <div><b>数据量</b>41,200 传感器读数</div>
+          <div><b>影响</b>入选城市规划白皮书</div>
+        </div>
+      </div></div>
+    </div>
+    <!-- 07 -->
+    <div class="work-row reveal" data-pv="line" data-label="Vaccine Run — 折线图">
+      <div class="no">07/</div>
+      <div class="name">疫苗赛跑 · 全球接种追踪<em>公共卫生可视化</em></div>
+      <div class="kind">Data Dashboard / Editorial</div>
+      <div class="year">2021</div>
+      <div class="arrow">↗</div>
+    </div>
+    <div class="work-detail">
+      <div class="work-detail-inner"><div class="work-detail-body">
+        <div class="spacer"></div>
+        <p>为全球疫苗接种进度设计的编辑型追踪页面：用「赛跑」的视觉隐喻替代冷冰冰的百分比，每日更新持续 11 个月，累计访问 2,700 万次。</p>
+        <div class="facts">
+          <div><b>角色</b>视觉叙事 / 系统设计</div>
+          <div><b>技术</b>响应式图形 · 自动化管线</div>
+          <div><b>周期</b>每日更新 × 334 天</div>
+          <div><b>访问</b>2,700 万次</div>
+        </div>
+      </div></div>
+    </div>
+    <!-- 08 -->
+    <div class="work-row reveal" data-pv="matrix" data-label="Type & Data — 字体矩阵">
+      <div class="no">08/</div>
+      <div class="name">可变字体 × 数据条形图<em>研究原型</em></div>
+      <div class="kind">R&amp;D / Typography</div>
+      <div class="year">2019</div>
+      <div class="arrow">↗</div>
+    </div>
+    <div class="work-detail">
+      <div class="work-detail-inner"><div class="work-detail-body">
+        <div class="spacer"></div>
+        <p>用可变字体的字重轴直接编码数据：文字本身就是图表。该原型发表于 IEEE VIS 文艺程序，后被 3 家新闻编辑部改编使用。</p>
+        <div class="facts">
+          <div><b>角色</b>研究 / 原型开发</div>
+          <div><b>技术</b>Variable Fonts · WebGL</div>
+          <div><b>发表</b>IEEE VIS Arts Program</div>
+          <div><b>采用</b>3 家新闻编辑部</div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- 悬停预览 -->
+  <div class="hover-preview" id="hoverPreview">
+    <div class="pv-label" id="pvLabel">Preview</div>
+  </div>
+</section>
+
+<!-- ═══ FEATURE ═══ -->
+<section id="feature" class="feature">
+  <div class="sec-head reveal">
+    <h2>Feature — 热浪档案</h2>
+    <div class="idx">02 — Case Study</div>
+  </div>
+  <div class="feature-grid">
+    <div class="reveal">
+      <h3>34 年，12 座城市，<br>148,000 个滚烫的日子。</h3>
+      <p>「热浪档案」不是一张图，而是一段可以滚动阅读的时间。每一列是一年，每一格是一天，颜色就是那一天的城市体温。读者第一次「看见」了热浪的密度、间隔与加速——而不是在折线图里寻找它们。</p>
+      <p style="margin-top:14px">项目采用全 Canvas 渲染，支持逐格检索；为色觉障碍读者提供了等高线替代模式。上线后被 210 家媒体转载。</p>
+      <div class="tags">
+        <span>D3.js</span><span>Canvas</span><span>Scrollytelling</span>
+        <span>148K Data Points</span><span>Accessibility</span>
+      </div>
+    </div>
+    <div class="heat-panel reveal">
+      <div class="heat-title">
+        <span>Heat Archive — Daily Max Temp</span>
+        <span>1991 → 2025</span>
+      </div>
+      <div class="heat-grid" id="heatGrid" aria-hidden="true"></div>
+      <div class="heat-legend">
+        <span>12°C</span>
+        <div class="sw" style="background:#2b4a8b"></div>
+        <div class="sw" style="background:#4f7dd1"></div>
+        <div class="sw" style="background:#e8c15a"></div>
+        <div class="sw" style="background:#e4572e"></div>
+        <div class="sw" style="background:#8c1d18"></div>
+        <span>44°C</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROCESS ═══ -->
+<section id="process">
+  <div class="sec-head reveal">
+    <h2>How It's Made</h2>
+    <div class="idx">03 — Process</div>
+  </div>
+  <div class="process reveal">
+    <div class="step">
+      <div class="bar"></div>
+      <div class="n">STEP 01</div>
+      <h4>Frame · 提问</h4>
+      <p>图形始于一个编辑问题，而不是一份数据集。「谁受影响？规模多大？与什么有关？」——先定义读者应该带走的一句话。</p>
+    </div>
+    <div class="step">
+      <div class="bar"></div>
+      <div class="n">STEP 02</div>
+      <h4>Collect · 取证</h4>
+      <p>采集、清洗、交叉验证。每个数字都要能追溯到原始出处；不可靠的数字宁可留白，也不放进图表。</p>
+    </div>
+    <div class="step">
+      <div class="bar"></div>
+      <div class="n">STEP 03</div>
+      <h4>Encode · 编码</h4>
+      <p>为数据寻找最诚实的视觉编码：位置优于长度，长度优于面积，颜色只留给真正需要强调的维度。</p>
+    </div>
+    <div class="step">
+      <div class="bar"></div>
+      <div class="n">STEP 04</div>
+      <h4>Publish · 发布</h4>
+      <p>可访问性测试、多端校对、色觉模拟、屏幕阅读器走查——然后交给时间检验：好的图表在三年后依然成立。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="sec-head reveal">
+    <h2>About</h2>
+    <div class="idx">04 — Profile</div>
+  </div>
+  <div class="about-grid">
+    <div class="reveal">
+      <div class="big-quote">
+        「数据没有立场，<br>但图形有。<span>每一个刻度的选择，都是一次编辑判断。</span>」
+      </div>
+      <ul class="awards">
+        <li><b>Information is Beautiful Awards</b><span>Gold — Editorial · 2025</span></li>
+        <li><b>Kantar Information Award</b><span>Finalist · 2024</span></li>
+        <li><b>Malofiej Awards</b><span>Silver — Interactive · 2023</span></li>
+        <li><b>IEEE VIS Arts Program</b><span>Official Selection · 2019</span></li>
+        <li><b>SND Digital</b><span>Award of Excellence · 2022</span></li>
+      </ul>
+    </div>
+    <div class="about-copy reveal">
+      <p>我在巴黎出生，在洛桑联邦理工学习统计，又在新闻编辑部里学会了「删掉 90% 的数据」。过去八年，我与《Le Monde》、联合国移民署、France Télévisions 等 37 家媒体与公共机构合作，把复杂数据变成公众愿意读完的图形。</p>
+      <p>我的工作室 DATUM 只接一类项目：那些「重要但没人读」的数据——公共预算、环境监测、公共卫生、选举档案。我相信信息设计是一种公共服务。</p>
+      <p>教学方面，我在 ÉCAL 与 Sciences Po 指导数据叙事工作坊，每年带 60 名学生完成他们的第一个数据专题。</p>
+    </div>
+  </div>
+
+  <div class="clients reveal" aria-hidden="true">
+    <div class="clients-track">
+      <span>Le Monde</span><span class="sep">◆</span>
+      <span>UN Migration</span><span class="sep">◆</span>
+      <span>France Télévisions</span><span class="sep">◆</span>
+      <span>The Guardian</span><span class="sep">◆</span>
+      <span>Sciences Po</span><span class="sep">◆</span>
+      <span>ÉCAL</span><span class="sep">◆</span>
+      <span>City of Paris</span><span class="sep">◆</span>
+      <span>WHO Europe</span><span class="sep">◆</span>
+      <span>Le Monde</span><span class="sep">◆</span>
+      <span>UN Migration</span><span class="sep">◆</span>
+      <span>France Télévisions</span><span class="sep">◆</span>
+      <span>The Guardian</span><span class="sep">◆</span>
+      <span>Sciences Po</span><span class="sep">◆</span>
+      <span>ÉCAL</span><span class="sep">◆</span>
+      <span>City of Paris</span><span class="sep">◆</span>
+      <span>WHO Europe</span><span class="sep">◆</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" class="contact">
+  <div class="sec-head reveal">
+    <h2>Let's Work With Data</h2>
+    <div class="idx">05 — Contact</div>
+  </div>
+  <a class="mail reveal" href="mailto:studio@datum.design">studio@datum.design</a>
+  <div class="contact-meta reveal">
+    <a href="#">Instagram ↗</a>
+    <a href="#">Observable ↗</a>
+    <a href="#">GitHub ↗</a>
+    <span>Paris — CET (UTC+1)</span>
+    <span>2026 档期开放中</span>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 DATUM® — Anaïs Mercier</div>
+  <div>Information Design Practice</div>
+  <div>Designed with 148,000 data points</div>
+</footer>
+
+<script>
+/* ── 模式切换（Mono / Dark）── */
+const root = document.documentElement;
+const btnMono = document.getElementById('modeMono');
+const btnDark = document.getElementById('modeDark');
+btnMono.addEventListener('click', () => {
+  root.removeAttribute('data-theme');
+  btnMono.classList.add('active'); btnDark.classList.remove('active');
+});
+btnDark.addEventListener('click', () => {
+  root.setAttribute('data-theme', 'dark');
+  btnDark.classList.add('active'); btnMono.classList.remove('active');
+});
+
+/* ── 项目行展开 ── */
+document.querySelectorAll('.work-row').forEach(row => {
+  row.addEventListener('click', () => {
+    const detail = row.nextElementSibling;
+    const isOpen = row.classList.contains('open');
+    document.querySelectorAll('.work-row.open').forEach(r => r.classList.remove('open'));
+    document.querySelectorAll('.work-detail.open').forEach(d => d.classList.remove('open'));
+    if (!isOpen) {
+      row.classList.add('open');
+      detail.classList.add('open');
+    }
+  });
+});
+
+/* ── 悬停浮动预览（纯 CSS/SVG 迷你图表） ── */
+const pv = document.getElementById('hoverPreview');
+const pvLabel = document.getElementById('pvLabel');
+const viz = {
+  bars:   '<svg viewBox="0 0 300 210"><g fill="#6366f1">'+[38,64,50,88,72,110,96,132,118,150,138,168,152,182,170,196].map((h,i)=>`<rect x="${14+i*18}" y="${200-h}" width="11" height="${h}" opacity="${.35+i*.04}"/>`).join('')+'</g></svg>',
+  donut:  '<svg viewBox="0 0 300 210"><g transform="translate(150,105)"><circle r="72" fill="none" stroke="#e2e8f0" stroke-width="30"/><circle r="72" fill="none" stroke="#6366f1" stroke-width="30" stroke-dasharray="210 452" transform="rotate(-90)"/><circle r="72" fill="none" stroke="#06b6d4" stroke-width="30" stroke-dasharray="96 452" stroke-dashoffset="-210" transform="rotate(-90)"/><circle r="72" fill="none" stroke="#E4572E" stroke-width="30" stroke-dasharray="58 452" stroke-dashoffset="-306" transform="rotate(-90)"/></g></svg>',
+  scatter:'<svg viewBox="0 0 300 210"><g>'+Array.from({length:46},(_,i)=>{const x=20+Math.random()*260,y=18+Math.random()*170;return `<circle cx="${x}" cy="${y}" r="${3+Math.random()*6}" fill="#6366f1" opacity="${.25+Math.random()*.6}"/>`}).join('')+'</g></svg>',
+  stream: '<svg viewBox="0 0 300 210"><path d="M0,150 C60,90 100,180 160,120 C210,75 260,140 300,100 L300,160 C250,190 200,130 150,170 C100,205 50,150 0,180 Z" fill="#6366f1" opacity=".7"/><path d="M0,110 C70,60 110,140 170,80 C220,40 270,100 300,70 L300,115 C255,145 205,90 155,130 C105,170 55,115 0,155 Z" fill="#06b6d4" opacity=".55"/></svg>',
+  dots:   '<svg viewBox="0 0 300 210"><g>'+Array.from({length:96},(_,i)=>{const x=18+(i%16)*18,y=22+Math.floor(i/16)*30;const c=['#6366f1','#06b6d4','#E4572E','#cbd5e1'][Math.floor(Math.random()*4)];return `<circle cx="${x}" cy="${y}" r="6.5" fill="${c}" opacity=".85"/>`}).join('')+'</g></svg>',
+  heat:   '<svg viewBox="0 0 300 210"><g>'+Array.from({length:120},(_,i)=>{const x=12+(i%20)*14,y=16+Math.floor(i/20)*32;const t=Math.random();const c=t<.3?'#2b4a8b':t<.55?'#4f7dd1':t<.75?'#e8c15a':t<.92?'#E4572E':'#8c1d18';return `<rect x="${x}" y="${y}" width="11" height="26" rx="2" fill="${c}" opacity=".9"/>`}).join('')+'</g></svg>',
+  line:   '<svg viewBox="0 0 300 210"><polyline points="10,180 45,150 80,162 115,110 150,124 185,74 220,92 255,42 290,58" fill="none" stroke="#6366f1" stroke-width="3"/><polyline points="10,192 45,178 80,168 115,158 150,138 185,132 220,112 255,102 290,84" fill="none" stroke="#E4572E" stroke-width="2" stroke-dasharray="5 5"/></svg>',
+  matrix: '<svg viewBox="0 0 300 210"><g>'+Array.from({length:60},(_,i)=>{const x=16+(i%12)*23,y=20+Math.floor(i/12)*36;const h=8+Math.random()*24;return `<rect x="${x}" y="${y}" width="16" height="${h}" rx="2" fill="#6366f1" opacity="${.3+Math.random()*.65}"/>`}).join('')+'</g></svg>'
+};
+document.querySelectorAll('.work-row').forEach(row => {
+  row.addEventListener('mousemove', e => {
+    const key = row.dataset.pv;
+    if (!viz[key]) return;
+    if (pv.dataset.key !== key) {
+      pv.innerHTML = viz[key] + '<div class="pv-label" id="pvLabel">' + row.dataset.label + '</div>';
+      pv.dataset.key = key;
+    }
+    pv.style.left = (e.clientX + 28) + 'px';
+    pv.style.top = (e.clientY - 105) + 'px';
+    pv.classList.add('show');
+  });
+  row.addEventListener('mouseleave', () => pv.classList.remove('show'));
+});
+
+/* ── 特写热力网格 ── */
+const heatGrid = document.getElementById('heatGrid');
+const heatColors = ['#2b4a8b','#4f7dd1','#7ea6e0','#e8c15a','#e08a3c','#E4572E','#8c1d18'];
+let frag = '';
+for (let i = 0; i < 168; i++) {
+  const t = Math.pow(Math.random(), 1.4);
+  const c = heatColors[Math.floor(t * heatColors.length)];
+  frag += `<i style="background:${c};animation-delay:${(i * 6)}ms"></i>`;
+}
+heatGrid.innerHTML = frag;
+
+/* ── 滚动入场（JS 守卫） ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.classList.add('in');
+      io.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

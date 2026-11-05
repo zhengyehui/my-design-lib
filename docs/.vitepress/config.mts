@@ -300,7 +300,8 @@ export default defineConfig({
             { text: 'TERRA 窑火 陶艺工作室', link: '/pages/terra-ceramics' },
             { text: 'KAIROS 舞蹈编导作品集', link: '/pages/kairos-dance' },
             { text: 'ALTITUDE 山岳探险家作品集', link: '/pages/altitude-expedition' },
-            { text: 'FEU 主厨火焰料理作品集', link: '/pages/chef-portfolio' }
+            { text: 'FEU 主厨火焰料理作品集', link: '/pages/chef-portfolio' },
+            { text: 'DATUM 数据叙事作品集', link: '/pages/datum-dataviz' }
           ]
         },
         {
@@ -452,7 +453,8 @@ export default defineConfig({
             { text: 'Aegis Trust Center 安全合规中心', link: '/pages/trust-center' },
             { text: 'DIALOGUE 对话录 人物访谈', link: '/pages/dialogue-interviews' },
             { text: 'Lumen Research 年度白皮书', link: '/pages/research-lab-whitepaper' },
-            { text: '北光纪行 摄影田野日志', link: '/pages/northlight-journal' }
+            { text: '北光纪行 摄影田野日志', link: '/pages/northlight-journal' },
+            { text: 'THE SEASON 赛季数据年鉴', link: '/pages/season-almanac' }
           ]
         },
         {

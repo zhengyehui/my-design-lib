@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 223 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 233 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -2052,6 +2052,24 @@ const pages = [
     colors: ['#f7f2e9', '#c84a24', '#17110b'],
     rating: 9.1,
     description: '米其林二星主厨个人品牌作品集——炭火暖调：超大衬线"火候/The Art of Fire"混排描边 Hero+旋转双环炭烧盘+食材 Marquee+三条理念描边大编号+招牌四味渐变餐盘卡+炉台履历时间线+深色主厨宣言与统计+媒体评价+私宴日程行式排版',
+  },
+  {
+    id: 'datum-dataviz',
+    title: 'DATUM — Anaïs Mercier 数据叙事 & 信息设计作品集',
+    category: 'portfolio',
+    tags: ['作品集', '数据可视化', '信息设计', '编号索引', 'SVG'],
+    colors: ['#FAFAF7', '#6366f1', '#E4572E'],
+    rating: 9.2,
+    description: '信息设计师作品集——实验室图纸风：图纸网格 Hero（DATUM 描边混排+SVG 折线绘制动画）+编号项目索引 01/—08/（点击展开详情+跟随光标 SVG 迷你图表预览）+深色特写案例（168 格热力网格）+四步流程网格+获奖列表+双 Marquee+Mono/Dark 模式切换',
+  },
+  {
+    id: 'season-almanac',
+    title: 'THE SEASON — 2025/26 足球赛季数据年鉴',
+    category: 'content',
+    tags: ['数据年鉴', '体育编辑', '报纸排版', '数据图表', 'SVG'],
+    colors: ['#F4F1E8', '#0B3D2E', '#C9A227'],
+    rating: 9.2,
+    description: '足球赛季数据年鉴——报纸编辑风：双线报头+衬线斜体刊名+头条（首字下沉导语+SVG 球场传球路线动画）+6 格数据条+最终积分榜（Form 战绩点阵+冠军金/降级橙标记）+射手榜条形图+补时进球柱图+xG 偏差散点矩阵+赛季时间线+编辑部长读专栏卡+深绿订阅面板',
   },
 ]
 

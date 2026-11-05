@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE SEASON — 2025/26 足球赛季数据年鉴</title>
+<meta name="description" content="THE SEASON — 赛季数据年鉴：积分榜、射手榜、关键时间线、xG 散点、状态矩阵与编辑部年度专栏，一册读懂 2025/26 赛季。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   THE SEASON — 足球赛季数据年鉴
+   报纸年鉴 × 数据编辑：新闻纸底色、墨绿主调、
+   大号衬线头条 + 联赛数据表 + CSS 图表组
+   ============================================================ */
+
+:root{
+  --paper:#F4F1E8;
+  --paper-2:#EDE8DA;
+  --ink:#181510;
+  --ink-60:rgba(24,21,16,.62);
+  --ink-40:rgba(24,21,16,.42);
+  --ink-14:rgba(24,21,16,.16);
+  --ink-08:rgba(24,21,16,.08);
+  --pitch:#0B3D2E;
+  --pitch-light:#14624A;
+  --flame:var(--color-danger,#E4572E);
+  --gold:#C9A227;
+  --sky:var(--color-primary,#6366f1);
+  --serif:'Georgia','Songti SC','Times New Roman',serif;
+  --sans:var(--font-sans,'Inter',-apple-system,sans-serif);
+  --mono:var(--font-mono,'JetBrains Mono','SF Mono',monospace);
+  --gutter:clamp(20px,4vw,72px);
+  --cubic:cubic-bezier(.77,0,.175,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);background:var(--paper);color:var(--ink);
+  line-height:var(--leading-normal,1.5);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background-image:radial-gradient(rgba(24,21,16,.035) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+::selection{background:var(--pitch);color:var(--paper)}
+a{color:inherit;text-decoration:none}
+
+/* ── 报头 ───────────────────────────────────── */
+.masthead{
+  border-bottom:3px double var(--ink);
+  padding:18px var(--gutter) 0;
+  position:relative;z-index:5;background:var(--paper);
+}
+.masthead-top{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-40);padding-bottom:12px;border-bottom:1px solid var(--ink-14);
+}
+.nameplate{
+  display:flex;align-items:baseline;justify-content:center;gap:24px;
+  padding:18px 0 8px;position:relative;
+}
+.nameplate h1{
+  font-family:var(--serif);font-size:clamp(44px,9vw,132px);
+  font-weight:900;letter-spacing:-.02em;line-height:.92;font-style:italic;
+  color:var(--pitch);
+}
+.nameplate .est{
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-40);writing-mode:vertical-rl;
+}
+.masthead-meta{
+  display:flex;justify-content:center;gap:28px;flex-wrap:wrap;
+  padding:10px 0 16px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-60);
+}
+.masthead-meta .pill{
+  border:1px solid var(--ink-14);border-radius:99px;padding:4px 12px;color:var(--pitch);font-weight:600;
+}
+
+/* ── 头条 ───────────────────────────────────── */
+.lead{
+  padding:clamp(40px,6vh,72px) var(--gutter) 0;
+  display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(28px,5vw,64px);
+  align-items:start;
+}
+@media(max-width:960px){.lead{grid-template-columns:1fr}}
+.kicker{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--flame);margin-bottom:18px;display:flex;align-items:center;gap:12px;
+}
+.kicker::before{content:'';width:36px;height:2px;background:var(--flame)}
+.lead h2{
+  font-family:var(--serif);font-size:clamp(36px,5.4vw,78px);
+  font-weight:900;line-height:1.02;letter-spacing:-.015em;color:var(--pitch);
+}
+.lead h2 em{font-style:italic;color:var(--flame)}
+.lead .dek{
+  margin-top:22px;font-size:clamp(16px,1.5vw,19px);line-height:1.75;color:var(--ink-60);
+  max-width:56ch;
+}
+.lead .dek::first-letter{
+  font-family:var(--serif);font-size:3.4em;float:left;line-height:.82;
+  padding:6px 12px 0 0;color:var(--pitch);font-weight:900;
+}
+.byline{
+  margin-top:20px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-40);
+}
+
+/* 头条视觉：球场图 */
+.pitch-panel{
+  background:var(--pitch);border-radius:6px;padding:26px;color:var(--paper);
+  box-shadow:0 30px 70px rgba(11,61,46,.25);
+}
+.pitch-panel .pp-head{
+  display:flex;justify-content:space-between;
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(244,241,232,.55);margin-bottom:16px;
+}
+.pitch-svg{width:100%;height:auto;display:block}
+.pitch-svg .field{stroke:rgba(244,241,232,.4);fill:none;stroke-width:1.6}
+.pitch-svg .route{stroke:var(--gold);stroke-width:2.4;fill:none;stroke-dasharray:240;stroke-dashoffset:240;animation:route 2.4s var(--cubic) .4s forwards}
+.pitch-svg .route2{stroke:#E8C15A;stroke-width:1.6;fill:none;stroke-dasharray:180;stroke-dashoffset:180;animation:route 2.4s var(--cubic) .8s forwards}
+@keyframes route{to{stroke-dashoffset:0}}
+.pitch-svg .player{fill:var(--gold)}
+.pitch-svg .player-opp{fill:#E8C15A;opacity:.75}
+.pp-caption{
+  margin-top:14px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(244,241,232,.55);
+}
+
+/* ── 数据条 ─────────────────────────────────── */
+.stat-strip{
+  margin:clamp(36px,5vh,60px) var(--gutter) 0;
+  display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--ink-14);
+  background:var(--paper-2);
+}
+@media(max-width:900px){.stat-strip{grid-template-columns:repeat(3,1fr)}}
+.stat-strip .cell{
+  padding:20px 18px;border-right:1px solid var(--ink-14);position:relative;overflow:hidden;
+}
+.stat-strip .cell:last-child{border-right:none}
+.stat-strip .cell b{
+  display:block;font-family:var(--serif);font-size:clamp(24px,3vw,40px);
+  font-weight:900;letter-spacing:-.02em;color:var(--pitch);line-height:1;
+}
+.stat-strip .cell span{
+  display:block;margin-top:8px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-40);
+}
+.stat-strip .cell .delta{color:var(--flame);font-family:var(--mono);font-size:10px}
+
+/* ── 分区标题 ───────────────────────────────── */
+section{padding:clamp(56px,8vh,96px) var(--gutter) 0}
+.sec-rule{
+  display:flex;align-items:baseline;gap:20px;margin-bottom:32px;
+  border-top:2px solid var(--ink);padding-top:16px;
+}
+.sec-rule h3{
+  font-family:var(--serif);font-size:clamp(24px,3.2vw,42px);
+  font-weight:900;letter-spacing:-.01em;color:var(--pitch);
+}
+.sec-rule .n{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-40);margin-left:auto;
+}
+
+/* ── 积分榜 ─────────────────────────────────── */
+.table-wrap{overflow-x:auto;border:1px solid var(--ink-14);background:var(--paper)}
+table{width:100%;border-collapse:collapse;min-width:720px}
+thead th{
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-40);text-align:right;padding:14px 12px;border-bottom:2px solid var(--ink);
+  background:var(--paper-2);
+}
+thead th:nth-child(-n+2){text-align:left}
+tbody td{
+  padding:13px 12px;text-align:right;font-family:var(--mono);font-size:12.5px;
+  border-bottom:1px solid var(--ink-14);color:var(--ink-60);
+}
+tbody td:nth-child(-n+2){text-align:left}
+tbody td.club{font-family:var(--sans);font-size:14.5px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+tbody td.pos{font-weight:700;color:var(--ink);width:52px;position:relative}
+tbody tr{transition:background .3s}
+tbody tr:hover{background:var(--ink-08)}
+tbody tr.hl{background:rgba(201,162,39,.12)}
+tbody tr.hl td.pos::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);
+}
+tbody tr.risk td.pos::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--flame);
+}
+td.pts{font-weight:700;color:var(--pitch);font-size:14px}
+.form{display:inline-flex;gap:4px;justify-content:flex-end}
+.form i{
+  width:18px;height:18px;border-radius:3px;display:grid;place-items:center;
+  font-style:normal;font-family:var(--mono);font-size:8.5px;font-weight:700;color:#fff;
+}
+.form i.w{background:var(--pitch-light)}
+.form i.d{background:var(--ink-40)}
+.form i.l{background:var(--flame)}
+.table-note{
+  padding:12px 14px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-40);display:flex;gap:22px;flex-wrap:wrap;
+  border-top:1px solid var(--ink-14);
+}
+.table-note .lg{display:inline-flex;align-items:center;gap:7px}
+.table-note .sw{width:12px;height:12px;border-radius:3px}
+
+/* ── 双栏：射手榜 + 进球分布 ───────────────── */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);margin-top:8px}
+@media(max-width:960px){.duo{grid-template-columns:1fr}}
+
+.scorer{display:flex;align-items:center;gap:16px;padding:13px 4px;border-bottom:1px solid var(--ink-14)}
+.scorer .rank{font-family:var(--mono);font-size:11px;color:var(--ink-40);width:26px}
+.scorer .who{flex:0 0 168px}
+.scorer .who b{display:block;font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.scorer .who span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-40)}
+.scorer .bar-wrap{flex:1;height:14px;background:var(--ink-08);border-radius:2px;overflow:hidden}
+.scorer .bar{
+  height:100%;border-radius:2px;width:0;
+  background:linear-gradient(90deg,var(--pitch),var(--pitch-light));
+  transition:width 1.1s var(--cubic);
+}
+.scorer .bar.alt{background:linear-gradient(90deg,var(--flame),#E8853F)}
+.scorer .goals{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--pitch);width:38px;text-align:right}
+
+/* 进球时间分布 */
+.minute-chart{display:flex;align-items:flex-end;gap:8px;height:230px;padding-top:12px}
+.minute-chart .m{
+  flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;height:100%;
+}
+.minute-chart .m .bar{
+  width:100%;border-radius:3px 3px 0 0;height:0;
+  background:var(--pitch);opacity:.85;transition:height 1s var(--cubic);
+  position:relative;
+}
+.minute-chart .m.peak .bar{background:var(--flame)}
+.minute-chart .m .bar b{
+  position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9.5px;color:var(--ink-40);font-weight:500;
+}
+.minute-chart .m .lb{
+  font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--ink-40);
+}
+
+/* ── 赛季时间线 ─────────────────────────────── */
+.timeline{
+  position:relative;margin-top:12px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--ink-14);
+  border:1px solid var(--ink-14);
+}
+@media(max-width:900px){.timeline{grid-template-columns:1fr 1fr}}
+.tl-item{background:var(--paper);padding:26px 22px 30px;position:relative;transition:background .35s}
+.tl-item:hover{background:var(--paper-2)}
+.tl-item .month{
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--flame);
+}
+.tl-item h5{font-family:var(--serif);font-size:19px;font-weight:900;letter-spacing:-.01em;margin:12px 0 8px;color:var(--pitch);line-height:1.22}
+.tl-item p{font-size:12.5px;line-height:1.7;color:var(--ink-60)}
+.tl-item .score{
+  margin-top:14px;display:inline-block;font-family:var(--mono);font-size:11px;
+  border:1px solid var(--ink-14);border-radius:4px;padding:5px 10px;color:var(--ink);letter-spacing:.06em;
+}
+
+/* ── xG 散点 ───────────────────────────────── */
+.xg-panel{
+  border:1px solid var(--ink-14);background:var(--paper-2);padding:clamp(20px,3vw,36px);
+}
+.xg-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-40);
+  margin-bottom:18px}
+.xg-svg{width:100%;height:auto;display:block}
+.xg-svg .quad{fill:var(--ink-08)}
+.xg-svg .ax{stroke:var(--ink-14);stroke-width:1}
+.xg-svg text{font-family:var(--mono);font-size:9px;fill:var(--ink-40)}
+.xg-svg .team{cursor:pointer;transition:opacity .3s}
+.xg-svg .team:hover{opacity:.6}
+.xg-svg .team circle{stroke:var(--paper);stroke-width:1.5}
+
+/* ── 专栏卡片 ───────────────────────────────── */
+.columns{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.5vw,32px);margin-top:12px}
+@media(max-width:900px){.columns{grid-template-columns:1fr}}
+.col-card{
+  border:1px solid var(--ink-14);background:var(--paper);padding:28px 26px 32px;
+  display:flex;flex-direction:column;gap:14px;transition:transform .4s var(--cubic),box-shadow .4s;
+  position:relative;overflow:hidden;
+}
+.col-card:hover{transform:translateY(-6px);box-shadow:0 24px 50px rgba(24,21,16,.12)}
+.col-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--pitch);
+  transform:scaleX(0);transform-origin:left;transition:transform .45s var(--cubic);
+}
+.col-card:hover::before{transform:scaleX(1)}
+.col-card .tag{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--flame);
+}
+.col-card h5{font-family:var(--serif);font-size:22px;font-weight:900;line-height:1.25;letter-spacing:-.01em;color:var(--pitch)}
+.col-card p{font-size:13.5px;line-height:1.75;color:var(--ink-60)}
+.col-card .read{
+  margin-top:auto;padding-top:14px;border-top:1px solid var(--ink-14);
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-40);display:flex;justify-content:space-between;
+}
+.col-card:hover .read{color:var(--flame)}
+
+/* ── 订阅 / 页脚 ───────────────────────────── */
+.subscribe{
+  margin:clamp(56px,8vh,96px) var(--gutter) 0;
+  background:var(--pitch);color:var(--paper);border-radius:6px;
+  padding:clamp(36px,6vw,64px);text-align:center;position:relative;overflow:hidden;
+}
+.subscribe::after{
+  content:'2025/26';position:absolute;right:-2%;bottom:-28%;
+  font-family:var(--serif);font-size:clamp(120px,22vw,300px);font-weight:900;font-style:italic;
+  color:rgba(244,241,232,.06);line-height:1;pointer-events:none;
+}
+.subscribe h3{font-family:var(--serif);font-size:clamp(26px,4vw,48px);font-weight:900;letter-spacing:-.01em}
+.subscribe p{margin:16px auto 26px;max-width:48ch;color:rgba(244,241,232,.7);font-size:15px;line-height:1.75}
+.sub-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.sub-form input{
+  font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+  padding:14px 20px;border:1px solid rgba(244,241,232,.28);border-radius:99px;
+  background:rgba(244,241,232,.08);color:var(--paper);min-width:260px;outline:none;
+}
+.sub-form input::placeholder{color:rgba(244,241,232,.45)}
+.sub-form input:focus{border-color:var(--gold)}
+.sub-form button{
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  padding:14px 28px;border-radius:99px;border:none;cursor:pointer;
+  background:var(--gold);color:#221B05;font-weight:700;transition:transform .3s var(--cubic);
+}
+.sub-form button:hover{transform:translateY(-2px)}
+
+footer{
+  margin-top:clamp(48px,7vh,80px);padding:30px var(--gutter) 40px;
+  border-top:3px double var(--ink);
+  display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-40);
+}
+footer b{color:var(--pitch)}
+
+/* ── 滚动入场 ───────────────────────────────── */
+html.js .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s var(--cubic),transform .8s var(--cubic)}
+html.js .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- ═══ 报头 ═══ -->
+<header class="masthead">
+  <div class="masthead-top">
+    <span>Vol. XII — No. 04</span>
+    <span>The Data Almanac of Football</span>
+    <span>Printed &amp; Digital Edition</span>
+  </div>
+  <div class="nameplate">
+    <div class="est">Est. 2014</div>
+    <h1>The Season</h1>
+    <div class="est">Data Almanac</div>
+  </div>
+  <div class="masthead-meta">
+    <span class="pill">2025 / 26 赛季特辑</span>
+    <span>38 轮 · 380 场 · 1,024 粒进球</span>
+    <span>编辑部年度数据年鉴</span>
+  </div>
+</header>
+
+<!-- ═══ 头条 ═══ -->
+<div class="lead">
+  <div class="reveal">
+    <div class="kicker">Cover Story — 封面故事</div>
+    <h2>冠军在<em>第 87 分钟</em>被决定的赛季</h2>
+    <p class="dek">
+      这是一个被补时改写的赛季：冠军悬念保留到最后一轮第 87 分钟，
+      两支球队、一粒进球、0.04 的预期进球差。本刊用 38 轮、380 场、
+      1,024 粒进球的完整数据，复盘这个被数据反复「预言失败」的赛季——
+      以及它为什么让模型集体失灵。
+    </p>
+    <div class="byline">文 / 数据编辑部 · 制图 / THE SEASON 图表组 · 阅读 12 分钟</div>
+  </div>
+
+  <div class="pitch-panel reveal">
+    <div class="pp-head">
+      <span>Decisive Goal — 第 38 轮 87'</span>
+      <span>xG 0.31</span>
+    </div>
+    <svg class="pitch-svg" viewBox="0 0 420 260" aria-label="决定性进球的传球路线图">
+      <rect class="field" x="10" y="10" width="400" height="240" rx="3"/>
+      <line class="field" x1="210" y1="10" x2="210" y2="250"/>
+      <circle class="field" cx="210" cy="130" r="42"/>
+      <rect class="field" x="10" y="66" width="58" height="128"/>
+      <rect class="field" x="352" y="66" width="58" height="128"/>
+      <rect class="field" x="10" y="102" width="24" height="56"/>
+      <rect class="field" x="386" y="102" width="24" height="56"/>
+      <!-- 进攻路线 -->
+      <path class="route" d="M86,196 C140,190 150,140 196,132 C244,124 268,96 330,86 L360,118"/>
+      <path class="route2" d="M196,132 C232,158 270,182 318,168"/>
+      <!-- 球员 -->
+      <circle class="player" cx="86" cy="196" r="6"/>
+      <circle class="player" cx="196" cy="132" r="6"/>
+      <circle class="player" cx="360" cy="118" r="7"/>
+      <circle class="player-opp" cx="150" cy="120" r="5"/>
+      <circle class="player-opp" cx="250" cy="110" r="5"/>
+      <circle class="player-opp" cx="320" cy="140" r="5"/>
+      <circle class="player-opp" cx="386" cy="130" r="5"/>
+      <text x="70" y="216" fill="#C9A227" font-family="monospace" font-size="9">8</text>
+      <text x="182" y="122" fill="#C9A227" font-family="monospace" font-size="9">10</text>
+      <text x="348" y="108" fill="#C9A227" font-family="monospace" font-size="9">9</text>
+    </svg>
+    <div class="pp-caption">87' — 中场直塞（成功率 12%）→ 内切回做 → 推射远角。全季最关键的一次进攻。</div>
+  </div>
+</div>
+
+<!-- ═══ 数据条 ═══ -->
+<div class="stat-strip reveal">
+  <div class="cell"><b>1,024</b><span>总进球 <i class="delta">▲ 6.2%</i></span></div>
+  <div class="cell"><b>2.70</b><span>场均进球</span></div>
+  <div class="cell"><b>18.4M</b><span>累计观众</span></div>
+  <div class="cell"><b>41'</b><span>平均首球时间</span></div>
+  <div class="cell"><b>23%</b><span>补时进球占比 <i class="delta">▲ 4pt</i></span></div>
+  <div class="cell"><b>0.04</b><span>冠亚军 xG 差</span></div>
+</div>
+
+<!-- ═══ 积分榜 ═══ -->
+<section>
+  <div class="sec-rule reveal">
+    <h3>Final Table — 最终积分榜</h3>
+    <div class="n">Table 01 — Matchday 38</div>
+  </div>
+  <div class="table-wrap reveal">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Club</th><th>P</th><th>W</th><th>D</th><th>L</th>
+          <th>GF</th><th>GA</th><th>GD</th><th>Form</th><th>Pts</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hl">
+          <td class="pos">1</td><td class="club">北岸联 Northgate United</td><td>38</td><td>27</td><td>6</td><td>5</td><td>89</td><td>31</td><td>+58</td>
+          <td><span class="form"><i class="w">W</i><i class="w">W</i><i class="d">D</i><i class="w">W</i><i class="w">W</i></span></td>
+          <td class="pts">87</td>
+        </tr>
+        <tr>
+          <td class="pos">2</td><td class="club">皇家港 Royal Harbour</td><td>38</td><td>27</td><td>5</td><td>6</td><td>92</td><td>35</td><td>+57</td>
+          <td><span class="form"><i class="w">W</i><i class="l">L</i><i class="w">W</i><i class="w">W</i><i class="d">D</i></span></td>
+          <td class="pts">86</td>
+        </tr>
+        <tr>
+          <td class="pos">3</td><td class="club">白鹿巷 White Hart Lane FC</td><td>38</td><td>22</td><td>9</td><td>7</td><td>74</td><td>41</td><td>+33</td>
+          <td><span class="form"><i class="d">D</i><i class="w">W</i><i class="w">W</i><i class="l">L</i><i class="w">W</i></span></td>
+          <td class="pts">75</td>
+        </tr>
+        <tr>
+          <td class="pos">4</td><td class="club">矿工城 Colliery Town</td><td>38</td><td>21</td><td>8</td><td>9</td><td>68</td><td>44</td><td>+24</td>
+          <td><span class="form"><i class="w">W</i><i class="w">W</i><i class="d">D</i><i class="d">D</i><i class="w">W</i></span></td>
+          <td class="pts">71</td>
+        </tr>
+        <tr>
+          <td class="pos">5</td><td class="club">阿尔滨 Albion Athletic</td><td>38</td><td>19</td><td>10</td><td>9</td><td>61</td><td>47</td><td>+14</td>
+          <td><span class="form"><i class="l">L</i><i class="w">W</i><i class="w">W</i><i class="w">W</i><i class="d">D</i></span></td>
+          <td class="pts">67</td>
+        </tr>
+        <tr>
+          <td class="pos">6</td><td class="club">红磨坊 Mill Rovers</td><td>38</td><td>17</td><td>11</td><td>10</td><td>58</td><td>49</td><td>+9</td>
+          <td><span class="form"><i class="d">D</i><i class="d">D</i><i class="w">W</i><i class="l">L</i><i class="w">W</i></span></td>
+          <td class="pts">62</td>
+        </tr>
+        <tr>
+          <td class="pos">7</td><td class="club">渡鸦谷 Ravensvale</td><td>38</td><td>15</td><td>12</td><td>11</td><td>52</td><td>50</td><td>+2</td>
+          <td><span class="form"><i class="w">W</i><i class="l">L</i><i class="d">D</i><i class="w">W</i><i class="l">L</i></span></td>
+          <td class="pts">57</td>
+        </tr>
+        <tr>
+          <td class="pos">8</td><td class="club">海狼 FC Sea Wolves</td><td>38</td><td>14</td><td>11</td><td>13</td><td>49</td><td>52</td><td>-3</td>
+          <td><span class="form"><i class="l">L</i><i class="w">W</i><i class="d">D</i><i class="l">L</i><i class="w">W</i></span></td>
+          <td class="pts">53</td>
+        </tr>
+        <tr class="risk">
+          <td class="pos">19</td><td class="club">铁桥钢铁 Ironbridge Steel</td><td>38</td><td>8</td><td>9</td><td>21</td><td>35</td><td>71</td><td>-36</td>
+          <td><span class="form"><i class="l">L</i><i class="l">L</i><i class="d">D</i><i class="l">L</i><i class="w">W</i></span></td>
+          <td class="pts">33</td>
+        </tr>
+        <tr class="risk">
+          <td class="pos">20</td><td class="club">石楠荒原 Heathmoor</td><td>38</td><td>6</td><td>8</td><td>24</td><td>29</td><td>79</td><td>-50</td>
+          <td><span class="form"><i class="l">L</i><i class="l">L</i><i class="l">L</i><i class="d">D</i><i class="l">L</i></span></td>
+          <td class="pts">26</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="table-note">
+      <span class="lg"><span class="sw" style="background:#C9A227"></span>冠军</span>
+      <span class="lg"><span class="sw" style="background:#E4572E"></span>降级区</span>
+      <span>Form = 最近 5 轮（从左至右）</span>
+      <span>数据截至 Matchday 38 · 全季 380 场</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 射手榜 + 进球分布 ═══ -->
+<section>
+  <div class="sec-rule reveal">
+    <h3>Goals — 射手榜 &amp; 进球时间分布</h3>
+    <div class="n">Chart 02 — Golden Boot Race</div>
+  </div>
+  <div class="duo">
+    <div class="reveal">
+      <div class="scorer">
+        <div class="rank">01</div>
+        <div class="who"><b>马特奥 · 西尔瓦</b><span>Northgate · 前锋</span></div>
+        <div class="bar-wrap"><div class="bar" data-w="100"></div></div>
+        <div class="goals">26</div>
+      </div>
+      <div class="scorer">
+        <div class="rank">02</div>
+        <div class="who"><b>卡里姆 · 阿卜杜</b><span>Royal Harbour · 前锋</span></div>
+        <div class="bar-wrap"><div class="bar" data-w="92"></div></div>
+        <div class="goals">24</div>
+      </div>
+      <div class="scorer">
+        <div class="rank">03</div>
+        <div class="who"><b>卢卡 · 布雷恰尼</b><span>White Hart Lane · 边锋</span></div>
+        <div class="bar-wrap"><div class="bar alt" data-w="77"></div></div>
+        <div class="goals">20</div>
+      </div>
+      <div class="scorer">
+        <div class="rank">04</div>
+        <div class="who"><b>延斯 · 奥尔森</b><span>Colliery Town · 前锋</span></div>
+        <div class="bar-wrap"><div class="bar" data-w="69"></div></div>
+        <div class="goals">18</div>
+      </div>
+      <div class="scorer">
+        <div class="rank">05</div>
+        <div class="who"><b>蒂亚戈 · 桑托斯</b><span>Albion · 影锋</span></div>
+        <div class="bar-wrap"><div class="bar" data-w="65"></div></div>
+        <div class="goals">17</div>
+      </div>
+      <div class="scorer">
+        <div class="rank">06</div>
+        <div class="who"><b>中村 蓮</b><span>Mill Rovers · 前锋</span></div>
+        <div class="bar-wrap"><div class="bar alt" data-w="58"></div></div>
+        <div class="goals">15</div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="xg-head" style="margin-bottom:8px">
+        <span>进球时间分布 — 1,024 粒进球</span>
+        <span>红色 = 补时峰值</span>
+      </div>
+      <div class="minute-chart" id="minuteChart">
+        <div class="m"><div class="bar" data-h="38"><b>61</b></div><div class="lb">0—15'</div></div>
+        <div class="m"><div class="bar" data-h="52"><b>84</b></div><div class="lb">16—30'</div></div>
+        <div class="m"><div class="bar" data-h="46"><b>74</b></div><div class="lb">31—45'</div></div>
+        <div class="m"><div class="bar" data-h="58"><b>93</b></div><div class="lb">46—60'</div></div>
+        <div class="m"><div class="bar" data-h="72"><b>116</b></div><div class="lb">61—75'</div></div>
+        <div class="m"><div class="bar" data-h="88"><b>142</b></div><div class="lb">76—90'</div></div>
+        <div class="m peak"><div class="bar" data-h="100"><b>161</b></div><div class="lb">90+'补时</div></div>
+      </div>
+      <div class="xg-head" style="margin-top:22px">
+        <span>关键结论</span>
+      </div>
+      <p style="font-size:13.5px;line-height:1.85;color:var(--ink-60);max-width:52ch">
+        本赛季 <b style="color:var(--flame)">23%</b> 的进球发生在补时阶段——近十年最高。
+        更长的补时（场均 +4.7 分钟）与更激进的尾声换人，共同制造了这个
+        「迟到的赛季」。冠军之争正是被 87 分钟与 94 分钟的两粒进球彻底改写。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ xG 散点 ═══ -->
+<section>
+  <div class="sec-rule reveal">
+    <h3>xG Matrix — 预期进球偏差矩阵</h3>
+    <div class="n">Chart 03 — Over / Under Performers</div>
+  </div>
+  <div class="xg-panel reveal">
+    <div class="xg-head">
+      <span>横轴：xG 预期进球 · 纵轴：实际进球</span>
+      <span>对角线 = 表现符合预期</span>
+    </div>
+    <svg class="xg-svg" viewBox="0 0 800 400" aria-label="预期进球与实际进球散点图">
+      <rect class="quad" x="60" y="20" width="700" height="340"/>
+      <line class="ax" x1="60" y1="360" x2="760" y2="360"/>
+      <line class="ax" x1="60" y1="20" x2="60" y2="360"/>
+      <!-- 对角参考线 -->
+      <line x1="60" y1="360" x2="740" y2="40" stroke="#C9A227" stroke-width="1.4" stroke-dasharray="6 6"/>
+      <!-- 球队点 -->
+      <g class="team"><circle cx="620" cy="98" r="13" fill="#0B3D2E"/><text x="620" y="72" text-anchor="middle" fill="#181510" font-size="10">Northgate 89</text></g>
+      <g class="team"><circle cx="592" cy="82" r="13" fill="#14624A"/><text x="580" y="60" text-anchor="middle" fill="#181510" font-size="10">Royal Harbour 92</text></g>
+      <g class="team"><circle cx="468" cy="148" r="11" fill="#14624A"/><text x="468" y="128" text-anchor="middle" fill="#181510" font-size="10">White Hart 74</text></g>
+      <g class="team"><circle cx="422" cy="168" r="11" fill="#14624A"/><text x="416" y="150" text-anchor="middle" fill="#181510" font-size="10">Colliery 68</text></g>
+      <g class="team"><circle cx="364" cy="188" r="10" fill="#E4572E"/><text x="352" y="172" text-anchor="middle" fill="#181510" font-size="10">Albion 61</text></g>
+      <g class="team"><circle cx="330" cy="196" r="10" fill="#14624A"/><text x="318" y="180" text-anchor="middle" fill="#181510" font-size="10">Mill Rovers 58</text></g>
+      <g class="team"><circle cx="288" cy="230" r="9" fill="#E4572E"/><text x="278" y="216" text-anchor="middle" fill="#181510" font-size="10">Ravensvale 52</text></g>
+      <g class="team"><circle cx="252" cy="242" r="9" fill="#14624A"/><text x="244" y="228" text-anchor="middle" fill="#181510" font-size="10">Sea Wolves 49</text></g>
+      <g class="team"><circle cx="148" cy="306" r="8" fill="#E4572E"/><text x="150" y="292" text-anchor="middle" fill="#181510" font-size="10">Ironbridge 35</text></g>
+      <g class="team"><circle cx="122" cy="322" r="8" fill="#E4572E"/><text x="122" y="308" text-anchor="middle" fill="#181510" font-size="10">Heathmoor 29</text></g>
+      <!-- 轴标签 -->
+      <text x="60" y="382">xG 20</text>
+      <text x="700" y="382">xG 95</text>
+      <text x="22" y="360" transform="rotate(-90 22 360)">实际进球</text>
+    </svg>
+    <div class="xg-head" style="margin-top:16px">
+      <span style="color:var(--pitch)">■ 超额完成（线以上）</span>
+      <span style="color:var(--flame)">■ 低于预期（线以下）</span>
+      <span>Royal Harbour 全季超额 +11 球，却以 1 分之差失冠 — 本刊年度最大样本偏差</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 时间线 ═══ -->
+<section>
+  <div class="sec-rule reveal">
+    <h3>Season Timeline — 赛季关键节点</h3>
+    <div class="n">Timeline 04 — Aug → May</div>
+  </div>
+  <div class="timeline reveal">
+    <div class="tl-item">
+      <div class="month">August — 开幕</div>
+      <h5>升班马掀翻卫冕冠军</h5>
+      <p>首轮即冷门：Heathmoor 用 28% 控球率 1—0 爆冷，全季第一次「模型失灵」。</p>
+      <div class="score">Heathmoor 1 — 0 Royal Harbour</div>
+    </div>
+    <div class="tl-item">
+      <div class="month">November — 中盘</div>
+      <h5>Northgate 十二连胜</h5>
+      <p>跨赛季 12 追胜创队史纪录，期间 xGA 仅 0.71，防守端统治级表现。</p>
+      <div class="score">12 连胜 · 进 34 失 8</div>
+    </div>
+    <div class="tl-item">
+      <div class="month">February — 转折</div>
+      <h5>双雄会 4—4 进球大战</h5>
+      <p>赛季最佳比赛：8 粒进球、3 次领先易手、2 粒补时进球，xG 合计仅 3.1。</p>
+      <div class="score">Royal Harbour 4 — 4 Northgate</div>
+    </div>
+    <div class="tl-item">
+      <div class="month">May — 终局</div>
+      <h5>87 分钟，冠军易主</h5>
+      <p>末轮同分争冠，第 87 分钟绝杀 + 94 分钟锁定，0.04 xG 差定江山。</p>
+      <div class="score">Northgate 2 — 1 Colliery</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 编辑专栏 ═══ -->
+<section>
+  <div class="sec-rule reveal">
+    <h3>Editor's Columns — 编辑部年度专栏</h3>
+    <div class="n">Essays 05 — Long Reads</div>
+  </div>
+  <div class="columns">
+    <div class="col-card reveal">
+      <div class="tag">Tactics</div>
+      <h5>当所有人都在踢 4—3—3，定位球成为最后的差异化武器</h5>
+      <p>本赛季 31% 的进球来自定位球，创十年新高。我们拆解了 6 支球队的角球套路，发现真正的创新不在战术板上，而在发球前的三秒钟。</p>
+      <div class="read"><span>长读 · 9 分钟</span><span>阅读 ↗</span></div>
+    </div>
+    <div class="col-card reveal">
+      <div class="tag">Data Essay</div>
+      <h5>0.04：我们该如何谈论「运气」</h5>
+      <p>当两支球队的 xG 差距小于一次扑救的误差范围，「更强」这个词还有意义吗？一篇关于数据谦逊的年度反思。</p>
+      <div class="read"><span>长读 · 12 分钟</span><span>阅读 ↗</span></div>
+    </div>
+    <div class="col-card reveal">
+      <div class="tag">Archive</div>
+      <h5>补时革命：从 3 分钟到 12 分钟的时代</h5>
+      <p>新规如何重塑了比赛的最后十分钟？我们统计了近五个赛季 12,400 场比赛的补时数据，还原这场安静的规则革命。</p>
+      <div class="read"><span>长读 · 7 分钟</span><span>阅读 ↗</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 订阅 ═══ -->
+<div class="subscribe reveal">
+  <h3>下一季，从数据开始</h3>
+  <p>《THE SEASON》每轮赛后次日送达：一张图看懂本轮、一个数据讲清故事。已有 48,000 名读者订阅赛季年鉴通讯。</p>
+  <form class="sub-form" onsubmit="return false">
+    <input type="email" placeholder="your@email.com" aria-label="邮箱地址">
+    <button type="submit">订阅年鉴</button>
+  </form>
+</div>
+
+<footer>
+  <div><b>THE SEASON</b> — The Data Almanac of Football</div>
+  <div>Vol. XII · 2025/26 赛季特辑 · 第 04 期</div>
+  <div>数据编辑部 · 制图组 · © 2026</div>
+</footer>
+
+<script>
+/* ── 射手榜条形图入场 ── */
+function animateBars(){
+  document.querySelectorAll('.scorer .bar').forEach(b => {
+    b.style.width = b.dataset.w + '%';
+  });
+  document.querySelectorAll('.minute-chart .bar').forEach(b => {
+    b.style.height = b.dataset.h + '%';
+  });
+}
+
+/* ── 滚动入场（JS 守卫） ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.classList.add('in');
+      if (en.target.querySelector('.scorer') || en.target.querySelector('.minute-chart')) animateBars();
+      io.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+setTimeout(animateBars, 1200);
+</script>
+</body>
+</html>
