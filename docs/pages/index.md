@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 233 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 229 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -2071,6 +2071,42 @@ const pages = [
     rating: 9.2,
     description: '足球赛季数据年鉴——报纸编辑风：双线报头+衬线斜体刊名+头条（首字下沉导语+SVG 球场传球路线动画）+6 格数据条+最终积分榜（Form 战绩点阵+冠军金/降级橙标记）+射手榜条形图+补时进球柱图+xG 偏差散点矩阵+赛季时间线+编辑部长读专栏卡+深绿订阅面板',
   },
+  {
+    id: 'nominal-ai',
+    title: 'Nominal AI 财务自动化平台',
+    category: 'landing',
+    tags: ['AI', '财务', 'SaaS', '企业级'],
+    colors: ['#6366f1', '#4a7c59', '#c9a96e'],
+    rating: 9.5,
+    description: '企业级 AI 财务自动化 SaaS 落地页——毛玻璃导航+暗色 Hero（浮动状态徽章+产品模拟界面）+信任栏+三栏特性+四步流程+数据统计+Tab 深度功能+客户评价+三栏定价+CTA，靛蓝紫主色+鼠尾草绿+金色强调交替背景',
+  },
+  {
+    id: 'reelcraft-ai',
+    title: 'ReelCraft AI 视频创作平台',
+    category: 'creative',
+    tags: ['AI', '视频', '创意', '暗色主题'],
+    colors: ['#08080d', '#c9a96e', '#00d4ff'],
+    rating: 9.5,
+    description: '电影级 AI 视频创作平台——全屏暗色 Hero（镜头光晕+胶片噪点纹理）+视频展示网格+四步生成流程+风格画廊横向滚动+Bento 特性+三栏定价+粒子 CTA，深空黑+金色强调+电光蓝的首映级视觉',
+  },
+  {
+    id: 'minilab-science',
+    title: 'MINILAB — 儿童科学探索馆',
+    category: 'industry',
+    tags: ['儿童教育', '科学馆', '趣味几何', '明亮配色'],
+    colors: ['#FFF6E9', '#182440', '#FF6B4A'],
+    rating: 9.2,
+    description: '儿童科学探索馆官网——温暖包豪斯几何风：吸顶导航+Hero 纯 CSS 轨道场景（行星绕轨+漂浮几何）+反白数据条+展厅 6 宫格+工作坊时间表+参观信息三栏+家长评价+FAQ 手风琴+珊瑚橙 CTA，奶油底+墨蓝+四点缀色',
+  },
+  {
+    id: 'medika-pharmacy',
+    title: 'MEDIKA — 数字药房',
+    category: 'app',
+    tags: ['数字医疗', '用药管理', '移动应用', '清爽UI'],
+    colors: ['#F4F7F6', '#10352E', '#0E9F6E'],
+    rating: 9.2,
+    description: '数字药房应用展示页——清爽现代医疗风：Hero 纯 CSS 手机 mockup（用药卡+进度环+提醒列表）+数字信任条+Bento 功能网格+三步流程+健康数据面板模拟+三栏定价+用户评价+FAQ+下载 CTA，薄荷绿+淡紫+琥珀点缀',
+  },
 ]
 
 const categories = [
@@ -2128,12 +2164,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 220 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 229 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="220 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="229 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -2142,7 +2178,7 @@ content=\"My Design Lib 页面灵感画廊 — 220 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 220 个完整页面</span>
+      <span>📦 229 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

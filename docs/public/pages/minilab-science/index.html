@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MINILAB — 儿童科学探索馆</title>
+<meta name="description" content="MINILAB 儿童科学探索馆：12 个互动展厅、200+ 动手展品、每日科学工作坊，让 3-12 岁孩子在玩耍中爱上科学。在线预约参观，周末遛娃首选。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MINILAB — Playful Geometric / 温暖包豪斯几何风
+   ============================================================ */
+:root{
+  --cream:#FFF6E9;
+  --cream-deep:#FFEDD2;
+  --ink:#182440;
+  --ink-soft:#41506E;
+  --coral:#FF6B4A;
+  --teal:#00A896;
+  --yellow:#FFC53D;
+  --violet:#7B61FF;
+  --white:#FFFFFF;
+  --shadow-pop:0 18px 40px -18px rgba(24,36,64,.28);
+  --shadow-soft:0 10px 30px -12px rgba(24,36,64,.18);
+  --radius-lg:24px;
+  --radius-md:18px;
+  --radius-sm:12px;
+  --font-round:'Nunito','Noto Sans SC',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  --maxw:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-round);
+  background:var(--cream);
+  color:var(--ink);
+  line-height:1.7;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+/* ── 滚动入场动画（html.js 守卫） ───────────────────── */
+html.js .reveal:not(.in){
+  opacity:0;
+  transform:translateY(28px);
+}
+.reveal{
+  transition:opacity .7s ease,transform .7s cubic-bezier(.22,.9,.3,1.05);
+  transition-delay:var(--d,0s);
+}
+.reveal.in{opacity:1;transform:none}
+
+/* ── 通用节标题 ─────────────────────────────────────── */
+.section{padding:96px 0}
+.section-head{max-width:720px;margin-bottom:52px}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.82rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--coral);
+  background:rgba(255,107,74,.1);
+  padding:8px 16px;border-radius:999px;margin-bottom:18px;
+}
+.kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--coral)}
+h2{
+  font-size:clamp(1.9rem,4vw,3rem);
+  font-weight:900;line-height:1.2;letter-spacing:-.01em;
+  margin-bottom:16px;
+}
+.section-head p{font-size:clamp(1rem,1.6vw,1.18rem);color:var(--ink-soft)}
+
+/* ── 按钮 ───────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:16px 32px;border-radius:999px;
+  font-weight:800;font-size:1.02rem;letter-spacing:.02em;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease,background .25s ease;
+  white-space:nowrap;
+}
+.btn:hover{transform:translateY(-3px) scale(1.02)}
+.btn:active{transform:translateY(0) scale(.99)}
+.btn-coral{background:var(--coral);color:#fff;box-shadow:0 12px 26px -10px rgba(255,107,74,.55)}
+.btn-coral:hover{box-shadow:0 18px 34px -10px rgba(255,107,74,.6)}
+.btn-ink{background:var(--ink);color:var(--cream);box-shadow:0 12px 26px -10px rgba(24,36,64,.45)}
+.btn-ghost{
+  background:transparent;color:var(--ink);
+  border:2.5px solid var(--ink);
+}
+.btn-ghost:hover{background:var(--ink);color:var(--cream)}
+.btn-white{background:#fff;color:var(--ink);box-shadow:0 14px 30px -12px rgba(24,36,64,.35)}
+
+/* ── 吸顶导航 ───────────────────────────────────────── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,246,233,.88);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:2px solid rgba(24,36,64,.08);
+}
+.nav-inner{
+  max-width:var(--maxw);margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.logo{
+  display:flex;align-items:center;gap:12px;
+  font-size:1.42rem;font-weight:900;letter-spacing:.04em;
+}
+.logo-mark{
+  position:relative;width:44px;height:44px;flex:none;
+  background:var(--yellow);border-radius:14px;
+  display:grid;place-items:center;
+  border:3px solid var(--ink);
+  box-shadow:4px 4px 0 var(--ink);
+}
+.logo-mark::before{
+  content:"";position:absolute;width:14px;height:14px;
+  background:var(--coral);border-radius:50%;top:-6px;right:-6px;
+  border:2.5px solid var(--ink);
+}
+.logo-mark svg{width:22px;height:22px}
+.logo em{font-style:normal;color:var(--coral)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{
+  padding:10px 16px;border-radius:999px;font-weight:700;font-size:.98rem;
+  color:var(--ink-soft);transition:all .22s ease;
+}
+.nav-links a:hover{color:var(--ink);background:rgba(24,36,64,.07)}
+.nav-cta{padding:12px 26px;font-size:.95rem}
+.nav-burger{
+  display:none;width:46px;height:46px;border-radius:12px;
+  border:2.5px solid var(--ink);position:relative;
+}
+.nav-burger span,.nav-burger span::before,.nav-burger span::after{
+  content:"";position:absolute;left:11px;width:20px;height:3px;
+  background:var(--ink);border-radius:2px;
+}
+.nav-burger span{top:20px}
+.nav-burger span::before{top:-7px;left:0}
+.nav-burger span::after{top:7px;left:0}
+
+/* ── Hero ───────────────────────────────────────────── */
+.hero{
+  position:relative;padding:88px 0 72px;
+  overflow:hidden;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.08fr .92fr;
+  gap:56px;align-items:center;
+}
+.hero h1{
+  font-size:clamp(2.5rem,5.6vw,4.6rem);
+  font-weight:900;line-height:1.12;letter-spacing:-.02em;
+  margin-bottom:24px;
+}
+.hero h1 .hl{
+  position:relative;color:var(--coral);white-space:nowrap;
+}
+.hero h1 .hl::after{
+  content:"";position:absolute;left:2%;bottom:-6px;
+  width:96%;height:12px;background:var(--yellow);
+  border-radius:999px;z-index:-1;transform:rotate(-1.2deg);
+}
+.hero-sub{
+  font-size:clamp(1.05rem,1.9vw,1.28rem);color:var(--ink-soft);
+  max-width:520px;margin-bottom:36px;
+}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:34px}
+.hero-trust{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hero-avatars{display:flex}
+.hero-avatars span{
+  width:42px;height:42px;border-radius:50%;
+  border:3px solid var(--cream);margin-left:-12px;
+  display:grid;place-items:center;font-size:1.15rem;
+}
+.hero-avatars span:first-child{margin-left:0}
+.hero-trust p{font-size:.92rem;color:var(--ink-soft);font-weight:600}
+.hero-trust strong{color:var(--ink)}
+
+/* Hero 轨道场景 */
+.orbit-stage{
+  position:relative;aspect-ratio:1/1;max-width:520px;margin:0 auto;width:100%;
+}
+.orbit-ring{
+  position:absolute;border-radius:50%;border:2.5px dashed rgba(24,36,64,.22);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.orbit-ring.r1{width:78%;height:78%;animation:spin 34s linear infinite}
+.orbit-ring.r2{width:100%;height:100%;border-color:rgba(0,168,150,.3);animation:spin 52s linear infinite reverse}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.planet{
+  position:absolute;border-radius:50%;border:3px solid var(--ink);
+}
+.planet-core{
+  width:34%;height:34%;top:33%;left:33%;
+  background:var(--coral);
+  box-shadow:inset -14px -12px 0 rgba(24,36,64,.14),0 22px 44px -14px rgba(255,107,74,.5);
+  animation:float 7s ease-in-out infinite;
+}
+.planet-core::after{
+  content:"";position:absolute;width:26%;height:26%;
+  background:var(--yellow);border-radius:50%;
+  top:18%;left:18%;border:3px solid var(--ink);
+}
+.orbit-ring.r1 .planet{width:52px;height:52px;top:-26px;left:calc(50% - 26px)}
+.orbit-ring.r2 .planet{width:38px;height:38px;bottom:-19px;left:calc(50% - 19px)}
+.planet-teal{background:var(--teal);box-shadow:inset -8px -6px 0 rgba(24,36,64,.16)}
+.planet-violet{background:var(--violet);box-shadow:inset -6px -5px 0 rgba(24,36,64,.16)}
+/* 轨道上的卫星需要反向自转保持直立 */
+.orbit-ring .planet{animation:spin 34s linear infinite reverse}
+.orbit-ring.r2 .planet{animation-duration:52s;animation-direction:normal}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.float-shape{position:absolute;animation:float 6s ease-in-out infinite}
+.shape-tri{
+  width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;
+  border-bottom:44px solid var(--yellow);top:6%;left:-2%;
+  filter:drop-shadow(0 10px 18px rgba(255,197,61,.45));
+  animation-delay:-1.6s;
+}
+.shape-square{
+  width:52px;height:52px;background:var(--violet);border-radius:14px;
+  border:3px solid var(--ink);bottom:8%;right:-2%;
+  transform:rotate(16deg);animation-delay:-3s;
+}
+.shape-dot{
+  width:34px;height:34px;background:var(--teal);border-radius:50%;
+  border:3px solid var(--ink);top:12%;right:10%;animation-delay:-4.4s;
+}
+.shape-arc{
+  width:86px;height:44px;border-radius:86px 86px 0 0;
+  border:8px solid var(--coral);border-bottom:none;
+  bottom:20%;left:2%;transform:rotate(-14deg);animation-delay:-2.2s;
+}
+.hero-blob{
+  position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;z-index:-1;
+}
+.hero-blob.b1{width:460px;height:460px;background:rgba(255,197,61,.5);top:-140px;left:-140px}
+.hero-blob.b2{width:400px;height:400px;background:rgba(123,97,255,.24);bottom:-160px;right:-100px}
+
+/* ── 数据条 ─────────────────────────────────────────── */
+.stats{
+  background:var(--ink);color:var(--cream);
+  border-radius:var(--radius-lg);
+  padding:52px 40px;
+  position:relative;overflow:hidden;
+  margin-top:-16px;
+}
+.stats::before{
+  content:"";position:absolute;width:280px;height:280px;
+  border:34px solid rgba(255,197,61,.16);border-radius:50%;
+  top:-120px;right:-80px;
+}
+.stats::after{
+  content:"";position:absolute;width:180px;height:180px;
+  border:26px solid rgba(0,168,150,.18);border-radius:50%;
+  bottom:-110px;left:12%;
+}
+.stats-grid{
+  position:relative;display:grid;
+  grid-template-columns:repeat(4,1fr);gap:32px;
+}
+.stat{border-left:3px solid rgba(255,246,233,.18);padding-left:22px}
+.stat b{
+  display:block;font-size:clamp(2.1rem,3.6vw,2.9rem);
+  font-weight:900;letter-spacing:-.01em;line-height:1.1;
+}
+.stat b i{font-style:normal;font-size:.55em;font-weight:800}
+.stat:nth-child(1) b{color:var(--yellow)}
+.stat:nth-child(2) b{color:var(--coral)}
+.stat:nth-child(3) b{color:var(--teal)}
+.stat:nth-child(4) b{color:#B7A6FF}
+.stat span{font-size:.95rem;opacity:.82;font-weight:600}
+
+/* ── 展厅体验 六宫格 ────────────────────────────────── */
+.halls{position:relative}
+.halls-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:26px;
+}
+.hall-card{
+  position:relative;background:#fff;border-radius:var(--radius-lg);
+  padding:34px 30px 32px;overflow:hidden;
+  border:2.5px solid rgba(24,36,64,.09);
+  transition:transform .32s cubic-bezier(.34,1.4,.64,1),box-shadow .32s ease,border-color .32s ease;
+}
+.hall-card:hover{
+  transform:translateY(-8px) rotate(-.6deg);
+  box-shadow:var(--shadow-pop);
+  border-color:var(--ink);
+}
+.hall-card::after{
+  content:"";position:absolute;width:130px;height:130px;
+  border-radius:50%;top:-58px;right:-58px;
+  background:var(--c,var(--coral));opacity:.14;
+  transition:transform .4s ease;
+}
+.hall-card:hover::after{transform:scale(1.5)}
+.hall-icon{
+  width:64px;height:64px;border-radius:18px;
+  background:var(--c,var(--coral));
+  border:3px solid var(--ink);
+  display:grid;place-items:center;font-size:1.9rem;
+  margin-bottom:22px;
+  box-shadow:5px 5px 0 var(--ink);
+}
+.hall-card h3{font-size:1.32rem;font-weight:900;margin-bottom:10px}
+.hall-card p{color:var(--ink-soft);font-size:.97rem;margin-bottom:18px}
+.hall-tag{
+  display:inline-block;font-size:.78rem;font-weight:800;letter-spacing:.06em;
+  padding:6px 14px;border-radius:999px;
+  background:color-mix(in srgb,var(--c,var(--coral)) 14%,#fff);
+  color:var(--ink);
+}
+.hall-no{
+  position:absolute;top:26px;right:28px;
+  font-size:1.05rem;font-weight:900;color:rgba(24,36,64,.16);
+}
+
+/* ── 工作坊时间表 ───────────────────────────────────── */
+.workshops{background:var(--white);position:relative;overflow:hidden}
+.workshops::before{
+  content:"";position:absolute;width:340px;height:340px;
+  border:3px dashed rgba(123,97,255,.25);border-radius:50%;
+  top:-170px;left:-120px;animation:spin 60s linear infinite;
+}
+.workshop-list{
+  background:var(--cream);border-radius:var(--radius-lg);
+  border:2.5px solid var(--ink);overflow:hidden;
+}
+.w-row{
+  display:grid;grid-template-columns:132px 1.4fr .8fr .8fr auto;
+  gap:20px;align-items:center;
+  padding:22px 30px;
+  border-bottom:2px dashed rgba(24,36,64,.14);
+  transition:background .25s ease;
+}
+.w-row:last-child{border-bottom:none}
+.w-row:hover{background:#fff}
+.w-time{
+  display:flex;flex-direction:column;align-items:flex-start;
+  font-weight:900;font-size:1.12rem;
+}
+.w-time small{
+  font-size:.72rem;font-weight:800;letter-spacing:.12em;
+  padding:3px 10px;border-radius:999px;margin-top:4px;
+  background:var(--badge,var(--yellow));color:var(--ink);
+}
+.w-topic{display:flex;align-items:center;gap:14px}
+.w-emoji{
+  width:46px;height:46px;flex:none;border-radius:14px;
+  display:grid;place-items:center;font-size:1.35rem;
+  border:2.5px solid var(--ink);
+}
+.w-topic b{font-size:1.08rem;font-weight:800}
+.w-topic em{display:block;font-style:normal;font-size:.84rem;color:var(--ink-soft)}
+.w-age{font-weight:700;color:var(--ink-soft)}
+.w-slot{font-size:.92rem;font-weight:700}
+.w-slot .full{color:var(--coral)}
+.w-slot .ok{color:var(--teal)}
+.w-row .btn{padding:11px 22px;font-size:.88rem}
+.workshop-note{
+  margin-top:22px;font-size:.92rem;color:var(--ink-soft);
+  display:flex;align-items:center;gap:10px;
+}
+.workshop-note::before{content:"✦";color:var(--violet);font-size:1.15rem}
+
+/* ── 参观信息 ───────────────────────────────────────── */
+.visit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.visit-card{
+  border-radius:var(--radius-lg);padding:36px 32px;
+  border:2.5px solid var(--ink);position:relative;overflow:hidden;
+}
+.visit-card.tint-coral{background:#FFE8E1}
+.visit-card.tint-teal{background:#DCF5F1}
+.visit-card.tint-yellow{background:#FFF1CC}
+.visit-card h3{
+  font-size:1.35rem;font-weight:900;margin-bottom:22px;
+  display:flex;align-items:center;gap:12px;
+}
+.visit-card h3 .v-ic{
+  width:44px;height:44px;border-radius:12px;background:#fff;
+  border:2.5px solid var(--ink);display:grid;place-items:center;font-size:1.25rem;
+}
+.price-row{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:13px 0;border-bottom:2px dashed rgba(24,36,64,.16);
+}
+.price-row:last-of-type{border-bottom:none}
+.price-row .name{font-weight:700}
+.price-row .name small{display:block;font-size:.78rem;color:var(--ink-soft);font-weight:600}
+.price-row .val{font-size:1.55rem;font-weight:900}
+.price-row .val s{font-size:.85rem;color:var(--ink-soft);font-weight:600;margin-right:6px}
+.visit-card .btn{width:100%;margin-top:22px;padding:13px 20px}
+.hour-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 0;border-bottom:2px dashed rgba(24,36,64,.16);font-weight:700;
+}
+.hour-row:last-of-type{border-bottom:none}
+.hour-row .t{color:var(--ink)}
+.hour-row .s{font-size:.82rem;padding:3px 12px;border-radius:999px;font-weight:800}
+.s-open{background:var(--teal);color:#fff}
+.s-closed{background:rgba(24,36,64,.12);color:var(--ink-soft)}
+.addr-line{display:flex;gap:12px;align-items:flex-start;padding:10px 0;font-size:.97rem}
+.addr-line .pin{
+  width:32px;height:32px;flex:none;border-radius:10px;background:#fff;
+  border:2.5px solid var(--ink);display:grid;place-items:center;font-size:.95rem;
+}
+.addr-line b{display:block;font-size:.98rem}
+.addr-line span{color:var(--ink-soft);font-size:.88rem}
+
+/* ── 家长评价 ───────────────────────────────────────── */
+.reviews{position:relative;overflow:hidden}
+.reviews::before{
+  content:"";position:absolute;width:220px;height:220px;
+  background:rgba(255,197,61,.28);border-radius:50%;
+  top:60px;right:-90px;filter:blur(4px);
+}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.review-card{
+  background:#fff;border-radius:var(--radius-lg);
+  padding:34px 30px;border:2.5px solid rgba(24,36,64,.09);
+  position:relative;transition:transform .3s ease,box-shadow .3s ease;
+}
+.review-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-soft)}
+.review-card .quote{
+  position:absolute;top:-20px;left:28px;
+  width:46px;height:46px;border-radius:14px;
+  background:var(--rc,var(--coral));border:3px solid var(--ink);
+  display:grid;place-items:center;
+  font-size:1.6rem;font-weight:900;color:#fff;line-height:1;
+  font-family:Georgia,serif;
+}
+.stars{color:var(--yellow);letter-spacing:.16em;font-size:1.02rem;margin:8px 0 14px}
+.review-card p{color:var(--ink-soft);font-size:.98rem;margin-bottom:22px}
+.reviewer{display:flex;align-items:center;gap:13px}
+.reviewer .ava{
+  width:48px;height:48px;border-radius:50%;
+  border:2.5px solid var(--ink);display:grid;place-items:center;
+  font-size:1.15rem;font-weight:900;color:#fff;
+  background:var(--rc,var(--coral));
+}
+.reviewer b{display:block;font-size:.98rem;font-weight:800}
+.reviewer span{font-size:.82rem;color:var(--ink-soft)}
+
+/* ── FAQ 手风琴 ─────────────────────────────────────── */
+.faq-wrap{max-width:820px;margin:0 auto}
+details.faq{
+  background:#fff;border:2.5px solid var(--ink);
+  border-radius:var(--radius-md);margin-bottom:16px;overflow:hidden;
+  transition:box-shadow .25s ease;
+}
+details.faq[open]{box-shadow:var(--shadow-soft)}
+details.faq summary{
+  list-style:none;cursor:pointer;
+  padding:22px 62px 22px 26px;position:relative;
+  font-size:1.08rem;font-weight:800;
+  display:flex;align-items:center;gap:14px;
+}
+details.faq summary::-webkit-details-marker{display:none}
+summary .q-no{
+  width:34px;height:34px;flex:none;border-radius:10px;
+  background:var(--qn,var(--yellow));border:2.5px solid var(--ink);
+  display:grid;place-items:center;font-size:.86rem;font-weight:900;
+}
+summary .q-plus{
+  position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;
+}
+summary .q-plus::before,summary .q-plus::after{
+  content:"";position:absolute;background:var(--ink);border-radius:2px;
+  transition:transform .28s ease;
+}
+summary .q-plus::before{width:18px;height:3px;top:11.5px;left:4px}
+summary .q-plus::after{width:3px;height:18px;top:4px;left:11.5px}
+details[open] summary .q-plus::after{transform:rotate(90deg)}
+.faq-body{padding:0 26px 24px 74px;color:var(--ink-soft);font-size:.97rem}
+
+/* ── CTA 色带 ───────────────────────────────────────── */
+.cta-band{
+  background:var(--coral);color:#fff;
+  border-radius:var(--radius-lg);
+  padding:72px 56px;position:relative;overflow:hidden;
+  text-align:center;
+}
+.cta-band::before{
+  content:"";position:absolute;width:360px;height:360px;
+  border:44px solid rgba(255,255,255,.14);border-radius:50%;
+  top:-160px;left:-110px;
+}
+.cta-band::after{
+  content:"";position:absolute;width:260px;height:260px;
+  border:34px solid rgba(24,36,64,.12);border-radius:50%;
+  bottom:-130px;right:-80px;
+}
+.cta-band h2{
+  position:relative;font-size:clamp(1.9rem,4.4vw,3.2rem);
+  margin-bottom:18px;
+}
+.cta-band p{
+  position:relative;font-size:clamp(1.02rem,1.8vw,1.22rem);
+  opacity:.94;max-width:620px;margin:0 auto 36px;
+}
+.cta-actions{position:relative;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.cta-mini{
+  position:relative;margin-top:26px;font-size:.88rem;opacity:.9;font-weight:600;
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+.footer{
+  background:var(--ink);color:rgba(255,246,233,.78);
+  padding:80px 0 36px;margin-top:96px;
+}
+.footer-grid{
+  display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;
+  gap:40px;padding-bottom:52px;
+  border-bottom:1px solid rgba(255,246,233,.14);
+}
+.footer .logo{color:var(--cream);margin-bottom:18px}
+.footer-about p{font-size:.94rem;max-width:280px;margin-bottom:22px}
+.social-row{display:flex;gap:12px}
+.social-row a{
+  width:42px;height:42px;border-radius:12px;
+  border:2px solid rgba(255,246,233,.3);
+  display:grid;place-items:center;font-size:1.05rem;
+  transition:all .25s ease;
+}
+.social-row a:hover{background:var(--yellow);color:var(--ink);border-color:var(--yellow);transform:translateY(-3px)}
+.footer h4{
+  color:var(--cream);font-size:.95rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;
+}
+.footer ul{list-style:none}
+.footer li{margin-bottom:11px}
+.footer li a{font-size:.93rem;transition:color .2s ease,padding-left .2s ease}
+.footer li a:hover{color:var(--yellow);padding-left:5px}
+.footer-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:20px;flex-wrap:wrap;padding-top:30px;font-size:.85rem;
+}
+.footer-bottom .legal{display:flex;gap:22px;flex-wrap:wrap}
+.footer-bottom .legal a:hover{color:var(--yellow)}
+
+/* ── 浮动装饰（章节间） ─────────────────────────────── */
+.deco-float{position:absolute;pointer-events:none;z-index:0}
+.deco-ring-dashed{
+  width:150px;height:150px;border:3px dashed rgba(255,107,74,.34);
+  border-radius:50%;animation:spin 40s linear infinite;
+}
+
+/* ── 响应式 ─────────────────────────────────────────── */
+@media(max-width:1020px){
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .orbit-stage{max-width:420px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:28px}
+  .halls-grid,.visit-grid,.reviews-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr 1fr}
+  .w-row{grid-template-columns:110px 1.3fr auto;row-gap:10px}
+  .w-age{display:none}
+}
+@media(max-width:760px){
+  .nav-links{display:none}
+  .nav-links.open{
+    display:flex;flex-direction:column;position:absolute;
+    top:100%;left:0;right:0;background:var(--cream);
+    border-bottom:2px solid rgba(24,36,64,.1);
+    padding:18px 24px;gap:6px;box-shadow:var(--shadow-soft);
+  }
+  .nav-burger{display:block}
+  .nav-inner{position:relative}
+  .nav-cta{display:none}
+  .section{padding:72px 0}
+  .halls-grid,.visit-grid,.reviews-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:22px}
+  .stats{padding:38px 26px}
+  .w-row{grid-template-columns:96px 1fr;padding:18px 20px}
+  .w-slot{grid-column:2}
+  .w-row .btn{grid-column:2;justify-self:start}
+  .cta-band{padding:56px 26px}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .hero{padding:56px 0 48px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 吸顶导航 ══════════ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#top" aria-label="MINILAB 首页">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#182440" stroke-width="2.6" stroke-linecap="round">
+          <path d="M9 3v6.2L4.4 17.6A2 2 0 0 0 6.2 20.6h11.6a2 2 0 0 0 1.8-3L15 9.2V3"/>
+          <path d="M8 3h8"/><path d="M7.2 14h9.6"/>
+        </svg>
+      </span>
+      MINI<em>LAB</em>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#halls">展厅体验</a>
+      <a href="#workshops">科学工作坊</a>
+      <a href="#visit">参观信息</a>
+      <a href="#reviews">家长评价</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <a class="btn btn-coral nav-cta" href="#visit">预约参观</a>
+    <button class="nav-burger" id="navBurger" aria-label="打开菜单" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ══════════ Hero ══════════ -->
+<section class="hero">
+  <div class="hero-blob b1" aria-hidden="true"></div>
+  <div class="hero-blob b2" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker reveal">3–12 岁 · 城市里的科学游乐场</p>
+      <h1 class="reveal" style="--d:.08s">让好奇心，<br>成为孩子的<span class="hl">超能力</span></h1>
+      <p class="hero-sub reveal" style="--d:.16s">
+        在 MINILAB，没有「不许动手」的展品。12 个互动展厅、200+ 可触摸的科学装置，
+        让孩子在推、拉、拧、拼之间，把「为什么」变成「原来如此」。
+      </p>
+      <div class="hero-ctas reveal" style="--d:.24s">
+        <a class="btn btn-coral" href="#visit">预约参观 →</a>
+        <a class="btn btn-ghost" href="#halls">浏览展厅</a>
+      </div>
+      <div class="hero-trust reveal" style="--d:.32s">
+        <div class="hero-avatars" aria-hidden="true">
+          <span style="background:#FFD9CE">👧</span>
+          <span style="background:#CDEFEA">🧒</span>
+          <span style="background:#E4DCFF">👦</span>
+          <span style="background:#FFEDC2">🧑</span>
+        </div>
+        <p><strong>50 万+ 家庭</strong>已来过 · 家长真实评分 <strong>4.9 / 5.0</strong></p>
+      </div>
+    </div>
+
+    <!-- 纯 CSS 轨道场景 -->
+    <div class="orbit-stage reveal" style="--d:.2s" aria-hidden="true">
+      <div class="orbit-ring r1"><div class="planet planet-teal"></div></div>
+      <div class="orbit-ring r2"><div class="planet planet-violet"></div></div>
+      <div class="planet planet-core"></div>
+      <div class="float-shape shape-tri"></div>
+      <div class="float-shape shape-square"></div>
+      <div class="float-shape shape-dot"></div>
+      <div class="float-shape shape-arc"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 数据条 ══════════ -->
+<section class="wrap" aria-label="MINILAB 数据一览">
+  <div class="stats reveal">
+    <div class="stats-grid">
+      <div class="stat">
+        <b>12</b>
+        <span>个互动展厅，覆盖声光、宇宙、生命、机械</span>
+      </div>
+      <div class="stat">
+        <b>200<i>+</i></b>
+        <span>件动手展品，每一件都可以摸、转、试</span>
+      </div>
+      <div class="stat">
+        <b>50<i> 万+</i></b>
+        <span>年度小访客，来自全城 300+ 所幼儿园与小学</span>
+      </div>
+      <div class="stat">
+        <b>4.9</b>
+        <span>家长平均评分（基于 12,800+ 条真实评价）</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 展厅体验 ══════════ -->
+<section class="section halls" id="halls">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker reveal">展厅体验 · HALLS</p>
+      <h2 class="reveal" style="--d:.08s">六个主题世界，六种「哇！」</h2>
+      <p class="reveal" style="--d:.14s">
+        每个展厅都由科学教育专家与儿童设计师共同打磨，鼓励孩子提问、试错、再试一次。
+        全部展项可自由体验，无需额外付费。
+      </p>
+    </div>
+
+    <div class="halls-grid">
+      <article class="hall-card reveal" style="--c:#FF6B4A">
+        <span class="hall-no">01</span>
+        <div class="hall-icon" aria-hidden="true">🔦</div>
+        <h3>光影实验室</h3>
+        <p>走进 8 米长的幻影隧道，用三棱镜分出彩虹，让影子留在荧光墙上——光的秘密，看得见摸得着。</p>
+        <span class="hall-tag">光学 · 视觉 · 色彩</span>
+      </article>
+
+      <article class="hall-card reveal" style="--c:#7B61FF;--d:.08s">
+        <span class="hall-no">02</span>
+        <div class="hall-icon" aria-hidden="true">🪐</div>
+        <h3>宇宙剧场</h3>
+        <p>穹顶球幕 180° 星空漫游，亲手为木星称重、在月球表面蹦跳，还可以操控火星车穿越红色峡谷。</p>
+        <span class="hall-tag">天文 · 航天 · 重力</span>
+      </article>
+
+      <article class="hall-card reveal" style="--c:#00A896;--d:.16s">
+        <span class="hall-no">03</span>
+        <div class="hall-icon" aria-hidden="true">💧</div>
+        <h3>水动力乐园</h3>
+        <p>穿好防水罩衣，用阀门、水闸和水泵造一条自己的河，看漩涡、水轮和气泡船如何听你的指挥。</p>
+        <span class="hall-tag">流体 · 能量 · 工程</span>
+      </article>
+
+      <article class="hall-card reveal" style="--c:#FFC53D">
+        <span class="hall-no">04</span>
+        <div class="hall-icon" aria-hidden="true">🫀</div>
+        <h3>人体探险</h3>
+        <p>钻进巨型「血管隧道」，听听自己的心跳，和朋友比一比反应速度——原来身体里藏着一座精密工厂。</p>
+        <span class="hall-tag">生命 · 健康 · 感知</span>
+      </article>
+
+      <article class="hall-card reveal" style="--c:#FF6B4A;--d:.08s">
+        <span class="hall-no">05</span>
+        <div class="hall-icon" aria-hidden="true">⚙️</div>
+        <h3>机械工坊</h3>
+        <p>齿轮、杠杆、滑轮、凸轮……用真实工具拼装一台会动的机器，失败了也没关系，拆掉重来就好。</p>
+        <span class="hall-tag">机械 · 结构 · 创客</span>
+      </article>
+
+      <article class="hall-card reveal" style="--c:#00A896;--d:.16s">
+        <span class="hall-no">06</span>
+        <div class="hall-icon" aria-hidden="true">🌿</div>
+        <h3>自然密林</h3>
+        <p>在室内雾林里辨认鸟鸣与昆虫足迹，用显微镜看一片叶子的纹路，把种子带回家种下第一株植物。</p>
+        <span class="hall-tag">生态 · 观察 · 环保</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 每日工作坊 ══════════ -->
+<section class="section workshops" id="workshops">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker reveal">科学工作坊 · WORKSHOPS</p>
+      <h2 class="reveal" style="--d:.08s">今日实验清单，做完再走</h2>
+      <p class="reveal" style="--d:.14s">
+        每天 5 场轮番上演，全部由全职科学导师带领，材料费已含在门票内。
+        建议提前 15 分钟到展厅门口集合，小班制保证每个孩子都被看见。
+      </p>
+    </div>
+
+    <div class="workshop-list reveal">
+      <div class="w-row">
+        <div class="w-time">10:30 <small>上午场</small></div>
+        <div class="w-topic">
+          <div class="w-emoji" style="background:#FFE0D6" aria-hidden="true">🌋</div>
+          <div><b>火山爆发实验</b><em>小苏打 × 柠檬酸，亲手调配一场安全的喷发</em></div>
+        </div>
+        <div class="w-age">4–8 岁</div>
+        <div class="w-slot"><span class="ok">余 6 个名额</span></div>
+        <a class="btn btn-ghost" href="#visit">占位</a>
+      </div>
+
+      <div class="w-row">
+        <div class="w-time">11:30 <small>上午场</small></div>
+        <div class="w-topic">
+          <div class="w-emoji" style="background:#DCF5F1" aria-hidden="true">🤖</div>
+          <div><b>编程小机器人</b><em>用图形化指令让 Bee-Bot 走完迷宫，理解顺序与循环</em></div>
+        </div>
+        <div class="w-age">5–9 岁</div>
+        <div class="w-slot"><span class="full">已满 · 可候补</span></div>
+        <a class="btn btn-ghost" href="#visit">候补</a>
+      </div>
+
+      <div class="w-row">
+        <div class="w-time">14:00 <small>下午场</small></div>
+        <div class="w-topic">
+          <div class="w-emoji" style="background:#FFF1CC" aria-hidden="true">🧪</div>
+          <div><b>厨房里的化学</b><em>紫甘蓝变色汁 + 酸碱大作战，安全试剂也能玩出魔术</em></div>
+        </div>
+        <div class="w-age">6–10 岁</div>
+        <div class="w-slot"><span class="ok">余 11 个名额</span></div>
+        <a class="btn btn-ghost" href="#visit">占位</a>
+      </div>
+
+      <div class="w-row">
+        <div class="w-time">15:30 <small>下午场</small></div>
+        <div class="w-topic">
+          <div class="w-emoji" style="background:#E4DCFF" aria-hidden="true">🏗️</div>
+          <div><b>纸桥承重挑战</b><em>只用 20 张 A4 纸，看谁的桥能扛起 5 公斤积木</em></div>
+        </div>
+        <div class="w-age">7–12 岁</div>
+        <div class="w-slot"><span class="ok">余 3 个名额</span></div>
+        <a class="btn btn-ghost" href="#visit">占位</a>
+      </div>
+
+      <div class="w-row">
+        <div class="w-time">19:00 <small>周末夜场</small></div>
+        <div class="w-topic">
+          <div class="w-emoji" style="background:#182440" aria-hidden="true">✨</div>
+          <div><b>星空夜话</b><em>关灯之后的宇宙剧场，用天文望远镜找土星环（户外场）</em></div>
+        </div>
+        <div class="w-age">6–12 岁</div>
+        <div class="w-slot"><span class="ok">余 14 个名额</span></div>
+        <a class="btn btn-ghost" href="#visit">占位</a>
+      </div>
+    </div>
+
+    <p class="workshop-note reveal">
+      工作坊名额每日 09:00 在小程序释放；家庭年卡用户可提前 24 小时优先预约。
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 参观信息 ══════════ -->
+<section class="section" id="visit">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker reveal">参观信息 · PLAN</p>
+      <h2 class="reveal" style="--d:.08s">来之前，把这三件事看一眼</h2>
+      <p class="reveal" style="--d:.14s">
+        门票含全部展厅与当日工作坊，不设园中园收费。建议预留 3–4 小时，玩到尽兴为止。
+      </p>
+    </div>
+
+    <div class="visit-grid">
+      <div class="visit-card tint-coral reveal">
+        <h3><span class="v-ic" aria-hidden="true">🎟️</span>门票价格</h3>
+        <div class="price-row">
+          <div class="name">儿童票<small>3–12 岁 · 全展厅通玩</small></div>
+          <div class="val"><s>¥128</s>¥98</div>
+        </div>
+        <div class="price-row">
+          <div class="name">成人票<small>13 岁及以上陪同</small></div>
+          <div class="val">¥68</div>
+        </div>
+        <div class="price-row">
+          <div class="name">家庭年卡<small>2 大 1 小 · 一年不限次</small></div>
+          <div class="val">¥1,288</div>
+        </div>
+        <a class="btn btn-coral" href="#top">立即预约购票</a>
+      </div>
+
+      <div class="visit-card tint-teal reveal" style="--d:.08s">
+        <h3><span class="v-ic" aria-hidden="true">🕐</span>开放时间</h3>
+        <div class="hour-row"><span class="t">周一</span><span class="s s-closed">闭馆 · 设备维护</span></div>
+        <div class="hour-row"><span class="t">周二 – 周五</span><span class="s s-open">09:30 – 18:00</span></div>
+        <div class="hour-row"><span class="t">周六 · 周日</span><span class="s s-open">09:00 – 20:30</span></div>
+        <div class="hour-row"><span class="t">法定节假日</span><span class="s s-open">09:00 – 20:30</span></div>
+        <div class="hour-row"><span class="t">星空夜话场</span><span class="s s-open">19:00 – 21:00</span></div>
+        <p style="margin-top:18px;font-size:.9rem;color:var(--ink-soft)">
+          * 每日闭馆前 60 分钟停止入园；每周一为闭馆整备日（法定节假日除外）。
+        </p>
+      </div>
+
+      <div class="visit-card tint-yellow reveal" style="--d:.16s">
+        <h3><span class="v-ic" aria-hidden="true">📍</span>地址与交通</h3>
+        <div class="addr-line">
+          <div class="pin" aria-hidden="true">🏛</div>
+          <div><b>MINILAB 儿童科学探索馆</b><span>星海市滨江区科创大道 88 号 · 未来广场 L2</span></div>
+        </div>
+        <div class="addr-line">
+          <div class="pin" aria-hidden="true">🚇</div>
+          <div><b>地铁</b><span>2 号线 / 9 号线「科创中心」站 C 口，步行 4 分钟</span></div>
+        </div>
+        <div class="addr-line">
+          <div class="pin" aria-hidden="true">🚌</div>
+          <div><b>公交</b><span>302 路、517 路、夜宵 8 路「未来广场」站下车</span></div>
+        </div>
+        <div class="addr-line">
+          <div class="pin" aria-hidden="true">🚗</div>
+          <div><b>自驾</b><span>未来广场地下停车场 B2 层，消费满 ¥200 免 3 小时</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 家长评价 ══════════ -->
+<section class="section reviews" id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker reveal">家长评价 · REVIEWS</p>
+      <h2 class="reveal" style="--d:.08s">孩子不想走，家长想常来</h2>
+      <p class="reveal" style="--d:.14s">
+        以下评价来自 2025 年真实到访家庭，经本人同意后展示。
+      </p>
+    </div>
+
+    <div class="reviews-grid">
+      <article class="review-card reveal" style="--rc:#FF6B4A">
+        <div class="quote" aria-hidden="true">"</div>
+        <div class="stars" aria-label="五星好评">★★★★★</div>
+        <p>
+          儿子 5 岁半，在水动力乐园玩了整整两个小时不肯出来，回家还自己画了一张「水闸设计图」。
+          导航老师蹲下来跟他说话的样子，让我觉得这地方是真的懂孩子。
+        </p>
+        <div class="reviewer">
+          <div class="ava" aria-hidden="true">林</div>
+          <div><b>林女士</b><span>5 岁男孩妈妈 · 家庭年卡会员</span></div>
+        </div>
+      </article>
+
+      <article class="review-card reveal" style="--rc:#00A896;--d:.08s">
+        <div class="quote" aria-hidden="true">"</div>
+        <div class="stars" aria-label="五星好评">★★★★★</div>
+        <p>
+          周末人多但完全不乱，每个展厅都有工作人员引导分流。最惊喜的是「火山爆发实验」，
+          老师会先问孩子猜结果再动手，问得我女儿一路都在提问题。
+        </p>
+        <div class="reviewer">
+          <div class="ava" aria-hidden="true">陈</div>
+          <div><b>陈先生</b><span>7 岁女孩爸爸 · 第三次到访</span></div>
+        </div>
+      </article>
+
+      <article class="review-card reveal" style="--rc:#7B61FF;--d:.16s">
+        <div class="quote" aria-hidden="true">"</div>
+        <div class="stars" aria-label="四点五星好评">★★★★★</div>
+        <p>
+          我们从邻市开车一小时过来，非常值。星空夜话场太浪漫了，孩子第一次亲眼看到土星环。
+          唯一建议是餐厅多加点素食选项，其他都很棒，明年生日趴也想办在这。
+        </p>
+        <div class="reviewer">
+          <div class="ava" aria-hidden="true">苏</div>
+          <div><b>苏女士</b><span>9 岁男孩妈妈 · 生日会预约中</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FAQ ══════════ -->
+<section class="section" id="faq" style="background:var(--white)">
+  <div class="wrap faq-wrap">
+    <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto">
+      <p class="kicker reveal">常见问题 · FAQ</p>
+      <h2 class="reveal" style="--d:.08s">爸妈们最常问的几件事</h2>
+      <p class="reveal" style="--d:.14s">没找到答案？工作日 09:00–18:00 拨打 400-880-2026，真人客服接听。</p>
+    </div>
+
+    <details class="faq reveal">
+      <summary>
+        <span class="q-no" style="--qn:#FFC53D">Q1</span>
+        孩子多大适合来？2 岁的弟弟可以进吗？
+        <span class="q-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="faq-body">
+        核心展项为 3–12 岁设计，但 2 岁以下婴幼儿在家长陪同下可免费入场。
+        我们在「自然密林」和「人体探险」区设有低龄软垫角，适合小小孩爬爬探索。
+        涉及小零件或水池的展项标有身高提示，请留意现场标识。
+      </div>
+    </details>
+
+    <details class="faq reveal" style="--d:.06s">
+      <summary>
+        <span class="q-no" style="--qn:#FF6B4A">Q2</span>
+        门票需要提前买吗？现场排队久不久？
+        <span class="q-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="faq-body">
+        强烈建议提前 1–3 天在小程序预约，选好入园时段，到馆扫码即可入场，通常 5 分钟内进馆。
+        现场也保留少量余票，但周末 11:00–15:00 高峰期可能需要等待 30 分钟以上。
+        工作坊名额需单独占位，与门票同步预约最省心。
+      </div>
+    </details>
+
+    <details class="faq reveal" style="--d:.12s">
+      <summary>
+        <span class="q-no" style="--qn:#00A896">Q3</span>
+        馆内可以吃东西吗？有没有餐厅？
+        <span class="q-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="faq-body">
+        L2 东侧设有「粒子餐厅」，提供儿童套餐、轻食和现磨咖啡，人均 ¥40–60。
+        展厅内请勿饮食（饮水区除外），但每层都有免费饮水点和婴儿喂食区。
+        如自带辅食，可在餐厅的加热区使用微波炉。
+      </div>
+    </details>
+
+    <details class="faq reveal" style="--d:.18s">
+      <summary>
+        <span class="q-no" style="--qn:#7B61FF">Q4</span>可以带婴儿车吗？有储物柜吗？
+        <span class="q-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="faq-body">
+        全馆无障碍通行，婴儿车可直接推进所有展厅（宇宙剧场内需停放在指定区域）。
+        入口右手边有 300 个免费电子储物柜，扫码开箱；大件行李可寄存于服务台。
+        馆内一层提供母婴室与家庭卫生间各 2 间。
+      </div>
+    </details>
+
+    <details class="faq reveal" style="--d:.24s">
+      <summary>
+        <span class="q-no" style="--qn:#FFC53D">Q5</span>
+        下雨天人会不会特别多？年卡怎么买最划算？
+        <span class="q-plus" aria-hidden="true"></span>
+      </summary>
+      <div class="faq-body">
+        雨天到访量约为平日的 1.6 倍，建议选择上午 09:30 场次或 17:00 后的夜场，人少体验更好。
+        家庭年卡（2 大 1 小 ¥1,288）约 4 次回本，额外福利包括工作坊优先预约、生日月免费派对厅 2 小时、
+        以及合作科普营地 8 折。年卡在小程序「我的 – 会员中心」即可办理。
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ══════════ CTA 色带 ══════════ -->
+<section class="wrap" aria-label="预约号召">
+  <div class="cta-band reveal">
+    <h2>这个周末，带孩子来一场科学冒险</h2>
+    <p>
+      不需要预习，不需要标准答案。带上好奇心就够了——
+      剩下的 200 个展项、5 场工作坊和一整座「为什么」博物馆，交给我们。
+    </p>
+    <div class="cta-actions">
+      <a class="btn btn-white" href="#visit">预约参观 →</a>
+      <a class="btn btn-ink" href="#workshops">查看本周工作坊</a>
+    </div>
+    <p class="cta-mini">在线预约赠儿童科学手册一本 · 3 人成团再减 ¥30</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════ Footer ══════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a class="logo" href="#top">
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#182440" stroke-width="2.6" stroke-linecap="round">
+              <path d="M9 3v6.2L4.4 17.6A2 2 0 0 0 6.2 20.6h11.6a2 2 0 0 0 1.8-3L15 9.2V3"/>
+              <path d="M8 3h8"/><path d="M7.2 14h9.6"/>
+            </svg>
+          </span>
+          MINI<em>LAB</em>
+        </a>
+        <p>
+          城市里的儿童科学探索馆。我们相信，每个孩子天生就是科学家——
+          只要给他们一个可以动手的地方。
+        </p>
+        <div class="social-row">
+          <a href="#top" aria-label="微信公众号">💬</a>
+          <a href="#top" aria-label="小红书">📕</a>
+          <a href="#top" aria-label="抖音">🎵</a>
+          <a href="#top" aria-label="视频号">📺</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>探索</h4>
+        <ul>
+          <li><a href="#halls">展厅体验</a></li>
+          <li><a href="#workshops">科学工作坊</a></li>
+          <li><a href="#workshops">星空夜话场</a></li>
+          <li><a href="#halls">生日派对</a></li>
+          <li><a href="#visit">团体预约</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>参观</h4>
+        <ul>
+          <li><a href="#visit">门票与年卡</a></li>
+          <li><a href="#visit">开放时间</a></li>
+          <li><a href="#visit">交通指南</a></li>
+          <li><a href="#faq">常见问题</a></li>
+          <li><a href="#visit">无障碍服务</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>教育</h4>
+        <ul>
+          <li><a href="#workshops">学校研学项目</a></li>
+          <li><a href="#workshops">教师资源包</a></li>
+          <li><a href="#workshops">家庭科学任务卡</a></li>
+          <li><a href="#reviews">家长社群</a></li>
+          <li><a href="#top">科普夏令营</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>关于</h4>
+        <ul>
+          <li><a href="#top">关于 MINILAB</a></li>
+          <li><a href="#top">加入我们</a></li>
+          <li><a href="#top">媒体与合作</a></li>
+          <li><a href="#top">志愿者招募</a></li>
+          <li><a href="#visit">联系我们</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 MINILAB 儿童科学探索馆 · 星海市滨江区科创大道 88 号 · 400-880-2026</p>
+      <div class="legal">
+        <a href="#top">隐私政策</a>
+        <a href="#top">服务条款</a>
+        <a href="#top">安全须知</a>
+        <a href="#top">京 ICP 备 2026008812 号</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── 滚动入场：IntersectionObserver + 兜底 ── */
+(function () {
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function (el) { io.observe(el); });
+})();
+
+/* ── 移动端菜单 ── */
+(function () {
+  var burger = document.getElementById('navBurger');
+  var links = document.getElementById('navLinks');
+  if (!burger || !links) return;
+  burger.addEventListener('click', function () {
+    var open = links.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  links.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') {
+      links.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
+
+/* ── FAQ：一次只展开一项（可选增强） ── */
+(function () {
+  var items = document.querySelectorAll('details.faq');
+  items.forEach(function (item) {
+    item.addEventListener('toggle', function () {
+      if (item.open) {
+        items.forEach(function (other) {
+          if (other !== item) other.open = false;
+        });
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

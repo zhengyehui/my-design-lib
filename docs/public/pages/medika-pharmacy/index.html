@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MEDIKA — 数字药房</title>
+<meta name="description" content="MEDIKA 数字药房：电子处方流转、智能用药提醒、家庭药箱管理、30 分钟送药到家、药师在线咨询。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============ MEDIKA 设计变量（覆盖 tokens 默认值） ============ */
+:root{
+  --mk-bg:      #F4F7F6;
+  --mk-ink:     #10352E;
+  --mk-ink-2:   #3D5B54;
+  --mk-green:   #0E9F6E;
+  --mk-green-d: #0B7F58;
+  --mk-green-l: #D9F2E8;
+  --mk-violet:  #A78BFA;
+  --mk-violet-l:#EDE9FE;
+  --mk-amber:   #F59E0B;
+  --mk-amber-l: #FEF3C7;
+  --mk-card:    #FFFFFF;
+  --mk-line:    #E2ECE8;
+  --mk-shadow:  0 10px 30px -12px rgba(16, 53, 46, .14);
+  --mk-shadow-s:0 4px 14px -6px rgba(16, 53, 46, .12);
+  --mk-radius:  18px;
+  --font-sans: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC',
+               'Microsoft YaHei', 'Segoe UI', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);
+  background:var(--mk-bg);
+  color:var(--mk-ink);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.wrap{width:min(1160px,92vw);margin-inline:auto}
+.section{padding:88px 0}
+.section-head{max-width:660px;margin:0 auto 52px;text-align:center}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:700;letter-spacing:.14em;
+  color:var(--mk-green-d);background:var(--mk-green-l);
+  padding:7px 16px;border-radius:999px;margin-bottom:18px;
+}
+.eyebrow.violet{color:#6D28D9;background:var(--mk-violet-l)}
+.eyebrow.amber{color:#B45309;background:var(--mk-amber-l)}
+h2{font-size:clamp(1.75rem,3.4vw,2.6rem);font-weight:800;line-height:1.25;letter-spacing:-.01em}
+.section-head p{margin-top:16px;color:var(--mk-ink-2);font-size:1.05rem}
+
+/* ============ 滚动入场动画（html.js 守卫） ============ */
+html.js .reveal:not(.in){opacity:0;transform:translateY(26px)}
+.reveal{transition:opacity .7s ease,transform .7s cubic-bezier(.22,.8,.3,1)}
+.reveal.d1{transition-delay:.1s}
+.reveal.d2{transition-delay:.2s}
+.reveal.d3{transition-delay:.3s}
+@media (prefers-reduced-motion:reduce){
+  html.js .reveal:not(.in){opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+
+/* ============ 1. 吸顶导航 ============ */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(244,247,246,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--mk-line);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.35rem;letter-spacing:.02em}
+.logo-mark{
+  width:38px;height:38px;border-radius:12px;
+  background:linear-gradient(135deg,var(--mk-green),#14C799);
+  display:grid;place-items:center;box-shadow:0 6px 16px -6px rgba(14,159,110,.55);
+}
+.logo-mark svg{width:20px;height:20px}
+.nav-links{display:flex;gap:32px;font-size:.95rem;font-weight:500;color:var(--mk-ink-2)}
+.nav-links a{position:relative;padding:4px 0;transition:color .25s}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:-2px;width:0;height:2px;
+  background:var(--mk-green);border-radius:2px;transition:width .28s;
+}
+.nav-links a:hover{color:var(--mk-green-d)}
+.nav-links a:hover::after{width:100%}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 28px;border-radius:14px;font-weight:700;font-size:.98rem;
+  transition:transform .22s,box-shadow .22s,background .22s;
+}
+.btn-primary{background:var(--mk-green);color:#fff;box-shadow:0 10px 22px -10px rgba(14,159,110,.65)}
+.btn-primary:hover{background:var(--mk-green-d);transform:translateY(-2px);box-shadow:0 16px 30px -12px rgba(14,159,110,.7)}
+.btn-ghost{background:#fff;color:var(--mk-ink);border:1.5px solid var(--mk-line);box-shadow:var(--mk-shadow-s)}
+.btn-ghost:hover{border-color:var(--mk-green);color:var(--mk-green-d);transform:translateY(-2px)}
+.nav .btn{padding:11px 22px}
+
+/* ============ 2. Hero ============ */
+.hero{position:relative;overflow:hidden;padding:88px 0 72px}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(720px 420px at 82% 12%,rgba(14,159,110,.12),transparent 65%),
+    radial-gradient(560px 380px at 8% 82%,rgba(167,139,250,.12),transparent 65%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:relative;display:grid;grid-template-columns:1.05fr .95fr;
+  gap:56px;align-items:center;
+}
+.hero h1{
+  font-size:clamp(2.5rem,5.6vw,4.35rem);font-weight:900;line-height:1.12;
+  letter-spacing:-.02em;
+}
+.hero h1 .accent{
+  color:var(--mk-green);position:relative;white-space:nowrap;
+}
+.hero h1 .accent::after{
+  content:"";position:absolute;left:2%;bottom:6px;width:96%;height:14px;
+  background:rgba(14,159,110,.18);border-radius:8px;z-index:-1;
+}
+.hero-sub{margin-top:22px;font-size:1.16rem;color:var(--mk-ink-2);max-width:520px}
+.hero-badges{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.badge{
+  display:inline-flex;align-items:center;gap:9px;
+  background:#fff;border:1px solid var(--mk-line);border-radius:999px;
+  padding:10px 18px;font-size:.92rem;font-weight:600;box-shadow:var(--mk-shadow-s);
+}
+.badge .dot{width:9px;height:9px;border-radius:50%}
+.badge.b1 .dot{background:var(--mk-amber)}
+.badge.b2 .dot{background:var(--mk-violet)}
+.badge.b3 .dot{background:var(--mk-green)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.hero-note{margin-top:18px;font-size:.86rem;color:#6B7F79;display:flex;align-items:center;gap:8px}
+.hero-note svg{width:16px;height:16px;flex:none}
+
+/* ---- 纯 CSS 手机 Mockup ---- */
+.phone-stage{position:relative;display:flex;justify-content:center}
+.phone-glow{
+  position:absolute;width:380px;height:380px;border-radius:50%;
+  background:radial-gradient(circle,rgba(14,159,110,.22),transparent 70%);
+  top:6%;filter:blur(10px);
+}
+.phone{
+  position:relative;width:314px;border-radius:44px;background:#10352E;
+  padding:12px;box-shadow:0 40px 70px -28px rgba(16,53,46,.5),0 0 0 1px rgba(16,53,46,.18);
+  animation:floaty 7s ease-in-out infinite;
+}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@media (prefers-reduced-motion:reduce){.phone{animation:none}}
+.phone-screen{
+  background:linear-gradient(175deg,#F7FBF9,#EEF5F2);border-radius:34px;
+  padding:22px 18px 18px;overflow:hidden;
+}
+.phone-notch{
+  width:110px;height:24px;background:#10352E;border-radius:0 0 16px 16px;
+  position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:3;
+}
+.ph-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.ph-greet{font-size:.72rem;color:#6B7F79}
+.ph-name{font-size:1.02rem;font-weight:800;color:var(--mk-ink)}
+.ph-avatar{
+  width:36px;height:36px;border-radius:12px;
+  background:linear-gradient(135deg,var(--mk-green),#14C799);
+  color:#fff;display:grid;place-items:center;font-size:.8rem;font-weight:700;
+}
+.ph-card{
+  background:#fff;border-radius:18px;padding:16px;
+  box-shadow:0 8px 20px -12px rgba(16,53,46,.18);margin-bottom:12px;
+}
+.ph-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.ph-card-title{font-size:.82rem;font-weight:700}
+.ph-tag{font-size:.66rem;font-weight:700;padding:3px 10px;border-radius:999px}
+.ph-tag.green{background:var(--mk-green-l);color:var(--mk-green-d)}
+.ph-tag.violet{background:var(--mk-violet-l);color:#6D28D9}
+.ph-progress{display:flex;align-items:center;gap:16px}
+.ph-ring{position:relative;width:88px;height:88px;flex:none}
+.ph-ring svg{transform:rotate(-90deg)}
+.ph-ring .ring-bg{fill:none;stroke:#E4EFEA;stroke-width:9}
+.ph-ring .ring-fg{fill:none;stroke:var(--mk-green);stroke-width:9;stroke-linecap:round}
+.ph-ring-label{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-size:1.15rem;font-weight:800;color:var(--mk-ink);
+}
+.ph-ring-label span{font-size:.62rem;font-weight:600;color:#6B7F79;display:block;text-align:center}
+.ph-med-info .med-name{font-size:.92rem;font-weight:700}
+.ph-med-info .med-meta{font-size:.72rem;color:#6B7F79;margin-top:3px}
+.ph-dose-bar{height:7px;border-radius:99px;background:#E4EFEA;margin-top:10px;overflow:hidden}
+.ph-dose-bar i{display:block;height:100%;width:66%;border-radius:99px;background:var(--mk-green)}
+.ph-list li{
+  display:flex;align-items:center;gap:11px;padding:9px 0;
+  border-bottom:1px dashed var(--mk-line);font-size:.78rem;
+}
+.ph-list li:last-child{border-bottom:none}
+.ph-time{
+  font-size:.7rem;font-weight:700;color:var(--mk-ink-2);
+  background:#F0F5F3;border-radius:8px;padding:3px 8px;flex:none;
+}
+.ph-check{
+  width:20px;height:20px;border-radius:7px;flex:none;display:grid;place-items:center;
+}
+.ph-check.done{background:var(--mk-green);color:#fff}
+.ph-check.pending{background:var(--mk-amber-l);border:1.5px solid var(--mk-amber)}
+.ph-check svg{width:11px;height:11px}
+.ph-list .med-t{flex:1}
+.ph-list .med-t b{display:block;font-weight:700}
+.ph-list .med-t small{color:#8AA098;font-size:.68rem}
+.float-chip{
+  position:absolute;background:#fff;border-radius:14px;padding:11px 16px;
+  box-shadow:0 18px 36px -14px rgba(16,53,46,.28);display:flex;align-items:center;gap:10px;
+  font-size:.78rem;font-weight:700;animation:floaty 6s ease-in-out infinite;
+}
+.float-chip .ic{width:30px;height:30px;border-radius:10px;display:grid;place-items:center}
+.float-chip.c1{top:12%;left:-4%;animation-delay:.6s}
+.float-chip.c2{bottom:10%;right:-6%;animation-delay:1.2s}
+.float-chip small{display:block;font-weight:500;color:#8AA098;font-size:.68rem}
+
+/* ============ 3. 信任栏数字条 ============ */
+.stats{
+  background:var(--mk-ink);color:#fff;border-radius:24px;
+  padding:46px 40px;box-shadow:0 30px 60px -24px rgba(16,53,46,.5);
+}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;text-align:center}
+.stat-num{
+  font-size:clamp(2.1rem,4vw,3.1rem);font-weight:900;line-height:1.1;
+  background:linear-gradient(120deg,#7FE9C2,#3ED9A4);-webkit-background-clip:text;
+  background-clip:text;color:transparent;
+}
+.stat-label{margin-top:8px;font-size:.92rem;color:rgba(255,255,255,.72)}
+.stat-div{width:1px;background:rgba(255,255,255,.14)}
+
+/* ============ 4. Bento 功能网格 ============ */
+.bento{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  grid-auto-rows:minmax(200px,auto);gap:22px;
+}
+.bento-card{
+  background:var(--mk-card);border-radius:var(--mk-radius);padding:30px;
+  box-shadow:var(--mk-shadow);border:1px solid rgba(226,236,232,.7);
+  position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s;
+}
+.bento-card:hover{transform:translateY(-6px);box-shadow:0 24px 46px -18px rgba(16,53,46,.22)}
+.bento-card h3{font-size:1.22rem;font-weight:800;margin:16px 0 10px}
+.bento-card p{color:var(--mk-ink-2);font-size:.95rem}
+.bento-icon{
+  width:52px;height:52px;border-radius:16px;display:grid;place-items:center;
+}
+.bento-icon svg{width:25px;height:25px}
+.ic-green{background:var(--mk-green-l);color:var(--mk-green-d)}
+.ic-violet{background:var(--mk-violet-l);color:#6D28D9}
+.ic-amber{background:var(--mk-amber-l);color:#B45309}
+.b-span-2{grid-column:span 2}
+.b-tall{grid-row:span 2}
+.bento-card.featured{
+  background:linear-gradient(150deg,#0E9F6E,#0B7F58 62%,#0A6B4B);
+  color:#fff;border:none;
+}
+.bento-card.featured p{color:rgba(255,255,255,.82)}
+.bento-card.featured .bento-icon{background:rgba(255,255,255,.18);color:#fff}
+.b-deco{
+  position:absolute;right:-30px;bottom:-30px;width:170px;height:170px;
+  border-radius:50%;background:rgba(255,255,255,.1);
+}
+.b-pill{
+  display:inline-flex;align-items:center;gap:7px;font-size:.76rem;font-weight:700;
+  padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);margin-top:18px;
+}
+.track-demo{margin-top:20px;background:#F4F8F6;border-radius:14px;padding:14px}
+.track-line{display:flex;align-items:center;gap:10px;font-size:.78rem;font-weight:600}
+.track-line .node{width:12px;height:12px;border-radius:50%;flex:none}
+.track-line .bar{flex:1;height:5px;border-radius:99px;background:#DDE9E4;overflow:hidden}
+.track-line .bar i{display:block;height:100%;width:72%;background:var(--mk-green);border-radius:99px}
+
+/* ============ 5. 三步流程 ============ */
+.steps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:12px}
+.steps::before{
+  content:"";position:absolute;top:44px;left:14%;right:14%;height:2.5px;
+  background:linear-gradient(90deg,var(--mk-green),var(--mk-violet),var(--mk-amber));
+  border-radius:2px;opacity:.5;
+}
+.step{text-align:center;position:relative;z-index:1}
+.step-num{
+  width:88px;height:88px;margin:0 auto 22px;border-radius:26px;
+  background:#fff;border:2px solid var(--mk-line);
+  display:grid;place-items:center;font-size:1.65rem;font-weight:900;
+  box-shadow:var(--mk-shadow-s);position:relative;
+}
+.step:nth-child(1) .step-num{color:var(--mk-green-d);border-color:rgba(14,159,110,.35)}
+.step:nth-child(2) .step-num{color:#6D28D9;border-color:rgba(167,139,250,.45)}
+.step:nth-child(3) .step-num{color:#B45309;border-color:rgba(245,158,11,.4)}
+.step-num .tick{
+  position:absolute;top:-9px;right:-9px;width:28px;height:28px;border-radius:10px;
+  color:#fff;display:grid;place-items:center;font-size:.8rem;font-weight:800;
+}
+.step:nth-child(1) .tick{background:var(--mk-green)}
+.step:nth-child(2) .tick{background:var(--mk-violet)}
+.step:nth-child(3) .tick{background:var(--mk-amber)}
+.step h3{font-size:1.22rem;font-weight:800;margin-bottom:10px}
+.step p{color:var(--mk-ink-2);font-size:.95rem;max-width:290px;margin-inline:auto}
+.step-time{
+  display:inline-block;margin-top:14px;font-size:.78rem;font-weight:700;
+  padding:5px 14px;border-radius:999px;background:#fff;border:1px solid var(--mk-line);
+  color:var(--mk-ink-2);
+}
+
+/* ============ 6. 健康数据面板 Mockup ============ */
+.dash-section{background:linear-gradient(180deg,#EEF4F2,var(--mk-bg))}
+.dash{
+  background:var(--mk-card);border-radius:24px;padding:34px;
+  box-shadow:0 34px 70px -30px rgba(16,53,46,.3);border:1px solid var(--mk-line);
+}
+.dash-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;flex-wrap:wrap;gap:12px}
+.dash-title{font-size:1.15rem;font-weight:800}
+.dash-title small{display:block;font-size:.82rem;font-weight:500;color:#6B7F79}
+.dash-tabs{display:flex;gap:8px}
+.dash-tab{
+  font-size:.82rem;font-weight:700;padding:8px 18px;border-radius:11px;
+  background:#F0F5F3;color:var(--mk-ink-2);
+}
+.dash-tab.active{background:var(--mk-green);color:#fff}
+.dash-grid{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:22px}
+.dash-card{
+  background:#FAFCFB;border:1px solid var(--mk-line);border-radius:18px;padding:24px;
+}
+.dash-card h4{font-size:.95rem;font-weight:800;margin-bottom:4px}
+.dash-card .sub{font-size:.78rem;color:#8AA098;margin-bottom:18px}
+.big-ring{position:relative;width:180px;height:180px;margin:6px auto 4px}
+.big-ring svg{transform:rotate(-90deg)}
+.big-ring .rb{fill:none;stroke:#E4EFEA;stroke-width:14}
+.big-ring .rf{fill:none;stroke:url(#gradRing);stroke-width:14;stroke-linecap:round}
+.big-ring .val{
+  position:absolute;inset:0;display:grid;place-items:center;text-align:center;
+}
+.big-ring .val b{font-size:2.35rem;font-weight:900;line-height:1}
+.big-ring .val small{display:block;font-size:.8rem;color:#6B7F79;margin-top:4px}
+.ring-legend{display:flex;justify-content:center;gap:18px;font-size:.78rem;color:var(--mk-ink-2);margin-top:12px}
+.ring-legend i{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px}
+.week-list li{
+  display:flex;align-items:center;gap:12px;padding:11px 0;
+  border-bottom:1px dashed var(--mk-line);font-size:.85rem;
+}
+.week-list li:last-child{border-bottom:none}
+.w-day{
+  width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
+  font-size:.76rem;font-weight:800;flex:none;
+}
+.w-day.ok{background:var(--mk-green-l);color:var(--mk-green-d)}
+.w-day.warn{background:var(--mk-amber-l);color:#B45309}
+.w-day.next{background:var(--mk-violet-l);color:#6D28D9}
+.week-list .w-info{flex:1}
+.week-list .w-info b{display:block;font-size:.86rem}
+.week-list .w-info small{color:#8AA098;font-size:.74rem}
+.w-status{font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.w-status.ok{background:var(--mk-green-l);color:var(--mk-green-d)}
+.w-status.warn{background:var(--mk-amber-l);color:#B45309}
+.w-status.next{background:var(--mk-violet-l);color:#6D28D9}
+.record-bars{display:flex;align-items:flex-end;gap:11px;height:150px;margin:8px 0 12px}
+.rbar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;height:100%}
+.rbar i{
+  width:100%;border-radius:9px 9px 4px 4px;
+  background:linear-gradient(180deg,#3ED9A4,var(--mk-green));
+}
+.rbar.low i{background:linear-gradient(180deg,#FCD34D,var(--mk-amber))}
+.rbar span{font-size:.72rem;color:#8AA098;font-weight:600}
+.record-note{
+  display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:600;
+  background:var(--mk-green-l);color:var(--mk-green-d);border-radius:12px;padding:12px 15px;
+}
+.record-note svg{width:18px;height:18px;flex:none}
+
+/* ============ 7. 定价 ============ */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+.price-card{
+  background:var(--mk-card);border-radius:22px;padding:36px 30px;
+  border:1px solid var(--mk-line);box-shadow:var(--mk-shadow-s);
+  display:flex;flex-direction:column;position:relative;
+  transition:transform .3s,box-shadow .3s;
+}
+.price-card:hover{transform:translateY(-6px);box-shadow:0 26px 50px -20px rgba(16,53,46,.22)}
+.price-card.hot{
+  background:linear-gradient(165deg,#10352E,#17493F);color:#fff;border:none;
+  box-shadow:0 34px 66px -24px rgba(16,53,46,.55);transform:scale(1.03);
+}
+.price-card.hot:hover{transform:scale(1.03) translateY(-6px)}
+.hot-tag{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--mk-amber);color:#fff;font-size:.76rem;font-weight:800;
+  padding:6px 18px;border-radius:999px;box-shadow:0 8px 18px -6px rgba(245,158,11,.6);
+  white-space:nowrap;
+}
+.price-name{font-size:1.12rem;font-weight:800}
+.price-desc{font-size:.88rem;color:var(--mk-ink-2);margin-top:6px;min-height:44px}
+.price-card.hot .price-desc{color:rgba(255,255,255,.72)}
+.price-tag{display:flex;align-items:baseline;gap:6px;margin:18px 0 22px}
+.price-tag b{font-size:2.65rem;font-weight:900;letter-spacing:-.02em}
+.price-tag span{font-size:.92rem;color:var(--mk-ink-2)}
+.price-card.hot .price-tag span{color:rgba(255,255,255,.72)}
+.price-list{flex:1;display:grid;gap:12px;margin-bottom:26px}
+.price-list li{display:flex;align-items:flex-start;gap:10px;font-size:.92rem}
+.price-list .ok{
+  width:20px;height:20px;border-radius:7px;flex:none;margin-top:3px;
+  background:var(--mk-green-l);color:var(--mk-green-d);display:grid;place-items:center;
+}
+.price-card.hot .price-list .ok{background:rgba(255,255,255,.16);color:#7FE9C2}
+.price-list .ok svg{width:11px;height:11px}
+.price-list li.off{opacity:.42}
+.price-list li.off .ok{background:#EDF2F0;color:#8AA098}
+.price-card .btn{width:100%}
+.price-card.hot .btn-primary{background:#fff;color:var(--mk-ink)}
+.price-card.hot .btn-primary:hover{background:#EAF6F1}
+
+/* ============ 8. 用户评价 ============ */
+.quote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.quote-card{
+  background:var(--mk-card);border-radius:20px;padding:32px 28px;
+  box-shadow:var(--mk-shadow-s);border:1px solid rgba(226,236,232,.8);
+  display:flex;flex-direction:column;position:relative;
+}
+.quote-mark{
+  font-size:3.4rem;line-height:1;font-weight:900;color:var(--mk-green-l);
+  font-family:Georgia,serif;height:34px;
+}
+.quote-card p{color:var(--mk-ink-2);font-size:.98rem;flex:1;margin:12px 0 22px}
+.quote-card p b{color:var(--mk-ink);font-weight:700}
+.quote-user{display:flex;align-items:center;gap:13px}
+.q-avatar{
+  width:46px;height:46px;border-radius:15px;display:grid;place-items:center;
+  color:#fff;font-weight:800;font-size:.95rem;flex:none;
+}
+.qa-1{background:linear-gradient(135deg,#0E9F6E,#14C799)}
+.qa-2{background:linear-gradient(135deg,#A78BFA,#8B5CF6)}
+.qa-3{background:linear-gradient(135deg,#F59E0B,#FBBF24)}
+.quote-user b{display:block;font-size:.95rem}
+.quote-user small{color:#8AA098;font-size:.8rem}
+.stars{display:flex;gap:3px;margin-left:auto;color:var(--mk-amber)}
+.stars svg{width:15px;height:15px}
+
+/* ============ 9. FAQ ============ */
+.faq-wrap{max-width:780px;margin-inline:auto;display:grid;gap:14px}
+.faq-item{
+  background:var(--mk-card);border:1px solid var(--mk-line);border-radius:16px;
+  overflow:hidden;transition:box-shadow .3s,border-color .3s;
+}
+.faq-item[open]{box-shadow:var(--mk-shadow-s);border-color:rgba(14,159,110,.35)}
+.faq-item summary{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:22px 26px;font-weight:700;font-size:1.04rem;cursor:pointer;list-style:none;
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{
+  content:"";width:11px;height:11px;flex:none;
+  border-right:2.5px solid var(--mk-green-d);border-bottom:2.5px solid var(--mk-green-d);
+  transform:rotate(45deg);transition:transform .3s;margin-top:-5px;
+}
+.faq-item[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+.faq-body{padding:0 26px 24px;color:var(--mk-ink-2);font-size:.96rem}
+.faq-body .hl{color:var(--mk-green-d);font-weight:700}
+
+/* ============ 10. 下载 CTA + Footer ============ */
+.download{
+  position:relative;overflow:hidden;border-radius:28px;
+  background:linear-gradient(140deg,#0E9F6E 0%,#0B7F58 55%,#0A5C43 100%);
+  color:#fff;padding:72px 60px;
+}
+.download::before,.download::after{
+  content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.09);
+}
+.download::before{width:340px;height:340px;top:-140px;right:-90px}
+.download::after{width:240px;height:240px;bottom:-120px;left:-70px}
+.download-inner{position:relative;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.download h2{font-size:clamp(1.9rem,3.6vw,2.85rem);line-height:1.22}
+.download p{margin-top:18px;color:rgba(255,255,255,.85);font-size:1.08rem;max-width:480px}
+.store-btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+.store-btn{
+  display:flex;align-items:center;gap:12px;background:#fff;color:var(--mk-ink);
+  border-radius:15px;padding:13px 24px;transition:transform .25s,box-shadow .25s;
+  box-shadow:0 14px 30px -12px rgba(0,0,0,.35);
+}
+.store-btn:hover{transform:translateY(-3px);box-shadow:0 22px 40px -14px rgba(0,0,0,.4)}
+.store-btn svg{width:26px;height:26px;flex:none}
+.store-btn small{display:block;font-size:.68rem;color:#6B7F79;line-height:1.2}
+.store-btn b{font-size:.98rem;line-height:1.3}
+.qr-card{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+  border-radius:20px;padding:26px;text-align:center;backdrop-filter:blur(6px);
+}
+.qr-grid{
+  width:148px;height:148px;margin:0 auto 16px;background:#fff;border-radius:14px;
+  padding:11px;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:3px;
+}
+.qr-grid i{border-radius:2px}
+.qr-grid i.on{background:var(--mk-ink)}
+.qr-card b{font-size:.95rem}
+.qr-card small{display:block;color:rgba(255,255,255,.72);font-size:.8rem;margin-top:5px}
+
+.footer{background:var(--mk-ink);color:rgba(255,255,255,.78);margin-top:88px;padding:64px 0 0}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1.2fr;gap:36px}
+.footer .logo{color:#fff;margin-bottom:16px}
+.footer-about{font-size:.92rem;line-height:1.85;max-width:280px}
+.footer h4{color:#fff;font-size:.98rem;font-weight:800;margin-bottom:18px}
+.footer-links{display:grid;gap:11px;font-size:.9rem}
+.footer-links a{transition:color .22s,padding-left .22s}
+.footer-links a:hover{color:#7FE9C2;padding-left:4px}
+.footer-contact li{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;margin-bottom:12px}
+.footer-contact svg{width:17px;height:17px;flex:none;margin-top:4px;color:#7FE9C2}
+.footer-bottom{
+  margin-top:52px;border-top:1px solid rgba(255,255,255,.12);
+  padding:24px 0;display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;font-size:.84rem;color:rgba(255,255,255,.55);
+}
+.footer-bottom .legal{display:flex;gap:22px}
+.footer-bottom a:hover{color:#7FE9C2}
+
+/* ============ 响应式 ============ */
+@media (max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .hero-sub{max-width:none}
+  .dash-grid{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr 1fr 1fr}
+  .download-inner{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .nav-links{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .bento{grid-template-columns:1fr 1fr}
+  .b-tall{grid-row:span 1}
+  .steps{grid-template-columns:1fr;gap:38px}
+  .steps::before{display:none}
+  .price-grid{grid-template-columns:1fr}
+  .price-card.hot{transform:none}
+  .quote-grid{grid-template-columns:1fr}
+  .dash-grid{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .section{padding:64px 0}
+  .bento{grid-template-columns:1fr}
+  .b-span-2{grid-column:span 1}
+  .stats{padding:34px 22px}
+  .download{padding:52px 26px}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .float-chip{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 1. 吸顶导航 ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top" aria-label="MEDIKA 首页">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round">
+          <path d="M12 4v16M4 12h16"/>
+        </svg>
+      </span>
+      MEDIKA
+    </a>
+    <nav class="nav-links" aria-label="主导航">
+      <a href="#features">功能</a>
+      <a href="#dashboard">用药管理</a>
+      <a href="#pricing">价格</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <a class="btn btn-primary" href="#download">下载 App</a>
+  </div>
+</header>
+
+<!-- ============ 2. Hero ============ -->
+<main id="top">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow reveal">MEDIKA 数字药房 · 让用药更安心</span>
+      <h1 class="reveal d1">把药房，<br><span class="accent">装进口袋</span></h1>
+      <p class="hero-sub reveal d2">
+        从电子处方流转到 30 分钟送药到家，从智能用药提醒到家庭药箱管理——
+        MEDIKA 用一套干净、可靠的数字工具，照顾全家人的每一次服药。
+      </p>
+      <div class="hero-badges reveal d2">
+        <span class="badge b1"><span class="dot"></span>智能用药提醒</span>
+        <span class="badge b2"><span class="dot"></span>电子处方流转</span>
+        <span class="badge b3"><span class="dot"></span>30 分钟送药到家</span>
+      </div>
+      <div class="hero-cta reveal d3">
+        <a class="btn btn-primary" href="#download">免费下载 App</a>
+        <a class="btn btn-ghost" href="#how">看看怎么用 →</a>
+      </div>
+      <p class="hero-note reveal d3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0E9F6E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        执业药师全程审核 · 处方药合规销售 · 已通过国家药监局互联网药品交易服务资质备案
+      </p>
+    </div>
+
+    <!-- 纯 CSS 手机 Mockup -->
+    <div class="phone-stage reveal d2">
+      <div class="phone-glow" aria-hidden="true"></div>
+
+      <div class="float-chip c1" aria-hidden="true">
+        <span class="ic" style="background:var(--mk-amber-l);color:#B45309">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 8v4l2.5 2.5"/><circle cx="12" cy="12" r="9"/></svg>
+        </span>
+        <span>该吃药啦<small>二甲双胍 · 08:00</small></span>
+      </div>
+      <div class="float-chip c2" aria-hidden="true">
+        <span class="ic" style="background:var(--mk-green-l);color:var(--mk-green-d)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </span>
+        <span>骑手已取药<small>预计 26 分钟送达</small></span>
+      </div>
+
+      <div class="phone">
+        <div class="phone-notch" aria-hidden="true"></div>
+        <div class="phone-screen" role="img" aria-label="MEDIKA App 今日用药界面示意">
+          <div class="ph-top">
+            <div>
+              <div class="ph-greet">早上好，林女士</div>
+              <div class="ph-name">今日用药 · 11 月 6 日</div>
+            </div>
+            <div class="ph-avatar">林</div>
+          </div>
+
+          <!-- 今日用药卡片 + 服药进度环 -->
+          <div class="ph-card">
+            <div class="ph-card-head">
+              <span class="ph-card-title">服药进度</span>
+              <span class="ph-tag green">按时率 96%</span>
+            </div>
+            <div class="ph-progress">
+              <div class="ph-ring">
+                <svg width="88" height="88" viewBox="0 0 88 88" aria-hidden="true">
+                  <circle class="ring-bg" cx="44" cy="44" r="36"/>
+                  <circle class="ring-fg" cx="44" cy="44" r="36"
+                          stroke-dasharray="226" stroke-dashoffset="63"/>
+                </svg>
+                <div class="ph-ring-label">4/6<span>今日已服</span></div>
+              </div>
+              <div class="ph-med-info">
+                <div class="med-name">二甲双胍缓释片</div>
+                <div class="med-meta">0.5g · 每日两次 · 随餐服用</div>
+                <div class="ph-dose-bar"><i></i></div>
+                <div class="med-meta" style="margin-top:7px">下一次 12:30 · 午餐后</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 提醒列表 -->
+          <div class="ph-card">
+            <div class="ph-card-head">
+              <span class="ph-card-title">今日提醒</span>
+              <span class="ph-tag violet">4 项待办</span>
+            </div>
+            <ul class="ph-list">
+              <li>
+                <span class="ph-time">08:00</span>
+                <span class="ph-check done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+                <span class="med-t"><b>二甲双胍缓释片</b><small>已服用 · 0.5g</small></span>
+              </li>
+              <li>
+                <span class="ph-time">08:30</span>
+                <span class="ph-check done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+                <span class="med-t"><b>阿托伐他汀钙片</b><small>已服用 · 20mg</small></span>
+              </li>
+              <li>
+                <span class="ph-time">12:30</span>
+                <span class="ph-check pending"></span>
+                <span class="med-t"><b>二甲双胍缓释片</b><small>随午餐服用</small></span>
+              </li>
+              <li>
+                <span class="ph-time">21:00</span>
+                <span class="ph-check pending"></span>
+                <span class="med-t"><b>维生素 D 滴剂</b><small>睡前 · 1 滴</small></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 信任栏数字条 ============ -->
+<section class="wrap" aria-label="平台数据">
+  <div class="stats reveal">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-num">2000+</div>
+        <div class="stat-label">合作连锁药房</div>
+      </div>
+      <div>
+        <div class="stat-num">99.8%</div>
+        <div class="stat-label">处方履约率</div>
+      </div>
+      <div>
+        <div class="stat-num">28<span style="font-size:.55em;font-weight:700"> 分钟</span></div>
+        <div class="stat-label">平均送达时长</div>
+      </div>
+      <div>
+        <div class="stat-num">120<span style="font-size:.55em;font-weight:700"> 万</span></div>
+        <div class="stat-label">服务家庭数</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. 功能 Bento 网格 ============ -->
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">核心功能</span>
+      <h2>一个 App，管好全家的药</h2>
+      <p>处方、提醒、药箱、配送、咨询、支付——用药这件事的每个环节，都被安放在该在的位置。</p>
+    </div>
+
+    <div class="bento">
+      <!-- 电子处方流转（大块 featured） -->
+      <div class="bento-card featured b-span-2 reveal">
+        <div class="b-deco" aria-hidden="true"></div>
+        <div class="bento-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+        </div>
+        <h3>电子处方流转</h3>
+        <p>
+          医院开具的电子处方一键同步至 MEDIKA，执业药师在线复核后直接调配发货。
+          处方有效期、用药禁忌、重复用药自动校验，全流程留痕可追溯，慢病续方再也不用跑腿排队。
+        </p>
+        <span class="b-pill">支持 300+ 家互联网医院处方互认</span>
+      </div>
+
+      <!-- 智能用药提醒 -->
+      <div class="bento-card reveal d1">
+        <div class="bento-icon ic-amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </div>
+        <h3>智能用药提醒</h3>
+        <p>按疗程自动生成服药计划，饭前饭后、间隔时长精准推送，漏服自动补提醒，家人可远程协助确认。</p>
+      </div>
+
+      <!-- 药师在线咨询 -->
+      <div class="bento-card reveal d2">
+        <div class="bento-icon ic-violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3 9 9 0 0 1-3.8-.8L3 21l2-4.6a8.2 8.2 0 0 1-1-4A8.4 8.4 0 0 1 12.5 4 8.4 8.4 0 0 1 21 11.5z"/><path d="M9 11h.01M12.5 11h.01M16 11h.01"/></svg>
+        </div>
+        <h3>药师在线咨询</h3>
+        <p>三甲医院退休药师与在职执业药师 7×12 小时在线，用药疑问平均 90 秒接通，支持图文与语音。</p>
+      </div>
+
+      <!-- 家庭药箱管理 -->
+      <div class="bento-card reveal">
+        <div class="bento-icon ic-green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M12 11v5M9.5 13.5h5"/></svg>
+        </div>
+        <h3>家庭药箱管理</h3>
+        <p>扫码录入家中常备药，批号与有效期自动识别，过期前 30 天预警，还能一键补货或回收过期药。</p>
+      </div>
+
+      <!-- 送药上门追踪（宽块 + 追踪演示） -->
+      <div class="bento-card b-span-2 reveal d1">
+        <div class="bento-icon ic-green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11" rx="2"/><path d="M15 9h4l3 3.5V17h-7"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+        </div>
+        <h3>送药上门 · 全程追踪</h3>
+        <p>接入 2000+ 合作药房的即时库存，下单后就近发货；冷链药品全程温控记录，骑手位置实时可见。</p>
+        <div class="track-demo" aria-hidden="true">
+          <div class="track-line">
+            <span class="node" style="background:var(--mk-green)"></span>药师已调配
+            <span class="bar"><i></i></span>
+            <span class="node" style="background:var(--mk-green)"></span>骑手配送中
+            <span class="node" style="background:#C7D8D2"></span>即将送达
+          </div>
+        </div>
+      </div>
+
+      <!-- 医保在线支付 -->
+      <div class="bento-card reveal d2">
+        <div class="bento-icon ic-violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg>
+        </div>
+        <h3>医保在线支付</h3>
+        <p>对接多地医保电子凭证，统筹与个人账户线上直接结算，自费部分支持家庭共济账户代付。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. 三步流程 ============ -->
+<section class="section" id="how" style="padding-top:24px">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow violet">使用流程</span>
+      <h2>三步，把药送到家</h2>
+      <p>不用排队、不用打电话，从拍照到收药，整个过程比煮一碗面还短。</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1<span class="tick">上</span></div>
+        <h3>拍照上传处方</h3>
+        <p>纸质处方拍照上传，或从互联网医院、电子健康卡一键同步电子处方，系统自动识别药品与用量。</p>
+        <span class="step-time">约 1 分钟</span>
+      </div>
+      <div class="step reveal d1">
+        <div class="step-num">2<span class="tick">审</span></div>
+        <h3>药师审核调配</h3>
+        <p>执业药师复核处方合规性与用药禁忌，确认后由就近合作药房调配备货，缺药自动推荐替代方案。</p>
+        <span class="step-time">约 3 分钟</span>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-num">3<span class="tick">送</span></div>
+        <h3>30 分钟送达</h3>
+        <p>专属骑手取药出发，全程温控与位置可查；到家扫码签收，用药提醒随即自动生成。</p>
+        <span class="step-time">平均 28 分钟</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. 健康数据面板模拟区 ============ -->
+<section class="section dash-section" id="dashboard">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow amber">用药管理</span>
+      <h2>看得见的健康数据</h2>
+      <p>每一次服药都被温柔记录，依从趋势、提醒完成度、用药记录一屏掌握，复诊时一键导出给医生。</p>
+    </div>
+
+    <div class="dash reveal">
+      <div class="dash-top">
+        <div class="dash-title">
+          林女士家庭 · 用药健康面板
+          <small>统计周期：11 月 1 日 — 11 月 7 日 · 共 3 位成员</small>
+        </div>
+        <div class="dash-tabs" role="tablist" aria-label="面板视图切换">
+          <button class="dash-tab active" type="button">本周</button>
+          <button class="dash-tab" type="button">本月</button>
+          <button class="dash-tab" type="button">导出报告</button>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <!-- 用药依从率环形进度 -->
+        <div class="dash-card">
+          <h4>用药依从率</h4>
+          <div class="sub">按计划完成服药的比例</div>
+          <div class="big-ring">
+            <svg width="180" height="180" viewBox="0 0 180 180" aria-hidden="true">
+              <defs>
+                <linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#3ED9A4"/>
+                  <stop offset="100%" stop-color="#0B7F58"/>
+                </linearGradient>
+              </defs>
+              <circle class="rb" cx="90" cy="90" r="72"/>
+              <circle class="rf" cx="90" cy="90" r="72"
+                      stroke-dasharray="452" stroke-dashoffset="41"/>
+            </svg>
+            <div class="val">
+              <div>
+                <b>91%</b>
+                <small>本周依从率</small>
+              </div>
+            </div>
+          </div>
+          <div class="ring-legend">
+            <span><i style="background:var(--mk-green)"></i>按时 42 次</span>
+            <span><i style="background:var(--mk-amber)"></i>补服 3 次</span>
+            <span><i style="background:#DDE9E4"></i>漏服 1 次</span>
+          </div>
+        </div>
+
+        <!-- 本周提醒列表 -->
+        <div class="dash-card">
+          <h4>本周提醒概览</h4>
+          <div class="sub">近 5 次用药提醒完成情况</div>
+          <ul class="week-list">
+            <li>
+              <span class="w-day ok">周五</span>
+              <span class="w-info"><b>二甲双胍缓释片</b><small>08:00 / 12:30 / 19:00</small></span>
+              <span class="w-status ok">全部完成</span>
+            </li>
+            <li>
+              <span class="w-day ok">周四</span>
+              <span class="w-info"><b>阿托伐他汀钙片</b><small>21:00 睡前服用</small></span>
+              <span class="w-status ok">已完成</span>
+            </li>
+            <li>
+              <span class="w-day warn">周三</span>
+              <span class="w-info"><b>氯沙坦钾片</b><small>08:00 漏服后补服</small></span>
+              <span class="w-status warn">补服 1 次</span>
+            </li>
+            <li>
+              <span class="w-day ok">周二</span>
+              <span class="w-info"><b>维生素 D 滴剂</b><small>宝宝 · 20:00</small></span>
+              <span class="w-status ok">已完成</span>
+            </li>
+            <li>
+              <span class="w-day next">今天</span>
+              <span class="w-info"><b>二甲双胍缓释片</b><small>12:30 午餐后</small></span>
+              <span class="w-status next">待服用</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 用药记录条 -->
+        <div class="dash-card">
+          <h4>近 7 天用药记录</h4>
+          <div class="sub">每日计划服药次数完成度</div>
+          <div class="record-bars" aria-hidden="true">
+            <div class="rbar"><i style="height:100%"></i><span>一</span></div>
+            <div class="rbar"><i style="height:88%"></i><span>二</span></div>
+            <div class="rbar low"><i style="height:62%"></i><span>三</span></div>
+            <div class="rbar"><i style="height:96%"></i><span>四</span></div>
+            <div class="rbar"><i style="height:100%"></i><span>五</span></div>
+            <div class="rbar"><i style="height:82%"></i><span>六</span></div>
+            <div class="rbar"><i style="height:74%"></i><span>日</span></div>
+          </div>
+          <div class="record-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg>
+            周三漏服 2 次，药师已生成补服建议
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. 定价 ============ -->
+<section class="section" id="pricing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">会员方案</span>
+      <h2>按需选择，随时可退</h2>
+      <p>基础功能永久免费。升级会员解锁全家共管、专属药师与优先配送，年付立减两个月。</p>
+    </div>
+
+    <div class="price-grid">
+      <!-- 基础版 -->
+      <div class="price-card reveal">
+        <div class="price-name">基础版</div>
+        <div class="price-desc">适合个人日常用药管理，永久免费。</div>
+        <div class="price-tag"><b>¥0</b><span>/ 永久免费</span></div>
+        <ul class="price-list">
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>用药提醒（3 个疗程）</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>电子处方上传与流转</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>家庭药箱（20 种药品）</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>标准配送（满 49 元免运费）</li>
+          <li class="off"><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>专属药师 1 对 1</li>
+        </ul>
+        <a class="btn btn-ghost" href="#download">免费开始</a>
+      </div>
+
+      <!-- 家庭版（推荐） -->
+      <div class="price-card hot reveal d1">
+        <span class="hot-tag">最受欢迎 · 三口之家首选</span>
+        <div class="price-name">家庭版</div>
+        <div class="price-desc">最多 6 位成员共管，提醒互相同步。</div>
+        <div class="price-tag"><b>¥15</b><span>/ 月 · 年付 ¥150</span></div>
+        <ul class="price-list">
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>基础版全部功能</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>无限疗程提醒 + 家人代确认</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>家庭药箱不限量 + 过期预警</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>每月 4 次药师图文咨询</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>全年免运费 · 优先配送</li>
+        </ul>
+        <a class="btn btn-primary" href="#download">选择家庭版</a>
+      </div>
+
+      <!-- 尊享药师版 -->
+      <div class="price-card reveal d2">
+        <div class="price-name">尊享药师版</div>
+        <div class="price-desc">慢病与术后长期用药人群的专属方案。</div>
+        <div class="price-tag"><b>¥39</b><span>/ 月 · 年付 ¥390</span></div>
+        <ul class="price-list">
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>家庭版全部功能</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>专属执业药师 1 对 1 跟管</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>慢病用药方案季度评估</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>用药基因与相互作用深度检测</li>
+          <li><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>急用药 20 分钟极速达</li>
+        </ul>
+        <a class="btn btn-ghost" href="#download">咨询开通</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. 用户评价 ============ -->
+<section class="section" style="padding-top:24px">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow violet">用户故事</span>
+      <h2>120 万家庭的用药日常</h2>
+      <p>真实用户反馈（已获授权展示），来自 MEDIKA 应用内评价与回访记录。</p>
+    </div>
+    <div class="quote-grid">
+      <div class="quote-card reveal">
+        <div class="quote-mark" aria-hidden="true">“</div>
+        <p>
+          我爸糖尿病十几年，以前<b>每天三种药、五六个时间点</b>，全靠我妈手写纸条提醒。
+          用 MEDIKA 之后提醒会推到我们仨手机上，谁看到谁点确认，上个月依从率直接从 71% 涨到 94%。
+          <b>续方也再也不用请假跑医院了</b>，拍照上传就行。
+        </p>
+        <div class="quote-user">
+          <div class="q-avatar qa-1">陈</div>
+          <div>
+            <b>陈志远</b>
+            <small>糖友家属 · 杭州</small>
+          </div>
+          <div class="stars" aria-label="五星好评">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-card reveal d1">
+        <div class="quote-mark" aria-hidden="true">“</div>
+        <p>
+          宝宝半夜发烧，家里的退烧药刚好过期，当时真的急坏了。下单后<b>23 分钟药就送到楼下</b>，
+          药师还专门标注了儿童剂量换算方法。家庭药箱的<b>过期预警</b>现在是我们家最依赖的功能，
+          每周都会看一眼。
+        </p>
+        <div class="quote-user">
+          <div class="q-avatar qa-2">苏</div>
+          <div>
+            <b>苏晚晴</b>
+            <small>三口之家 · 成都</small>
+          </div>
+          <div class="stars" aria-label="五星好评">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-card reveal d2">
+        <div class="quote-mark" aria-hidden="true">“</div>
+        <p>
+          作为药师，我最看重的是<b>处方审核留痕和用药交代的完整性</b>。MEDIKA 的后台把重复用药、
+          禁忌冲突都做了前置校验，咨询记录自动归档到用户健康档案。
+          术后抗凝药这种高风险用药，<b>线上随访效率比电话高太多了</b>。
+        </p>
+        <div class="quote-user">
+          <div class="q-avatar qa-3">吴</div>
+          <div>
+            <b>吴慧敏</b>
+            <small>合作执业药师 · 南京</small>
+          </div>
+          <div class="stars" aria-label="五星好评">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2 2 9.4l7-.9z"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. FAQ 手风琴 ============ -->
+<section class="section" id="faq" style="padding-top:24px">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">常见问题</span>
+      <h2>你可能想知道</h2>
+      <p>关于处方、医保、配送与药师资质的高频疑问，都在这里。</p>
+    </div>
+    <div class="faq-wrap">
+      <details class="faq-item reveal" open>
+        <summary>处方药怎么买？一定要上传处方吗？</summary>
+        <div class="faq-body">
+          是的，<span class="hl">处方药必须凭有效处方购买</span>，这是国家法规要求，也是对您安全的保障。
+          您可以拍照上传医院纸质处方、同步互联网医院电子处方，或在 App 内发起在线复诊开方（由合作医疗机构的执业医师开具）。
+          上传后由<span class="hl">执业药师逐单复核</span>，确认无误后才会调配发货；非处方药（OTC）则可以直接下单。
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary>医保能用吗？怎么结算？</summary>
+        <div class="faq-body">
+          MEDIKA 已在<span class="hl">全国 40+ 个城市</span>开通医保在线支付，支持医保电子凭证扫码结算，
+          统筹报销与个人账户支付一次完成。具体可报销范围以当地医保政策为准，下单前 App 会明确标注「医保可付」标识。
+          个人账户余额还可通过<span class="hl">家庭共济</span>为父母、子女代付自费部分。
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary>送药范围有哪些？多久能送到？</summary>
+        <div class="faq-body">
+          目前服务覆盖<span class="hl">全国 260 个城市的主城区</span>，依托 2000+ 家合作连锁药房就近发货，
+          平均送达 28 分钟，90% 订单在 35 分钟内完成。夜间（22:00—次日 8:00）提供急诊药急送通道，最长 45 分钟送达。
+          冷链药品（如胰岛素、生物制剂）全程温控配送，签收时可查看温度记录。
+        </div>
+      </details>
+
+      <details class="faq-item reveal">
+        <summary>在线咨询的药师是什么资质？</summary>
+        <div class="faq-body">
+          所有在线药师均持有<span class="hl">国家执业药师资格证书</span>并完成实名与多点执业备案，
+          平均从业年限 9 年，其中 37% 具备三甲医院药房工作经验。平台对药师实行季度考核与用户评价双轨管理，
+          每一次咨询都会生成<span class="hl">电子药历</span>归档，可随时回看或导出给您的主诊医生。
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. 下载 CTA ============ -->
+<section class="section" id="download" style="padding-top:24px">
+  <div class="wrap">
+    <div class="download reveal">
+      <div class="download-inner">
+        <div>
+          <h2>今天开始，<br>让每一次服药都被认真对待</h2>
+          <p>下载 MEDIKA，30 秒建立你的家庭药箱。新用户首单免运费，还能领 7 天家庭版体验。</p>
+          <div class="store-btns">
+            <a class="store-btn" href="#" aria-label="前往 App Store 下载">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.8-3.5.8-.7 0-1.9-.8-3.1-.8-1.6 0-3 .9-3.8 2.4-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3.1-.7 1.4 0 1.8.7 3.1.7 1.3 0 2.1-1.1 2.9-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.8zM14.2 5.8c.6-.8 1-1.9.9-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.8-1.3z"/></svg>
+              <span><small>下载于</small><b>App Store</b></span>
+            </a>
+            <a class="store-btn" href="#" aria-label="前往 Android 应用市场下载">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4.5v15c0 .4.2.7.5.9l8.2-8.4L4.5 3.6c-.3.2-.5.5-.5.9zM15.9 9.2l-2.5-1.4-2.8 2.8 2.8 2.8 2.5-1.4c.8-.4.8-2.4 0-2.8zM5.7 21l7.4-4.2-2.5-2.5L5.7 21zM10.6 9.2l2.5-2.5L5.7 2.5l4.9 6.7z"/></svg>
+              <span><small>获取于</small><b>Android 应用市场</b></span>
+            </a>
+          </div>
+          <p style="margin-top:22px;font-size:.88rem;color:rgba(255,255,255,.72)">
+            支持 iOS 14+ / Android 9+ · 已通过等保三级认证 · 药品经营许可证：苏CA0288xxx
+          </p>
+        </div>
+
+        <div class="qr-card">
+          <div class="qr-grid" aria-hidden="true">
+            <!-- 纯 CSS 二维码装饰 -->
+            <i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i>
+            <i class="on"></i><i></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i>
+            <i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i>
+            <i></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i>
+            <i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i>
+            <i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i>
+            <i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i>
+          </div>
+          <b>扫码下载 MEDIKA</b>
+          <small>微信扫一扫 · 新用户领 7 天家庭版</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ Footer ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 4v16M4 12h16"/></svg>
+          </span>
+          MEDIKA
+        </div>
+        <p class="footer-about">
+          MEDIKA 数字药房——让好药更快到达，让用药更安心。
+          我们相信，专业的医药服务应当像水和电一样，可靠、可及、有温度。
+        </p>
+      </div>
+      <div>
+        <h4>产品</h4>
+        <ul class="footer-links">
+          <li><a href="#features">电子处方流转</a></li>
+          <li><a href="#dashboard">用药管理</a></li>
+          <li><a href="#features">家庭药箱</a></li>
+          <li><a href="#pricing">会员方案</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>服务与支持</h4>
+        <ul class="footer-links">
+          <li><a href="#faq">常见问题</a></li>
+          <li><a href="#how">配送说明</a></li>
+          <li><a href="#faq">医保结算指南</a></li>
+          <li><a href="#download">企业健康合作</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>关于 MEDIKA</h4>
+        <ul class="footer-links">
+          <li><a href="#top">品牌故事</a></li>
+          <li><a href="#top">药师团队</a></li>
+          <li><a href="#top">资质公示</a></li>
+          <li><a href="#top">加入我们</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>联系我们</h4>
+        <ul class="footer-contact">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2z"/></svg>
+            <span>客服热线 400-820-6060<br>每日 8:00—22:00</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M22 7l-10 6L2 7"/></svg>
+            <span>care@medika.health</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>上海市静安区南京西路 1266 号<br>恒隆广场二座 28F</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MEDIKA 数字药房（上海）健康科技有限公司 · 沪ICP备2026008866号</span>
+      <div class="legal">
+        <a href="#">隐私政策</a>
+        <a href="#">用户协议</a>
+        <a href="#">药品安全声明</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var reveals = document.querySelectorAll('.reveal');
+
+  // 兜底：不支持 IntersectionObserver 时全量显示
+  if (!('IntersectionObserver' in window)) {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(function (el) { io.observe(el); });
+
+  // 面板 tab 演示交互（纯展示）
+  document.querySelectorAll('.dash-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.dash-tab').forEach(function (t) {
+        t.classList.remove('active');
+      });
+      tab.classList.add('active');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
