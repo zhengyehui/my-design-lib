@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 229 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 232 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -2107,6 +2107,33 @@ const pages = [
     rating: 9.2,
     description: '数字药房应用展示页——清爽现代医疗风：Hero 纯 CSS 手机 mockup（用药卡+进度环+提醒列表）+数字信任条+Bento 功能网格+三步流程+健康数据面板模拟+三栏定价+用户评价+FAQ+下载 CTA，薄荷绿+淡紫+琥珀点缀',
   },
+  {
+    id: 'avifauna-guide',
+    title: 'AVIFAUNA — 鸟类野外图鉴',
+    category: 'content',
+    tags: ['博物图鉴', 'HUD标注', '等宽排版', 'CSS网点'],
+    colors: ['#080808', '#F7F8F9', '#FF6B35'],
+    rating: 9.2,
+    description: 'HUD 风格鸟类野外图鉴——大标题 Hero（四角图版标注+标本统计条）+6 种鸟类内联 SVG 标本卡+翼型解剖图解（mask 圆形揭示动画）+迁徙路线虚线动画+鸣叫频谱条+分类检索表+物候时间线，近黑底+单色白线+观测橙点缀，CSS 网点制版质感',
+  },
+  {
+    id: 'volta-electronics',
+    title: 'VOLTA — 精品数码生活商店',
+    category: 'ecommerce',
+    tags: ['数码电商', '双色系统', '发丝线排版', 'CSS产品图'],
+    colors: ['#F8F7EE', '#1664EB', '#35342C'],
+    rating: 9.1,
+    description: '精品数码电商长页——超大紧排 Hero（CSS 环绕 orbit 装饰+SVG 产品剪影）+服务承诺跑马灯+六款产品网格（售罄灰阶卡）+Halo Pro 旗舰深潜区+配件横向滑轨+评价背书+会员四宫格+Newsletter+超大字标页脚，暖米白×电光蓝严格双色，零圆角零阴影',
+  },
+  {
+    id: 'halloway-auctions',
+    title: 'HALLOWAY — 当代艺术拍卖行',
+    category: 'ecommerce',
+    tags: ['拍卖行', '有机遮罩', '实时出价', '编辑排版'],
+    colors: ['#F5F2EA', '#14120F', '#D93A1E'],
+    rating: 9.3,
+    description: '艺术拍卖行长页——拍卖跑马灯+超大紧排 Hero（落槌倒计时+blob 遮罩主拍品）+精选拍品网格（6 件内联 SVG 抽象艺术）+墨黑反转 LIVE 竞投区（实时出价流）+竞投流程描边大数字+拍卖日历 hover 反色+私人洽购衬线引言+超大字标页脚，骨白×墨黑+拍卖朱红点缀',
+  },
 ]
 
 const categories = [
@@ -2164,12 +2191,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 229 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 232 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="229 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="232 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -2178,7 +2205,7 @@ content=\"My Design Lib 页面灵感画廊 — 229 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 229 个完整页面</span>
+      <span>📦 232 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

@@ -378,7 +378,9 @@ export default defineConfig({
             { text: 'VISTA 视光眼镜工坊', link: '/pages/vista-eyewear' },
             { text: 'Petit Lune 有机母婴精品', link: '/pages/petit-lune-baby' },
             { text: 'NORDHAUS 北欧设计家具商城', link: '/pages/nordhaus-furniture' },
-            { text: 'HARMONIA 手工乐器工坊', link: '/pages/harmonia-instruments' }
+            { text: 'HARMONIA 手工乐器工坊', link: '/pages/harmonia-instruments' },
+            { text: 'VOLTA 精品数码商店', link: '/pages/volta-electronics' },
+            { text: 'HALLOWAY 当代艺术拍卖行', link: '/pages/halloway-auctions' }
           ]
         },
         {
@@ -455,7 +457,8 @@ export default defineConfig({
             { text: 'DIALOGUE 对话录 人物访谈', link: '/pages/dialogue-interviews' },
             { text: 'Lumen Research 年度白皮书', link: '/pages/research-lab-whitepaper' },
             { text: '北光纪行 摄影田野日志', link: '/pages/northlight-journal' },
-            { text: 'THE SEASON 赛季数据年鉴', link: '/pages/season-almanac' }
+            { text: 'THE SEASON 赛季数据年鉴', link: '/pages/season-almanac' },
+            { text: 'AVIFAUNA 鸟类野外图鉴', link: '/pages/avifauna-guide' }
           ]
         },
         {

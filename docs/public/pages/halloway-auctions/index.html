@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HALLOWAY — 当代艺术拍卖行</title>
+<meta name="description" content="HALLOWAY & FINCH 当代艺术夜场拍卖 —— 62 件重要拍品，现场与线上同步竞投。林逸舟、陈墨白、沈星野等艺术家代表作。">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ============================================================
+   HALLOWAY & FINCH — 当代艺术拍卖行
+   设计语言：骨白 #F5F2EA × 墨黑 #14120F + 拍卖朱红 #D93A1E
+   超大紧排标题 + 衬线斜体点缀 + 等宽拍卖数据；
+   有机 blob 遮罩主拍品（致敬流体蒙版）；发丝线网格；零阴影
+   ============================================================ */
+
+:root{
+  --bone:      #F5F2EA;
+  --bone-deep: #EDE8DC;
+  --ink:       #14120F;
+  --ink-soft:  #2A2620;
+  --gray-mid:  #6E6759;
+  --gray-soft: #A39B89;
+  --vermilion: #D93A1E;
+  --verm-deep: #A62B14;
+  --hairline:  rgba(20,18,15,.18);
+  --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --serif: Georgia, "Times New Roman", "Songti SC", "STSong", serif;
+  --mono: "SF Mono", "Menlo", "Consolas", monospace;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  background:var(--bone);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+::selection{ background:var(--vermilion); color:var(--bone); }
+
+a{ color:inherit; text-decoration:none; }
+img, svg{ display:block; }
+button{ font-family:inherit; cursor:pointer; }
+
+.wrap{ width:min(1380px, 93vw); margin-inline:auto; }
+
+.mono{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.serif-it{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:0;
+}
+
+/* ---------- 滚动入场（html.js 守卫） ---------- */
+html.js .reveal{ opacity:0; transform:translateY(26px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+html.js .reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion:reduce){
+  html.js .reveal{ opacity:1 !important; transform:none !important; transition:none; }
+  *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; }
+}
+
+/* ================= NAV ================= */
+.nav{
+  position:sticky; top:0; z-index:60;
+  background:color-mix(in srgb, var(--bone) 92%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--hairline);
+}
+.nav-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  height:66px; gap:24px;
+}
+.logo{ display:flex; align-items:baseline; gap:10px; }
+.logo b{
+  font-size:19px; letter-spacing:.22em; font-weight:800;
+}
+.logo .est{ color:var(--gray-soft); }
+.logo .gavel{ color:var(--vermilion); font-size:15px; }
+.nav-links{ display:flex; gap:30px; }
+.nav-links a{
+  font-size:12.5px; letter-spacing:.12em; text-transform:uppercase;
+  font-weight:500; color:var(--ink-soft); position:relative; padding:6px 0;
+}
+.nav-links a::after{
+  content:""; position:absolute; left:0; bottom:0; height:1.5px; width:0;
+  background:var(--vermilion); transition:width .28s var(--ease);
+}
+.nav-links a:hover{ color:var(--vermilion); }
+.nav-links a:hover::after{ width:100%; }
+.nav-cta{
+  border:1.5px solid var(--ink); background:var(--ink); color:var(--bone);
+  padding:11px 22px; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:600; transition:background .25s var(--ease), color .25s var(--ease);
+}
+.nav-cta:hover{ background:var(--vermilion); border-color:var(--vermilion); }
+.nav-burger{ display:none; background:none; border:none; font-size:22px; }
+
+/* ================= MARQUEE ================= */
+.ticker{
+  background:var(--ink); color:var(--bone); overflow:hidden;
+  border-bottom:1px solid var(--ink); padding:11px 0; white-space:nowrap;
+}
+.ticker-track{
+  display:inline-flex; gap:0;
+  animation:tick 38s linear infinite;
+}
+.ticker-track span{
+  font-family:var(--mono); font-size:11px; letter-spacing:.22em;
+  text-transform:uppercase; padding:0 26px;
+}
+.ticker-track .dot{ color:var(--vermilion); padding:0 4px; }
+@keyframes tick{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+/* ================= HERO ================= */
+.hero{ padding:78px 0 64px; border-bottom:1px solid var(--hairline); }
+.hero-grid{
+  display:grid; grid-template-columns:1.15fr .85fr; gap:60px; align-items:center;
+}
+.eyebrow{
+  display:flex; align-items:center; gap:12px; margin-bottom:26px;
+  color:var(--gray-mid);
+}
+.eyebrow .live{
+  display:inline-flex; align-items:center; gap:7px;
+  background:var(--vermilion); color:var(--bone); padding:5px 11px;
+  font-family:var(--mono); font-size:10px; letter-spacing:.18em;
+}
+.eyebrow .live i{
+  width:6px; height:6px; border-radius:50%; background:var(--bone);
+  animation:blink 1.2s ease-in-out infinite;
+}
+@keyframes blink{ 0%,100%{ opacity:1; } 50%{ opacity:.25; } }
+
+.hero h1{
+  font-size:clamp(56px, 8.2vw, 118px);
+  line-height:.94;
+  letter-spacing:-.035em;
+  font-weight:800;
+}
+.hero h1 .thin{ font-weight:200; letter-spacing:-.02em; }
+.hero h1 .red{ color:var(--vermilion); }
+.hero-sub{
+  margin:30px 0 0; max-width:520px;
+  font-family:var(--serif); font-style:italic;
+  font-size:19px; line-height:1.75; color:var(--ink-soft);
+}
+.hero-actions{ display:flex; gap:16px; margin-top:38px; flex-wrap:wrap; }
+.btn{
+  display:inline-flex; align-items:center; gap:12px;
+  padding:16px 30px; font-size:12.5px; letter-spacing:.15em;
+  text-transform:uppercase; font-weight:700;
+  border:1.5px solid var(--ink); transition:all .28s var(--ease);
+}
+.btn-solid{ background:var(--ink); color:var(--bone); }
+.btn-solid:hover{ background:var(--vermilion); border-color:var(--vermilion); transform:translateY(-2px); }
+.btn-ghost:hover{ background:var(--ink); color:var(--bone); transform:translateY(-2px); }
+.btn .arr{ transition:transform .28s var(--ease); }
+.btn:hover .arr{ transform:translateX(5px); }
+
+/* 倒计时 */
+.countdown{
+  display:flex; gap:0; margin-top:44px;
+  border:1px solid var(--hairline); width:fit-content;
+}
+.countdown .cell{
+  padding:16px 26px; text-align:center;
+  border-right:1px solid var(--hairline);
+}
+.countdown .cell:last-child{ border-right:none; }
+.countdown .num{
+  font-family:var(--mono); font-size:32px; font-weight:700;
+  letter-spacing:.04em; line-height:1; color:var(--ink);
+}
+.countdown .lab{
+  margin-top:7px; color:var(--gray-soft);
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.22em; text-transform:uppercase;
+}
+
+/* 主拍品卡 — 有机 blob 遮罩 */
+.hero-lot{ position:relative; }
+.blob-frame{
+  position:relative; width:100%; aspect-ratio:1/1.08;
+}
+.blob-frame .art{
+  width:100%; height:100%;
+  border-radius:56% 44% 62% 38% / 48% 58% 42% 52%;
+  overflow:hidden;
+  transition:border-radius 1.4s var(--ease);
+}
+.hero-lot:hover .art{
+  border-radius:44% 56% 38% 62% / 58% 42% 58% 42%;
+}
+.blob-frame .art svg{ width:100%; height:100%; }
+.lot-corner{
+  position:absolute; font-family:var(--mono); font-size:10px;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--gray-mid);
+}
+.lot-corner.tl{ top:6px; left:0; }
+.lot-corner.br{ bottom:6px; right:0; text-align:right; }
+.hero-lot .meta{
+  margin-top:26px; padding-top:20px; border-top:1px solid var(--ink);
+  display:grid; grid-template-columns:1fr auto; gap:8px 20px; align-items:end;
+}
+.hero-lot .meta .t{ font-size:17px; font-weight:700; letter-spacing:.01em; }
+.hero-lot .meta .s{ color:var(--gray-mid); font-size:12.5px; letter-spacing:.06em; }
+.hero-lot .meta .est{
+  font-family:var(--mono); font-size:13px; text-align:right; letter-spacing:.03em;
+}
+.hero-lot .meta .est small{ display:block; color:var(--gray-soft); font-size:9px; letter-spacing:.22em; margin-bottom:4px; }
+.hero-lot .meta .bid{
+  grid-column:1/-1; margin-top:12px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--ink); color:var(--bone); padding:13px 18px;
+  font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+}
+.hero-lot .meta .bid b{ color:#FF6A4D; font-weight:700; }
+
+/* ================= 数据条 ================= */
+.stats{
+  border-bottom:1px solid var(--hairline);
+  display:grid; grid-template-columns:repeat(4, 1fr);
+}
+.stats .cell{
+  padding:34px 30px; border-right:1px solid var(--hairline);
+}
+.stats .cell:last-child{ border-right:none; }
+.stats .num{
+  font-family:var(--mono); font-size:clamp(28px, 3vw, 42px); font-weight:700;
+  letter-spacing:-.01em;
+}
+.stats .num em{ font-style:normal; color:var(--vermilion); }
+.stats .lab{ margin-top:8px; color:var(--gray-mid); font-size:12px; letter-spacing:.14em; text-transform:uppercase; }
+
+/* ================= 区块标题 ================= */
+.sec{ padding:96px 0; border-bottom:1px solid var(--hairline); }
+.sec-head{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  gap:30px; margin-bottom:52px; flex-wrap:wrap;
+}
+.sec-head h2{
+  font-size:clamp(36px, 5vw, 64px); line-height:1.02;
+  letter-spacing:-.03em; font-weight:800;
+}
+.sec-head h2 .serif-it{ font-size:.82em; color:var(--gray-mid); }
+.sec-head .aside{ max-width:380px; color:var(--gray-mid); font-size:14px; line-height:1.8; }
+.sec-head .aside .mono{ display:block; color:var(--vermilion); margin-bottom:10px; }
+
+/* ================= 拍品网格 ================= */
+.lots{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:44px 34px;
+}
+.lot-card{ position:relative; }
+.lot-card .thumb{
+  position:relative; aspect-ratio:4/4.6; overflow:hidden;
+  border:1px solid var(--hairline); background:var(--bone-deep);
+}
+.lot-card .thumb svg{
+  width:100%; height:100%;
+  transition:transform .7s var(--ease);
+}
+.lot-card:hover .thumb svg{ transform:scale(1.045); }
+.lot-card .chip{
+  position:absolute; top:12px; left:12px; z-index:2;
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
+  padding:5px 9px; background:var(--bone); border:1px solid var(--ink);
+}
+.lot-card .chip.hot{ background:var(--vermilion); border-color:var(--vermilion); color:var(--bone); }
+.lot-card .chip.done{ background:var(--ink); color:var(--bone); border-color:var(--ink); }
+.lot-card .idx{
+  position:absolute; top:12px; right:12px; z-index:2;
+  font-family:var(--mono); font-size:10px; letter-spacing:.16em; color:var(--ink);
+  background:color-mix(in srgb, var(--bone) 85%, transparent); padding:5px 8px;
+}
+.lot-card .info{ padding-top:16px; }
+.lot-card .artist{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--vermilion); margin-bottom:7px;
+}
+.lot-card h3{ font-size:17.5px; letter-spacing:-.01em; font-weight:700; }
+.lot-card .medium{ color:var(--gray-mid); font-size:12.5px; margin-top:5px; }
+.lot-card .row{
+  margin-top:12px; padding-top:12px; border-top:1px solid var(--hairline);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.lot-card .price{ font-family:var(--mono); font-size:12px; letter-spacing:.05em; }
+.lot-card .price small{ display:block; color:var(--gray-soft); font-size:9px; letter-spacing:.2em; margin-bottom:3px; }
+.lot-card .price.sold{ color:var(--vermilion); }
+.lot-card .go{
+  width:34px; height:34px; border:1px solid var(--ink);
+  display:grid; place-items:center;
+  transition:all .25s var(--ease); font-size:13px;
+}
+.lot-card:hover .go{ background:var(--vermilion); border-color:var(--vermilion); color:var(--bone); transform:rotate(-45deg); }
+
+/* ================= LIVE 竞投（墨黑反转区） ================= */
+.live-sec{
+  background:var(--ink); color:var(--bone); border-bottom:1px solid var(--ink);
+  padding:96px 0;
+}
+.live-grid{ display:grid; grid-template-columns:1.1fr .9fr; gap:70px; align-items:start; }
+.live-sec h2{
+  font-size:clamp(38px, 5vw, 66px); line-height:1.02; letter-spacing:-.03em; font-weight:800;
+}
+.live-sec h2 .red{ color:#FF6A4D; }
+.live-sec .lead{
+  margin-top:24px; max-width:520px;
+  font-family:var(--serif); font-style:italic; font-size:18px; line-height:1.8;
+  color:#CFC8B8;
+}
+.bid-ticker{
+  margin-top:40px; border:1px solid rgba(245,242,234,.22);
+}
+.bid-ticker .tt-head{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:13px 18px; border-bottom:1px solid rgba(245,242,234,.22);
+}
+.bid-ticker .tt-head .mono{ color:#8D8574; }
+.bid-ticker .tt-head .on{
+  display:inline-flex; align-items:center; gap:8px; color:#FF6A4D;
+}
+.bid-ticker .tt-head .on i{
+  width:6px; height:6px; border-radius:50%; background:#FF6A4D;
+  animation:blink 1.2s ease-in-out infinite;
+}
+#bid-feed{ list-style:none; min-height:206px; }
+#bid-feed li{
+  display:grid; grid-template-columns:auto 1fr auto auto; gap:18px; align-items:center;
+  padding:13px 18px; border-bottom:1px solid rgba(245,242,234,.13);
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.08em;
+  animation:slidein .5s var(--ease);
+}
+#bid-feed li:last-child{ border-bottom:none; }
+@keyframes slidein{ from{ opacity:0; transform:translateY(-8px); } to{ opacity:1; transform:none; } }
+#bid-feed .who{ color:#8D8574; }
+#bid-feed .amt{ color:#FF6A4D; font-weight:700; }
+#bid-feed .ago{ color:#6B6455; font-size:10px; }
+
+/* 竞投方式 */
+.ways{ display:grid; gap:0; border:1px solid rgba(245,242,234,.22); }
+.way{
+  display:grid; grid-template-columns:auto 1fr; gap:22px;
+  padding:26px 24px; border-bottom:1px solid rgba(245,242,234,.16);
+  transition:background .25s var(--ease);
+}
+.way:last-child{ border-bottom:none; }
+.way:hover{ background:rgba(245,242,234,.06); }
+.way .n{
+  font-family:var(--mono); font-size:13px; color:#FF6A4D; letter-spacing:.16em; padding-top:3px;
+}
+.way h4{ font-size:16px; letter-spacing:.02em; font-weight:700; }
+.way p{ margin-top:7px; color:#A69D8A; font-size:13px; line-height:1.75; }
+
+/* ================= 竞投流程 ================= */
+.steps{ display:grid; grid-template-columns:repeat(4, 1fr); gap:0; border:1px solid var(--hairline); }
+.step{
+  padding:38px 28px 42px; border-right:1px solid var(--hairline);
+  position:relative; overflow:hidden;
+  transition:background .3s var(--ease);
+}
+.step:last-child{ border-right:none; }
+.step:hover{ background:var(--bone-deep); }
+.step .big{
+  font-family:var(--mono); font-size:52px; font-weight:700; line-height:1;
+  color:transparent; -webkit-text-stroke:1.2px var(--ink);
+  transition:color .3s var(--ease);
+}
+.step:hover .big{ color:var(--vermilion); -webkit-text-stroke:1.2px var(--vermilion); }
+.step h4{ margin-top:22px; font-size:18px; letter-spacing:-.01em; }
+.step p{ margin-top:10px; color:var(--gray-mid); font-size:13.5px; line-height:1.8; }
+
+/* ================= 拍卖日历 ================= */
+.cal-row{
+  display:grid; grid-template-columns:110px 1fr 200px 150px 40px;
+  gap:26px; align-items:center;
+  padding:30px 14px; border-top:1px solid var(--hairline);
+  transition:all .28s var(--ease);
+}
+.cal-row:last-of-type{ border-bottom:1px solid var(--hairline); }
+.cal-row:hover{
+  background:var(--ink); color:var(--bone); padding-left:26px; padding-right:26px;
+}
+.cal-row .date{
+  font-family:var(--mono); font-size:13px; letter-spacing:.12em;
+}
+.cal-row .date b{ display:block; font-size:26px; letter-spacing:.02em; }
+.cal-row .name{ font-size:21px; font-weight:700; letter-spacing:-.015em; }
+.cal-row .name small{ display:block; margin-top:5px; font-weight:400; font-size:12.5px; color:var(--gray-mid); letter-spacing:.06em; }
+.cal-row:hover .name small{ color:#A69D8A; }
+.cal-row .place{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gray-mid); }
+.cal-row:hover .place{ color:#A69D8A; }
+.cal-row .stat{ font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; }
+.cal-row .stat.open{ color:var(--vermilion); }
+.cal-row .go{ text-align:right; font-size:18px; transition:transform .28s var(--ease); }
+.cal-row:hover .go{ transform:translateX(6px); }
+
+/* ================= 私洽 / 编辑 ================= */
+.private-grid{ display:grid; grid-template-columns:.9fr 1.1fr; gap:70px; align-items:center; }
+.private-quote{
+  font-family:var(--serif); font-style:italic;
+  font-size:clamp(24px, 2.6vw, 34px); line-height:1.6; letter-spacing:-.01em;
+}
+.private-quote .mark{ color:var(--vermilion); font-size:1.4em; line-height:0; position:relative; top:.12em; }
+.private-quote .sign{
+  display:block; margin-top:28px; font-family:var(--mono); font-style:normal;
+  font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--gray-mid);
+}
+.private-body p{ color:var(--ink-soft); font-size:15px; line-height:2; margin-bottom:18px; }
+.private-body .row{ display:flex; gap:14px; margin:26px 0; flex-wrap:wrap; }
+.tagline{
+  display:inline-flex; align-items:center; gap:9px;
+  border:1px solid var(--hairline); padding:9px 15px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--gray-mid);
+}
+.tagline i{ width:5px; height:5px; background:var(--vermilion); border-radius:50%; }
+
+/* ================= NEWSLETTER ================= */
+.news{
+  padding:96px 0; border-bottom:1px solid var(--hairline);
+  display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
+}
+.news h2{ font-size:clamp(32px, 4vw, 52px); line-height:1.08; letter-spacing:-.03em; font-weight:800; }
+.news h2 .serif-it{ color:var(--gray-mid); }
+.news p{ margin-top:18px; color:var(--gray-mid); max-width:420px; font-size:14.5px; line-height:1.9; }
+.news-form{ display:flex; border:1.5px solid var(--ink); }
+.news-form input{
+  flex:1; border:none; outline:none; background:transparent;
+  padding:19px 20px; font-size:14px; font-family:inherit; color:var(--ink);
+}
+.news-form input::placeholder{ color:var(--gray-soft); letter-spacing:.05em; }
+.news-form button{
+  border:none; background:var(--ink); color:var(--bone);
+  padding:0 30px; font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:700;
+  transition:background .25s var(--ease);
+}
+.news-form button:hover{ background:var(--vermilion); }
+.news-note{ margin-top:14px; color:var(--gray-soft); font-family:var(--mono); font-size:10px; letter-spacing:.14em; }
+
+/* ================= FOOTER ================= */
+footer{ background:var(--ink); color:var(--bone); overflow:hidden; }
+.foot-top{
+  display:grid; grid-template-columns:1.3fr 1fr 1fr 1fr; gap:44px;
+  padding:80px 0 60px;
+}
+.foot-top h5{
+  font-family:var(--mono); font-size:10px; letter-spacing:.24em;
+  text-transform:uppercase; color:#8D8574; margin-bottom:20px;
+}
+.foot-top a{
+  display:block; padding:6px 0; font-size:13.5px; color:#CFC8B8;
+  transition:color .2s, letter-spacing .25s var(--ease);
+}
+.foot-top a:hover{ color:#FF6A4D; letter-spacing:.045em; }
+.foot-blurb{
+  font-family:var(--serif); font-style:italic; font-size:16px; line-height:1.9;
+  color:#A69D8A; max-width:320px; margin-top:18px;
+}
+.wordmark{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  padding:10px 0 24px; user-select:none;
+}
+.wordmark span{
+  font-size:clamp(52px, 11.4vw, 172px); font-weight:800; letter-spacing:-.02em;
+  line-height:.92; color:transparent; -webkit-text-stroke:1.4px rgba(245,242,234,.5);
+  transition:color .3s var(--ease), transform .3s var(--ease), -webkit-text-stroke .3s;
+}
+.wordmark span:hover{ color:#FF6A4D; -webkit-text-stroke:1.4px #FF6A4D; transform:translateY(-10px); }
+.foot-legal{
+  border-top:1px solid rgba(245,242,234,.16);
+  display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  padding:22px 0 30px;
+}
+.foot-legal, .foot-legal a{ font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#6B6455; }
+.foot-legal a:hover{ color:#FF6A4D; }
+
+/* ================= 响应式 ================= */
+@media (max-width:1024px){
+  .hero-grid{ grid-template-columns:1fr; gap:56px; }
+  .live-grid{ grid-template-columns:1fr; gap:50px; }
+  .private-grid{ grid-template-columns:1fr; gap:44px; }
+  .lots{ grid-template-columns:repeat(2, 1fr); }
+  .steps{ grid-template-columns:repeat(2, 1fr); }
+  .step:nth-child(2){ border-right:none; }
+  .step:nth-child(1), .step:nth-child(2){ border-bottom:1px solid var(--hairline); }
+  .news{ grid-template-columns:1fr; gap:36px; }
+}
+@media (max-width:760px){
+  .nav-links{ display:none; }
+  .nav-burger{ display:block; }
+  .nav-cta{ padding:9px 14px; font-size:10.5px; }
+  .stats{ grid-template-columns:repeat(2, 1fr); }
+  .stats .cell:nth-child(2){ border-right:none; }
+  .stats .cell:nth-child(1), .stats .cell:nth-child(2){ border-bottom:1px solid var(--hairline); }
+  .lots{ grid-template-columns:1fr; }
+  .steps{ grid-template-columns:1fr; }
+  .step{ border-right:none; border-bottom:1px solid var(--hairline); }
+  .step:last-child{ border-bottom:none; }
+  .cal-row{ grid-template-columns:70px 1fr; gap:14px; }
+  .cal-row .place, .cal-row .stat{ display:none; }
+  .countdown .cell{ padding:12px 16px; }
+  .countdown .num{ font-size:23px; }
+  .foot-top{ grid-template-columns:1fr 1fr; gap:34px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top">
+      <span class="gavel">◆</span>
+      <b>HALLOWAY</b>
+      <span class="est mono">&amp; FINCH · EST. 1974</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#lots">本场拍品</a>
+      <a href="#live">直播竞投</a>
+      <a href="#process">竞投流程</a>
+      <a href="#calendar">拍卖日历</a>
+      <a href="#private">私人洽购</a>
+    </nav>
+    <button class="nav-cta">登记竞买 →</button>
+    <button class="nav-burger" aria-label="菜单">☰</button>
+  </div>
+</header>
+
+<!-- ================= MARQUEE ================= -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="ticker-track">
+    <span>2026 秋季夜场 · 当代艺术<b class="dot">◆</b></span>
+    <span>11 月 18 日 19:00 HKT<b class="dot">◆</b></span>
+    <span>62 件重要拍品<b class="dot">◆</b></span>
+    <span>现场 · 电话 · 线上同步竞投<b class="dot">◆</b></span>
+    <span>上海 · 香港 · 伦敦<b class="dot">◆</b></span>
+    <span>预展 11.12 — 11.17<b class="dot">◆</b></span>
+    <span>2026 秋季夜场 · 当代艺术<b class="dot">◆</b></span>
+    <span>11 月 18 日 19:00 HKT<b class="dot">◆</b></span>
+    <span>62 件重要拍品<b class="dot">◆</b></span>
+    <span>现场 · 电话 · 线上同步竞投<b class="dot">◆</b></span>
+    <span>上海 · 香港 · 伦敦<b class="dot">◆</b></span>
+    <span>预展 11.12 — 11.17<b class="dot">◆</b></span>
+  </div>
+</div>
+
+<!-- ================= HERO ================= -->
+<main id="top">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">
+        <span class="live"><i></i>LIVE 落槌中</span>
+        <span class="mono">AUTUMN EVENING SALE · 沪 HKT 19:00</span>
+      </div>
+      <h1>
+        价值<span class="thin">，</span>在<br>
+        落槌<span class="red">的一刻</span><br>
+        <span class="thin serif-it">发生。</span>
+      </h1>
+      <p class="hero-sub">
+        HALLOWAY &amp; FINCH 2026 秋季夜场 —— 六十二件来自亚洲与欧洲私人收藏的当代艺术杰作，
+        首次进入公开市场。每一件作品，都是一次重新定价的文化时刻。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="#lots">浏览电子图录 <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#process">如何参与竞投 <span class="arr">→</span></a>
+      </div>
+      <div class="countdown" id="countdown" aria-label="距离开拍倒计时">
+        <div class="cell"><div class="num" id="cd-d">00</div><div class="lab">Days</div></div>
+        <div class="cell"><div class="num" id="cd-h">00</div><div class="lab">Hours</div></div>
+        <div class="cell"><div class="num" id="cd-m">00</div><div class="lab">Minutes</div></div>
+        <div class="cell"><div class="num" id="cd-s">00</div><div class="lab">Seconds</div></div>
+      </div>
+    </div>
+
+    <!-- 主拍品：有机 blob 遮罩 -->
+    <div class="hero-lot reveal">
+      <div class="blob-frame">
+        <span class="lot-corner tl">LOT 014 / 62</span>
+        <div class="art">
+          <svg viewBox="0 0 600 650" preserveAspectRatio="xMidYMid slice" role="img" aria-label="林逸舟《无题 No.7》色域抽象画">
+            <defs>
+              <linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#C7431F"/>
+                <stop offset=".52" stop-color="#E8763A"/>
+                <stop offset="1" stop-color="#F0B25E"/>
+              </linearGradient>
+              <radialGradient id="hg2" cx=".32" cy=".3" r=".8">
+                <stop offset="0" stop-color="#F5E9CE"/>
+                <stop offset="1" stop-color="#F5E9CE" stop-opacity="0"/>
+              </radialGradient>
+              <pattern id="grain" width="5" height="5" patternUnits="userSpaceOnUse">
+                <circle cx="1" cy="1" r=".7" fill="#14120F" opacity=".12"/>
+              </pattern>
+            </defs>
+            <rect width="600" height="650" fill="url(#hg1)"/>
+            <rect width="600" height="650" fill="url(#hg2)"/>
+            <path d="M0 470 C 140 430 240 510 360 480 S 560 430 600 452 L600 650 L0 650 Z" fill="#14120F" opacity=".82"/>
+            <path d="M0 470 C 140 430 240 510 360 480 S 560 430 600 452" fill="none" stroke="#F5E9CE" stroke-width="2" opacity=".5"/>
+            <circle cx="428" cy="180" r="86" fill="none" stroke="#F5E9CE" stroke-width="1.6" opacity=".85"/>
+            <circle cx="428" cy="180" r="60" fill="#F5E9CE" opacity=".16"/>
+            <rect x="70" y="96" width="120" height="120" fill="none" stroke="#F5E9CE" stroke-width="1.4" opacity=".5" transform="rotate(12 130 156)"/>
+            <rect width="600" height="650" fill="url(#grain)"/>
+          </svg>
+        </div>
+        <span class="lot-corner br">估价 ¥1.2M – 1.8M<br>布面油画 · 1998</span>
+      </div>
+      <div class="meta">
+        <div>
+          <div class="t">林逸舟《无题 No.7》</div>
+          <div class="s">LIN YIZHOU · 来自上海私人收藏，1998 年购藏至今</div>
+        </div>
+        <div class="est"><small>Estimate</small>¥1,200,000<br>– 1,800,000</div>
+        <div class="bid">
+          <span>当前最高出价 <b>¥1,350,000</b></span>
+          <span>竞买号 #8821 · 2 分钟前</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 数据条 ================= -->
+<section class="stats">
+  <div class="cell reveal"><div class="num"><em>52</em>年</div><div class="lab">自 1974 年的信誉积累</div></div>
+  <div class="cell reveal"><div class="num">92<em>%</em></div><div class="lab">近八季平均成交率</div></div>
+  <div class="cell reveal"><div class="num">¥48.6<em>亿</em></div><div class="lab">2025 年度成交总额</div></div>
+  <div class="cell reveal"><div class="num">62<em>件</em></div><div class="lab">本场精选重要拍品</div></div>
+</section>
+
+<!-- ================= 拍品网格 ================= -->
+<section class="sec" id="lots">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>本场精选<br><span class="serif-it">Selected Lots</span></h2>
+      <div class="aside">
+        <span class="mono">AUCTION · 11.18 · 19:00</span>
+        所有拍品均附独立鉴定报告与完整来源记录。电子图录含高清细部图、
+        展览著录与文献资料，登记后即可下载。
+      </div>
+    </div>
+
+    <div class="lots">
+      <!-- LOT 021 -->
+      <article class="lot-card reveal">
+        <div class="thumb">
+          <span class="chip hot">热投</span><span class="idx">LOT 021</span>
+          <svg viewBox="0 0 400 460" role="img" aria-label="陈墨白《山外山 III》水墨设色">
+            <defs>
+              <linearGradient id="ink1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#EFEAE0"/><stop offset="1" stop-color="#D8CDBA"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="460" fill="url(#ink1)"/>
+            <path d="M0 330 Q 90 200 170 300 T 400 260 L400 460 L0 460Z" fill="#2E2A24" opacity=".88"/>
+            <path d="M0 380 Q 120 300 210 360 T 400 330 L400 460 L0 460Z" fill="#14120F"/>
+            <path d="M0 250 Q 110 150 220 230 T 400 190" fill="none" stroke="#6E6759" stroke-width="1.3" opacity=".7"/>
+            <path d="M0 210 Q 140 120 260 190 T 400 140" fill="none" stroke="#6E6759" stroke-width="1" opacity=".45"/>
+            <circle cx="312" cy="108" r="34" fill="none" stroke="#C7431F" stroke-width="1.6"/>
+            <circle cx="312" cy="108" r="8" fill="#C7431F"/>
+            <g opacity=".22" stroke="#14120F" stroke-width="1">
+              <line x1="40" y1="60" x2="40" y2="430"/><line x1="80" y1="60" x2="80" y2="430"/>
+              <line x1="120" y1="60" x2="120" y2="430"/><line x1="160" y1="60" x2="160" y2="430"/>
+            </g>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="artist">CHEN MOBAI · 陈墨白</div>
+          <h3>《山外山 III》</h3>
+          <div class="medium">水墨设色纸本 · 2015 · 145 × 210 cm</div>
+          <div class="row">
+            <div class="price"><small>Estimate</small>¥680,000 – 900,000</div>
+            <div class="go">↗</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- LOT 033 -->
+      <article class="lot-card reveal">
+        <div class="thumb">
+          <span class="chip">开放出价</span><span class="idx">LOT 033</span>
+          <svg viewBox="0 0 400 460" role="img" aria-label="沈星野《霓虹构造》综合材料几何构成">
+            <rect width="400" height="460" fill="#1A1722"/>
+            <g stroke="#D93A1E" stroke-width="1.4" fill="none" opacity=".9">
+              <rect x="60" y="80" width="140" height="140"/>
+              <rect x="120" y="150" width="140" height="140"/>
+              <rect x="200" y="240" width="140" height="140"/>
+            </g>
+            <g stroke="#6AC5FF" stroke-width="1.2" fill="none" opacity=".75">
+              <circle cx="270" cy="120" r="66"/>
+              <circle cx="120" cy="330" r="52"/>
+            </g>
+            <line x1="0" y1="230" x2="400" y2="230" stroke="#F5E9CE" stroke-width="1" opacity=".4"/>
+            <line x1="200" y1="0" x2="200" y2="460" stroke="#F5E9CE" stroke-width="1" opacity=".25"/>
+            <rect x="170" y="200" width="60" height="60" fill="#D93A1E" opacity=".85" transform="rotate(45 200 230)"/>
+            <g fill="#F5E9CE" opacity=".8">
+              <circle cx="60" cy="80" r="3"/><circle cx="200" cy="80" r="3"/>
+              <circle cx="340" cy="380" r="3"/><circle cx="60" cy="380" r="3"/>
+            </g>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="artist">SHEN XINGYE · 沈星野</div>
+          <h3>《霓虹构造》</h3>
+          <div class="medium">综合材料（亚克力、LED、铝）· 2021 · 180 × 180 cm</div>
+          <div class="row">
+            <div class="price"><small>Estimate</small>¥320,000 – 480,000</div>
+            <div class="go">↗</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- LOT 042 -->
+      <article class="lot-card reveal">
+        <div class="thumb">
+          <span class="chip">开放出价</span><span class="idx">LOT 042</span>
+          <svg viewBox="0 0 400 460" role="img" aria-label="白露《呼吸的墙》树脂与钢装置">
+            <defs>
+              <pattern id="dots1" width="16" height="16" patternUnits="userSpaceOnUse">
+                <circle cx="8" cy="8" r="2.6" fill="#14120F"/>
+              </pattern>
+              <radialGradient id="fade1" cx=".5" cy=".42" r=".62">
+                <stop offset="0" stop-color="#F5F2EA"/><stop offset="1" stop-color="#F5F2EA" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="400" height="460" fill="#E7E0D2"/>
+            <rect width="400" height="460" fill="url(#dots1)"/>
+            <rect width="400" height="460" fill="url(#fade1)"/>
+            <g stroke="#14120F" stroke-width="1.1" fill="none">
+              <path d="M110 120 h180 v220 h-180 z"/>
+              <path d="M130 140 h140 v180 h-140 z" opacity=".55"/>
+              <path d="M150 160 h100 v140 h-100 z" opacity=".3"/>
+            </g>
+            <circle cx="200" cy="230" r="26" fill="#D93A1E"/>
+            <circle cx="200" cy="230" r="44" fill="none" stroke="#D93A1E" stroke-width="1" opacity=".55"/>
+            <line x1="200" y1="0" x2="200" y2="120" stroke="#14120F" stroke-width="1.2"/>
+            <line x1="200" y1="340" x2="200" y2="460" stroke="#14120F" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="artist">BAI LU · 白露</div>
+          <h3>《呼吸的墙》</h3>
+          <div class="medium">装置（树脂、钢、灯光）· 2019 · 尺寸可变</div>
+          <div class="row">
+            <div class="price"><small>Estimate</small>¥1,500,000 – 2,200,000</div>
+            <div class="go">↗</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- LOT 047 -->
+      <article class="lot-card reveal">
+        <div class="thumb">
+          <span class="chip hot">热投</span><span class="idx">LOT 047</span>
+          <svg viewBox="0 0 400 460" role="img" aria-label="顾青禾《夏日终曲》布面丙烯网点日光">
+            <defs>
+              <pattern id="half1" width="8" height="8" patternUnits="userSpaceOnUse">
+                <circle cx="4" cy="4" r="1.7" fill="#14120F" opacity=".28"/>
+              </pattern>
+              <radialGradient id="sun1" cx=".5" cy=".44" r=".5">
+                <stop offset="0" stop-color="#FFD9A0"/><stop offset=".55" stop-color="#F0A24E"/><stop offset="1" stop-color="#E5742F"/>
+              </radialGradient>
+            </defs>
+            <rect width="400" height="460" fill="url(#sun1)"/>
+            <rect width="400" height="460" fill="url(#half1)"/>
+            <circle cx="200" cy="205" r="112" fill="none" stroke="#F5E9CE" stroke-width="1.6" opacity=".9"/>
+            <circle cx="200" cy="205" r="150" fill="none" stroke="#F5E9CE" stroke-width="1" opacity=".5"/>
+            <path d="M0 360 h400" stroke="#14120F" stroke-width="1.4"/>
+            <path d="M0 360 Q 100 330 200 360 T 400 360 L400 460 L0 460Z" fill="#14120F" opacity=".9"/>
+            <g stroke="#F5E9CE" stroke-width="1" opacity=".65">
+              <line x1="60" y1="360" x2="60" y2="460"/><line x1="140" y1="360" x2="140" y2="460"/>
+              <line x1="220" y1="360" x2="220" y2="460"/><line x1="300" y1="360" x2="300" y2="460"/>
+            </g>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="artist">GU QINGHE · 顾青禾</div>
+          <h3>《夏日终曲》</h3>
+          <div class="medium">布面丙烯 · 2013 · 120 × 150 cm</div>
+          <div class="row">
+            <div class="price"><small>Estimate</small>¥450,000 – 650,000</div>
+            <div class="go">↗</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- LOT 053 -->
+      <article class="lot-card reveal">
+        <div class="thumb">
+          <span class="chip">开放出价</span><span class="idx">LOT 053</span>
+          <svg viewBox="0 0 400 460" role="img" aria-label="维拉·索恩《双联：昼夜》丙烯拼贴">
+            <rect width="400" height="460" fill="#EDE8DC"/>
+            <rect x="0" y="0" width="200" height="460" fill="#14120F"/>
+            <g fill="#F5E9CE">
+              <circle cx="60" cy="90" r="2.2"/><circle cx="110" cy="150" r="1.6"/><circle cx="160" cy="70" r="2.6"/>
+              <circle cx="80" cy="230" r="1.8"/><circle cx="150" cy="300" r="2.2"/><circle cx="45" cy="360" r="1.5"/>
+              <circle cx="120" cy="410" r="2.4"/><circle cx="180" cy="180" r="1.4"/>
+            </g>
+            <circle cx="110" cy="240" r="52" fill="none" stroke="#F5E9CE" stroke-width="1.2" opacity=".7"/>
+            <circle cx="300" cy="200" r="70" fill="#D93A1E" opacity=".92"/>
+            <circle cx="300" cy="200" r="100" fill="none" stroke="#14120F" stroke-width="1.1" opacity=".5"/>
+            <path d="M200 330 h200" stroke="#14120F" stroke-width="1.3"/>
+            <g stroke="#14120F" stroke-width="1" opacity=".6">
+              <line x1="240" y1="360" x2="240" y2="440"/><line x1="280" y1="360" x2="280" y2="440"/>
+              <line x1="320" y1="360" x2="320" y2="440"/><line x1="360" y1="360" x2="360" y2="440"/>
+            </g>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="artist">VERA THORNE · 维拉·索恩</div>
+          <h3>《双联：昼夜》</h3>
+          <div class="medium">丙烯、拼贴于麻布 · 2017 · 双联 160 × 220 cm</div>
+          <div class="row">
+            <div class="price"><small>Estimate</small>¥520,000 – 780,000</div>
+            <div class="go">↗</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- LOT 058 已成交 -->
+      <article class="lot-card reveal">
+        <div class="thumb">
+          <span class="chip done">已成交</span><span class="idx">LOT 058</span>
+          <svg viewBox="0 0 400 460" role="img" aria-label="方元《机械山水》工程草图">
+            <rect width="400" height="460" fill="#EAE4D6"/>
+            <g stroke="#14120F" stroke-width="1" fill="none" opacity=".8">
+              <path d="M40 380 L120 220 L180 320 L250 160 L330 340 L380 260"/>
+              <circle cx="120" cy="220" r="26"/><circle cx="250" cy="160" r="38"/>
+              <rect x="150" y="330" width="90" height="60"/>
+              <line x1="40" y1="400" x2="380" y2="400"/>
+            </g>
+            <g stroke="#D93A1E" stroke-width="1.2" fill="none" opacity=".85">
+              <path d="M60 120 h90 v54 h-90 z"/>
+              <path d="M255 300 l40 24 l-40 24 z"/>
+              <line x1="310" y1="110" x2="360" y2="160"/><line x1="360" y1="110" x2="310" y2="160"/>
+            </g>
+            <g stroke="#6E6759" stroke-width=".8" opacity=".55">
+              <line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="440" x2="400" y2="440"/>
+              <line x1="60" y1="0" x2="60" y2="460"/><line x1="340" y1="0" x2="340" y2="460"/>
+            </g>
+            <text x="64" y="112" font-family="monospace" font-size="11" fill="#D93A1E" letter-spacing="2">FIG. 04 — 传动组</text>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="artist">FANG YUAN · 方元</div>
+          <h3>《机械山水 · 草图四》</h3>
+          <div class="medium">墨水、铅笔于工程纸 · 2024 · 76 × 56 cm</div>
+          <div class="row">
+            <div class="price sold"><small>Hammer · 已落槌</small>¥2,140,000</div>
+            <div class="go">↗</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LIVE 竞投 ================= -->
+<section class="live-sec" id="live">
+  <div class="wrap live-grid">
+    <div>
+      <h2>现场、电话与线上<br><span class="red">同步竞投</span>。</h2>
+      <p class="lead">
+        「拍卖最动人的部分，是它强迫所有人同时下注。」
+        每一次举牌都实时呈现在三地会场与线上直播间 —— 没有时差，没有延迟。
+      </p>
+      <div class="bid-ticker">
+        <div class="tt-head">
+          <span class="mono">实时出价记录 · BID FEED</span>
+          <span class="mono on"><i></i>LIVE</span>
+        </div>
+        <ul id="bid-feed">
+          <li><span class="who">竞买号 #8821</span><span>LOT 033 · 霓虹构造</span><span class="amt">¥380,000</span><span class="ago">12 秒前</span></li>
+          <li><span class="who">电话委托 · 香港</span><span>LOT 014 · 无题 No.7</span><span class="amt">¥1,350,000</span><span class="ago">1 分钟前</span></li>
+          <li><span class="who">竞买号 #7709</span><span>LOT 047 · 夏日终曲</span><span class="amt">¥510,000</span><span class="ago">3 分钟前</span></li>
+          <li><span class="who">现场 · 第二排</span><span>LOT 021 · 山外山 III</span><span class="amt">¥720,000</span><span class="ago">6 分钟前</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ways">
+      <div class="way">
+        <div class="n">01</div>
+        <div>
+          <h4>现场举牌 · SALLE</h4>
+          <p>于上海外滩会场领取竞买号牌。预展期间即可办理登记，开拍前 30 分钟截止。保证金 ¥200,000 起。</p>
+        </div>
+      </div>
+      <div class="way">
+        <div class="n">02</div>
+        <div>
+          <h4>电话委托 · TELEPHONE</h4>
+          <p>专属顾问在落槌前一刻与您连线，替您举牌。适合跨时区藏家，开拍前 24 小时预约。</p>
+        </div>
+      </div>
+      <div class="way">
+        <div class="n">03</div>
+        <div>
+          <h4>线上竞投 · ONLINE</h4>
+          <p>HALLOWAY Live 平台支持高清多机位直播与即时出价，手续费与现场完全一致。</p>
+        </div>
+      </div>
+      <div class="way">
+        <div class="n">04</div>
+        <div>
+          <h4>缺席委托 · ABSENTEE</h4>
+          <p>提前设定心理价位上限，系统自动代您竞价至该价位为止。最迟于开拍前 12 小时提交。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 竞投流程 ================= -->
+<section class="sec" id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>四步完成<br><span class="serif-it">From Register to Hammer</span></h2>
+      <div class="aside">
+        <span class="mono">PROCESS · 平均 48 小时完成登记</span>
+        第一次参拍？我们的顾问团队会全程陪同 —— 从保证金安排到落槌后的物流与保险。
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="big">01</div>
+        <h4>登记与资质审核</h4>
+        <p>提交身份证明与资金证明，1 个工作日内完成审核，领取专属竞买号牌。</p>
+      </div>
+      <div class="step reveal">
+        <div class="big">02</div>
+        <h4>预展与看货</h4>
+        <p>11.12 – 11.17 于外滩会场公开展出全部拍品，可预约专家一对一导览与品相说明。</p>
+      </div>
+      <div class="step reveal">
+        <div class="big">03</div>
+        <h4>出价与竞投</h4>
+        <p>现场、电话、线上三通道同步。每口叫价阶梯实时显示，落槌即成交，不可撤回。</p>
+      </div>
+      <div class="step reveal">
+        <div class="big">04</div>
+        <h4>结算与交割</h4>
+        <p>成交后 7 日内完成结算，提供全程投保运输、报关与悬挂安装的一站式交割服务。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 拍卖日历 ================= -->
+<section class="sec" id="calendar">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>拍卖日历<br><span class="serif-it">Auction Calendar</span></h2>
+      <div class="aside">
+        <span class="mono">SEASON 2026 / 27</span>
+        四场拍卖，四个收藏方向。点击任意场次查看专场图录与征集进度。
+      </div>
+    </div>
+
+    <a class="cal-row reveal" href="#lots">
+      <div class="date"><b>11.18</b>2026</div>
+      <div class="name">秋季夜场 · 当代艺术<small>62 件拍品 · 亚洲与欧洲私人收藏</small></div>
+      <div class="place">上海 · 外滩会场</div>
+      <div class="stat open">● 开放登记</div>
+      <div class="go">→</div>
+    </a>
+    <a class="cal-row reveal" href="#lots">
+      <div class="date"><b>12.06</b>2026</div>
+      <div class="name">纸上的现代性<small>现代与当代纸本作品 · 素描、版画、水彩</small></div>
+      <div class="place">线上专场</div>
+      <div class="stat open">● 开放登记</div>
+      <div class="go">→</div>
+    </a>
+    <a class="cal-row reveal" href="#lots">
+      <div class="date"><b>12.14</b>2026</div>
+      <div class="name">珠宝、名表与珍稀器物<small>重要私人收藏 · 含 12 枚独立制表时计</small></div>
+      <div class="place">香港 · 中环空间</div>
+      <div class="stat">○ 即将开放</div>
+      <div class="go">→</div>
+    </a>
+    <a class="cal-row reveal" href="#lots">
+      <div class="date"><b>01.24</b>2027</div>
+      <div class="name">新势力首拍 · N/GEN<small>35 岁以下艺术家专场 · 征集进行中</small></div>
+      <div class="place">上海 · 外滩会场</div>
+      <div class="stat">○ 征集中</div>
+      <div class="go">→</div>
+    </a>
+  </div>
+</section>
+
+<!-- ================= 私人洽购 ================= -->
+<section class="sec" id="private">
+  <div class="wrap private-grid">
+    <div class="private-quote reveal">
+      <span class="mark">「</span>拍卖行的工作不是卖出最高价，
+      而是让一件作品找到<span style="color:var(--vermilion)">对的房间</span>。<span class="mark">」</span>
+      <span class="sign">— 韩砚之 · HALLOWAY 亚洲区主席</span>
+    </div>
+    <div class="private-body reveal">
+      <p>
+        并非所有交易都发生在拍场之上。HALLOWAY 私人洽购部门为藏家提供
+        一对一的匿名购藏与出售服务 —— 在拍卖季之外，以最审慎的方式完成重要作品的易手。
+      </p>
+      <p>
+        过去五年，我们通过私人洽购完成了 180 余件作品的交易，
+        其中包括四件成交价超过五千万的艺术品。所有委托均受严格保密协议保护。
+      </p>
+      <div class="row">
+        <span class="tagline"><i></i>匿名购藏</span>
+        <span class="tagline"><i></i>收藏规划</span>
+        <span class="tagline"><i></i>估值与遗产咨询</span>
+        <span class="tagline"><i></i>全球物流与保险</span>
+      </div>
+      <a class="btn btn-solid" href="#top">预约专家咨询 <span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= NEWSLETTER ================= -->
+<section class="news">
+  <div class="wrap" style="display:contents;">
+    <div class="reveal" style="padding-left:max(3.5vw, calc((100vw - min(1380px, 93vw)) / 2));">
+      <h2>每两周一封<br><span class="serif-it">The Hammer Report</span></h2>
+      <p>成交数据、征集预告与藏家故事 —— 来自拍场第一排的观察。订阅即赠 2026 秋拍电子图录。</p>
+    </div>
+    <div class="reveal" style="padding-right:max(3.5vw, calc((100vw - min(1380px, 93vw)) / 2));">
+      <form class="news-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='已订阅 ✓';">
+        <input type="email" placeholder="您的电子邮箱" required aria-label="电子邮箱">
+        <button type="submit">订阅</button>
+      </form>
+      <div class="news-note">NO SPAM · 随时退订 · 我们绝不共享您的信息</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <h5>HALLOWAY &amp; FINCH</h5>
+        <div class="foot-blurb">
+          自 1974 年起，我们在每一次落槌中记录艺术价值的重新书写。
+          上海 · 香港 · 伦敦 · 纽约。
+        </div>
+      </div>
+      <div>
+        <h5>拍卖</h5>
+        <a href="#lots">本场拍品</a>
+        <a href="#calendar">拍卖日历</a>
+        <a href="#process">如何竞投</a>
+        <a href="#live">直播竞投</a>
+      </div>
+      <div>
+        <h5>服务</h5>
+        <a href="#private">私人洽购</a>
+        <a href="#private">免费估值</a>
+        <a href="#private">遗产与信托咨询</a>
+        <a href="#process">物流与保险</a>
+      </div>
+      <div>
+        <h5>联系</h5>
+        <a href="#top">bid@halloway.example</a>
+        <a href="#top">+86 21 8888 0074</a>
+        <a href="#top">上海 · 中山东一路 27 号</a>
+        <a href="#top">微信 / 小红书 @HallowayFinch</a>
+      </div>
+    </div>
+
+    <div class="wordmark" aria-hidden="true">
+      <span>H</span><span>A</span><span>L</span><span>L</span><span>O</span><span>W</span><span>A</span><span>Y</span>
+    </div>
+
+    <div class="foot-legal">
+      <span>© 2026 HALLOWAY &amp; FINCH AUCTIONEERS · 沪拍备 1974-001</span>
+      <span><a href="#top">隐私政策</a> · <a href="#top">竞买规则</a> · <a href="#top">免责声明</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ---------- 落槌倒计时 ----------
+(function(){
+  var target = new Date('2026-11-18T19:00:00+08:00').getTime();
+  var d = document.getElementById('cd-d'),
+      h = document.getElementById('cd-h'),
+      m = document.getElementById('cd-m'),
+      s = document.getElementById('cd-s');
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function tick(){
+    var diff = target - Date.now();
+    if (diff < 0) diff = 0;
+    var dd = Math.floor(diff / 86400000),
+        hh = Math.floor(diff % 86400000 / 3600000),
+        mm = Math.floor(diff % 3600000 / 60000),
+        ss = Math.floor(diff % 60000 / 1000);
+    d.textContent = pad(dd); h.textContent = pad(hh);
+    m.textContent = pad(mm); s.textContent = pad(ss);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+// ---------- 实时出价流 ----------
+(function(){
+  var feed = document.getElementById('bid-feed');
+  if (!feed) return;
+  var pool = [
+    ['竞买号 #8821', 'LOT 033 · 霓虹构造'],
+    ['电话委托 · 香港', 'LOT 014 · 无题 No.7'],
+    ['竞买号 #7709', 'LOT 047 · 夏日终曲'],
+    ['现场 · 第二排', 'LOT 021 · 山外山 III'],
+    ['线上 · #2210', 'LOT 042 · 呼吸的墙'],
+    ['电话委托 · 伦敦', 'LOT 053 · 双联：昼夜'],
+    ['竞买号 #6650', 'LOT 047 · 夏日终曲'],
+    ['现场 · 包厢 A', 'LOT 014 · 无题 No.7']
+  ];
+  var amounts = { 'LOT 033 · 霓虹构造': 380000, 'LOT 014 · 无题 No.7': 1350000,
+                  'LOT 047 · 夏日终曲': 510000, 'LOT 021 · 山外山 III': 720000,
+                  'LOT 042 · 呼吸的墙': 1520000, 'LOT 053 · 双联：昼夜': 540000 };
+  var i = 0;
+  setInterval(function(){
+    var entry = pool[i % pool.length]; i++;
+    var lot = entry[1];
+    amounts[lot] += 10000 + Math.floor(Math.random() * 26) * 10000;
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="who">' + entry[0] + '</span><span>' + lot +
+      '</span><span class="amt">¥' + amounts[lot].toLocaleString('en-US') +
+      '</span><span class="ago">刚刚</span>';
+    feed.insertBefore(li, feed.firstChild);
+    while (feed.children.length > 4) feed.removeChild(feed.lastChild);
+    var agos = feed.querySelectorAll('.ago');
+    for (var k = 1; k < agos.length; k++){
+      var prev = agos[k].textContent;
+      if (prev === '刚刚') agos[k].textContent = '1 分钟前';
+    }
+  }, 6500);
+})();
+
+// ---------- 滚动入场（无 IO 时全量 .in 兜底） ----------
+(function(){
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if (!('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+  els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+</body>
+</html>

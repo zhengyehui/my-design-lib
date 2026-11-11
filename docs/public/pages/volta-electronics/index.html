@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLTA — 精品数码生活商店</title>
+<meta name="description" content="VOLTA 精品数码商店 —— 声学、电力与桌面器物的精密日常。Halo Pro 降噪耳机、Arc 音箱、Beam 氮化镓充电器。">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ============================================================
+   VOLTA — 精品数码电子商店
+   设计语言：暖米白 #F8F7EE × 电光蓝 #1664EB / #0066F4
+   严格双色 + 克制中性灰；零圆角零阴影；2px 蓝色发丝线；
+   字重式 hover；纯 CSS 环绕（orbit）与滑入淡入
+   ============================================================ */
+
+:root{
+  --cream:      #F8F7EE;
+  --cream-deep: #F2F0E2;
+  --blue:       #1664EB;
+  --blue-bright:#0066F4;
+  --blue-ink:   #0D3F9E;
+  --gray-ink:   #35342C;
+  --gray-mid:   #6E6C5F;
+  --gray-soft:  #A6A395;
+  --gray-sold:  #C9C6B8;
+  --hair: 2px solid var(--blue);
+  --sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --serif: Georgia, "Times New Roman", "Songti SC", "STSong", serif;
+  --mono: "SF Mono", "Menlo", "Consolas", monospace;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; border-radius:0 !important; box-shadow:none !important; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  background:var(--cream);
+  color:var(--gray-ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+::selection{ background:var(--blue); color:var(--cream); }
+
+a{ color:inherit; text-decoration:none; }
+
+img, svg{ display:block; }
+
+.wrap{ width:min(1360px, 92vw); margin-inline:auto; }
+
+em.serif{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:0;
+}
+
+/* ── 发丝线分区 ─────────────────────────────────────────── */
+.rule{ border:0; border-top:var(--hair); }
+.rule-thin{ border:0; border-top:1px solid var(--blue); opacity:.35; }
+
+/* ── 字重式 hover：400 → 700 + 变蓝 ─────────────────────── */
+.w-hover{
+  font-weight:400;
+  transition:color .18s ease, font-weight .18s ease, letter-spacing .18s ease;
+}
+.w-hover:hover, .w-hover:focus-visible{
+  color:var(--blue);
+  font-weight:700;
+  letter-spacing:.02em;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav{
+  position:sticky; top:0; z-index:60;
+  background:var(--cream);
+  border-bottom:var(--hair);
+}
+.nav-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 0;
+}
+.brand{
+  font-weight:700;
+  font-size:26px;
+  letter-spacing:-1px;
+  color:var(--blue);
+  display:flex; align-items:baseline; gap:10px;
+}
+.brand small{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.28em;
+  color:var(--gray-mid);
+  font-weight:400;
+}
+.nav-links{
+  display:flex; gap:36px; align-items:center;
+  font-size:14px; letter-spacing:.04em;
+}
+.nav-links a{ position:relative; padding:2px 0; }
+.nav-right{ display:flex; align-items:center; gap:26px; font-size:14px; }
+.cart-btn{
+  border:2px solid var(--blue);
+  padding:8px 18px;
+  color:var(--blue);
+  font-size:13px; letter-spacing:.06em;
+  background:transparent;
+  cursor:pointer;
+  font-family:var(--sans);
+  transition:background .18s ease, color .18s ease, font-weight .18s ease;
+  display:inline-flex; align-items:center; gap:10px;
+}
+.cart-btn:hover{ background:var(--blue); color:var(--cream); font-weight:700; }
+.cart-count{
+  font-family:var(--mono); font-size:12px;
+  min-width:22px; text-align:center;
+  border-left:2px solid currentColor; padding-left:10px;
+}
+.cart-btn.pulse{ animation:cartPulse .5s ease; }
+@keyframes cartPulse{
+  0%{ transform:scale(1); } 40%{ transform:scale(1.08); } 100%{ transform:scale(1); }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  border-bottom:var(--hair);
+  overflow:hidden;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  min-height:76vh;
+}
+.hero-left{
+  padding:96px 60px 90px 0;
+  border-right:var(--hair);
+  display:flex; flex-direction:column; justify-content:center;
+}
+.hero-kicker{
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:.42em;
+  color:var(--blue);
+  text-transform:uppercase;
+  margin-bottom:34px;
+  display:flex; align-items:center; gap:16px;
+}
+.hero-kicker::before{
+  content:""; width:56px; height:2px; background:var(--blue); display:inline-block;
+}
+h1.hero-title{
+  font-size:clamp(52px, 6.2vw, 96px);
+  line-height:.92;
+  letter-spacing:-2px;
+  font-weight:700;
+  color:var(--blue);
+  text-transform:none;
+}
+h1.hero-title em{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-1px;
+  color:var(--blue-bright);
+}
+.hero-sub{
+  margin-top:38px;
+  max-width:520px;
+  font-size:17px;
+  line-height:1.75;
+  color:var(--gray-mid);
+}
+.hero-sub b{ color:var(--gray-ink); font-weight:700; }
+.hero-cta{
+  margin-top:46px;
+  display:flex; gap:20px; align-items:center; flex-wrap:wrap;
+}
+.btn-solid{
+  background:var(--blue);
+  color:var(--cream);
+  border:2px solid var(--blue);
+  padding:18px 42px;
+  font-size:15px; letter-spacing:.12em;
+  cursor:pointer;
+  font-family:var(--sans);
+  transition:background .18s ease, color .18s ease, font-weight .18s ease;
+}
+.btn-solid:hover{ background:var(--cream); color:var(--blue); font-weight:700; }
+.btn-ghost{
+  border:2px solid var(--blue);
+  color:var(--blue);
+  background:transparent;
+  padding:18px 42px;
+  font-size:15px; letter-spacing:.12em;
+  cursor:pointer;
+  font-family:var(--sans);
+  transition:font-weight .18s ease, letter-spacing .18s ease;
+}
+.btn-ghost:hover{ font-weight:700; letter-spacing:.18em; }
+.hero-stats{
+  margin-top:58px;
+  display:flex; gap:0;
+  border-top:var(--hair);
+}
+.hero-stat{
+  flex:1;
+  padding:22px 20px 0 0;
+}
+.hero-stat + .hero-stat{ border-left:1px solid rgba(22,100,235,.35); padding-left:24px; }
+.hero-stat .num{
+  font-size:34px; font-weight:700; letter-spacing:-1px; color:var(--blue);
+  line-height:1;
+}
+.hero-stat .lbl{
+  margin-top:8px;
+  font-size:12px; letter-spacing:.14em; color:var(--gray-mid);
+}
+
+/* ── Hero 右：环绕 orbit + 主推产品 ─────────────────────── */
+.hero-right{
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  padding:60px 0;
+  background:
+    linear-gradient(0deg, rgba(22,100,235,.05), rgba(22,100,235,.05)),
+    var(--cream);
+}
+.orbit-stage{
+  position:relative;
+  width:min(440px, 78%);
+  aspect-ratio:1;
+}
+.orbit-ring{
+  position:absolute; inset:0;
+  border:2px solid var(--blue);
+  border-radius:50% !important;
+  opacity:.9;
+}
+.orbit-ring.r2{ inset:11%; opacity:.55; }
+.orbit-ring.r3{ inset:23%; opacity:.3; border-style:dashed; }
+
+.orbit-spin{
+  position:absolute; inset:0;
+  animation:orbitSpin 26s linear infinite;
+}
+.orbit-spin.slow{ animation-duration:44s; animation-direction:reverse; }
+@keyframes orbitSpin{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+
+.orbit-dot{
+  position:absolute;
+  width:14px; height:14px;
+  background:var(--blue-bright);
+  top:-7px; left:calc(50% - 7px);
+}
+.orbit-dot.d2{ top:auto; bottom:-7px; background:var(--blue); width:10px; height:10px; }
+.orbit-dot.d3{ top:calc(50% - 6px); left:-6px; width:12px; height:12px; background:var(--gray-ink); }
+.orbit-chip{
+  position:absolute;
+  top:-16px; left:calc(50% + 26px);
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:.22em;
+  color:var(--blue);
+  background:var(--cream);
+  padding:4px 10px;
+  border:2px solid var(--blue);
+  white-space:nowrap;
+}
+.orbit-chip.c2{
+  top:auto; bottom:-18px; left:auto; right:calc(50% + 30px);
+  color:var(--cream); background:var(--blue);
+}
+
+.hero-product{
+  position:absolute; inset:15%;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--cream);
+  border:2px solid var(--blue);
+}
+.hero-product svg{ width:78%; height:auto; }
+.hero-tag{
+  position:absolute;
+  bottom:-70px; left:50%; transform:translateX(-50%);
+  text-align:center; width:max-content;
+}
+.hero-tag .name{
+  font-size:19px; font-weight:700; letter-spacing:-.5px; color:var(--blue);
+}
+.hero-tag .price{
+  font-family:var(--mono); font-size:13px; color:var(--gray-mid); margin-top:6px;
+  letter-spacing:.14em;
+}
+
+/* ============================================================
+   TRUST MARQUEE
+   ============================================================ */
+.trust{
+  border-bottom:var(--hair);
+  background:var(--blue);
+  color:var(--cream);
+  overflow:hidden;
+  padding:20px 0;
+}
+.marquee{
+  display:flex; gap:0;
+  width:max-content;
+  animation:marquee 36s linear infinite;
+}
+.marquee span{
+  font-size:15px; letter-spacing:.24em; white-space:nowrap;
+  padding:0 34px;
+  display:inline-flex; align-items:center; gap:34px;
+}
+.marquee span::after{
+  content:"◆"; font-size:9px; opacity:.7;
+}
+@keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+/* ============================================================
+   SECTION SHELL
+   ============================================================ */
+.section{ padding:120px 0; border-bottom:var(--hair); }
+.section-head{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  gap:40px;
+  padding-bottom:34px;
+  margin-bottom:64px;
+  border-bottom:var(--hair);
+}
+.section-index{
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:.4em;
+  color:var(--blue);
+}
+h2.section-title{
+  font-size:clamp(40px, 4.6vw, 66px);
+  line-height:.94;
+  letter-spacing:-1.5px;
+  font-weight:700;
+  color:var(--blue);
+  margin-top:16px;
+}
+h2.section-title em{
+  font-family:var(--serif); font-style:italic; font-weight:400;
+  color:var(--blue-bright); letter-spacing:-.5px;
+}
+.section-desc{
+  max-width:420px;
+  font-size:15px; line-height:1.85;
+  color:var(--gray-mid);
+}
+
+/* ============================================================
+   PRODUCT GRID
+   ============================================================ */
+.products{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  border-top:var(--hair);
+  border-left:var(--hair);
+}
+.p-card{
+  border-right:var(--hair);
+  border-bottom:var(--hair);
+  padding:38px 34px 34px;
+  display:flex; flex-direction:column;
+  background:var(--cream);
+  position:relative;
+  transition:background .25s ease;
+}
+.p-card:hover{ background:#F3F1E4; }
+.p-card.sold{ filter:grayscale(1); opacity:.62; }
+.p-card.sold:hover{ background:var(--cream); }
+
+.p-badge{
+  position:absolute; top:0; right:0;
+  font-family:var(--mono); font-size:10px; letter-spacing:.24em;
+  padding:8px 14px;
+  border-left:2px solid var(--blue);
+  border-bottom:2px solid var(--blue);
+  color:var(--blue);
+  background:var(--cream);
+}
+.p-badge.hot{ background:var(--blue); color:var(--cream); }
+.p-badge.out{ background:var(--gray-sold); color:#fff; border-color:var(--gray-soft); }
+
+.p-visual{
+  height:210px;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:30px;
+}
+.p-visual svg{ width:170px; height:auto; transition:transform .45s ease; }
+.p-card:hover .p-visual svg{ transform:translateY(-8px); }
+
+.p-cat{
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:.32em;
+  color:var(--gray-mid);
+  margin-bottom:12px;
+}
+.p-name{
+  font-size:26px; font-weight:700; letter-spacing:-.8px; line-height:1.1;
+  color:var(--blue);
+}
+.p-name em{ font-family:var(--serif); font-style:italic; font-weight:400; }
+.p-spec{
+  margin-top:16px;
+  border-top:1px solid rgba(22,100,235,.35);
+}
+.p-spec li{
+  list-style:none;
+  display:flex; justify-content:space-between; gap:14px;
+  padding:9px 0;
+  border-bottom:1px solid rgba(22,100,235,.18);
+  font-size:12.5px;
+}
+.p-spec li .k{ color:var(--gray-mid); letter-spacing:.08em; }
+.p-spec li .v{ color:var(--gray-ink); font-family:var(--mono); font-size:11.5px; }
+
+.p-foot{
+  margin-top:auto;
+  padding-top:26px;
+  display:flex; align-items:center; justify-content:space-between; gap:18px;
+}
+.p-price{
+  font-size:24px; font-weight:700; letter-spacing:-.5px; color:var(--blue);
+}
+.p-price small{
+  display:block;
+  font-family:var(--mono); font-size:10px; letter-spacing:.2em;
+  color:var(--gray-soft); text-decoration:line-through; font-weight:400;
+  margin-bottom:3px;
+}
+.p-add{
+  border:2px solid var(--blue);
+  background:transparent;
+  color:var(--blue);
+  font-family:var(--sans);
+  font-size:13px; letter-spacing:.1em;
+  padding:13px 22px;
+  cursor:pointer;
+  transition:all .18s ease;
+  white-space:nowrap;
+}
+.p-add:hover{ background:var(--blue); color:var(--cream); font-weight:700; }
+.p-add:disabled{
+  border-color:var(--gray-soft); color:var(--gray-soft); cursor:not-allowed;
+}
+.p-add:disabled:hover{ background:transparent; color:var(--gray-soft); font-weight:400; }
+.p-rating{
+  margin-top:14px;
+  display:flex; align-items:center; gap:10px;
+  font-size:11px; color:var(--gray-mid); letter-spacing:.06em;
+}
+.stars{ color:var(--blue); letter-spacing:2px; font-size:13px; }
+
+/* ============================================================
+   FLAGSHIP DEEP DIVE
+   ============================================================ */
+.flagship{ background:var(--cream-deep); }
+.flag-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border:var(--hair);
+}
+.flag-visual{
+  border-right:var(--hair);
+  padding:70px 50px;
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.flag-visual .orbit-ring{ border-color:var(--blue-bright); }
+.flag-visual .flag-svg{ width:min(340px, 82%); position:relative; z-index:2; }
+.flag-vert{
+  position:absolute;
+  left:22px; top:50%;
+  transform:translateY(-50%) rotate(180deg);
+  writing-mode:vertical-rl;
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:.5em;
+  color:var(--blue);
+}
+.flag-info{ padding:56px 52px; }
+.flag-model{
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:.42em;
+  color:var(--blue-bright);
+}
+h3.flag-title{
+  margin-top:18px;
+  font-size:clamp(38px, 3.8vw, 56px);
+  line-height:.94; letter-spacing:-1.5px;
+  color:var(--blue); font-weight:700;
+}
+h3.flag-title em{ font-family:var(--serif); font-style:italic; font-weight:400; }
+.flag-lead{
+  margin-top:24px;
+  font-size:15.5px; line-height:1.9; color:var(--gray-mid);
+  max-width:520px;
+}
+.spec-table{
+  margin-top:38px;
+  border-top:var(--hair);
+  width:100%;
+  border-collapse:collapse;
+}
+.spec-table tr{ border-bottom:1px solid rgba(22,100,235,.25); }
+.spec-table th{
+  text-align:left;
+  padding:13px 0;
+  font-size:12px; letter-spacing:.16em;
+  color:var(--gray-mid);
+  font-weight:400;
+  width:42%;
+}
+.spec-table td{
+  padding:13px 0;
+  font-family:var(--mono);
+  font-size:12.5px;
+  color:var(--gray-ink);
+  letter-spacing:.04em;
+}
+.flag-buy{
+  margin-top:40px;
+  display:flex; align-items:center; gap:26px; flex-wrap:wrap;
+}
+.flag-price{
+  font-size:40px; font-weight:700; letter-spacing:-1.5px; color:var(--blue);
+  line-height:1;
+}
+.flag-price small{
+  font-family:var(--mono); font-size:11px; letter-spacing:.22em;
+  color:var(--gray-mid); font-weight:400; display:block; margin-top:8px;
+}
+
+.flag-features{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  border:var(--hair);
+  border-top:0;
+}
+.flag-feat{
+  padding:46px 40px 50px;
+}
+.flag-feat + .flag-feat{ border-left:var(--hair); }
+.flag-feat .fi-num{
+  font-family:var(--mono); font-size:11px; letter-spacing:.4em; color:var(--blue-bright);
+}
+.flag-feat h4{
+  margin-top:20px;
+  font-size:26px; font-weight:700; letter-spacing:-.8px; line-height:1.12;
+  color:var(--blue);
+}
+.flag-feat h4 em{ font-family:var(--serif); font-style:italic; font-weight:400; }
+.flag-feat p{
+  margin-top:16px;
+  font-size:13.5px; line-height:1.9; color:var(--gray-mid);
+}
+
+/* ============================================================
+   ACCESSORIES RAIL (横向滑轨)
+   ============================================================ */
+.rail-head{
+  display:flex; justify-content:space-between; align-items:baseline;
+  margin-bottom:36px;
+}
+.rail-hint{
+  font-family:var(--mono); font-size:11px; letter-spacing:.3em; color:var(--gray-mid);
+}
+.rail{
+  display:flex;
+  gap:0;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  border-top:var(--hair);
+  border-bottom:var(--hair);
+  scrollbar-width:thin;
+  scrollbar-color:var(--blue) var(--cream);
+}
+.rail::-webkit-scrollbar{ height:6px; }
+.rail::-webkit-scrollbar-thumb{ background:var(--blue); }
+.rail::-webkit-scrollbar-track{ background:var(--cream); }
+.rail-card{
+  flex:0 0 300px;
+  scroll-snap-align:start;
+  padding:34px 30px;
+  border-right:var(--hair);
+  transition:background .25s ease;
+}
+.rail-card:hover{ background:#F3F1E4; }
+.rail-card .rv{
+  height:110px;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:22px;
+}
+.rail-card .rv svg{ width:110px; }
+.rail-card .rc{
+  font-family:var(--mono); font-size:10px; letter-spacing:.28em; color:var(--gray-mid);
+}
+.rail-card .rn{
+  margin-top:10px;
+  font-size:19px; font-weight:700; letter-spacing:-.5px; color:var(--blue);
+}
+.rail-card .rp{
+  margin-top:12px;
+  font-family:var(--mono); font-size:13px; color:var(--gray-ink); letter-spacing:.08em;
+}
+
+/* ============================================================
+   REVIEWS + PRESS
+   ============================================================ */
+.reviews{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  border-top:var(--hair);
+  border-left:var(--hair);
+}
+.review{
+  border-right:var(--hair);
+  border-bottom:var(--hair);
+  padding:46px 44px 42px;
+}
+.review .stars{ font-size:16px; }
+.review blockquote{
+  margin-top:22px;
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:21px;
+  line-height:1.62;
+  color:var(--gray-ink);
+  letter-spacing:.1px;
+}
+.review .meta{
+  margin-top:26px;
+  padding-top:18px;
+  border-top:1px solid rgba(22,100,235,.3);
+  display:flex; justify-content:space-between; align-items:baseline;
+}
+.review .who{ font-size:13px; font-weight:700; color:var(--blue); letter-spacing:.06em; }
+.review .when{ font-family:var(--mono); font-size:10.5px; color:var(--gray-soft); letter-spacing:.18em; }
+
+.press{
+  margin-top:80px;
+  border:var(--hair);
+}
+.press-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+}
+.press-item{
+  padding:42px 38px;
+}
+.press-item + .press-item{ border-left:var(--hair); }
+.press-item .src{
+  font-family:var(--mono); font-size:11px; letter-spacing:.34em; color:var(--blue-bright);
+}
+.press-item p{
+  margin-top:18px;
+  font-size:16px; line-height:1.75; color:var(--gray-mid);
+}
+.press-item p b{ color:var(--blue); font-weight:700; }
+
+/* ============================================================
+   MEMBERSHIP / SERVICE STRIP
+   ============================================================ */
+.service{ background:var(--blue); color:var(--cream); border-bottom:var(--hair); }
+.service .section-head{ border-bottom-color:rgba(248,247,238,.5); }
+.service h2.section-title{ color:var(--cream); }
+.service h2.section-title em{ color:#BBD4FF; }
+.service .section-desc{ color:rgba(248,247,238,.75); }
+.service .section-index{ color:#BBD4FF; }
+.svc-grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  border-top:2px solid rgba(248,247,238,.6);
+  border-left:2px solid rgba(248,247,238,.6);
+}
+.svc-cell{
+  padding:44px 34px 50px;
+  border-right:2px solid rgba(248,247,238,.6);
+  border-bottom:2px solid rgba(248,247,238,.6);
+}
+.svc-cell .si{
+  font-family:var(--mono); font-size:11px; letter-spacing:.4em; color:#BBD4FF;
+}
+.svc-cell h4{
+  margin-top:22px;
+  font-size:27px; font-weight:700; letter-spacing:-.8px; line-height:1.1;
+}
+.svc-cell h4 em{ font-family:var(--serif); font-style:italic; font-weight:400; }
+.svc-cell p{
+  margin-top:16px;
+  font-size:13px; line-height:1.9; color:rgba(248,247,238,.72);
+}
+.svc-cell .more{
+  display:inline-block;
+  margin-top:22px;
+  font-family:var(--mono); font-size:11px; letter-spacing:.26em;
+  border-bottom:2px solid rgba(248,247,238,.8);
+  padding-bottom:5px;
+  transition:letter-spacing .18s ease;
+}
+.svc-cell .more:hover{ letter-spacing:.42em; }
+
+/* ============================================================
+   NEWSLETTER / CTA
+   ============================================================ */
+.cta{
+  padding:150px 0 140px;
+  border-bottom:var(--hair);
+  text-align:center;
+}
+.cta .k{
+  font-family:var(--mono); font-size:11px; letter-spacing:.5em; color:var(--blue);
+}
+.cta h2{
+  margin-top:34px;
+  font-size:clamp(46px, 6vw, 88px);
+  line-height:.92;
+  letter-spacing:-2px;
+  color:var(--blue);
+  font-weight:700;
+}
+.cta h2 em{ font-family:var(--serif); font-style:italic; font-weight:400; color:var(--blue-bright); }
+.cta p{
+  margin:34px auto 0;
+  max-width:560px;
+  font-size:16px; line-height:1.9; color:var(--gray-mid);
+}
+.nl-form{
+  margin:56px auto 0;
+  display:flex;
+  width:min(660px, 90vw);
+  border:var(--hair);
+}
+.nl-form input{
+  flex:1;
+  border:0;
+  background:transparent;
+  padding:22px 26px;
+  font-family:var(--sans);
+  font-size:15px;
+  color:var(--gray-ink);
+  outline:none;
+}
+.nl-form input::placeholder{ color:var(--gray-soft); letter-spacing:.12em; }
+.nl-form button{
+  border:0;
+  border-left:var(--hair);
+  background:var(--blue);
+  color:var(--cream);
+  padding:22px 44px;
+  font-family:var(--sans);
+  font-size:14px; letter-spacing:.18em;
+  cursor:pointer;
+  transition:font-weight .18s ease, background .18s ease;
+  white-space:nowrap;
+}
+.nl-form button:hover{ background:var(--blue-bright); font-weight:700; }
+.nl-note{
+  margin-top:20px;
+  font-family:var(--mono); font-size:11px; letter-spacing:.22em; color:var(--gray-soft);
+  min-height:18px;
+}
+.nl-note.ok{ color:var(--blue); font-weight:700; }
+
+/* ============================================================
+   FOOTER — 超大字标
+   ============================================================ */
+.footer{
+  padding:90px 0 0;
+  overflow:hidden;
+}
+.foot-cols{
+  display:grid;
+  grid-template-columns:1.4fr repeat(3, 1fr);
+  gap:40px;
+  padding-bottom:70px;
+  border-bottom:var(--hair);
+}
+.foot-brand .fb-mark{
+  font-size:32px; font-weight:700; letter-spacing:-1.4px; color:var(--blue);
+}
+.foot-brand p{
+  margin-top:20px;
+  max-width:330px;
+  font-size:13.5px; line-height:1.95; color:var(--gray-mid);
+}
+.foot-brand .fb-meta{
+  margin-top:26px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.24em; color:var(--gray-soft);
+  line-height:2.2;
+}
+.foot-col h5{
+  font-family:var(--mono); font-size:10px; letter-spacing:.38em;
+  color:var(--blue); font-weight:400;
+  padding-bottom:18px;
+  border-bottom:1px solid rgba(22,100,235,.35);
+}
+.foot-col a{
+  display:block;
+  margin-top:16px;
+  font-size:14px;
+}
+.foot-legal{
+  display:flex; justify-content:space-between; gap:30px; flex-wrap:wrap;
+  padding:26px 0;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.22em; color:var(--gray-soft);
+}
+.giant-mark{
+  font-size:clamp(110px, 21.5vw, 360px);
+  font-weight:700;
+  letter-spacing:-.045em;
+  line-height:.78;
+  color:var(--blue);
+  text-align:center;
+  padding:30px 0 24px;
+  user-select:none;
+}
+.giant-mark span{
+  display:inline-block;
+  transition:color .3s ease, transform .3s ease;
+}
+.giant-mark span:hover{ color:var(--blue-bright); transform:translateY(-10px); }
+.foot-underline{
+  border-top:var(--hair);
+  padding:16px 0 22px;
+  display:flex; justify-content:space-between;
+  font-family:var(--mono); font-size:10px; letter-spacing:.32em; color:var(--gray-mid);
+}
+
+/* ============================================================
+   SCROLL REVEAL GUARD (html.js pattern)
+   ============================================================ */
+.reveal{ transition:opacity .85s ease, transform .85s cubic-bezier(.16,.7,.3,1); }
+html.js .reveal:not(.in){ opacity:0; transform:translateY(34px); }
+html.js .reveal.left:not(.in){ transform:translateX(-40px); }
+html.js .reveal.right:not(.in){ transform:translateX(40px); }
+html.js .reveal.zoom:not(.in){ transform:scale(.94); }
+.reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){
+  html.js .reveal:not(.in){ opacity:1; transform:none; }
+  .orbit-spin, .marquee{ animation:none; }
+  html{ scroll-behavior:auto; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1080px){
+  .hero-grid{ grid-template-columns:1fr; }
+  .hero-left{ border-right:0; border-bottom:var(--hair); padding:80px 0 70px; }
+  .hero-right{ min-height:560px; padding:110px 0 130px; }
+  .products{ grid-template-columns:repeat(2, 1fr); }
+  .flag-grid{ grid-template-columns:1fr; }
+  .flag-visual{ border-right:0; border-bottom:var(--hair); min-height:420px; }
+  .flag-features{ grid-template-columns:1fr; }
+  .flag-feat + .flag-feat{ border-left:0; border-top:var(--hair); }
+  .press-grid{ grid-template-columns:1fr; }
+  .press-item + .press-item{ border-left:0; border-top:var(--hair); }
+  .svc-grid{ grid-template-columns:repeat(2, 1fr); }
+  .foot-cols{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 720px){
+  .nav-links{ display:none; }
+  .section{ padding:80px 0; }
+  .section-head{ flex-direction:column; align-items:flex-start; gap:22px; }
+  .products{ grid-template-columns:1fr; }
+  .reviews{ grid-template-columns:1fr; }
+  .hero-stats{ flex-wrap:wrap; }
+  .hero-stat{ flex:1 1 45%; padding-bottom:18px; }
+  .nl-form{ flex-direction:column; }
+  .nl-form button{ border-left:0; border-top:var(--hair); }
+  .flag-info{ padding:44px 28px; }
+  .foot-cols{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">VOLTA <small>ELECTRONICS · SINCE 2019</small></a>
+    <nav class="nav-links">
+      <a class="w-hover" href="#products">产品矩阵</a>
+      <a class="w-hover" href="#flagship">旗舰深潜</a>
+      <a class="w-hover" href="#accessories">配件</a>
+      <a class="w-hover" href="#reviews">用户口碑</a>
+      <a class="w-hover" href="#service">会员服务</a>
+    </nav>
+    <div class="nav-right">
+      <a class="w-hover" href="#newsletter">登录</a>
+      <button class="cart-btn" id="cartBtn" type="button">购物袋 <span class="cart-count" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-left">
+      <div class="hero-kicker reveal">VOLTA — 精密电子 · 精品日常</div>
+      <h1 class="hero-title reveal">把复杂，<br><em>做得锋利</em>。<br>把日常，<em>做得精密</em>。</h1>
+      <p class="hero-sub reveal">
+        VOLTA 以实验室级声学与电力技术，重构你桌面上的每一件器物。
+        从 <b>42dB 深海级主动降噪</b> 到 <b>65W 氮化镓快充</b>——
+        每一处参数，都为长期使用而生。
+      </p>
+      <div class="hero-cta reveal">
+        <a class="btn-solid" href="#products">选购全系产品</a>
+        <a class="btn-ghost" href="#flagship">探索 Halo Pro</a>
+      </div>
+      <div class="hero-stats reveal">
+        <div class="hero-stat"><div class="num">128,000+</div><div class="lbl">注册用户 / USERS</div></div>
+        <div class="hero-stat"><div class="num">4.9</div><div class="lbl">平均评分 / RATING</div></div>
+        <div class="hero-stat"><div class="num">30 天</div><div class="lbl">无理由退换 / RETURNS</div></div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="orbit-stage reveal zoom">
+        <div class="orbit-ring"></div>
+        <div class="orbit-ring r2"></div>
+        <div class="orbit-ring r3"></div>
+        <div class="orbit-spin">
+          <div class="orbit-dot"></div>
+          <div class="orbit-chip">ANC 42dB</div>
+          <div class="orbit-dot d2"></div>
+        </div>
+        <div class="orbit-spin slow">
+          <div class="orbit-dot d3"></div>
+          <div class="orbit-chip c2">LDAC · 24BIT</div>
+        </div>
+        <div class="hero-product">
+          <!-- 主推产品：Halo Pro 头戴耳机（纯 SVG 剪影） -->
+          <svg viewBox="0 0 240 240" fill="none" stroke="#1664EB" stroke-width="6" stroke-linecap="round">
+            <path d="M42 148 V116 a78 78 0 0 1 156 0 v32" />
+            <path d="M60 140 V118 a60 60 0 0 1 120 0 v22" stroke-width="3" opacity=".5"/>
+            <rect x="26" y="140" width="42" height="70" fill="#F8F7EE"/>
+            <rect x="26" y="140" width="42" height="70"/>
+            <rect x="172" y="140" width="42" height="70" fill="#F8F7EE"/>
+            <rect x="172" y="140" width="42" height="70"/>
+            <line x1="38" y1="158" x2="38" y2="192" stroke-width="3"/>
+            <line x1="56" y1="158" x2="56" y2="192" stroke-width="3"/>
+            <line x1="184" y1="158" x2="184" y2="192" stroke-width="3"/>
+            <line x1="202" y1="158" x2="202" y2="192" stroke-width="3"/>
+            <circle cx="47" cy="222" r="5" fill="#0066F4" stroke="none"/>
+            <circle cx="193" cy="222" r="5" fill="#0066F4" stroke="none"/>
+          </svg>
+        </div>
+        <div class="hero-tag">
+          <div class="name">VOLTA Halo Pro 主动降噪耳机</div>
+          <div class="price">¥1,980 · 免费顺丰包邮</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ TRUST MARQUEE ══════════════════ -->
+<div class="trust" aria-label="服务承诺">
+  <div class="marquee" id="marquee">
+    <span>顺丰全国包邮</span><span>30 天无理由退换</span><span>2 年官方质保</span><span>100% 原厂正品</span><span>48 小时极速发货</span><span>全国 12 家体验店</span><span>7×24 专属客服</span>
+    <span>顺丰全国包邮</span><span>30 天无理由退换</span><span>2 年官方质保</span><span>100% 原厂正品</span><span>48 小时极速发货</span><span>全国 12 家体验店</span><span>7×24 专属客服</span>
+  </div>
+</div>
+
+<!-- ══════════════════ PRODUCTS ══════════════════ -->
+<section class="section" id="products">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-index reveal">01 / PRODUCT MATRIX</div>
+        <h2 class="section-title reveal">六件器物，<br>一套<em>桌面秩序</em>。</h2>
+      </div>
+      <p class="section-desc reveal right">
+        声学、电力、输入、佩戴——VOLTA 全系产品共享同一套设计语言与工程标准：
+        航空级铝材、精密 CNC、以及绝不妥协的参数。
+      </p>
+    </div>
+
+    <div class="products">
+      <!-- 1 Halo Pro -->
+      <article class="p-card reveal">
+        <div class="p-badge hot">BEST SELLER</div>
+        <div class="p-visual">
+          <svg viewBox="0 0 200 170" fill="none" stroke="#1664EB" stroke-width="5" stroke-linecap="round">
+            <path d="M36 116 V88 a64 64 0 0 1 128 0 v28"/>
+            <rect x="22" y="112" width="34" height="52"/>
+            <rect x="144" y="112" width="34" height="52"/>
+            <line x1="32" y1="128" x2="32" y2="150" stroke-width="2.5"/>
+            <line x1="46" y1="128" x2="46" y2="150" stroke-width="2.5"/>
+            <line x1="154" y1="128" x2="154" y2="150" stroke-width="2.5"/>
+            <line x1="168" y1="128" x2="168" y2="150" stroke-width="2.5"/>
+            <circle cx="39" cy="20" r="4" fill="#0066F4" stroke="none"/>
+          </svg>
+        </div>
+        <div class="p-cat">AUDIO / 头戴降噪耳机</div>
+        <h3 class="p-name">Halo <em>Pro</em></h3>
+        <ul class="p-spec">
+          <li><span class="k">主动降噪</span><span class="v">42 dB 深海级</span></li>
+          <li><span class="k">驱动单元</span><span class="v">40mm 钛振膜</span></li>
+          <li><span class="k">续航</span><span class="v">60 h / 关降噪 80 h</span></li>
+        </ul>
+        <div class="p-rating"><span class="stars">★★★★★</span> 4.9 · 3,284 条评价</div>
+        <div class="p-foot">
+          <div class="p-price"><small>原价 ¥2,280</small>¥1,980</div>
+          <button class="p-add" type="button">加入购物袋 →</button>
+        </div>
+      </article>
+
+      <!-- 2 Arc One -->
+      <article class="p-card reveal">
+        <div class="p-badge">NEW</div>
+        <div class="p-visual">
+          <svg viewBox="0 0 200 170" fill="none" stroke="#1664EB" stroke-width="5" stroke-linecap="round">
+            <rect x="30" y="24" width="140" height="122"/>
+            <circle cx="70" cy="85" r="26"/>
+            <circle cx="70" cy="85" r="11" stroke-width="3"/>
+            <circle cx="132" cy="60" r="14"/>
+            <circle cx="132" cy="110" r="8" stroke-width="3"/>
+            <line x1="30" y1="42" x2="170" y2="42" stroke-width="2.5" opacity=".5"/>
+            <rect x="88" y="132" width="24" height="6" fill="#1664EB" stroke="none"/>
+          </svg>
+        </div>
+        <div class="p-cat">AUDIO / 桌面有源音箱</div>
+        <h3 class="p-name">Arc <em>One</em></h3>
+        <ul class="p-spec">
+          <li><span class="k">输出功率</span><span class="v">30W × 2 双单元</span></li>
+          <li><span class="k">无线协议</span><span class="v">LDAC / USB-C DAC</span></li>
+          <li><span class="k">频响范围</span><span class="v">52Hz – 22kHz</span></li>
+        </ul>
+        <div class="p-rating"><span class="stars">★★★★★</span> 4.8 · 1,176 条评价</div>
+        <div class="p-foot">
+          <div class="p-price">¥2,480</div>
+          <button class="p-add" type="button">加入购物袋 →</button>
+        </div>
+      </article>
+
+      <!-- 3 Beam 65 -->
+      <article class="p-card reveal">
+        <div class="p-visual">
+          <svg viewBox="0 0 200 170" fill="none" stroke="#1664EB" stroke-width="5" stroke-linecap="round">
+            <rect x="58" y="36" width="84" height="104"/>
+            <rect x="74" y="52" width="52" height="26" stroke-width="3"/>
+            <line x1="86" y1="22" x2="86" y2="36"/>
+            <line x1="114" y1="22" x2="114" y2="36"/>
+            <circle cx="100" cy="112" r="12" stroke-width="3"/>
+            <line x1="30" y1="88" x2="52" y2="88" stroke-width="2.5" opacity=".5"/>
+            <line x1="148" y1="88" x2="170" y2="88" stroke-width="2.5" opacity=".5"/>
+            <rect x="92" y="80" width="16" height="16" fill="#0066F4" stroke="none"/>
+          </svg>
+        </div>
+        <div class="p-cat">POWER / 氮化镓充电器</div>
+        <h3 class="p-name">Beam <em>65</em></h3>
+        <ul class="p-spec">
+          <li><span class="k">输出</span><span class="v">65W GaN 三口</span></li>
+          <li><span class="k">协议</span><span class="v">PD3.1 / PPS / QC5</span></li>
+          <li><span class="k">体积</span><span class="v">42×42×28mm · 112g</span></li>
+        </ul>
+        <div class="p-rating"><span class="stars">★★★★★</span> 4.9 · 8,921 条评价</div>
+        <div class="p-foot">
+          <div class="p-price">¥399</div>
+          <button class="p-add" type="button">加入购物袋 →</button>
+        </div>
+      </article>
+
+      <!-- 4 Keystroke 68 -->
+      <article class="p-card reveal">
+        <div class="p-visual">
+          <svg viewBox="0 0 200 170" fill="none" stroke="#1664EB" stroke-width="5" stroke-linecap="round">
+            <rect x="18" y="52" width="164" height="72"/>
+            <line x1="18" y1="76" x2="182" y2="76" stroke-width="2" opacity=".55"/>
+            <line x1="18" y1="100" x2="182" y2="100" stroke-width="2" opacity=".55"/>
+            <line x1="46" y1="52" x2="46" y2="124" stroke-width="2" opacity=".35"/>
+            <line x1="74" y1="52" x2="74" y2="124" stroke-width="2" opacity=".35"/>
+            <line x1="102" y1="52" x2="102" y2="124" stroke-width="2" opacity=".35"/>
+            <line x1="130" y1="52" x2="130" y2="124" stroke-width="2" opacity=".35"/>
+            <line x1="158" y1="52" x2="158" y2="124" stroke-width="2" opacity=".35"/>
+            <rect x="58" y="136" width="84" height="8" fill="#1664EB" stroke="none"/>
+            <circle cx="172" cy="64" r="4" fill="#0066F4" stroke="none"/>
+          </svg>
+        </div>
+        <div class="p-cat">INPUT / 三模机械键盘</div>
+        <h3 class="p-name">Keystroke <em>68</em></h3>
+        <ul class="p-spec">
+          <li><span class="k">配列</span><span class="v">68 键 / 铝坨坨 CNC</span></li>
+          <li><span class="k">连接</span><span class="v">2.4G · 蓝牙 5.1 · 有线</span></li>
+          <li><span class="k">轴体</span><span class="v">VOLTA 磁轴 · 热插拔</span></li>
+        </ul>
+        <div class="p-rating"><span class="stars">★★★★☆</span> 4.7 · 2,043 条评价</div>
+        <div class="p-foot">
+          <div class="p-price">¥1,090</div>
+          <button class="p-add" type="button">加入购物袋 →</button>
+        </div>
+      </article>
+
+      <!-- 5 Pulse 2 — 售罄 -->
+      <article class="p-card sold reveal">
+        <div class="p-badge out">售罄 SOLD OUT</div>
+        <div class="p-visual">
+          <svg viewBox="0 0 200 170" fill="none" stroke="#35342C" stroke-width="5" stroke-linecap="round">
+            <rect x="72" y="52" width="56" height="66"/>
+            <rect x="84" y="24" width="32" height="28" stroke-width="3"/>
+            <rect x="84" y="118" width="32" height="28" stroke-width="3"/>
+            <circle cx="100" cy="85" r="16" stroke-width="3"/>
+            <line x1="100" y1="85" x2="100" y2="74" stroke-width="3"/>
+            <line x1="100" y1="85" x2="109" y2="90" stroke-width="3"/>
+            <line x1="140" y1="85" x2="164" y2="85" stroke-width="2.5" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="p-cat">WEARABLE / 智能健康腕表</div>
+        <h3 class="p-name">Pulse <em>2</em></h3>
+        <ul class="p-spec">
+          <li><span class="k">屏幕</span><span class="v">1.85" LTPO 常亮</span></li>
+          <li><span class="k">传感</span><span class="v">ECG + 血氧 + 体温</span></li>
+          <li><span class="k">续航</span><span class="v">14 天典型使用</span></li>
+        </ul>
+        <div class="p-rating"><span class="stars">★★★★★</span> 4.8 · 967 条评价</div>
+        <div class="p-foot">
+          <div class="p-price"><small>第二批已售罄</small>¥1,680</div>
+          <button class="p-add" type="button" disabled>到货提醒</button>
+        </div>
+      </article>
+
+      <!-- 6 Loop -->
+      <article class="p-card reveal">
+        <div class="p-visual">
+          <svg viewBox="0 0 200 170" fill="none" stroke="#1664EB" stroke-width="5" stroke-linecap="round">
+            <rect x="56" y="26" width="88" height="120"/>
+            <circle cx="100" cy="74" r="22" stroke-width="3"/>
+            <circle cx="100" cy="74" r="8" fill="#0066F4" stroke="none"/>
+            <rect x="78" y="114" width="44" height="10" stroke-width="3"/>
+            <line x1="56" y1="46" x2="144" y2="46" stroke-width="2.5" opacity=".45"/>
+            <line x1="26" y1="86" x2="50" y2="86" stroke-width="2.5" opacity=".5"/>
+            <line x1="150" y1="86" x2="174" y2="86" stroke-width="2.5" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="p-cat">POWER / 磁吸移动电源</div>
+        <h3 class="p-name">Loop <em>Mag</em></h3>
+        <ul class="p-spec">
+          <li><span class="k">容量</span><span class="v">10,000mAh / 22.5W</span></li>
+          <li><span class="k">磁吸</span><span class="v">MagSafe 15W 无线</span></li>
+          <li><span class="k">机身</span><span class="v">铝合金 · 仅 178g</span></li>
+        </ul>
+        <div class="p-rating"><span class="stars">★★★★★</span> 4.9 · 5,612 条评价</div>
+        <div class="p-foot">
+          <div class="p-price">¥559</div>
+          <button class="p-add" type="button">加入购物袋 →</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FLAGSHIP DEEP DIVE ══════════════════ -->
+<section class="section flagship" id="flagship">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-index reveal">02 / FLAGSHIP DEEP DIVE</div>
+        <h2 class="section-title reveal">Halo Pro：<br>为<em>安静</em>而生的旗舰。</h2>
+      </div>
+      <p class="section-desc reveal right">
+        三年声学实验室打磨，七代原型机迭代。
+        我们把 42dB 的降噪深度、60 小时续航与 248g 重量，
+        同时装进了一副可以整天佩戴的耳机里。
+      </p>
+    </div>
+
+    <div class="flag-grid">
+      <div class="flag-visual reveal left">
+        <div class="flag-vert">VOLTA · ACOUSTIC LAB · 2026</div>
+        <div class="orbit-ring" style="width:min(320px,70%); aspect-ratio:1; position:absolute; inset:0; margin:auto;"></div>
+        <div class="orbit-ring r3" style="width:min(400px,88%); aspect-ratio:1; position:absolute; inset:0; margin:auto;"></div>
+        <div class="orbit-spin" style="width:min(320px,70%); aspect-ratio:1; position:absolute; inset:0; margin:auto;">
+          <div class="orbit-dot"></div>
+          <div class="orbit-chip">TITANIUM</div>
+        </div>
+        <svg class="flag-svg" viewBox="0 0 240 240" fill="none" stroke="#1664EB" stroke-width="6" stroke-linecap="round">
+          <path d="M42 148 V116 a78 78 0 0 1 156 0 v32"/>
+          <path d="M62 138 V118 a58 58 0 0 1 116 0 v20" stroke-width="3" opacity=".5"/>
+          <rect x="24" y="138" width="46" height="76"/>
+          <rect x="170" y="138" width="46" height="76"/>
+          <rect x="34" y="152" width="26" height="48" stroke-width="3"/>
+          <rect x="180" y="152" width="26" height="48" stroke-width="3"/>
+          <circle cx="47" cy="228" r="5" fill="#0066F4" stroke="none"/>
+          <circle cx="193" cy="228" r="5" fill="#0066F4" stroke="none"/>
+        </svg>
+      </div>
+
+      <div class="flag-info reveal right">
+        <div class="flag-model">MODEL VH-02 / PRO</div>
+        <h3 class="flag-title">深海级<em>静默</em>，<br>与 60 小时的<em>自由</em>。</h3>
+        <p class="flag-lead">
+          八麦克风混合式降噪阵列每秒进行 48,000 次环境采样，
+          从地铁轰鸣到办公室白噪音，一并沉入安静。
+          钛金属复合振膜带来 5Hz–40kHz 的宽广声场，
+          支持 LDAC 与 aptX Lossless 无损传输。
+        </p>
+
+        <table class="spec-table">
+          <tr><th>驱动单元 / DRIVER</th><td>40mm 钛金属复合振膜</td></tr>
+          <tr><th>降噪深度 / ANC</th><td>-42 dB 混合式 · 8 麦阵列</td></tr>
+          <tr><th>频响 / FREQUENCY</th><td>5 Hz – 40 kHz</td></tr>
+          <tr><th>编解码 / CODEC</th><td>LDAC · aptX Lossless · AAC</td></tr>
+          <tr><th>蓝牙 / BLUETOOTH</th><td>5.4 双设备连接</td></tr>
+          <tr><th>续航 / BATTERY</th><td>60 h (ANC on) / 80 h (off)</td></tr>
+          <tr><th>快充 / CHARGE</th><td>充电 5 分钟 = 播放 5 小时</td></tr>
+          <tr><th>重量 / WEIGHT</th><td>248 g · 航空级铝合金头梁</td></tr>
+          <tr><th>防护 / RATING</th><td>IPX4 防泼溅</td></tr>
+        </table>
+
+        <div class="flag-buy">
+          <div class="flag-price">¥1,980<small>含 2 年质保 · 30 天无理由</small></div>
+          <button class="btn-solid p-add-flag" type="button">加入购物袋</button>
+          <a class="btn-ghost" href="#reviews">看 3,284 条评价</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="flag-features">
+      <div class="flag-feat reveal">
+        <div class="fi-num">FEATURE 01</div>
+        <h4>42dB <em>深海</em>降噪</h4>
+        <p>自适应降噪引擎根据佩戴松紧与环境噪声实时校准，每 0.8 毫秒更新一次滤波曲线。开启后，世界只剩下你想听的声音。</p>
+      </div>
+      <div class="flag-feat reveal">
+        <div class="fi-num">FEATURE 02</div>
+        <h4>60 小时<em>续航</em></h4>
+        <p>1,200mAh 高密度电芯配合低功耗蓝牙 5.4，一次充电覆盖一整周通勤。快充 5 分钟，换来 5 小时音乐。</p>
+      </div>
+      <div class="flag-feat reveal">
+        <div class="fi-num">FEATURE 03</div>
+        <h4>248g <em>轻若</em>无物</h4>
+        <p>航空级铝合金头梁 + 记忆棉蛋白皮耳罩，压力均匀分布。12,000 次开合测试后，阻尼依然如初。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ ACCESSORIES RAIL ══════════════════ -->
+<section class="section" id="accessories">
+  <div class="wrap">
+    <div class="rail-head">
+      <div>
+        <div class="section-index reveal">03 / SELECTED ACCESSORIES</div>
+        <h2 class="section-title reveal" style="margin-top:14px;">精选配件，<em>横向滑动</em>。</h2>
+      </div>
+      <div class="rail-hint reveal right">← DRAG / SCROLL →</div>
+    </div>
+  </div>
+
+  <div class="rail reveal">
+    <div class="rail-card">
+      <div class="rv">
+        <svg viewBox="0 0 120 100" fill="none" stroke="#1664EB" stroke-width="4">
+          <path d="M10 74 C 30 20, 60 20, 60 50 S 92 82, 110 30"/>
+          <rect x="4" y="72" width="14" height="18"/>
+          <rect x="102" y="20" width="14" height="18"/>
+        </svg>
+      </div>
+      <div class="rc">CABLE / 编织线材</div>
+      <div class="rn">Braid 240W 数据线</div>
+      <div class="rp">¥129 · 1.5m · 凯夫拉编织</div>
+    </div>
+    <div class="rail-card">
+      <div class="rv">
+        <svg viewBox="0 0 120 100" fill="none" stroke="#1664EB" stroke-width="4">
+          <rect x="18" y="24" width="84" height="52"/>
+          <line x1="18" y1="50" x2="102" y2="50" stroke-width="2.5" opacity=".5"/>
+          <rect x="34" y="82" width="52" height="8" fill="#1664EB" stroke="none"/>
+        </svg>
+      </div>
+      <div class="rc">ACCESSORY / 收纳</div>
+      <div class="rn">Shell 硬壳收纳包</div>
+      <div class="rp">¥229 · EVA 压模 · 防泼溅</div>
+    </div>
+    <div class="rail-card">
+      <div class="rv">
+        <svg viewBox="0 0 120 100" fill="none" stroke="#1664EB" stroke-width="4">
+          <ellipse cx="60" cy="34" rx="34" ry="18"/>
+          <path d="M26 34 v14 a34 18 0 0 0 68 0 v-14"/>
+          <line x1="60" y1="66" x2="60" y2="88" stroke-width="3"/>
+          <line x1="38" y1="88" x2="82" y2="88" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="rc">DESK / 桌面支架</div>
+      <div class="rn">Rise 铝合金支架</div>
+      <div class="rp">¥349 · CNC 一体成型</div>
+    </div>
+    <div class="rail-card">
+      <div class="rv">
+        <svg viewBox="0 0 120 100" fill="none" stroke="#1664EB" stroke-width="4">
+          <circle cx="60" cy="50" r="28"/>
+          <circle cx="60" cy="50" r="11" stroke-width="2.5"/>
+          <line x1="60" y1="8" x2="60" y2="18" stroke-width="3"/>
+          <line x1="60" y1="82" x2="60" y2="92" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="rc">CARE / 清洁养护</div>
+      <div class="rn">Care 清洁套装</div>
+      <div class="rp">¥89 · 6 件套 · 无酒精配方</div>
+    </div>
+    <div class="rail-card">
+      <div class="rv">
+        <svg viewBox="0 0 120 100" fill="none" stroke="#1664EB" stroke-width="4">
+          <rect x="30" y="16" width="60" height="68"/>
+          <line x1="30" y1="36" x2="90" y2="36" stroke-width="2.5" opacity=".5"/>
+          <rect x="44" y="48" width="32" height="6" fill="#1664EB" stroke="none"/>
+          <rect x="44" y="62" width="20" height="6" fill="#0066F4" stroke="none"/>
+        </svg>
+      </div>
+      <div class="rc">POWER / 桌面能源</div>
+      <div class="rn">Dock 100W 桌面充电站</div>
+      <div class="rp">¥699 · 三口 · 智能功率分配</div>
+    </div>
+    <div class="rail-card">
+      <div class="rv">
+        <svg viewBox="0 0 120 100" fill="none" stroke="#1664EB" stroke-width="4">
+          <path d="M30 78 V50 a30 30 0 0 1 60 0 v28"/>
+          <rect x="20" y="72" width="20" height="20"/>
+          <rect x="80" y="72" width="20" height="20"/>
+        </svg>
+      </div>
+      <div class="rc">AUDIO / 耳罩配件</div>
+      <div class="rn">Halo 替换耳罩</div>
+      <div class="rp">¥199 · 记忆棉 · 蛋白皮</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ REVIEWS + PRESS ══════════════════ -->
+<section class="section" id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-index reveal">04 / VOICES & PRESS</div>
+        <h2 class="section-title reveal">他们已经，<br>把 VOLTA <em>用旧了</em>。</h2>
+      </div>
+      <p class="section-desc reveal right">
+        截至 2026 年 10 月，VOLTA 全系累计收到 22,000+ 条真实评价，
+        平均评分 4.9 / 5.0。以下是其中一些我们最喜欢的。
+      </p>
+    </div>
+
+    <div class="reviews">
+      <div class="review reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>“降噪深到什么程度呢——我在早高峰地铁上戴着 Halo Pro，到站提示音是同事发消息提醒我的。60 小时续航不是虚标，我一周一充。”</blockquote>
+        <div class="meta"><span class="who">陈屿 / 产品经理 · 上海</span><span class="when">2026.09.18 · 已验证购买</span></div>
+      </div>
+      <div class="review reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>“买过很多桌面音箱，Arc One 是第一款让我不再想折腾的。人声干净，低频不轰头，摆在显示器旁边像一件仪器而不是外设。”</blockquote>
+        <div class="meta"><span class="who">Nora W. / 独立音乐人 · 北京</span><span class="when">2026.08.30 · 已验证购买</span></div>
+      </div>
+      <div class="review reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>“Beam 65 是我出差唯一带的充电头。手机、笔记本、耳机三口同时喂饱，体积比原装适配器还小一圈。质感对得起价格。”</blockquote>
+        <div class="meta"><span class="who">郑文博 / 咨询顾问 · 深圳</span><span class="when">2026.10.02 · 已验证购买</span></div>
+      </div>
+      <div class="review reveal">
+        <div class="stars">★★★★☆</div>
+        <blockquote>“Keystroke 68 的磁轴手感很妙，打字像敲在一块整铝上但又不累手腕。扣一星是因为我想买的白色款永远缺货。”</blockquote>
+        <div class="meta"><span class="who">Lin / 前端工程师 · 杭州</span><span class="when">2026.07.11 · 已验证购买</span></div>
+      </div>
+    </div>
+
+    <div class="press reveal">
+      <div class="press-grid">
+        <div class="press-item">
+          <div class="src">《数字生活》DIGITAL LIVING</div>
+          <p>“VOLTA 正在做一件反潮流的事：<b>让参数回归体验</b>。它不堆料，而是把每一项规格都做到能被日常感知。”</p>
+        </div>
+        <div class="press-item">
+          <div class="src">少数派 SSPAI</div>
+          <p>“Halo Pro 的调音克制而耐听，<b>是今年 2000 元档最值得推荐的降噪耳机</b>，没有之一。”</p>
+        </div>
+        <div class="press-item">
+          <div class="src">iF DESIGN AWARD 2026</div>
+          <p>“评委会评语：<b>以极简双色系统与精密制造</b>，重新定义了消费电子的精品表达。”</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MEMBERSHIP / SERVICE ══════════════════ -->
+<section class="section service" id="service">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-index reveal">05 / VOLTA+ MEMBERSHIP</div>
+        <h2 class="section-title reveal">服务，是<em>产品的延续</em>。</h2>
+      </div>
+      <p class="section-desc reveal right">
+        加入 VOLTA+ 会员，获得延保、以旧换新、优先购与专属声学调校服务。
+        每年 ¥199，全系通用。
+      </p>
+    </div>
+
+    <div class="svc-grid">
+      <div class="svc-cell reveal">
+        <div class="si">01</div>
+        <h4>顺丰<em>包邮</em></h4>
+        <p>全场商品全国顺丰免费配送，48 小时内极速发货，支持预约配送与驿站自提。</p>
+        <a class="more" href="#newsletter">配送细则 →</a>
+      </div>
+      <div class="svc-cell reveal">
+        <div class="si">02</div>
+        <h4>30 天<em>无理由</em></h4>
+        <p>不满意随时退换，来回运费由我们承担。拆封、试听、试用过也一样可以退。</p>
+        <a class="more" href="#newsletter">退换政策 →</a>
+      </div>
+      <div class="svc-cell reveal">
+        <div class="si">03</div>
+        <h4>2 年<em>质保</em>延至 4 年</h4>
+        <p>全系产品享 2 年官方质保；VOLTA+ 会员自动延长至 4 年，电池健康低于 80% 免费更换。</p>
+        <a class="more" href="#newsletter">质保范围 →</a>
+      </div>
+      <div class="svc-cell reveal">
+        <div class="si">04</div>
+        <h4>以旧<em>换新</em></h4>
+        <p>旧设备抵扣最高 ¥800，全国 12 家体验店支持现场检测定价，旧机数据免费安全擦除。</p>
+        <a class="more" href="#newsletter">立即估价 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ NEWSLETTER / CTA ══════════════════ -->
+<section class="cta" id="newsletter">
+  <div class="wrap">
+    <div class="k reveal">NEWSLETTER / 每月一封，无广告</div>
+    <h2 class="reveal">新品先知道，<br><em>安静地</em>抵达邮箱。</h2>
+    <p class="reveal">
+      订阅 VOLTA 月报：新品预告、工程师手记、以及只对订阅者开放的优先购资格。
+      我们不发广告，也不把你的邮箱交给任何人。
+    </p>
+    <form class="nl-form reveal" id="nlForm" autocomplete="off">
+      <input type="email" id="nlEmail" placeholder="输入你的邮箱地址 / YOUR EMAIL" required aria-label="邮箱地址">
+      <button type="submit">立即订阅</button>
+    </form>
+    <div class="nl-note" id="nlNote">已有 46,200 人订阅 · 随时可一键退订</div>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="foot-cols">
+      <div class="foot-brand">
+        <div class="fb-mark">VOLTA — 精品数码生活</div>
+        <p>我们相信，好的电子产品不需要被解释，只需要被使用。
+           从声学到电力，VOLTA 用工程的诚意，做好每一件桌面器物。</p>
+        <div class="fb-meta">
+          客服热线 400-820-1958<br>
+          服务时间 09:00 – 22:00（周一至周日）<br>
+          hello@volta-electronics.cn
+        </div>
+      </div>
+      <div class="foot-col">
+        <h5>产品 / PRODUCTS</h5>
+        <a class="w-hover" href="#products">Halo Pro 降噪耳机</a>
+        <a class="w-hover" href="#products">Arc One 桌面音箱</a>
+        <a class="w-hover" href="#products">Beam 65 氮化镓充电器</a>
+        <a class="w-hover" href="#products">Keystroke 68 机械键盘</a>
+        <a class="w-hover" href="#products">Loop Mag 移动电源</a>
+      </div>
+      <div class="foot-col">
+        <h5>服务 / SERVICE</h5>
+        <a class="w-hover" href="#service">配送与运费</a>
+        <a class="w-hover" href="#service">退换货政策</a>
+        <a class="w-hover" href="#service">质保与维修</a>
+        <a class="w-hover" href="#service">以旧换新</a>
+        <a class="w-hover" href="#service">VOLTA+ 会员</a>
+      </div>
+      <div class="foot-col">
+        <h5>关于 / ABOUT</h5>
+        <a class="w-hover" href="#reviews">品牌故事</a>
+        <a class="w-hover" href="#reviews">媒体报道</a>
+        <a class="w-hover" href="#newsletter">加入我们</a>
+        <a class="w-hover" href="#newsletter">线下体验店</a>
+        <a class="w-hover" href="#newsletter">联系合作</a>
+      </div>
+    </div>
+
+    <div class="foot-legal">
+      <span>© 2026 VOLTA ELECTRONICS CO., LTD.</span>
+      <span>沪 ICP 备 2019062188 号</span>
+      <span>隐私政策 · 用户协议 · COOKIES</span>
+    </div>
+  </div>
+
+  <div class="giant-mark" aria-hidden="true">
+    <span>V</span><span>O</span><span>L</span><span>T</span><span>A</span>
+  </div>
+
+  <div class="wrap">
+    <div class="foot-underline">
+      <span>DESIGNED IN SHANGHAI</span>
+      <span>ENGINEERED FOR EVERYDAY</span>
+      <span>EST. 2019</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   VOLTA — vanilla JS
+   1) 滚动入场（html.js 守卫 + 无 IntersectionObserver 兜底）
+   2) 购物袋计数
+   3) Newsletter 提交反馈
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* ---------- 1. Scroll reveal ---------- */
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+
+  function showAll() {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    showAll(); /* 兜底：无 IO 支持时全量显示 */
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+
+    reveals.forEach(function (el) { io.observe(el); });
+
+    /* 兜底：页面加载后仍隐藏的元素（如已处于视口内被遗漏）2s 后全量显示 */
+    window.setTimeout(function () {
+      reveals.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('in');
+      });
+    }, 2000);
+  }
+
+  /* ---------- 2. 购物袋 ---------- */
+  var count = 0;
+  var countEl = document.getElementById('cartCount');
+  var cartBtn = document.getElementById('cartBtn');
+
+  function addToCart() {
+    count += 1;
+    countEl.textContent = String(count);
+    cartBtn.classList.remove('pulse');
+    /* 强制重排以重启动画 */
+    void cartBtn.offsetWidth;
+    cartBtn.classList.add('pulse');
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.p-add:not(:disabled), .p-add-flag'), function (btn) {
+    btn.addEventListener('click', function () {
+      addToCart();
+      var original = btn.getAttribute('data-original') || btn.textContent;
+      btn.setAttribute('data-original', original);
+      btn.textContent = '已加入 ✓';
+      window.setTimeout(function () { btn.textContent = original; }, 1400);
+    });
+  });
+
+  /* ---------- 3. Newsletter ---------- */
+  var form = document.getElementById('nlForm');
+  var note = document.getElementById('nlNote');
+  var email = document.getElementById('nlEmail');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var value = email.value.trim();
+    if (!value) return;
+    note.textContent = '订阅成功 ✓ 确认邮件已发送至 ' + value;
+    note.classList.add('ok');
+    email.value = '';
+  });
+})();
+</script>
+
+</body>
+</html>
