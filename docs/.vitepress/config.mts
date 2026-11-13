@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，229 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，235 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -71,7 +71,7 @@ export default defineConfig({
     // Open Graph（社交分享）
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 229 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 235 个完整页面，纯 HTML+CSS，零依赖。' }],
     ['meta', { property: 'og:url', content: 'http://101.37.166.208:11930' }],
     ['meta', { property: 'og:site_name', content: 'My Design Lib' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -79,14 +79,14 @@ export default defineConfig({
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 229 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 235 个完整页面，纯 HTML+CSS，零依赖。' }],
 
     // Schema.org 结构化数据
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "My Design Lib",
-"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 229 个完整页面",
+"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 235 个完整页面",
       "url": "http://101.37.166.208:11930",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
@@ -101,7 +101,7 @@ export default defineConfig({
 
     // AI 爬虫友好
     ['meta', { name: 'ai-content-type', content: 'design-library' }],
-    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，229个完整页面模板，Design Tokens。可直接复制使用。' }],
+    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，235个完整页面模板，Design Tokens。可直接复制使用。' }],
 
     ['link', { rel: 'stylesheet', href: '/tokens/tokens.css' }],
     ...componentCSS.map(name => [
@@ -262,7 +262,8 @@ export default defineConfig({
             { text: 'Harbor 保险科技', link: '/pages/harbor-insurance' },
             { text: 'LinguaLink 全球本地化平台', link: '/pages/lingua-localization' },
             { text: 'SparkFund 创意众筹平台', link: '/pages/sparkfund-crowdfunding' },
-            { text: 'MARCEL 高定美发沙龙', link: '/pages/marcel-hair-studio' }
+            { text: 'MARCEL 高定美发沙龙', link: '/pages/marcel-hair-studio' },
+            { text: 'ENCORE 演出票务平台', link: '/pages/encore-tickets' }
           ]
         },
         {
@@ -301,7 +302,8 @@ export default defineConfig({
             { text: 'KAIROS 舞蹈编导作品集', link: '/pages/kairos-dance' },
             { text: 'ALTITUDE 山岳探险家作品集', link: '/pages/altitude-expedition' },
             { text: 'FEU 主厨火焰料理作品集', link: '/pages/chef-portfolio' },
-            { text: 'DATUM 数据叙事作品集', link: '/pages/datum-dataviz' }
+            { text: 'DATUM 数据叙事作品集', link: '/pages/datum-dataviz' },
+            { text: 'MATEO SILVA 足球运动员官网', link: '/pages/athlete-portfolio' }
           ]
         },
         {
@@ -497,7 +499,8 @@ export default defineConfig({
             { text: 'Verdant 城市垂直农场', link: '/pages/verdant-farms' },
             { text: 'Verrière 婚礼庄园', link: '/pages/wedding-estate' },
             { text: 'Blue Reef 蓝湾海洋馆', link: '/pages/blue-reef-aquarium' },
-      { text: 'MINILAB 儿童科学探索馆', link: '/pages/minilab-science' }
+            { text: 'MINILAB 儿童科学探索馆', link: '/pages/minilab-science' },
+            { text: 'DRIVEHAUS 精品租车', link: '/pages/drivehaus-rental' }
           ]
         }
       ]

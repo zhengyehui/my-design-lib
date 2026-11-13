@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 232 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 235 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -2134,6 +2134,33 @@ const pages = [
     rating: 9.3,
     description: '艺术拍卖行长页——拍卖跑马灯+超大紧排 Hero（落槌倒计时+blob 遮罩主拍品）+精选拍品网格（6 件内联 SVG 抽象艺术）+墨黑反转 LIVE 竞投区（实时出价流）+竞投流程描边大数字+拍卖日历 hover 反色+私人洽购衬线引言+超大字标页脚，骨白×墨黑+拍卖朱红点缀',
   },
+  {
+    id: 'athlete-portfolio',
+    title: 'MATEO SILVA 足球运动员官网',
+    category: 'portfolio',
+    tags: ['运动员官网', '体育数据', '计分牌跑马灯', '描边数字'],
+    colors: ['#0B1512', '#F4F1E8', '#D8FF3E'],
+    rating: 8.7,
+    description: '足球运动员个人品牌长页——巨型 Anton 紧排标题 + 描边"10"球衣号码水印 + 荧光青柠计分牌跑马灯 + 生涯数据卡与逐赛季进球柱状图 + 签名时刻横滚渐变卡 + 生涯轨迹数据表格 + 场下品牌伙伴 + 明黄 CTA 大块 + 超大描边字标页脚，夜场球场黑 × 看台奶油白',
+  },
+  {
+    id: 'encore-tickets',
+    title: 'ENCORE 演出票务平台',
+    category: 'landing',
+    tags: ['票务平台', '演出娱乐', '撕边票根', '选座图'],
+    colors: ['#120B16', '#FF3D6E', '#FFB03A'],
+    rating: 8.2,
+    description: '演出票务平台落地页——剧场夜紫渐变 Hero + SVG 旋转环绕徽章 + 搜索栏 + 本周热售演出卡网格（CSS 海报渐变封面）+ 撕边电子票根/手机票夹/可视化选座三大体验 + 主题合辑横滑 + 米黄反转数据区 + 明黄场馆入驻区 + 描边字标页脚，夜紫黑 × 舞台品红 × 灯光琥珀',
+  },
+  {
+    id: 'drivehaus-rental',
+    title: 'DRIVEHAUS 精品租车',
+    category: 'industry',
+    tags: ['租车平台', '德式工业精密', '预订表单', 'SVG 车形剪影'],
+    colors: ['#101214', '#F2F0EC', '#FF5C1A'],
+    rating: 8.9,
+    description: '汽车租赁平台长页——德式工业精密排版：巨型 DRIVE. YOUR WAY. 描边混排标题 + 12 列网格底纹 + 拟物预订表单 + SVG 几何车形剪影车队卡 + 01/02/03 描边编号流程 + 保障图标网格 + 会员三档定价 + 城市跑马灯 + 口碑卡 + 巨字 CTA 页脚，沥青黑 × 高能橙',
+  },
 ]
 
 const categories = [
@@ -2191,12 +2218,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 232 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 235 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="232 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="235 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -2205,7 +2232,7 @@ content=\"My Design Lib 页面灵感画廊 — 232 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 232 个完整页面</span>
+      <span>📦 235 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

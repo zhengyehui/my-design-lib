@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENCORE — 演出票务平台</title>
+<meta name="description" content="ENCORE 演出票务平台 —— 全国 480 家场馆的真实票务。音乐节、话剧、livehouse、脱口秀，从抢票到入场都是一流体验。">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ENCORE — 演出票务平台落地页
+   设计语言：剧场夜紫 #120B16 × 舞台品红 #FF3D6E × 灯光琥珀 #FFB03A
+   舞台灯光渐变 Hero + 旋转徽章（SVG textPath）+ 类型化 CSS 海报卡
+   撕边电子票根（radial 打孔）+ 手机票夹 + SVG 选座图
+   交互模式参考：Awwwards SOTD 的滚动入场 / 悬停微交互 / 跑马灯节奏
+   ============================================================ */
+
+:root{
+  --night:    #120B16;
+  --night-2:  #1A1022;
+  --night-3:  #241531;
+  --cream:    #F6F1E9;
+  --cream-dim:#C7BEC9;
+  --magenta:  #FF3D6E;
+  --magenta-deep:#C21F4C;
+  --amber:    #FFB03A;
+  --violet:   #8B5CF6;
+  --line:     rgba(246,241,233,.13);
+  --muted:    rgba(246,241,233,.55);
+  --display: 'Unbounded', 'PingFang SC', sans-serif;
+  --sans: 'Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--night);
+  color:var(--cream);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{ background:var(--magenta); color:var(--cream); }
+a{ color:inherit; text-decoration:none; }
+
+.wrap{ width:min(1240px, 92vw); margin:0 auto; }
+
+/* 颗粒质感 */
+body::after{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:60;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  opacity:.05; mix-blend-mode:overlay;
+}
+
+/* ── 导航 ─────────────────────────────── */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.15rem min(4vw, 3rem);
+  transition:background .4s var(--ease), padding .4s var(--ease), border-color .4s;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(18,11,22,.9);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-bottom-color:var(--line);
+  padding:.75rem min(4vw, 3rem);
+}
+.logo{
+  display:flex; align-items:center; gap:.6rem;
+  font-family:var(--display); font-weight:800; font-size:1.18rem; letter-spacing:.06em;
+}
+.logo .pulse{
+  width:.65rem; height:.65rem; border-radius:50%; background:var(--magenta);
+  box-shadow:0 0 0 0 rgba(255,61,110,.7); animation:pulse 2.2s infinite;
+}
+@keyframes pulse{
+  0%{ box-shadow:0 0 0 0 rgba(255,61,110,.6); }
+  75%{ box-shadow:0 0 0 12px rgba(255,61,110,0); }
+  100%{ box-shadow:0 0 0 0 rgba(255,61,110,0); }
+}
+.nav-links{ display:flex; gap:2.15rem; align-items:center; }
+.nav-links a{
+  font-size:.84rem; font-weight:600; letter-spacing:.06em; color:var(--cream-dim);
+  position:relative; transition:color .3s;
+}
+.nav-links a::after{
+  content:''; position:absolute; left:0; bottom:-4px; height:2px; width:0;
+  background:var(--amber); transition:width .35s var(--ease);
+}
+.nav-links a:hover{ color:var(--cream); }
+.nav-links a:hover::after{ width:100%; }
+.nav-cta{
+  font-family:var(--display); font-size:.82rem; font-weight:600; letter-spacing:.04em;
+  padding:.72rem 1.5rem; border-radius:999px; background:var(--cream); color:var(--night);
+  transition:transform .3s var(--ease), background .3s;
+}
+.nav-cta:hover{ transform:translateY(-2px); background:var(--amber); }
+
+/* ── HERO ─────────────────────────────── */
+.hero{
+  position:relative; overflow:hidden;
+  padding:10.5rem 0 4.5rem;
+}
+.hero-lights{ position:absolute; inset:0; pointer-events:none; }
+.hero-lights .glow{
+  position:absolute; border-radius:50%; filter:blur(70px); opacity:.55;
+  animation:drift 16s var(--ease) infinite alternate;
+}
+.glow-a{ width:52vw; height:52vw; left:-14vw; top:-20vw; background:radial-gradient(circle, rgba(255,61,110,.5), transparent 65%); }
+.glow-b{ width:44vw; height:44vw; right:-12vw; top:-6vw; background:radial-gradient(circle, rgba(255,176,58,.4), transparent 65%); animation-delay:-6s; }
+.glow-c{ width:38vw; height:38vw; left:28vw; top:18vw; background:radial-gradient(circle, rgba(139,92,246,.32), transparent 65%); animation-delay:-11s; }
+@keyframes drift{
+  from{ transform:translate3d(0,0,0) scale(1); }
+  to{ transform:translate3d(4vw, 3vw, 0) scale(1.12); }
+}
+
+.hero-inner{ position:relative; z-index:2; }
+.hero-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:2.5rem; }
+
+/* 旋转徽章 */
+.badge{
+  position:relative; width:132px; height:132px; flex:0 0 auto;
+}
+.badge svg{ width:100%; height:100%; animation:spin 18s linear infinite; }
+.badge:hover svg{ animation-duration:5s; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+.badge .core{
+  position:absolute; inset:0; display:grid; place-items:center;
+}
+.badge .core span{
+  width:52px; height:52px; border-radius:50%;
+  background:var(--magenta); display:grid; place-items:center;
+  font-family:var(--display); font-size:1.35rem; color:var(--cream);
+  box-shadow:0 8px 30px rgba(255,61,110,.45);
+}
+
+.hero h1{
+  font-family:var(--display); font-weight:800;
+  font-size:clamp(2.9rem, 8.4vw, 7.6rem);
+  line-height:1.02; letter-spacing:.005em;
+}
+.hero h1 .accent{
+  background:linear-gradient(92deg, var(--magenta), var(--amber));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero h1 .outline{
+  color:transparent; -webkit-text-stroke:2px var(--cream);
+}
+.hero-sub{
+  margin-top:1.9rem; max-width:34rem; color:var(--cream-dim);
+  font-size:1.12rem; line-height:1.95;
+}
+
+/* 检索条 */
+.search-bar{
+  margin-top:2.6rem; display:flex; align-items:center; gap:.75rem; flex-wrap:wrap;
+  background:rgba(246,241,233,.07); border:1px solid var(--line);
+  border-radius:999px; padding:.65rem .75rem .65rem 1.6rem;
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  max-width:660px;
+  transition:border-color .3s, box-shadow .3s;
+}
+.search-bar:focus-within{ border-color:rgba(255,61,110,.65); box-shadow:0 0 0 5px rgba(255,61,110,.14); }
+.search-bar input{
+  flex:1 1 200px; min-width:150px; background:none; border:0; outline:0;
+  color:var(--cream); font-size:1rem; font-family:var(--sans);
+}
+.search-bar input::placeholder{ color:var(--muted); }
+.search-tag{
+  display:flex; align-items:center; gap:.45rem;
+  font-family:var(--mono); font-size:.8rem; letter-spacing:.06em; color:var(--cream-dim);
+  padding:.55rem 1rem; border-radius:999px; border:1px solid var(--line);
+  cursor:pointer; transition:all .3s; white-space:nowrap;
+}
+.search-tag:hover{ border-color:var(--amber); color:var(--amber); }
+.search-go{
+  width:52px; height:52px; border-radius:50%; border:0; cursor:pointer;
+  background:var(--magenta); color:var(--cream); font-size:1.15rem;
+  display:grid; place-items:center;
+  transition:transform .3s var(--ease), background .3s;
+}
+.search-go:hover{ transform:scale(1.08) rotate(-8deg); background:var(--amber); color:var(--night); }
+
+.quick-chips{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1.35rem; }
+.chip{
+  font-size:.85rem; font-weight:600; letter-spacing:.03em;
+  padding:.5rem 1.15rem; border-radius:999px;
+  border:1px solid var(--line); color:var(--cream-dim);
+  cursor:pointer; transition:all .3s var(--ease); background:none; font-family:var(--sans);
+}
+.chip:hover, .chip.active{ background:var(--cream); color:var(--night); border-color:var(--cream); transform:translateY(-2px); }
+
+.hero-mini-stats{
+  display:flex; gap:2.6rem; flex-wrap:wrap; margin-top:3.2rem;
+  font-family:var(--mono); font-size:.82rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+}
+.hero-mini-stats b{
+  display:block; font-family:var(--display); font-size:1.75rem; letter-spacing:.02em;
+  color:var(--cream); margin-bottom:.3rem;
+}
+
+/* ── 跑马灯条 ─────────────────────────── */
+.marquee{
+  background:var(--amber); color:var(--night); overflow:hidden;
+  padding:.95rem 0; margin-top:4.6rem;
+  transform:rotate(-1.1deg) scale(1.02); position:relative; z-index:3;
+}
+.marquee-track{ display:flex; width:max-content; animation:ticker 30s linear infinite; }
+.marquee:hover .marquee-track{ animation-play-state:paused; }
+.marquee-item{
+  display:flex; align-items:center; gap:1.6rem; padding:0 1.6rem; white-space:nowrap;
+  font-family:var(--display); font-weight:700; font-size:1.05rem; letter-spacing:.05em; text-transform:uppercase;
+}
+.marquee-item .st{ color:var(--magenta-deep); font-size:.85rem; }
+@keyframes ticker{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+
+/* ── 章节公共 ─────────────────────────── */
+section{ position:relative; }
+.sec-pad{ padding:7.2rem 0; }
+.sec-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; flex-wrap:wrap; margin-bottom:3.2rem; }
+.sec-label{
+  display:flex; align-items:center; gap:.85rem;
+  font-family:var(--mono); font-size:.78rem; letter-spacing:.26em; text-transform:uppercase; color:var(--amber);
+  margin-bottom:1.15rem;
+}
+.sec-label .bar{ width:2.6rem; height:1px; background:var(--amber); opacity:.6; }
+.sec-title{
+  font-family:var(--display); font-weight:800;
+  font-size:clamp(2.2rem, 5vw, 4.15rem); line-height:1.08; letter-spacing:.005em;
+}
+.sec-title .accent{ color:var(--magenta); }
+.sec-link{
+  display:inline-flex; align-items:center; gap:.65rem;
+  font-family:var(--mono); font-size:.82rem; letter-spacing:.16em; text-transform:uppercase; color:var(--cream-dim);
+  border-bottom:1px solid var(--line); padding-bottom:.55rem; transition:color .3s, border-color .3s;
+}
+.sec-link:hover{ color:var(--amber); border-color:var(--amber); }
+.sec-link .arrow{ transition:transform .3s var(--ease); }
+.sec-link:hover .arrow{ transform:translateX(5px); }
+
+/* ── 演出卡片网格 ─────────────────────── */
+.shows-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:1.65rem;
+}
+.show{
+  border:1px solid var(--line); border-radius:18px; overflow:hidden;
+  background:var(--night-2); position:relative;
+  transition:transform .45s var(--ease), border-color .45s, box-shadow .45s;
+}
+.show:hover{
+  transform:translateY(-10px);
+  border-color:rgba(255,61,110,.5);
+  box-shadow:0 26px 60px -22px rgba(255,61,110,.35);
+}
+.show.hide{ display:none; }
+.show-poster{
+  height:230px; position:relative; overflow:hidden;
+  display:flex; flex-direction:column; justify-content:space-between; padding:1.25rem;
+}
+.show-poster .genre{
+  align-self:flex-start;
+  font-family:var(--mono); font-size:.7rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+  padding:.42rem .95rem; border-radius:999px;
+  background:rgba(18,11,22,.5); border:1px solid rgba(246,241,233,.3);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+}
+.show-poster .date-ghost{
+  position:absolute; right:.9rem; bottom:.4rem;
+  font-family:var(--display); font-size:4.3rem; line-height:1; font-weight:900;
+  color:transparent; -webkit-text-stroke:1.6px rgba(246,241,233,.4);
+  pointer-events:none;
+}
+.show-poster .headline{
+  font-family:var(--display); font-weight:800; font-size:1.62rem; line-height:1.18;
+  text-shadow:0 6px 26px rgba(0,0,0,.35); position:relative; z-index:1;
+}
+/* 六种纯 CSS 海报 */
+.p1{ background:
+  radial-gradient(120% 100% at 12% 8%, rgba(255,176,58,.85), transparent 52%),
+  radial-gradient(110% 110% at 88% 92%, rgba(255,61,110,.8), transparent 55%),
+  linear-gradient(160deg, #3A1B4D, #120B16); }
+.p1::before{ content:''; position:absolute; inset:0;
+  background:repeating-linear-gradient(115deg, transparent 0 18px, rgba(246,241,233,.09) 18px 20px); }
+.p2{ background:
+  radial-gradient(130% 90% at 80% 12%, rgba(255,61,110,.75), transparent 55%),
+  linear-gradient(200deg, #4A1226, #120B16 72%); }
+.p2::before{ content:''; position:absolute; inset:0;
+  background:repeating-radial-gradient(circle at 82% 16%, transparent 0 30px, rgba(246,241,233,.12) 30px 32px); }
+.p3{ background:
+  linear-gradient(120deg, rgba(139,92,246,.95) 0 42%, rgba(18,11,22,0) 42.5%),
+  linear-gradient(300deg, rgba(255,61,110,.65), transparent 60%), #120B16; }
+.p3::before{ content:''; position:absolute; right:-46px; top:-46px; width:190px; height:190px;
+  border:2px solid rgba(246,241,233,.35); border-radius:50%; }
+.p4{ background:
+  conic-gradient(from 205deg at 74% 30%, #FFB03A 0deg, rgba(255,176,58,0) 120deg, rgba(255,61,110,.7) 220deg, rgba(255,61,110,0) 330deg, #FFB03A 360deg),
+  #120B16; }
+.p4::before{ content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(18,11,22,.82), transparent 58%); }
+.p5{ background:
+  linear-gradient(180deg, rgba(122,214,255,.75), rgba(139,92,246,.5) 55%, #120B16); }
+.p5::before{ content:''; position:absolute; inset:0;
+  background:
+  radial-gradient(closest-side, rgba(246,241,233,.5), transparent) 16% 28%/130px 130px no-repeat,
+  radial-gradient(closest-side, rgba(255,176,58,.55), transparent) 84% 70%/180px 180px no-repeat; }
+.p6{ background:
+  radial-gradient(115% 85% at 20% 88%, rgba(255,176,58,.6), transparent 55%),
+  linear-gradient(155deg, #232747, #120B16 70%); }
+.p6::before{ content:''; position:absolute; inset:0;
+  background:repeating-linear-gradient(-20deg, transparent 0 26px, rgba(246,241,233,.1) 26px 28px); }
+
+.show-body{ padding:1.45rem 1.5rem 1.6rem; }
+.show-body h3{ font-family:var(--display); font-weight:600; font-size:1.12rem; line-height:1.45; letter-spacing:.01em; }
+.show-body .where{
+  margin-top:.7rem; display:flex; align-items:center; gap:.55rem;
+  color:var(--muted); font-size:.9rem;
+}
+.show-body .where .pin{ color:var(--magenta); }
+.show-foot{
+  margin-top:1.25rem; padding-top:1.1rem; border-top:1px solid var(--line);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.show-foot .price{ font-family:var(--display); font-weight:700; font-size:1.22rem; color:var(--amber); }
+.show-foot .price small{ font-family:var(--sans); font-size:.78rem; font-weight:500; color:var(--muted); margin-left:.35rem; }
+.buy-btn{
+  font-family:var(--display); font-size:.82rem; font-weight:600; letter-spacing:.03em;
+  padding:.62rem 1.35rem; border-radius:999px; border:1px solid var(--cream);
+  background:none; color:var(--cream); cursor:pointer;
+  transition:all .3s var(--ease);
+}
+.show:hover .buy-btn{ background:var(--magenta); border-color:var(--magenta); }
+.buy-btn:hover{ background:var(--amber) !important; border-color:var(--amber) !important; color:var(--night); transform:scale(1.05); }
+
+/* ── 票务体验 ─────────────────────────── */
+.exp{ background:var(--night-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.exp-grid{ display:grid; grid-template-columns:1.15fr .9fr 1fr; gap:1.65rem; align-items:stretch; }
+.exp-card{
+  border:1px solid var(--line); border-radius:18px; padding:2.15rem 1.9rem;
+  background:var(--night); position:relative; overflow:hidden;
+  transition:border-color .4s;
+}
+.exp-card:hover{ border-color:rgba(255,176,58,.5); }
+.exp-card h3{ font-family:var(--display); font-weight:700; font-size:1.32rem; line-height:1.35; }
+.exp-card p{ margin-top:.85rem; color:var(--muted); font-size:.95rem; line-height:1.85; }
+
+/* 撕边票根 */
+.ticket{
+  margin-top:1.75rem; border-radius:14px; overflow:hidden; position:relative;
+  background:linear-gradient(115deg, var(--cream) 0 61%, rgba(246,241,233,.86));
+  color:var(--night); transform:rotate(-1.6deg);
+  transition:transform .4s var(--ease);
+}
+.exp-card:hover .ticket{ transform:rotate(0deg) translateY(-5px); }
+.ticket::before, .ticket::after{
+  content:''; position:absolute; left:calc(61% - 12px); width:24px; height:24px;
+  background:var(--night); border-radius:50%;
+}
+.ticket::before{ top:-12px; }
+.ticket::after{ bottom:-12px; }
+.ticket-main{ padding:1.35rem 1.5rem 1.25rem; width:61%; }
+.ticket-main .t-tag{
+  display:inline-block; font-family:var(--mono); font-size:.68rem; font-weight:700;
+  letter-spacing:.22em; text-transform:uppercase;
+  background:var(--magenta); color:var(--cream); padding:.32rem .8rem; border-radius:999px;
+}
+.ticket-main h4{ margin-top:.85rem; font-family:var(--display); font-size:1.28rem; line-height:1.3; }
+.ticket-main .t-meta{ margin-top:.75rem; font-family:var(--mono); font-size:.8rem; line-height:1.9; opacity:.72; }
+.ticket-side{
+  position:absolute; right:0; top:0; bottom:0; width:39%;
+  display:flex; flex-direction:column; justify-content:space-between; align-items:flex-end;
+  padding:1.25rem 1.25rem 1.15rem;
+}
+.barcode{ display:flex; gap:2.6px; height:64px; align-items:stretch; }
+.barcode i{ width:3px; background:var(--night); border-radius:1px; }
+.barcode i:nth-child(3n){ width:2px; opacity:.85; }
+.barcode i:nth-child(4n){ height:78%; align-self:flex-end; }
+.barcode i:nth-child(5n){ width:5px; }
+.ticket-side .seat{ font-family:var(--display); font-size:1.02rem; letter-spacing:.05em; text-align:right; }
+.ticket-side .seat small{ display:block; font-family:var(--mono); font-size:.68rem; letter-spacing:.2em; opacity:.6; margin-top:.25rem; }
+
+/* 手机票夹 */
+.phone{
+  margin:1.75rem auto 0; width:225px; border-radius:32px; padding:.72rem;
+  background:linear-gradient(165deg, #352143, #1B1022);
+  border:1px solid rgba(246,241,233,.22);
+  box-shadow:0 32px 70px -28px rgba(139,92,246,.5);
+  transition:transform .5s var(--ease);
+}
+.exp-card:hover .phone{ transform:translateY(-8px) rotate(1.4deg); }
+.phone-screen{
+  border-radius:25px; overflow:hidden; background:#0D0813; padding:.95rem .85rem 1.15rem;
+}
+.phone-notch{ width:82px; height:18px; border-radius:999px; background:#241531; margin:0 auto .85rem; }
+.phone-title{ font-family:var(--display); font-size:.92rem; letter-spacing:.03em; }
+.phone-title span{ color:var(--amber); }
+.p-ticket{
+  margin-top:.75rem; border-radius:12px; padding:.72rem .82rem;
+  background:rgba(246,241,233,.07); border:1px solid var(--line);
+  display:flex; align-items:center; gap:.72rem;
+  transition:background .3s;
+}
+.p-ticket:hover{ background:rgba(255,61,110,.16); }
+.p-ticket .swatch{ width:38px; height:38px; border-radius:9px; flex:0 0 auto; }
+.p-ticket .s1{ background:linear-gradient(135deg, #FF3D6E, #FFB03A); }
+.p-ticket .s2{ background:linear-gradient(135deg, #8B5CF6, #FF3D6E); }
+.p-ticket .s3{ background:linear-gradient(135deg, #FFB03A, #7AD6FF); }
+.p-ticket .info b{ display:block; font-size:.82rem; font-weight:700; }
+.p-ticket .info span{ font-family:var(--mono); font-size:.68rem; color:var(--muted); letter-spacing:.08em; }
+.p-ticket .go{ margin-left:auto; color:var(--muted); font-size:.85rem; }
+
+/* SVG 选座图 */
+.seatmap{ margin-top:1.75rem; border:1px solid var(--line); border-radius:14px; padding:1.35rem 1.15rem 1.15rem; background:rgba(246,241,233,.03); }
+.seatmap svg{ width:100%; height:auto; display:block; }
+.seat-legend{
+  display:flex; gap:1.05rem; flex-wrap:wrap; margin-top:1.15rem;
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+}
+.seat-legend i{ width:.72rem; height:.72rem; border-radius:3px; display:inline-block; margin-right:.42rem; }
+
+.exp-bullets{ display:flex; gap:.55rem; flex-wrap:wrap; margin-top:1.55rem; }
+.exp-bullets span{
+  font-family:var(--mono); font-size:.74rem; letter-spacing:.12em; text-transform:uppercase;
+  padding:.45rem .95rem; border-radius:999px; border:1px solid var(--line); color:var(--cream-dim);
+}
+
+/* ── 主题合辑 ─────────────────────────── */
+.collections-track{
+  display:flex; gap:1.55rem; overflow-x:auto; padding:.55rem .25rem 1.9rem;
+  scroll-snap-type:x mandatory; scrollbar-width:none;
+}
+.collections-track::-webkit-scrollbar{ display:none; }
+.collection{
+  flex:0 0 min(340px, 78vw); scroll-snap-align:start;
+  border-radius:20px; overflow:hidden; position:relative; height:360px;
+  display:flex; flex-direction:column; justify-content:flex-end; padding:1.75rem;
+  transition:transform .45s var(--ease);
+}
+.collection:hover{ transform:translateY(-8px) scale(1.015); }
+.collection .c-tag{
+  position:absolute; top:1.35rem; left:1.35rem;
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+  padding:.45rem 1rem; border-radius:999px; background:rgba(18,11,22,.45);
+  border:1px solid rgba(246,241,233,.3); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+}
+.collection .c-count{
+  position:absolute; top:1.3rem; right:1.45rem;
+  font-family:var(--display); font-size:1.75rem; font-weight:800;
+  color:transparent; -webkit-text-stroke:1.3px rgba(246,241,233,.55);
+}
+.collection h3{ font-family:var(--display); font-weight:700; font-size:1.55rem; line-height:1.25; text-shadow:0 6px 24px rgba(0,0,0,.35); }
+.collection p{ margin-top:.6rem; font-size:.92rem; color:rgba(246,241,233,.82); }
+.c1{ background:radial-gradient(130% 100% at 15% 10%, rgba(255,176,58,.9), transparent 55%), linear-gradient(190deg, #B3355F, #241531); }
+.c2{ background:radial-gradient(120% 100% at 85% 15%, rgba(139,92,246,.85), transparent 58%), linear-gradient(170deg, #3C2A6B, #120B16); }
+.c3{ background:radial-gradient(135% 95% at 20% 90%, rgba(122,214,255,.8), transparent 55%), linear-gradient(160deg, #17506B, #120B16); }
+.c4{ background:radial-gradient(125% 100% at 80% 85%, rgba(255,61,110,.85), transparent 55%), linear-gradient(150deg, #6E1F3C, #120B16); }
+
+/* ── 数据带 ─────────────────────────── */
+.numbers{ background:var(--cream); color:var(--night); }
+.numbers .sec-label{ color:var(--magenta-deep); }
+.numbers .sec-label .bar{ background:var(--magenta-deep); }
+.numbers .sec-title .accent{ color:var(--magenta-deep); }
+.num-grid{
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:0;
+  border:1px solid rgba(18,11,22,.16);
+}
+.num-cell{
+  padding:2.85rem 2.15rem; border-right:1px solid rgba(18,11,22,.16);
+  position:relative; overflow:hidden; transition:background .35s;
+}
+.num-cell:last-child{ border-right:0; }
+.num-cell:hover{ background:rgba(255,61,110,.08); }
+.num-cell .v{
+  font-family:var(--display); font-weight:800; font-size:clamp(2.5rem, 4.6vw, 3.9rem);
+  line-height:1; letter-spacing:.01em;
+}
+.num-cell:hover .v{ color:var(--magenta-deep); transition:color .3s; }
+.num-cell .v small{ font-size:.45em; margin-left:.18em; }
+.num-cell .k{ margin-top:.85rem; font-family:var(--mono); font-size:.78rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(18,11,22,.55); }
+
+/* ── 场馆入驻 ─────────────────────────── */
+.join{
+  background:linear-gradient(105deg, var(--amber) 0 58%, #FFC667);
+  color:var(--night); overflow:hidden; position:relative;
+}
+.join::after{
+  content:'ENCORE'; position:absolute; right:-2rem; bottom:-2.6rem;
+  font-family:var(--display); font-weight:900; font-size:clamp(5rem, 14vw, 11rem);
+  color:transparent; -webkit-text-stroke:2px rgba(18,11,22,.16); letter-spacing:.02em;
+  pointer-events:none; white-space:nowrap;
+}
+.join-inner{
+  display:grid; grid-template-columns:1.2fr .8fr; gap:3.2rem; align-items:center;
+  padding:6rem 0; position:relative; z-index:1;
+}
+.join h2{
+  font-family:var(--display); font-weight:800;
+  font-size:clamp(2.25rem, 4.8vw, 3.9rem); line-height:1.12; letter-spacing:.005em;
+}
+.join p{ margin-top:1.35rem; font-size:1.08rem; line-height:1.95; max-width:33rem; opacity:.85; }
+.join-list{ display:grid; gap:.95rem; }
+.join-list li{
+  list-style:none; display:flex; align-items:center; gap:1rem;
+  padding:1.15rem 1.35rem; border-radius:14px;
+  background:rgba(18,11,22,.07); border:1px solid rgba(18,11,22,.12);
+  font-weight:600; font-size:1.02rem;
+  transition:transform .3s var(--ease), background .3s;
+}
+.join-list li:hover{ transform:translateX(8px); background:rgba(18,11,22,.12); }
+.join-list li .idx{ font-family:var(--mono); font-size:.8rem; opacity:.55; letter-spacing:.14em; }
+.join-btn{
+  margin-top:2.1rem; display:inline-flex; align-items:center; gap:.85rem;
+  font-family:var(--display); font-weight:700; font-size:.95rem; letter-spacing:.03em;
+  padding:1.15rem 2.35rem; border-radius:999px;
+  background:var(--night); color:var(--cream); border:0; cursor:pointer;
+  transition:transform .3s var(--ease), box-shadow .3s;
+}
+.join-btn:hover{ transform:translateY(-3px); box-shadow:0 18px 42px -14px rgba(18,11,22,.55); }
+
+/* ── 页脚 ─────────────────────────────── */
+.footer{ background:var(--night); padding:5.2rem 0 2.6rem; }
+.footer-top{
+  display:grid; grid-template-columns:1.15fr .85fr; gap:3.2rem;
+  padding-bottom:3.2rem; border-bottom:1px solid var(--line);
+}
+.footer h3{ font-family:var(--display); font-weight:700; font-size:1.65rem; line-height:1.4; }
+.newsletter{
+  margin-top:1.45rem; display:flex; gap:.65rem; flex-wrap:wrap; max-width:430px;
+}
+.newsletter input{
+  flex:1 1 210px; padding:.95rem 1.35rem; border-radius:999px;
+  background:rgba(246,241,233,.07); border:1px solid var(--line);
+  color:var(--cream); font-size:.95rem; outline:0; font-family:var(--sans);
+  transition:border-color .3s;
+}
+.newsletter input:focus{ border-color:var(--magenta); }
+.newsletter button{
+  padding:.95rem 1.85rem; border-radius:999px; border:0; cursor:pointer;
+  background:var(--magenta); color:var(--cream); font-weight:700; font-size:.92rem;
+  transition:background .3s, transform .3s var(--ease);
+}
+.newsletter button:hover{ background:var(--amber); color:var(--night); transform:translateY(-2px); }
+.footer-note{ margin-top:.95rem; font-family:var(--mono); font-size:.74rem; letter-spacing:.12em; color:var(--muted); text-transform:uppercase; }
+.footer-links{ display:grid; grid-template-columns:repeat(2, 1fr); gap:2.15rem; }
+.footer-links h4{
+  font-family:var(--mono); font-size:.76rem; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--amber); margin-bottom:1.15rem;
+}
+.footer-links a{ display:block; padding:.34rem 0; color:var(--cream-dim); font-size:.95rem; transition:color .3s, transform .3s var(--ease); }
+.footer-links a:hover{ color:var(--cream); transform:translateX(5px); }
+.footer-word{
+  margin-top:3.2rem; overflow:hidden;
+  font-family:var(--display); font-weight:900;
+  font-size:clamp(3.4rem, 11vw, 10.2rem); line-height:1; letter-spacing:.04em;
+  color:transparent; -webkit-text-stroke:1.6px rgba(246,241,233,.22);
+  white-space:nowrap;
+}
+.footer-row{
+  display:flex; justify-content:space-between; gap:1.5rem; flex-wrap:wrap;
+  margin-top:2.6rem; padding-top:1.75rem; border-top:1px solid var(--line);
+  font-family:var(--mono); font-size:.75rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);
+}
+
+/* ── 入场动画（js 守卫） ──────────────── */
+.js .reveal{ opacity:0; transform:translateY(32px); transition:opacity .85s var(--ease), transform .85s var(--ease); }
+.js .reveal.on{ opacity:1; transform:none; }
+
+/* ── 响应式 ───────────────────────────── */
+@media (max-width: 1020px){
+  .shows-grid{ grid-template-columns:repeat(2, 1fr); }
+  .exp-grid{ grid-template-columns:1fr; }
+  .num-grid{ grid-template-columns:repeat(2, 1fr); }
+  .num-cell:nth-child(2){ border-right:0; }
+  .num-cell:nth-child(-n+2){ border-bottom:1px solid rgba(18,11,22,.16); }
+  .join-inner{ grid-template-columns:1fr; gap:2.4rem; }
+  .footer-top{ grid-template-columns:1fr; }
+}
+@media (max-width: 760px){
+  .nav-links, .nav-cta{ display:none; }
+  .hero{ padding:8.2rem 0 3.2rem; }
+  .hero-top{ flex-direction:column-reverse; align-items:flex-start; }
+  .badge{ width:105px; height:105px; }
+  .shows-grid{ grid-template-columns:1fr; }
+  .num-grid{ grid-template-columns:1fr; }
+  .num-cell{ border-right:0; border-bottom:1px solid rgba(18,11,22,.16); }
+  .sec-pad{ padding:5.1rem 0; }
+  .search-bar{ padding-left:1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- 导航 -->
+<header class="nav" id="nav">
+  <a class="logo" href="#"><span class="pulse"></span>ENCORE</a>
+  <nav class="nav-links">
+    <a href="#shows">热售演出</a>
+    <a href="#exp">票务体验</a>
+    <a href="#collections">主题合辑</a>
+    <a href="#join">场馆入驻</a>
+  </nav>
+  <a class="nav-cta" href="#join">下载 App</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-lights">
+    <div class="glow glow-a"></div>
+    <div class="glow glow-b"></div>
+    <div class="glow glow-c"></div>
+  </div>
+  <div class="wrap hero-inner">
+    <div class="hero-top">
+      <div>
+        <h1>今晚，<br><span class="accent">去现场</span><span class="outline">。</span></h1>
+        <p class="hero-sub">全国 480 家场馆的官方票务伙伴。音乐节、话剧、livehouse、脱口秀 ——
+          真票、实名、秒入场，让每一张票根都值得收藏。</p>
+      </div>
+      <!-- 旋转徽章 -->
+      <div class="badge" aria-hidden="true">
+        <svg viewBox="0 0 132 132">
+          <defs>
+            <path id="circlePath" d="M66,66 m-49,0 a49,49 0 1,1 98,0 a49,49 0 1,1 -98,0"/>
+          </defs>
+          <text fill="#FFB03A" font-family="'JetBrains Mono', monospace" font-size="11.6" letter-spacing="3.2">
+            <textPath href="#circlePath">LIVE · TONIGHT · 去现场 · ENCORE · LIVE · TONIGHT · 去现场 ·</textPath>
+          </text>
+        </svg>
+        <div class="core"><span>▶</span></div>
+      </div>
+    </div>
+
+    <!-- 检索条 -->
+    <div class="search-bar">
+      <input type="text" placeholder="搜索艺人、演出或场馆…" aria-label="搜索演出">
+      <span class="search-tag">⌖ 全城</span>
+      <span class="search-tag">本周末 ▾</span>
+      <button class="search-go" aria-label="搜索">→</button>
+    </div>
+    <div class="quick-chips">
+      <button class="chip active">全部</button>
+      <button class="chip">音乐节</button>
+      <button class="chip">话剧</button>
+      <button class="chip">Livehouse</button>
+      <button class="chip">脱口秀</button>
+      <button class="chip">亲子</button>
+      <button class="chip">音乐会</button>
+    </div>
+
+    <div class="hero-mini-stats">
+      <div><b>328</b>本周场次</div>
+      <div><b>480</b>合作场馆</div>
+      <div><b>320万</b>实名乐迷</div>
+      <div><b>0.08s</b>平均出票</div>
+    </div>
+  </div>
+
+  <!-- 跑马灯 -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack">
+      <div class="marquee-item">浪潮音乐节 2026<span class="st">✦</span></div>
+      <div class="marquee-item">《暗恋桃花源》巡演<span class="st">✦</span></div>
+      <div class="marquee-item">City Pop 复古之夜<span class="st">✦</span></div>
+      <div class="marquee-item">周五说笑·脱口秀城市赛<span class="st">✦</span></div>
+      <div class="marquee-item">午夜爵士沙龙<span class="st">✦</span></div>
+      <div class="marquee-item">亲子光影乐园<span class="st">✦</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 正在热售 -->
+<section class="sec-pad" id="shows">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="sec-label"><span class="bar"></span><span>On Sale Now</span></div>
+        <h2 class="sec-title">本周<span class="accent">热售</span></h2>
+      </div>
+      <a class="sec-link" href="#shows">查看全部 328 场<span class="arrow">→</span></a>
+    </div>
+
+    <div class="shows-grid reveal" id="showsGrid">
+      <article class="show" data-cat="音乐节">
+        <div class="show-poster p1">
+          <span class="genre">音乐节</span>
+          <div class="headline">浪潮音乐节<br>三日通票</div>
+          <span class="date-ghost">06.19</span>
+        </div>
+        <div class="show-body">
+          <h3>浪潮音乐节 2026 · 夏日海岸特别场</h3>
+          <div class="where"><span class="pin">⌖</span>滨海公园 · 三日通票 / 单日票</div>
+          <div class="show-foot">
+            <div class="price">¥580<small>起</small></div>
+            <button class="buy-btn">购票</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="show" data-cat="话剧">
+        <div class="show-poster p2">
+          <span class="genre">话剧</span>
+          <div class="headline">《暗恋<br>桃花源》</div>
+          <span class="date-ghost">06.14</span>
+        </div>
+        <div class="show-body">
+          <h3>经典话剧《暗恋桃花源》三十周年巡演</h3>
+          <div class="where"><span class="pin">⌖</span>城市大剧院 · 歌剧厅</div>
+          <div class="show-foot">
+            <div class="price">¥180<small>起</small></div>
+            <button class="buy-btn">购票</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="show" data-cat="Livehouse">
+        <div class="show-poster p3">
+          <span class="genre">Livehouse</span>
+          <div class="headline">City Pop<br>复古之夜 vol.7</div>
+          <span class="date-ghost">06.13</span>
+        </div>
+        <div class="show-body">
+          <h3>City Pop 复古之夜 vol.7 · 城市巡演</h3>
+          <div class="where"><span class="pin">⌖</span>MAO Livehouse · 站席</div>
+          <div class="show-foot">
+            <div class="price">¥120<small>起</small></div>
+            <button class="buy-btn">购票</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="show" data-cat="脱口秀">
+        <div class="show-poster p4">
+          <span class="genre">脱口秀</span>
+          <div class="headline">「周五说笑」<br>城市赛</div>
+          <span class="date-ghost">06.12</span>
+        </div>
+        <div class="show-body">
+          <h3>「周五说笑」脱口秀城市赛 · 半决赛之夜</h3>
+          <div class="where"><span class="pin">⌖</span>喜剧盒子 · 小剧场</div>
+          <div class="show-foot">
+            <div class="price">¥99<small>起</small></div>
+            <button class="buy-btn">购票</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="show" data-cat="亲子">
+        <div class="show-poster p5">
+          <span class="genre">亲子</span>
+          <div class="headline">亲子<br>光影乐园</div>
+          <span class="date-ghost">06.15</span>
+        </div>
+        <div class="show-body">
+          <h3>亲子光影乐园 · 沉浸式互动特展</h3>
+          <div class="where"><span class="pin">⌖</span>科技馆 · 特展厅</div>
+          <div class="show-foot">
+            <div class="price">¥68<small>起</small></div>
+            <button class="buy-btn">购票</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="show" data-cat="音乐会">
+        <div class="show-poster p6">
+          <span class="genre">音乐会</span>
+          <div class="headline">午夜<br>爵士沙龙</div>
+          <span class="date-ghost">06.16</span>
+        </div>
+        <div class="show-body">
+          <h3>午夜爵士沙龙 · 复古仓库特别场</h3>
+          <div class="where"><span class="pin">⌖</span>Blue Note 旧仓库 · 对坐席</div>
+          <div class="show-foot">
+            <div class="price">¥220<small>起</small></div>
+            <button class="buy-btn">购票</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 票务体验 -->
+<section class="exp sec-pad" id="exp">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="sec-label"><span class="bar"></span><span>Ticket Experience</span></div>
+        <h2 class="sec-title">从抢票到入场，<br><span class="accent">都是一流体验</span></h2>
+      </div>
+      <p class="sec-note" style="max-width:24rem;color:var(--muted);font-size:.98rem;line-height:1.85;">
+        实名电子票根、随时转赠、选座可视化、入场秒过闸 —— 把排队的焦虑留在门外。</p>
+    </div>
+
+    <div class="exp-grid">
+      <!-- 电子票根 -->
+      <div class="exp-card reveal">
+        <h3>电子票根<br>值得收藏</h3>
+        <p>每张票根都是为演出定制的纪念品 —— 开票瞬间生成，支持添加到票夹与钱包。</p>
+        <div class="ticket">
+          <div class="ticket-main">
+            <span class="t-tag">A 区 · 三日通票</span>
+            <h4>浪潮音乐节 2026</h4>
+            <div class="t-meta">
+              06.19—06.21 · 滨海公园<br>
+              GATE 03 · ROW 12 · SEAT 08
+            </div>
+          </div>
+          <div class="ticket-side">
+            <div class="barcode" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="seat">NO. 02688<small>实名 · 已绑定</small></div>
+          </div>
+        </div>
+        <div class="exp-bullets">
+          <span>实名票根</span><span>一键转赠</span><span>离线可用</span>
+        </div>
+      </div>
+
+      <!-- 手机票夹 -->
+      <div class="exp-card reveal">
+        <h3>手机票夹<br>一码同行</h3>
+        <p>所有票券自动归档，开演前 2 小时智能提醒，闸机前亮码即入。</p>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="phone-title">我的票夹 <span>· 3 张待使用</span></div>
+            <div class="p-ticket">
+              <div class="swatch s1"></div>
+              <div class="info"><b>浪潮音乐节</b><span>06.19 · 滨海公园</span></div>
+              <div class="go">›</div>
+            </div>
+            <div class="p-ticket">
+              <div class="swatch s2"></div>
+              <div class="info"><b>暗恋桃花源</b><span>06.14 · 城市大剧院</span></div>
+              <div class="go">›</div>
+            </div>
+            <div class="p-ticket">
+              <div class="swatch s3"></div>
+              <div class="info"><b>午夜爵士沙龙</b><span>06.16 · 旧仓库</span></div>
+              <div class="go">›</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 选座图 -->
+      <div class="exp-card reveal">
+        <h3>可视化选座<br>视野所见即所得</h3>
+        <p>场馆 1:1 座位图，悬停即可预览舞台视野方向，好位置不再靠运气。</p>
+        <div class="seatmap">
+          <svg viewBox="0 0 360 190" aria-label="场馆选座示意图">
+            <!-- 舞台 -->
+            <rect x="90" y="10" width="180" height="26" rx="8" fill="#FF3D6E"/>
+            <text x="180" y="28" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#F6F1E9" letter-spacing="4">STAGE</text>
+            <!-- A 区 -->
+            <g fill="#FFB03A">
+              <rect x="100" y="52" width="16" height="12" rx="3"/><rect x="122" y="52" width="16" height="12" rx="3"/>
+              <rect x="144" y="52" width="16" height="12" rx="3"/><rect x="166" y="52" width="16" height="12" rx="3"/>
+              <rect x="188" y="52" width="16" height="12" rx="3"/><rect x="210" y="52" width="16" height="12" rx="3"/>
+              <rect x="232" y="52" width="16" height="12" rx="3"/>
+              <rect x="100" y="70" width="16" height="12" rx="3"/><rect x="122" y="70" width="16" height="12" rx="3"/>
+              <rect x="144" y="70" width="16" height="12" rx="3"/><rect x="166" y="70" width="16" height="12" rx="3" opacity=".35"/>
+              <rect x="188" y="70" width="16" height="12" rx="3"/><rect x="210" y="70" width="16" height="12" rx="3"/>
+              <rect x="232" y="70" width="16" height="12" rx="3"/>
+            </g>
+            <!-- B 区 -->
+            <g fill="#8B5CF6">
+              <rect x="72" y="94" width="16" height="12" rx="3"/><rect x="94" y="94" width="16" height="12" rx="3"/>
+              <rect x="116" y="94" width="16" height="12" rx="3"/><rect x="138" y="94" width="16" height="12" rx="3" opacity=".35"/>
+              <rect x="160" y="94" width="16" height="12" rx="3"/><rect x="182" y="94" width="16" height="12" rx="3"/>
+              <rect x="204" y="94" width="16" height="12" rx="3"/><rect x="226" y="94" width="16" height="12" rx="3"/>
+              <rect x="248" y="94" width="16" height="12" rx="3"/><rect x="270" y="94" width="16" height="12" rx="3"/>
+            </g>
+            <!-- C 区 -->
+            <g fill="#7AD6FF">
+              <rect x="60" y="118" width="16" height="12" rx="3"/><rect x="82" y="118" width="16" height="12" rx="3"/>
+              <rect x="104" y="118" width="16" height="12" rx="3"/><rect x="126" y="118" width="16" height="12" rx="3"/>
+              <rect x="148" y="118" width="16" height="12" rx="3"/><rect x="170" y="118" width="16" height="12" rx="3"/>
+              <rect x="192" y="118" width="16" height="12" rx="3" opacity=".35"/><rect x="214" y="118" width="16" height="12" rx="3"/>
+              <rect x="236" y="118" width="16" height="12" rx="3"/><rect x="258" y="118" width="16" height="12" rx="3"/>
+              <rect x="280" y="118" width="16" height="12" rx="3"/>
+            </g>
+            <!-- 站席/环廊 -->
+            <rect x="60" y="146" width="240" height="14" rx="7" fill="rgba(246,241,233,.25)"/>
+            <text x="180" y="156.5" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#F6F1E9" letter-spacing="3">GA · 站席环廊</text>
+            <!-- 入口 -->
+            <text x="24" y="103" font-family="'JetBrains Mono', monospace" font-size="9" fill="rgba(246,241,233,.55)">IN</text>
+            <text x="322" y="103" font-family="'JetBrains Mono', monospace" font-size="9" fill="rgba(246,241,233,.55)">IN</text>
+          </svg>
+          <div class="seat-legend">
+            <span><i style="background:#FFB03A"></i>A 区</span>
+            <span><i style="background:#8B5CF6"></i>B 区</span>
+            <span><i style="background:#7AD6FF"></i>C 区</span>
+            <span><i style="background:rgba(246,241,233,.35)"></i>已售</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 主题合辑 -->
+<section class="sec-pad" id="collections">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="sec-label"><span class="bar"></span><span>Curated Collections</span></div>
+        <h2 class="sec-title">主题<span class="accent">合辑</span></h2>
+      </div>
+      <div class="sec-link" style="border:0;cursor:default;">← 横向滑动 →</div>
+    </div>
+    <div class="collections-track reveal">
+      <div class="collection c1">
+        <span class="c-tag">Seasonal</span><span class="c-count">86</span>
+        <h3>夏夜音乐季</h3>
+        <p>从落日到星光，86 场户外演出接续整个夏天。</p>
+      </div>
+      <div class="collection c2">
+        <span class="c-tag">Theatre</span><span class="c-count">42</span>
+        <h3>城市话剧周</h3>
+        <p>经典复排与新锐首演，小剧场的黄金九十分钟。</p>
+      </div>
+      <div class="collection c3">
+        <span class="c-tag">Family</span><span class="c-count">27</span>
+        <h3>亲子嘉年华</h3>
+        <p>为孩子设计的第一次现场体验，全场次儿童友好。</p>
+      </div>
+      <div class="collection c4">
+        <span class="c-tag">Late Night</span><span class="c-count">31</span>
+        <h3>午夜声音计划</h3>
+        <p>爵士、电子与实验声响，城市入睡之后的另一面。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 数据带 -->
+<section class="numbers sec-pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="sec-label"><span class="bar"></span><span>By The Numbers</span></div>
+        <h2 class="sec-title">被 <span class="accent">320 万</span>乐迷信任的出票系统</h2>
+      </div>
+    </div>
+    <div class="num-grid reveal">
+      <div class="num-cell">
+        <div class="v"><span data-count="12000">0</span><small>+</small></div>
+        <div class="k">年度场次</div>
+      </div>
+      <div class="num-cell">
+        <div class="v"><span data-count="480">0</span></div>
+        <div class="k">合作场馆</div>
+      </div>
+      <div class="num-cell">
+        <div class="v"><span data-count="320">0</span><small>万</small></div>
+        <div class="k">实名乐迷</div>
+      </div>
+      <div class="num-cell">
+        <div class="v"><span data-count="80">0</span><small>ms</small></div>
+        <div class="k">平均出票延迟</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 场馆入驻 -->
+<section class="join" id="join">
+  <div class="wrap join-inner">
+    <div class="reveal">
+      <h2>你的场馆，<br>值得满座的夜晚</h2>
+      <p>从票版设计、动态定价到现场核销数据看板 —— ENCORE 为剧场、livehouse 与音乐节主办方提供一站式票务基建。</p>
+      <button class="join-btn">申请入驻 <span>→</span></button>
+    </div>
+    <ul class="join-list reveal">
+      <li><span class="idx">01</span>0 门槛接入 · 3 天上线</li>
+      <li><span class="idx">02</span>动态定价与分销联盟</li>
+      <li><span class="idx">03</span>实时上座率数据看板</li>
+      <li><span class="idx">04</span>黄牛风控 · 全链路实名</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <h3>演出不错过，<br>好戏在后头。</h3>
+        <div class="newsletter">
+          <input type="email" placeholder="你的邮箱，接收每周演出精选" aria-label="邮箱订阅">
+          <button>订阅精选</button>
+        </div>
+        <div class="footer-note">每周四发送 · 随时退订 · 128,000+ 订阅读者</div>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h4>发现</h4>
+          <a href="#shows">本周热售</a>
+          <a href="#collections">主题合辑</a>
+          <a href="#">城市指南</a>
+          <a href="#">演出日历</a>
+        </div>
+        <div>
+          <h4>服务</h4>
+          <a href="#exp">票务体验</a>
+          <a href="#join">场馆入驻</a>
+          <a href="#">帮助中心</a>
+          <a href="#">退换票政策</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-word" aria-hidden="true">ENCORE · ENCORE · ENCORE</div>
+    <div class="footer-row">
+      <nav style="display:flex;gap:1.9rem;flex-wrap:wrap;">
+        <a href="#shows">热售演出</a>
+        <a href="#exp">票务体验</a>
+        <a href="#join">场馆入驻</a>
+      </nav>
+      <div>© 2026 ENCORE 票务 · 让每一场都满座</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// 导航滚动态
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// 跑马灯无缝循环
+const mt = document.getElementById('marqueeTrack');
+if (mt) mt.innerHTML += mt.innerHTML;
+
+// 分类筛选（视觉交互）
+const chips = document.querySelectorAll('.chip');
+const shows = document.querySelectorAll('.show');
+chips.forEach((chip) => {
+  chip.addEventListener('click', () => {
+    chips.forEach((c) => c.classList.remove('active'));
+    chip.classList.add('active');
+    const cat = chip.textContent.trim();
+    shows.forEach((s) => {
+      s.classList.toggle('hide', cat !== '全部' && s.dataset.cat !== cat);
+    });
+  });
+});
+
+// 入场动画 + 数字滚动
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    el.classList.add('on');
+    el.querySelectorAll('[data-count]').forEach((n) => {
+      if (n.dataset.done) return;
+      n.dataset.done = '1';
+      const end = parseInt(n.dataset.count, 10);
+      const t0 = performance.now(), dur = 1500;
+      const tick = (t) => {
+        const p = Math.min((t - t0) / dur, 1);
+        n.textContent = (Math.round(end * (1 - Math.pow(1 - p, 3)))).toLocaleString('en-US');
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+    io.unobserve(el);
+  });
+}, { threshold: 0.16 });
+
+document.querySelectorAll('.reveal, .num-grid').forEach((el) => io.observe(el));
+if (!('IntersectionObserver' in window)) {
+  document.querySelectorAll('.reveal').forEach((el) => el.classList.add('on'));
+}
+</script>
+
+</body>
+</html>

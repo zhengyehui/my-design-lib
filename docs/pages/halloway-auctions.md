@@ -31,6 +31,9 @@ pageDetail:
   prev:
     text: VOLTA 精品数码商店
     link: /pages/volta-electronics.html
+  next:
+    text: MATEO SILVA 足球运动员官网
+    link: /pages/athlete-portfolio.html
 ---
 
 <PageDetail />

@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MATEO SILVA — 职业足球运动员官网</title>
+<meta name="description" content="马特奥·席尔瓦 —— 职业足球运动员、前锋、北岸竞技 10 号。职业生涯数据、签名时刻、生涯轨迹与席尔瓦基金会。">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MATEO SILVA — 职业足球运动员个人品牌官网
+   设计语言：夜场球场 #0B1512 × 看台奶油 #F4F1E8
+   荧光青柠 #D8FF3E 计分牌强调 + 焰橙 #FF5B23 点缀
+   超大 Anton 紧排标题 + 描边球衣号码水印 + 计分牌跑马灯
+   致敬 Awwwards SOTD 运动员官网：Hero 肖像排版 / 签名时刻横滚 / 场下篇章
+   ============================================================ */
+
+:root{
+  --pitch:      #0B1512;
+  --pitch-2:    #101F1A;
+  --pitch-3:    #16281F;
+  --cream:      #F4F1E8;
+  --cream-dim:  #C9C6BA;
+  --volt:       #D8FF3E;
+  --flare:      #FF5B23;
+  --line:       rgba(244,241,232,.14);
+  --line-soft:  rgba(244,241,232,.08);
+  --muted:      rgba(244,241,232,.55);
+  --display: 'Anton', 'Arial Narrow', 'PingFang SC', sans-serif;
+  --sans: 'Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--pitch);
+  color:var(--cream);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{ background:var(--volt); color:var(--pitch); }
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+
+.wrap{ width:min(1240px, 92vw); margin:0 auto; }
+
+/* 全局颗粒质感 */
+body::after{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:60;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  opacity:.05; mix-blend-mode:overlay;
+}
+
+/* ── 导航 ─────────────────────────────── */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.1rem min(4vw, 3rem);
+  transition:background .4s var(--ease), padding .4s var(--ease), border-color .4s;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(11,21,18,.88);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom-color:var(--line-soft);
+  padding:.7rem min(4vw, 3rem);
+}
+.logo{
+  display:flex; align-items:center; gap:.55rem;
+  font-family:var(--display); font-size:1.35rem; letter-spacing:.04em;
+}
+.logo .dot{ width:.62rem; height:.62rem; border-radius:50%; background:var(--volt); box-shadow:0 0 12px rgba(216,255,62,.8); }
+.logo .num{ color:var(--volt); }
+.nav-links{ display:flex; gap:2.1rem; align-items:center; }
+.nav-links a{
+  font-size:.82rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--cream-dim); position:relative; padding:.25rem 0;
+  transition:color .3s;
+}
+.nav-links a::after{
+  content:''; position:absolute; left:0; bottom:-2px; height:2px; width:0;
+  background:var(--volt); transition:width .35s var(--ease);
+}
+.nav-links a:hover{ color:var(--cream); }
+.nav-links a:hover::after{ width:100%; }
+.nav-cta{
+  font-size:.8rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+  padding:.65rem 1.35rem; border:1px solid var(--volt); color:var(--volt);
+  position:relative; overflow:hidden; transition:color .35s var(--ease);
+}
+.nav-cta span{ position:relative; z-index:1; }
+.nav-cta::before{
+  content:''; position:absolute; inset:0; background:var(--volt);
+  transform:translateY(101%); transition:transform .35s var(--ease);
+}
+.nav-cta:hover{ color:var(--pitch); }
+.nav-cta:hover::before{ transform:translateY(0); }
+.nav-burger{ display:none; }
+
+/* ── HERO ─────────────────────────────── */
+.hero{
+  position:relative; min-height:100vh;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:8.5rem 0 0; overflow:hidden;
+}
+.hero-lights{ position:absolute; inset:0; pointer-events:none; }
+.hero-lights::before{
+  content:''; position:absolute; top:-32%; left:8%; width:46vw; height:110vh;
+  background:conic-gradient(from 168deg at 50% 0%, transparent 42%, rgba(216,255,62,.14) 50%, transparent 58%);
+  filter:blur(6px);
+}
+.hero-lights::after{
+  content:''; position:absolute; top:-30%; right:2%; width:42vw; height:110vh;
+  background:conic-gradient(from 192deg at 50% 0%, transparent 43%, rgba(244,241,232,.10) 50%, transparent 57%);
+  filter:blur(8px);
+}
+.hero-number{
+  position:absolute; right:-2vw; top:44%; transform:translateY(-50%);
+  font-family:var(--display); font-size:min(46vw, 40rem); line-height:.8;
+  color:transparent; -webkit-text-stroke:2px rgba(244,241,232,.14);
+  letter-spacing:-.03em; pointer-events:none; user-select:none;
+}
+.hero-inner{ position:relative; z-index:2; }
+.hero-eyebrow{
+  display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+  font-family:var(--mono); font-size:.82rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--volt); margin-bottom:1.6rem;
+}
+.hero-eyebrow .bar{ width:3.2rem; height:1px; background:var(--volt); opacity:.7; }
+.hero h1{
+  font-family:var(--display); font-weight:400;
+  font-size:clamp(3.4rem, 11.5vw, 10.2rem);
+  line-height:.92; letter-spacing:.01em; text-transform:uppercase;
+}
+.hero h1 .line2{ display:block; margin-left:.06em; }
+.hero h1 .ghost{
+  color:transparent; -webkit-text-stroke:2px var(--cream);
+  transition:color .5s var(--ease);
+}
+.hero h1:hover .ghost{ color:var(--volt); -webkit-text-stroke-color:var(--volt); }
+.hero-sub{
+  display:flex; gap:2.6rem; flex-wrap:wrap; align-items:flex-end;
+  margin-top:2.2rem;
+}
+.hero-sub p{
+  max-width:34rem; color:var(--cream-dim); font-size:1.06rem; line-height:1.85;
+}
+.hero-sub p strong{ color:var(--cream); font-weight:600; }
+.hero-meta{
+  display:flex; gap:2.4rem; font-family:var(--mono); font-size:.78rem;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
+}
+.hero-meta b{ display:block; color:var(--cream); font-size:1.02rem; letter-spacing:.06em; margin-top:.35rem; font-weight:500; }
+.hero-ctas{ display:flex; gap:1rem; margin-top:2.6rem; flex-wrap:wrap; }
+.btn{
+  display:inline-flex; align-items:center; gap:.75rem;
+  font-weight:700; font-size:.88rem; letter-spacing:.14em; text-transform:uppercase;
+  padding:1.05rem 2.1rem; border:1px solid var(--cream); position:relative; overflow:hidden;
+  transition:color .35s var(--ease), border-color .35s;
+  cursor:pointer; background:none; color:var(--cream); font-family:var(--sans);
+}
+.btn .arrow{ transition:transform .35s var(--ease); }
+.btn:hover .arrow{ transform:translateX(5px); }
+.btn--volt{ background:var(--volt); border-color:var(--volt); color:var(--pitch); }
+.btn--volt::before{
+  content:''; position:absolute; inset:0; background:var(--cream);
+  transform:translateY(101%); transition:transform .35s var(--ease);
+}
+.btn--volt:hover{ color:var(--pitch); border-color:var(--cream); }
+.btn--volt:hover::before{ transform:translateY(0); }
+.btn--volt span, .btn--volt .arrow{ position:relative; z-index:1; }
+.btn--ghost::before{
+  content:''; position:absolute; inset:0; background:var(--cream);
+  transform:scaleX(0); transform-origin:left; transition:transform .35s var(--ease);
+}
+.btn--ghost:hover{ color:var(--pitch); border-color:var(--cream); }
+.btn--ghost:hover::before{ transform:scaleX(1); }
+.btn--ghost span, .btn--ghost .arrow{ position:relative; z-index:1; }
+
+/* 计分牌跑马灯 */
+.ticker{
+  margin-top:4.8rem; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  background:var(--volt); color:var(--pitch); overflow:hidden; position:relative; z-index:3;
+}
+.ticker-track{
+  display:flex; gap:0; width:max-content;
+  animation:ticker 36s linear infinite;
+}
+.ticker:hover .ticker-track{ animation-play-state:paused; }
+.ticker-item{
+  display:flex; align-items:center; gap:1.4rem;
+  padding:.85rem 1.6rem; white-space:nowrap;
+  font-family:var(--mono); font-size:.88rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+}
+.ticker-item .star{ font-size:.7rem; opacity:.55; }
+@keyframes ticker{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+/* ── 章节公共 ─────────────────────────── */
+section{ position:relative; }
+.sec-pad{ padding:7.5rem 0; }
+.sec-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; margin-bottom:3.4rem; flex-wrap:wrap; }
+.sec-label{
+  display:flex; align-items:center; gap:.85rem;
+  font-family:var(--mono); font-size:.78rem; letter-spacing:.26em; text-transform:uppercase; color:var(--volt);
+  margin-bottom:1.15rem;
+}
+.sec-label .idx{ opacity:.55; }
+.sec-label .bar{ width:2.6rem; height:1px; background:var(--volt); opacity:.6; }
+.sec-title{
+  font-family:var(--display); font-weight:400;
+  font-size:clamp(2.3rem, 5.2vw, 4.4rem); line-height:1.02; text-transform:uppercase; letter-spacing:.015em;
+}
+.sec-title .ghost{ color:transparent; -webkit-text-stroke:1.6px var(--cream); }
+.sec-note{ max-width:26rem; color:var(--muted); font-size:.98rem; line-height:1.85; }
+
+/* ── 数据档案 ─────────────────────────── */
+.stats{ background:var(--pitch-2); border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); }
+.stat-grid{
+  display:grid; grid-template-columns:repeat(4, 1fr);
+  border:1px solid var(--line);
+}
+.stat{
+  padding:2.9rem 2.1rem 2.5rem; border-right:1px solid var(--line); position:relative; overflow:hidden;
+  transition:background .4s var(--ease);
+}
+.stat:last-child{ border-right:0; }
+.stat:hover{ background:rgba(216,255,62,.05); }
+.stat .num{
+  font-family:var(--display); font-size:clamp(3rem, 5.6vw, 4.9rem); line-height:.95;
+  letter-spacing:.01em;
+}
+.stat:hover .num{ color:var(--volt); transition:color .35s; }
+.stat .unit{ font-family:var(--sans); font-size:1rem; font-weight:600; color:var(--volt); margin-left:.35rem; letter-spacing:.08em; }
+.stat .name{
+  margin-top:.95rem; font-family:var(--mono); font-size:.8rem;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--muted);
+}
+.stat .bar-abs{ position:absolute; left:0; bottom:0; height:3px; width:100%; background:var(--line-soft); }
+.stat .bar-abs i{ display:block; height:100%; width:0; background:var(--volt); transition:width 1.2s var(--ease); }
+.stat.on .bar-abs i{ width:var(--w, 70%); }
+
+.season-chart{ margin-top:3.2rem; border:1px solid var(--line); padding:2.4rem 2.2rem 1.8rem; }
+.season-chart h3{
+  font-family:var(--mono); font-size:.8rem; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:2rem;
+}
+.bars{ display:flex; align-items:flex-end; gap:clamp(.5rem, 1.6vw, 1.35rem); height:200px; }
+.bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; gap:.8rem; height:100%; justify-content:flex-end; }
+.bar-col .bar{
+  width:100%; max-width:72px; height:0; background:linear-gradient(180deg, var(--volt), rgba(216,255,62,.25));
+  transition:height 1.1s var(--ease); position:relative;
+}
+.bar-col .bar::before{
+  content:attr(data-g); position:absolute; top:-1.75rem; left:50%; transform:translateX(-50%);
+  font-family:var(--mono); font-size:.78rem; color:var(--cream); font-weight:700;
+  opacity:0; transition:opacity .5s .8s;
+}
+.bars.on .bar::before{ opacity:1; }
+.bar-col:hover .bar{ background:var(--flare); }
+.bar-col .yr{ font-family:var(--mono); font-size:.72rem; color:var(--muted); letter-spacing:.12em; }
+
+/* ── 签名时刻（横向滚动） ─────────────── */
+.moments{ background:var(--pitch); }
+.moments-track{
+  display:flex; gap:1.5rem; overflow-x:auto; padding:.6rem .2rem 2.2rem;
+  scroll-snap-type:x mandatory; scrollbar-width:none;
+}
+.moments-track::-webkit-scrollbar{ display:none; }
+.moment{
+  flex:0 0 min(420px, 82vw); scroll-snap-align:start;
+  border:1px solid var(--line); position:relative; overflow:hidden;
+  transition:transform .45s var(--ease), border-color .45s;
+  background:var(--pitch-2);
+}
+.moment:hover{ transform:translateY(-8px); border-color:rgba(216,255,62,.5); }
+.moment-art{
+  height:270px; position:relative; overflow:hidden;
+  display:flex; align-items:flex-end; padding:1.35rem;
+}
+.moment-art .minute{
+  font-family:var(--display); font-size:clamp(3.4rem, 7vw, 5.4rem); line-height:.85;
+  text-shadow:0 6px 30px rgba(0,0,0,.35);
+}
+.moment-art .tag{
+  position:absolute; top:1.15rem; left:1.15rem;
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.22em; text-transform:uppercase;
+  background:rgba(11,21,18,.55); backdrop-filter:blur(6px);
+  padding:.42rem .85rem; border:1px solid rgba(244,241,232,.25);
+}
+/* 六种纯 CSS 海报肌理 */
+.m1{ background:linear-gradient(140deg, #274234 0%, #0B1512 70%), radial-gradient(circle at 80% 12%, rgba(216,255,62,.5), transparent 45%); background-blend-mode:screen; }
+.m1::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(105deg, transparent 0 12px, rgba(244,241,232,.07) 12px 13px); }
+.m2{ background:radial-gradient(120% 90% at 18% 10%, rgba(255,91,35,.85), transparent 55%), linear-gradient(160deg, #1B2B22, #0B1512); }
+.m2::before{ content:''; position:absolute; inset:0; background:repeating-radial-gradient(circle at 22% 18%, transparent 0 26px, rgba(244,241,232,.1) 26px 27px); }
+.m3{ background:linear-gradient(120deg, rgba(216,255,62,.9) 0%, rgba(216,255,62,.15) 46%, #0B1512 46.2%); }
+.m3::before{ content:''; position:absolute; right:-40px; top:-40px; width:220px; height:220px; border:2px solid rgba(11,21,18,.5); border-radius:50%; }
+.m4{ background:linear-gradient(180deg, #12251C 0%, #0B1512 100%); }
+.m4::before{ content:''; position:absolute; inset:0; background:
+  linear-gradient(90deg, rgba(244,241,232,.16) 1px, transparent 1px) 0 0/44px 44px,
+  linear-gradient(0deg, rgba(244,241,232,.16) 1px, transparent 1px) 0 0/44px 44px;
+  mask-image:linear-gradient(200deg, #000 30%, transparent 78%); -webkit-mask-image:linear-gradient(200deg, #000 30%, transparent 78%); }
+.m5{ background:conic-gradient(from 210deg at 72% 30%, #FF5B23 0deg, rgba(255,91,35,0) 110deg, rgba(216,255,62,.7) 200deg, rgba(216,255,62,0) 320deg, #FF5B23 360deg); background-color:#0B1512; }
+.m5::before{ content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(11,21,18,.8), transparent 55%); }
+.m6{ background:linear-gradient(200deg, #23392C 0%, #0B1512 65%); }
+.m6::before{ content:''; position:absolute; inset:-20% -10%; background:
+  radial-gradient(closest-side, rgba(216,255,62,.5), transparent) 12% 30%/180px 180px no-repeat,
+  radial-gradient(closest-side, rgba(255,91,35,.45), transparent) 82% 72%/240px 240px no-repeat; }
+.m6::after{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(-18deg, transparent 0 26px, rgba(244,241,232,.08) 26px 28px); }
+
+.moment-body{ padding:1.55rem 1.55rem 1.75rem; }
+.moment-body h3{ font-size:1.22rem; font-weight:700; letter-spacing:.02em; }
+.moment-body p{ margin-top:.65rem; color:var(--muted); font-size:.92rem; line-height:1.8; }
+.moment-body .meta{
+  margin-top:1.15rem; display:flex; justify-content:space-between; align-items:center;
+  font-family:var(--mono); font-size:.74rem; letter-spacing:.18em; text-transform:uppercase; color:var(--cream-dim);
+  border-top:1px solid var(--line-soft); padding-top:.95rem;
+}
+.moment-body .meta em{ font-style:normal; color:var(--volt); }
+
+.scroll-hint{
+  display:flex; align-items:center; gap:.85rem;
+  font-family:var(--mono); font-size:.75rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted);
+}
+.scroll-hint .line{ width:4.5rem; height:1px; background:var(--muted); position:relative; overflow:hidden; }
+.scroll-hint .line::after{
+  content:''; position:absolute; inset:0; background:var(--volt);
+  transform:translateX(-100%); animation:sweep 2.2s var(--ease) infinite;
+}
+@keyframes sweep{ 0%{ transform:translateX(-100%);} 55%{ transform:translateX(100%);} 100%{ transform:translateX(100%);} }
+
+/* ── 生涯轨迹 ─────────────────────────── */
+.career{ background:var(--pitch-2); border-top:1px solid var(--line-soft); }
+.career-table{ border-top:1px solid var(--line); }
+.career-row{
+  display:grid; grid-template-columns:5.5rem 1.3fr 1fr .8fr .8fr 1.6fr;
+  gap:1.2rem; align-items:center;
+  padding:1.45rem 1.25rem; border-bottom:1px solid var(--line-soft);
+  position:relative; transition:background .35s var(--ease), color .35s, padding-left .35s var(--ease);
+  font-size:.95rem;
+}
+.career-row.head{
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--muted); padding:.95rem 1.25rem;
+}
+.career-row:not(.head):hover{ background:var(--volt); color:var(--pitch); padding-left:2.1rem; }
+.career-row:not(.head):hover .c-season, .career-row:not(.head):hover .c-note{ color:var(--pitch); opacity:.75; }
+.career-row .c-season{ font-family:var(--mono); color:var(--muted); font-size:.85rem; letter-spacing:.08em; }
+.career-row .c-club{ font-weight:700; font-size:1.06rem; letter-spacing:.02em; }
+.career-row .c-club small{ display:block; font-weight:400; font-size:.78rem; opacity:.65; letter-spacing:.12em; text-transform:uppercase; margin-top:.15rem; }
+.career-row .c-num{ font-family:var(--mono); font-weight:500; }
+.career-row .c-note{ color:var(--muted); font-size:.88rem; }
+
+/* ── 场下 90 分钟 ─────────────────────── */
+.off{ background:var(--pitch); }
+.off-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:0; border:1px solid var(--line); }
+.off-left{ padding:3.4rem 3rem; border-right:1px solid var(--line); }
+.off-left h3, .off-right h3{
+  font-family:var(--display); font-size:clamp(1.9rem, 3.3vw, 2.9rem);
+  text-transform:uppercase; line-height:1.05; letter-spacing:.02em;
+}
+.off-left p, .off-right p{ color:var(--cream-dim); line-height:1.95; margin-top:1.35rem; font-size:1rem; }
+.partner-marquee{ margin-top:2.4rem; overflow:hidden; border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); }
+.partner-track{ display:flex; width:max-content; animation:ticker 30s linear infinite; }
+.partner-track span{
+  padding:.95rem 1.7rem; white-space:nowrap;
+  font-family:var(--display); font-size:1.55rem; letter-spacing:.06em; text-transform:uppercase;
+  color:transparent; -webkit-text-stroke:1.2px rgba(244,241,232,.5);
+  transition:color .3s;
+}
+.partner-track span:hover{ color:var(--volt); -webkit-text-stroke-color:var(--volt); }
+.partner-track .sep{ -webkit-text-stroke:0; color:var(--flare); font-size:.9rem; display:flex; align-items:center; padding:0 .2rem; }
+
+.off-right{
+  padding:3.4rem 3rem; position:relative; overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 85% 8%, rgba(216,255,62,.12), transparent 55%),
+    var(--pitch-2);
+}
+.foundation-numbers{ display:grid; grid-template-columns:repeat(3, 1fr); gap:1.4rem; margin-top:2.6rem; }
+.fnum .v{
+  font-family:var(--display); font-size:clamp(2.5rem, 4.4vw, 3.7rem); line-height:1;
+  color:transparent; -webkit-text-stroke:1.6px var(--volt);
+}
+.fnum:hover .v{ color:var(--volt); transition:color .35s; }
+.fnum .k{ margin-top:.65rem; font-family:var(--mono); font-size:.74rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+.off-quote{
+  margin-top:2.7rem; padding:1.6rem 1.7rem; border-left:3px solid var(--flare);
+  background:rgba(255,91,35,.07);
+  font-size:1.06rem; line-height:1.9; color:var(--cream); font-style:italic;
+}
+.off-quote cite{ display:block; margin-top:.85rem; font-style:normal; font-family:var(--mono); font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+
+/* ── CTA 联系 ─────────────────────────── */
+.cta{
+  background:var(--volt); color:var(--pitch);
+  padding:6.2rem 0 5.6rem; position:relative; overflow:hidden;
+}
+.cta::before{
+  content:'10'; position:absolute; right:-1.5rem; top:50%; transform:translateY(-50%);
+  font-family:var(--display); font-size:min(30vw, 22rem); line-height:1;
+  color:transparent; -webkit-text-stroke:2px rgba(11,21,18,.18); pointer-events:none;
+}
+.cta h2{
+  font-family:var(--display); font-size:clamp(2.6rem, 6.4vw, 5.6rem);
+  line-height:.98; text-transform:uppercase; letter-spacing:.015em; max-width:16ch;
+}
+.cta p{ margin-top:1.55rem; max-width:36rem; font-size:1.08rem; line-height:1.9; opacity:.82; }
+.cta-row{ display:flex; gap:2.6rem; flex-wrap:wrap; margin-top:2.8rem; align-items:center; }
+.cta .btn{ border-color:var(--pitch); color:var(--pitch); }
+.cta .btn::before{ background:var(--pitch); }
+.cta .btn:hover{ color:var(--volt); }
+.cta-contact{ font-family:var(--mono); font-size:.85rem; letter-spacing:.14em; text-transform:uppercase; line-height:2.1; }
+.cta-contact b{ border-bottom:1.5px solid var(--pitch); font-weight:500; }
+
+/* ── 页脚 ─────────────────────────────── */
+.footer{ background:var(--pitch); padding:4.2rem 0 2.4rem; border-top:1px solid var(--line-soft); }
+.footer-word{
+  font-family:var(--display); text-transform:uppercase; line-height:.82;
+  font-size:clamp(3.6rem, 12.5vw, 11.5rem); letter-spacing:.015em;
+  display:flex; justify-content:space-between; flex-wrap:nowrap;
+}
+.footer-word span{
+  color:transparent; -webkit-text-stroke:1.6px rgba(244,241,232,.4);
+  transition:color .35s var(--ease), transform .35s var(--ease), -webkit-text-stroke-color .35s;
+  cursor:default;
+}
+.footer-word span:hover{ color:var(--volt); -webkit-text-stroke-color:var(--volt); transform:translateY(-10px); }
+.footer-row{
+  display:flex; justify-content:space-between; align-items:center; gap:1.5rem; flex-wrap:wrap;
+  margin-top:2.8rem; padding-top:1.7rem; border-top:1px solid var(--line-soft);
+  font-family:var(--mono); font-size:.76rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);
+}
+.footer-row nav{ display:flex; gap:1.9rem; flex-wrap:wrap; }
+.footer-row nav a:hover{ color:var(--volt); }
+
+/* ── 入场动画（js 守卫） ──────────────── */
+.js .reveal{ opacity:0; transform:translateY(30px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+.js .reveal.on{ opacity:1; transform:none; }
+
+/* ── 响应式 ───────────────────────────── */
+@media (max-width: 1020px){
+  .stat-grid{ grid-template-columns:repeat(2, 1fr); }
+  .stat:nth-child(2){ border-right:0; }
+  .stat:nth-child(-n+2){ border-bottom:1px solid var(--line); }
+  .off-grid{ grid-template-columns:1fr; }
+  .off-left{ border-right:0; border-bottom:1px solid var(--line); }
+  .career-row{ grid-template-columns:4.2rem 1.2fr .8fr 1.4fr; }
+  .career-row .c-apps, .career-row .c-goals{ display:none; }
+}
+@media (max-width: 760px){
+  .nav-links, .nav-cta{ display:none; }
+  .hero{ padding-top:7rem; }
+  .hero-number{ font-size:56vw; right:-8vw; }
+  .hero-sub{ flex-direction:column; gap:1.6rem; }
+  .hero-meta{ flex-wrap:wrap; gap:1.3rem 2rem; }
+  .stat-grid{ grid-template-columns:1fr 1fr; }
+  .career-row{ grid-template-columns:3.6rem 1fr 1fr; font-size:.88rem; }
+  .career-row .c-note{ display:none; }
+  .foundation-numbers{ grid-template-columns:1fr; gap:1.15rem; }
+  .sec-pad{ padding:5.2rem 0; }
+  .off-left, .off-right{ padding:2.4rem 1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- 导航 -->
+<header class="nav" id="nav">
+  <a class="logo" href="#"><span class="dot"></span>SILVA<span class="num">10</span></a>
+  <nav class="nav-links">
+    <a href="#stats">数据档案</a>
+    <a href="#moments">签名时刻</a>
+    <a href="#career">生涯轨迹</a>
+    <a href="#off">场下 90</a>
+  </nav>
+  <a class="nav-cta" href="#contact"><span>合作邀约</span></a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-lights"></div>
+  <div class="hero-number" aria-hidden="true">10</div>
+  <div class="wrap hero-inner">
+    <div class="hero-eyebrow">
+      <span class="bar"></span>
+      <span>北岸竞技 · 前锋 · 10 号</span>
+      <span class="bar"></span>
+      <span>2026 赛季</span>
+    </div>
+    <h1>
+      MATEO
+      <span class="line2 ghost">SILVA</span>
+    </h1>
+    <div class="hero-sub">
+      <p><strong>马特奥·席尔瓦</strong> —— 用左脚写诗的锋线杀手。从街区球场到冠军领奖台，
+      214 场比赛、127 粒进球，以及一个关于「永远比昨天多跑一步」的信条。</p>
+      <div class="hero-meta">
+        <div>国籍<b>葡萄牙 / 中国</b></div>
+        <div>身高<b>184 CM</b></div>
+        <div>惯用脚<b>左脚</b></div>
+        <div>国家队<b>63 场 / 31 球</b></div>
+      </div>
+    </div>
+    <div class="hero-ctas">
+      <a class="btn btn--volt" href="#moments"><span>观看签名时刻</span><span class="arrow">→</span></a>
+      <a class="btn btn--ghost" href="#contact"><span>合作与代言</span><span class="arrow">→</span></a>
+    </div>
+  </div>
+  <!-- 计分牌跑马灯 -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="tickerTrack">
+      <div class="ticker-item">127 粒进球<span class="star">✦</span></div>
+      <div class="ticker-item">214 次出场<span class="star">✦</span></div>
+      <div class="ticker-item">68 次助攻<span class="star">✦</span></div>
+      <div class="ticker-item">3× 联赛冠军<span class="star">✦</span></div>
+      <div class="ticker-item">2× 赛季金靴<span class="star">✦</span></div>
+      <div class="ticker-item">11 粒决赛进球<span class="star">✦</span></div>
+      <div class="ticker-item">63 次国家队出场<span class="star">✦</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 数据档案 -->
+<section class="stats sec-pad" id="stats">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="sec-label"><span class="idx">01</span><span class="bar"></span><span>Career Numbers</span></div>
+        <h2 class="sec-title">数据<span class="ghost">不会说谎</span></h2>
+      </div>
+      <p class="sec-note">截至 2026 赛季中段的俱乐部生涯官方数据。每一格数字背后，都是加练到熄灯的黄昏。</p>
+    </div>
+
+    <div class="stat-grid reveal">
+      <div class="stat" style="--w:86%">
+        <div class="num"><span data-count="214">0</span></div>
+        <div class="name">Appearances · 出场</div>
+        <div class="bar-abs"><i></i></div>
+      </div>
+      <div class="stat" style="--w:92%">
+        <div class="num"><span data-count="127">0</span><span class="unit">球</span></div>
+        <div class="name">Goals · 进球</div>
+        <div class="bar-abs"><i></i></div>
+      </div>
+      <div class="stat" style="--w:64%">
+        <div class="num"><span data-count="68">0</span></div>
+        <div class="name">Assists · 助攻</div>
+        <div class="bar-abs"><i></i></div>
+      </div>
+      <div class="stat" style="--w:78%">
+        <div class="num"><span data-count="11">0</span></div>
+        <div class="name">Final Goals · 决赛进球</div>
+        <div class="bar-abs"><i></i></div>
+      </div>
+    </div>
+
+    <div class="season-chart reveal">
+      <h3>Season Goals · 逐赛季进球曲线</h3>
+      <div class="bars" id="seasonBars">
+        <div class="bar-col"><div class="bar" data-g="7" data-h="26%"></div><div class="yr">19/20</div></div>
+        <div class="bar-col"><div class="bar" data-g="12" data-h="42%"></div><div class="yr">20/21</div></div>
+        <div class="bar-col"><div class="bar" data-g="16" data-h="55%"></div><div class="yr">21/22</div></div>
+        <div class="bar-col"><div class="bar" data-g="21" data-h="72%"></div><div class="yr">22/23</div></div>
+        <div class="bar-col"><div class="bar" data-g="24" data-h="83%"></div><div class="yr">23/24</div></div>
+        <div class="bar-col"><div class="bar" data-g="19" data-h="66%"></div><div class="yr">24/25</div></div>
+        <div class="bar-col"><div class="bar" data-g="17" data-h="59%"></div><div class="yr">25/26</div></div>
+        <div class="bar-col"><div class="bar" data-g="11" data-h="38%"></div><div class="yr">26/27</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 签名时刻 -->
+<section class="moments sec-pad" id="moments">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="sec-label"><span class="idx">02</span><span class="bar"></span><span>Signature Moments</span></div>
+        <h2 class="sec-title">签名<span class="ghost">时刻</span></h2>
+      </div>
+      <div class="scroll-hint"><span>横向滑动</span><span class="line"></span></div>
+    </div>
+
+    <div class="moments-track reveal">
+      <article class="moment">
+        <div class="moment-art m1"><span class="tag">2023 · 联赛第 27 轮</span><span class="minute">89'</span></div>
+        <div class="moment-body">
+          <h3>雨夜绝杀</h3>
+          <p>0-1 落后，补时第一分钟。禁区外一记落叶弧线，皮球擦着立柱内侧入网。全场 42,000 人陷入寂静，然后是海啸。</p>
+          <div class="meta"><span>北岸竞技 vs 河畔联</span><em>32.4 M 浏览</em></div>
+        </div>
+      </article>
+      <article class="moment">
+        <div class="moment-art m2"><span class="tag">2024 · 杯赛决赛</span><span class="minute">11'</span></div>
+        <div class="moment-body">
+          <h3>开场闪电</h3>
+          <p>决赛第 11 分钟，接直塞球后零度角抽射破门。那一年的杯赛，他 6 场 9 球，把奖杯带回了北岸。</p>
+          <div class="meta"><span>杯赛决赛 · 国家体育场</span><em>MVP</em></div>
+        </div>
+      </article>
+      <article class="moment">
+        <div class="moment-art m3"><span class="tag">2022 · 国家队</span><span class="minute">×3</span></div>
+        <div class="moment-body">
+          <h3>帽子戏法</h3>
+          <p>国家队生涯首个帽子戏法，三个进球三种方式：头球、远射、点球。赛后他说：「献给凌晨五点的街区球场。」</p>
+          <div class="meta"><span>国际邀请赛</span><em>全场最佳</em></div>
+        </div>
+      </article>
+      <article class="moment">
+        <div class="moment-art m4"><span class="tag">2025 · 欧战之夜</span><span class="minute">90+4</span></div>
+        <div class="moment-body">
+          <h3>读秒绝平</h3>
+          <p>客场，伤停补时第 4 分钟，角球混战中抢点破门。这粒进球把球队送进了半决赛，也把客场看台打成了主场。</p>
+          <div class="meta"><span>欧战 1/4 决赛</span><em>赛季最佳进球 Top3</em></div>
+        </div>
+      </article>
+      <article class="moment">
+        <div class="moment-art m5"><span class="tag">2021 · 里程碑</span><span class="minute">50</span></div>
+        <div class="moment-body">
+          <h3>第 50 球</h3>
+          <p>24 岁生日夜攻入俱乐部生涯第 50 球，成为队史最年轻的 50 球先生。北岸看台为他升起了巨型 tifo。</p>
+          <div class="meta"><span>北岸竞技 vs 南港</span><em>队史纪录</em></div>
+        </div>
+      </article>
+      <article class="moment">
+        <div class="moment-art m6"><span class="tag">2026 · 本赛季</span><span class="minute">77'</span></div>
+        <div class="moment-body">
+          <h3>复出之夜</h3>
+          <p>伤停 98 天后替补登场，第一次触球就送出助攻，第七次触球完成破门。医学报告说需要三个月，他用了 42 天。</p>
+          <div class="meta"><span>北岸竞技 vs 海湾城</span><em>复出即主宰</em></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 生涯轨迹 -->
+<section class="career sec-pad" id="career">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="sec-label"><span class="idx">03</span><span class="bar"></span><span>Career Path</span></div>
+        <h2 class="sec-title">生涯<span class="ghost">轨迹</span></h2>
+      </div>
+      <p class="sec-note">从街区青训营到欧战之夜 —— 一条以进球计量的成长曲线。数据为俱乐部官方赛季统计。</p>
+    </div>
+
+    <div class="career-table reveal">
+      <div class="career-row head">
+        <span>赛季</span><span>俱乐部</span><span>联赛</span><span class="c-apps">出场</span><span class="c-goals">进球</span><span>荣誉 / 备注</span>
+      </div>
+      <div class="career-row">
+        <span class="c-season">2026—</span>
+        <span class="c-club">北岸竞技<small>Nord Athletic FC</small></span>
+        <span class="c-num">顶级联赛</span>
+        <span class="c-num c-apps">24</span>
+        <span class="c-num c-goals">17</span>
+        <span class="c-note">赛季进行中 · 队长袖标</span>
+      </div>
+      <div class="career-row">
+        <span class="c-season">2024—25</span>
+        <span class="c-club">北岸竞技<small>Nord Athletic FC</small></span>
+        <span class="c-num">顶级联赛</span>
+        <span class="c-num c-apps">38</span>
+        <span class="c-num c-goals">19</span>
+        <span class="c-note">联赛冠军 · 杯赛冠军</span>
+      </div>
+      <div class="career-row">
+        <span class="c-season">2023—24</span>
+        <span class="c-club">北岸竞技<small>Nord Athletic FC</small></span>
+        <span class="c-num">顶级联赛</span>
+        <span class="c-num c-apps">41</span>
+        <span class="c-num c-goals">24</span>
+        <span class="c-note">赛季金靴 · 最佳阵容</span>
+      </div>
+      <div class="career-row">
+        <span class="c-season">2021—23</span>
+        <span class="c-club">河畔联<small>Riverside United</small></span>
+        <span class="c-num">顶级联赛</span>
+        <span class="c-num c-apps">73</span>
+        <span class="c-num c-goals">46</span>
+        <span class="c-note">联赛冠军 ×2 · 赛季金靴</span>
+      </div>
+      <div class="career-row">
+        <span class="c-season">2019—21</span>
+        <span class="c-club">海角竞技<small>Cabo Atlético</small></span>
+        <span class="c-num">次级联赛</span>
+        <span class="c-num c-apps">38</span>
+        <span class="c-num c-goals">21</span>
+        <span class="c-note">升级附加赛决赛进球</span>
+      </div>
+      <div class="career-row">
+        <span class="c-season">2017—19</span>
+        <span class="c-club">街区青训营<small>Rua Nova Academy</small></span>
+        <span class="c-num">青年梯队</span>
+        <span class="c-num c-apps">—</span>
+        <span class="c-num c-goals">—</span>
+        <span class="c-note">U19 全国锦标赛最佳射手</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 场下 90 分钟 -->
+<section class="off sec-pad" id="off">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="sec-label"><span class="idx">04</span><span class="bar"></span><span>Off The Pitch</span></div>
+        <h2 class="sec-title">场下<span class="ghost">90 分钟</span></h2>
+      </div>
+      <p class="sec-note">球衣之外的 90 分钟，决定他是谁。品牌伙伴、个人风格，以及席尔瓦基金会的第 38 块球场。</p>
+    </div>
+
+    <div class="off-grid reveal">
+      <div class="off-left">
+        <h3>风格与<br>品牌伙伴</h3>
+        <p>从球场到秀场，他相信「自信是最好的装备」。与运动、烈酒、眼镜与咖啡品牌保持着长期而克制的合作关系 —— 每一次联名，都必须留出一部分给社区。</p>
+        <div class="partner-marquee" aria-hidden="true">
+          <div class="partner-track">
+            <span>AURUM SPORT</span><span class="sep">✦</span>
+            <span>NORD COFFEE</span><span class="sep">✦</span>
+            <span>VOLT ENERGY</span><span class="sep">✦</span>
+            <span>MUSE EYEWEAR</span><span class="sep">✦</span>
+            <span>CASA LIMA</span><span class="sep">✦</span>
+            <span>AURUM SPORT</span><span class="sep">✦</span>
+            <span>NORD COFFEE</span><span class="sep">✦</span>
+            <span>VOLT ENERGY</span><span class="sep">✦</span>
+            <span>MUSE EYEWEAR</span><span class="sep">✦</span>
+            <span>CASA LIMA</span><span class="sep">✦</span>
+          </div>
+        </div>
+      </div>
+      <div class="off-right">
+        <h3>席尔瓦<br>基金会</h3>
+        <p>「每个孩子都值得一块能奔跑的草地。」基金会专注青少年足球与教育，在 12 个城市铺设球场、组建联赛、提供奖学金。</p>
+        <div class="foundation-numbers">
+          <div class="fnum"><div class="v">12</div><div class="k">合作学校</div></div>
+          <div class="fnum"><div class="v">4,200</div><div class="k">受益孩子</div></div>
+          <div class="fnum"><div class="v">38</div><div class="k">新建球场</div></div>
+        </div>
+        <blockquote class="off-quote">
+          「我人生中最重要的进球，是在街区球场打进的 —— 那时候连球门网都是破的。」
+          <cite>—— Mateo Silva</cite>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="wrap">
+    <h2>让品牌与<br>10 号同行</h2>
+    <p>代言合作、商业活动、媒体采访与青训公益合作，均由 Silva 10 团队统一接洽。我们通常在 2 个工作日内回复。</p>
+    <div class="cta-row">
+      <a class="btn" href="mailto:booking@silva10.example"><span>booking@silva10.example</span><span class="arrow">→</span></a>
+      <div class="cta-contact">
+        商业合作 <b>+351 900 000 010</b><br>
+        媒体联络 <b>press@silva10.example</b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-word" aria-hidden="true">
+      <span>S</span><span>I</span><span>L</span><span>V</span><span>A</span><span>1</span><span>0</span>
+    </div>
+    <div class="footer-row">
+      <nav>
+        <a href="#stats">数据档案</a>
+        <a href="#moments">签名时刻</a>
+        <a href="#career">生涯轨迹</a>
+        <a href="#off">场下 90</a>
+        <a href="#contact">合作邀约</a>
+      </nav>
+      <div>© 2026 Mateo Silva · SILVA 10 · All rights reserved</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// 导航滚动态
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// 计分牌跑马灯：克隆轨道实现无缝循环
+const track = document.getElementById('tickerTrack');
+if (track) track.innerHTML += track.innerHTML;
+
+// 入场动画 + 数字滚动 + 柱状图生长
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    el.classList.add('on');
+    // 数字滚动
+    el.querySelectorAll('[data-count]').forEach((n) => {
+      if (n.dataset.done) return;
+      n.dataset.done = '1';
+      const end = parseInt(n.dataset.count, 10);
+      const t0 = performance.now(), dur = 1400;
+      const tick = (t) => {
+        const p = Math.min((t - t0) / dur, 1);
+        n.textContent = Math.round(end * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+    // 柱状图
+    el.querySelectorAll('.bar[data-h]').forEach((b, i) => {
+      setTimeout(() => { b.style.height = b.dataset.h; }, i * 110);
+    });
+    io.unobserve(el);
+  });
+}, { threshold: 0.18 });
+
+document.querySelectorAll('.reveal, .stat-grid, .bars, .stat').forEach((el) => io.observe(el));
+// 无 IntersectionObserver 兜底
+if (!('IntersectionObserver' in window)) {
+  document.querySelectorAll('.reveal').forEach((el) => el.classList.add('on'));
+}
+</script>
+
+</body>
+</html>
