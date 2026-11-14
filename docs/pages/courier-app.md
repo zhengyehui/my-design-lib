@@ -33,8 +33,8 @@ pageDetail:
     text: Nexus 数据仪表盘
     link: /pages/dashboard-dark.html
   next:
-    text: KŌDA 运动潮牌商城
-    link: /pages/streetwear-store.html
+    text: MetroPulse 城市出行
+    link: /pages/metro-pulse.html
 ---
 
 <PageDetail />

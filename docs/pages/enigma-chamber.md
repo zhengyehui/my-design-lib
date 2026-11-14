@@ -26,8 +26,8 @@ pageDetail:
   - title: 适用场景
     content: '密室逃脱/剧本杀场馆、沉浸式娱乐预约、游戏化活动页、暗色剧场风品牌站'
   prev:
-    text: 北光纪行 旅行摄影师田野日志
-    link: /pages/northlight-journal.html
+    text: VIBE CHECK 设计人格测评
+    link: /pages/taste-quiz.html
   next:
     text: ALTITUDE 山岳探险家作品集
     link: /pages/altitude-expedition.html

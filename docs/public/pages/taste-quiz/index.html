@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIBE CHECK — 你的设计人格测评</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<style>
+/* ── Reset & Base ──────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream: #f4efe6;
+  --cream-deep: #ebe4d6;
+  --ink: #16130e;
+  --ink-soft: rgba(22,19,14,0.62);
+  --ink-faint: rgba(22,19,14,0.34);
+  --red: #e8442e;
+  --acid: #d8f24a;
+  --blue: #3355e8;
+  --purple: #8b4fe0;
+  --serif: 'Georgia', 'Times New Roman', 'Songti SC', serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── 纸张纹理 ──────────────────────────────────────────── */
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    radial-gradient(rgba(22,19,14,0.045) 1px, transparent 1px);
+  background-size: 5px 5px;
+}
+
+/* ── Top Bar ───────────────────────────────────────────── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.15rem 2.6rem;
+  border-bottom: 2px solid var(--ink);
+  background: var(--cream);
+}
+.wordmark {
+  font-family: var(--serif); font-size: 1.35rem; font-weight: 700;
+  letter-spacing: -.01em; display: flex; align-items: center; gap: .6rem;
+}
+.wordmark .star {
+  display: inline-flex; width: 30px; height: 30px; background: var(--red);
+  color: var(--acid); border-radius: 50%; align-items: center; justify-content: center;
+  font-size: 1.05rem; transform: rotate(-12deg);
+}
+.topbar-meta {
+  font-family: var(--mono); font-size: .74rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+.topbar-cta {
+  background: var(--ink); color: var(--cream); text-decoration: none;
+  padding: .68rem 1.55rem; border-radius: 99px; font-weight: 700; font-size: .88rem;
+  border: 2px solid var(--ink); transition: all .22s;
+}
+.topbar-cta:hover { background: var(--acid); color: var(--ink); transform: rotate(-2deg); }
+
+/* ── Hero ──────────────────────────────────────────────── */
+.hero {
+  position: relative; z-index: 1;
+  padding: 11rem 2.6rem 5.5rem;
+  border-bottom: 2px solid var(--ink);
+  overflow: hidden;
+}
+.hero-stripe {
+  position: absolute; top: 0; bottom: 0; width: 34%;
+  right: -6%; background: var(--acid);
+  transform: skewX(-11deg); border-left: 2px solid var(--ink); border-right: 2px solid var(--ink);
+  z-index: -1;
+}
+.hero-inner { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.25fr .75fr; gap: 3.5rem; align-items: end; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .6rem;
+  font-family: var(--mono); font-size: .78rem; letter-spacing: .18em;
+  text-transform: uppercase; background: var(--ink); color: var(--cream);
+  padding: .48rem 1.05rem; border-radius: 99px; margin-bottom: 1.9rem;
+}
+.eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--acid); animation: blink 1.4s infinite; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(3.2rem, 7.2vw, 6.2rem);
+  line-height: .98; font-weight: 700; letter-spacing: -.03em;
+  margin-bottom: 1.7rem;
+}
+.hero h1 .swash { font-style: italic; color: var(--red); }
+.hero h1 .boxed {
+  background: var(--ink); color: var(--cream); padding: 0 .28em;
+  display: inline-block; transform: rotate(-1.6deg);
+}
+.hero-sub {
+  font-size: 1.18rem; color: var(--ink-soft); max-width: 470px;
+  margin-bottom: 2.5rem; font-family: var(--serif); font-style: italic;
+}
+.hero-actions { display: flex; gap: 1.15rem; align-items: center; flex-wrap: wrap; }
+.btn-big {
+  background: var(--red); color: var(--cream); text-decoration: none;
+  font-weight: 800; font-size: 1.08rem; padding: 1.15rem 2.5rem;
+  border-radius: 99px; border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink); transition: all .18s; cursor: pointer;
+}
+.btn-big:hover { transform: translate(3px,3px); box-shadow: 2px 2px 0 var(--ink); }
+.btn-quiet {
+  color: var(--ink); text-decoration: none; font-weight: 700; font-size: 1rem;
+  border-bottom: 2px solid var(--ink); padding-bottom: .22rem; transition: color .2s;
+}
+.btn-quiet:hover { color: var(--red); border-color: var(--red); }
+.hero-side { padding-bottom: .8rem; }
+.hero-card {
+  background: var(--cream); border: 2px solid var(--ink); border-radius: 22px;
+  padding: 1.85rem; box-shadow: 8px 8px 0 var(--ink); transform: rotate(2.2deg);
+}
+.hero-card h4 { font-family: var(--mono); font-size: .74rem; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 1.15rem; color: var(--ink-soft); }
+.mini-stat { display: flex; justify-content: space-between; align-items: baseline; padding: .62rem 0; border-bottom: 1.5px dashed rgba(22,19,14,.22); }
+.mini-stat:last-child { border-bottom: none; }
+.mini-stat .k { font-family: var(--serif); font-style: italic; font-size: 1.02rem; }
+.mini-stat .v { font-family: var(--mono); font-weight: 700; font-size: 1.08rem; }
+.mini-stat .v.red { color: var(--red); }
+
+/* ── Marquee ───────────────────────────────────────────── */
+.marquee {
+  overflow: hidden; border-bottom: 2px solid var(--ink);
+  background: var(--red); color: var(--cream); padding: .95rem 0;
+}
+.mq-track {
+  display: flex; gap: 2.8rem; white-space: nowrap; width: max-content;
+  animation: mq 26s linear infinite;
+  font-family: var(--mono); font-size: .82rem; letter-spacing: .22em; text-transform: uppercase;
+}
+.mq-track span::after { content: '✦'; margin-left: 2.8rem; color: var(--acid); }
+@keyframes mq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── Quiz Section ──────────────────────────────────────── */
+.quiz-wrap {
+  position: relative; z-index: 1;
+  max-width: 880px; margin: 0 auto;
+  padding: 6.5rem 2.6rem 7.5rem;
+}
+.quiz-shell {
+  background: var(--cream); border: 2px solid var(--ink); border-radius: 28px;
+  box-shadow: 12px 12px 0 var(--ink); overflow: hidden;
+}
+.quiz-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.45rem 2.15rem; border-bottom: 2px solid var(--ink);
+  background: var(--cream-deep);
+}
+.quiz-top .q-label { font-family: var(--mono); font-size: .78rem; letter-spacing: .18em; text-transform: uppercase; }
+.quiz-top .q-label b { color: var(--red); font-size: 1.05rem; }
+.progress-shell {
+  width: 210px; height: 12px; border: 2px solid var(--ink); border-radius: 99px;
+  overflow: hidden; background: var(--cream);
+}
+.progress-fill {
+  height: 100%; width: 20%; background: var(--red); border-radius: 99px;
+  transition: width .45s cubic-bezier(.22,1,.36,1);
+}
+.quiz-body { padding: 3.15rem 2.85rem 3.35rem; min-height: 480px; position: relative; }
+.q-step { display: none; animation: stepIn .45s cubic-bezier(.22,1,.36,1); }
+.q-step.active { display: block; }
+@keyframes stepIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+.q-kicker {
+  font-family: var(--mono); font-size: .74rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--red); margin-bottom: 1.15rem; display: block;
+}
+.q-title {
+  font-family: var(--serif); font-size: clamp(1.65rem, 3.4vw, 2.35rem);
+  line-height: 1.22; font-weight: 700; letter-spacing: -.015em; margin-bottom: .95rem;
+}
+.q-hint { color: var(--ink-soft); margin-bottom: 2.35rem; font-size: 1.02rem; }
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 1.05rem; }
+.option {
+  position: relative; text-align: left; cursor: pointer;
+  background: var(--cream); border: 2px solid var(--ink); border-radius: 18px;
+  padding: 1.45rem 1.35rem 1.35rem 3.65rem;
+  font-family: var(--sans); font-size: 1rem; color: var(--ink);
+  transition: all .18s;
+}
+.option:hover { background: var(--acid); transform: translateY(-3px); box-shadow: 5px 5px 0 var(--ink); }
+.option.selected {
+  background: var(--ink); color: var(--cream);
+  box-shadow: 5px 5px 0 var(--red); transform: translateY(-3px);
+}
+.option .idx {
+  position: absolute; left: 1.15rem; top: 1.35rem;
+  width: 27px; height: 27px; border: 2px solid currentColor; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: .78rem; font-weight: 700;
+}
+.option.selected .idx { background: var(--acid); color: var(--ink); border-color: var(--acid); }
+.option .opt-name { font-weight: 800; display: block; margin-bottom: .28rem; letter-spacing: -.01em; }
+.option .opt-desc { font-size: .85rem; opacity: .66; line-height: 1.5; }
+.quiz-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.55rem 2.15rem; border-top: 2px solid var(--ink); background: var(--cream-deep);
+}
+.back-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--mono); font-size: .85rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-soft); transition: color .2s;
+}
+.back-btn:hover { color: var(--ink); }
+.back-btn:disabled { opacity: .3; cursor: not-allowed; }
+.next-btn {
+  background: var(--ink); color: var(--cream); border: 2px solid var(--ink);
+  padding: .92rem 2.25rem; border-radius: 99px; font-weight: 800; font-size: .98rem;
+  cursor: pointer; transition: all .18s; box-shadow: 4px 4px 0 var(--red);
+}
+.next-btn:hover:not(:disabled) { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--red); }
+.next-btn:disabled { opacity: .35; cursor: not-allowed; box-shadow: none; }
+
+/* ── Result ────────────────────────────────────────────── */
+.result {
+  display: none; padding: 3.35rem 2.85rem; text-align: center;
+  animation: stepIn .55s cubic-bezier(.22,1,.36,1);
+}
+.result.show { display: block; }
+.result-badge {
+  display: inline-block; font-family: var(--mono); font-size: .76rem;
+  letter-spacing: .22em; text-transform: uppercase;
+  background: var(--acid); border: 2px solid var(--ink); border-radius: 99px;
+  padding: .55rem 1.35rem; transform: rotate(-2deg); margin-bottom: 1.85rem;
+}
+.result .r-num {
+  font-family: var(--mono); font-size: .82rem; letter-spacing: .26em;
+  color: var(--ink-faint); text-transform: uppercase;
+}
+.result h2 {
+  font-family: var(--serif); font-size: clamp(2.65rem, 6vw, 4.45rem);
+  line-height: 1.04; letter-spacing: -.028em; margin: .55rem 0 1.35rem;
+}
+.result h2 .accent { color: var(--red); font-style: italic; }
+.r-desc {
+  font-size: 1.13rem; color: var(--ink-soft); max-width: 520px;
+  margin: 0 auto 2.45rem; font-family: var(--serif); font-style: italic;
+}
+.r-traits { display: flex; justify-content: center; gap: .78rem; flex-wrap: wrap; margin-bottom: 2.65rem; }
+.trait {
+  border: 2px solid var(--ink); border-radius: 99px; padding: .58rem 1.28rem;
+  font-family: var(--mono); font-size: .82rem; letter-spacing: .1em; text-transform: uppercase;
+  background: var(--cream);
+}
+.trait:nth-child(2) { background: var(--acid); }
+.trait:nth-child(3) { background: var(--red); color: var(--cream); }
+.r-bars { max-width: 460px; margin: 0 auto 2.75rem; text-align: left; }
+.r-bar { margin-bottom: 1.05rem; }
+.r-bar .rb-head { display: flex; justify-content: space-between; font-family: var(--mono); font-size: .76rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .42rem; }
+.r-bar .rb-track { height: 12px; border: 2px solid var(--ink); border-radius: 99px; overflow: hidden; background: var(--cream); }
+.r-bar .rb-fill { height: 100%; background: var(--ink); width: 0; transition: width .9s cubic-bezier(.22,1,.36,1); }
+.r-bar:nth-child(2) .rb-fill { background: var(--red); }
+.r-bar:nth-child(3) .rb-fill { background: var(--blue); }
+.result-actions { display: flex; gap: 1.15rem; justify-content: center; flex-wrap: wrap; }
+
+/* ── 档案画廊 ──────────────────────────────────────────── */
+.archetypes {
+  position: relative; z-index: 1;
+  border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
+  background: var(--ink); color: var(--cream); padding: 6.25rem 2.6rem;
+}
+.archetypes .section-head { max-width: 1180px; margin: 0 auto 3.55rem; }
+.archetypes .section-tag {
+  font-family: var(--mono); font-size: .76rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--acid); display: block; margin-bottom: 1.05rem;
+}
+.archetypes h2 {
+  font-family: var(--serif); font-size: clamp(2.15rem, 4.4vw, 3.25rem);
+  line-height: 1.14; letter-spacing: -.022em;
+}
+.archetypes h2 .swash { font-style: italic; color: var(--acid); }
+.arch-grid {
+  max-width: 1180px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.15rem;
+}
+.arch {
+  border: 2px solid rgba(244,239,230,.2); border-radius: 20px; padding: 1.85rem 1.55rem;
+  transition: all .25s; position: relative; overflow: hidden;
+}
+.arch:hover { border-color: var(--acid); transform: translateY(-6px) rotate(-1deg); }
+.arch .a-emoji {
+  width: 52px; height: 52px; border-radius: 15px; display: flex; align-items: center;
+  justify-content: center; font-size: 1.55rem; margin-bottom: 1.28rem;
+  background: rgba(244,239,230,.08); border: 1px solid rgba(244,239,230,.16);
+}
+.arch h3 { font-family: var(--serif); font-size: 1.22rem; margin-bottom: .52rem; }
+.arch p { font-size: .875rem; color: rgba(244,239,230,.55); line-height: 1.62; }
+.arch .a-no {
+  position: absolute; top: 1.25rem; right: 1.35rem;
+  font-family: var(--mono); font-size: .72rem; color: rgba(244,239,230,.3); letter-spacing: .14em;
+}
+
+/* ── CTA ───────────────────────────────────────────────── */
+.finale {
+  position: relative; z-index: 1;
+  padding: 7.25rem 2.6rem; text-align: center;
+}
+.finale h2 {
+  font-family: var(--serif); font-size: clamp(2.65rem, 6.4vw, 4.85rem);
+  line-height: 1.06; letter-spacing: -.028em; margin-bottom: 1.35rem;
+}
+.finale h2 .boxed {
+  background: var(--red); color: var(--cream); padding: 0 .24em;
+  display: inline-block; transform: rotate(-1.8deg);
+}
+.finale p {
+  font-family: var(--serif); font-style: italic; font-size: 1.18rem;
+  color: var(--ink-soft); max-width: 520px; margin: 0 auto 2.65rem;
+}
+.finale .hero-actions { justify-content: center; }
+
+/* ── Footer ────────────────────────────────────────────── */
+footer {
+  position: relative; z-index: 1;
+  border-top: 2px solid var(--ink); padding: 2.65rem;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 2rem; flex-wrap: wrap; background: var(--cream-deep);
+}
+.foot-links { display: flex; gap: 2.15rem; list-style: none; }
+.foot-links a {
+  color: var(--ink-soft); text-decoration: none; font-family: var(--mono);
+  font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; transition: color .2s;
+}
+.foot-links a:hover { color: var(--red); }
+.foot-copy { font-family: var(--mono); font-size: .78rem; color: var(--ink-faint); letter-spacing: .1em; }
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .topbar { padding: 1rem 1.35rem; }
+  .topbar-meta { display: none; }
+  .hero { padding: 8.25rem 1.35rem 4.25rem; }
+  .hero-inner { grid-template-columns: 1fr; gap: 2.85rem; }
+  .hero-stripe { display: none; }
+  .quiz-wrap { padding: 4.25rem 1.35rem 5.25rem; }
+  .quiz-body { padding: 2.25rem 1.55rem; min-height: 0; }
+  .options { grid-template-columns: 1fr; }
+  .arch-grid { grid-template-columns: 1fr 1fr; }
+  .archetypes, .finale { padding: 4.25rem 1.35rem; }
+  .quiz-top, .quiz-nav { padding: 1.15rem 1.35rem; }
+}
+@media (max-width: 560px) {
+  .arch-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<nav class="topbar">
+  <div class="wordmark"><span class="star">✦</span>VIBE CHECK</div>
+  <div class="topbar-meta">Issue No.07 · Design Personality Test</div>
+  <a href="#quiz" class="topbar-cta">开始测评</a>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-stripe"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>6 道题 · 90 秒 · 4 种设计人格</div>
+      <h1>你是哪种<br><span class="swash">设计人格</span>？<br><span class="boxed">测测看</span></h1>
+      <p class="hero-sub">别再纠结配色了 —— 先搞清楚你的审美底层代码。六个直觉问题，解锁属于你的设计人格档案。</p>
+      <div class="hero-actions">
+        <a href="#quiz" class="btn-big">立即开始 →</a>
+        <a href="#archetypes" class="btn-quiet">先看看四种人格</a>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="hero-card">
+        <h4>// Test Stats</h4>
+        <div class="mini-stat"><span class="k">已完成测评</span><span class="v red">128,540</span></div>
+        <div class="mini-stat"><span class="k">平均用时</span><span class="v">82 sec</span></div>
+        <div class="mini-stat"><span class="k">最受欢迎人格</span><span class="v">The Maker</span></div>
+        <div class="mini-stat"><span class="k">分享率</span><span class="v">64%</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Marquee -->
+<div class="marquee">
+  <div class="mq-track">
+    <span>直觉优先</span><span>没有对错</span><span>诚实作答</span><span>结果可分享</span><span>90 秒见分晓</span>
+    <span>直觉优先</span><span>没有对错</span><span>诚实作答</span><span>结果可分享</span><span>90 秒见分晓</span>
+  </div>
+</div>
+
+<!-- Quiz -->
+<section class="quiz-wrap" id="quiz">
+  <div class="quiz-shell">
+    <div class="quiz-top">
+      <div class="q-label"><b id="qCurrent">01</b> / 06 · DESIGN PERSONALITY TEST</div>
+      <div class="progress-shell"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <div class="quiz-body" id="quizBody">
+      <!-- Q1 -->
+      <div class="q-step active" data-step="0">
+        <span class="q-kicker">Question 01 · 工作台</span>
+        <h2 class="q-title">周一早晨，你的工作台是什么状态？</h2>
+        <p class="q-hint">凭直觉选，不要思考"应该"是什么样。</p>
+        <div class="options">
+          <button class="option" data-value="maker"><span class="idx">A</span><span class="opt-name">摆满进行中的项目</span><span class="opt-desc">工具摊开、草图叠着草图，乱中有序</span></button>
+          <button class="option" data-value="curator"><span class="idx">B</span><span class="opt-name">极简到只剩必要</span><span class="opt-desc">一屏一纸一笔，多一样都会分心</span></button>
+          <button class="option" data-value="explorer"><span class="idx">C</span><span class="opt-name">堆着新买的实验材料</span><span class="opt-desc">总有三样东西等着被试出新玩法</span></button>
+          <button class="option" data-value="storyteller"><span class="idx">D</span><span class="opt-name">贴满灵感与照片墙</span><span class="opt-desc">情绪板、明信片、一句句摘抄</span></button>
+        </div>
+      </div>
+      <!-- Q2 -->
+      <div class="q-step" data-step="1">
+        <span class="q-kicker">Question 02 · 配色</span>
+        <h2 class="q-title">如果一个页面只能用一种颜色，你选？</h2>
+        <p class="q-hint">哪种颜色最像"你"的表达方式。</p>
+        <div class="options">
+          <button class="option" data-value="maker"><span class="idx">A</span><span class="opt-name">饱和正红</span><span class="opt-desc">热烈、直接、绝不低调</span></button>
+          <button class="option" data-value="curator"><span class="idx">B</span><span class="opt-name">纯粹的墨黑</span><span class="opt-desc">克制就是最强的表达</span></button>
+          <button class="option" data-value="explorer"><span class="idx">C</span><span class="opt-name">荧光酸绿</span><span class="opt-desc">刺眼一点才有记忆点</span></button>
+          <button class="option" data-value="storyteller"><span class="idx">D</span><span class="opt-name">黄昏暖橙</span><span class="opt-desc">有温度的颜色才讲得出故事</span></button>
+        </div>
+      </div>
+      <!-- Q3 -->
+      <div class="q-step" data-step="2">
+        <span class="q-kicker">Question 03 · 灵感</span>
+        <h2 class="q-title">灵感枯竭时，你的自救方式是？</h2>
+        <p class="q-hint">别选"正确答案"，选你真实会做的。</p>
+        <div class="options">
+          <button class="option" data-value="maker"><span class="idx">A</span><span class="opt-name">直接动手做</span><span class="opt-desc">做着做着思路就来了</span></button>
+          <button class="option" data-value="curator"><span class="idx">B</span><span class="opt-name">整理收藏夹</span><span class="opt-desc">在归类旧灵感时发现新连接</span></button>
+          <button class="option" data-value="explorer"><span class="idx">C</span><span class="opt-name">学一个陌生技能</span><span class="opt-desc">跨界碰一碰，火花四溅</span></button>
+          <button class="option" data-value="storyteller"><span class="idx">D</span><span class="opt-name">去街上走走</span><span class="opt-desc">人间烟火是最好的灵感库</span></button>
+        </div>
+      </div>
+      <!-- Q4 -->
+      <div class="q-step" data-step="3">
+        <span class="q-kicker">Question 04 · 审美</span>
+        <h2 class="q-title">看到"完美设计"的瞬间，你心里想的是？</h2>
+        <p class="q-hint">哪种反应最接近你的内心独白。</p>
+        <div class="options">
+          <button class="option" data-value="maker"><span class="idx">A</span><span class="opt-name">"这是怎么做出来的？"</span><span class="opt-desc">立刻想拆解工艺与实现</span></button>
+          <button class="option" data-value="curator"><span class="idx">B</span><span class="opt-name">"终于有人做对了"</span><span class="opt-desc">对精确与秩序由衷敬佩</span></button>
+          <button class="option" data-value="explorer"><span class="idx">C</span><span class="opt-name">"规则就是用来打破的"</span><span class="opt-desc">已经开始想下一次怎么颠覆</span></button>
+          <button class="option" data-value="storyteller"><span class="idx">D</span><span class="opt-name">"它让我想起一个故事"</span><span class="opt-desc">设计的价值在于唤起情感</span></button>
+        </div>
+      </div>
+      <!-- Q5 -->
+      <div class="q-step" data-step="4">
+        <span class="q-kicker">Question 05 · 作品集</span>
+        <h2 class="q-title">你希望别人用哪个词形容你的作品？</h2>
+        <p class="q-hint">这道题没有中立选项，抱歉。</p>
+        <div class="options">
+          <button class="option" data-value="maker"><span class="idx">A</span><span class="opt-name">扎实</span><span class="opt-desc">每一个细节都经得起推敲</span></button>
+          <button class="option" data-value="curator"><span class="idx">B</span><span class="opt-name">高级</span><span class="opt-desc">克制、精准、恰到好处</span></button>
+          <button class="option" data-value="explorer"><span class="idx">C</span><span class="opt-name">大胆</span><span class="opt-desc">没见过，但忘不掉</span></button>
+          <button class="option" data-value="storyteller"><span class="idx">D</span><span class="opt-name">动人</span><span class="opt-desc">看完之后心里会动一下</span></button>
+        </div>
+      </div>
+      <!-- Q6 -->
+      <div class="q-step" data-step="5">
+        <span class="q-kicker">Question 06 · 收尾</span>
+        <h2 class="q-title">项目截止前的最后一小时，你会？</h2>
+        <p class="q-hint">最后一题，诚实一点。</p>
+        <div class="options">
+          <button class="option" data-value="maker"><span class="idx">A</span><span class="opt-name">再打磨一个细节</span><span class="opt-desc">"还能再好 1%"</span></button>
+          <button class="option" data-value="curator"><span class="idx">B</span><span class="opt-name">做最后一轮减法</span><span class="opt-desc">把所有多余的东西删干净</span></button>
+          <button class="option" data-value="explorer"><span class="idx">C</span><span class="opt-name">大胆改一版新的</span><span class="opt-desc">截止时间是最好的灵感来源</span></button>
+          <button class="option" data-value="storyteller"><span class="idx">D</span><span class="opt-name">通读一遍叙事节奏</span><span class="opt-desc">确保故事的呼吸是顺的</span></button>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="result" id="resultCard">
+        <div class="result-badge">✦ 你的设计人格档案</div>
+        <div class="r-num">TYPE / 0<span id="rTypeNum">1</span></div>
+        <h2 id="rTitle">The <span class="accent">Maker</span></h2>
+        <p class="r-desc" id="rDesc">你相信手比脑子先知道答案。</p>
+        <div class="r-traits" id="rTraits"></div>
+        <div class="r-bars">
+          <div class="r-bar">
+            <div class="rb-head"><span>Craft · 手艺</span><span id="rb1v">86%</span></div>
+            <div class="rb-track"><div class="rb-fill" id="rb1"></div></div>
+          </div>
+          <div class="r-bar">
+            <div class="rb-head"><span>Taste · 品味</span><span id="rb2v">72%</span></div>
+            <div class="rb-track"><div class="rb-fill" id="rb2"></div></div>
+          </div>
+          <div class="r-bar">
+            <div class="rb-head"><span>Chaos · 能量</span><span id="rb3v">58%</span></div>
+            <div class="rb-track"><div class="rb-fill" id="rb3"></div></div>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button class="btn-big" id="restartBtn">再测一次</button>
+          <a href="#archetypes" class="btn-quiet">查看全部人格</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-nav" id="quizNav">
+      <button class="back-btn" id="backBtn" disabled>← 上一题</button>
+      <button class="next-btn" id="nextBtn" disabled>下一题 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- Archetypes -->
+<section class="archetypes" id="archetypes">
+  <div class="section-head">
+    <span class="section-tag">// The Four Archetypes</span>
+    <h2>四种人格，<br>没有高下，只有 <span class="swash">不同</span></h2>
+  </div>
+  <div class="arch-grid">
+    <div class="arch">
+      <div class="a-no">TYPE 01</div>
+      <div class="a-emoji">🔨</div>
+      <h3>The Maker</h3>
+      <p>动手即思考。你用制作代替犹豫，作品里永远留着手工的温度和打磨的痕迹。</p>
+    </div>
+    <div class="arch">
+      <div class="a-no">TYPE 02</div>
+      <div class="a-emoji">🎯</div>
+      <h3>The Curator</h3>
+      <p>少即是全部。你对多余的东西过敏，能在一个像素里看出秩序与失衡。</p>
+    </div>
+    <div class="arch">
+      <div class="a-no">TYPE 03</div>
+      <div class="a-emoji">🧪</div>
+      <h3>The Explorer</h3>
+      <p>规则是你的游乐场。别人问"为什么"，你问"为什么不"，作品永远在边界之外。</p>
+    </div>
+    <div class="arch">
+      <div class="a-no">TYPE 04</div>
+      <div class="a-emoji">📖</div>
+      <h3>The Storyteller</h3>
+      <p>设计是叙事的容器。你在意观众看完之后记住了什么感受，而非记住了什么形状。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Finale -->
+<section class="finale">
+  <h2>知道了自己是谁，<br><span class="boxed">就去做点什么</span></h2>
+  <p>把你的结果分享给同行的朋友 —— 看看谁和你是同一种设计生物。</p>
+  <div class="hero-actions">
+    <a href="#quiz" class="btn-big">重新测评</a>
+    <a href="#" class="btn-quiet">分享我的结果 ✦</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="wordmark"><span class="star">✦</span>VIBE CHECK</div>
+  <ul class="foot-links">
+    <li><a href="#">Archive</a></li>
+    <li><a href="#">Methodology</a></li>
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="foot-copy">© 2026 VIBE CHECK · ISSUE NO.07</div>
+</footer>
+
+<script>
+(function () {
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.q-step'));
+  var total = steps.length;
+  var current = 0;
+  var answers = new Array(total).fill(null);
+
+  var qCurrent = document.getElementById('qCurrent');
+  var progressFill = document.getElementById('progressFill');
+  var backBtn = document.getElementById('backBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var quizNav = document.getElementById('quizNav');
+  var resultCard = document.getElementById('resultCard');
+
+  var profiles = {
+    maker: {
+      num: '1', name: 'The <span class="accent">Maker</span>',
+      desc: '你相信手比脑子先知道答案。你的作品里永远留着制作的温度 —— 不完美，但有心跳。',
+      traits: ['手作感', '持续迭代', '细节控'],
+      bars: [86, 72, 58]
+    },
+    curator: {
+      num: '2', name: 'The <span class="accent">Curator</span>',
+      desc: '你对多余的东西过敏。在你手里，克制不是退让，而是最锋利的表达。',
+      traits: ['极简秩序', '精准判断', '高级感'],
+      bars: [64, 92, 38]
+    },
+    explorer: {
+      num: '3', name: 'The <span class="accent">Explorer</span>',
+      desc: '规则是你的游乐场。你永远在问"为什么不"，作品停在边界之外，等着被追赶。',
+      traits: ['跨界实验', '打破常规', '高能量'],
+      bars: [70, 66, 94]
+    },
+    storyteller: {
+      num: '4', name: 'The <span class="accent">Storyteller</span>',
+      desc: '你在意的从来不是形状，而是观众合上页面之后，心里残留的那点温度。',
+      traits: ['情感叙事', '氛围营造', '共情力'],
+      bars: [58, 80, 72]
+    }
+  };
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function render() {
+    steps.forEach(function (s, i) { s.classList.toggle('active', i === current); });
+    qCurrent.textContent = pad(current + 1);
+    progressFill.style.width = ((current + 1) / total * 100) + '%';
+    backBtn.disabled = current === 0;
+    nextBtn.disabled = answers[current] === null;
+    nextBtn.textContent = current === total - 1 ? '查看结果 ✦' : '下一题 →';
+  }
+
+  steps.forEach(function (step, i) {
+    step.querySelectorAll('.option').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        step.querySelectorAll('.option').forEach(function (o) { o.classList.remove('selected'); });
+        opt.classList.add('selected');
+        answers[i] = opt.getAttribute('data-value');
+        nextBtn.disabled = false;
+      });
+    });
+  });
+
+  backBtn.addEventListener('click', function () {
+    if (current > 0) { current--; render(); }
+  });
+
+  nextBtn.addEventListener('click', function () {
+    if (answers[current] === null) return;
+    if (current < total - 1) {
+      current++;
+      render();
+    } else {
+      showResult();
+    }
+  });
+
+  function showResult() {
+    var score = { maker: 0, curator: 0, explorer: 0, storyteller: 0 };
+    answers.forEach(function (a) { if (a) score[a]++; });
+    var best = 'maker';
+    for (var k in score) { if (score[k] > score[best]) best = k; }
+    var p = profiles[best];
+
+    steps.forEach(function (s) { s.classList.remove('active'); });
+    quizNav.style.display = 'none';
+    qCurrent.textContent = 'RESULT';
+    progressFill.style.width = '100%';
+
+    document.getElementById('rTypeNum').textContent = p.num;
+    document.getElementById('rTitle').innerHTML = p.name;
+    document.getElementById('rDesc').textContent = p.desc;
+
+    var traitsEl = document.getElementById('rTraits');
+    traitsEl.innerHTML = '';
+    p.traits.forEach(function (t) {
+      var span = document.createElement('span');
+      span.className = 'trait';
+      span.textContent = t;
+      traitsEl.appendChild(span);
+    });
+
+    resultCard.classList.add('show');
+    ['rb1', 'rb2', 'rb3'].forEach(function (id, i) {
+      document.getElementById(id + 'v').textContent = p.bars[i] + '%';
+      setTimeout(function () {
+        document.getElementById(id).style.width = p.bars[i] + '%';
+      }, 120 + i * 180);
+    });
+
+    resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  document.getElementById('restartBtn').addEventListener('click', function () {
+    answers = new Array(total).fill(null);
+    current = 0;
+    resultCard.classList.remove('show');
+    quizNav.style.display = 'flex';
+    steps.forEach(function (s) {
+      s.querySelectorAll('.option').forEach(function (o) { o.classList.remove('selected'); });
+    });
+    ['rb1', 'rb2', 'rb3'].forEach(function (id) {
+      document.getElementById(id).style.width = '0';
+    });
+    render();
+    document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

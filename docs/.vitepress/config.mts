@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，235 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，237 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -71,7 +71,7 @@ export default defineConfig({
     // Open Graph（社交分享）
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 235 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 237 个完整页面，纯 HTML+CSS，零依赖。' }],
     ['meta', { property: 'og:url', content: 'http://101.37.166.208:11930' }],
     ['meta', { property: 'og:site_name', content: 'My Design Lib' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -79,14 +79,14 @@ export default defineConfig({
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 235 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 237 个完整页面，纯 HTML+CSS，零依赖。' }],
 
     // Schema.org 结构化数据
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "My Design Lib",
-"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 235 个完整页面",
+"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 237 个完整页面",
       "url": "http://101.37.166.208:11930",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
@@ -101,7 +101,7 @@ export default defineConfig({
 
     // AI 爬虫友好
     ['meta', { name: 'ai-content-type', content: 'design-library' }],
-    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，235个完整页面模板，Design Tokens。可直接复制使用。' }],
+    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，237个完整页面模板，Design Tokens。可直接复制使用。' }],
 
     ['link', { rel: 'stylesheet', href: '/tokens/tokens.css' }],
     ...componentCSS.map(name => [
@@ -342,7 +342,8 @@ export default defineConfig({
             { text: 'APERTURE 专业修图工作台', link: '/pages/aperture-editor' },
             { text: 'Orbit Meet 视频会议', link: '/pages/orbit-meet' },
             { text: 'ASTRAL 星空观测台', link: '/pages/astral-observatory' },
-      { text: 'MEDIKA 数字药房', link: '/pages/medika-pharmacy' }
+            { text: 'MEDIKA 数字药房', link: '/pages/medika-pharmacy' },
+            { text: 'MetroPulse 城市出行', link: '/pages/metro-pulse' }
           ]
         },
         {
@@ -421,7 +422,8 @@ export default defineConfig({
             { text: 'CELESTE 星象馆', link: '/pages/celeste-zodiac' },
             { text: 'Orphée 歌剧院演出季', link: '/pages/opera-season' },
             { text: 'INKWAVE 漫画出版平台', link: '/pages/inkwave-manga' },
-            { text: 'Enigma Chamber 密室逃脱', link: '/pages/enigma-chamber' }
+            { text: 'Enigma Chamber 密室逃脱', link: '/pages/enigma-chamber' },
+            { text: 'VIBE CHECK 设计人格测评', link: '/pages/taste-quiz' }
           ]
         },
         {

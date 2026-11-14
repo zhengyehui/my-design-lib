@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 235 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 237 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -2161,6 +2161,24 @@ const pages = [
     rating: 8.9,
     description: '汽车租赁平台长页——德式工业精密排版：巨型 DRIVE. YOUR WAY. 描边混排标题 + 12 列网格底纹 + 拟物预订表单 + SVG 几何车形剪影车队卡 + 01/02/03 描边编号流程 + 保障图标网格 + 会员三档定价 + 城市跑马灯 + 口碑卡 + 巨字 CTA 页脚，沥青黑 × 高能橙',
   },
+  {
+    id: 'metro-pulse',
+    title: 'MetroPulse 城市出行',
+    category: 'app',
+    tags: ['出行导航', '实时数据', '深色 UI', '地铁线路', '应用官网'],
+    colors: ['#0b0d12', '#c8f542', '#ff4d5e'],
+    rating: 9.3,
+    description: '城市出行导航应用官网——深空蓝黑 + 荧光青柠：旋转地铁线 Hero 装饰 + 渐变描边路线规划器 Mockup + 六宫格特性 + 实时到站看板（拥挤度三色徽章）+ 纯 CSS 手机 App Mockup（发光站点地图）+ 数字统计带 + 渐变 CTA',
+  },
+  {
+    id: 'taste-quiz',
+    title: 'VIBE CHECK 设计人格测评',
+    category: 'creative',
+    tags: ['互动测评', 'Neo-Brutalism', '编辑设计', '复古印刷', '交互问答'],
+    colors: ['#f4efe6', '#e8442e', '#d8f24a'],
+    rating: 9.4,
+    description: '互动测评体验页——复古印刷海报风：斜切酸绿色块 Hero + 悬浮数据卡 + 六题全 JS 状态机问答（进度条/选项状态/前后导航）+ 动态人格结果档案（动画数据条）+ 四人格反色画廊 + 硬阴影 Neo-Brutalism 卡片体系',
+  },
 ]
 
 const categories = [
@@ -2218,12 +2236,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 235 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 237 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="235 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="237 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -2232,7 +2250,7 @@ content=\"My Design Lib 页面灵感画廊 — 235 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 235 个完整页面</span>
+      <span>📦 237 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
