@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 237 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 239 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -2179,6 +2179,24 @@ const pages = [
     rating: 9.4,
     description: '互动测评体验页——复古印刷海报风：斜切酸绿色块 Hero + 悬浮数据卡 + 六题全 JS 状态机问答（进度条/选项状态/前后导航）+ 动态人格结果档案（动画数据条）+ 四人格反色画廊 + 硬阴影 Neo-Brutalism 卡片体系',
   },
+  {
+    id: 'harvest-market',
+    title: 'Harvest Market 都市生鲜超市',
+    category: 'ecommerce',
+    tags: ['电商', '生鲜超市', '瑞士极简', '农场溯源', '产品网格'],
+    colors: ['#0F0F0F', '#F0F1EF', '#2E7D32'],
+    rating: 9.3,
+    description: '都市有机生鲜超市电商——postevand 式瑞士极简：黑白灰 + 1px 黑线母题 + 84px 巨字 Hero「从田野 到餐桌」+ 六品类横条 + 8 SKU 产品网格（线描 SVG 果蔬 + 白底价格条）+ 指针注释食材溯源拆解 + 配送承诺大数字栏 + 主厨推荐 + 超大 wordmark 页脚',
+  },
+  {
+    id: 'nova-mobile',
+    title: 'Nova Mobile 运营商套餐',
+    category: 'industry',
+    tags: ['电信套餐', '定价卡', '深紫渐变', '数据可视化', '手风琴'],
+    colors: ['#170B2E', '#1E6EF3', '#F7F5F2'],
+    rating: 9.3,
+    description: '移动通信运营商套餐页——深靛紫渐变 + 亮蓝强调：信号波 SVG Hero + 月付/年付切换（8 折价格过渡）+ 4 张套餐卡（推荐款渐变描边高亮）+ 8 行发丝线对比表 + 权益动效插画 + 抽象城市覆盖地图（脉冲信号点）+ 口碑数据 + FAQ 手风琴 + 超大 NOVA wordmark',
+  },
 ]
 
 const categories = [
@@ -2236,12 +2254,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 237 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 239 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="237 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="239 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -2250,7 +2268,7 @@ content=\"My Design Lib 页面灵感画廊 — 237 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 237 个完整页面</span>
+      <span>📦 239 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>

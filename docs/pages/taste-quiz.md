@@ -31,8 +31,8 @@ pageDetail:
     text: MetroPulse 城市出行
     link: /pages/metro-pulse.html
   next:
-    text: Enigma Chamber 密室逃脱
-    link: /pages/enigma-chamber.html
+    text: Harvest Market 都市生鲜超市
+    link: /pages/harvest-market.html
 ---
 
 <PageDetail />

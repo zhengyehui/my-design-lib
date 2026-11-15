@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harvest Market — 从田野到餐桌 · 都市有机生鲜超市</title>
+<meta name="description" content="Harvest Market 都市有机生鲜超市：128 家合作农场，清晨采摘，3 小时冷链当日达。时令果蔬、乳品烘焙、肉禽蛋品、水产海鲜。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   HARVEST MARKET — Swiss / Scandinavian minimal
+   墨黑 1px 线 + 大留白 + 单绿点缀
+   ============================================================ */
+:root{
+  --hm-ink:      #0F0F0F;
+  --hm-white:    #FFFFFF;
+  --hm-paper:    #F0F1EF;
+  --hm-paper-2:  #D7D9D3;
+  --hm-green:    #2E7D32;
+  --hm-green-ink:#256428;
+  --hm-tomato:   #E4572E;
+
+  --hm-font: 'Inter', 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+
+  --hm-t-fast: .15s ease;
+  --hm-t:      .2s ease;
+  --hm-t-slow: .5s ease;
+  --hm-t-slower:.8s ease;
+
+  --hm-pad: clamp(20px, 4.5vw, 72px);
+  --hm-max: 1560px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body{
+  font-family: var(--hm-font);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--hm-ink);
+  background: var(--hm-white);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; background:none; border:none; cursor:pointer; }
+ul{ list-style:none; }
+
+/* ── 通用排版 ─────────────────────────────────────────── */
+.label{
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.label--green{ color: var(--hm-green); }
+.mega{
+  font-size: clamp(48px, 8.2vw, 84px);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+.narrative{
+  font-size: clamp(28px, 3.8vw, 52px);
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+}
+.body-text{ font-size: 14px; line-height: 1.5; }
+.muted{ color: rgba(15,15,15,.58); }
+
+.wrap{
+  max-width: var(--hm-max);
+  margin: 0 auto;
+  padding-left: var(--hm-pad);
+  padding-right: var(--hm-pad);
+}
+.rule{ border:0; border-top:1px solid var(--hm-ink); }
+
+/* ── 滚动入场（html.js 守卫） ─────────────────────────── */
+html.js .reveal:not(.in){ opacity:0; transform: translateY(26px); }
+.reveal{
+  transition:
+    opacity   var(--hm-t-slower) ease,
+    transform var(--hm-t-slower) ease;
+  transition-delay: var(--rd, 0s);
+}
+html.js .reveal--clip:not(.in){ opacity:0; transform: translateY(40px) scale(.985); }
+.reveal--clip{ transition: opacity 1s ease, transform 1s ease; transition-delay: var(--rd, 0s); }
+
+/* ── 链接：::after 下划线宽度过渡 ─────────────────────── */
+.u-link{
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+.u-link::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:0;
+  height:1px;
+  width:0;
+  background: currentColor;
+  transition: width var(--hm-t);
+}
+.u-link:hover::after{ width:100%; }
+
+/* ============================================================
+   1 — 顶栏
+   ============================================================ */
+.header{
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--hm-white);
+  border-bottom: 1px solid var(--hm-ink);
+}
+.header__inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 24px;
+  height: 68px;
+  max-width: var(--hm-max);
+  margin: 0 auto;
+  padding: 0 var(--hm-pad);
+}
+.logo{
+  font-size: 13px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display:flex;
+  align-items:baseline;
+  gap: 10px;
+}
+.logo__mark{
+  width:10px; height:10px;
+  border:1px solid var(--hm-ink);
+  border-radius: 50%;
+  display:inline-block;
+  position:relative;
+  top: 0;
+  transition: background var(--hm-t);
+}
+.logo:hover .logo__mark{ background: var(--hm-green); border-color: var(--hm-green); }
+
+.nav{
+  display:flex;
+  align-items:center;
+  gap: clamp(18px, 2.6vw, 42px);
+}
+.nav a{
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  position: relative;
+  padding: 4px 0;
+}
+.nav a::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:0;
+  height:1px; width:0;
+  background: var(--hm-green);
+  transition: width var(--hm-t);
+}
+.nav a:hover{ color: var(--hm-green); }
+.nav a:hover::after{ width:100%; }
+.nav a.is-active{ color: var(--hm-green); }
+.nav a.is-active::after{ width:100%; }
+
+.bag{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  border: 1px solid var(--hm-ink);
+  padding: 9px 16px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transition: background var(--hm-t), color var(--hm-t);
+  white-space: nowrap;
+}
+.bag:hover{ background: var(--hm-ink); color: var(--hm-white); }
+.bag__count{
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--hm-green);
+  color: var(--hm-white);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 10px;
+  letter-spacing: 0;
+  transition: transform var(--hm-t);
+}
+.bag.is-bump .bag__count{ transform: scale(1.35); }
+
+.menu-toggle{ display:none; }
+
+/* ============================================================
+   2 — Hero
+   ============================================================ */
+.hero{
+  padding: clamp(72px, 11vw, 168px) 0 clamp(56px, 7vw, 112px);
+  border-bottom: 1px solid var(--hm-ink);
+  position: relative;
+  overflow: hidden;
+}
+.hero__season{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  margin-bottom: clamp(32px, 5vw, 72px);
+}
+.hero__season-dot{
+  width:7px; height:7px;
+  background: var(--hm-green);
+  border-radius:50%;
+}
+.hero__word{
+  display:block;
+}
+.hero__word em{
+  font-style: normal;
+  color: var(--hm-green);
+}
+.hero__sub{
+  margin-top: clamp(28px, 3.6vw, 48px);
+  max-width: 620px;
+}
+.hero__lede{
+  margin-top: 20px;
+  max-width: 480px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(15,15,15,.62);
+}
+.hero__cta-row{
+  margin-top: clamp(32px, 4vw, 52px);
+  display:flex;
+  align-items:center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap: 14px;
+  background: var(--hm-ink);
+  color: var(--hm-white);
+  border:1px solid var(--hm-ink);
+  padding: 17px 30px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  transition: background var(--hm-t), color var(--hm-t), transform var(--hm-t);
+}
+.btn:hover{
+  background: var(--hm-green);
+  border-color: var(--hm-green);
+  transform: translateY(-2px);
+}
+.btn--ghost{
+  background: transparent;
+  color: var(--hm-ink);
+}
+.btn--ghost:hover{
+  background: var(--hm-ink);
+  color: var(--hm-white);
+  border-color: var(--hm-ink);
+}
+.btn__arrow{ transition: transform var(--hm-t); }
+.btn:hover .btn__arrow{ transform: translateX(5px); }
+
+.hero__stats{
+  margin-top: clamp(56px, 7vw, 104px);
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--hm-ink);
+}
+.stat{
+  padding: 28px 24px 4px 0;
+  border-right: 1px solid var(--hm-paper-2);
+}
+.stat:last-child{ border-right: 0; }
+.stat__num{
+  font-size: clamp(28px, 3vw, 44px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat__num sup{
+  font-size: .42em;
+  letter-spacing: .06em;
+  vertical-align: super;
+  color: var(--hm-green);
+}
+.stat__label{
+  margin-top: 12px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(15,15,15,.55);
+}
+
+/* hero 角落的几何蔬果装饰 */
+.hero__deco{
+  position:absolute;
+  right: clamp(-40px, -2vw, 0px);
+  top: clamp(40px, 8vw, 120px);
+  width: clamp(180px, 22vw, 360px);
+  opacity:.9;
+  pointer-events:none;
+}
+@media (max-width: 1080px){ .hero__deco{ display:none; } }
+
+/* ============================================================
+   3 — 品类横条
+   ============================================================ */
+.cats{
+  border-bottom: 1px solid var(--hm-ink);
+  background: var(--hm-white);
+}
+.cats__row{
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+.cat{
+  padding: clamp(32px, 3.6vw, 52px) 18px;
+  border-right: 1px solid var(--hm-paper-2);
+  display:flex;
+  flex-direction:column;
+  gap: 14px;
+  transition: background var(--hm-t), color var(--hm-t);
+  position: relative;
+}
+.cat:last-child{ border-right: 0; }
+.cat__idx{
+  font-size: 11px;
+  letter-spacing: .12em;
+  color: rgba(15,15,15,.4);
+  transition: color var(--hm-t);
+}
+.cat__name{
+  font-size: 13px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.cat__en{
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(15,15,15,.45);
+  transition: color var(--hm-t);
+}
+.cat__line{
+  height:1px;
+  width: 28px;
+  background: var(--hm-ink);
+  transition: width var(--hm-t), background var(--hm-t);
+}
+.cat:hover{ color: var(--hm-green); }
+.cat:hover .cat__idx,
+.cat:hover .cat__en{ color: var(--hm-green); }
+.cat:hover .cat__line{ width: 64px; background: var(--hm-green); }
+
+/* ============================================================
+   4 — 产品网格
+   ============================================================ */
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap: 32px;
+  padding: clamp(56px, 7vw, 104px) 0 clamp(28px, 3.4vw, 48px);
+  flex-wrap: wrap;
+}
+.section-head__title{
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  max-width: 720px;
+}
+.section-head__meta{
+  text-align: right;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(15,15,15,.55);
+  line-height: 1.9;
+}
+
+.products{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--hm-ink);
+  border-left: 1px solid var(--hm-ink);
+}
+.card{
+  border-right: 1px solid var(--hm-ink);
+  border-bottom: 1px solid var(--hm-ink);
+  background: var(--hm-white);
+  display:flex;
+  flex-direction:column;
+  transition: transform var(--hm-t-slow), box-shadow var(--hm-t-slow);
+  position: relative;
+}
+.card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px -18px rgba(15,15,15,.22);
+  z-index: 2;
+}
+.card__figure{
+  position: relative;
+  background: var(--hm-paper);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.card__figure svg{
+  width: 68%;
+  height: 68%;
+  transition: transform var(--hm-t-slow);
+}
+.card:hover .card__figure svg{ transform: scale(1.05) rotate(-1deg); }
+.card__badge{
+  position:absolute;
+  top: 14px;
+  left: 14px;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  background: var(--hm-tomato);
+  color: var(--hm-white);
+}
+.card__badge--green{
+  background: var(--hm-green);
+}
+.card__badge--line{
+  background: transparent;
+  color: var(--hm-ink);
+  border: 1px solid var(--hm-ink);
+}
+.card__quick{
+  position:absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--hm-ink);
+  background: var(--hm-white);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--hm-t), transform var(--hm-t), background var(--hm-t), color var(--hm-t);
+}
+.card:hover .card__quick{ opacity:1; transform: translateY(0); }
+.card__quick:hover{ background: var(--hm-ink); color: var(--hm-white); }
+
+.card__bar{
+  border-top: 1px solid var(--hm-ink);
+  background: var(--hm-white);
+  padding: 16px 18px 18px;
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 12px;
+  align-items: baseline;
+}
+.card__name{
+  font-size: 14px;
+  letter-spacing: .01em;
+}
+.card__spec{
+  grid-column: 1 / -1;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(15,15,15,.5);
+}
+.card__price{
+  color: var(--hm-green);
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.card__price small{
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: rgba(15,15,15,.5);
+}
+.card__price s{
+  color: rgba(15,15,15,.35);
+  font-size: 11px;
+  margin-right: 6px;
+}
+
+/* ============================================================
+   5 — 食材溯源（指针注释）
+   ============================================================ */
+.trace{
+  background: var(--hm-paper);
+  border-top: 1px solid var(--hm-ink);
+  border-bottom: 1px solid var(--hm-ink);
+  padding: clamp(72px, 9vw, 140px) 0;
+}
+.trace__lede{
+  max-width: 980px;
+  margin-bottom: clamp(56px, 7vw, 96px);
+}
+.trace__lede .hl{ color: var(--hm-green); }
+.trace__diagram{
+  display:grid;
+  grid-template-columns: 1fr minmax(320px, 560px) 1fr;
+  gap: clamp(16px, 2.5vw, 40px);
+  align-items: center;
+}
+.trace__side{
+  display:flex;
+  flex-direction:column;
+  gap: clamp(40px, 5vw, 88px);
+}
+.trace__side--right{ align-items: flex-end; text-align: right; }
+
+.note{
+  max-width: 280px;
+  cursor: default;
+}
+.note__line{
+  height:1px;
+  background: var(--hm-ink);
+  width: 56px;
+  margin-bottom: 12px;
+  transition: width var(--hm-t), background var(--hm-t);
+}
+.trace__side--right .note__line{ margin-left: auto; }
+.note:hover .note__line{ width: 96px; background: var(--hm-green); }
+.note__key{
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(15,15,15,.5);
+  margin-bottom: 8px;
+}
+.note__val{
+  font-size: 15px;
+  line-height: 1.55;
+}
+.note__val strong{
+  font-weight: 400;
+  color: var(--hm-green);
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+.note__sub{
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: rgba(15,15,15,.55);
+  line-height: 1.6;
+}
+.trace__crate{
+  position: relative;
+}
+.trace__crate svg{
+  width: 100%;
+  height: auto;
+}
+.trace__stamp{
+  position:absolute;
+  right: -8px;
+  top: -18px;
+  width: 108px;
+  height: 108px;
+  border: 1px solid var(--hm-green);
+  border-radius: 50%;
+  color: var(--hm-green);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap: 3px;
+  background: rgba(240,241,239,.9);
+  transform: rotate(8deg);
+  transition: transform var(--hm-t-slow);
+}
+.trace__crate:hover .trace__stamp{ transform: rotate(0deg); }
+.trace__stamp b{ font-weight:400; font-size: 21px; letter-spacing: -0.01em; }
+.trace__stamp span{ font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
+
+/* ============================================================
+   6 — 配送承诺
+   ============================================================ */
+.promise{
+  border-bottom: 1px solid var(--hm-ink);
+}
+.promise__grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.promise__col{
+  padding: clamp(56px, 6.5vw, 104px) clamp(24px, 3vw, 56px) clamp(48px, 5vw, 88px) 0;
+  border-right: 1px solid var(--hm-paper-2);
+}
+.promise__col:last-child{
+  border-right: 0;
+  padding-right: 0;
+}
+.promise__num{
+  font-size: clamp(56px, 6.5vw, 96px);
+  line-height: .95;
+  letter-spacing: -0.03em;
+}
+.promise__num em{
+  font-style: normal;
+  font-size: .38em;
+  letter-spacing: .04em;
+  color: var(--hm-green);
+}
+.promise__title{
+  margin-top: 26px;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.promise__text{
+  margin-top: 14px;
+  max-width: 300px;
+  color: rgba(15,15,15,.6);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.promise__bar{
+  margin-top: 28px;
+  height: 1px;
+  width: 44px;
+  background: var(--hm-ink);
+  transition: width var(--hm-t-slow), background var(--hm-t-slow);
+}
+.promise__col:hover .promise__bar{ width: 120px; background: var(--hm-green); }
+
+/* ============================================================
+   7 — 本周主厨 / 编辑推荐
+   ============================================================ */
+.chef{
+  padding: clamp(72px, 8vw, 128px) 0 clamp(56px, 6vw, 96px);
+  border-bottom: 1px solid var(--hm-ink);
+}
+.chef__top{
+  display:grid;
+  grid-template-columns: 7fr 5fr;
+  gap: clamp(32px, 5vw, 88px);
+  align-items: start;
+}
+.chef__kicker{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.chef__kicker .tick{ width: 34px; height:1px; background: var(--hm-green); }
+.chef__quote{
+  font-size: clamp(26px, 3.2vw, 44px);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+}
+.chef__quote .hl{ color: var(--hm-green); }
+.chef__body{
+  margin-top: 28px;
+  max-width: 560px;
+  color: rgba(15,15,15,.62);
+  line-height: 1.75;
+  font-size: 13.5px;
+}
+.chef__sign{
+  margin-top: 30px;
+  display:flex;
+  align-items:center;
+  gap: 16px;
+}
+.chef__avatar{
+  width: 46px; height: 46px;
+  border: 1px solid var(--hm-ink);
+  border-radius: 50%;
+  overflow: hidden;
+  flex: none;
+}
+.chef__who b{ font-weight: 400; display:block; font-size: 14px; }
+.chef__who span{ font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(15,15,15,.5); }
+
+.chef__plate{
+  background: var(--hm-paper);
+  border: 1px solid var(--hm-ink);
+  padding: clamp(20px, 2.5vw, 36px);
+}
+.chef__plate svg{ width: 100%; height: auto; }
+.chef__plate-cap{
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hm-paper-2);
+  display:flex;
+  justify-content:space-between;
+  gap: 12px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(15,15,15,.55);
+}
+
+.picks{
+  margin-top: clamp(56px, 6vw, 96px);
+}
+.picks__head{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--hm-ink);
+}
+.picks__nav{
+  display:flex;
+  gap: 10px;
+}
+.picks__btn{
+  width: 42px; height: 42px;
+  border: 1px solid var(--hm-ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition: background var(--hm-t), color var(--hm-t);
+}
+.picks__btn:hover{ background: var(--hm-ink); color: var(--hm-white); }
+.picks__track{
+  display:flex;
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+}
+.picks__track::-webkit-scrollbar{ display:none; }
+.picks__track.is-drag{ cursor: grabbing; scroll-snap-type: none; }
+.pick{
+  flex: 0 0 clamp(260px, 26vw, 380px);
+  scroll-snap-align: start;
+  border-right: 1px solid var(--hm-paper-2);
+  padding: 32px 32px 36px 0;
+  margin-right: 32px;
+  transition: opacity var(--hm-t);
+}
+.pick__fig{
+  background: var(--hm-paper);
+  aspect-ratio: 4 / 3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.pick__fig svg{ width: 52%; height: 52%; transition: transform var(--hm-t-slow); }
+.pick:hover .pick__fig svg{ transform: scale(1.07); }
+.pick__no{
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--hm-green);
+}
+.pick__title{
+  margin-top: 12px;
+  font-size: 20px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.pick__text{
+  margin-top: 12px;
+  color: rgba(15,15,15,.6);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.pick__link{
+  margin-top: 18px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   8 — Footer
+   ============================================================ */
+.footer{
+  background: var(--hm-white);
+}
+.footer__manifesto{
+  padding: clamp(56px, 6vw, 96px) 0;
+  display:grid;
+  grid-template-columns: 5fr 7fr;
+  gap: clamp(28px, 4vw, 80px);
+  align-items: start;
+}
+.footer__manifesto p{
+  font-size: clamp(22px, 2.4vw, 34px);
+  line-height: 1.35;
+  letter-spacing: -0.012em;
+  max-width: 720px;
+}
+.footer__manifesto .hl{ color: var(--hm-green); }
+.footer__cols{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  padding: 48px 0 64px;
+  border-top: 1px solid var(--hm-ink);
+}
+.footer__col h4{
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(15,15,15,.45);
+  margin-bottom: 22px;
+}
+.footer__col li{ margin-bottom: 13px; }
+.footer__col a{
+  font-size: 13px;
+  position: relative;
+  padding-bottom: 2px;
+}
+.footer__col a::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:0;
+  height:1px; width:0;
+  background: var(--hm-ink);
+  transition: width var(--hm-t);
+}
+.footer__col a:hover::after{ width:100%; }
+
+.footer__newsletter{
+  border-top: 1px solid var(--hm-ink);
+  padding: 40px 0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.nl-form{
+  display:flex;
+  align-items:center;
+  border-bottom: 1px solid var(--hm-ink);
+  min-width: min(420px, 100%);
+}
+.nl-form input{
+  flex:1;
+  border:0;
+  outline:0;
+  background:transparent;
+  font: inherit;
+  padding: 12px 0;
+  font-size: 13px;
+}
+.nl-form input::placeholder{ color: rgba(15,15,15,.4); letter-spacing: .04em; }
+.nl-form button{
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 12px 0 12px 18px;
+  transition: color var(--hm-t);
+}
+.nl-form button:hover{ color: var(--hm-green); }
+
+.footer__word{
+  border-top: 1px solid var(--hm-ink);
+  padding: clamp(24px, 3vw, 48px) 0 0;
+  overflow: hidden;
+}
+.footer__word .mega{
+  font-size: clamp(52px, 11.2vw, 176px);
+  letter-spacing: -0.03em;
+  line-height: .92;
+  white-space: nowrap;
+}
+.footer__word .mega em{ font-style: normal; color: var(--hm-green); }
+.footer__legal{
+  display:flex;
+  justify-content:space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 22px 0 30px;
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(15,15,15,.45);
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 1180px){
+  .products{ grid-template-columns: repeat(3, 1fr); }
+  .cats__row{ grid-template-columns: repeat(3, 1fr); }
+  .cat:nth-child(3n){ border-right: 0; }
+  .cat:nth-child(-n+3){ border-bottom: 1px solid var(--hm-paper-2); }
+  .trace__diagram{ grid-template-columns: 1fr; }
+  .trace__side{ flex-direction: row; flex-wrap: wrap; gap: 32px; }
+  .trace__side--right{ align-items: flex-start; text-align: left; }
+  .trace__side--right .note__line{ margin-left: 0; }
+  .trace__crate{ max-width: 560px; margin: 8px auto; }
+}
+@media (max-width: 900px){
+  .nav{ display:none; }
+  .menu-toggle{
+    display:flex;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--hm-ink);
+    padding-bottom: 2px;
+  }
+  .hero__stats{ grid-template-columns: repeat(2, 1fr); }
+  .stat:nth-child(2n){ border-right: 0; }
+  .stat:nth-child(-n+2){ border-bottom: 1px solid var(--hm-paper-2); padding-bottom: 24px; }
+  .products{ grid-template-columns: repeat(2, 1fr); }
+  .promise__grid{ grid-template-columns: 1fr; }
+  .promise__col{
+    border-right: 0;
+    border-bottom: 1px solid var(--hm-paper-2);
+    padding-right: 0;
+  }
+  .promise__col:last-child{ border-bottom: 0; }
+  .chef__top{ grid-template-columns: 1fr; }
+  .footer__manifesto{ grid-template-columns: 1fr; }
+  .footer__cols{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px){
+  .cats__row{ grid-template-columns: repeat(2, 1fr); }
+  .cat{ border-right: 1px solid var(--hm-paper-2); border-bottom: 1px solid var(--hm-paper-2); }
+  .cat:nth-child(2n){ border-right: 0; }
+  .cat:nth-child(3n){ border-right: 1px solid var(--hm-paper-2); }
+  .cat:nth-child(2n){ border-right: 0; }
+  .products{ grid-template-columns: 1fr; }
+  .hero__stats{ grid-template-columns: 1fr 1fr; }
+  .pick{ flex-basis: 82vw; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     1 — 顶栏
+     ============================================================ -->
+<header class="header">
+  <div class="header__inner">
+    <a class="logo" href="#" aria-label="Harvest Market 首页">
+      <span class="logo__mark" aria-hidden="true"></span>
+      HARVEST&nbsp;MARKET
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#products" class="is-active">本周时鲜</a>
+      <a href="#categories">果蔬</a>
+      <a href="#categories">乳品烘焙</a>
+      <a href="#categories">肉禽蛋</a>
+      <a href="#about">关于我们</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:18px;">
+      <button class="menu-toggle" type="button">菜单</button>
+      <button class="bag" type="button" id="bagBtn">
+        购物袋
+        <span class="bag__count" id="bagCount">2</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================
+     2 — Hero
+     ============================================================ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero__season reveal">
+      <span class="hero__season-dot" aria-hidden="true"></span>
+      <span class="label">冬季食单 · 第 46 周 &nbsp;/&nbsp; WINTER LIST — WEEK 46</span>
+    </div>
+
+    <h1 class="mega hero__word reveal" style="--rd:.08s">
+      从田野<br>
+      到<em>餐桌</em>
+    </h1>
+
+    <div class="hero__sub reveal" style="--rd:.16s">
+      <p class="narrative">初冬时令，清晨采摘当日达。</p>
+      <p class="hero__lede">
+        我们与全国 128 家生态农场直接合作。凌晨五点的手工采收，正午之前进入 0–4°C 冷链，
+        三个小时后出现在你家的厨房台面上——不打蜡，不催熟，不加防腐剂。
+      </p>
+    </div>
+
+    <div class="hero__cta-row reveal" style="--rd:.24s">
+      <a class="btn" href="#products">
+        选购本周时鲜
+        <span class="btn__arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="btn btn--ghost" href="#trace">
+        查看食材溯源
+        <span class="btn__arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="hero__stats reveal" style="--rd:.3s">
+      <div class="stat">
+        <div class="stat__num">128<sup>家</sup></div>
+        <div class="stat__label">合作生态农场</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">3<sup>h</sup></div>
+        <div class="stat__label">冷链当日达</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">2,400<sup>+</sup></div>
+        <div class="stat__label">在售生鲜 SKU</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">98.6<sup>%</sup></div>
+        <div class="stat__label">新鲜度好评率</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 几何装饰：番茄 / 叶片 -->
+  <svg class="hero__deco" viewBox="0 0 360 360" fill="none" aria-hidden="true">
+    <circle cx="180" cy="210" r="118" stroke="#0F0F0F" stroke-width="1"/>
+    <path d="M180 92c0-26 18-48 44-56-4 28-20 48-44 56z" stroke="#2E7D32" stroke-width="1"/>
+    <path d="M180 92c0-26-18-48-44-56 4 28 20 48 44 56z" stroke="#2E7D32" stroke-width="1"/>
+    <path d="M180 92v-34" stroke="#2E7D32" stroke-width="1"/>
+    <path d="M120 168c14-18 34-28 58-28" stroke="#0F0F0F" stroke-width="1" opacity=".4"/>
+    <path d="M64 328h232" stroke="#0F0F0F" stroke-width="1"/>
+    <rect x="252" y="300" width="52" height="28" stroke="#0F0F0F" stroke-width="1"/>
+    <path d="M264 314h28M278 306v16" stroke="#2E7D32" stroke-width="1"/>
+    <text x="64" y="352" fill="#0F0F0F" opacity=".55" font-family="Inter, Arial" font-size="10" letter-spacing="2">FIG. 01 — HEIRLOOM TOMATO / SOLANUM LYCOPERSICUM</text>
+  </svg>
+</section>
+
+<!-- ============================================================
+     3 — 品类横条
+     ============================================================ -->
+<section class="cats" id="categories" aria-label="商品品类">
+  <div class="wrap" style="padding-left:0;padding-right:0;max-width:none;">
+    <div class="cats__row">
+      <a class="cat" href="#products">
+        <span class="cat__idx">01</span>
+        <span class="cat__name">时令果蔬</span>
+        <span class="cat__line" aria-hidden="true"></span>
+        <span class="cat__en">Seasonal Produce</span>
+      </a>
+      <a class="cat" href="#products">
+        <span class="cat__idx">02</span>
+        <span class="cat__name">乳品烘焙</span>
+        <span class="cat__line" aria-hidden="true"></span>
+        <span class="cat__en">Dairy &amp; Bakery</span>
+      </a>
+      <a class="cat" href="#products">
+        <span class="cat__idx">03</span>
+        <span class="cat__name">肉禽蛋品</span>
+        <span class="cat__line" aria-hidden="true"></span>
+        <span class="cat__en">Meat &amp; Eggs</span>
+      </a>
+      <a class="cat" href="#products">
+        <span class="cat__idx">04</span>
+        <span class="cat__name">水产海鲜</span>
+        <span class="cat__line" aria-hidden="true"></span>
+        <span class="cat__en">Seafood</span>
+      </a>
+      <a class="cat" href="#products">
+        <span class="cat__idx">05</span>
+        <span class="cat__name">Pantry 杂货</span>
+        <span class="cat__line" aria-hidden="true"></span>
+        <span class="cat__en">Pantry</span>
+      </a>
+      <a class="cat" href="#products">
+        <span class="cat__idx">06</span>
+        <span class="cat__name">饮品</span>
+        <span class="cat__line" aria-hidden="true"></span>
+        <span class="cat__en">Beverages</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     4 — 产品网格
+     ============================================================ -->
+<section id="products">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="section-head__title reveal">
+        本周货架上最好的八样东西。<br>
+        <span class="muted">卖完即止，下周再见。</span>
+      </h2>
+      <div class="section-head__meta reveal" style="--rd:.1s">
+        更新于 11 月 15 日 06:00<br>
+        库存每 15 分钟同步一次<br>
+        <span class="label--green">· 8 / 8 有货</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-bottom: clamp(64px, 8vw, 128px);">
+    <div class="products">
+
+      <!-- 1 阳光小番茄 -->
+      <article class="card reveal">
+        <div class="card__figure">
+          <span class="card__badge">限时 −15%</span>
+          <button class="card__quick" type="button" aria-label="加入购物袋">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <svg viewBox="0 0 200 200" fill="none" aria-label="阳光小番茄插画">
+            <circle cx="100" cy="118" r="56" stroke="#0F0F0F" stroke-width="1.2"/>
+            <path d="M100 62c0-14 8-26 22-32-2 16-10 27-22 32z" stroke="#2E7D32" stroke-width="1.2"/>
+            <path d="M100 62c0-14-8-26-22-32 2 16 10 27 22 32z" stroke="#2E7D32" stroke-width="1.2"/>
+            <path d="M100 62V38" stroke="#2E7D32" stroke-width="1.2"/>
+            <path d="M74 106c6-12 16-20 28-22" stroke="#0F0F0F" stroke-width="1" opacity=".35"/>
+            <path d="M60 150c10 12 26 20 40 20s30-8 40-20" stroke="#0F0F0F" stroke-width="1" opacity=".25"/>
+            <text x="100" y="196" text-anchor="middle" font-family="Inter, Arial" font-size="8" letter-spacing="2" fill="#0F0F0F" opacity=".5">SOLANUM LYCOPERSICUM</text>
+          </svg>
+        </div>
+        <div class="card__bar">
+          <h3 class="card__name">阳光小番茄</h3>
+          <div class="card__price"><s>¥22.0</s>¥18.8 <small>/ 500g</small></div>
+          <div class="card__spec">山东寿光 · 当日采摘 · 8 分甜度</div>
+        </div>
+      </article>
+
+      <!-- 2 有机菠菜 -->
+      <article class="card reveal" style="--rd:.06s">
+        <div class="card__figure">
+          <span class="card__badge card__badge--green">当日达</span>
+          <button class="card__quick" type="button" aria-label="加入购物袋">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <svg viewBox="0 0 200 200" fill="none" aria-label="有机菠菜插画">
+            <path d="M100 172V96" stroke="#0F0F0F" stroke-width="1.2"/>
+            <path d="M100 100c-30-6-52-28-58-58 32 2 54 24 58 58z" stroke="#2E7D32" stroke-width="1.2"/>
+            <path d="M100 100c30-6 52-28 58-58-32 2-54 24-58 58z" stroke="#2E7D32" stroke-width="1.2"/>
+            <path d="M100 132c-22-4-38-20-42-42 24 2 40 18 42 42z" stroke="#0F0F0F" stroke-width="1.1" opacity=".7"/>
+            <path d="M100 132c22-4 38-20 42-42-24 2-40 18-42 42z" stroke="#0F0F0F" stroke-width="1.1" opacity=".7"/>
+            <path d="M78 74c10 8 18 18 22 26M122 74c-10 8-18 18-22 26" stroke="#2E7D32" stroke-width=".9" opacity=".6"/>
+            <text x="100" y="196" text-anchor="middle" font-family="Inter, Arial" font-size="8" letter-spacing="2" fill="#0F0F0F" opacity=".5">SPINACIA OLERACEA</text>
+          </svg>
+        </div>
+        <div class="card__bar">
+          <h3 class="card__name">有机嫩菠菜</h3>
+          <div class="card__price">¥9.9 <small>/ 300g</small></div>
+          <div class="card__spec">崇明有机农场 · 无农药 218 项检测</div>
+        </div>
+      </article>
+
+      <!-- 3 散养土鸡蛋 -->
+      <article class="card reveal" style="--rd:.12s">
+        <div class="card__figure">
+          <span class="card__badge card__badge--line">限量</span>
+          <button class="card__quick" type="button" aria-label="加入购物袋">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <svg viewBox="0 0 200 200" fill="none" aria-label="散养土鸡蛋插画">
+            <path d="M42 118h116l-12 42H54l-12-42z" stroke="#0F0F0F" stroke-width="1.2"/>
+            <path d="M50 118l8-14h84l8 14" stroke="#0F0F0F" stroke-width="1.1"/>
+            <ellipse cx="74" cy="102" rx="18" ry="23" stroke="#0F0F0F" stroke-width="1.2"/>
+            <ellipse cx="112" cy="98" rx="18" ry="23" stroke="#2E7D32" stroke-width="1.2"/>
+            <path d="M66 92c3-5 7-8 12-9" stroke="#0F0F0F" stroke-width=".9" opacity=".35"/>
+            <path d="M104 88c3-5 7-8 12-9" stroke="#2E7D32" stroke-width=".9" opacity=".5"/>
+            <path d="M60 140h24M116 140h24" stroke="#0F0F0F" stroke-width=".9" opacity=".35"/>
+            <text x="100" y="196" text-anchor="middle" font-family="Inter, Arial" font-size="8" letter-spacing="2" fill="#0F0F0F" opacity=".5">FREE-RANGE EGGS · GRADE A</text>
+          </svg>
+        </div>
+        <div class="card__bar">
+          <h3 class="card__name">丘陵散养土鸡蛋</h3>
+          <div class="card__price">¥26.0 <small>/ 10 枚</small></div>
+          <div class="card__spec">江西赣州 · 林下散养 300 天</div>
+        </div>
+      </article>
+
+      <!-- 4 巴氏鲜牛奶 -->
+      <article class="card reveal" style="--rd:.18s">
+        <div class="card__figure">
+          <span class="card__badge card__badge--green">72h 鲜</span>
+          <button class="card__quick" type="button" aria-label="加入购物袋">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <svg viewBox="0 0 200 200" fill="none" aria-label="巴氏鲜牛奶插画">
+            <path d="M84 34h32v20l14 26v82H70V80l14-26V34z" stroke="#0F0F0F" stroke-width="1.2"/>
+            <path d="M84 34h32v12H84z" stroke="#2E7D32" stroke-width="1.2"/>
+            <rect x="70" y="104" width="60" height="34" stroke="#2E7D32" stroke-width="1.1"/>
+            <path d="M78 116h44M78 126h30" stroke="#2E7D32" stroke-width=".9" opacity=".7"/>
+            <path d="M70 80h60" stroke="#0F0F0F" stroke-width="1" opacity=".4"/>
+            <text x="100" y="196" text-anchor="middle" font-family="Inter, Arial" font-size="8" letter-spacing="2" fill="#0F0F0F" opacity=".5">PASTEURIZED · 72H FRESH</text>
+          </svg>
+        </div>
+        <div class="card__bar">
+          <h3 class="card__name">72℃ 巴氏鲜牛奶</h3>
+          <div class="card__price">¥15.8 <small>/ 950ml</small></div>
+          <div class="card__spec">河北牧场 · 低温杀菌 · 乳脂 3.8%</div>
+        </div>
+      </article>
+
+      <!-- 5 乡村酸种面包 -->
+      <article class="card reveal" style="--rd:.24s">
+        <div class="card__figure">
+          <button class="card__quick" type="button" aria-label="加入购物袋">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <svg viewBox="0 0 200 200" fill="none" aria-label="酸种面包插画">
+            <path d="M38 116c0-30 28-52 62-52s62 22 62 52c0 18-10 30-22 34H60c-12-4-22-16-22-34z" stroke="#0F0F0F" stroke-width="1.2"/>
+            <path d="M74 82c8 6 12 14 12 24M100 76c8 6 12 16 12 28M126 82c8 6 12 14 12 24" stroke="#2E7D32" stroke-width="1.1"/>
+            <path d="M52 132c10 8 28 12 48 12s38-4 48-12" stroke="#0F0F0F" stroke-width="1" opacity=".35"/>
+            <circle cx="66" cy="66" r="2" fill="#0F0F0F" opacity=".4"/>
+            <circle cx="136" cy="62" r="2" fill="#0F0F0F" opacity=".4"/>
+            <circle cx="100" cy="58" r="2" fill="#0F0F0F" opacity=".4"/>
+            <text x="100" y="196" text-anchor="middle" font-family="Inter, Arial" font-size="8" letter-spacing="2" fill="#0F0F0F" opacity=".5">SOURDOUGH · 18H FERMENT</text>
+          </svg>
+        </div>
+        <div class="card__bar">
+          <h3 class="card__name">乡村酸种面包</h3>
+          <div class="card__price">¥22.0 <small>/ 450g</small></div>
+          <div class="card__spec">18 小时低温发酵 · 石磨全麦粉</div>
+        </div>
+      </article>
+
+      <!-- 6 牛油果 -->
+      <article class="card reveal" style="--rd:.3s">
+        <div class="card__figure">
+          <span class="card__badge">即食熟度</span>
+          <button class="card__quick" type="button" aria-label="加入购物袋">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <svg viewBox="0 0 200 200" fill="none" aria-label="牛油果插画">
+            <path d="M100 32c26 0 44 30 44 66 0 40-20 70-44 70s-44-30-44-70c0-36 18-66 44-66z" stroke="#0F0F0F" stroke-width="1.2"/>
+            <path d="M100 32c26 0 44 30 44 66 0 40-20 70-44 70" stroke="#2E7D32" stroke-width="1.2" opacity=".8"/>
+            <circle cx="100" cy="112" r="22" stroke="#0F0F0F" stroke-width="1.1"/>
+            <path d="M86 100c6-6 14-9 22-9" stroke="#2E7D32" stroke-width=".9" opacity=".6"/>
+            <path d="M100 32v-8" stroke="#0F0F0F" stroke-width="1.2"/>
+            <text x="100" y="196" text-anchor="middle" font-family="Inter, Arial" font-size="8" letter-spacing="2" fill="#0F0F0F" opacity=".5">PERSEA AMERICANA · READY TO EAT</text>
+          </svg>
+        </div>
+        <div class="card__bar">
+          <h3 class="card__name">墨西哥牛油果</h3>
+          <div class="card__price">¥12.9 <small>/ 2 只</small></div>
+          <div class="card__spec">米却肯州 · 即食熟度 · 单果 180g+</div>
+        </div>
+      </article>
+
+      <!-- 7 挪威三文鱼 -->
+      <article class="card reveal" style="--rd:.36s">
+        <div class="card__figure">
+          <span class="card__badge card__badge--line">刺身级</span>
+          <button class="card__quick" type="button" aria-label="加入购物袋">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <svg viewBox="0 0 200 200" fill="none" aria-label="三文鱼插画">
+            <path d="M34 108c22-30 58-46 92-42 20 2 34 12 40 22-6 12-20 24-40 28-34 6-70-2-92-8z" stroke="#0F0F0F" stroke-width="1.2"/>
+            <path d="M158 88l14-16v56l-14-18" stroke="#0F0F0F" stroke-width="1.2"/>
+            <path d="M62 96c12-8 28-13 44-13M74 112c12-8 28-13 44-13" stroke="#E4572E" stroke-width="1.1" opacity=".85"/>
+            <path d="M100 82c8-4 18-6 28-5" stroke="#2E7D32" stroke-width="1" opacity=".6"/>
+            <circle cx="148" cy="92" r="2.4" fill="#0F0F0F"/>
+            <text x="100" y="196" text-anchor="middle" font-family="Inter, Arial" font-size="8" letter-spacing="2" fill="#0F0F0F" opacity=".5">SALMO SALAR · SASHIMI GRADE</text>
+          </svg>
+        </div>
+        <div class="card__bar">
+          <h3 class="card__name">冰鲜挪威三文鱼</h3>
+          <div class="card__price">¥68.0 <small>/ 300g</small></div>
+          <div class="card__spec">大西洋鲑 · 空运冰鲜 · 刺身级</div>
+        </div>
+      </article>
+
+      <!-- 8 槐花蜜 -->
+      <article class="card reveal" style="--rd:.42s">
+        <div class="card__figure">
+          <button class="card__quick" type="button" aria-label="加入购物袋">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <svg viewBox="0 0 200 200" fill="none" aria-label="槐花蜜插画">
+            <rect x="62" y="66" width="76" height="98" stroke="#0F0F0F" stroke-width="1.2"/>
+            <rect x="70" y="52" width="60" height="14" stroke="#0F0F0F" stroke-width="1.2"/>
+            <rect x="74" y="96" width="52" height="42" stroke="#2E7D32" stroke-width="1.1"/>
+            <path d="M84 112h32M84 122h22" stroke="#2E7D32" stroke-width=".9" opacity=".7"/>
+            <path d="M100 32v14M92 38c-6-6-2-14 8-12 10-2 14 6 8 12" stroke="#0F0F0F" stroke-width="1.1"/>
+            <path d="M62 82h76" stroke="#0F0F0F" stroke-width="1" opacity=".35"/>
+            <text x="100" y="196" text-anchor="middle" font-family="Inter, Arial" font-size="8" letter-spacing="2" fill="#0F0F0F" opacity=".5">ACACIA HONEY · UNPASTEURIZED</text>
+          </svg>
+        </div>
+        <div class="card__bar">
+          <h3 class="card__name">秦岭槐花蜜</h3>
+          <div class="card__price">¥45.0 <small>/ 500g</small></div>
+          <div class="card__spec">野生槐花 · 未加热 · 波美度 42°</div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     5 — 食材溯源（指针注释）
+     ============================================================ -->
+<section class="trace" id="trace">
+  <div class="wrap">
+    <div class="trace__lede reveal">
+      <p class="label label--green" style="margin-bottom:28px;">食材溯源 / TRACEABILITY</p>
+      <p class="narrative">
+        每一盒蔬菜，都带着清晨的露水<br>
+        和一份<span class="hl">可以查证的档案</span>。
+      </p>
+      <p class="body-text muted" style="margin-top:28px;max-width:560px;line-height:1.8;">
+        扫描盒身二维码，你可以看到它从哪块土地来、哪天被摘下、经过了哪些检测、
+        又在多少度的车厢里度过了旅程。我们把供应链摊开在阳光下——因为「新鲜」
+        不该是一个形容词，而应该是一组可以核对的数据。
+      </p>
+    </div>
+
+    <div class="trace__diagram">
+      <!-- 左侧注释 -->
+      <div class="trace__side">
+        <div class="note reveal">
+          <div class="note__line" aria-hidden="true"></div>
+          <div class="note__key">产地 / ORIGIN</div>
+          <div class="note__val">云南红河高原基地<br><strong>海拔 1,860 m</strong></div>
+          <div class="note__sub">昼夜温差 12°C，山泉灌溉，土壤三年一检。</div>
+        </div>
+        <div class="note reveal" style="--rd:.1s">
+          <div class="note__line" aria-hidden="true"></div>
+          <div class="note__key">采摘 / HARVEST</div>
+          <div class="note__val">今日 <strong>05:20</strong> 手工采收</div>
+          <div class="note__sub">日出前完成，采后 18 分钟内进入预冷间。</div>
+        </div>
+      </div>
+
+      <!-- 中央：蔬菜箱插画 -->
+      <div class="trace__crate reveal--clip">
+        <div class="trace__stamp" aria-hidden="true">
+          <b>100%</b>
+          <span>可溯源</span>
+          <span>Traceable</span>
+        </div>
+        <svg viewBox="0 0 560 420" fill="none" aria-label="一盒当季蔬菜的拆解图">
+          <!-- 台面线 -->
+          <path d="M40 356h480" stroke="#0F0F0F" stroke-width="1"/>
+          <!-- 箱体 -->
+          <path d="M120 216h320v140H120z" stroke="#0F0F0F" stroke-width="1.2"/>
+          <path d="M120 252h320M120 300h320" stroke="#0F0F0F" stroke-width="1" opacity=".35"/>
+          <path d="M180 216v140M280 216v140M380 216v140" stroke="#0F0F0F" stroke-width="1" opacity=".22"/>
+          <path d="M112 216l16-22h304l16 22" stroke="#0F0F0F" stroke-width="1.2"/>
+          <!-- 菠菜 -->
+          <path d="M196 196c-18-6-30-20-32-38 18 2 32 16 32 38z" stroke="#2E7D32" stroke-width="1.2"/>
+          <path d="M196 196c14-12 20-30 16-48-14 10-20 30-16 48z" stroke="#2E7D32" stroke-width="1.2"/>
+          <path d="M196 196v22" stroke="#2E7D32" stroke-width="1.1"/>
+          <!-- 小番茄 -->
+          <circle cx="268" cy="186" r="24" stroke="#0F0F0F" stroke-width="1.2"/>
+          <path d="M268 162v-10M258 158c6-4 14-4 20 0" stroke="#2E7D32" stroke-width="1.1"/>
+          <circle cx="316" cy="196" r="18" stroke="#E4572E" stroke-width="1.2"/>
+          <!-- 胡萝卜 -->
+          <path d="M362 152l24 96-38-26-24-70 38 0z" stroke="#E4572E" stroke-width="1.2"/>
+          <path d="M368 150c-2-16 6-30 18-36-2 16-8 28-18 36zM356 152c-8-12-22-18-34-16 8 12 20 20 34 16z" stroke="#2E7D32" stroke-width="1.1"/>
+          <!-- 蘑菇 -->
+          <path d="M226 216v-16c0-12 10-22 22-22s22 10 22 22v16" stroke="#0F0F0F" stroke-width="1.2"/>
+          <path d="M236 216v-14c0-6 5-12 12-12" stroke="#0F0F0F" stroke-width=".9" opacity=".4"/>
+          <!-- 箱内标签 -->
+          <rect x="228" y="278" width="104" height="34" stroke="#0F0F0F" stroke-width="1"/>
+          <path d="M240 292h80M240 302h56" stroke="#0F0F0F" stroke-width=".9" opacity=".5"/>
+          <!-- 露水点 -->
+          <circle cx="170" cy="180" r="2.2" fill="#2E7D32" opacity=".7"/>
+          <circle cx="212" cy="158" r="1.8" fill="#2E7D32" opacity=".6"/>
+          <circle cx="336" cy="172" r="2" fill="#2E7D32" opacity=".6"/>
+          <!-- 指针线（指向四周注释） -->
+          <path d="M120 216H44" stroke="#0F0F0F" stroke-width="1" stroke-dasharray="3 4"/>
+          <path d="M120 300H44" stroke="#0F0F0F" stroke-width="1" stroke-dasharray="3 4"/>
+          <path d="M440 216h76" stroke="#0F0F0F" stroke-width="1" stroke-dasharray="3 4"/>
+          <path d="M440 300h76" stroke="#0F0F0F" stroke-width="1" stroke-dasharray="3 4"/>
+          <circle cx="44" cy="216" r="3" fill="#2E7D32"/>
+          <circle cx="44" cy="300" r="3" fill="#2E7D32"/>
+          <circle cx="516" cy="216" r="3" fill="#2E7D32"/>
+          <circle cx="516" cy="300" r="3" fill="#2E7D32"/>
+          <text x="280" y="404" text-anchor="middle" font-family="Inter, Arial" font-size="9" letter-spacing="3" fill="#0F0F0F" opacity=".55">FIG. 02 — DAILY HARVEST BOX / DISASSEMBLED VIEW</text>
+        </svg>
+      </div>
+
+      <!-- 右侧注释 -->
+      <div class="trace__side trace__side--right">
+        <div class="note reveal" style="--rd:.16s">
+          <div class="note__line" aria-hidden="true"></div>
+          <div class="note__key">检测 / INSPECTION</div>
+          <div class="note__val"><strong>218 项</strong> 农残全检</div>
+          <div class="note__sub">SGS 第三方实验室，每批次留样 18 个月。</div>
+        </div>
+        <div class="note reveal" style="--rd:.24s">
+          <div class="note__line" aria-hidden="true"></div>
+          <div class="note__key">冷链 / COLD CHAIN</div>
+          <div class="note__val">全程 <strong>0–4°C</strong> 不断链</div>
+          <div class="note__sub">车厢温度每 5 分钟上传一次，异常自动报警。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     6 — 配送承诺
+     ============================================================ -->
+<section class="promise">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="section-head__title reveal">
+        新鲜是一场与时间的赛跑，<br>
+        我们把每一棒都跑进秒表。
+      </h2>
+      <div class="section-head__meta reveal" style="--rd:.1s">
+        服务承诺 / OUR PROMISE<br>
+        覆盖 26 座城市 · 412 个前置仓
+      </div>
+    </div>
+
+    <div class="promise__grid">
+      <div class="promise__col reveal">
+        <div class="promise__num">05<em>:20</em></div>
+        <div class="promise__title">清晨采摘</div>
+        <p class="promise__text">
+          日出之前完成采收，露水还挂在叶尖。采后 18 分钟进入预冷间，
+          锁住 90% 以上的维生素 C 与风味物质。
+        </p>
+        <div class="promise__bar" aria-hidden="true"></div>
+      </div>
+      <div class="promise__col reveal" style="--rd:.1s">
+        <div class="promise__num">3<em>小时</em></div>
+        <div class="promise__title">冷链当日达</div>
+        <p class="promise__text">
+          从农场出库到你家门口，温度始终维持在 0–4°C。
+          保温箱内置相变冰板，开箱时依然冰手。
+        </p>
+        <div class="promise__bar" aria-hidden="true"></div>
+      </div>
+      <div class="promise__col reveal" style="--rd:.2s">
+        <div class="promise__num">24<em>h</em></div>
+        <div class="promise__title">无忧退换</div>
+        <p class="promise__text">
+          不新鲜？24 小时内一键退款，无需拍照举证。
+          我们宁可自己承担损耗，也不让你为坏心情买单。
+        </p>
+        <div class="promise__bar" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     7 — 本周主厨 / 编辑推荐
+     ============================================================ -->
+<section class="chef" id="about">
+  <div class="wrap">
+    <div class="chef__top">
+      <div>
+        <div class="chef__kicker reveal">
+          <span class="tick" aria-hidden="true"></span>
+          <span class="label">本周主厨 / CHEF'S TABLE — WEEK 46</span>
+        </div>
+        <blockquote class="chef__quote reveal" style="--rd:.08s">
+          「冬天的厨房不需要复杂的技巧。<br>
+          一把好菠菜、一勺好橄榄油、<span class="hl">一点耐心</span>，<br>
+          就是一顿好饭。」
+        </blockquote>
+        <p class="chef__body reveal" style="--rd:.16s">
+          本周我们邀请常驻主厨林禾，用当季食材设计了一份 30 分钟就能完成的冬季菜单：
+          蒜香橄榄油拌嫩菠菜、慢烤小番茄酸种吐司、柠檬黄油煎三文鱼。
+          三道菜共用 9 种食材，全部来自下面的本周清单——一次买齐，一周不重样。
+          她说，好的食材会自己说话，厨师要做的只是别把话打断。
+        </p>
+        <div class="chef__sign reveal" style="--rd:.22s">
+          <div class="chef__avatar" aria-hidden="true">
+            <svg viewBox="0 0 46 46" fill="none">
+              <circle cx="23" cy="18" r="9" stroke="#0F0F0F" stroke-width="1"/>
+              <path d="M7 42c2-10 8-15 16-15s14 5 16 15" stroke="#0F0F0F" stroke-width="1"/>
+              <path d="M14 12c2-6 16-6 18 0" stroke="#2E7D32" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="chef__who">
+            <b>林禾 · Lin He</b>
+            <span>Harvest Market 常驻主厨 / 前上海米其林一星</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 餐盘插画 -->
+      <figure class="chef__plate reveal--clip">
+        <svg viewBox="0 0 480 380" fill="none" aria-label="冬季菜单餐盘插画">
+          <ellipse cx="240" cy="210" rx="170" ry="120" stroke="#0F0F0F" stroke-width="1.2"/>
+          <ellipse cx="240" cy="210" rx="128" ry="88" stroke="#0F0F0F" stroke-width="1" opacity=".35"/>
+          <!-- 三文鱼 -->
+          <path d="M168 190c24-18 56-26 86-22 18 2 32 10 38 18-8 12-24 20-44 22-32 4-62-4-80-18z" stroke="#E4572E" stroke-width="1.2"/>
+          <path d="M186 184c12-6 28-10 42-10M198 198c12-6 28-10 42-10" stroke="#E4572E" stroke-width=".9" opacity=".7"/>
+          <!-- 菠菜 -->
+          <path d="M300 232c-14-4-24-16-26-30 14 2 26 14 26 30z" stroke="#2E7D32" stroke-width="1.2"/>
+          <path d="M300 232c10-10 14-24 12-38-10 8-14 24-12 38z" stroke="#2E7D32" stroke-width="1.2"/>
+          <!-- 小番茄 -->
+          <circle cx="200" cy="252" r="14" stroke="#0F0F0F" stroke-width="1.1"/>
+          <path d="M200 238v-6M194 235c4-2 8-2 12 0" stroke="#2E7D32" stroke-width="1"/>
+          <!-- 柠檬角 -->
+          <path d="M282 176l24-12 6 18-24 10z" stroke="#0F0F0F" stroke-width="1.1"/>
+          <path d="M290 172l10-5M294 178l10-5" stroke="#0F0F0F" stroke-width=".8" opacity=".5"/>
+          <!-- 香草枝 -->
+          <path d="M240 268c14 6 32 6 46 0M246 262c-2 6 0 12 4 16M262 262c-2 6 0 12 4 16M278 260c-2 6 0 12 4 16" stroke="#2E7D32" stroke-width="1"/>
+          <!-- 盘边刻度 -->
+          <path d="M70 210h20M390 210h20M240 90v20M240 300v20" stroke="#0F0F0F" stroke-width="1" opacity=".35"/>
+          <text x="240" y="366" text-anchor="middle" font-family="Inter, Arial" font-size="9" letter-spacing="3" fill="#0F0F0F" opacity=".55">PLATE 46 — LEMON BUTTER SALMON / SPINACH / SOURDOUGH</text>
+        </svg>
+        <figcaption class="chef__plate-cap">
+          <span>柠檬黄油煎三文鱼</span>
+          <span>30 MIN · 2 人份</span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <!-- 编辑推荐横滑 -->
+    <div class="picks">
+      <div class="picks__head">
+        <h3 class="label reveal">编辑推荐 / EDITOR'S PICKS — 横向滑动查看</h3>
+        <div class="picks__nav reveal">
+          <button class="picks__btn" type="button" id="pickPrev" aria-label="上一组">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M6 1L1 6l5 5M1 6h15" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <button class="picks__btn" type="button" id="pickNext" aria-label="下一组">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M10 1l5 5-5 5M15 6H0" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="picks__track" id="picksTrack">
+        <article class="pick">
+          <div class="pick__fig">
+            <svg viewBox="0 0 160 120" fill="none" aria-hidden="true">
+              <path d="M40 88h80l-8 20H48l-8-20z" stroke="#0F0F0F" stroke-width="1.1"/>
+              <path d="M80 88V44" stroke="#0F0F0F" stroke-width="1.1"/>
+              <path d="M80 60c-16-2-26-12-28-26 16 2 26 12 28 26zM80 60c16-2 26-12 28-26-16 2-26 12-28 26z" stroke="#2E7D32" stroke-width="1.1"/>
+            </svg>
+          </div>
+          <div class="pick__no">PICK 01</div>
+          <h4 class="pick__title">一棵会讲故事的白菜</h4>
+          <p class="pick__text">
+            胶东半岛霜降后采收的黄心大白菜，甜度是夏天的两倍。
+            炖汤、醋溜、做泡菜，它是冬天最宽容的食材。
+          </p>
+          <a class="pick__link u-link" href="#products">查看清单 →</a>
+        </article>
+
+        <article class="pick">
+          <div class="pick__fig">
+            <svg viewBox="0 0 160 120" fill="none" aria-hidden="true">
+              <rect x="48" y="30" width="64" height="72" stroke="#0F0F0F" stroke-width="1.1"/>
+              <rect x="56" y="46" width="48" height="28" stroke="#2E7D32" stroke-width="1.1"/>
+              <path d="M64 60h32M64 68h22" stroke="#2E7D32" stroke-width=".9" opacity=".7"/>
+              <path d="M80 16v12M72 22c-4-5-2-10 8-8 10-2 12 3 8 8" stroke="#0F0F0F" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="pick__no">PICK 02</div>
+          <h4 class="pick__title">早餐的第三种可能</h4>
+          <p class="pick__text">
+            酸种吐司 + 牛油果 + 一颗溏心蛋，撒海盐与黑胡椒。
+            五分钟，比外卖快，比外卖体面。
+          </p>
+          <a class="pick__link u-link" href="#products">查看清单 →</a>
+        </article>
+
+        <article class="pick">
+          <div class="pick__fig">
+            <svg viewBox="0 0 160 120" fill="none" aria-hidden="true">
+              <circle cx="80" cy="62" r="30" stroke="#0F0F0F" stroke-width="1.1"/>
+              <path d="M80 32v-12M62 38c8-6 20-8 30-4M62 82c8 8 28 10 38 0" stroke="#2E7D32" stroke-width="1.1"/>
+              <path d="M50 62H32M128 62h-18" stroke="#0F0F0F" stroke-width="1" opacity=".35"/>
+            </svg>
+          </div>
+          <div class="pick__no">PICK 03</div>
+          <h4 class="pick__title">冬夜的第一杯热饮</h4>
+          <p class="pick__text">
+            槐花蜜 + 现磨姜片 + 一片柠檬，80°C 温水冲开。
+            不到 10 元的成本，抵得上一杯热红酒的治愈感。
+          </p>
+          <a class="pick__link u-link" href="#products">查看清单 →</a>
+        </article>
+
+        <article class="pick">
+          <div class="pick__fig">
+            <svg viewBox="0 0 160 120" fill="none" aria-hidden="true">
+              <path d="M36 84c0-24 20-42 44-42s44 18 44 42c0 12-6 22-16 26H52c-10-4-16-14-16-26z" stroke="#0F0F0F" stroke-width="1.1"/>
+              <path d="M62 58c6 6 8 12 8 20M80 52c6 6 8 12 8 20M98 58c6 6 8 12 8 20" stroke="#2E7D32" stroke-width="1"/>
+              <path d="M46 96c8 6 22 10 34 10s26-4 34-10" stroke="#0F0F0F" stroke-width=".9" opacity=".35"/>
+            </svg>
+          </div>
+          <div class="pick__no">PICK 04</div>
+          <h4 class="pick__title">面包会有的，黄油也会有</h4>
+          <p class="pick__text">
+            本周烘焙坊开炉时间提前到清晨 4:00。酸种、法棍、全麦贝果，
+            出炉两小时内装车，中午前送到。
+          </p>
+          <a class="pick__link u-link" href="#products">查看清单 →</a>
+        </article>
+
+        <article class="pick">
+          <div class="pick__fig">
+            <svg viewBox="0 0 160 120" fill="none" aria-hidden="true">
+              <path d="M44 44h72v56H44z" stroke="#0F0F0F" stroke-width="1.1"/>
+              <path d="M44 62h72M62 44v56M98 44v56" stroke="#0F0F0F" stroke-width=".9" opacity=".3"/>
+              <path d="M58 34c2-8 8-14 16-16-1 9-6 15-16 16zM102 34c-2-8-8-14-16-16 1 9 6 15 16 16z" stroke="#2E7D32" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="pick__no">PICK 05</div>
+          <h4 class="pick__title">一人食也要摆摆好</h4>
+          <p class="pick__text">
+            200g 分装小规格肉禽，刚好一餐的量。
+            不浪费、不将就，冰箱里永远留得住清爽。
+          </p>
+          <a class="pick__link u-link" href="#products">查看清单 →</a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     8 — Footer
+     ============================================================ -->
+<footer class="footer">
+  <div class="wrap">
+
+    <div class="footer__manifesto">
+      <div class="reveal">
+        <p class="label label--green">品牌宣言 / MANIFESTO</p>
+      </div>
+      <div class="reveal" style="--rd:.1s">
+        <p>
+          我们相信，食物最好的装饰，<br>
+          是它<span class="hl">本来的样子</span>。
+        </p>
+        <p class="body-text muted" style="margin-top:22px;max-width:560px;line-height:1.85;">
+          Harvest Market 成立于 2019 年，从一辆冷链小货车和三家合作农场开始。
+          六年过去，我们仍然坚持同一件事：把应季、干净、有来处的食物，
+          用最短的路径送到城市的厨房里。不追求全年都有，只追求此刻最好。
+        </p>
+      </div>
+    </div>
+
+    <div class="footer__cols">
+      <div class="footer__col reveal">
+        <h4>购物 / SHOP</h4>
+        <ul>
+          <li><a class="u-link" href="#products">本周时鲜</a></li>
+          <li><a class="u-link" href="#categories">时令果蔬</a></li>
+          <li><a class="u-link" href="#categories">乳品烘焙</a></li>
+          <li><a class="u-link" href="#categories">肉禽蛋品</a></li>
+          <li><a class="u-link" href="#categories">水产海鲜</a></li>
+          <li><a class="u-link" href="#categories">Pantry 杂货</a></li>
+        </ul>
+      </div>
+      <div class="footer__col reveal" style="--rd:.06s">
+        <h4>关于 / ABOUT</h4>
+        <ul>
+          <li><a class="u-link" href="#about">品牌故事</a></li>
+          <li><a class="u-link" href="#trace">合作农场</a></li>
+          <li><a class="u-link" href="#trace">采摘标准</a></li>
+          <li><a class="u-link" href="#trace">检测报告</a></li>
+          <li><a class="u-link" href="#about">可持续承诺</a></li>
+          <li><a class="u-link" href="#about">加入我们</a></li>
+        </ul>
+      </div>
+      <div class="footer__col reveal" style="--rd:.12s">
+        <h4>服务 / SERVICE</h4>
+        <ul>
+          <li><a class="u-link" href="#">配送范围与时效</a></li>
+          <li><a class="u-link" href="#">冷链说明</a></li>
+          <li><a class="u-link" href="#">退换政策</a></li>
+          <li><a class="u-link" href="#">会员与订阅</a></li>
+          <li><a class="u-link" href="#">常见问题</a></li>
+          <li><a class="u-link" href="#">发票与结算</a></li>
+        </ul>
+      </div>
+      <div class="footer__col reveal" style="--rd:.18s">
+        <h4>联系 / CONTACT</h4>
+        <ul>
+          <li><a class="u-link" href="#">在线客服 7:00–23:00</a></li>
+          <li><a class="u-link" href="#">企业与团体采购</a></li>
+          <li><a class="u-link" href="#">线下门店：上海安福路 128 号</a></li>
+          <li><a class="u-link" href="#">媒体与合作</a></li>
+          <li><a class="u-link" href="#">供应商入驻</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__newsletter">
+      <div>
+        <p class="label">订阅每周时鲜清单 / WEEKLY LIST</p>
+        <p class="body-text muted" style="margin-top:8px;">每周日早上 8 点，一封邮件，告诉你下周什么最好吃。</p>
+      </div>
+      <form class="nl-form" onsubmit="return false;">
+        <input type="email" placeholder="你的邮箱地址" aria-label="邮箱地址">
+        <button type="submit">订阅 →</button>
+      </form>
+    </div>
+
+    <div class="footer__word">
+      <div class="mega reveal">HARVEST <em>MARKET</em></div>
+      <div class="footer__legal">
+        <span>© 2026 Harvest Market 生鲜超市 · 沪ICP备 2019xxxxx 号</span>
+        <span>从田野到餐桌 / FROM FIELD TO TABLE</span>
+        <span>隐私政策 · 用户协议 · 食品经营许可证 JY13100000000</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   交互脚本 — 纯 vanilla，无依赖
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* — 滚动入场动画：无 IntersectionObserver 时全量加 .in 兜底 — */
+  var reveals = document.querySelectorAll('.reveal, .reveal--clip');
+
+  if (!('IntersectionObserver' in window)) {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+  reveals.forEach(function (el) { io.observe(el); });
+
+  /* — 购物袋：加购动效 — */
+  var bag = document.getElementById('bagBtn');
+  var bagCount = document.getElementById('bagCount');
+  if (bag && bagCount) {
+    document.querySelectorAll('.card__quick').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        bagCount.textContent = String(parseInt(bagCount.textContent, 10) + 1);
+        bag.classList.add('is-bump');
+        setTimeout(function () { bag.classList.remove('is-bump'); }, 220);
+      });
+    });
+  }
+
+  /* — 编辑推荐：横滑按钮 + 拖拽 — */
+  var track = document.getElementById('picksTrack');
+  var prev = document.getElementById('pickPrev');
+  var next = document.getElementById('pickNext');
+
+  if (track && prev && next) {
+    var step = function () {
+      var card = track.querySelector('.pick');
+      return card ? card.getBoundingClientRect().width + 32 : 320;
+    };
+    prev.addEventListener('click', function () {
+      track.scrollBy({ left: -step(), behavior: 'smooth' });
+    });
+    next.addEventListener('click', function () {
+      track.scrollBy({ left: step(), behavior: 'smooth' });
+    });
+
+    var isDown = false, startX = 0, startScroll = 0;
+    track.addEventListener('pointerdown', function (e) {
+      isDown = true;
+      startX = e.clientX;
+      startScroll = track.scrollLeft;
+      track.classList.add('is-drag');
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!isDown) return;
+      track.scrollLeft = startScroll - (e.clientX - startX);
+    });
+    window.addEventListener('pointerup', function () {
+      isDown = false;
+      track.classList.remove('is-drag');
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

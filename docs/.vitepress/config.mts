@@ -63,7 +63,7 @@ export default defineConfig({
 
   head: [
     // SEO 基础 meta
-    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，237 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
+    ['meta', { name: 'description', content: 'My Design Lib — 为 AI 编程助手优化的前端设计库。25 个纯 HTML+CSS 组件，239 个完整页面灵感，Design Tokens，零框架依赖，复制即用。' }],
     ['meta', { name: 'keywords', content: '前端组件库, AI设计库, HTML CSS组件, 页面模板, 设计系统, Design Tokens, 免费组件, SaaS模板' }],
     ['meta', { name: 'author', content: 'My Design Lib' }],
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
@@ -71,7 +71,7 @@ export default defineConfig({
     // Open Graph（社交分享）
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 237 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { property: 'og:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 239 个完整页面，纯 HTML+CSS，零依赖。' }],
     ['meta', { property: 'og:url', content: 'http://101.37.166.208:11930' }],
     ['meta', { property: 'og:site_name', content: 'My Design Lib' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -79,14 +79,14 @@ export default defineConfig({
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'My Design Lib — 你的设计，AI 来加速' }],
-    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 237 个完整页面，纯 HTML+CSS，零依赖。' }],
+    ['meta', { name: 'twitter:description', content: '为 AI 编程助手优化的前端设计库。25 个组件 + 239 个完整页面，纯 HTML+CSS，零依赖。' }],
 
     // Schema.org 结构化数据
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "My Design Lib",
-"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 237 个完整页面",
+"description": "为 AI 编程助手优化的前端设计库，包含 25 个组件和 239 个完整页面",
       "url": "http://101.37.166.208:11930",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
@@ -101,7 +101,7 @@ export default defineConfig({
 
     // AI 爬虫友好
     ['meta', { name: 'ai-content-type', content: 'design-library' }],
-    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，237个完整页面模板，Design Tokens。可直接复制使用。' }],
+    ['meta', { name: 'ai-description', content: '前端设计库：25个HTML+CSS组件，239个完整页面模板，Design Tokens。可直接复制使用。' }],
 
     ['link', { rel: 'stylesheet', href: '/tokens/tokens.css' }],
     ...componentCSS.map(name => [
@@ -383,7 +383,8 @@ export default defineConfig({
             { text: 'NORDHAUS 北欧设计家具商城', link: '/pages/nordhaus-furniture' },
             { text: 'HARMONIA 手工乐器工坊', link: '/pages/harmonia-instruments' },
             { text: 'VOLTA 精品数码商店', link: '/pages/volta-electronics' },
-            { text: 'HALLOWAY 当代艺术拍卖行', link: '/pages/halloway-auctions' }
+            { text: 'HALLOWAY 当代艺术拍卖行', link: '/pages/halloway-auctions' },
+            { text: 'Harvest Market 都市生鲜超市', link: '/pages/harvest-market' }
           ]
         },
         {
@@ -502,7 +503,8 @@ export default defineConfig({
             { text: 'Verrière 婚礼庄园', link: '/pages/wedding-estate' },
             { text: 'Blue Reef 蓝湾海洋馆', link: '/pages/blue-reef-aquarium' },
             { text: 'MINILAB 儿童科学探索馆', link: '/pages/minilab-science' },
-            { text: 'DRIVEHAUS 精品租车', link: '/pages/drivehaus-rental' }
+            { text: 'DRIVEHAUS 精品租车', link: '/pages/drivehaus-rental' },
+            { text: 'Nova Mobile 运营商套餐', link: '/pages/nova-mobile' }
           ]
         }
       ]

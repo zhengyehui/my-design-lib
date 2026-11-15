@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Mobile · 信号无界，自由连通 — 都市 5G 套餐</title>
+<meta name="description" content="Nova Mobile 都市移动通信运营商：5G 套餐 ¥39 起，99.2% 人口覆盖，下行 1.2Gbps。轻享 / 畅享 / 家庭 / 商务四档套餐，携号转网即刻办理。">
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   Nova Mobile — 品牌调色板（与 tokens.css 并存，局部覆盖）
+   深靛紫 × 亮蓝 × 霓虹青 · 数据可视化版式
+   ============================================================ */
+:root{
+  --nv-ink-900:#170B2E;
+  --nv-ink-800:#1C0F38;
+  --nv-ink-700:#241247;
+  --nv-ink-600:#2E1A5C;
+  --nv-paper:#F7F5F2;
+  --nv-white:#FFFFFF;
+  --nv-blue:#1E6EF3;
+  --nv-blue-deep:#1554C4;
+  --nv-blue-soft:rgba(30,110,243,.12);
+  --nv-slate:#6A7681;
+  --nv-slate-deep:#3B444D;
+  --nv-cyan:#7FE7E0;
+  --nv-hair:rgba(23,11,46,.12);
+  --nv-hair-dark:rgba(255,255,255,.14);
+  --nv-radius-l:24px;
+  --nv-radius-m:20px;
+  --nv-radius-s:12px;
+  --font-sans:'Inter','Helvetica Neue',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  --nv-shadow-card:0 24px 60px -24px rgba(23,11,46,.22);
+  --nv-shadow-lift:0 40px 90px -30px rgba(30,110,243,.35);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);
+  background:var(--nv-paper);
+  color:var(--nv-ink-900);
+  font-size:15px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+ul{list-style:none}
+
+/* ── 滚动入场（html.js 守卫：无 JS 时内容全部可见） ───────── */
+html.js .reveal:not(.in){
+  opacity:0;
+  transform:translateY(28px);
+}
+.reveal{
+  transition:opacity .8s cubic-bezier(.22,.61,.36,1),transform .8s cubic-bezier(.22,.61,.36,1);
+  transition-delay:var(--d,0s);
+}
+html.js .reveal.in{opacity:1;transform:none}
+
+/* ── 通用排版工具 ─────────────────────────────────────── */
+.wrap{width:min(1180px,92vw);margin:0 auto}
+.eyebrow{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:600;color:var(--nv-blue);
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.7}
+.eyebrow.on-dark{color:var(--nv-cyan)}
+.h-mega{
+  font-size:clamp(44px,6.4vw,80px);
+  line-height:1.05;letter-spacing:-.02em;font-weight:700;
+}
+.h-sec{
+  font-size:clamp(32px,4vw,52px);
+  line-height:1.12;letter-spacing:-.015em;font-weight:700;
+}
+.lede{font-size:16px;line-height:1.8;color:var(--nv-slate);max-width:56ch}
+.lede.on-dark{color:rgba(255,255,255,.72)}
+.hairline{border:none;border-top:1px solid var(--nv-hair)}
+.hairline.on-dark{border-top-color:var(--nv-hair-dark)}
+
+/* ── 按钮 ─────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:15px 30px;border-radius:999px;font-size:14px;font-weight:600;
+  letter-spacing:.02em;transition:transform .3s,box-shadow .3s,background .3s,color .3s;
+}
+.btn-primary{background:var(--nv-blue);color:#fff;box-shadow:0 14px 34px -12px rgba(30,110,243,.55)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 22px 46px -12px rgba(30,110,243,.65);background:var(--nv-blue-deep)}
+.btn-ghost{border:1px solid var(--nv-hair);color:var(--nv-ink-900);background:rgba(255,255,255,.5)}
+.btn-ghost:hover{border-color:var(--nv-blue);color:var(--nv-blue);transform:translateY(-2px)}
+.btn-ghost-dark{border:1px solid var(--nv-hair-dark);color:#fff}
+.btn-ghost-dark:hover{border-color:var(--nv-cyan);color:var(--nv-cyan);transform:translateY(-2px)}
+.btn .arrow{transition:transform .3s}
+.btn:hover .arrow{transform:translateX(4px)}
+
+/* ============================================================
+   1. 吸顶导航
+   ============================================================ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(23,11,46,.82);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  height:68px;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-size:20px;font-weight:700;letter-spacing:.16em;color:#fff;
+}
+.logo-mark{width:30px;height:30px;flex:none}
+.logo-mark .ring{animation:logoPulse 3.2s ease-out infinite}
+.logo-mark .ring:nth-child(2){animation-delay:.5s}
+.logo-mark .ring:nth-child(3){animation-delay:1s}
+@keyframes logoPulse{
+  0%{opacity:.25;transform:scale(.86)}
+  55%{opacity:.95;transform:scale(1)}
+  100%{opacity:.25;transform:scale(.86)}
+}
+.nav-links{display:flex;align-items:center;gap:34px}
+.nav-links a{
+  font-size:13.5px;color:rgba(255,255,255,.72);letter-spacing:.04em;
+  position:relative;padding:6px 0;transition:color .3s;
+}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1.5px;width:0;
+  background:var(--nv-cyan);transition:width .35s cubic-bezier(.22,.61,.36,1);
+}
+.nav-links a:hover{color:#fff}
+.nav-links a:hover::after{width:100%}
+.nav-actions{display:flex;align-items:center;gap:18px}
+.nav-login{font-size:13.5px;color:rgba(255,255,255,.72);transition:color .3s}
+.nav-login:hover{color:#fff}
+.nav .btn{padding:11px 24px;font-size:13px}
+.nav-burger{display:none;width:40px;height:40px;flex-direction:column;justify-content:center;gap:5px;align-items:center}
+.nav-burger span{width:20px;height:1.6px;background:#fff;transition:.3s}
+
+/* ============================================================
+   2. Hero
+   ============================================================ */
+.hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(155deg,var(--nv-ink-900) 0%,var(--nv-ink-700) 62%,#2B1658 100%);
+  color:#fff;
+  padding:172px 0 110px;
+}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.hero-arcs{
+  position:absolute;right:-14%;top:50%;transform:translateY(-50%);
+  width:min(880px,82vw);opacity:.85;
+}
+.hero-arcs .arc{
+  fill:none;stroke-linecap:round;
+  transform-origin:120px 320px;
+  animation:arcGlow 5.2s ease-in-out infinite;
+}
+.hero-arcs .arc:nth-child(1){stroke:rgba(127,231,224,.55);animation-delay:0s}
+.hero-arcs .arc:nth-child(2){stroke:rgba(127,231,224,.4);animation-delay:.45s}
+.hero-arcs .arc:nth-child(3){stroke:rgba(30,110,243,.55);animation-delay:.9s}
+.hero-arcs .arc:nth-child(4){stroke:rgba(30,110,243,.34);animation-delay:1.35s}
+.hero-arcs .arc:nth-child(5){stroke:rgba(255,255,255,.16);animation-delay:1.8s}
+.hero-arcs .arc:nth-child(6){stroke:rgba(255,255,255,.1);animation-delay:2.25s}
+@keyframes arcGlow{
+  0%,100%{opacity:.35;transform:scale(.985)}
+  50%{opacity:1;transform:scale(1.015)}
+}
+.hero-arcs .wave{
+  fill:none;stroke:var(--nv-cyan);stroke-width:1.4;opacity:.5;
+  stroke-dasharray:6 10;
+  animation:waveFlow 9s linear infinite;
+}
+@keyframes waveFlow{to{stroke-dashoffset:-320}}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(ellipse 90% 80% at 30% 40%,#000 20%,transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 80% at 30% 40%,#000 20%,transparent 78%);
+}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
+.hero h1{margin:22px 0 26px}
+.hero h1 .line-2{
+  background:linear-gradient(92deg,#fff 8%,var(--nv-cyan) 52%,var(--nv-blue) 96%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-sub{font-size:17px;line-height:1.85;color:rgba(255,255,255,.74);max-width:52ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:16px;margin:38px 0 46px}
+.hero-stats{
+  display:flex;gap:0;border-top:1px solid var(--nv-hair-dark);
+  padding-top:30px;
+}
+.hero-stat{padding-right:44px;margin-right:44px;border-right:1px solid var(--nv-hair-dark)}
+.hero-stat:last-child{border-right:none;margin-right:0;padding-right:0}
+.hero-stat .num{
+  font-size:42px;font-weight:700;letter-spacing:-.02em;line-height:1.1;
+  color:#fff;display:flex;align-items:baseline;gap:4px;
+}
+.hero-stat .num .unit{font-size:16px;color:var(--nv-cyan);font-weight:600}
+.hero-stat .cap{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:8px}
+
+/* 计费切换开关 */
+.billing{
+  display:inline-flex;align-items:center;gap:16px;
+  background:rgba(255,255,255,.07);border:1px solid var(--nv-hair-dark);
+  border-radius:999px;padding:8px 10px 8px 22px;
+}
+.billing .lbl{font-size:13px;color:rgba(255,255,255,.6);transition:color .3s;user-select:none}
+.billing .lbl.active{color:#fff;font-weight:600}
+.billing .save{
+  font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  color:var(--nv-ink-900);background:var(--nv-cyan);border-radius:999px;padding:3px 9px;
+}
+.switch{
+  width:58px;height:30px;border-radius:999px;position:relative;
+  background:rgba(255,255,255,.16);border:1px solid var(--nv-hair-dark);
+  transition:background .35s;
+}
+.switch[aria-checked="true"]{background:var(--nv-blue)}
+.switch .knob{
+  position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;
+  background:#fff;transition:transform .38s cubic-bezier(.34,1.45,.64,1);
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+.switch[aria-checked="true"] .knob{transform:translateX(28px)}
+
+/* Hero 右侧：信号仪表卡 */
+.hero-panel{
+  position:relative;border-radius:var(--nv-radius-l);
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  padding:32px 32px 26px;
+}
+.hero-panel .panel-tag{
+  font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--nv-cyan);font-weight:700;display:flex;align-items:center;gap:8px;
+}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--nv-cyan);position:relative}
+.live-dot::after{
+  content:"";position:absolute;inset:-5px;border-radius:50%;
+  border:1px solid var(--nv-cyan);animation:livePing 1.8s ease-out infinite;
+}
+@keyframes livePing{0%{transform:scale(.5);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+.panel-speed{margin:26px 0 8px;display:flex;align-items:baseline;gap:10px}
+.panel-speed .big{font-size:58px;font-weight:700;letter-spacing:-.03em;line-height:1;color:#fff}
+.panel-speed .unit{font-size:15px;color:var(--nv-cyan);font-weight:600}
+.panel-cap{font-size:12px;color:rgba(255,255,255,.52);letter-spacing:.1em;text-transform:uppercase}
+.signal-bars{display:flex;align-items:flex-end;gap:7px;height:64px;margin:26px 0 22px}
+.signal-bars .bar{
+  flex:1;border-radius:6px 6px 3px 3px;
+  background:linear-gradient(180deg,var(--nv-cyan),rgba(30,110,243,.75));
+  transform-origin:bottom;animation:barDance 2.6s ease-in-out infinite;
+}
+.signal-bars .bar:nth-child(1){height:26%;animation-delay:0s}
+.signal-bars .bar:nth-child(2){height:44%;animation-delay:.18s}
+.signal-bars .bar:nth-child(3){height:36%;animation-delay:.36s}
+.signal-bars .bar:nth-child(4){height:62%;animation-delay:.54s}
+.signal-bars .bar:nth-child(5){height:52%;animation-delay:.72s}
+.signal-bars .bar:nth-child(6){height:82%;animation-delay:.9s}
+.signal-bars .bar:nth-child(7){height:68%;animation-delay:1.08s}
+.signal-bars .bar:nth-child(8){height:100%;animation-delay:1.26s}
+@keyframes barDance{0%,100%{transform:scaleY(.86);opacity:.8}50%{transform:scaleY(1);opacity:1}}
+.panel-foot{
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--nv-hair-dark);padding-top:18px;
+  font-size:12px;color:rgba(255,255,255,.56);letter-spacing:.06em;
+}
+.panel-foot strong{color:var(--nv-cyan);font-weight:600}
+
+/* ============================================================
+   3. 套餐卡区（核心）
+   ============================================================ */
+.plans{background:var(--nv-paper);padding:110px 0 120px;position:relative}
+.plans-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:58px}
+.plans-head h2{margin:18px 0 0}
+.plans-head .lede{max-width:42ch}
+.plans-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;align-items:stretch}
+
+.plan{
+  position:relative;display:flex;flex-direction:column;
+  background:#fff;border-radius:var(--nv-radius-l);
+  border:1px solid var(--nv-hair);
+  padding:34px 28px 30px;
+  transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,border-color .45s;
+  overflow:hidden;
+}
+.plan::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(140deg,var(--nv-blue),var(--nv-cyan) 55%,transparent 80%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity .45s;
+}
+.plan:hover{transform:translateY(-10px);box-shadow:var(--nv-shadow-lift);border-color:transparent}
+.plan:hover::before{opacity:1}
+.plan.featured{
+  border:1.6px solid var(--nv-blue);
+  box-shadow:0 30px 70px -28px rgba(30,110,243,.38);
+  transform:translateY(-12px);
+}
+.plan.featured:hover{transform:translateY(-18px)}
+.plan.featured::before{opacity:.55}
+.plan-badge{
+  position:absolute;top:0;right:26px;
+  background:linear-gradient(135deg,var(--nv-blue),#4A8CFF);
+  color:#fff;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  padding:8px 15px;border-radius:0 0 10px 10px;
+}
+.plan-name{font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--nv-slate)}
+.plan-name .cn{display:block;font-size:21px;letter-spacing:.02em;text-transform:none;color:var(--nv-ink-900);margin-top:7px;font-weight:700}
+.plan-price{display:flex;align-items:baseline;gap:5px;margin:24px 0 4px}
+.plan-price .cur{font-size:26px;font-weight:600;color:var(--nv-blue);align-self:flex-start;margin-top:12px}
+.plan-price .val{
+  font-size:82px;line-height:.92;font-weight:700;letter-spacing:-.045em;
+  color:var(--nv-blue);
+}
+.plan.featured .plan-price .val{
+  color:transparent;
+  -webkit-text-stroke:2px var(--nv-blue);
+}
+.plan-price .per{font-size:14px;color:var(--nv-slate);font-weight:500}
+.plan-price .val{transition:opacity .32s,transform .32s}
+.plan-price .val.swap{opacity:0;transform:translateY(-12px)}
+.plan-billed{font-size:11.5px;letter-spacing:.08em;color:var(--nv-slate);min-height:18px;text-transform:uppercase}
+.plan-data{
+  display:flex;align-items:baseline;gap:8px;
+  margin:22px 0 6px;padding-top:22px;border-top:1px solid var(--nv-hair);
+}
+.plan-data .flow{font-size:34px;font-weight:700;letter-spacing:-.02em;color:var(--nv-ink-900)}
+.plan-data .flow-unit{font-size:13px;color:var(--nv-slate);letter-spacing:.08em;text-transform:uppercase}
+.plan-desc{font-size:13.5px;color:var(--nv-slate);line-height:1.75;min-height:46px}
+.plan-feats{margin:22px 0 28px;display:flex;flex-direction:column;gap:11px;flex:1}
+.plan-feats li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:13.5px;color:var(--nv-slate-deep);
+}
+.plan-feats li .tick{flex:none;margin-top:3px}
+.plan-feats li b{color:var(--nv-ink-900);font-weight:600}
+.plan .btn{width:100%}
+.plan.featured .btn{background:linear-gradient(135deg,var(--nv-blue),#4A8CFF)}
+.plan-note{
+  margin-top:26px;text-align:center;font-size:11.5px;letter-spacing:.06em;color:var(--nv-slate);
+}
+.plan-note a{color:var(--nv-blue);text-decoration:underline;text-underline-offset:3px}
+
+/* ============================================================
+   4. 套餐对比表
+   ============================================================ */
+.compare{background:#fff;padding:110px 0;border-top:1px solid var(--nv-hair)}
+.compare-head{text-align:center;max-width:640px;margin:0 auto 58px}
+.compare-head h2{margin:18px 0 16px}
+.compare-head .lede{margin:0 auto}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ctable{width:100%;border-collapse:collapse;min-width:820px}
+.ctable th,.ctable td{
+  padding:19px 22px;text-align:center;
+  border-bottom:1px solid var(--nv-hair);
+  font-size:14px;
+}
+.ctable thead th{
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--nv-slate);font-weight:600;
+  border-bottom:1.5px solid var(--nv-ink-900);
+  padding-bottom:16px;
+}
+.ctable thead th .th-cn{display:block;font-size:16px;letter-spacing:.02em;text-transform:none;color:var(--nv-ink-900);margin-top:6px;font-weight:700}
+.ctable thead th.col-featured{color:var(--nv-blue)}
+.ctable thead th.col-featured .th-cn{color:var(--nv-blue)}
+.ctable tbody th{
+  text-align:left;font-weight:600;color:var(--nv-ink-900);font-size:13.5px;
+}
+.ctable tbody th small{display:block;font-weight:400;color:var(--nv-slate);font-size:11.5px;letter-spacing:.05em;margin-top:3px}
+.ctable td{color:var(--nv-slate-deep)}
+.ctable td.col-featured{background:var(--nv-blue-soft);color:var(--nv-ink-900);font-weight:600}
+.ctable tbody tr:hover td{background:rgba(23,11,46,.03)}
+.ctable tbody tr:hover td.col-featured{background:rgba(30,110,243,.16)}
+.ctable .price-row td{font-size:17px;font-weight:700;color:var(--nv-ink-900);padding-top:24px;padding-bottom:24px}
+.ctable .price-row .money{color:var(--nv-blue);font-size:22px;letter-spacing:-.02em}
+.ctable .yes svg{margin:0 auto}
+.ctable .no svg{margin:0 auto;opacity:.4}
+
+/* ============================================================
+   5. 权益区
+   ============================================================ */
+.perks{background:var(--nv-paper);padding:112px 0}
+.perks-head{max-width:640px;margin-bottom:60px}
+.perks-head h2{margin:18px 0 16px}
+.perks-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.perk{
+  background:#fff;border:1px solid var(--nv-hair);border-radius:var(--nv-radius-m);
+  padding:34px 28px 32px;position:relative;overflow:hidden;
+  transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s;
+}
+.perk:hover{transform:translateY(-8px);box-shadow:var(--nv-shadow-card)}
+.perk-art{
+  height:110px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:26px;
+}
+.perk h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.perk p{font-size:13.5px;color:var(--nv-slate);line-height:1.8}
+.perk .tagline{
+  display:inline-block;margin-top:18px;
+  font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--nv-blue);background:var(--nv-blue-soft);
+  padding:5px 12px;border-radius:999px;
+}
+/* 权益小插画动效 */
+.spin-badge{animation:spinSlow 16s linear infinite;transform-origin:center}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+.pulse-ring{transform-origin:center;animation:pulseRing 2.8s ease-out infinite}
+.pulse-ring.d2{animation-delay:.9s}
+.pulse-ring.d3{animation-delay:1.8s}
+@keyframes pulseRing{
+  0%{transform:scale(.55);opacity:.85}
+  85%{transform:scale(1.25);opacity:0}
+  100%{transform:scale(1.25);opacity:0}
+}
+.orbit-dot{transform-origin:center;animation:spinSlow 7s linear infinite}
+.orbit-dot.rev{animation-direction:reverse;animation-duration:9s}
+.dash-sweep{stroke-dasharray:8 9;animation:dashMove 3.4s linear infinite}
+@keyframes dashMove{to{stroke-dashoffset:-68}}
+
+/* ============================================================
+   6. 覆盖地图区（深底）
+   ============================================================ */
+.coverage{
+  background:linear-gradient(160deg,var(--nv-ink-900),var(--nv-ink-700) 70%,#2A1555);
+  color:#fff;padding:118px 0;position:relative;overflow:hidden;
+}
+.coverage::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:90px 90px;
+}
+.coverage-inner{position:relative;z-index:2;display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:center}
+.coverage h2{margin:20px 0 22px}
+.coverage-stats{display:flex;flex-direction:column;gap:0;margin-top:44px}
+.cov-stat{
+  display:flex;align-items:baseline;gap:18px;
+  padding:22px 0;border-top:1px solid var(--nv-hair-dark);
+}
+.cov-stat:last-child{border-bottom:1px solid var(--nv-hair-dark)}
+.cov-stat .num{
+  font-size:52px;font-weight:700;letter-spacing:-.03em;line-height:1;
+  min-width:190px;
+  background:linear-gradient(120deg,#fff,var(--nv-cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.cov-stat .txt{font-size:13.5px;color:rgba(255,255,255,.68);line-height:1.7}
+.cov-stat .txt b{display:block;color:#fff;font-size:15px;font-weight:600;letter-spacing:.02em}
+
+/* 抽象城市信号覆盖图 */
+.cov-map{
+  position:relative;border-radius:var(--nv-radius-l);overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  background:
+    radial-gradient(circle at 68% 36%,rgba(30,110,243,.32),transparent 55%),
+    radial-gradient(circle at 22% 72%,rgba(127,231,224,.16),transparent 50%),
+    rgba(255,255,255,.04);
+  aspect-ratio:1.12/1;
+}
+.cov-map svg{width:100%;height:100%}
+.map-node{transform-origin:center;animation:nodePulse 3s ease-out infinite}
+.map-node.n2{animation-delay:.6s}
+.map-node.n3{animation-delay:1.2s}
+.map-node.n4{animation-delay:1.8s}
+.map-node.n5{animation-delay:2.4s}
+@keyframes nodePulse{
+  0%{opacity:.15;transform:scale(.4)}
+  45%{opacity:.9;transform:scale(1)}
+  100%{opacity:.15;transform:scale(1.7)}
+}
+.map-core{animation:coreGlow 2.4s ease-in-out infinite}
+@keyframes coreGlow{0%,100%{opacity:.55}50%{opacity:1}}
+.map-link{stroke-dasharray:5 8;animation:dashMove 4.5s linear infinite}
+.map-legend{
+  position:absolute;left:22px;bottom:20px;display:flex;gap:20px;
+  font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.6);
+}
+.map-legend span{display:flex;align-items:center;gap:7px}
+.map-legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.map-legend .l-cyan{background:var(--nv-cyan)}
+.map-legend .l-blue{background:var(--nv-blue)}
+.map-legend .l-white{background:rgba(255,255,255,.5)}
+
+/* ============================================================
+   7. 口碑 + 数据区（米白反转）
+   ============================================================ */
+.voices{background:var(--nv-white);padding:112px 0}
+.voices-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:56px}
+.voices-head h2{margin:18px 0 0;max-width:15ch}
+.voices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:80px}
+.voice{
+  border:1px solid var(--nv-hair);border-radius:var(--nv-radius-m);
+  padding:36px 32px 30px;background:var(--nv-paper);
+  display:flex;flex-direction:column;
+  transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s;
+}
+.voice:hover{transform:translateY(-8px);box-shadow:var(--nv-shadow-card)}
+.voice .quote-mark{
+  font-size:64px;line-height:.7;font-weight:700;color:var(--nv-blue);
+  opacity:.22;margin-bottom:14px;font-family:Georgia,serif;
+}
+.voice p{font-size:14.5px;line-height:1.9;color:var(--nv-slate-deep);flex:1}
+.voice .who{display:flex;align-items:center;gap:13px;margin-top:26px;padding-top:22px;border-top:1px solid var(--nv-hair)}
+.avatar{
+  width:42px;height:42px;border-radius:50%;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:#fff;letter-spacing:.04em;
+}
+.av-1{background:linear-gradient(135deg,var(--nv-ink-700),var(--nv-blue))}
+.av-2{background:linear-gradient(135deg,var(--nv-blue),var(--nv-cyan))}
+.av-3{background:linear-gradient(135deg,#7A4FD8,var(--nv-ink-600))}
+.voice .who .name{font-size:13.5px;font-weight:700;color:var(--nv-ink-900)}
+.voice .who .meta{font-size:11.5px;color:var(--nv-slate);letter-spacing:.05em}
+.stars{display:flex;gap:3px;margin-left:auto}
+
+.metrics{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1.5px solid var(--nv-ink-900);
+}
+.metric{padding:38px 28px 8px;border-right:1px solid var(--nv-hair)}
+.metric:last-child{border-right:none}
+.metric .num{
+  font-size:56px;font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--nv-ink-900);
+}
+.metric .num .u{font-size:20px;color:var(--nv-blue);font-weight:600;letter-spacing:0}
+.metric .cap{margin-top:14px;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--nv-slate)}
+.metric .desc{margin-top:8px;font-size:13px;color:var(--nv-slate);line-height:1.7}
+
+/* ============================================================
+   8. FAQ
+   ============================================================ */
+.faq{background:var(--nv-paper);padding:112px 0}
+.faq-inner{display:grid;grid-template-columns:.8fr 1.2fr;gap:80px;align-items:start}
+.faq-head h2{margin:18px 0 18px}
+.faq-head .lede{margin-bottom:30px}
+.faq-list{border-top:1px solid var(--nv-hair)}
+.faq-item{border-bottom:1px solid var(--nv-hair)}
+.faq-item summary{
+  list-style:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:26px 4px;font-size:16.5px;font-weight:600;color:var(--nv-ink-900);
+  transition:color .3s;
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:hover{color:var(--nv-blue)}
+.faq-item summary .q-index{
+  font-size:11px;letter-spacing:.14em;color:var(--nv-slate);font-weight:600;
+  margin-right:18px;font-variant-numeric:tabular-nums;
+}
+.faq-item summary .q-text{flex:1;display:flex;align-items:baseline}
+.faq-icon{
+  flex:none;width:30px;height:30px;border-radius:50%;
+  border:1px solid var(--nv-hair);position:relative;transition:.35s;
+}
+.faq-icon::before,.faq-icon::after{
+  content:"";position:absolute;top:50%;left:50%;background:var(--nv-ink-900);
+  transition:.35s;transform:translate(-50%,-50%);
+}
+.faq-icon::before{width:11px;height:1.6px}
+.faq-icon::after{width:1.6px;height:11px}
+.faq-item[open] .faq-icon{background:var(--nv-blue);border-color:var(--nv-blue);transform:rotate(135deg)}
+.faq-item[open] .faq-icon::before,.faq-item[open] .faq-icon::after{background:#fff}
+.faq-item[open] summary{color:var(--nv-blue)}
+.faq-answer{
+  padding:0 60px 30px 46px;
+  font-size:14.5px;line-height:1.95;color:var(--nv-slate);
+}
+.faq-answer a{color:var(--nv-blue);text-decoration:underline;text-underline-offset:3px}
+
+/* ============================================================
+   9. CTA 深底区
+   ============================================================ */
+.cta{
+  position:relative;overflow:hidden;text-align:center;
+  background:linear-gradient(150deg,var(--nv-ink-900) 0%,var(--nv-ink-700) 55%,#2C1760 100%);
+  color:#fff;padding:130px 0;
+}
+.cta-arcs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1100px,120vw);opacity:.6;pointer-events:none}
+.cta-arcs circle{fill:none;stroke-linecap:round}
+.cta-arcs .a1{stroke:rgba(127,231,224,.34);animation:arcGlow 5s ease-in-out infinite}
+.cta-arcs .a2{stroke:rgba(30,110,243,.38);animation:arcGlow 5s ease-in-out .7s infinite}
+.cta-arcs .a3{stroke:rgba(255,255,255,.12);animation:arcGlow 5s ease-in-out 1.4s infinite}
+.cta-inner{position:relative;z-index:2}
+.cta h2{margin:22px 0 20px}
+.cta h2 .accent{
+  background:linear-gradient(92deg,var(--nv-cyan),#5B9BFF);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.cta .lede{margin:0 auto 44px}
+.cta-btns{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.cta-fine{
+  margin-top:36px;font-size:11.5px;letter-spacing:.1em;color:rgba(255,255,255,.46);
+  text-transform:uppercase;
+}
+
+/* ============================================================
+   10. Footer
+   ============================================================ */
+.footer{background:var(--nv-ink-900);color:#fff;padding:90px 0 0;overflow:hidden}
+.footer-cols{
+  display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr 1fr;gap:40px;
+  padding-bottom:66px;
+}
+.footer-brand .logo{margin-bottom:20px}
+.footer-brand p{font-size:13px;line-height:1.9;color:rgba(255,255,255,.5);max-width:30ch}
+.footer h4{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.42);margin-bottom:20px;font-weight:600;
+}
+.footer-links li{margin-bottom:12px}
+.footer-links a{
+  font-size:13.5px;color:rgba(255,255,255,.68);transition:color .3s,padding-left .3s;
+}
+.footer-links a:hover{color:var(--nv-cyan);padding-left:5px}
+.footer-legal{
+  border-top:1px solid var(--nv-hair-dark);
+  padding:26px 0 22px;
+  display:flex;flex-wrap:wrap;gap:8px 26px;align-items:center;
+  font-size:11px;letter-spacing:.08em;color:rgba(255,255,255,.38);
+}
+.footer-legal a{color:rgba(255,255,255,.5)}
+.footer-legal a:hover{color:var(--nv-cyan)}
+.footer-wordmark{
+  line-height:.78;text-align:center;user-select:none;pointer-events:none;
+  font-size:clamp(110px,21vw,290px);font-weight:800;letter-spacing:.02em;
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.015));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:-.08em;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width:1080px){
+  .plans-grid{grid-template-columns:repeat(2,1fr)}
+  .perks-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-inner{grid-template-columns:1fr;gap:52px}
+  .hero-panel{max-width:520px}
+  .coverage-inner{grid-template-columns:1fr;gap:52px}
+  .faq-inner{grid-template-columns:1fr;gap:44px}
+  .footer-cols{grid-template-columns:1fr 1fr 1fr}
+}
+@media (max-width:760px){
+  .nav-links,.nav-login{display:none}
+  .nav-burger{display:flex}
+  .hero{padding:132px 0 84px}
+  .hero-stats{flex-direction:column;gap:22px}
+  .hero-stat{border-right:none;margin-right:0;padding-right:0;padding-bottom:20px;border-bottom:1px solid var(--nv-hair-dark)}
+  .hero-stat:last-child{border-bottom:none;padding-bottom:0}
+  .plans-grid,.voices-grid,.perks-grid{grid-template-columns:1fr}
+  .plan.featured{transform:none}
+  .plan.featured:hover{transform:translateY(-10px)}
+  .metrics{grid-template-columns:1fr 1fr}
+  .metric{border-bottom:1px solid var(--nv-hair)}
+  .plans-head,.voices-head{flex-direction:column;align-items:flex-start}
+  .cov-stat .num{min-width:0;font-size:42px}
+  .footer-cols{grid-template-columns:1fr 1fr;gap:34px}
+}
+
+/* 数字滚动（JS 注入前的默认态） */
+.count{font-variant-numeric:tabular-nums}
+
+/* 减少动效偏好 */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  html.js .reveal:not(.in){opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 1. 吸顶导航 ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top" aria-label="Nova Mobile 首页">
+      <svg class="logo-mark" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+        <circle class="ring" cx="15" cy="15" r="12.5" stroke="#7FE7E0" stroke-width="1.4" opacity=".55"/>
+        <circle class="ring" cx="15" cy="15" r="8" stroke="#4A8CFF" stroke-width="1.6"/>
+        <circle class="ring" cx="15" cy="15" r="3.4" fill="#FFFFFF"/>
+      </svg>
+      NOVA
+    </a>
+    <nav class="nav-links" aria-label="主导航">
+      <a href="#plans">套餐</a>
+      <a href="#compare">宽带</a>
+      <a href="#coverage">覆盖</a>
+      <a href="#faq">服务</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-login" href="#login">登录</a>
+      <a class="btn btn-primary" href="#cta">立即办理</a>
+      <button class="nav-burger" aria-label="打开菜单"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 2. Hero ============ -->
+<main id="top">
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-grid"></div>
+    <svg class="hero-arcs" viewBox="0 0 720 640" fill="none">
+      <!-- 同心信号弧 -->
+      <path class="arc" d="M120 320 A 210 210 0 0 1 412 62" stroke-width="1.6"/>
+      <path class="arc" d="M120 320 A 262 262 0 0 1 470 34" stroke-width="1.4"/>
+      <path class="arc" d="M120 320 A 318 318 0 0 1 532 8" stroke-width="1.8"/>
+      <path class="arc" d="M120 320 A 376 376 0 0 1 594 -14" stroke-width="1.2"/>
+      <path class="arc" d="M120 320 A 436 436 0 0 1 656 -38" stroke-width="1"/>
+      <path class="arc" d="M120 320 A 498 498 0 0 1 718 -62" stroke-width="1"/>
+      <!-- 波形线 -->
+      <path class="wave" d="M60 480 C 160 430, 210 530, 310 480 S 460 430, 560 480 S 660 530, 720 486"/>
+      <path class="wave" d="M60 540 C 160 496, 210 586, 310 540 S 460 496, 560 540 S 660 586, 720 546" style="animation-delay:-3.5s"/>
+      <!-- 信号格 -->
+      <g opacity=".7">
+        <rect x="560" y="470" width="12" height="20" rx="3" fill="#7FE7E0" opacity=".35"/>
+        <rect x="582" y="458" width="12" height="32" rx="3" fill="#7FE7E0" opacity=".5"/>
+        <rect x="604" y="442" width="12" height="48" rx="3" fill="#7FE7E0" opacity=".7"/>
+        <rect x="626" y="424" width="12" height="66" rx="3" fill="#7FE7E0"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="wrap hero-inner">
+    <div>
+      <span class="eyebrow on-dark reveal">NOVA MOBILE · 城市 5G 网络</span>
+      <h1 class="h-mega reveal" style="--d:.08s">
+        信号无界，<br><span class="line-2">自由连通</span>
+      </h1>
+      <p class="hero-sub reveal" style="--d:.16s">
+        Nova Mobile 为都市而生。独立 5G 双频组网覆盖全城地铁、
+        高架与楼宇深处，套餐透明无套路——流量、通话、权益，
+        一眼看清，随时可换。
+      </p>
+      <div class="hero-cta reveal" style="--d:.24s">
+        <a class="btn btn-primary" href="#plans">查看套餐 <span class="arrow">→</span></a>
+        <a class="btn btn-ghost-dark" href="#coverage">测试我家覆盖</a>
+      </div>
+
+      <div class="billing reveal" style="--d:.3s" role="group" aria-label="计费周期切换">
+        <span class="lbl active" id="lbl-monthly">月付</span>
+        <button class="switch" id="billingSwitch" role="switch" aria-checked="false" aria-label="切换年付（8 折）">
+          <span class="knob"></span>
+        </button>
+        <span class="lbl" id="lbl-yearly">年付</span>
+        <span class="save">省 20%</span>
+      </div>
+
+      <div class="hero-stats reveal" style="--d:.36s">
+        <div class="hero-stat">
+          <div class="num"><span class="count" data-count="99.2">0</span><span class="unit">%</span></div>
+          <div class="cap">城市人口覆盖</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num"><span class="count" data-count="1.2">0</span><span class="unit">Gbps</span></div>
+          <div class="cap">5G 下行峰值</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num"><span class="count" data-count="28">0</span><span class="unit">ms</span></div>
+          <div class="cap">平均网络时延</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero 信号仪表面板 -->
+    <aside class="hero-panel reveal" style="--d:.28s" aria-label="实时网络指标">
+      <div class="panel-tag"><span class="live-dot"></span> LIVE NETWORK · 实时网络</div>
+      <div class="panel-speed">
+        <span class="big">1.2</span>
+        <span class="unit">Gbps 下行</span>
+      </div>
+      <div class="panel-cap">Speed Index · 全城均值 862 Mbps</div>
+      <div class="signal-bars" aria-hidden="true">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+      <div class="panel-foot">
+        <span>基站在线 <strong>12,480</strong></span>
+        <span>丢包率 <strong>0.02%</strong></span>
+        <span>拥堵指数 <strong>低</strong></span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ 3. 套餐卡区 ============ -->
+<section class="plans" id="plans">
+  <div class="wrap">
+    <div class="plans-head">
+      <div>
+        <span class="eyebrow reveal">PLANS · 四档套餐</span>
+        <h2 class="h-sec reveal" style="--d:.08s">选一档，<br>剩下的交给我们</h2>
+      </div>
+      <p class="lede reveal" style="--d:.14s">
+        无隐形消费、无强制合约。所有套餐均支持携号转网与线上销户，
+        套餐外流量 5 元/GB 封顶，当月有效不清零。
+      </p>
+    </div>
+
+    <div class="plans-grid">
+      <!-- 轻享 -->
+      <article class="plan reveal">
+        <div class="plan-name">LITE<span class="cn">轻享套餐</span></div>
+        <div class="plan-price">
+          <span class="cur">¥</span>
+          <span class="val" data-monthly="39" data-yearly="31">39</span>
+          <span class="per">/月</span>
+        </div>
+        <div class="plan-billed" data-billed-monthly="按月计费 · 随时取消" data-billed-yearly="年付 ¥372 · 折合 ¥31/月">按月计费 · 随时取消</div>
+        <div class="plan-data">
+          <span class="flow">30</span><span class="flow-unit">GB 全国流量</span>
+        </div>
+        <p class="plan-desc">适合轻度上网、以 WiFi 为主的都市单人用户。</p>
+        <ul class="plan-feats">
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>300 分钟</b> 国内通话</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>100 条国内短信</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>5G 网络优享接入</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>来电显示 / 骚扰拦截</span></li>
+        </ul>
+        <a class="btn btn-ghost" href="#cta">选择轻享</a>
+      </article>
+
+      <!-- 畅享（推荐） -->
+      <article class="plan featured reveal" style="--d:.08s">
+        <div class="plan-badge">最受欢迎</div>
+        <div class="plan-name">MAX<span class="cn">畅享套餐</span></div>
+        <div class="plan-price">
+          <span class="cur">¥</span>
+          <span class="val" data-monthly="69" data-yearly="55">69</span>
+          <span class="per">/月</span>
+        </div>
+        <div class="plan-billed" data-billed-monthly="按月计费 · 随时取消" data-billed-yearly="年付 ¥660 · 折合 ¥55/月">按月计费 · 随时取消</div>
+        <div class="plan-data">
+          <span class="flow">100</span><span class="flow-unit">GB 全国流量</span>
+        </div>
+        <p class="plan-desc">刷剧、直播、远程办公全都要的都市主力之选。</p>
+        <ul class="plan-feats">
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>1000 分钟</b> 国内通话</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>200 条国内短信</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>视频会员</b>三选一（月月可换）</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>热点共享 <b>20GB</b></span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>5G 极速速率 <b>1.2Gbps</b></span></li>
+        </ul>
+        <a class="btn btn-primary" href="#cta">选择畅享 <span class="arrow">→</span></a>
+      </article>
+
+      <!-- 家庭 -->
+      <article class="plan reveal" style="--d:.16s">
+        <div class="plan-name">FAMILY<span class="cn">家庭融合</span></div>
+        <div class="plan-price">
+          <span class="cur">¥</span>
+          <span class="val" data-monthly="129" data-yearly="103">129</span>
+          <span class="per">/月</span>
+        </div>
+        <div class="plan-billed" data-billed-monthly="按月计费 · 含宽带" data-billed-yearly="年付 ¥1,236 · 折合 ¥103/月">按月计费 · 含宽带</div>
+        <div class="plan-data">
+          <span class="flow">300</span><span class="flow-unit">GB 共享流量</span>
+        </div>
+        <p class="plan-desc">一张主卡 + 两张副卡共享，再送千兆宽带与电视。</p>
+        <ul class="plan-feats">
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>2000 分钟</b> 国内通话</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>1000M 光纤宽带</b> + 4K 电视</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>2 张免费副卡（共享流量）</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>亲情号互打免费</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>家庭云盘 <b>1TB</b></span></li>
+        </ul>
+        <a class="btn btn-ghost" href="#cta">选择家庭</a>
+      </article>
+
+      <!-- 商务 -->
+      <article class="plan reveal" style="--d:.24s">
+        <div class="plan-name">BIZ<span class="cn">商务尊享</span></div>
+        <div class="plan-price">
+          <span class="cur">¥</span>
+          <span class="val" data-monthly="199" data-yearly="159">199</span>
+          <span class="per">/月</span>
+        </div>
+        <div class="plan-billed" data-billed-monthly="按月计费 · 专属客服" data-billed-yearly="年付 ¥1,908 · 折合 ¥159/月">按月计费 · 专属客服</div>
+        <div class="plan-data">
+          <span class="flow">∞</span><span class="flow-unit">全国不限量</span>
+        </div>
+        <p class="plan-desc">高频差旅与移动办公，全程高速不设限。</p>
+        <ul class="plan-feats">
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>通话不限量</b> 国内主叫</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>100GB 高速热点共享</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>国际漫游</b> 30 地区畅行包</span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>机场高铁 <b>VIP 贵宾厅</b></span></li>
+          <li><svg class="tick" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 8l3 3 6-7" stroke="#1E6EF3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>专属客户经理 7×24</span></li>
+        </ul>
+        <a class="btn btn-ghost" href="#cta">选择商务</a>
+      </article>
+    </div>
+
+    <p class="plan-note reveal">所有价格含税。年付方案按 8 折计价，一次性支付 12 个月费用。<a href="#faq">查看常见问题 →</a></p>
+  </div>
+</section>
+
+<!-- ============ 4. 套餐对比表 ============ -->
+<section class="compare" id="compare">
+  <div class="wrap">
+    <div class="compare-head">
+      <span class="eyebrow reveal">COMPARE · 逐项对比</span>
+      <h2 class="h-sec reveal" style="--d:.08s">差异一目了然</h2>
+      <p class="lede reveal" style="--d:.14s">同一张表看清四档套餐的每一项权益。发丝级对比，不做模糊表述。</p>
+    </div>
+
+    <div class="table-scroll reveal" style="--d:.18s">
+      <table class="ctable">
+        <thead>
+          <tr>
+            <th scope="col" style="text-align:left">项目<span class="th-cn">权益对比</span></th>
+            <th scope="col">LITE<span class="th-cn">轻享 ¥39</span></th>
+            <th scope="col" class="col-featured">MAX<span class="th-cn">畅享 ¥69</span></th>
+            <th scope="col">FAMILY<span class="th-cn">家庭 ¥129</span></th>
+            <th scope="col">BIZ<span class="th-cn">商务 ¥199</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">全国流量<small>当月有效，超出 5 元/GB 封顶</small></th>
+            <td>30GB</td>
+            <td class="col-featured">100GB</td>
+            <td>300GB 共享</td>
+            <td>不限量</td>
+          </tr>
+          <tr>
+            <th scope="row">达量限速<small>超出高速额度后的速率</small></th>
+            <td>1Mbps</td>
+            <td class="col-featured">3Mbps</td>
+            <td>3Mbps</td>
+            <td>不降速</td>
+          </tr>
+          <tr>
+            <th scope="row">国内通话<small>拨打中国大陆号码</small></th>
+            <td>300 分钟</td>
+            <td class="col-featured">1000 分钟</td>
+            <td>2000 分钟</td>
+            <td>不限量</td>
+          </tr>
+          <tr>
+            <th scope="row">热点共享<small>手机作为移动热点的高速流量</small></th>
+            <td>5GB</td>
+            <td class="col-featured">20GB</td>
+            <td>50GB</td>
+            <td>100GB</td>
+          </tr>
+          <tr>
+            <th scope="row">视频会员<small>爱奇艺 / 腾讯 / 优酷 三选一</small></th>
+            <td class="no"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#6A7681" stroke-width="1.7" stroke-linecap="round"/></svg></td>
+            <td class="col-featured yes"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M3.5 9l3.4 3.4L13.5 5" stroke="#1E6EF3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+            <td class="yes"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M3.5 9l3.4 3.4L13.5 5" stroke="#1E6EF3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+            <td class="yes"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M3.5 9l3.4 3.4L13.5 5" stroke="#1E6EF3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          </tr>
+          <tr>
+            <th scope="row">云盘空间<small>Nova Cloud 家庭共享</small></th>
+            <td>10GB</td>
+            <td class="col-featured">100GB</td>
+            <td>1TB</td>
+            <td>2TB</td>
+          </tr>
+          <tr>
+            <th scope="row">国际漫游<small>按天计费的畅行流量包</small></th>
+            <td class="no"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#6A7681" stroke-width="1.7" stroke-linecap="round"/></svg></td>
+            <td class="col-featured no"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#6A7681" stroke-width="1.7" stroke-linecap="round"/></svg></td>
+            <td>可选加购</td>
+            <td>30 地区畅行</td>
+          </tr>
+          <tr class="price-row">
+            <th scope="row">月费<small>年付享 8 折</small></th>
+            <td><span class="money">¥39</span></td>
+            <td class="col-featured"><span class="money">¥69</span></td>
+            <td><span class="money">¥129</span></td>
+            <td><span class="money">¥199</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. 权益区 ============ -->
+<section class="perks" id="perks">
+  <div class="wrap">
+    <div class="perks-head">
+      <span class="eyebrow reveal">BENEFITS · 不止于流量</span>
+      <h2 class="h-sec reveal" style="--d:.08s">入网即享的<br>四重生活权益</h2>
+      <p class="lede reveal" style="--d:.14s">从追剧到出差，从家庭相册到越洋电话——Nova 把运营商的「附加题」做成「送分题」。</p>
+    </div>
+
+    <div class="perks-grid">
+      <!-- 视频会员 -->
+      <article class="perk reveal">
+        <div class="perk-art" aria-hidden="true">
+          <svg width="108" height="108" viewBox="0 0 108 108" fill="none">
+            <circle class="pulse-ring" cx="54" cy="54" r="38" stroke="#1E6EF3" stroke-width="1.4"/>
+            <circle class="pulse-ring d2" cx="54" cy="54" r="38" stroke="#1E6EF3" stroke-width="1.4"/>
+            <circle class="pulse-ring d3" cx="54" cy="54" r="38" stroke="#7FE7E0" stroke-width="1.4"/>
+            <rect x="30" y="38" width="48" height="32" rx="8" fill="#170B2E"/>
+            <path d="M50 47.5l11 6.5-11 6.5v-13z" fill="#7FE7E0"/>
+            <rect x="30" y="74" width="48" height="3.4" rx="1.7" fill="#1E6EF3" opacity=".5"/>
+            <rect x="30" y="74" width="26" height="3.4" rx="1.7" fill="#1E6EF3"/>
+          </svg>
+        </div>
+        <h3>视频会员月月换</h3>
+        <p>爱奇艺、腾讯视频、优酷黄金会员三选一，每月可在 Nova App 内自由切换，追剧永不掉队。</p>
+        <span class="tagline">价值 ¥25/月</span>
+      </article>
+
+      <!-- 云盘空间 -->
+      <article class="perk reveal" style="--d:.08s">
+        <div class="perk-art" aria-hidden="true">
+          <svg width="108" height="108" viewBox="0 0 108 108" fill="none">
+            <g class="spin-badge" style="transform-origin:54px 54px">
+              <circle cx="54" cy="54" r="40" stroke="#1E6EF3" stroke-width="1.3" stroke-dasharray="3 7"/>
+              <circle cx="54" cy="14" r="4" fill="#7FE7E0"/>
+              <circle cx="94" cy="54" r="3" fill="#1E6EF3"/>
+              <circle cx="54" cy="94" r="3.4" fill="#241247"/>
+            </g>
+            <path d="M42 62a10 10 0 0 1 1.6-19.9 13 13 0 0 1 24.2 4.2A9 9 0 0 1 66 62H42z" fill="#241247"/>
+            <path d="M54 48v10m0 0l-4-4m4 4l4-4" stroke="#7FE7E0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="42" y="66" width="24" height="3" rx="1.5" fill="#1E6EF3" opacity=".6"/>
+          </svg>
+        </div>
+        <h3>家庭云盘 1TB</h3>
+        <p>照片、视频、合同自动备份，端到端加密存储。家庭成员共享同一空间，换机不再手忙脚乱。</p>
+        <span class="tagline">多重加密</span>
+      </article>
+
+      <!-- 国际漫游 -->
+      <article class="perk reveal" style="--d:.16s">
+        <div class="perk-art" aria-hidden="true">
+          <svg width="108" height="108" viewBox="0 0 108 108" fill="none">
+            <circle cx="54" cy="54" r="34" stroke="#241247" stroke-width="1.6"/>
+            <ellipse cx="54" cy="54" rx="15" ry="34" stroke="#1E6EF3" stroke-width="1.3" class="dash-sweep"/>
+            <path d="M20 54h68M24 38h60M24 70h60" stroke="#1E6EF3" stroke-width="1.1" opacity=".55"/>
+            <g class="orbit-dot" style="transform-origin:54px 54px">
+              <circle cx="54" cy="20" r="5" fill="#7FE7E0"/>
+            </g>
+            <g class="orbit-dot rev" style="transform-origin:54px 54px">
+              <circle cx="88" cy="54" r="3.6" fill="#1E6EF3"/>
+            </g>
+          </svg>
+        </div>
+        <h3>国际漫游畅行包</h3>
+        <p>覆盖日韩、新马泰、欧美 30 个热门地区，按天 10 元封顶，落地自动激活，无需换卡。</p>
+        <span class="tagline">30 地区覆盖</span>
+      </article>
+
+      <!-- 亲情号 -->
+      <article class="perk reveal" style="--d:.24s">
+        <div class="perk-art" aria-hidden="true">
+          <svg width="108" height="108" viewBox="0 0 108 108" fill="none">
+            <circle class="pulse-ring" cx="36" cy="54" r="20" stroke="#7FE7E0" stroke-width="1.3"/>
+            <circle class="pulse-ring d2" cx="72" cy="54" r="20" stroke="#1E6EF3" stroke-width="1.3"/>
+            <circle cx="36" cy="54" r="11" fill="#241247"/>
+            <circle cx="72" cy="54" r="11" fill="#1E6EF3"/>
+            <path d="M47 54h14" stroke="#241247" stroke-width="2" stroke-linecap="round"/>
+            <path d="M56 49l5 5-5 5" stroke="#241247" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="36" y="58.5" text-anchor="middle" fill="#7FE7E0" font-size="10" font-weight="700">家</text>
+            <text x="72" y="58.5" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">你</text>
+          </svg>
+        </div>
+        <h3>亲情号免费互打</h3>
+        <p>最多绑定 5 个亲情号码，全国互打全免费。父母的手机费，从此由 Nova 请客。</p>
+        <span class="tagline">5 个号码</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. 覆盖地图区 ============ -->
+<section class="coverage" id="coverage">
+  <div class="wrap coverage-inner">
+    <div>
+      <span class="eyebrow on-dark reveal">COVERAGE · 全城覆盖</span>
+      <h2 class="h-sec reveal" style="--d:.08s">从地下三层<br>到城市天际线</h2>
+      <p class="lede on-dark reveal" style="--d:.14s">
+        12,480 座基站、700MHz 黄金频段深度覆盖，
+        地铁隧道、地下车库、高层写字楼均实测可用。
+        每一处你常去的地方，都有 Nova 的信号。
+      </p>
+
+      <div class="coverage-stats">
+        <div class="cov-stat reveal" style="--d:.18s">
+          <div class="num"><span class="count" data-count="99.2">0</span>%</div>
+          <div class="txt"><b>城市人口覆盖率</b>主城区连续覆盖，郊区县城同步在建</div>
+        </div>
+        <div class="cov-stat reveal" style="--d:.24s">
+          <div class="num"><span class="count" data-count="12480">0</span></div>
+          <div class="txt"><b>在运营基站数</b>含 3,200 座室内分布系统，年增 18%</div>
+        </div>
+        <div class="cov-stat reveal" style="--d:.3s">
+          <div class="num"><span class="count" data-count="286">0</span></div>
+          <div class="txt"><b>已覆盖地铁站点</b>全网地铁 5G 无缝切换，掉线率低于 0.1%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 抽象城市信号覆盖图 -->
+    <div class="cov-map reveal" style="--d:.2s" role="img" aria-label="城市信号覆盖示意图：网格街区与信号发射点">
+      <svg viewBox="0 0 520 460" fill="none" preserveAspectRatio="xMidYMid slice">
+        <!-- 街区网格 -->
+        <g stroke="rgba(255,255,255,.1)" stroke-width="1">
+          <path d="M0 60h520M0 130h520M0 200h520M0 270h520M0 340h520M0 410h520"/>
+          <path d="M60 0v460M150 0v460M240 0v460M330 0v460M420 0v460"/>
+        </g>
+        <!-- 高亮街区 -->
+        <rect x="150" y="130" width="90" height="70" fill="rgba(30,110,243,.16)" rx="4"/>
+        <rect x="330" y="200" width="90" height="70" fill="rgba(127,231,224,.12)" rx="4"/>
+        <rect x="240" y="270" width="90" height="70" fill="rgba(30,110,243,.1)" rx="4"/>
+        <!-- 主干道 -->
+        <path d="M0 235 C 130 200, 240 300, 360 240 S 480 210, 520 235" stroke="rgba(127,231,224,.4)" stroke-width="2"/>
+        <path class="map-link" d="M90 400 C 180 320, 300 340, 430 150" stroke="rgba(30,110,243,.55)" stroke-width="1.6"/>
+        <!-- 信号节点 -->
+        <g>
+          <circle class="map-node" cx="195" cy="165" r="14" fill="rgba(127,231,224,.5)" style="transform-origin:195px 165px"/>
+          <circle class="map-core" cx="195" cy="165" r="6" fill="#7FE7E0"/>
+        </g>
+        <g>
+          <circle class="map-node n2" cx="375" cy="235" r="14" fill="rgba(30,110,243,.55)" style="transform-origin:375px 235px"/>
+          <circle class="map-core" cx="375" cy="235" r="6" fill="#4A8CFF" style="animation-delay:.5s"/>
+        </g>
+        <g>
+          <circle class="map-node n3" cx="285" cy="305" r="14" fill="rgba(127,231,224,.45)" style="transform-origin:285px 305px"/>
+          <circle class="map-core" cx="285" cy="305" r="6" fill="#7FE7E0" style="animation-delay:1s"/>
+        </g>
+        <g>
+          <circle class="map-node n4" cx="105" cy="95" r="12" fill="rgba(30,110,243,.5)" style="transform-origin:105px 95px"/>
+          <circle class="map-core" cx="105" cy="95" r="5" fill="#4A8CFF" style="animation-delay:1.5s"/>
+        </g>
+        <g>
+          <circle class="map-node n5" cx="445" cy="395" r="12" fill="rgba(127,231,224,.4)" style="transform-origin:445px 395px"/>
+          <circle class="map-core" cx="445" cy="395" r="5" fill="#7FE7E0" style="animation-delay:2s"/>
+        </g>
+        <!-- 塔桅 -->
+        <g opacity=".8">
+          <path d="M252 182l14-26 14 26" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M258 172h16M262 162h8" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+        </g>
+      </svg>
+      <div class="map-legend">
+        <span><i class="l-cyan"></i>5G 基站</span>
+        <span><i class="l-blue"></i>室内分布</span>
+        <span><i class="l-white"></i>规划中</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. 用户口碑 + 数据 ============ -->
+<section class="voices" id="voices">
+  <div class="wrap">
+    <div class="voices-head">
+      <div>
+        <span class="eyebrow reveal">VOICES · 用户口碑</span>
+        <h2 class="h-sec reveal" style="--d:.08s">真实用户，<br>真实体验</h2>
+      </div>
+      <p class="lede reveal" style="--d:.14s">
+        来自 Nova App 与第三方测评平台的真实反馈。我们不修饰差评，
+        只用网络质量回应。
+      </p>
+    </div>
+
+    <div class="voices-grid">
+      <article class="voice reveal">
+        <div class="quote-mark">“</div>
+        <p>换了畅享套餐半年，最直观的感受是地铁里终于能顺畅看视频了。以前在 2 号线隧道必断，现在全程 5G，早高峰刷直播都不卡。</p>
+        <div class="who">
+          <div class="avatar av-1">陈</div>
+          <div>
+            <div class="name">陈嘉宁</div>
+            <div class="meta">产品经理 · 畅享套餐用户 8 个月</div>
+          </div>
+          <div class="stars" aria-label="评分 5 分">
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="voice reveal" style="--d:.08s">
+        <div class="quote-mark">“</div>
+        <p>家庭融合套餐一张单搞定全家：我和太太的手机、两张副卡、还有千兆宽带。账单从原来的 400 多降到 129，网速反而更快了。</p>
+        <div class="who">
+          <div class="avatar av-2">林</div>
+          <div>
+            <div class="name">林向文</div>
+            <div class="meta">建筑师 · 家庭融合用户 1 年</div>
+          </div>
+          <div class="stars" aria-label="评分 5 分">
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="voice reveal" style="--d:.16s">
+        <div class="quote-mark">“</div>
+        <p>商务套餐的国际漫游是真省心。上个月在东京出差一周，落地就有信号，10 元一天封顶，开视频会议和国内没差别。客户经理响应也快。</p>
+        <div class="who">
+          <div class="avatar av-3">苏</div>
+          <div>
+            <div class="name">苏亦然</div>
+            <div class="meta">外贸总监 · 商务尊享用户 2 年</div>
+          </div>
+          <div class="stars" aria-label="评分 5 分">
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 13 13"><path d="M6.5 1l1.6 3.4 3.7.5-2.7 2.6.7 3.7L6.5 9.4 3.2 11.2l.7-3.7L1.2 4.9l3.7-.5z" fill="#1E6EF3"/></svg>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- 运营数据 -->
+    <div class="metrics reveal">
+      <div class="metric">
+        <div class="num"><span class="count" data-count="286">0</span><span class="u">万</span></div>
+        <div class="cap">在网用户</div>
+        <p class="desc">连续 8 个季度净增长，携号转网转入占比 41%。</p>
+      </div>
+      <div class="metric">
+        <div class="num"><span class="count" data-count="12480">0</span><span class="u">+</span></div>
+        <div class="cap">运营基站</div>
+        <p class="desc">自建 5G 独立组网，平均站间距 280 米。</p>
+      </div>
+      <div class="metric">
+        <div class="num"><span class="count" data-count="97.6">0</span><span class="u">%</span></div>
+        <div class="cap">用户满意度</div>
+        <p class="desc">2026 年第三季度第三方满意度调研结果。</p>
+      </div>
+      <div class="metric">
+        <div class="num"><span class="count" data-count="30">0</span><span class="u">秒</span></div>
+        <div class="cap">客服响应</div>
+        <p class="desc">7×24 人工客服，平均接通时间 30 秒内。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. FAQ ============ -->
+<section class="faq" id="faq">
+  <div class="wrap faq-inner">
+    <div class="faq-head">
+      <span class="eyebrow reveal">FAQ · 常见问题</span>
+      <h2 class="h-sec reveal" style="--d:.08s">你可能想问</h2>
+      <p class="lede reveal" style="--d:.14s">
+        没找到答案？7×24 在线客服随时待命，或拨打 10086-Nova。
+      </p>
+      <a class="btn btn-ghost reveal" style="--d:.2s" href="#cta">联系在线客服 <span class="arrow">→</span></a>
+    </div>
+
+    <div class="faq-list reveal" style="--d:.16s">
+      <details class="faq-item" open>
+        <summary>
+          <span class="q-text"><span class="q-index">01</span>携号转网到 Nova 需要多久？会不会影响我的号码？</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer">
+          全程线上办理，通常 1 小时内完成，最长不超过 24 小时。您的手机号码完全不变，通讯录、绑定的银行卡与 App 均不受影响。办理前请确认原运营商无在网合约，并发送短信「SQXZ#姓名#身份证号」至原运营商获取授权码。<a href="#cta">立即开始携转 →</a>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>
+          <span class="q-text"><span class="q-index">02</span>套餐有合约期吗？可以随时更换或取消吗？</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer">
+          月付套餐无合约期，可随时在 Nova App 内升降档或销户，次月生效，不收取任何违约金。年付套餐享受 8 折优惠，合约期为 12 个月；若提前终止，已享折扣部分将按差价补足，剩余未使用月份全额退还。
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>
+          <span class="q-text"><span class="q-index">03</span>家庭套餐的副卡怎么办理？副卡有额外费用吗？</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer">
+          家庭融合套餐自带 2 张免费副卡，可在办理时一并申请，也可后续在 App 内补办。副卡与主卡共享 300GB 流量与 2000 分钟通话，互打免费。如需第 3 张副卡，费用为 10 元/月/张，最多可加办 3 张。副卡申请人需年满 16 周岁并实名登记。
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>
+          <span class="q-text"><span class="q-index">04</span>使用 5G 网络需要换 SIM 卡或换手机吗？</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer">
+          不需要换卡。Nova 全部套餐均支持 5G SA/NSA 双模，您只需使用支持 5G 的手机终端，并在设置中开启 5G 开关即可。若您的手机仅支持 4G，套餐依然可以正常使用，按 4G 速率上网，资费不变。覆盖查询工具可输入您的常用地址，查看 5G 信号强度实测图。
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>
+          <span class="q-text"><span class="q-index">05</span>套餐外流量如何计费？会「天价账单」吗？</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer">
+          不会。套餐外流量按 5 元/GB 计费，当月累计 3GB 后免费使用至月底（高速流量内）。我们还提供「安心锁」服务：可在 App 内自主设置月消费上限（默认 60 元），达量自动断网并短信提醒，杜绝意外账单。所有消费明细实时可查、可导出。
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. CTA 深底区 ============ -->
+<section class="cta" id="cta">
+  <svg class="cta-arcs" viewBox="0 0 1100 560" fill="none" aria-hidden="true">
+    <circle class="a1" cx="550" cy="280" r="180" stroke-width="1.4"/>
+    <circle class="a2" cx="550" cy="280" r="260" stroke-width="1.2"/>
+    <circle class="a3" cx="550" cy="280" r="340" stroke-width="1"/>
+    <circle class="a1" cx="550" cy="280" r="420" stroke-width="1" style="animation-delay:.9s"/>
+  </svg>
+  <div class="wrap cta-inner">
+    <span class="eyebrow on-dark reveal">JOIN NOVA · 即刻入网</span>
+    <h2 class="h-mega reveal" style="--d:.08s">即刻入网 <span class="accent">Nova</span></h2>
+    <p class="lede on-dark reveal" style="--d:.14s">
+      线上选号、免费寄卡、顺丰次日达。激活即享首月半价，
+      携号转网用户额外赠送 20GB 全国流量。
+    </p>
+    <div class="cta-btns reveal" style="--d:.2s">
+      <a class="btn btn-primary" href="#plans">立即办理套餐 <span class="arrow">→</span></a>
+      <a class="btn btn-ghost-dark" href="#coverage">查询我家覆盖</a>
+    </div>
+    <p class="cta-fine reveal" style="--d:.26s">
+      首月半价仅限新入网用户 · 活动截止 2026 年 12 月 31 日 · 最终解释权归 Nova Mobile 所有
+    </p>
+  </div>
+</section>
+</main>
+
+<!-- ============ 10. Footer ============ -->
+<footer class="footer" id="login">
+  <div class="wrap">
+    <div class="footer-cols">
+      <div class="footer-brand">
+        <a class="logo" href="#top">
+          <svg class="logo-mark" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+            <circle cx="15" cy="15" r="12.5" stroke="#7FE7E0" stroke-width="1.4" opacity=".55"/>
+            <circle cx="15" cy="15" r="8" stroke="#4A8CFF" stroke-width="1.6"/>
+            <circle cx="15" cy="15" r="3.4" fill="#FFFFFF"/>
+          </svg>
+          NOVA
+        </a>
+        <p>Nova Mobile 都市移动通信运营商。为城市生活提供透明、高速、无套路的移动连接服务。</p>
+      </div>
+      <div>
+        <h4>套餐服务</h4>
+        <ul class="footer-links">
+          <li><a href="#plans">轻享套餐</a></li>
+          <li><a href="#plans">畅享套餐</a></li>
+          <li><a href="#plans">家庭融合</a></li>
+          <li><a href="#plans">商务尊享</a></li>
+          <li><a href="#compare">套餐对比</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>网络与覆盖</h4>
+        <ul class="footer-links">
+          <li><a href="#coverage">覆盖地图</a></li>
+          <li><a href="#coverage">5G 网络</a></li>
+          <li><a href="#compare">千兆宽带</a></li>
+          <li><a href="#perks">国际漫游</a></li>
+          <li><a href="#faq">携号转网</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>客户支持</h4>
+        <ul class="footer-links">
+          <li><a href="#faq">常见问题</a></li>
+          <li><a href="#cta">在线客服</a></li>
+          <li><a href="#cta">营业厅查询</a></li>
+          <li><a href="#faq">账单与发票</a></li>
+          <li><a href="#faq">投诉与建议</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>关于 Nova</h4>
+        <ul class="footer-links">
+          <li><a href="#top">品牌故事</a></li>
+          <li><a href="#voices">用户口碑</a></li>
+          <li><a href="#top">加入我们</a></li>
+          <li><a href="#top">新闻中心</a></li>
+          <li><a href="#top">合作伙伴</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <span>© 2026 Nova Mobile 通信技术有限公司</span>
+      <span>电信业务经营许可证：B1-2026XXXX</span>
+      <span>增值电信业务许可证：京B2-2026XXXX</span>
+      <span><a href="#top">隐私政策</a></span>
+      <span><a href="#top">服务协议</a></span>
+      <span><a href="#top">京ICP备2026XXXXXX号-1</a></span>
+    </div>
+  </div>
+  <div class="footer-wordmark" aria-hidden="true">NOVA</div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── 滚动入场：IntersectionObserver + 无 IO 兜底 ───────── */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    /* 兜底：不支持 IntersectionObserver 时全量显示 */
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ── 月付 / 年付切换（价格数字过渡） ─────────────────── */
+  var sw = document.getElementById('billingSwitch');
+  var lblM = document.getElementById('lbl-monthly');
+  var lblY = document.getElementById('lbl-yearly');
+  var priceVals = Array.prototype.slice.call(document.querySelectorAll('.plan-price .val'));
+  var billedNotes = Array.prototype.slice.call(document.querySelectorAll('.plan-billed'));
+  var yearly = false;
+
+  function renderPrices() {
+    priceVals.forEach(function (el) {
+      el.classList.add('swap');
+      setTimeout(function () {
+        var v = yearly ? el.getAttribute('data-yearly') : el.getAttribute('data-monthly');
+        el.textContent = v;
+        el.classList.remove('swap');
+      }, 200);
+    });
+    billedNotes.forEach(function (el) {
+      var v = yearly
+        ? el.getAttribute('data-billed-yearly')
+        : el.getAttribute('data-billed-monthly');
+      el.textContent = v;
+    });
+    if (lblM && lblY) {
+      lblM.classList.toggle('active', !yearly);
+      lblY.classList.toggle('active', yearly);
+    }
+    if (sw) { sw.setAttribute('aria-checked', String(yearly)); }
+  }
+
+  if (sw) {
+    sw.addEventListener('click', function () {
+      yearly = !yearly;
+      renderPrices();
+    });
+  }
+
+  /* ── FAQ 手风琴：一次只展开一项（details 原生可用） ───── */
+  var faqItems = Array.prototype.slice.call(document.querySelectorAll('.faq-item'));
+  faqItems.forEach(function (item) {
+    item.addEventListener('toggle', function () {
+      if (item.open) {
+        faqItems.forEach(function (other) {
+          if (other !== item) { other.open = false; }
+        });
+      }
+    });
+  });
+
+  /* ── 数字滚动（进入视口时 count-up） ─────────────────── */
+  var counters = Array.prototype.slice.call(document.querySelectorAll('.count'));
+  function animateCount(el) {
+    var target = parseFloat(el.getAttribute('data-count'));
+    if (isNaN(target)) { return; }
+    var decimals = (String(target).split('.')[1] || '').length;
+    var duration = 1400;
+    var startTime = null;
+    function step(ts) {
+      if (!startTime) { startTime = ts; }
+      var p = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var current = target * eased;
+      el.textContent = decimals
+        ? current.toFixed(decimals)
+        : Math.round(current).toLocaleString('zh-CN');
+      if (p < 1) { requestAnimationFrame(step); }
+    }
+    requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          cio.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (el) { cio.observe(el); });
+  } else {
+    counters.forEach(function (el) {
+      var t = parseFloat(el.getAttribute('data-count'));
+      if (!isNaN(t)) { el.textContent = String(t); }
+    });
+  }
+
+  /* ── 导航：移动端汉堡（轻量展开） ────────────────────── */
+  var burger = document.querySelector('.nav-burger');
+  var navLinks = document.querySelector('.nav-links');
+  if (burger && navLinks) {
+    burger.addEventListener('click', function () {
+      var open = navLinks.style.display === 'flex';
+      navLinks.style.display = open ? '' : 'flex';
+      navLinks.style.position = 'absolute';
+      navLinks.style.top = '68px';
+      navLinks.style.left = '0';
+      navLinks.style.right = '0';
+      navLinks.style.flexDirection = 'column';
+      navLinks.style.gap = '4px';
+      navLinks.style.padding = open ? '' : '18px 6vw 26px';
+      navLinks.style.background = 'rgba(23,11,46,.97)';
+      navLinks.style.borderBottom = '1px solid rgba(255,255,255,.1)';
+    });
+    navLinks.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A' && window.innerWidth <= 760) {
+        navLinks.style.display = '';
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
