@@ -26,8 +26,8 @@ pageDetail:
   - title: 适用场景
     content: '密室逃脱/剧本杀场馆、沉浸式娱乐预约、游戏化活动页、暗色剧场风品牌站'
   prev:
-    text: Nova Mobile 运营商套餐
-    link: /pages/nova-mobile.html
+    text: Cirrus Airways 精品航司预订
+    link: /pages/cirrus-airways.html
   next:
     text: ALTITUDE 山岳探险家作品集
     link: /pages/altitude-expedition.html

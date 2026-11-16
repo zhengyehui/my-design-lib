@@ -32,8 +32,8 @@ pageDetail:
     text: Harvest Market 都市生鲜超市
     link: /pages/harvest-market.html
   next:
-    text: Enigma Chamber 密室逃脱
-    link: /pages/enigma-chamber.html
+    text: Playform 设计积木玩具商店
+    link: /pages/playform-toys.html
 ---
 
 <PageDetail />

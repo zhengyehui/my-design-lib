@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cirrus Airways — Fly The Quiet Routes</title>
+<link rel="stylesheet" href="/tokens/tokens.css">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET ============ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --paper: #F5F3F0;
+  --ink: #0C0C0C;
+  --hair: rgba(12, 12, 12, .18);
+  --hair-strong: rgba(12, 12, 12, .55);
+  --font: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ease-flip: cubic-bezier(.77, 0, .175, 1);
+  --pad: clamp(20px, 5vw, 80px);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  line-height: 1.4;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; text-transform: uppercase; letter-spacing: .02em; cursor: pointer; background: none; border: none; color: inherit; }
+ul { list-style: none; }
+
+/* ============ REVEAL / 3D FLIP ENTRY ============ */
+.reveal-wrap { perspective: 1000px; }
+html.js .reveal:not(.in) { opacity: 0; transform: translateY(42%) rotateX(-40deg); filter: blur(4px); }
+html.js .reveal-up:not(.in) { opacity: 0; transform: translateY(48%); filter: blur(3px); }
+.reveal, .reveal-up { transition: opacity .7s var(--ease-flip), transform .7s var(--ease-flip), filter .7s var(--ease-flip); }
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal:not(.in), html.js .reveal-up:not(.in) { opacity: 1; transform: none; filter: none; }
+  .reveal, .reveal-up { transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ============ INVISIBLE UNDERLINE LINK ============ */
+.u-link { position: relative; display: inline-block; padding-bottom: 2px; }
+.u-link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .2s var(--ease-flip);
+}
+.u-link:hover::after { transform: scaleX(1); }
+
+/* ============ SNAP UNDERLINE (FORM + CTA) ============ */
+.snap { border-bottom: 2px solid var(--hair); transition: border-color .2s; }
+.snap:hover, .snap:focus { border-bottom-color: var(--ink); outline: none; }
+
+.snap-btn { display: inline-block; padding: 4px 0; border-bottom: 3px solid transparent; transition: border-color .2s; }
+.snap-btn:hover, .snap-btn.active { border-bottom-color: currentColor; }
+
+/* ============ TOP BAR ============ */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px var(--pad);
+  background: rgba(245, 243, 240, .92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.wordmark { font-size: clamp(16px, 1.6vw, 22px); font-weight: 900; letter-spacing: .06em; white-space: nowrap; }
+.wordmark span { font-weight: 500; }
+.topnav { display: flex; gap: clamp(14px, 2.2vw, 34px); }
+.topnav a { font-size: clamp(11px, 1vw, 12px); font-weight: 600; letter-spacing: .12em; }
+.top-right { display: flex; align-items: center; gap: clamp(12px, 1.8vw, 28px); }
+.socials { display: flex; gap: 14px; }
+.socials a { font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+.book-cta {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  border-bottom: 3px solid var(--ink);
+  padding-bottom: 3px;
+  transition: border-color .2s, color .2s;
+}
+.book-cta:hover { border-bottom-color: transparent; }
+
+/* ============ HERO ============ */
+.hero { padding: clamp(130px, 18vh, 200px) var(--pad) clamp(40px, 6vh, 90px); }
+.micro { font-size: clamp(11px, 1vw, 12px); font-weight: 600; letter-spacing: .22em; margin-bottom: clamp(18px, 3vh, 36px); }
+h1.hero-title {
+  font-size: clamp(40px, 6vw, 88px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: .01em;
+  max-width: 12em;
+}
+.hero-sub {
+  margin-top: clamp(20px, 3vh, 36px);
+  font-size: clamp(13px, 1.4vw, 17px);
+  font-weight: 600;
+  letter-spacing: .08em;
+  line-height: 1.7;
+  max-width: 46ch;
+}
+.hero-meta {
+  margin-top: clamp(28px, 4vh, 52px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(20px, 4vw, 60px);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .18em;
+}
+.hero-meta strong { display: block; font-size: clamp(20px, 2.4vw, 32px); font-weight: 800; letter-spacing: .02em; margin-top: 6px; }
+
+/* Hero plane mark */
+.hero-plane {
+  position: absolute;
+  right: -6vw;
+  top: clamp(120px, 16vh, 190px);
+  width: clamp(220px, 32vw, 520px);
+  opacity: .09;
+  pointer-events: none;
+}
+.hero { position: relative; overflow: hidden; }
+
+/* ============ SECTION SHELL ============ */
+section { padding: clamp(56px, 9vh, 120px) var(--pad); }
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: clamp(30px, 5vh, 64px);
+}
+h2.sec-title { font-size: clamp(26px, 4vw, 56px); font-weight: 800; line-height: 1.05; }
+.sec-note { font-size: 11px; font-weight: 600; letter-spacing: .18em; }
+
+/* ============ FLIGHT SEARCH ============ */
+.search-tabs { display: flex; gap: clamp(18px, 3vw, 42px); margin-bottom: clamp(28px, 4vh, 48px); }
+.search-tabs button {
+  font-size: clamp(11px, 1vw, 12px);
+  font-weight: 700;
+  letter-spacing: .16em;
+  padding-bottom: 5px;
+  border-bottom: 3px solid transparent;
+  transition: border-color .2s;
+}
+.search-tabs button.active { border-bottom-color: var(--ink); }
+
+.search-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(16px, 2.5vw, 40px); align-items: end; }
+.field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  margin-bottom: 12px;
+  opacity: .65;
+}
+.field input, .field .fake-input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--hair);
+  padding: 6px 0 10px;
+  font-family: inherit;
+  font-size: clamp(15px, 1.7vw, 22px);
+  font-weight: 800;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: border-color .2s;
+}
+.field input::placeholder { color: var(--ink); opacity: .35; }
+.field input:hover, .field input:focus { border-bottom-color: var(--ink); outline: none; }
+
+.search-foot {
+  margin-top: clamp(28px, 4vh, 48px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 22px;
+}
+.cabin-seg { display: flex; align-items: center; gap: clamp(14px, 2vw, 28px); }
+.cabin-seg .seg-label { font-size: 10px; font-weight: 600; letter-spacing: .22em; opacity: .65; }
+.cabin-seg button {
+  font-size: clamp(11px, 1vw, 12px);
+  font-weight: 700;
+  letter-spacing: .14em;
+  padding-bottom: 4px;
+  border-bottom: 3px solid transparent;
+  transition: border-color .2s;
+}
+.cabin-seg button.active { border-bottom-color: var(--ink); }
+.search-btn {
+  font-size: clamp(13px, 1.3vw, 16px);
+  font-weight: 800;
+  letter-spacing: .18em;
+  padding: 18px 42px;
+  background: var(--ink);
+  color: var(--paper);
+  transition: background .2s, color .2s, box-shadow .2s;
+  border-bottom: 3px solid var(--ink);
+}
+.search-btn:hover { background: var(--paper); color: var(--ink); }
+.search-msg {
+  width: 100%;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  min-height: 16px;
+  opacity: .8;
+}
+
+/* ============ DEPARTURES BOARD ============ */
+.board { border-top: 1px solid var(--hair-strong); }
+.board-head, .board-row {
+  display: grid;
+  grid-template-columns: 1.1fr 1.6fr 1fr .8fr .8fr 1.4fr;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 8px;
+  border-bottom: 1px solid var(--hair);
+}
+.board-head { font-size: 10px; font-weight: 700; letter-spacing: .22em; opacity: .6; }
+.board-row {
+  font-size: clamp(12px, 1.3vw, 16px);
+  font-weight: 700;
+  letter-spacing: .06em;
+  transition: background .2s, color .2s;
+  cursor: default;
+}
+.board-row:hover { background: var(--ink); color: var(--paper); }
+.board-row .code { font-weight: 800; }
+.board-row .status { display: flex; align-items: center; gap: 10px; font-size: clamp(10px, 1vw, 12px); letter-spacing: .14em; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
+.dot.hollow { background: transparent; box-shadow: inset 0 0 0 2px currentColor; }
+
+/* ============ ROUTES — STAGGERED GRID ============ */
+.routes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 4vw, 72px) clamp(22px, 3vw, 56px); }
+.route:nth-child(3n+2) { transform: translateY(clamp(36px, 6vw, 90px)); }
+html.js .route:nth-child(3n+2).reveal:not(.in) { transform: translateY(calc(clamp(36px, 6vw, 90px) + 42%)) rotateX(-40deg); }
+.route-num { font-size: 10px; font-weight: 700; letter-spacing: .26em; opacity: .55; margin-bottom: 14px; }
+.route-cities { font-size: clamp(22px, 2.6vw, 38px); font-weight: 800; line-height: 1.05; }
+.route-arrow { display: inline-block; margin: 6px 0; }
+.route-arrow svg { width: clamp(26px, 3vw, 46px); height: auto; display: block; }
+.route-price { margin: 18px 0 6px; font-size: clamp(30px, 3.6vw, 52px); font-weight: 900; line-height: 1; }
+.route-price small { font-size: .34em; font-weight: 700; letter-spacing: .18em; margin-left: 8px; opacity: .6; }
+.route-meta {
+  display: flex;
+  gap: 26px;
+  margin: 14px 0 20px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  opacity: .75;
+}
+.route-meta strong { display: block; font-size: 13px; font-weight: 800; letter-spacing: .06em; margin-top: 5px; opacity: 1; }
+.route-link { font-size: 11px; font-weight: 700; letter-spacing: .18em; }
+
+/* ============ CABIN CLASSES ============ */
+.cabins { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(30px, 4vw, 80px); }
+.cabin-name { font-size: clamp(20px, 2.2vw, 32px); font-weight: 800; margin-bottom: 6px; }
+.cabin-tag { font-size: 10px; font-weight: 600; letter-spacing: .22em; opacity: .6; margin-bottom: 26px; }
+.cabin-seat { font-size: clamp(64px, 8vw, 130px); font-weight: 900; line-height: .9; letter-spacing: -.01em; }
+.cabin-seat small { font-size: .22em; font-weight: 700; letter-spacing: .18em; display: block; margin-top: 12px; opacity: .6; }
+.cabin-list { margin-top: 30px; border-top: 1px solid var(--hair-strong); }
+.cabin-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--hair);
+  font-size: clamp(10px, 1vw, 12px);
+  font-weight: 600;
+  letter-spacing: .12em;
+}
+.cabin-list li span:last-child { font-weight: 800; }
+
+/* ============ INVERTED STATS BAND ============ */
+.band { background: var(--ink); color: var(--paper); }
+.band .sec-title { color: var(--paper); }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px, 3vw, 60px); }
+.stat-num { font-size: clamp(44px, 6.5vw, 104px); font-weight: 900; line-height: 1; }
+.stat-label {
+  margin-top: 14px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .24em;
+  opacity: .75;
+}
+
+/* ============ MEMBERSHIP ============ */
+.tier {
+  padding: clamp(24px, 3.5vh, 44px) 0;
+  border-bottom: 1px solid var(--hair);
+  display: grid;
+  grid-template-columns: 1.1fr 2fr;
+  gap: clamp(20px, 4vw, 60px);
+  align-items: start;
+}
+.tier:first-of-type { border-top: 1px solid var(--hair-strong); }
+.tier-name { font-size: clamp(22px, 2.8vw, 42px); font-weight: 800; line-height: 1.05; }
+.tier-threshold { margin-top: 10px; font-size: 10px; font-weight: 600; letter-spacing: .22em; opacity: .65; }
+.tier-perks li {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--hair);
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 600;
+  letter-spacing: .1em;
+  line-height: 1.6;
+}
+.tier-perks li:last-child { border-bottom: none; }
+
+/* ============ FAQ ============ */
+.faq-item { border-bottom: 1px solid var(--hair); }
+.faq-item:first-child { border-top: 1px solid var(--hair-strong); }
+.faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: clamp(20px, 3vh, 32px) 0;
+  text-align: left;
+  font-size: clamp(15px, 1.9vw, 26px);
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1.25;
+  transition: opacity .2s;
+}
+.faq-q:hover { opacity: .55; }
+.faq-icon { font-size: clamp(20px, 2.2vw, 30px); font-weight: 500; flex: none; transition: transform .3s var(--ease-flip); }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .45s var(--ease-flip), opacity .35s; opacity: 0; }
+.faq-item.open .faq-a { opacity: 1; }
+.faq-a p {
+  padding: 0 0 clamp(22px, 3vh, 34px);
+  max-width: 72ch;
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 600;
+  letter-spacing: .1em;
+  line-height: 1.9;
+  text-transform: uppercase;
+  opacity: .85;
+}
+
+/* ============ FINAL CTA + FOOTER ============ */
+.final { text-align: left; padding-bottom: clamp(30px, 5vh, 60px); }
+.final-line { font-size: clamp(22px, 3.4vw, 52px); font-weight: 800; line-height: 1.12; max-width: 20ch; }
+.final-cta {
+  display: inline-block;
+  margin-top: clamp(26px, 4vh, 48px);
+  font-size: clamp(13px, 1.3vw, 16px);
+  font-weight: 800;
+  letter-spacing: .2em;
+  padding-bottom: 6px;
+  border-bottom: 4px solid var(--ink);
+  transition: border-color .2s;
+}
+.final-cta:hover { border-bottom-color: transparent; }
+
+.giant-mark {
+  font-size: clamp(64px, 15.5vw, 260px);
+  font-weight: 900;
+  line-height: .86;
+  letter-spacing: .01em;
+  padding: 0 var(--pad);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+footer { position: relative; padding: clamp(36px, 6vh, 72px) var(--pad) clamp(28px, 4vh, 48px); border-top: 1px solid var(--hair-strong); margin-top: clamp(20px, 4vh, 50px); }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: clamp(24px, 3vw, 60px); }
+.foot-col h4 { font-size: 10px; font-weight: 700; letter-spacing: .24em; opacity: .55; margin-bottom: 18px; }
+.foot-col li { margin-bottom: 11px; }
+.foot-col a { font-size: 11px; font-weight: 600; letter-spacing: .12em; }
+.foot-brand { font-size: clamp(18px, 2vw, 28px); font-weight: 900; letter-spacing: .06em; margin-bottom: 16px; }
+.foot-tag { font-size: 10px; font-weight: 600; letter-spacing: .18em; line-height: 1.9; opacity: .7; max-width: 30ch; }
+.foot-legal {
+  margin-top: clamp(30px, 5vh, 60px);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  opacity: .55;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1024px) {
+  .topnav { display: none; }
+  .search-grid { grid-template-columns: repeat(3, 1fr); }
+  .routes-grid { grid-template-columns: repeat(2, 1fr); }
+  .route:nth-child(3n+2) { transform: none; }
+  html.js .route:nth-child(3n+2).reveal:not(.in) { transform: translateY(42%) rotateX(-40deg); }
+  .route:nth-child(2n) { transform: translateY(clamp(28px, 5vw, 60px)); }
+  html.js .route:nth-child(2n).reveal:not(.in) { transform: translateY(calc(clamp(28px, 5vw, 60px) + 42%)) rotateX(-40deg); }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .board-head, .board-row { grid-template-columns: 1fr 1.4fr 1fr 1.4fr; }
+  .board-head span:nth-child(4), .board-head span:nth-child(5),
+  .board-row span:nth-child(4), .board-row span:nth-child(5) { display: none; }
+}
+
+@media (max-width: 768px) {
+  .socials { display: none; }
+  .search-grid { grid-template-columns: 1fr 1fr; }
+  .cabins { grid-template-columns: 1fr; gap: 56px; }
+  .tier { grid-template-columns: 1fr; }
+  .routes-grid { grid-template-columns: 1fr; }
+  .route:nth-child(n) { transform: none; }
+  html.js .route:nth-child(n).reveal:not(.in) { transform: translateY(42%) rotateX(-40deg); }
+  .board-head, .board-row { grid-template-columns: 1fr 1.2fr 1.2fr; }
+  .board-head span:nth-child(3), .board-row span:nth-child(3) { display: none; }
+  .foot-grid { grid-template-columns: 1fr; }
+  .search-foot { flex-direction: column; align-items: flex-start; }
+  .hero-plane { top: auto; bottom: -20px; right: -30vw; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ FLOATING TOP BAR ============ -->
+<header class="topbar">
+  <a class="wordmark" href="#top">CIRRUS <span>✈ AIRWAYS</span></a>
+  <nav class="topnav">
+    <a class="u-link" href="#routes">ROUTES</a>
+    <a class="u-link" href="#fleet">FLEET</a>
+    <a class="u-link" href="#cabin">CABIN</a>
+    <a class="u-link" href="#members">MEMBERS</a>
+  </nav>
+  <div class="top-right">
+    <div class="socials">
+      <a class="u-link" href="#" aria-label="Instagram">IN</a>
+      <a class="u-link" href="#" aria-label="LinkedIn">LI</a>
+      <a class="u-link" href="#" aria-label="X">X</a>
+    </div>
+    <a class="book-cta" href="#book">BOOK</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<main id="top">
+<section class="hero">
+  <svg class="hero-plane" viewBox="0 0 640 200" fill="none" aria-hidden="true">
+    <path d="M20 120 L300 100 L250 40 L280 38 L380 92 L540 82 C590 80 620 92 620 104 C620 116 590 126 540 124 L380 116 L280 168 L250 166 L300 112 Z" fill="#0C0C0C"/>
+    <path d="M0 108 H620" stroke="#0C0C0C" stroke-width="2" stroke-dasharray="10 12"/>
+    <circle cx="30" cy="108" r="5" fill="#0C0C0C"/>
+    <circle cx="590" cy="108" r="5" fill="#0C0C0C"/>
+  </svg>
+  <div class="reveal-wrap">
+    <p class="micro reveal">SCANDINAVIAN REGIONAL AIR — EST. 2014</p>
+  </div>
+  <div class="reveal-wrap">
+    <h1 class="hero-title reveal" style="transition-delay:.06s">FLY THE<br>QUIET ROUTES</h1>
+  </div>
+  <div class="reveal-wrap">
+    <p class="hero-sub reveal" style="transition-delay:.12s">
+      SMALL PLANES. SHORT LINES. CIVILISED HOURS. CIRRUS AIRWAYS CONNECTS
+      TWELVE NORDIC CITIES TO THE HEART OF EUROPE — WITHOUT THE NOISE,
+      THE CROWDS, OR THE 04:30 BOARDING CALL.
+    </p>
+  </div>
+  <div class="hero-meta reveal-wrap">
+    <div class="reveal-up"><span>DAILY DEPARTURES</span><strong>126</strong></div>
+    <div class="reveal-up" style="transition-delay:.06s"><span>CITIES SERVED</span><strong>34</strong></div>
+    <div class="reveal-up" style="transition-delay:.12s"><span>AVG. GATE WAIT</span><strong>9 MIN</strong></div>
+    <div class="reveal-up" style="transition-delay:.18s"><span>PUNCTUALITY</span><strong>94%</strong></div>
+  </div></section>
+
+<!-- ============ FLIGHT SEARCH ============ -->
+<section id="book">
+  <div class="sec-head reveal-wrap">
+    <h2 class="sec-title reveal">FIND YOUR FLIGHT</h2>
+    <p class="sec-note reveal" style="transition-delay:.08s">FARES SHOWN INCLUDE TAXES & CHARGES</p>
+  </div>
+
+  <div class="search-tabs reveal-wrap">
+    <button class="reveal active" data-trip="one-way">ONE WAY</button>
+    <button class="reveal" data-trip="return" style="transition-delay:.06s">RETURN</button>
+    <button class="reveal" data-trip="multi" style="transition-delay:.12s">MULTI-CITY</button>
+  </div>
+
+  <div class="search-grid reveal-wrap">
+    <div class="field reveal"><label for="f-from">FROM</label>
+      <input id="f-from" type="text" value="OSLO OSL" readonly></div>
+    <div class="field reveal" style="transition-delay:.06s"><label for="f-to">TO</label>
+      <input id="f-to" type="text" value="BERLIN BER" readonly></div>
+    <div class="field reveal" style="transition-delay:.12s"><label for="f-dep">DEPART</label>
+      <input id="f-dep" type="text" value="24 NOV" readonly></div>
+    <div class="field reveal" id="ret-field" style="transition-delay:.18s"><label for="f-ret">RETURN</label>
+      <input id="f-ret" type="text" value="01 DEC" readonly></div>
+    <div class="field reveal" style="transition-delay:.24s"><label for="f-pax">PASSENGERS</label>
+      <input id="f-pax" type="text" value="1 ADULT" readonly></div>
+  </div>
+
+  <div class="search-foot">
+    <div class="cabin-seg reveal-wrap">
+      <span class="seg-label reveal">CABIN</span>
+      <button class="reveal active" data-cabin="ECONOMY" style="transition-delay:.06s">ECONOMY</button>
+      <button class="reveal" data-cabin="PREMIUM" style="transition-delay:.12s">PREMIUM</button>
+      <button class="reveal" data-cabin="BUSINESS" style="transition-delay:.18s">BUSINESS</button>
+    </div>
+    <button class="search-btn reveal" id="search-btn">SEARCH FLIGHTS</button>
+    <p class="search-msg" id="search-msg" role="status"></p>
+  </div>
+</section>
+
+<!-- ============ DEPARTURES BOARD ============ -->
+<section id="fleet">
+  <div class="sec-head reveal-wrap">
+    <h2 class="sec-title reveal">TODAY'S DEPARTURES</h2>
+    <p class="sec-note reveal" style="transition-delay:.08s">OSLO GARDERMOEN — LOCAL TIME CET — UPDATED 10:15</p>
+  </div>
+
+  <div class="board reveal-wrap">
+    <div class="board-head">
+      <span>FLIGHT</span><span>ROUTE</span><span>DEPARTS</span><span>GATE</span><span>AIRCRAFT</span><span>STATUS</span>
+    </div>
+    <div class="board-row reveal">
+      <span class="code">SK 1042</span><span>OSL → BER</span><span>07:45</span><span>B12</span><span>ATR 72-600</span>
+      <span class="status"><i class="dot"></i>ON TIME</span>
+    </div>
+    <div class="board-row reveal" style="transition-delay:.06s">
+      <span class="code">SK 2218</span><span>OSL → CPH</span><span>08:20</span><span>A04</span><span>DASH 8 Q400</span>
+      <span class="status"><i class="dot"></i>BOARDING</span>
+    </div>
+    <div class="board-row reveal" style="transition-delay:.12s">
+      <span class="code">SK 3370</span><span>OSL → AMS</span><span>09:05</span><span>B07</span><span>A220-300</span>
+      <span class="status"><i class="dot hollow"></i>GATE CLOSING</span>
+    </div>
+    <div class="board-row reveal" style="transition-delay:.18s">
+      <span class="code">SK 4486</span><span>OSL → ARN</span><span>09:40</span><span>A11</span><span>ATR 72-600</span>
+      <span class="status"><i class="dot"></i>ON TIME</span>
+    </div>
+    <div class="board-row reveal" style="transition-delay:.24s">
+      <span class="code">SK 5120</span><span>OSL → LHR</span><span>10:15</span><span>C02</span><span>A220-300</span>
+      <span class="status"><i class="dot hollow"></i>DELAYED 12 MIN</span>
+    </div>
+    <div class="board-row reveal" style="transition-delay:.3s">
+      <span class="code">SK 6614</span><span>OSL → ZRH</span><span>11:30</span><span>B09</span><span>DASH 8 Q400</span>
+      <span class="status"><i class="dot"></i>ON TIME</span>
+    </div>
+    <div class="board-row reveal" style="transition-delay:.36s">
+      <span class="code">SK 7728</span><span>OSL → HEL</span><span>12:50</span><span>A06</span><span>ATR 72-600</span>
+      <span class="status"><i class="dot"></i>ON TIME</span>
+    </div>
+    <div class="board-row reveal" style="transition-delay:.42s">
+      <span class="code">SK 8830</span><span>OSL → VIE</span><span>14:05</span><span>C08</span><span>A220-300</span>
+      <span class="status"><i class="dot hollow"></i>SCHEDULED</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ POPULAR ROUTES — STAGGERED GRID ============ -->
+<section id="routes">
+  <div class="sec-head reveal-wrap">
+    <h2 class="sec-title reveal">POPULAR ROUTES</h2>
+    <p class="sec-note reveal" style="transition-delay:.08s">ONE-WAY FROM — BOOKED 14 DAYS AHEAD</p>
+  </div>
+
+  <div class="routes-grid">
+    <article class="route reveal-wrap"><div class="route reveal">
+      <p class="route-num">ROUTE 01 — DAILY</p>
+      <h3 class="route-cities">OSLO<span class="route-arrow"><svg viewBox="0 0 48 16" fill="none"><path d="M0 8 H40 M32 2 L42 8 L32 14" stroke="#0C0C0C" stroke-width="2.5"/></svg></span>BERLIN</h3>
+      <p class="route-price">€89<small>FROM</small></p>
+      <div class="route-meta"><div>FLIGHT TIME<strong>1H 45M</strong></div><div>WEEKLY<strong>21 FLIGHTS</strong></div><div>AIRCRAFT<strong>ATR 72</strong></div></div>
+      <a class="u-link route-link" href="#book">VIEW ROUTE</a>
+    </div></article>
+
+    <article class="route reveal-wrap"><div class="route reveal" style="transition-delay:.06s">
+      <p class="route-num">ROUTE 02 — DAILY</p>
+      <h3 class="route-cities">STOCKHOLM<span class="route-arrow"><svg viewBox="0 0 48 16" fill="none"><path d="M0 8 H40 M32 2 L42 8 L32 14" stroke="#0C0C0C" stroke-width="2.5"/></svg></span>PARIS</h3>
+      <p class="route-price">€119<small>FROM</small></p>
+      <div class="route-meta"><div>FLIGHT TIME<strong>2H 25M</strong></div><div>WEEKLY<strong>14 FLIGHTS</strong></div><div>AIRCRAFT<strong>A220-300</strong></div></div>
+      <a class="u-link route-link" href="#book">VIEW ROUTE</a>
+    </div></article>
+
+    <article class="route reveal-wrap"><div class="route reveal" style="transition-delay:.12s">
+      <p class="route-num">ROUTE 03 — DAILY</p>
+      <h3 class="route-cities">COPENHAGEN<span class="route-arrow"><svg viewBox="0 0 48 16" fill="none"><path d="M0 8 H40 M32 2 L42 8 L32 14" stroke="#0C0C0C" stroke-width="2.5"/></svg></span>AMSTERDAM</h3>
+      <p class="route-price">€79<small>FROM</small></p>
+      <div class="route-meta"><div>FLIGHT TIME<strong>1H 20M</strong></div><div>WEEKLY<strong>28 FLIGHTS</strong></div><div>AIRCRAFT<strong>DASH 8</strong></div></div>
+      <a class="u-link route-link" href="#book">VIEW ROUTE</a>
+    </div></article>
+
+    <article class="route reveal-wrap"><div class="route reveal">
+      <p class="route-num">ROUTE 04 — 5X WEEKLY</p>
+      <h3 class="route-cities">HELSINKI<span class="route-arrow"><svg viewBox="0 0 48 16" fill="none"><path d="M0 8 H40 M32 2 L42 8 L32 14" stroke="#0C0C0C" stroke-width="2.5"/></svg></span>LONDON</h3>
+      <p class="route-price">€129<small>FROM</small></p>
+      <div class="route-meta"><div>FLIGHT TIME<strong>3H 05M</strong></div><div>WEEKLY<strong>10 FLIGHTS</strong></div><div>AIRCRAFT<strong>A220-300</strong></div></div>
+      <a class="u-link route-link" href="#book">VIEW ROUTE</a>
+    </div></article>
+
+    <article class="route reveal-wrap"><div class="route reveal" style="transition-delay:.06s">
+      <p class="route-num">ROUTE 05 — 5X WEEKLY</p>
+      <h3 class="route-cities">GOTHENBURG<span class="route-arrow"><svg viewBox="0 0 48 16" fill="none"><path d="M0 8 H40 M32 2 L42 8 L32 14" stroke="#0C0C0C" stroke-width="2.5"/></svg></span>ZURICH</h3>
+      <p class="route-price">€99<small>FROM</small></p>
+      <div class="route-meta"><div>FLIGHT TIME<strong>2H 05M</strong></div><div>WEEKLY<strong>10 FLIGHTS</strong></div><div>AIRCRAFT<strong>DASH 8</strong></div></div>
+      <a class="u-link route-link" href="#book">VIEW ROUTE</a>
+    </div></article>
+
+    <article class="route reveal-wrap"><div class="route reveal" style="transition-delay:.12s">
+      <p class="route-num">ROUTE 06 — 4X WEEKLY</p>
+      <h3 class="route-cities">MALMÖ<span class="route-arrow"><svg viewBox="0 0 48 16" fill="none"><path d="M0 8 H40 M32 2 L42 8 L32 14" stroke="#0C0C0C" stroke-width="2.5"/></svg></span>VIENNA</h3>
+      <p class="route-price">€109<small>FROM</small></p>
+      <div class="route-meta"><div>FLIGHT TIME<strong>2H 15M</strong></div><div>WEEKLY<strong>8 FLIGHTS</strong></div><div>AIRCRAFT<strong>ATR 72</strong></div></div>
+      <a class="u-link route-link" href="#book">VIEW ROUTE</a>
+    </div></article>
+  </div>
+</section>
+
+<!-- ============ CABIN CLASSES ============ -->
+<section id="cabin">
+  <div class="sec-head reveal-wrap">
+    <h2 class="sec-title reveal">THREE CABINS. ONE STANDARD.</h2>
+    <p class="sec-note reveal" style="transition-delay:.08s">EVERY SEAT. EVERY ROUTE. NO EXCEPTIONS.</p>
+  </div>
+
+  <div class="cabins">
+    <div class="reveal-wrap"><div class="reveal">
+      <h3 class="cabin-name">ECONOMY</h3>
+      <p class="cabin-tag">CABIN 01 — THE SENSIBLE CHOICE</p>
+      <p class="cabin-seat">31"<small>SEAT PITCH</small></p>
+      <ul class="cabin-list">
+        <li><span>CABIN BAG</span><span>1 × 8 KG</span></li>
+        <li><span>HOLD BAG</span><span>1 × 23 KG</span></li>
+        <li><span>MEAL SERVICE</span><span>COLD NORDIC PLATE</span></li>
+        <li><span>SEAT WIDTH</span><span>18 INCH</span></li>
+        <li><span>RECLINE</span><span>4 INCH</span></li>
+        <li><span>POWER</span><span>USB-C AT SEAT</span></li>
+      </ul>
+    </div></div>
+
+    <div class="reveal-wrap"><div class="reveal" style="transition-delay:.08s">
+      <h3 class="cabin-name">PREMIUM</h3>
+      <p class="cabin-tag">CABIN 02 — ROOM TO THINK</p>
+      <p class="cabin-seat">34"<small>SEAT PITCH</small></p>
+      <ul class="cabin-list">
+        <li><span>CABIN BAG</span><span>2 × 10 KG</span></li>
+        <li><span>HOLD BAG</span><span>2 × 23 KG</span></li>
+        <li><span>MEAL SERVICE</span><span>WARM SMÖRGÅS + BAR</span></li>
+        <li><span>SEAT WIDTH</span><span>19.5 INCH</span></li>
+        <li><span>RECLINE</span><span>6 INCH</span></li>
+        <li><span>POWER</span><span>USB-C + AC OUTLET</span></li>
+      </ul>
+    </div></div>
+
+    <div class="reveal-wrap"><div class="reveal" style="transition-delay:.16s">
+      <h3 class="cabin-name">BUSINESS</h3>
+      <p class="cabin-tag">CABIN 03 — THE QUIET FRONT</p>
+      <p class="cabin-seat">38"<small>SEAT PITCH</small></p>
+      <ul class="cabin-list">
+        <li><span>CABIN BAG</span><span>2 × 12 KG</span></li>
+        <li><span>HOLD BAG</span><span>3 × 23 KG</span></li>
+        <li><span>MEAL SERVICE</span><span>CHEF MENU + CHAMPAGNE</span></li>
+        <li><span>SEAT WIDTH</span><span>21 INCH</span></li>
+        <li><span>RECLINE</span><span>8 INCH</span></li>
+        <li><span>POWER</span><span>USB-C + AC + WIRELESS</span></li>
+      </ul>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ INVERTED STATS BAND ============ -->
+<section class="band" id="stats">
+  <div class="sec-head reveal-wrap">
+    <h2 class="sec-title reveal">CIRRUS BY THE NUMBERS</h2>
+    <p class="sec-note reveal" style="transition-delay:.08s">FY 2025 — AUDITED OPERATIONAL DATA</p>
+  </div>
+  <div class="stats reveal-wrap">
+    <div class="reveal"><p class="stat-num"><span class="count" data-target="42">0</span></p>
+      <p class="stat-label">AIRCRAFT IN FLEET</p></div>
+    <div class="reveal" style="transition-delay:.06s"><p class="stat-num"><span class="count" data-target="128">0</span></p>
+      <p class="stat-label">ROUTES OPERATED</p></div>
+    <div class="reveal" style="transition-delay:.12s"><p class="stat-num"><span class="count" data-target="94">0</span>%</p>
+      <p class="stat-label">ON-TIME ARRIVALS</p></div>
+    <div class="reveal" style="transition-delay:.18s"><p class="stat-num"><span class="count" data-target="2.1" data-decimals="1">0</span>M</p>
+      <p class="stat-label">PASSENGERS FLOWN</p></div>
+  </div>
+</section>
+
+<!-- ============ MEMBERSHIP ============ -->
+<section id="members">
+  <div class="sec-head reveal-wrap">
+    <h2 class="sec-title reveal">CIRRUS CLOUD</h2>
+    <p class="sec-note reveal" style="transition-delay:.08s">OUR LOYALTY PROGRAMME — FREE TO JOIN, ALWAYS</p>
+  </div>
+
+  <div class="reveal-wrap"><div class="tier reveal">
+    <div><h3 class="tier-name">CIRRUS BLUE</h3>
+      <p class="tier-threshold">ENTRY TIER — 0 QUALIFYING SEGMENTS</p></div>
+    <ul class="tier-perks">
+      <li>1 MILE PER EURO SPENT ON FARES AND EXTRAS</li>
+      <li>FREE STANDARD SEAT SELECTION AT CHECK-IN</li>
+      <li>DIGITAL BOARDING PASS AND MOBILE GATE UPDATES</li>
+      <li>24-HOUR FARE HOLD ON ALL BOOKINGS</li>
+    </ul>
+  </div></div>
+
+  <div class="reveal-wrap"><div class="tier reveal" style="transition-delay:.08s">
+    <div><h3 class="tier-name">CIRRUS GOLD</h3>
+      <p class="tier-threshold">25 QUALIFYING SEGMENTS OR 30,000 MILES / YEAR</p></div>
+    <ul class="tier-perks">
+      <li>1.5 MILES PER EURO PLUS 25% TIER BONUS ON EVERY FLIGHT</li>
+      <li>ONE FREE HOLD BAG OF 23 KG ON EVERY TICKET</li>
+      <li>PRIORITY CHECK-IN AND PRIORITY BOARDING</li>
+      <li>FREE DATE CHANGES UP TO 24 HOURS BEFORE DEPARTURE</li>
+      <li>ACCESS TO CIRRUS LOUNGES IN OSL, CPH AND ARN</li>
+    </ul>
+  </div></div>
+
+  <div class="reveal-wrap"><div class="tier reveal" style="transition-delay:.16s">
+    <div><h3 class="tier-name">CIRRUS BLACK</h3>
+      <p class="tier-threshold">60 QUALIFYING SEGMENTS OR 80,000 MILES / YEAR</p></div>
+    <ul class="tier-perks">
+      <li>2 MILES PER EURO PLUS 50% TIER BONUS ON EVERY FLIGHT</li>
+      <li>THREE FREE HOLD BAGS AND UNLIMITED CABIN BAGGAGE</li>
+      <li>COMPLIMENTARY UPGRADES TO PREMIUM WHEN AVAILABLE</li>
+      <li>FLEXIBLE TICKETS — FREE CHANGES AND REFUNDS, ANY TIME</li>
+      <li>LOUNGE ACCESS ACROSS THE ENTIRE NETWORK PLUS ONE GUEST</li>
+      <li>DIRECT LINE TO A NAMED CIRRUS CONCIERGE, 24/7</li>
+    </ul>
+  </div></div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="sec-head reveal-wrap">
+    <h2 class="sec-title reveal">GOOD TO KNOW</h2>
+    <p class="sec-note reveal" style="transition-delay:.08s">BAGS, CHANGES, BOARDING — THE HONEST ANSWERS</p>
+  </div>
+
+  <div class="reveal-wrap"><div class="faq-item reveal">
+    <button class="faq-q" aria-expanded="false"><span>HOW MUCH BAGGAGE CAN I BRING ON BOARD?</span><span class="faq-icon">＋</span></button>
+    <div class="faq-a"><p>EVERY FARE INCLUDES ONE CABIN BAG OF UP TO 8 KG AND ONE SMALL PERSONAL ITEM THAT FITS UNDER THE SEAT IN FRONT OF YOU. HOLD BAGGAGE DEPENDS ON YOUR CABIN — 23 KG IN ECONOMY, 2 × 23 KG IN PREMIUM AND 3 × 23 KG IN BUSINESS. SPORTS EQUIPMENT COUNTS AS A HOLD BAG IF IT STAYS WITHIN 23 KG AND 190 CM LINEAR.</p></div>
+  </div></div>
+
+  <div class="reveal-wrap"><div class="faq-item reveal" style="transition-delay:.06s">
+    <button class="faq-q" aria-expanded="false"><span>CAN I CHANGE OR CANCEL MY BOOKING?</span><span class="faq-icon">＋</span></button>
+    <div class="faq-a"><p>YES. DATE AND TIME CHANGES ARE FREE ON PREMIUM AND BUSINESS FARES AND CHARGED AT €39 ON ECONOMY, UP TO 24 HOURS BEFORE DEPARTURE. CANCELLATIONS WITHIN 24 HOURS OF BOOKING ARE ALWAYS FULLY REFUNDABLE. AFTER THAT, ECONOMY FARES REFUND TO TRAVEL CREDIT VALID FOR 24 MONTHS, WHILE PREMIUM AND BUSINESS FARES REFUND TO THE ORIGINAL PAYMENT METHOD.</p></div>
+  </div></div>
+
+  <div class="reveal-wrap"><div class="faq-item reveal" style="transition-delay:.12s">
+    <button class="faq-q" aria-expanded="false"><span>WHEN DOES CHECK-IN AND BOARDING CLOSE?</span><span class="faq-icon">＋</span></button>
+    <div class="faq-a"><p>ONLINE CHECK-IN OPENS 30 HOURS BEFORE DEPARTURE AND CLOSES 60 MINUTES BEFORE. AT THE AIRPORT, BAG DROP CLOSES 40 MINUTES BEFORE DEPARTURE ON SCHENGEN ROUTES AND 60 MINUTES ON NON-SCHENGEN ROUTES. BOARDING CLOSES 20 MINUTES BEFORE DEPARTURE — OUR GATES SHARPEN ON TIME, EVERY TIME.</p></div>
+  </div></div>
+
+  <div class="reveal-wrap"><div class="faq-item reveal" style="transition-delay:.18s">
+    <button class="faq-q" aria-expanded="false"><span>DO YOU SERVE FOOD ON SHORT FLIGHTS?</span><span class="faq-icon">＋</span></button>
+    <div class="faq-a"><p>ON EVERY FLIGHT OVER 75 MINUTES WE SERVE A COMPLIMENTARY COLD NORDIC PLATE IN ECONOMY — OPEN SANDWICH, SEASONAL SALAD AND A SWEET. PREMIUM ADDS A WARM SMÖRGÅS AND A FULL BEVERAGE CART, AND BUSINESS FEATURES A CHEF-DESIGNED MENU WITH A CHAMPAGNE SERVICE. ALLERGEN INFORMATION IS AVAILABLE IN THE APP 48 HOURS BEFORE DEPARTURE.</p></div>
+  </div></div>
+
+  <div class="reveal-wrap"><div class="faq-item reveal" style="transition-delay:.24s">
+    <button class="faq-q" aria-expanded="false"><span>WHAT HAPPENS IF MY FLIGHT IS DELAYED OR CANCELLED?</span><span class="faq-icon">＋</span></button>
+    <div class="faq-a"><p>IF WE DELAY YOU BY MORE THAN 90 MINUTES YOU GET MEAL VOUCHERS AND FREE WI-FI IMMEDIATELY, NO QUESTIONS ASKED. FOR CANCELLATIONS WE REBOOK YOU ON THE NEXT AVAILABLE CIRRUS SERVICE — OR A PARTNER AIRLINE IF IT GETS YOU THERE SOONER — AND COVER MEALS AND HOTEL STAYS WHEN AN OVERNIGHT IS UNAVOIDABLE. EU261 COMPENSATION APPLIES WHERE ELIGIBLE.</p></div>
+  </div></div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final">
+  <div class="reveal-wrap">
+    <p class="final-line reveal">THE NEXT QUIET ROUTE IS BOARDING. ARE YOU ON IT?</p>
+  </div>
+  <div class="reveal-wrap">
+    <a class="final-cta reveal" href="#book" style="transition-delay:.08s">SEARCH FLIGHTS →</a>
+  </div>
+</section>
+</main>
+
+<div class="giant-mark reveal-wrap"><span class="reveal-up">CIRRUS ✈</span></div>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-col">
+      <p class="foot-brand">CIRRUS AIRWAYS</p>
+      <p class="foot-tag">SCANDINAVIAN REGIONAL AIR. FLYING THE QUIET ROUTES BETWEEN THE NORDICS AND EUROPE SINCE 2014. OSLO · STOCKHOLM · COPENHAGEN · HELSINKI.</p>
+    </div>
+    <div class="foot-col">
+      <h4>FLY</h4>
+      <ul>
+        <li><a class="u-link" href="#book">BOOK A FLIGHT</a></li>
+        <li><a class="u-link" href="#routes">ROUTE MAP</a></li>
+        <li><a class="u-link" href="#fleet">TODAY'S DEPARTURES</a></li>
+        <li><a class="u-link" href="#cabin">CABIN CLASSES</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>COMPANY</h4>
+      <ul>
+        <li><a class="u-link" href="#stats">ABOUT CIRRUS</a></li>
+        <li><a class="u-link" href="#members">CIRRUS CLOUD</a></li>
+        <li><a class="u-link" href="#faq">HELP & FAQ</a></li>
+        <li><a class="u-link" href="#">CAREERS</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>FOLLOW</h4>
+      <ul>
+        <li><a class="u-link" href="#">IN — INSTAGRAM</a></li>
+        <li><a class="u-link" href="#">LI — LINKEDIN</a></li>
+        <li><a class="u-link" href="#">X — TWITTER</a></li>
+        <li><a class="u-link" href="#">NEWSROOM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-legal">
+    <span>© 2026 CIRRUS AIRWAYS AS — ORG. NO. 918 442 553 — DRAMMENSVEIEN 145, 0277 OSLO, NORWAY</span>
+    <span>TERMS OF CARRIAGE · PRIVACY · COOKIES · ACCESSIBILITY · TRANSPARENCY REGULATION (EU) 2019/2115</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ===== Reveal on scroll (guarded by html.js class + IntersectionObserver) ===== */
+  var revealEls = document.querySelectorAll('.reveal, .reveal-up');
+
+  function showAll() {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    showAll();
+  }
+
+  /* ===== Trip-type tabs ===== */
+  var tripBtns = document.querySelectorAll('.search-tabs button');
+  var retField = document.getElementById('ret-field');
+  tripBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      tripBtns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var mode = btn.getAttribute('data-trip');
+      if (mode === 'one-way') {
+        retField.style.opacity = '.35';
+      } else {
+        retField.style.opacity = '1';
+      }
+    });
+  });
+
+  /* ===== Cabin segmented control ===== */
+  var cabinBtns = document.querySelectorAll('.cabin-seg button');
+  cabinBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      cabinBtns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    });
+  });
+
+  /* ===== Search action ===== */
+  var searchBtn = document.getElementById('search-btn');
+  var searchMsg = document.getElementById('search-msg');
+  searchBtn.addEventListener('click', function () {
+    var trip = document.querySelector('.search-tabs button.active');
+    var cabin = document.querySelector('.cabin-seg button.active');
+    var tripLabel = trip ? trip.textContent.trim() : 'RETURN';
+    var cabinLabel = cabin ? cabin.getAttribute('data-cabin') : 'ECONOMY';
+    searchMsg.textContent = 'SEARCHING ' + tripLabel + ' — OSL → BER, 24 NOV, 1 ADULT, ' + cabinLabel + ' — 6 FLIGHTS FOUND FROM €89';
+  });
+
+  /* ===== FAQ accordion ===== */
+  var faqBtns = document.querySelectorAll('.faq-q');
+  faqBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.parentElement;
+      var panel = item.querySelector('.faq-a');
+      var isOpen = item.classList.contains('open');
+      if (isOpen) {
+        item.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        panel.style.maxHeight = '0px';
+      } else {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+      }
+    });
+  });
+
+  /* ===== Count-up stats ===== */
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var counters = document.querySelectorAll('.count');
+
+  function runCount(el) {
+    var target = parseFloat(el.getAttribute('data-target'));
+    var decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    if (prefersReduced) {
+      el.textContent = target.toFixed(decimals);
+      return;
+    }
+    var duration = 1400;
+    var startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = (target * eased).toFixed(decimals);
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target.toFixed(decimals);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  if ('IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          runCount(entry.target);
+          cio.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(function (el) { cio.observe(el); });
+  } else {
+    counters.forEach(runCount);
+  }
+})();
+</script>
+</body>
+</html>

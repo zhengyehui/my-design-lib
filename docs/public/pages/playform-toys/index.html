@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playform Toys — Play Is a Form of Design</title>
+  <link rel="stylesheet" href="/tokens/tokens.css">
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+    PLAYFORM TOYS — design tokens
+    ============================================================ */
+    :root { --pf-bg: #FFFFFF; --pf-bg-warm: #FAF8F4; --pf-bg-grey: #F5F5F5; --pf-text: #272727; --pf-text-soft: #6E6E6E; --pf-text-mute: #A9A9A9; --pf-line: #D9D9D9; --pf-btn: #333333; --pf-btn-hover: #000000; --pf-coral: #EF6B6B; --pf-coral-hover: #EE5757; --pf-blue: #2F6BE6; --pf-yellow: #F5C542; --pf-green: #3BA55C; --pf-ease: cubic-bezier(0.19, 1, 0.22, 1); --pf-dur: 0.6s; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', 'Futura', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--pf-bg); color: var(--pf-text); font-size: 16px; font-weight: 400; line-height: 1.65; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+    .wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 40px; }
+    /* ---------- micro label system ---------- */
+    .micro { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 2.16px; color: var(--pf-text-mute); }
+    .micro--tight { letter-spacing: 0.92px; font-size: 10px; }
+    .micro--dark  { color: var(--pf-text); }
+    .micro--coral { color: var(--pf-coral); }
+    /* ---------- buttons ---------- */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 34px; border-radius: 5px; background: var(--pf-btn); color: #FFFFFF; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 2.16px; transition: background var(--pf-dur) var(--pf-ease), color var(--pf-dur) var(--pf-ease), transform var(--pf-dur) var(--pf-ease); }
+    .btn:hover { background: var(--pf-btn-hover); transform: translateY(-2px); }
+    .btn--coral { background: var(--pf-coral); }
+    .btn--coral:hover { background: var(--pf-coral-hover); }
+    .btn--ghost { background: transparent; color: var(--pf-text); border: 1px solid var(--pf-line); }
+    .btn--ghost:hover { background: var(--pf-bg-grey); color: var(--pf-text); }
+    /* ---------- reveal on scroll (JS-guarded) ---------- */
+    html.js .reveal { transition: opacity var(--pf-dur) var(--pf-ease), transform var(--pf-dur) var(--pf-ease); }
+    html.js .reveal:not(.in) { opacity: 0; transform: translateY(10px); }
+    /* ============================================================
+    1 — STICKY NAV
+    ============================================================ */
+    .nav { position: sticky; top: 0; z-index: 60; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--pf-line); }
+    .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .wordmark { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--pf-text); }
+    .wordmark span { color: var(--pf-coral); }
+    .nav__links { display: flex; gap: 38px; }
+    .nav__links a { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 2.16px; color: var(--pf-text); position: relative; padding: 6px 0; transition: color var(--pf-dur) var(--pf-ease); }
+    .nav__links a::after { content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 1px; background: var(--pf-coral); transition: width var(--pf-dur) var(--pf-ease); }
+    .nav__links a:hover { color: var(--pf-coral); }
+    .nav__links a:hover::after { width: 100%; }
+    .nav__right { display: flex; align-items: center; gap: 22px; }
+    .nav__tag { font-size: 9px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--pf-text-mute); border: 1px solid var(--pf-line); border-radius: 20px; padding: 5px 12px; }
+    .cart-btn { display: flex; align-items: center; gap: 8px; color: var(--pf-text); transition: color var(--pf-dur) var(--pf-ease); }
+    .cart-btn:hover { color: var(--pf-coral); }
+    .cart-btn .count { font-size: 10px; font-weight: 500; background: var(--pf-coral); color: #FFF; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; letter-spacing: 0; }
+    .nav__burger { display: none; }
+    /* ============================================================
+    2 — HERO
+    ============================================================ */
+    .hero { position: relative; overflow: hidden; padding: 120px 0 130px; background: var(--pf-bg); }
+    .hero__inner { position: relative; z-index: 2; max-width: 760px; }
+    .hero__label { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 34px; }
+    .hero__label .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pf-coral); }
+    .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 500; line-height: 1.08; letter-spacing: -1px; text-transform: uppercase; margin-bottom: 28px; }
+    .hero h1 em { font-style: normal; color: var(--pf-coral); }
+    .hero__sub { font-size: 17px; font-weight: 300; color: var(--pf-text-soft); max-width: 480px; margin-bottom: 42px; }
+    .hero__cta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero__stats { display: flex; gap: 56px; margin-top: 72px; }
+    .hero__stat .num { font-size: 30px; font-weight: 500; letter-spacing: -0.5px; }
+    .hero__stat .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1.8px; color: var(--pf-text-mute); margin-top: 4px; }
+    /* floating toy silhouettes */
+    .float-toy { position: absolute; z-index: 1; opacity: 0.92; animation: floaty 10s ease-in-out infinite; }
+    .float-toy--tower  { top: 90px;  right: 8%;   animation-duration: 11s; }
+    .float-toy--top    { top: 320px; right: 24%;  animation-duration: 9s;  animation-delay: -2s; }
+    .float-toy--abacus { bottom: 70px; right: 6%; animation-duration: 12s; animation-delay: -4s; }
+    .float-toy--puzzle { top: 130px; right: 34%;  animation-duration: 8s;  animation-delay: -1s; }
+    .float-toy--train  { bottom: 120px; right: 30%; animation-duration: 10s; animation-delay: -3s; }
+    .float-toy--ring   { top: 420px; right: 2%;   animation-duration: 12s; animation-delay: -5s; }
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(-16px) rotate(2.5deg); }
+    }
+    /* ============================================================
+    3 — AGE SEGMENT BAND
+    ============================================================ */
+    .ageband { border-top: 1px solid var(--pf-line); border-bottom: 1px solid var(--pf-line); padding: 44px 0; background: var(--pf-bg); }
+    .ageband__inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+    .ageband__title { display: flex; align-items: center; gap: 14px; }
+    .ageband__title h2 { font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 2.16px; }
+    .info-btn { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--pf-line); color: var(--pf-text-mute); font-size: 11px; font-weight: 500; font-style: italic; display: inline-flex; align-items: center; justify-content: center; transition: border-color var(--pf-dur) var(--pf-ease), color var(--pf-dur) var(--pf-ease); }
+    .info-btn:hover { border-color: var(--pf-coral); color: var(--pf-coral); }
+    /* segmented control */
+    .segment { display: flex; align-items: center; gap: 0; background: var(--pf-bg-grey); border-radius: 10px; padding: 6px; }
+    .segment__opt { position: relative; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 26px; border-radius: 10px; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.6px; color: var(--pf-text-soft); transition: background var(--pf-dur) var(--pf-ease), color var(--pf-dur) var(--pf-ease); }
+    .segment__opt:hover { background: #ECECEC; }
+    .segment__opt .knob { width: 24px; height: 24px; border-radius: 50%; background: var(--pf-line); transition: background var(--pf-dur) var(--pf-ease), transform var(--pf-dur) var(--pf-ease); }
+    .segment__opt.is-active { color: #FFFFFF; background: var(--pf-coral); }
+    .segment__opt.is-active .knob { background: #FFFFFF; transform: scale(1.08); }
+    .ageband__hint { font-size: 13px; color: var(--pf-text-mute); }
+    .ageband__hint b { color: var(--pf-coral); font-weight: 500; }
+    /* ============================================================
+    4 — PRODUCT GRID
+    ============================================================ */
+    .shop { padding: 110px 0 120px; }
+    .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 56px; flex-wrap: wrap; }
+    .sec-head h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 500; letter-spacing: -0.5px; text-transform: uppercase; line-height: 1.15; margin-top: 14px; }
+    .sec-head p { max-width: 360px; font-size: 15px; font-weight: 300; color: var(--pf-text-soft); }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .card { position: relative; background: var(--pf-bg); border: 1px solid var(--pf-line); border-radius: 5px; overflow: hidden; transition: transform var(--pf-dur) var(--pf-ease), box-shadow var(--pf-dur) var(--pf-ease); }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 24px 48px rgba(39, 39, 39, 0.10); }
+    .card__media { position: relative; height: 260px; background: var(--pf-bg-warm); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .card__media svg { transition: transform var(--pf-dur) var(--pf-ease); }
+    .card:hover .card__media svg { transform: scale(1.06) rotate(-2deg); }
+    .card__badge { position: absolute; top: 16px; left: 16px; background: var(--pf-coral); color: #FFF; font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.6px; padding: 5px 12px; border-radius: 20px; }
+    .card__quick { position: absolute; left: 16px; right: 16px; bottom: 16px; height: 42px; border-radius: 5px; background: var(--pf-btn); color: #FFF; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 2.16px; opacity: 0; transform: translateY(8px); transition: opacity var(--pf-dur) var(--pf-ease), transform var(--pf-dur) var(--pf-ease), background var(--pf-dur) var(--pf-ease); }
+    .card:hover .card__quick { opacity: 1; transform: translateY(0); }
+    .card__quick:hover { background: var(--pf-btn-hover); }
+    .card__body { padding: 22px 22px 26px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .card__name { font-size: 17px; font-weight: 500; letter-spacing: -0.2px; }
+    .card__cat { margin-top: 6px; }
+    .card__price { font-size: 17px; font-weight: 500; color: var(--pf-coral); white-space: nowrap; }
+    /* ============================================================
+    5 — DESIGN PILLARS
+    ============================================================ */
+    .pillars { padding: 110px 0; background: var(--pf-bg-warm); border-top: 1px solid var(--pf-line); border-bottom: 1px solid var(--pf-line); }
+    .pillars__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+    .pillar { padding-top: 26px; border-top: 1px solid var(--pf-line); }
+    .pillar .no { font-size: 12px; font-weight: 500; letter-spacing: 2.16px; color: var(--pf-coral); }
+    .pillar h3 { font-size: 15px; font-weight: 500; text-transform: uppercase; letter-spacing: 2.16px; margin: 18px 0 16px; }
+    .pillar p { font-size: 15px; font-weight: 300; color: var(--pf-text-soft); line-height: 1.75; }
+    /* ============================================================
+    6 — FLAGSHIP WIDE BAND
+    ============================================================ */
+    .flagship { padding: 120px 0; background: var(--pf-bg-warm); }
+    .flagship__inner { display: grid; grid-template-columns: 1.05fr 1fr; gap: 80px; align-items: center; }
+    .flagship__visual { position: relative; background: var(--pf-bg); border: 1px solid var(--pf-line); border-radius: 5px; padding: 60px; display: flex; align-items: center; justify-content: center; }
+    .flagship h2 { font-size: clamp(1.9rem, 3.4vw, 2.7rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.5px; line-height: 1.12; margin: 16px 0 20px; }
+    .flagship p { font-size: 16px; font-weight: 300; color: var(--pf-text-soft); max-width: 440px; margin-bottom: 30px; }
+    .chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 34px; }
+    .chip { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.6px; color: var(--pf-text-soft); border: 1px solid var(--pf-line); border-radius: 20px; padding: 7px 16px; }
+    .flagship__buy { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+    .flagship__price { font-size: 30px; font-weight: 500; color: var(--pf-coral); letter-spacing: -0.5px; }
+    .flagship__price small { font-size: 12px; color: var(--pf-text-mute); text-decoration: line-through; margin-left: 10px; font-weight: 400; }
+    /* ============================================================
+    7 — TESTIMONIALS
+    ============================================================ */
+    .voices { padding: 110px 0; background: var(--pf-bg); border-top: 1px solid var(--pf-line); }
+    .voices__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 56px; }
+    .quote { border: 1px solid var(--pf-line); border-radius: 5px; padding: 36px 32px; background: var(--pf-bg); transition: background var(--pf-dur) var(--pf-ease); }
+    .quote:hover { background: var(--pf-bg-grey); }
+    .stars { display: flex; gap: 5px; margin-bottom: 22px; }
+    .quote blockquote { font-size: 17px; font-weight: 300; line-height: 1.7; color: var(--pf-text); margin-bottom: 28px; }
+    .quote__who .name { font-size: 14px; font-weight: 500; }
+    .quote__who .role { margin-top: 5px; }
+    /* ============================================================
+    8 — GIFT SUBSCRIPTION BAND
+    ============================================================ */
+    .gifts { padding: 110px 0 120px; background: var(--pf-bg-grey); }
+    .gifts .sec-head { justify-content: center; text-align: center; }
+    .gifts .sec-head p { margin: 0 auto; }
+    .gifts__switch { display: flex; justify-content: center; margin-bottom: 48px; }
+    .gifts__panels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .plan { background: var(--pf-bg); border: 1px solid var(--pf-line); border-radius: 5px; padding: 40px 34px; display: flex; flex-direction: column; transition: transform var(--pf-dur) var(--pf-ease), box-shadow var(--pf-dur) var(--pf-ease), border-color var(--pf-dur) var(--pf-ease); }
+    .plan:hover { transform: translateY(-6px); box-shadow: 0 20px 44px rgba(39, 39, 39, 0.09); }
+    .plan.is-featured { border-color: var(--pf-coral); position: relative; }
+    .plan.is-featured::before { content: 'MOST GIFTED'; position: absolute; top: -11px; left: 34px; background: var(--pf-coral); color: #FFF; font-size: 9px; font-weight: 500; letter-spacing: 1.6px; padding: 4px 12px; border-radius: 20px; }
+    .plan .name { font-size: 15px; font-weight: 500; text-transform: uppercase; letter-spacing: 2.16px; }
+    .plan .price { font-size: 38px; font-weight: 500; letter-spacing: -1px; margin: 18px 0 4px; }
+    .plan .price span { font-size: 13px; font-weight: 400; letter-spacing: 0; color: var(--pf-text-mute); }
+    .plan .desc { font-size: 14px; font-weight: 300; color: var(--pf-text-soft); margin: 14px 0 26px; }
+    .plan ul { display: flex; flex-direction: column; gap: 12px; margin-bottom: 34px; flex: 1; }
+    .plan ul li { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 300; color: var(--pf-text-soft); }
+    .plan ul li .tick { width: 16px; height: 16px; flex-shrink: 0; }
+    .plan .btn { width: 100%; }
+    /* ============================================================
+    9 — NEWSLETTER + FOOTER
+    ============================================================ */
+    .news { padding: 90px 0; background: var(--pf-bg); border-top: 1px solid var(--pf-line); }
+    .news__inner { display: flex; align-items: center; justify-content: space-between; gap: 50px; flex-wrap: wrap; }
+    .news h2 { font-size: clamp(1.6rem, 2.6vw, 2.1rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.4px; line-height: 1.2; margin-top: 12px; }
+    .news__form { display: flex; gap: 12px; flex-wrap: wrap; }
+    .news__form input { height: 52px; width: 300px; max-width: 100%; border: 1px solid var(--pf-line); border-radius: 5px; padding: 0 20px; font-family: inherit; font-size: 14px; color: var(--pf-text); background: var(--pf-bg); transition: border-color var(--pf-dur) var(--pf-ease); }
+    .news__form input:focus { outline: none; border-color: var(--pf-coral); }
+    .news__form input::placeholder { color: var(--pf-text-mute); }
+    .news__note { margin-top: 14px; font-size: 10px; letter-spacing: 0.92px; text-transform: uppercase; color: var(--pf-text-mute); }
+    .footer { background: var(--pf-text); color: #FFFFFF; padding: 90px 0 40px; }
+    .footer__top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 50px; padding-bottom: 60px; border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
+    .footer__brand .wordmark { font-size: 34px; color: #FFFFFF; }
+    .footer__brand .wordmark span { color: var(--pf-coral); }
+    .footer__brand p { margin-top: 18px; max-width: 300px; font-size: 14px; font-weight: 300; color: rgba(255, 255, 255, 0.55); line-height: 1.75; }
+    .footer h4 { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 2.16px; color: rgba(255, 255, 255, 0.45); margin-bottom: 22px; }
+    .footer ul { display: flex; flex-direction: column; gap: 13px; }
+    .footer ul a { font-size: 14px; font-weight: 300; color: rgba(255, 255, 255, 0.78); transition: color var(--pf-dur) var(--pf-ease); }
+    .footer ul a:hover { color: var(--pf-coral); }
+    .footer__bottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding-top: 32px; }
+    .footer__legal { font-size: 9px; letter-spacing: 0.92px; text-transform: uppercase; color: rgba(255, 255, 255, 0.38); line-height: 2; }
+    .footer__marks { display: flex; gap: 12px; }
+    .footer__marks span { font-size: 9px; letter-spacing: 1.6px; text-transform: uppercase; color: rgba(255, 255, 255, 0.38); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 5px 13px; }
+    /* three-dot progress indicator (signature) */
+    .dots { display: flex; gap: 6px; }
+    .dots i { width: 15px; height: 3px; border-radius: 2px; background: var(--pf-line); }
+    .dots i.on { background: var(--pf-coral); }
+    /* ============================================================
+    RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .wrap { padding: 0 32px; }
+      .grid, .pillars__grid, .voices__grid, .gifts__panels { grid-template-columns: repeat(2, 1fr); }
+      .flagship__inner { grid-template-columns: 1fr; gap: 50px; }
+      .flagship__visual { padding: 44px; }
+      .footer__top { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .float-toy--puzzle, .float-toy--train { display: none; }
+      .hero__stats { gap: 40px; }
+    }
+    @media (max-width: 768px) {
+      .wrap { padding: 0 22px; }
+      .nav__links, .nav__tag { display: none; }
+      .nav__burger { display: flex; flex-direction: column; gap: 5px; padding: 8px; }
+      .nav__burger i { width: 22px; height: 2px; background: var(--pf-text); }
+      .hero { padding: 80px 0 90px; }
+      .hero__stats { flex-wrap: wrap; gap: 28px 40px; margin-top: 50px; }
+      .float-toy--tower { right: -20px; top: 40px; transform: scale(0.8); }
+      .float-toy--top, .float-toy--ring { display: none; }
+      .float-toy--abacus { bottom: 20px; right: -10px; transform: scale(0.75); }
+      .ageband__inner { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .segment { width: 100%; overflow-x: auto; }
+      .segment__opt { padding: 0 18px; }
+      .grid, .pillars__grid, .voices__grid, .gifts__panels { grid-template-columns: 1fr; }
+      .shop, .pillars, .voices, .gifts, .flagship { padding: 76px 0; }
+      .hero__cta .btn { width: 100%; }
+      .news__form input { width: 100%; }
+      .news__form .btn { width: 100%; }
+      .footer__top { grid-template-columns: 1fr; }
+      .footer { padding: 70px 0 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================= 1 · NAV ========================= -->
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a class="wordmark" href="#">playform<span>.</span></a>
+      <nav class="nav__links">
+        <a href="#shop">Shop</a>
+        <a href="#ages">Ages</a>
+        <a href="#story">Story</a>
+        <a href="#gifts">Gifts</a>
+      </nav>
+      <div class="nav__right">
+        <span class="nav__tag">Free EU shipping</span>
+        <button class="cart-btn" aria-label="Open cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 7h12l1.2 12.2a1.6 1.6 0 0 1-1.6 1.8H6.4a1.6 1.6 0 0 1-1.6-1.8L6 7z"/>
+            <path d="M9 10V6a3 3 0 0 1 6 0v4"/>
+          </svg>
+          <span class="count">2</span>
+        </button>
+        <button class="nav__burger" aria-label="Menu"><i></i><i></i><i></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================= 2 · HERO ========================= -->
+  <section class="hero">
+    <!-- floating toy silhouettes -->
+    <svg class="float-toy float-toy--tower" width="120" height="170" viewBox="0 0 120 170" aria-hidden="true">
+      <rect x="20" y="112" width="80" height="48" rx="6" fill="#2F6BE6"/>
+      <rect x="32" y="64"  width="56" height="42" rx="6" fill="#F5C542"/>
+      <rect x="42" y="22"  width="36" height="36" rx="6" fill="#EF6B6B"/>
+      <circle cx="60" cy="40" r="7" fill="#FFFFFF" opacity="0.85"/>
+    </svg>
+
+    <svg class="float-toy float-toy--top" width="96" height="110" viewBox="0 0 96 110" aria-hidden="true">
+      <ellipse cx="48" cy="46" rx="42" ry="20" fill="#3BA55C"/>
+      <path d="M48 46 L34 78 L62 78 Z" fill="#2F6BE6"/>
+      <rect x="44" y="14" width="8" height="34" rx="4" fill="#272727"/>
+      <circle cx="48" cy="46" r="12" fill="#F5C542"/>
+    </svg>
+
+    <svg class="float-toy float-toy--abacus" width="150" height="110" viewBox="0 0 150 110" aria-hidden="true">
+      <rect x="8" y="14" width="134" height="82" rx="8" fill="none" stroke="#D9D9D9" stroke-width="4"/>
+      <line x1="22" y1="42" x2="128" y2="42" stroke="#A9A9A9" stroke-width="3"/>
+      <line x1="22" y1="70" x2="128" y2="70" stroke="#A9A9A9" stroke-width="3"/>
+      <circle cx="40"  cy="42" r="9" fill="#EF6B6B"/>
+      <circle cx="64"  cy="42" r="9" fill="#F5C542"/>
+      <circle cx="88"  cy="42" r="9" fill="#2F6BE6"/>
+      <circle cx="52"  cy="70" r="9" fill="#3BA55C"/>
+      <circle cx="76"  cy="70" r="9" fill="#EF6B6B"/>
+    </svg>
+
+    <svg class="float-toy float-toy--puzzle" width="88" height="88" viewBox="0 0 88 88" aria-hidden="true">
+      <path d="M10 10h26a10 10 0 1 1 16 0h26v26a10 10 0 1 0 0 16v26H52a10 10 0 1 1-16 0H10V52a10 10 0 1 0 0-16V10z" fill="#F5C542"/>
+    </svg>
+
+    <svg class="float-toy float-toy--train" width="170" height="80" viewBox="0 0 170 80" aria-hidden="true">
+      <rect x="14" y="26" width="64" height="30" rx="6" fill="#EF6B6B"/>
+      <rect x="84" y="36" width="52" height="20" rx="5" fill="#2F6BE6"/>
+      <rect x="26" y="12" width="24" height="18" rx="4" fill="#F5C542"/>
+      <circle cx="34" cy="62" r="10" fill="#272727"/>
+      <circle cx="62" cy="62" r="10" fill="#272727"/>
+      <circle cx="104" cy="62" r="8"  fill="#272727"/>
+      <circle cx="34" cy="62" r="4" fill="#FFFFFF"/>
+      <circle cx="62" cy="62" r="4" fill="#FFFFFF"/>
+    </svg>
+
+    <svg class="float-toy float-toy--ring" width="90" height="90" viewBox="0 0 90 90" aria-hidden="true">
+      <circle cx="45" cy="45" r="34" fill="none" stroke="#3BA55C" stroke-width="12"/>
+      <circle cx="45" cy="45" r="12" fill="#EF6B6B"/>
+    </svg>
+
+    <div class="wrap">
+      <div class="hero__inner">
+        <div class="hero__label reveal">
+          <span class="dot"></span>
+          <span class="micro">Est. 2019 — Copenhagen · Toy Design Studio</span>
+        </div>
+        <h1 class="reveal">Play is a form<br>of <em>design</em></h1>
+        <p class="hero__sub reveal">
+          Heirloom-quality wooden toys, drawn by designers and tested by
+          the most demanding critics on earth — children. Solid beech,
+          water-based colour, zero plastic.
+        </p>
+        <div class="hero__cta reveal">
+          <a class="btn btn--coral" href="#shop">Shop the Collection</a>
+          <a class="btn btn--ghost" href="#story">Our Design Story</a>
+        </div>
+        <div class="hero__stats reveal">
+          <div class="hero__stat">
+            <div class="num">48</div>
+            <div class="lbl">Designed objects</div>
+          </div>
+          <div class="hero__stat">
+            <div class="num">100%</div>
+            <div class="lbl">FSC beechwood</div>
+          </div>
+          <div class="hero__stat">
+            <div class="num">4.9</div>
+            <div class="lbl">Parent rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3 · AGE SEGMENT BAND ==================== -->
+  <section class="ageband" id="ages">
+    <div class="wrap ageband__inner">
+      <div class="ageband__title reveal">
+        <h2>Find toys by age</h2>
+        <button class="info-btn" title="Ages are guidance, not rules">i</button>
+      </div>
+
+      <div class="segment reveal" id="ageSegment" role="tablist" aria-label="Age range">
+        <button class="segment__opt is-active" role="tab" aria-selected="true" data-age="0–2">
+          <span class="knob"></span> 0–2
+        </button>
+        <button class="segment__opt" role="tab" aria-selected="false" data-age="3–5">
+          <span class="knob"></span> 3–5
+        </button>
+        <button class="segment__opt" role="tab" aria-selected="false" data-age="6–8">
+          <span class="knob"></span> 6–8
+        </button>
+        <button class="segment__opt" role="tab" aria-selected="false" data-age="9–12">
+          <span class="knob"></span> 9–12
+        </button>
+      </div>
+
+      <p class="ageband__hint reveal">Now showing pieces for ages <b id="ageOut">0–2</b></p>
+    </div>
+  </section>
+
+  <!-- ==================== 4 · PRODUCT GRID ==================== -->
+  <section class="shop" id="shop">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="reveal">
+          <span class="micro">Selected objects · Winter edit</span>
+          <h2>Toys built like<br>furniture</h2>
+        </div>
+        <p class="reveal">
+          Every piece is prototyped in our Copenhagen workshop, sanded to
+          a 0.4 mm radius edge and finished with plant-based oils that are
+          safe for little mouths.
+        </p>
+      </div>
+
+      <div class="grid">
+        <!-- card 1 — block tower -->
+        <article class="card reveal">
+          <div class="card__media">
+            <svg width="180" height="170" viewBox="0 0 180 170" aria-hidden="true">
+              <rect x="30" y="112" width="120" height="42" rx="6" fill="#2F6BE6"/>
+              <rect x="46" y="70"  width="88"  height="38" rx="6" fill="#F5C542"/>
+              <rect x="62" y="32"  width="56"  height="34" rx="6" fill="#EF6B6B"/>
+              <rect x="78" y="6"   width="24"  height="22" rx="5" fill="#3BA55C"/>
+            </svg>
+          </div>
+          <div class="card__body">
+            <div>
+              <div class="card__name">Stack Tower No.1</div>
+              <div class="card__cat micro micro--tight">Building · 8 pieces</div>
+            </div>
+            <div class="card__price">€38</div>
+          </div>
+          <button class="card__quick">Add to cart</button>
+        </article>
+
+        <!-- card 2 — spinning top (NEW) -->
+        <article class="card reveal">
+          <div class="card__media">
+            <span class="card__badge">New</span>
+            <svg width="170" height="170" viewBox="0 0 170 170" aria-hidden="true">
+              <ellipse cx="85" cy="82" rx="66" ry="30" fill="#EF6B6B"/>
+              <path d="M85 82 L58 132 L112 132 Z" fill="#2F6BE6"/>
+              <rect x="77" y="28" width="16" height="58" rx="8" fill="#272727"/>
+              <circle cx="85" cy="82" r="20" fill="#F5C542"/>
+              <circle cx="85" cy="82" r="8"  fill="#FFFFFF" opacity="0.9"/>
+            </svg>
+          </div>
+          <div class="card__body">
+            <div>
+              <div class="card__name">Whirl Top No.4</div>
+              <div class="card__cat micro micro--tight">Motion · Single piece</div>
+            </div>
+            <div class="card__price">€24</div>
+          </div>
+          <button class="card__quick">Add to cart</button>
+        </article>
+
+        <!-- card 3 — puzzle block -->
+        <article class="card reveal">
+          <div class="card__media">
+            <svg width="170" height="170" viewBox="0 0 170 170" aria-hidden="true">
+              <path d="M32 32h42a14 14 0 1 1 22 0h42v42a14 14 0 1 0 0 22v42H96a14 14 0 1 1-22 0H32V96a14 14 0 1 0 0-22V32z" fill="#3BA55C"/>
+              <circle cx="61" cy="61" r="12" fill="#F5C542"/>
+              <rect x="88" y="88" width="26" height="26" rx="5" fill="#EF6B6B"/>
+            </svg>
+          </div>
+          <div class="card__body">
+            <div>
+              <div class="card__name">Puzzle Block Set</div>
+              <div class="card__cat micro micro--tight">Puzzle · 4 pieces</div>
+            </div>
+            <div class="card__price">€42</div>
+          </div>
+          <button class="card__quick">Add to cart</button>
+        </article>
+
+        <!-- card 4 — abacus -->
+        <article class="card reveal">
+          <div class="card__media">
+            <svg width="190" height="150" viewBox="0 0 190 150" aria-hidden="true">
+              <rect x="14" y="18" width="162" height="114" rx="10" fill="none" stroke="#272727" stroke-width="6"/>
+              <line x1="32" y1="54" x2="158" y2="54" stroke="#A9A9A9" stroke-width="4"/>
+              <line x1="32" y1="88" x2="158" y2="88" stroke="#A9A9A9" stroke-width="4"/>
+              <circle cx="52"  cy="54" r="12" fill="#EF6B6B"/>
+              <circle cx="84"  cy="54" r="12" fill="#F5C542"/>
+              <circle cx="116" cy="54" r="12" fill="#2F6BE6"/>
+              <circle cx="68"  cy="88" r="12" fill="#3BA55C"/>
+              <circle cx="100" cy="88" r="12" fill="#EF6B6B"/>
+              <circle cx="132" cy="88" r="12" fill="#F5C542"/>
+            </svg>
+          </div>
+          <div class="card__body">
+            <div>
+              <div class="card__name">Count Frame No.2</div>
+              <div class="card__cat micro micro--tight">Numbers · 12 beads</div>
+            </div>
+            <div class="card__price">€46</div>
+          </div>
+          <button class="card__quick">Add to cart</button>
+        </article>
+
+        <!-- card 5 — little car -->
+        <article class="card reveal">
+          <div class="card__media">
+            <svg width="200" height="130" viewBox="0 0 200 130" aria-hidden="true">
+              <rect x="22" y="46" width="112" height="38" rx="9" fill="#2F6BE6"/>
+              <rect x="134" y="58" width="48" height="26" rx="7" fill="#F5C542"/>
+              <rect x="42" y="24" width="38" height="26" rx="6" fill="#EF6B6B"/>
+              <circle cx="58"  cy="94" r="16" fill="#272727"/>
+              <circle cx="58"  cy="94" r="7"  fill="#FFFFFF"/>
+              <circle cx="146" cy="94" r="16" fill="#272727"/>
+              <circle cx="146" cy="94" r="7"  fill="#FFFFFF"/>
+            </svg>
+          </div>
+          <div class="card__body">
+            <div>
+              <div class="card__name">Roadster No.3</div>
+              <div class="card__cat micro micro--tight">Vehicles · Single piece</div>
+            </div>
+            <div class="card__price">€29</div>
+          </div>
+          <button class="card__quick">Add to cart</button>
+        </article>
+
+        <!-- card 6 — shape sorter -->
+        <article class="card reveal">
+          <div class="card__media">
+            <svg width="180" height="160" viewBox="0 0 180 160" aria-hidden="true">
+              <rect x="26" y="52" width="128" height="88" rx="12" fill="#F5C542"/>
+              <rect x="26" y="52" width="128" height="18" rx="9" fill="#E7B22F"/>
+              <circle cx="66"  cy="102" r="14" fill="#FFFFFF"/>
+              <rect x="94" y="88" width="28" height="28" rx="5" fill="#FFFFFF"/>
+              <path d="M78 30 l14 22 h-28 z" fill="#EF6B6B"/>
+              <circle cx="116" cy="36" r="12" fill="#2F6BE6"/>
+              <rect x="36" y="24" width="22" height="22" rx="5" fill="#3BA55C"/>
+            </svg>
+          </div>
+          <div class="card__body">
+            <div>
+              <div class="card__name">Shape Sorter No.7</div>
+              <div class="card__cat micro micro--tight">Sorting · 12 pieces</div>
+            </div>
+            <div class="card__price">€58</div>
+          </div>
+          <button class="card__quick">Add to cart</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5 · DESIGN PILLARS ==================== -->
+  <section class="pillars" id="story">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="reveal">
+          <span class="micro">The Playform method</span>
+          <h2>Three rules we<br>never break</h2>
+        </div>
+        <p class="reveal">
+          We treat a toddler's toy with the same rigor as a chair for a
+          design museum. Here is what that means in practice.
+        </p>
+      </div>
+
+      <div class="pillars__grid">
+        <div class="pillar reveal">
+          <div class="no">01</div>
+          <h3>Materials</h3>
+          <p>
+            Solid European beech from FSC-certified forests, coloured with
+            water-based pigments and sealed with linseed oil. No MDF, no
+            plastic, no synthetic fragrances — only what a forest would
+            recognise.
+          </p>
+        </div>
+        <div class="pillar reveal">
+          <div class="no">02</div>
+          <h3>Safety</h3>
+          <p>
+            Every edge is radiused to 0.4 mm and every piece passes the
+            EN71-3 mouthing test before it leaves Copenhagen. Small parts
+            are measured, weighed and drop-tested 2,000 times per batch.
+          </p>
+        </div>
+        <div class="pillar reveal">
+          <div class="no">03</div>
+          <h3>Imagination</h3>
+          <p>
+            A good toy does not explain itself. We design open-ended
+            shapes with no screens, no sounds and no single right answer —
+            so the story stays in the child's hands.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6 · FLAGSHIP BAND ==================== -->
+  <section class="flagship">
+    <div class="wrap flagship__inner">
+      <div class="flagship__visual reveal">
+        <svg width="340" height="290" viewBox="0 0 340 290" aria-hidden="true">
+          <!-- body -->
+          <rect x="40" y="110" width="260" height="150" rx="18" fill="#F5C542"/>
+          <rect x="40" y="110" width="260" height="30" rx="15" fill="#E7B22F"/>
+          <!-- holes -->
+          <circle cx="112" cy="200" r="26" fill="#FFFFFF"/>
+          <rect x="170" y="176" width="50" height="50" rx="8" fill="#FFFFFF"/>
+          <path d="M262 176 l26 44 h-52 z" fill="#FFFFFF"/>
+          <!-- floating pieces -->
+          <circle cx="96" cy="52" r="24" fill="#2F6BE6"/>
+          <rect x="156" y="34" width="46" height="46" rx="8" fill="#EF6B6B"/>
+          <path d="M262 32 l26 44 h-52 z" fill="#3BA55C"/>
+          <!-- shadow -->
+          <ellipse cx="170" cy="272" rx="120" ry="10" fill="#272727" opacity="0.08"/>
+        </svg>
+      </div>
+
+      <div class="flagship__copy">
+        <div class="reveal">
+          <span class="micro micro--coral">Flagship object · 2026 edition</span>
+          <h2>The Shape<br>Sorter No.7</h2>
+          <p>
+            Three years in the making: a two-chamber sorter that grows with
+            the child. Toddlers match the shapes, older kids sort by colour,
+            weight and sound. The lid lifts off and becomes a carrying case.
+          </p>
+          <div class="chips">
+            <span class="chip">Beechwood</span>
+            <span class="chip">12 pieces</span>
+            <span class="chip">Ages 1+</span>
+            <span class="chip">2-in-1 case</span>
+          </div>
+          <div class="flagship__buy">
+            <div class="flagship__price">€58 <small>€72</small></div>
+            <a class="btn btn--coral" href="#shop">Add to cart</a>
+            <div class="dots"><i class="on"></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 7 · TESTIMONIALS ==================== -->
+  <section class="voices">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="reveal">
+          <span class="micro">From the playroom</span>
+          <h2>What parents<br>tell us</h2>
+        </div>
+        <p class="reveal">
+          Over 11,000 families across Europe play with Playform objects
+          every day. These are their words, unedited.
+        </p>
+      </div>
+
+      <div class="voices__grid">
+        <div class="quote reveal">
+          <div class="stars">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg>
+          </div>
+          <blockquote>
+            “The Stack Tower lives on our coffee table when the kids are
+            asleep. I have never said that about a toy before — it is
+            genuinely beautiful.”
+          </blockquote>
+          <div class="quote__who">
+            <div class="name">Ingrid Halvorsen</div>
+            <div class="role micro micro--tight">Parent of two, Oslo</div>
+          </div>
+        </div>
+
+        <div class="quote reveal">
+          <div class="stars">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg>
+          </div>
+          <blockquote>
+            “Three years of daily abuse and the Shape Sorter still looks
+            new. The wood has aged into this warm honey colour we love
+            even more than the day it arrived.”
+          </blockquote>
+          <div class="quote__who">
+            <div class="name">Mathias De Vries</div>
+            <div class="role micro micro--tight">Parent of one, Rotterdam</div>
+          </div>
+        </div>
+
+        <div class="quote reveal">
+          <div class="stars">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg> <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l2 4.4 4.8.5-3.6 3.2 1 4.7L8 11.5 3.8 13.8l1-4.7L1.2 5.9 6 5.4z" fill="#EF6B6B"/></svg>
+          </div>
+          <blockquote>
+            “We gave the Monthly Box as a birthday present and now the
+            whole kindergarten wants one. It arrives like a piece of
+            design, not like plastic packaging.”
+          </blockquote>
+          <div class="quote__who">
+            <div class="name">Sofia Lindqvist</div>
+            <div class="role micro--tight micro">Educator, Malmö</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 8 · GIFT SUBSCRIPTION ==================== -->
+  <section class="gifts" id="gifts">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="reveal">
+          <span class="micro">Give design, not clutter</span>
+          <h2>The Playform boxes</h2>
+        </div>
+        <p class="reveal">
+          A curated box of new and archival pieces, delivered in recycled
+          cardboard with a hand-set letterpress card. Pause or cancel
+          any month.
+        </p>
+      </div>
+
+      <div class="gifts__switch reveal">
+        <div class="segment" id="boxSegment" role="tablist" aria-label="Box plan">
+          <button class="segment__opt" role="tab" aria-selected="false" data-box="mini">
+            <span class="knob"></span> Mini
+          </button>
+          <button class="segment__opt is-active" role="tab" aria-selected="true" data-box="monthly">
+            <span class="knob"></span> Monthly
+          </button>
+          <button class="segment__opt" role="tab" aria-selected="false" data-box="grand">
+            <span class="knob"></span> Grand
+          </button>
+        </div>
+      </div>
+
+      <div class="gifts__panels">
+        <div class="plan reveal">
+          <div class="name">Mini Box</div>
+          <div class="price">€29<span> / quarter</span></div>
+          <div class="desc">One small object every three months — perfect for first birthdays and newborn gifts.</div>
+          <ul>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              1 signature piece per delivery
+            </li>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Letterpress gift card included
+            </li>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Free shipping across the EU
+            </li>
+          </ul>
+          <button class="btn btn--ghost">Choose Mini</button>
+        </div>
+
+        <div class="plan is-featured reveal">
+          <div class="name">Monthly Box</div>
+          <div class="price">€34<span> / month</span></div>
+          <div class="desc">A new designed object every month, matched to your child's age and stage.</div>
+          <ul>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Monthly object + play guide
+            </li>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Early access to new editions
+            </li>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Pause or cancel any month
+            </li>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              10% off the full catalogue
+            </li>
+          </ul>
+          <button class="btn btn--coral">Choose Monthly</button>
+        </div>
+
+        <div class="plan reveal">
+          <div class="name">Grand Box</div>
+          <div class="price">€89<span> / quarter</span></div>
+          <div class="desc">Our full seasonal set — three to five objects, boxed as a complete play system.</div>
+          <ul>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              3–5 objects per seasonal box
+            </li>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Numbered collector's edition
+            </li>
+            <li>
+              <svg class="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#EF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Workshop visit invitation
+            </li>
+          </ul>
+          <button class="btn btn--ghost">Choose Grand</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 9 · NEWSLETTER ==================== -->
+  <section class="news">
+    <div class="wrap news__inner">
+      <div class="reveal">
+        <span class="micro">The Playform letter</span>
+        <h2>One email a month.<br>Only good objects.</h2>
+      </div>
+      <div class="reveal">
+        <form class="news__form" onsubmit="return false;">
+          <input type="email" placeholder="your@email.com" aria-label="Email address">
+          <button class="btn btn--coral" type="submit">Subscribe</button>
+        </form>
+        <div class="news__note">No spam · Unsubscribe in one click · Design notes from Copenhagen</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <div class="wordmark">playform<span>.</span></div>
+          <p>
+            A small toy design studio in Copenhagen. We make wooden
+            objects for open-ended play, built to be handed down rather
+            than thrown away.
+          </p>
+        </div>
+        <div>
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#shop">All toys</a></li>
+            <li><a href="#shop">New arrivals</a></li>
+            <li><a href="#gifts">Gift boxes</a></li>
+            <li><a href="#shop">Spare parts</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Studio</h4>
+          <ul>
+            <li><a href="#story">Our story</a></li>
+            <li><a href="#story">Materials</a></li>
+            <li><a href="#story">Safety standards</a></li>
+            <li><a href="#story">Workshop visits</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Help</h4>
+          <ul>
+            <li><a href="#gifts">Shipping &amp; returns</a></li>
+            <li><a href="#gifts">Care guide</a></li>
+            <li><a href="#gifts">Contact us</a></li>
+            <li><a href="#gifts">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="footer__legal">
+          © 2026 Playform Toys ApS · Refshalevej 147, 1432 Copenhagen K, Denmark<br>
+          All toys comply with EN71-1/2/3 · Prices include VAT where applicable · Terms of sale · Privacy policy
+        </div>
+        <div class="footer__marks">
+          <span>FSC Certified</span>
+          <span>EN71 Safe</span>
+          <span>B-Corp Pending</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ---------- scroll reveal (guarded + fallback) ---------- */
+      var reveals = document.querySelectorAll('.reveal');
+
+      function showAll() {
+        for (var i = 0; i < reveals.length; i++) reveals[i].classList.add('in');
+      }
+
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        for (var j = 0; j < reveals.length; j++) io.observe(reveals[j]);
+      } else {
+        showAll();
+      }
+
+      /* ---------- segmented controls ---------- */
+      function bindSegment(segmentId, onChange) {
+        var seg = document.getElementById(segmentId);
+        if (!seg) return;
+        var opts = seg.querySelectorAll('.segment__opt');
+        opts.forEach(function (opt) {
+          opt.addEventListener('click', function () {
+            opts.forEach(function (o) {
+              o.classList.remove('is-active');
+              o.setAttribute('aria-selected', 'false');
+            });
+            opt.classList.add('is-active');
+            opt.setAttribute('aria-selected', 'true');
+            if (onChange) onChange(opt);
+          });
+        });
+      }
+
+      bindSegment('ageSegment', function (opt) {
+        var out = document.getElementById('ageOut');
+        if (out) out.textContent = opt.getAttribute('data-age');
+      });
+
+      bindSegment('boxSegment', function (opt) {
+        var plans = document.querySelectorAll('.gifts__panels .plan');
+        var order = ['mini', 'monthly', 'grand'];
+        var idx = order.indexOf(opt.getAttribute('data-box'));
+        plans.forEach(function (p, i) {
+          p.classList.toggle('is-featured', i === idx);
+        });
+      });
+
+      /* ---------- quick add buttons ---------- */
+      document.querySelectorAll('.card__quick').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var count = document.querySelector('.cart-btn .count');
+          if (count) count.textContent = String(parseInt(count.textContent, 10) + 1);
+          btn.textContent = 'Added ✓';
+          setTimeout(function () { btn.textContent = 'Add to cart'; }, 1400);
+        });
+      });
+
+      /* ---------- progress dots on flagship band ---------- */
+      var dots = document.querySelectorAll('.flagship .dots i');
+      if (dots.length) {
+        var d = 0;
+        setInterval(function () {
+          dots.forEach(function (el) { el.classList.remove('on'); });
+          d = (d + 1) % dots.length;
+          dots[d].classList.add('on');
+        }, 3200);
+      }
+    })();
+  </script>
+</body>
+</html>

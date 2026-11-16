@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 页面灵感画廊
-description: 239 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
+description: 241 个完整页面设计展示 — 像 Awwwards 一样浏览和获取灵感
 sidebar: false
 ---
 
@@ -2197,6 +2197,24 @@ const pages = [
     rating: 9.3,
     description: '移动通信运营商套餐页——深靛紫渐变 + 亮蓝强调：信号波 SVG Hero + 月付/年付切换（8 折价格过渡）+ 4 张套餐卡（推荐款渐变描边高亮）+ 8 行发丝线对比表 + 权益动效插画 + 抽象城市覆盖地图（脉冲信号点）+ 口碑数据 + FAQ 手风琴 + 超大 NOVA wordmark',
   },
+  {
+    id: 'playform-toys',
+    title: 'Playform 设计积木玩具商店',
+    category: 'ecommerce',
+    tags: ['电商首页', '玩具品牌', '北欧极简', 'SVG 插画', '交互组件'],
+    colors: ['#FFFFFF', '#EF6B6B', '#272727'],
+    rating: 9.1,
+    description: '设计师积木玩具电商首页——北欧白场 + 珊瑚红强调：浮动 SVG 玩具剪影 Hero + 年龄分段选择器（圆形滑柄）+ 6 款玩具卡网格（全 inline SVG 插画）+ 三条编号设计理念 + 旗舰形状分拣器宽幅 + 家长口碑 + 三档礼盒订阅切换 + Newsletter + 深色页脚',
+  },
+  {
+    id: 'cirrus-airways',
+    title: 'Cirrus Airways 精品航司预订',
+    category: 'industry',
+    tags: ['航空公司', '机票预订', '双色极简', '行业垂直', '大字排版'],
+    colors: ['#F5F3F0', '#0C0C0C', '#E8E4DE'],
+    rating: 9.1,
+    description: '精品区域航司预订页——严格双色排版语言：巨型全大写 Hero + 航班搜索（单程/往返/多程 tab + 舱位分段 + snap-underline 表单）+ 今日离港看板（hover 反色）+ 热门航线错位网格 + 三舱位对比（登机牌发丝线）+ 反转深色 count-up 数据带 + CIRRUS CLOUD 会员 + FAQ 手风琴 + 超大 wordmark 页脚',
+  },
 ]
 
 const categories = [
@@ -2254,12 +2272,12 @@ function getScoreColor(score) {
 
 <div class="gallery-page">
   <!-- SEO Meta -->
-content=\"My Design Lib 页面灵感画廊 — 239 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
+content=\"My Design Lib 页面灵感画廊 — 241 个完整页面设计展示，包含 SaaS 落地页、作品集、仪表盘、电商、创意页面、行业模板等。可预览、看源码、学设计。\"
   <meta name="keywords" content="页面模板, 前端设计, SaaS模板, 作品集模板, 仪表盘模板, 电商模板, 404页面, 设计灵感">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="🎨 页面灵感画廊 — My Design Lib">
-    <meta property="og:description" content="239 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
+    <meta property="og:description" content="241 个完整页面设计展示，像 Awwwards 一样浏览。SaaS 落地页、作品集、仪表盘等高质量页面模板。">
   <meta property="og:url" content="http://101.37.166.208:11930/pages/">
   <link rel="canonical" href="http://101.37.166.208:11930/pages/">
 
@@ -2268,7 +2286,7 @@ content=\"My Design Lib 页面灵感画廊 — 239 个完整页面设计展示�
     <h1>🎨 页面灵感画廊</h1>
     <p>完整的页面设计展示，点击即可预览实时效果，查看源码</p>
     <div class="hero-stats">
-      <span>📦 239 个完整页面</span>
+      <span>📦 241 个完整页面</span>
       <span>🏷️ 7 个分类</span>
       <span>🔄 每日自动更新</span>
     </div>
